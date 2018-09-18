@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# When Debug is set to false
+# ALLOWED_HOSTS = ['*']
+
 
 # Application definition
 
