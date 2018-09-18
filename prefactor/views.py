@@ -1,3 +1,11 @@
 from django.shortcuts import render
 
-# Create your views here.
+from .models import PreFactor
+
+
+def prefactors(request):
+    prefs = PreFactor.objects
+    return render(request, 'prefactors/prefactors.html', {'prefs':prefs})
+
+def home(request):
+    return render(request, 'prefactors/homepage.html')

@@ -15,7 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+
+import prefactor.views
+import prefactor_verification.views
+import tender.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    path('', prefactor.views.home, name='homepage'),
+    path('prefPage/', prefactor.views.prefactors, name='prefPage'),
+    path('pref_ver/', prefactor_verification.views.pref_verification, name='pref_ver'),
+    path('tenders/', tender.views.tenders, name='tenders'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
