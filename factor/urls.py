@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -25,7 +25,9 @@ import request.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', prefactor.views.home, name='homepage'),
+    # path('', prefactor.views.home, name='homepage'),
+    path('', request.views.allTable, name='allTables'),
+    path('testPage/', prefactor.views.testpage, name='testPage'),
     path('prefPage/', prefactor.views.prefactors, name='prefPage'),
     path('pref_ver/', prefactor_verification.views.pref_verification, name='pref_ver'),
     path('tenders/', tender.views.tenders, name='tenders'),
@@ -35,5 +37,7 @@ urlpatterns = [
     path('prefactors/<int:pref_id>', request.views.prefactor_details, name="prefactorsDetailPage"),
     path('prefVerification/', request.views.prefactors_verification_page, name="prefVerificationPage"),
     path('prefVerification/<int:pref_ver_id>', request.views.pref_ver_details, name="prefVerfDetailPage"),
-    path('allTable/', request.views.allTable, name='allTables')
+    path('find_pref/', request.views.find_pref, name="find_prefPage"),
+    path('accounts/', include('accounts.url')),
+    path('request/', include('request.url')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'tender.apps.TenderConfig',
     'prefactor.apps.PrefactorConfig',
     'prefactor_verification.apps.PrefactorVerificationConfig',
+    'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,7 +62,7 @@ ROOT_URLCONF = 'factor.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['request/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

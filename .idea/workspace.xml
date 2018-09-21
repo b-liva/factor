@@ -2,19 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85c93896-8beb-4081-82f4-1287b6871527" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/request/templates/requests/pref_details.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/templates/requests/pref_ver_details.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/templates/requests/req_details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/logout.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/signup.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/accounts/url.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/prefactor_verification/templates/prefVerification/create.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/prefactors/create.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/create.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/results.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/testpage.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/url.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/factor/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/factor/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/factor/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/factor/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html" beforeDir="false" afterPath="$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prefactor/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/prefactor/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/request/templates/requests/prefVerificationsPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/prefVerificationsPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/pref_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/pref_details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/pref_ver_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/pref_ver_details.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/request/templates/requests/prefactors.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/prefactors.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/req_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/req_details.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/request/templates/requests/requests.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/requests.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/request/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tender/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/tender/models.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -88,49 +98,61 @@
     <session id="-342465293">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="6" />
           <entry key="project.open.time.2" value="2" />
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.38" value="1" />
           <entry key="project.open.time.43" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.open.time.45" value="1" />
+          <entry key="project.open.time.48" value="1" />
+          <entry key="project.open.time.56" value="1" />
+          <entry key="project.open.time.58" value="1" />
+          <entry key="project.opened" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="html" value="43" />
-          <entry key="py" value="78" />
+          <entry key="html" value="73" />
+          <entry key="py" value="103" />
           <entry key="pyi" value="1" />
+          <entry key="rnc" value="1" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="HTML" value="43" />
+          <entry key="HTML" value="73" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="78" />
+          <entry key="Python" value="103" />
           <entry key="PythonStub" value="1" />
+          <entry key="RNG Compact" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="html" value="1069" />
-          <entry key="py" value="3064" />
+          <entry key="Django Console" value="14" />
+          <entry key="html" value="3656" />
+          <entry key="py" value="6122" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="1069" />
-          <entry key="Python" value="3064" />
+          <entry key="HTML" value="3656" />
+          <entry key="Python" value="6136" />
         </counts>
       </usages-collector>
     </session>
   </component>
+  <component name="FavoritesManager">
+    <favorites_list name="factor" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/factor/urls.py">
+        <entry file="file://$PROJECT_DIR$/request/url.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="36" column="103" selection-start-line="36" selection-start-column="85" selection-end-line="36" selection-end-column="103" />
+            <state relative-caret-position="228">
+              <caret line="31" column="44" selection-start-line="31" selection-start-column="44" selection-end-line="31" selection-end-column="44" />
               <folding>
                 <element signature="e#630#662#0" expanded="true" />
               </folding>
@@ -139,38 +161,85 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/request/views.py">
+        <entry file="file://$PROJECT_DIR$/request/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="35" column="71" selection-start-line="35" selection-start-column="63" selection-end-line="35" selection-end-column="71" />
+            <state relative-caret-position="153">
+              <caret line="27" column="10" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
-                <marker date="1537277340381" expanded="true" signature="304:309" ph="..." />
-                <marker date="1537277340381" expanded="true" signature="646:651" ph="..." />
+                <element signature="e#0#28#0" expanded="true" />
+                <marker date="1537264751096" expanded="true" signature="403:408" ph="..." />
+                <marker date="1537264751096" expanded="true" signature="796:1148" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/request/templates/requests/prefVerificationsPage.html">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/request/templates/prefactors/create.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
-              <caret line="94" column="108" selection-start-line="94" selection-start-column="108" selection-end-line="94" selection-end-column="108" />
+            <state relative-caret-position="68">
+              <caret line="6" column="29" lean-forward="true" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/request/templates/requests/prefactors.html">
+        <entry file="file://$PROJECT_DIR$/request/templates/requests/create.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="92" column="97" lean-forward="true" selection-start-line="92" selection-start-column="40" selection-end-line="92" selection-end-column="97" />
+            <state relative-caret-position="459">
+              <caret line="27" lean-forward="true" selection-end-line="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/request/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="212">
+              <caret line="119" column="79" selection-start-line="119" selection-start-column="79" selection-end-line="119" selection-end-column="79" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+                <marker date="1537556270050" expanded="true" signature="397:402" ph="..." />
+                <marker date="1537556270050" expanded="true" signature="739:744" ph="..." />
+                <marker date="1537556270050" expanded="true" signature="1885:1890" ph="..." />
+                <marker date="1537556270050" expanded="true" signature="2601:2605" ph="..." />
+                <marker date="1537556270050" expanded="true" signature="3789:3793" ph="..." />
+                <marker date="1537556270050" expanded="true" signature="4074:4079" ph="..." />
+                <marker date="1537556270050" expanded="true" signature="5253:5258" ph="..." />
+                <marker date="1537556270050" expanded="true" signature="5328:5329" ph="..." />
+                <marker date="1537556270050" expanded="true" signature="5490:5491" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/prefactor_verification/templates/prefVerification/create.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="15" column="38" lean-forward="true" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/request/templates/requests/base.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="99">
+              <caret line="75" column="31" lean-forward="true" selection-start-line="75" selection-start-column="31" selection-end-line="75" selection-end-column="31" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -179,11 +248,17 @@
       <find>All</find>
       <find>request</find>
       <find>pref</find>
+      <find>album py-5 bg-light</find>
+      <find>var</find>
+      <find>homepage</find>
+      <find>DoesNo</find>
+      <find>album</find>
     </findStrings>
     <replaceStrings>
       <replace>pref</replace>
       <replace>pref_ver</replace>
       <replace>prefactor</replace>
+      <replace>req</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -198,26 +273,39 @@
         <option value="$PROJECT_DIR$/tender/views.py" />
         <option value="$PROJECT_DIR$/prefactor_verification/templagtes/prefVerification/prefVerification.html" />
         <option value="$PROJECT_DIR$/prefactor_verification/admin.py" />
-        <option value="$PROJECT_DIR$/prefactor/views.py" />
         <option value="$PROJECT_DIR$/tender/templates/tenders/tenders.html" />
         <option value="$PROJECT_DIR$/prefactor_verification/views.py" />
-        <option value="$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html" />
         <option value="$PROJECT_DIR$/prefactor_verification/templates/prefVerification/prefVerification.html" />
         <option value="$PROJECT_DIR$/prefactor/models.py" />
         <option value="$PROJECT_DIR$/prefactor_verification/models.py" />
         <option value="$PROJECT_DIR$/request/admin.py" />
         <option value="$PROJECT_DIR$/prefactor/templates/prefactors/prefactors.html" />
-        <option value="$PROJECT_DIR$/request/models.py" />
         <option value="$PROJECT_DIR$/tender/models.py" />
-        <option value="$PROJECT_DIR$/factor/settings.py" />
-        <option value="$PROJECT_DIR$/request/templates/requests/req_details.html" />
-        <option value="$PROJECT_DIR$/factor/urls.py" />
-        <option value="$PROJECT_DIR$/request/views.py" />
-        <option value="$PROJECT_DIR$/request/templates/requests/pref_details.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/pref_ver_details.html" />
+        <option value="$PROJECT_DIR$/prefactor/views.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/testpage.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/requests.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/prefactors.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/prefVerificationsPage.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/prefactors.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/req_details.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/pref_ver_details.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/pref_details.html" />
+        <option value="$PROJECT_DIR$/request/models.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/results.html" />
+        <option value="$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html" />
+        <option value="$PROJECT_DIR$/accounts/url.py" />
+        <option value="$PROJECT_DIR$/factor/settings.py" />
+        <option value="$PROJECT_DIR$/accounts/templates/accounts/logout.html" />
+        <option value="$PROJECT_DIR$/accounts/views.py" />
+        <option value="$PROJECT_DIR$/accounts/templates/accounts/login.html" />
+        <option value="$PROJECT_DIR$/accounts/templates/accounts/signup.html" />
+        <option value="$PROJECT_DIR$/factor/urls.py" />
+        <option value="$PROJECT_DIR$/request/templates/prefactors/creat.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/create.html" />
+        <option value="$PROJECT_DIR$/request/templates/prefactors/create.html" />
+        <option value="$PROJECT_DIR$/request/url.py" />
+        <option value="$PROJECT_DIR$/prefactor_verification/templates/prefVerification/create.html" />
+        <option value="$PROJECT_DIR$/request/views.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/base.html" />
       </list>
     </option>
   </component>
@@ -228,7 +316,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-7" />
+    <option name="x" value="336" />
     <option name="width" value="697" />
     <option name="height" value="735" />
   </component>
@@ -249,36 +337,61 @@
             <path>
               <item name="factor" type="b2602c69:ProjectViewProjectNode" />
               <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
+              <item name="accounts" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="factor" type="b2602c69:ProjectViewProjectNode" />
               <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="prefactor" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="prefactor" type="462c0819:PsiDirectoryNode" />
+              <item name="accounts" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="factor" type="b2602c69:ProjectViewProjectNode" />
               <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="prefactor" type="462c0819:PsiDirectoryNode" />
+              <item name="accounts" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="accounts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factor" type="462c0819:PsiDirectoryNode" />
+              <item name="factor" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factor" type="462c0819:PsiDirectoryNode" />
+              <item name="prefactor_verification" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factor" type="462c0819:PsiDirectoryNode" />
+              <item name="prefactor_verification" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factor" type="462c0819:PsiDirectoryNode" />
+              <item name="prefactor_verification" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="prefVerification" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factor" type="462c0819:PsiDirectoryNode" />
+              <item name="request" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factor" type="462c0819:PsiDirectoryNode" />
+              <item name="request" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factor" type="462c0819:PsiDirectoryNode" />
+              <item name="request" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
               <item name="prefactors" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="factor" type="b2602c69:ProjectViewProjectNode" />
@@ -294,6 +407,8 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="SearchEverywhereHistoryKey" value="base&#9;FILE&#9;file://C:/Users/liva/Desktop/dev files/django/factor/request/templates/requests/base.html" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -301,14 +416,15 @@
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\liva\Desktop\dev files\django\factor\prefactor\templates\prefactors" />
-      <recent name="C:\Users\pc\Desktop\django\factor\factor" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\liva\Desktop\dev files\django\factor\request\templates\requests" />
       <recent name="C:\Users\liva\Desktop\dev files\django\factor\tender\templates\tenders" />
       <recent name="C:\Users\pc\Desktop\django\factor" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\liva\Desktop\dev files\django\factor\accounts\templates\accounts" />
+      <recent name="C:\Users\liva\Desktop\dev files\django\factor\prefactor\templates\prefactors" />
+      <recent name="C:\Users\pc\Desktop\django\factor\factor" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -332,14 +448,14 @@
         <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DJANGO_SETTINGS_MODULE" value="factor.settings" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\liva\AppData\Local\Programs\Python\Python37-32\python.exe" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="launchJavascriptDebuger" value="false" />
       <option name="port" value="8000" />
-      <option name="host" value="" />
+      <option name="host" value="localhost" />
       <option name="additionalOptions" value="" />
       <option name="browserUrl" value="" />
       <option name="runTestServer" value="false" />
@@ -373,13 +489,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2647504" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49802372" visible="true" weight="0.17246597" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info id="Favorites" order="2" sideWeight="0.5019763" side_tool="true" weight="0.27987897" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3295082" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3295082" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2967213" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -387,7 +504,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3295082" />
       <window_info anchor="bottom" id="Database Changes" order="9" weight="0.3295082" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.3295082" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.3295082" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.3295082" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -404,64 +521,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="10" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/prefactor/migrations/0001_initial.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="50" selection-start-line="16" selection-start-column="50" selection-end-line="16" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/media/prefactor/1536218436889_1.png" />
-    <entry file="file://$PROJECT_DIR$/prefactor/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/manage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/prefactor/migrations/0003_auto_20180914_2157.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tender/tests.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/prefactor/migrations/0002_auto_20180914_2143.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/db/models/manager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="166" selection-start-line="166" selection-end-line="166" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tender/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tender/apps.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/db/models/fields/files.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="360" column="8" selection-start-line="360" selection-start-column="8" selection-end-line="360" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/prefactor/apps.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -519,10 +578,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-            <marker date="1537252669403" expanded="true" signature="111:116" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -564,40 +619,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/prefactor/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="24" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
-          <folding>
-            <marker date="1537187350586" expanded="true" signature="217:222" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/request/admin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" column="42" lean-forward="true" selection-start-line="9" selection-start-column="42" selection-end-line="9" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="52" column="40" selection-start-line="52" selection-start-column="40" selection-end-line="52" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3/datetime.pyi">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3009">
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
+        <state relative-caret-position="-3009" />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/db/models/fields/__init__.py">
@@ -631,10 +662,200 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/testpage.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="20" selection-start-line="1" selection-start-column="20" selection-end-line="1" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/prefactor/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="18" lean-forward="true" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+            <marker date="1537290697320" expanded="true" signature="217:222" ph="..." />
+            <marker date="1537290697320" expanded="true" signature="297:302" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/pref_details.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="33" column="11" selection-start-line="33" selection-start-column="11" selection-end-line="33" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/pref_ver_details.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="50" selection-start-line="9" selection-start-column="50" selection-end-line="9" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/req_details.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="35" column="11" selection-start-line="35" selection-start-column="11" selection-end-line="35" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/prefVerificationsPage.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="35" selection-start-line="35" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/prefactors.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/factor/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="40" column="35" selection-start-line="40" selection-start-column="35" selection-end-line="40" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/auth/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="63" column="4" selection-start-line="63" selection-start-column="4" selection-end-line="63" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/url.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/logout.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="6" selection-start-column="6" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/pycharm.jar!/resources/html5-schema/html5/web-forms.rnc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="176" column="22" selection-start-line="176" selection-start-column="22" selection-end-line="176" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/signup.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="11" lean-forward="true" selection-end-line="19" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="7" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/requests.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="29" column="18" lean-forward="true" selection-start-line="6" selection-start-column="12" selection-end-line="29" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/results.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/accounts/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#45#0" expanded="true" />
+            <marker date="1537509356349" expanded="true" signature="1288:1293" ph="..." />
+            <marker date="1537509356349" expanded="true" signature="1460:1461" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/urls/conf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/create.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" lean-forward="true" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/factor/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="41" column="39" selection-start-line="41" selection-start-column="39" selection-end-line="41" selection-end-column="39" />
+          <folding>
+            <element signature="e#630#662#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/prefactors/create.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="6" column="29" lean-forward="true" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/url.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="31" column="44" selection-start-line="31" selection-start-column="44" selection-end-line="31" selection-end-column="44" />
+          <folding>
+            <element signature="e#630#662#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/shortcuts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="39" column="4" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/request/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1">
-          <caret line="9" column="38" lean-forward="true" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
+        <state relative-caret-position="153">
+          <caret line="27" column="10" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
             <marker date="1537264751096" expanded="true" signature="403:408" ph="..." />
@@ -643,77 +864,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/factor/settings.py">
+    <entry file="file://$PROJECT_DIR$/prefactor_verification/templates/prefVerification/create.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="27" column="17" selection-start-line="27" selection-start-column="17" selection-end-line="27" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/req_details.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="93" column="37" selection-end-line="143" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/pref_details.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="97" column="69" selection-start-line="97" selection-start-column="69" selection-end-line="97" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/pref_ver_details.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="97" column="73" selection-start-line="97" selection-start-column="73" selection-end-line="97" selection-end-column="73" />
+        <state relative-caret-position="255">
+          <caret line="15" column="38" lean-forward="true" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/request/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="35" column="71" selection-start-line="35" selection-start-column="63" selection-end-line="35" selection-end-column="71" />
+        <state relative-caret-position="212">
+          <caret line="119" column="79" selection-start-line="119" selection-start-column="79" selection-end-line="119" selection-end-column="79" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <marker date="1537277340381" expanded="true" signature="304:309" ph="..." />
-            <marker date="1537277340381" expanded="true" signature="646:651" ph="..." />
+            <marker date="1537556270050" expanded="true" signature="397:402" ph="..." />
+            <marker date="1537556270050" expanded="true" signature="739:744" ph="..." />
+            <marker date="1537556270050" expanded="true" signature="1885:1890" ph="..." />
+            <marker date="1537556270050" expanded="true" signature="2601:2605" ph="..." />
+            <marker date="1537556270050" expanded="true" signature="3789:3793" ph="..." />
+            <marker date="1537556270050" expanded="true" signature="4074:4079" ph="..." />
+            <marker date="1537556270050" expanded="true" signature="5253:5258" ph="..." />
+            <marker date="1537556270050" expanded="true" signature="5328:5329" ph="..." />
+            <marker date="1537556270050" expanded="true" signature="5490:5491" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/prefactors.html">
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="92" column="97" lean-forward="true" selection-start-line="92" selection-start-column="40" selection-end-line="92" selection-end-column="97" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/requests.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="86" column="70" lean-forward="true" selection-start-line="86" selection-start-column="70" selection-end-line="86" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/factor/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="36" column="103" selection-start-line="36" selection-start-column="85" selection-end-line="36" selection-end-column="103" />
-          <folding>
-            <element signature="e#630#662#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/prefVerificationsPage.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="94" column="108" selection-start-line="94" selection-start-column="108" selection-end-line="94" selection-end-column="108" />
+        <state relative-caret-position="99">
+          <caret line="75" column="31" lean-forward="true" selection-start-line="75" selection-start-column="31" selection-end-line="75" selection-end-column="31" />
         </state>
       </provider>
     </entry>

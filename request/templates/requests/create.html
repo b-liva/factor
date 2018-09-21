@@ -1,0 +1,27 @@
+{% extends 'requests/base.html' %}
+{% block mainContent %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+               {% if error %}
+                {{ error }}
+            {% endif %}
+            <form method="POST" action="{% url 'create_req' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                Req No.<br>
+                <input type="text" name="req_no"><br>
+                Summary:<br>
+                <textarea name="req_summary"></textarea><br>
+                Image<br>
+                <input type="file" name="req_file"><br>
+
+                <input class="btn btn-primary" type="submit" value="Add New">
+
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

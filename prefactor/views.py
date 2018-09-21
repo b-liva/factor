@@ -9,3 +9,7 @@ def prefactors(request):
 
 def home(request):
     return render(request, 'prefactors/homepage.html')
+
+
+def testpage(request):
+    return render(request, 'requests/testpage.html')
