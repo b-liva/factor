@@ -8,12 +8,12 @@
     </form>
     <hr>
     {% for req in reqs.all %}
-        <h3 style="margin-left: 25px">Req No. <a href="{% url 'reqDetails' req.pk %}">{{ req.number }}</a></h3>
+        <p style="margin-left: 25px">Req No. <a href="{% url 'reqDetails' req.pk %}">{{ req.number }}</a></p>
 
         {% for pref in req.prefactor_set.all %}
-            <h3 style="margin-left: 75px;">Pref No.<a href="{% url 'prefactorsDetailPage' pref.pk %}">{{ pref.number }}</a></h3>
+            <p style="margin-left: 75px;">Pref No.<a href="{% url 'prefactorsDetailPage' pref.pk %}">{{ pref.number }}</a></p>
             {% for ver in pref.prefactorverification_set.all %}
-                <h3 style="margin-left: 125px">Ver No.<a href="{% url 'prefVerfDetailPage' ver.pk %}">{{ ver.number }}</a></h3>
+                <p style="margin-left: 125px">Ver No.<a href="{% url 'prefVerfDetailPage' ver.pk %}">{{ ver.number }}</a></p>
             {% endfor %}
         {% endfor %}
 

@@ -19,31 +19,39 @@ def tenders(request):
 
         # for tId, tender in enumerate(tenders):
         #     print(f"item# {tId}: {tender['title']} & Date:{tender['startDateFa']}")
+    key = ''
+    if 'key' in request.POST:
+        key = request.POST['key']
+
     scraper = TendersScraper()
-    tenders_items = scraper.scrape()
-    return render(request, 'tenders/tenders.html', {'tenders_items': tenders_items})
+    tenders_items = scraper.scrape(key)
+    aria_tender = AriaTender()
+    aria_items = aria_tender.scrape(key)
+
+    return render(request, 'tenders/tenders.html', {'tenders_items': tenders_items, 'aria_tenders': aria_items, 'key': key})
 
 
 class TendersScraper(object):
     def __init__(self):
         self.search_request = "term=الکترو"
 
-    def scrape(self):
-        tens = self.scrape_jobs(5)
+    def scrape(self, key=''):
+        tens = self.scrape_jobs(5, key)
         return tens
 
 
-    def scrape_jobs(self, max_pages=3):
+    def scrape_jobs(self, max_pages=3, key = ''):
         tenders = []
         pageno = 1
         url = "https://www.parsnamaddata.com/parsnamad/tenders/search/find"
 
         querystring = {"langid": "1065"}
 
-        term = requests.utils.quote('الکتروموتور')
+        term = requests.utils.quote('الکترو')
+        term = requests.utils.quote(key)
         while pageno <= max_pages:
             # print(f"term= {term} & pageNo= {pageno}")
-            payload = f"term={ term }&allGrpId=0&current={pageno}&status=2"
+            payload = f"term={term}&allGrpId=0&current={pageno}&status=2"
             headers = {
                 'content-type': "application/x-www-form-urlencoded",
                 'cache-control': "no-cache",
@@ -68,3 +76,43 @@ class TendersScraper(object):
         return tenders
 
 
+
+
+class AriaTender(object):
+    def scrape(keyword='', key=''):
+        tenders = []
+        term = requests.utils.quote(key)
+        url = "http://www.ariatender.com/beta/query.php"
+        # payload = "subject%5B%5D=%D8%A7%D9%84%DA%A9%D8%AA%D8%B1%D9%88%D9%85%D9%88%D8%AA%D9%88%D8%B1"
+        payload = f'subject%5B%5D={term}'
+        headers = {
+            'content-type': "application/x-www-form-urlencoded",
+            'cache-control': "no-cache"
+        }
+
+        response = requests.request("POST", url, data=payload, headers=headers)
+        result = response.text
+
+        soup = BeautifulSoup(result, 'html.parser')
+        # print(soup)
+        links = soup.findAll('a')
+        # print(links)
+        # print(links)
+        # results = response.json()
+        # resinner = results['list']
+        # print(resinner)
+        links = soup.select('div.Tender-Box-Div-Description-f a')
+        print(links)
+        i = 1
+        for link in links:
+            tender = {}
+            href = link.get('href')
+            tender['href'] = href
+            tender['title'] = link.text
+            href = f'http://www.ariatender.com{href}'
+            # print(f'{i} -  {link.text} | {href}')
+            tenders.append(tender)
+            i += 1
+
+        print(tenders)
+        return tenders

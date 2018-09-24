@@ -74,11 +74,20 @@
 
       <div class="album py-5 bg-light">
         <div class="container">
+            <div>
+                <form action="{% url 'tenders' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="key" value="{% if tenders_items %}{{ key }}{% endif %}">
+                    <input class="btn btn-primary" type="submit" value="Sumbit">
 
+                </form>
+
+            </div>
           <div class="row">
-              {% for tender in tenders_items %}
-                <div class="col-md-4">
-                  <div class="card mb-4 shadow-sm">
+              <div class="col-md-6">
+                  {% for tender in tenders_items %}
+                <div class="col-md-6">
+                  <div class="card mb-6 shadow-sm">
                     <div class="card-body">
                         <a href="http://www.parsnamaddata.com{{ tender.link }}">{{ tender.title }}</a>
                         <p class="card-text">{{ tender.summary }}</p>
@@ -94,6 +103,36 @@
                 </div>
 
               {% endfor %}
+              </div>
+          <div class="col-md-6">
+              <div>
+                  {% for aria_tender in aria_tenders %}
+
+
+
+                   <div class="col-md-6">
+                  <div class="card mb-6 shadow-sm">
+                    <div class="card-body">
+                        <a href="http://www.ariatender.com{{ aria_tender.href }}">{{ aria_tender.title }}</a>
+                        <p class="card-text"></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-sm btn-outline-secondary"></button>
+                          <button type="button" class="btn btn-sm btn-outline-secondary">
+                              <a href="http://www.ariatender.com{{ aria_tender.href }}">View</a>
+                          </button>
+                        </div>
+                        <small class="text-muted"></small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                  {% endfor %}
+                </div>
+
+          </div>
+
           </div>
         </div>
       </div>
