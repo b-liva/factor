@@ -31,6 +31,7 @@ urlpatterns = [
     path('prefPage/', prefactor.views.prefactors, name='prefPage'),
     path('pref_ver/', prefactor_verification.views.pref_verification, name='pref_ver'),
     path('tenders/', tender.views.tenders, name='tenders'),
+    path('tenders_admin/', tender.views.tenders_admin, name='tenders_admin'),
     path('requests/', request.views.request_page, name="requestPage"),
     path('requests/<int:request_id>', request.views.request_details, name="reqDetails"),
     path('prefactors/', request.views.prefactors_page, name="prefactorsPage"),
@@ -38,6 +39,7 @@ urlpatterns = [
     path('prefVerification/', request.views.prefactors_verification_page, name="prefVerificationPage"),
     path('prefVerification/<int:pref_ver_id>', request.views.pref_ver_details, name="prefVerfDetailPage"),
     path('find_pref/', request.views.find_pref, name="find_prefPage"),
+    path('dashboard/', request.views.dashboard, name="dashboard"),
     path('accounts/', include('accounts.url')),
     path('request/', include('request.url')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

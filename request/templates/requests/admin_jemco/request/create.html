@@ -1,0 +1,81 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+
+    <div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+               {% if error %}
+                {{ error }}
+            {% endif %}
+            <form method="POST" action="{% url 'create_req' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                Req No.<br>
+                <input type="text" name="req_no"><br>
+                Summary:<br>
+                <textarea name="req_summary"></textarea><br>
+Image<br>
+                <input type="file" name="req_file"><br>
+                <input class="btn btn-primary" type="submit" value="Save" name="done">
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{#{% extends 'requests/base.html' %}#}
+{#{% block mainContent %}#}
+{#<div class="row">#}
+{#    <div class="col-md-4">#}
+{#        <div class="card mb-4 shadow-sm">#}
+{#            <div class="card-body">#}
+{#               {% if error %}#}
+{#                {{ error }}#}
+{#            {% endif %}#}
+{#            <form method="POST" action="{% url 'create_req' %}" enctype="multipart/form-data">#}
+{#                {% csrf_token %}#}
+{#                Req No.<br>#}
+{#                <input type="text" name="req_no"><br>#}
+{#                Summary:<br>#}
+{#                <textarea name="req_summary"></textarea><br>#}
+{#Image<br>#}
+{#                <input type="file" name="req_file"><br>#}
+{#                <input class="btn btn-primary" type="submit" value="Save" name="done">#}
+{#            </form>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+{#{% endblock %}#}
+
+
+
+
+
+
+
+
+{#                KW<br>#}
+{#                <input type="number" name="kw"><br><br>#}
+{#                RPM<br>#}
+{#                <input type="number" name="rpm"><br>#}
+{#                Voltage<br>#}
+{#                <select name="voltage">#}
+{#                    {% for item in req.voltage %}#}
+{#                    <option value="{{ item }}">{{ item }}</option>#}
+{#                    {% endfor %}#}
+{#                </select><br>#}
+{#                IP<br>#}
+{#                <select name="ip">#}
+{#                    {% for item in req.ip %}#}
+{#                    <option value="{{ item }}">{{ item }}</option>#}
+{#                    {% endfor %}#}
+{#                </select><br>#}
+{#                IC<br>#}
+{#                <select name="ic">#}
+{#                    {% for item in req.ic %}#}
+{#                    <option value="{{ item }}">{{ item }}</option>#}
+{#                    {% endfor %}#}
+{#                </select><br>#}
+{#                Image<br>#}
+{#                <input type="file" name="req_file"><br>#}

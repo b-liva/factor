@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response, redirect
 
 # Create your views here.
 #!/usr/bin/env python
@@ -28,7 +28,36 @@ def tenders(request):
     aria_tender = AriaTender()
     aria_items = aria_tender.scrape(key)
 
+    # return render(request, 'requests/admin_jemco/tenders/tenders.html', {'tenders_items': tenders_items, 'aria_tenders': aria_items, 'key': key})
     return render(request, 'tenders/tenders.html', {'tenders_items': tenders_items, 'aria_tenders': aria_items, 'key': key})
+
+def find_tenders(key=''):
+    prefs = ''
+    print('02')
+    scraper = TendersScraper()
+    parsnamad_items = scraper.scrape(key)
+    print('03')
+    aria_tender = AriaTender()
+    aria_items = aria_tender.scrape(key)
+    print('04')
+    return parsnamad_items, aria_items
+
+
+def render_tenders(request, parsTender, ariaTender, key=''):
+    print('05')
+    # return render(request, 'requests/admin_jemco/tenders/tenders.html', {'tenders_items': parsTender, 'aria_tenders': ariaTender, 'key': key})
+    return redirect('requests/admin_jemco/tenders/tenders.html', {'tenders_items': parsTender, 'aria_tenders': ariaTender, 'key': key})
+
+
+def tenders_admin(request, key='', path_to_html_file=''):
+    if 'key' in request.POST:
+        key = request.POST['key']
+    print('01')
+    pars_tenders, aria_tenders = find_tenders(key)
+    path_to_html_file = 'requests/admin_jemco/tenders/tenders.html'
+    # render_tenders(pars_tenders, aria_tenders, key)
+    return render(request, path_to_html_file, {'tenders_items': pars_tenders, 'aria_tenders': aria_tenders, 'key': key})
+
 
 
 class TendersScraper(object):

@@ -1,9 +1,12 @@
 import json
+
+from django.contrib.humanize.templatetags.humanize import intcomma
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
 from .models import Requests
+from .models import ReqSpec
 from .models import Prefactor
 from .models import PrefactorVerification
 from django.contrib.auth.decorators import login_required
@@ -12,22 +15,27 @@ from django.contrib.auth.decorators import login_required
 
 def request_page(request):
     allRequests = Requests.objects
-    return render(request, 'requests/requests.html', {'allRequests': allRequests})
+    return render(request, 'requests/admin_jemco/allRequests.html', {'allRequests': allRequests})
+    # return render(request, 'requests/requests.html', {'allRequests': allRequests})
 
 
 def prefactors_page(request):
     allPrefactos = Prefactor.objects
-    return render(request, 'requests/prefactors.html', {'allPrefactors': allPrefactos})
+    return render(request, 'requests/admin_jemco/prefactors.html', {'allPrefactors': allPrefactos})
+    # return render(request, 'requests/prefactors.html', {'allPrefactors': allPrefactos})
 
 
 def prefactors_verification_page(request):
     allPrefVerifications = PrefactorVerification.objects
-    return render(request, 'requests/prefVerificationsPage.html', {'allPrefVerifications': allPrefVerifications})
+    return render(request, 'requests/admin_jemco/prefVerificationsPage.html', {'allPrefVerifications': allPrefVerifications})
+    # return render(request, 'requests/prefVerificationsPage.html', {'allPrefVerifications': allPrefVerifications})
 
 
 def request_details(request, request_id):
     req = get_object_or_404(Requests, pk=request_id)
-    return render(request, 'requests/req_details.html', {'request': req})
+    specs = req.reqspec_set.all()
+    return render(request, 'requests/admin_jemco/request/req_details.html', {'request': req, 'specs': specs})
+    # return render(request, 'requests/req_details.html', {'request': req, 'specs': specs})
 
 def prefactor_details(request, pref_id):
     pref = get_object_or_404(Prefactor, pk=pref_id)
@@ -64,17 +72,76 @@ def find_pref(request):
 @login_required
 def create_req(request):
     if request.method == 'POST':
-        if request.POST['req_no'] and request.POST['req_summary']:
+        if request.POST['req_no']:
             req = Requests()
             req.number = request.POST['req_no']
             req.summary = request.POST['req_summary']
-            req.image = request.FILES['req_file']
+            # req.image = request.FILES['req_file']
             req.pub_date = timezone.datetime.now()
             req.save()
-            return redirect('allTables')
+            return redirect('create_spec', req_pk=req.pk)
         else:
-            return render(request, 'requests/create.html', {'error': 'some field is empty'})
-    return render(request, 'requests/create.html')
+            return render(request, 'requests/admin_jemco/request/create.html', {'error': 'some field is empty'})
+    return render(request, 'requests/admin_jemco/request/create.html')
+
+
+def create_spec(request, req_pk):
+    req_obj = get_object_or_404(Requests, pk=req_pk)
+    specs = req_obj.reqspec_set.all()
+    # req_obj = Requests(pk=req_pk)
+    print(req_obj.number)
+    return render(request, 'requests/admin_jemco/request/create_spec.html', {'req_obj': req_obj, 'specs': specs})
+    # return render(request, 'requests/create_spec.html', {'req_obj': req_obj, 'specs': specs})
+
+
+def save_spec(request):
+    if request.method == 'POST':
+        related_req = Requests(pk=request.POST['req_id'])
+        spec = ReqSpec()
+        spec.req_id = related_req
+        spec.qty = request.POST['qty']
+        spec.kw = request.POST['kw']
+        spec.rpm = request.POST['rpm']
+        spec.voltage = request.POST['voltage']
+        spec.ic = request.POST['ic']
+        spec.ip = request.POST['ip']
+        spec.summary = request.POST['summary']
+        spec.save()
+        return redirect('create_spec', req_pk=related_req.pk)
+
+def del_spec(request, spec_id):
+    # print(request.content_params)
+    print(spec_id)
+    spec = get_object_or_404(ReqSpec, pk=spec_id)
+
+    req = spec.req_id
+    spec.delete()
+    return redirect('create_spec', req_pk=req.pk)
+
+
+# @login_required
+# def create_req(request):
+#     if request.method == 'POST':
+#         if request.POST['req_no'] and request.POST['req_summary']:
+#             req = Requests()
+#             req.number = request.POST['req_no']
+#             req.summary = request.POST['req_summary']
+#             req.image = request.FILES['req_file']
+#             req.pub_date = timezone.datetime.now()
+#             req.save()
+#             req_spec = ReqSpec()
+#             req_spec.req_id = req.number
+#             req_spec.kw = request.POST['kw']
+#             req_spec.rpm = request.POST['rpm']
+#             req_spec.id = request.POST['id']
+#             req_spec.ip = request.POST['ip']
+#             req_spec.save(
+#
+#             )
+#             return redirect('allTables')
+#         else:
+#             return render(request, 'requests/create.html', {'error': 'some field is empty'})
+#     return render(request, 'requests/create.html')
 
 @login_required
 def create_pref(request):
@@ -97,22 +164,26 @@ def create_pref(request):
         else:
             list = allRequests()
             return render(request, 'prefactors/create.html', {'list': list, 'error': 'some field is empty'})
-    return render(request, 'requests/create.html')
+    return render(request, 'requests/admin_jemco/request/create.html')
 
 @login_required
 def createpage(request):
-    return render(request, 'requests/create.html')
+    req = Requests()
+    return render(request, 'requests/admin_jemco/request/create.html', {'req': req})
+    # return render(request, 'requests/create.html', {'req': req})
 
 @login_required
 def createprefpage(request):
     list = allRequests()
     print(list)
-    return render(request, 'prefactors/create.html', {'list': list})
+    return render(request, 'requests/admin_jemco/prefactor/create.html', {'list': list})
+    # return render(request, 'prefactors/create.html', {'list': list})
 
 @login_required
 def create_verf_page(request, error=''):
     list = allPref()
-    return render(request, 'prefVerification/create.html', {'list': list, 'error': error})
+    return render(request, 'requests/admin_jemco/prefVerification/create.html', {'list': list, 'error': error})
+    # return render(request, 'prefVerification/create.html', {'list': list, 'error': error})
 
 def create_verf(request):
     print(request)
@@ -151,3 +222,33 @@ def allRequests():
         list.append(req.number)
     list.sort()
     return list
+
+
+@login_required
+def dashboard(request):
+    routine_kw, project_kw, allKw = find_routine_kw()
+    print(project_kw)
+    print(routine_kw)
+    return render(request, 'requests/admin_jemco/dashboard.html', {'routine_kw': intcomma(routine_kw), 'project_kw': intcomma(project_kw), 'allKw': intcomma(allKw)})
+
+
+def find_routine_kw():
+
+# ReqSpec is a class and ReqSpec() is an instance of it
+# command bellow works for clas and not working for instance
+
+    routine_specs = ReqSpec.objects.filter(kw__lte=450)
+    project_specs = ReqSpec.objects.filter(kw__gt=450)
+    allSpecs = ReqSpec.objects.all()
+    allKw = 0
+    routine_kw = 0
+    project_kw = 0
+    for spec in routine_specs:
+        routine_kw += spec.kw * spec.qty
+
+    for specc in project_specs:
+        project_kw += specc.kw * specc.qty
+    for spec in allSpecs:
+        allKw += spec.kw * spec.qty
+
+    return routine_kw, project_kw, allKw

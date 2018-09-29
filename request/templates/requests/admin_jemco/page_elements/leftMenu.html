@@ -1,0 +1,44 @@
+<!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <h3>General</h3>
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                      <li><a href="#">Dashboard2</a></li>
+                      <li><a href="#">Dashboard3</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-edit"></i> Requests <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{% url 'requestPage' %}">All requests</a></li>
+                      <li><a href="{% url 'createpage' %}">Create request</a></li>
+                      <li><a href="#">Edit a request</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-desktop"></i> Prefactors <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{% url 'prefactorsPage' %}">All prefactors</a></li>
+                      <li><a href="{% url 'find_pref' %}">Find a prefactor</a></li>
+                      <li><a href="{% url 'createprefpage' %}">Create prefactor</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-table"></i> Prefactor Verifications <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{% url 'prefVerificationPage' %}">All Verifications</a></li>
+                        <li><a href="{% url 'create_verf_page' %}">Add a Verification </a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-table"></i> Tenders <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{% url 'tenders_admin' %}">Find Tenders </a></li>
+                    </ul>
+                  </li>
+
+
+                </ul>
+              </div>
+
+            </div>
+            <!-- /sidebar menu -->

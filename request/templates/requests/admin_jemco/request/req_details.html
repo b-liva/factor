@@ -1,0 +1,68 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+
+            <div class="row">
+                    <div class="col-md-9">
+                        <div class="card mb-9 shadow-sm">
+{#                            <img class="card-img-top" src="{{ request.image.url }}" alt="Card image cap">#}
+                            <div class="card-body">
+                                <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Req: {{ request.number }}</button>
+
+                                    </div>
+                                <p> {{ request.summary }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div class="btn-group">
+                                        <a href="{% url 'create_spec' req_pk=request.pk %}"><button type="button" class="btn btn-sm btn-outline-secondary">Edit</button></a>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
+                                    </div>
+                                    <small class="text-muted">{{ request.pub_date_pretty }}</small>
+                                </div>
+
+                                 <div>
+                <p><b>Spec:</b></p>
+                <table class="withBorder tableFull">
+                    <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <th>QTY</th>
+                        <th>KW</th>
+                        <th>VOLTAGE</th>
+                        <th>RPM</th>
+                        <th>IP</th>
+                        <th>IC</th>
+                        <th>SUMMARY</th>
+                    </tr>
+                    {% for spec in specs %}
+                    <tr>
+                        <td>{{ spec.id }}</td>
+                        <td>{{ spec.qty }}</td>
+                        <td>{{ spec.kw }}</td>
+                        <td>{{ spec.voltage }}</td>
+                        <td>{{ spec.rpm }}</td>
+                        <td>{{ spec.ip }}</td>
+                        <td>{{ spec.ic }}</td>
+                        <td>{{ spec.summary }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <hr>
+            </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

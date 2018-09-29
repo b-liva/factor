@@ -29,6 +29,10 @@ urlpatterns = [
     path('createprefpage/', request.views.createprefpage, name='createprefpage'),
     path('create_pref/', request.views.create_pref, name='create_pref'),
     path('create_verf_page/', request.views.create_verf_page, name='create_verf_page'),
-    path('create_verf/', request.views.create_verf, name='create_verf')
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('create_verf/', request.views.create_verf, name='create_verf'),
+    path('create_spec/<req_pk>', request.views.create_spec, name='create_spec'),
+    path('save_spec', request.views.save_spec, name='save_spec'),
+    path('del_spec/<int:spec_id>', request.views.del_spec, name='del_spec'),
+    path('find_pref', request.views.allTable, name='find_pref'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

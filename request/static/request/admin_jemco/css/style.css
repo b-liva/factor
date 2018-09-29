@@ -1,0 +1,29 @@
+#area-chart,
+#line-chart,
+#bar-chart,
+#stacked,
+#pie-chart{
+  min-height: 250px;
+}
+.card-img-top{
+  width: 100%;
+  max-height: 200px;
+}
+table.withBorder tbody,
+table.withBorder th,
+table.withBorder td{
+  /*border:1px solid black;*/
+  /*text-align: center;*/
+}
+.withBorder th,
+.withBorder td,
+.withBorder tbody{
+  border:1px solid black;
+  text-align: center;
+}
+table.withBorder{
+    /*width:100%;*/
+}
+table.tableFull{
+  width:100%;
+}

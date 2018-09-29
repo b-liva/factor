@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.humanize',
     'request.apps.RequestConfig',
     'tender.apps.TenderConfig',
     'prefactor.apps.PrefactorConfig',
