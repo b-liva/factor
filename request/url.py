@@ -34,5 +34,9 @@ urlpatterns = [
     path('save_spec', request.views.save_spec, name='save_spec'),
     path('del_spec/<int:spec_id>', request.views.del_spec, name='del_spec'),
     path('find_pref', request.views.allTable, name='find_pref'),
+    path('create_pref_spec', request.views.create_pref_spec, name='create_pref_spec'),
+    path('create_spec_pref_findReq', request.views.create_spec_pref_findReq, name='create_spec_pref_findReq'),
+    path('save_pref_spec', request.views.save_pref_spec, name='save_pref_spec'),
+    path('xreq_pref_spec', request.views.xreq_pref_spec, name='xreq_pref_spec'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

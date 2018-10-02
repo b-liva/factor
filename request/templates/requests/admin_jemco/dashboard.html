@@ -2,7 +2,7 @@
 
 {% block right_col %}
 
-    {% include 'requests/admin_jemco/page_elements/top-summary.html' with r_kw=routine_kw  project_kw=project_kw allKw=allKw %}
+    {% include 'requests/admin_jemco/page_elements/top-summary.html' with r_kw=routine_kw  project_kw=project_kw allKw=allKw num_of_reqs=num_of_reqs %}
 
           <div class="row">
 
@@ -27,7 +27,7 @@
 
 
                 {% include 'requests/admin_jemco/page_elements/agent_shares.html' %}
-                {% include 'requests/admin_jemco/page_elements/latest_orders.html' %}
+                {% include 'requests/admin_jemco/page_elements/latest_orders.html' with last_n_requests=last_n_requests %}
 
 
 

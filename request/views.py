@@ -9,6 +9,8 @@ from .models import Requests
 from .models import ReqSpec
 from .models import Prefactor
 from .models import PrefactorVerification
+from .models import PrefSpec
+from .models import Xpref
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
@@ -100,12 +102,18 @@ def save_spec(request):
         spec = ReqSpec()
         spec.req_id = related_req
         spec.qty = request.POST['qty']
+        spec.type = request.POST['type']
         spec.kw = request.POST['kw']
         spec.rpm = request.POST['rpm']
         spec.voltage = request.POST['voltage']
         spec.ic = request.POST['ic']
         spec.ip = request.POST['ip']
         spec.summary = request.POST['summary']
+        if request.POST['price']:
+            spec.price = request.POST['price']
+
+
+
         spec.save()
         return redirect('create_spec', req_pk=related_req.pk)
 
@@ -227,13 +235,23 @@ def allRequests():
 @login_required
 def dashboard(request):
     routine_kw, project_kw, allKw = find_routine_kw()
-    print(project_kw)
-    print(routine_kw)
-    return render(request, 'requests/admin_jemco/dashboard.html', {'routine_kw': intcomma(routine_kw), 'project_kw': intcomma(project_kw), 'allKw': intcomma(allKw)})
+    num_of_requests = no_of_requests()
+    orders = Orders()
+    last_n_requests = orders.last_orders()
+    return render(request, 'requests/admin_jemco/dashboard.html',
+                  {
+                      'routine_kw': intcomma(routine_kw),
+                      'project_kw': intcomma(project_kw),
+                      'allKw': intcomma(allKw),
+                      'num_of_reqs': num_of_requests,
+                      'last_n_requests': last_n_requests
+                  })
 
+def no_of_requests():
+    num_of_reqs = Requests.objects.all().count()
+    return num_of_reqs
 
 def find_routine_kw():
-
 # ReqSpec is a class and ReqSpec() is an instance of it
 # command bellow works for clas and not working for instance
 
@@ -246,9 +264,83 @@ def find_routine_kw():
     for spec in routine_specs:
         routine_kw += spec.kw * spec.qty
 
-    for specc in project_specs:
-        project_kw += specc.kw * specc.qty
+    for spec in project_specs:
+        project_kw += spec.kw * spec.qty
     for spec in allSpecs:
         allKw += spec.kw * spec.qty
 
     return routine_kw, project_kw, allKw
+
+
+def find_last_reqs():
+    pass
+
+def specs_of_orders(orders):
+    pass
+
+
+class Orders:
+    def last_orders(self):
+        last_n_requests = Requests.objects.filter()[:10]
+        return last_n_requests
+
+
+def create_pref_spec(request):
+    return render(request, 'requests/admin_jemco/prefactor/create_spec_pref01.html')
+
+def create_spec_pref_findReq(request):
+    req = Requests.objects.all().get(number=request.POST['req_no'])
+    # xpref = Xpref()
+    # xpref.req_id = req
+    # xpref.number = request.POST['pref_no']
+    # xpref.save()
+    # print('***&&&&****')
+    # print(request.POST['req_no'])
+    a = req
+    reqspec = a.reqspec_set.all()
+    print(reqspec.count())
+    return render(request, 'requests/admin_jemco/prefactor/create_spec_pref02.html', {
+        'reqspec': reqspec,
+        'req_id': req.pk,
+        # 'xpref_no': xpref
+    })
+
+
+def save_pref_spec(request):
+    req_no = request.POST['req_no']
+    xpref_no = request.POST['xpref']
+    spec_prices = request.POST.getlist('price')
+    spec_ids = request.POST.getlist('spec_id')
+    x = 0
+    xpref = Xpref.objects.filter(pk=xpref_no)
+    xpref = Xpref()
+    xpref.number = xpref_no
+    xpref.req_id = Requests.objects.get(pk=req_no)
+    xpref.save()
+    for i in spec_ids:
+        j = int(i)
+        print(str(i) + ':' + str(spec_prices[x]))
+        x += 1
+        # r = PrefSpec.objects.filter(pk=spec_ids[x])
+        spec = ReqSpec.objects.get(pk=j)
+
+        pref_spec = PrefSpec()
+        pref_spec.type = spec.type
+        pref_spec.price = spec.price
+        pref_spec.kw = spec.kw
+        pref_spec.rpm = spec.rpm
+        pref_spec.voltage = spec.voltage
+        pref_spec.ip = spec.ip
+        pref_spec.ic = spec.ic
+        pref_spec.summary = spec.summary
+        pref_spec.xpref_id = xpref
+        pref_spec.save()
+        # r = PrefSpec.objects.get(pk=j)
+        # r.xpref_id = xpref
+        # r.price = spec_prices[x]
+        # r.save()
+    return render(request, 'requests/admin_jemco/prefactor/create_spec_pref01.html')
+
+
+def xreq_pref_spec():
+    return

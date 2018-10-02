@@ -17,12 +17,34 @@ class Requests(models.Model):
 class ReqSpec(models.Model):
     req_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
     qty = models.IntegerField(default=1)
+    type = models.TextField(default=1)
+    price = models.FloatField(null=True, blank=True)
     kw = models.FloatField()
     rpm = models.IntegerField()
     voltage = models.IntegerField(default=380)
     ip = models.IntegerField(null=True, blank=True)
     ic = models.IntegerField(null=True, blank=True)
     summary = models.TextField(max_length=500, blank=True, null=True)
+
+
+class Xpref(models.Model):
+    req_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
+    number = models.IntegerField()
+    pub_date = models.DateTimeField(default=now)
+    image = models.ImageField('requests/prefactors/original/')
+
+class PrefSpec(models.Model):
+    xpref_id = models.ForeignKey(Xpref, on_delete=models.CASCADE)
+    qty = models.IntegerField(default=1)
+    type = models.TextField(default=1)
+    price = models.FloatField(null=True, blank=True)
+    kw = models.FloatField()
+    rpm = models.IntegerField()
+    voltage = models.IntegerField(default=380)
+    ip = models.IntegerField(null=True, blank=True)
+    ic = models.IntegerField(null=True, blank=True)
+    summary = models.TextField(max_length=500, blank=True, null=True)
+
 
 
 class Prefactor(models.Model):

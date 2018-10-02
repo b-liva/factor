@@ -24,7 +24,12 @@
                     <ul class="quick-list">
                       <li><i class="fa fa-calendar-o"></i><a href="#">Latest orders</a>
                       </li>
-                      <li><i class="fa fa-bars"></i><a href="#">Abfa - 250kw - 2qty</a>
+
+                        {% for item in last_n_requests %}
+                            <li><i class="fa fa-bars"></i><a href="#">Abfa - {{ item.number }} - 2qty</a>
+                        {% endfor %}
+
+                        <li><i class="fa fa-bars"></i><a href="#">Abfa - 250kw - 2qty</a>
                       </li>
                       <li><i class="fa fa-bars"></i><a href="#">Sazesh - 325kw - 5qty</a>
                       <li><i class="fa fa-bars"></i><a href="#">Pumpiran - 500kw - 14qty</a>
