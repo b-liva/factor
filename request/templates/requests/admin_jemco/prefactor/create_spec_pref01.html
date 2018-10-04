@@ -8,6 +8,10 @@
                {% if msg %}
                 {{ msg }}
             {% endif %}
+            {% for req in  reqs %}
+                {{ req.number }} -
+            {% endfor %}
+
             <form method="POST" action="{% url 'create_spec_pref_findReq' %}" enctype="multipart/form-data">
                 {% csrf_token %}
 

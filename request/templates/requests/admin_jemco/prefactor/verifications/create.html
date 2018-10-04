@@ -1,6 +1,7 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
 {% block right_col %}
 
+    <h3>{{ msg}}</h3>
 <div class="row">
     <div class="col-md-4">
         <div class="card mb-4 shadow-sm">
@@ -8,14 +9,14 @@
                {% if error %}
                 {{ error }}
             {% endif %}
-            <form method="POST" action="{% url 'create_verf' %}" enctype="multipart/form-data">
+            <form method="POST" action="{% url 'create_xverf' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 Verification No.<br>
                 <input type="text" name="number"><br>
                 Prefactor No.<br>
-                <select name="pref_number">
-                {% for item in list %}
-                      <option value="{{item}}">{{item}}</option>
+                <select name="xpref_id">
+                {% for xpref in xprefs %}
+                      <option value="{{xpref.id}}">{{xpref.number}}</option>
                 {% endfor %}
 
                 </select>

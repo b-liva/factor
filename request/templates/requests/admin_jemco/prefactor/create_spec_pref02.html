@@ -19,7 +19,7 @@
             <form action="{% url 'save_pref_spec' %}" method="POST">
             {% csrf_token %}
             Prefactor No<br>
-            <input type="number" name="xpref" value="100"><br>
+            <input type="number" name="xpref" value="" required><br>
                 <table class="withBorder">
                     <tbody>
                     <tr>

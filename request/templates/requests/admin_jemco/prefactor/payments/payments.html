@@ -1,0 +1,22 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+    this is payment page
+    <table class="withBorder">
+        <tr>
+            <th>Number</th>
+            <th>Amount</th>
+            <th>Payment Date</th>
+        </tr>
+        <tbody class="">
+
+            {% for payment in payments %}
+                <tr>
+                    <td>{{ payment.number }}</td>
+                    <td>{{ payment.amount }}</td>
+                    <td>{{ payment.payment_date }}</td>
+                </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+
+{% endblock %}

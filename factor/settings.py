@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'tender.apps.TenderConfig',
     'prefactor.apps.PrefactorConfig',
     'prefactor_verification.apps.PrefactorVerificationConfig',
+    'customer.apps.CustomerConfig',
+    # 'accounts.apps.AppConfig',
     'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',

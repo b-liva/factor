@@ -12,6 +12,13 @@
                 {% csrf_token %}
                 Req No.<br>
                 <input type="text" name="req_no"><br>
+                Customer<br>
+                <select name="customer_id">
+                    {% for customer in customers %}
+                        <option  value="{{ customer.id }}">{{ customer.name }}</option>
+                    {% endfor %}
+
+                </select><br>
                 Summary:<br>
                 <textarea name="req_summary"></textarea><br>
 Image<br>

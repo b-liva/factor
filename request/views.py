@@ -11,6 +11,9 @@ from .models import Prefactor
 from .models import PrefactorVerification
 from .models import PrefSpec
 from .models import Xpref
+from .models import Payment
+from .models import XprefVerf
+from customer.models import Customer
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
@@ -75,9 +78,11 @@ def find_pref(request):
 def create_req(request):
     if request.method == 'POST':
         if request.POST['req_no']:
+            print(request.POST['customer_id'])
             req = Requests()
             req.number = request.POST['req_no']
             req.summary = request.POST['req_summary']
+            req.customer = Customer.objects.get(pk=request.POST['customer_id'])
             # req.image = request.FILES['req_file']
             req.pub_date = timezone.datetime.now()
             req.save()
@@ -95,11 +100,25 @@ def create_spec(request, req_pk):
     return render(request, 'requests/admin_jemco/request/create_spec.html', {'req_obj': req_obj, 'specs': specs})
     # return render(request, 'requests/create_spec.html', {'req_obj': req_obj, 'specs': specs})
 
-
+def edit_xspec(request, spec_pk, req_pk):
+    req = Requests.objects.get(pk=req_pk)
+    specs = ReqSpec.objects.filter(req_id=req)
+    spec = ReqSpec.objects.get(pk=spec_pk)
+    updating = True
+    # specs = PrefSpec.objects.all()
+    return render(request, 'requests/admin_jemco/request/create_spec.html', {
+        'spec': spec,
+        'specs': specs,
+        'req_obj': req,
+        'updating': updating
+    })
 def save_spec(request):
     if request.method == 'POST':
-        related_req = Requests(pk=request.POST['req_id'])
         spec = ReqSpec()
+        if request.POST['updating']:
+            spec = ReqSpec.objects.get(pk=request.POST['spec_pk'])
+
+        related_req = Requests(pk=request.POST['req_id'])
         spec.req_id = related_req
         spec.qty = request.POST['qty']
         spec.type = request.POST['type']
@@ -109,11 +128,8 @@ def save_spec(request):
         spec.ic = request.POST['ic']
         spec.ip = request.POST['ip']
         spec.summary = request.POST['summary']
-        if request.POST['price']:
-            spec.price = request.POST['price']
-
-
-
+        # if request.POST['price']:
+        #     spec.price = request.POST['price']
         spec.save()
         return redirect('create_spec', req_pk=related_req.pk)
 
@@ -177,7 +193,11 @@ def create_pref(request):
 @login_required
 def createpage(request):
     req = Requests()
-    return render(request, 'requests/admin_jemco/request/create.html', {'req': req})
+    customers = Customer.objects.all()
+    return render(request, 'requests/admin_jemco/request/create.html', {
+        'req': req,
+        'customers': customers,
+    })
     # return render(request, 'requests/create.html', {'req': req})
 
 @login_required
@@ -286,10 +306,11 @@ class Orders:
 
 
 def create_pref_spec(request):
-    return render(request, 'requests/admin_jemco/prefactor/create_spec_pref01.html')
+    Reqs = Requests.objects.all()
+    return render(request, 'requests/admin_jemco/prefactor/create_spec_pref01.html', {'reqs': Reqs})
 
 def create_spec_pref_findReq(request):
-    req = Requests.objects.all().get(number=request.POST['req_no'])
+    req = Requests.objects.get(number=request.POST['req_no'])
     # xpref = Xpref()
     # xpref.req_id = req
     # xpref.number = request.POST['pref_no']
@@ -307,6 +328,7 @@ def create_spec_pref_findReq(request):
 
 
 def save_pref_spec(request):
+    reqs = Requests.objects.all()
     req_no = request.POST['req_no']
     xpref_no = request.POST['xpref']
     spec_prices = request.POST.getlist('price')
@@ -320,13 +342,15 @@ def save_pref_spec(request):
     for i in spec_ids:
         j = int(i)
         print(str(i) + ':' + str(spec_prices[x]))
-        x += 1
         # r = PrefSpec.objects.filter(pk=spec_ids[x])
         spec = ReqSpec.objects.get(pk=j)
 
         pref_spec = PrefSpec()
         pref_spec.type = spec.type
-        pref_spec.price = spec.price
+        if spec_prices[x] == '':
+            pref_spec.price = 0
+        else:
+            pref_spec.price = spec_prices[x]
         pref_spec.kw = spec.kw
         pref_spec.rpm = spec.rpm
         pref_spec.voltage = spec.voltage
@@ -335,12 +359,136 @@ def save_pref_spec(request):
         pref_spec.summary = spec.summary
         pref_spec.xpref_id = xpref
         pref_spec.save()
-        # r = PrefSpec.objects.get(pk=j)
-        # r.xpref_id = xpref
-        # r.price = spec_prices[x]
-        # r.save()
-    return render(request, 'requests/admin_jemco/prefactor/create_spec_pref01.html')
+        x += 1
+
+    return render(request, 'requests/admin_jemco/prefactor/create_spec_pref01.html', {
+        'reqs': reqs
+                   })
 
 
-def xreq_pref_spec():
-    return
+def xreq_pref_spec(request):
+    xprefs = Xpref.objects.all()
+
+    return render(request, 'requests/admin_jemco/report/report.html', {'xprefs': xprefs})
+
+def find_xpref(request):
+    # xpref_obj = Xpref()
+    # if 'xpref_no' in request.POST:
+    #     xpref_no = request.POST['xpref_no']
+    #     xpref_obj = Xpref.objects.get(pk=xpref_no)
+
+    xpref = Xpref.objects.get(number=request.POST['xpref_no'])
+    xpref = get_object_or_404(Xpref, number=request.POST['xpref_no'])
+    return render(request, 'requests/admin_jemco/prefactor/find_xpref.html', {'xpref_obj': xpref})
+
+def xpref_link(request, xpref_id):
+    xpref = Xpref.objects.get(pk=xpref_id)
+    xpref_specs = xpref.prefspec_set.all()
+    return render(request, 'requests/admin_jemco/report/xpref_details.html', {
+        'xpref': xpref,
+        'xpref_specs': xpref_specs
+    })
+
+
+def edit_xpref(request, xpref_id):
+    xpref = Xpref.objects.get(pk=xpref_id)
+    spec_prices = request.POST.getlist('price')
+    xspec = xpref.prefspec_set.all()
+    x = 0
+    for item in xspec:
+        item.price = spec_prices[x]
+        item.save()
+        x += 1
+
+    msg = 'prefactor was updated'
+    return render(request, 'requests/admin_jemco/report/xpref_details.html', {
+        'xpref': xpref,
+        'xpref_specs': xspec,
+        'msg': msg,
+    })
+
+
+def add_payment_page(request):
+    reqs, xprefs, xpayments = find_all_obj()
+
+    return render(request, 'requests/admin_jemco/prefactor/payments/add_payment.html', {
+        'reqs': reqs,
+        'xprefs': xprefs,
+        'xpayments': xpayments
+    })
+
+
+def add_payment(request):
+
+    xpref = Xpref.objects.get(pk=request.POST['xpref_no'])
+    payment = Payment()
+    payment.xpref_id = xpref
+    payment.amount = request.POST['amount']
+    payment.number = request.POST['number']
+    payment.summary = request.POST['summary']
+    payment.save()
+    msg = 'payment added successfully'
+
+    reqs, xprefs, xpayments = find_all_obj()
+
+    return render(request, 'requests/admin_jemco/prefactor/payments/add_payment.html', {
+        'msg': msg,
+        'reqs': reqs,
+        'xprefs': xprefs,
+        'xpayments': xpayments
+    })
+
+
+def payments(request):
+    payments = Payment.objects.all()
+    return render(request, 'requests/admin_jemco/prefactor/payments/payments.html', {'payments': payments})
+
+
+def find_all_obj():
+    reqs = Requests.objects.all()
+    xprefs = Xpref.objects.all()
+    xpayment = Payment.objects.all()
+    return reqs, xprefs, xpayment
+
+
+
+
+@login_required
+def xpref_ver_create(request, error=''):
+    xprefs = Xpref.objects.all()
+    return render(request, 'requests/admin_jemco/prefactor/verifications/create.html', {
+        'xprefs': xprefs, 'error': error
+    })
+
+
+def create_xverf(request):
+    if request.method == 'POST':
+        if request.POST['number'] and request.POST['summary']:
+            print(request.POST['xpref_id'])
+            if Xpref.objects.get(pk=request.POST['xpref_id']):
+                try:
+                    related_pref = Xpref.objects.get(pk=request.POST['xpref_id'])
+                    verf = XprefVerf()
+                    verf.number = request.POST['number']
+                    verf.xpref = related_pref
+                    verf.summary = request.POST['summary']
+                    # verf.image = request.FILES['image']
+                    # verf.pub_date = timezone.datetime.now()
+                    verf.save()
+                    msg = 'verification saved successfully'
+                    xprefs = Xpref.objects.all()
+                    # return redirect('create_verf_page')
+                    return render(request, 'requests/admin_jemco/prefactor/verifications/create.html', {
+                        'msg': msg,
+                        'xprefs': xprefs
+                    })
+                except Prefactor.DoesNotExist:
+                    return render(request, 'prefVerification/create.html', {'error': 'no such request'})
+        else:
+            allprefactors = allPref()
+            return render(request, 'prefVerification/create.html',
+                          {'error': 'some field is empty', 'list': allprefactors})
+    return render(request, 'prefVerification/create.html')
+
+
+

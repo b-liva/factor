@@ -1,0 +1,27 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+    <h3>{{ msg }}</h3>
+
+    {% for all_customer in all_customers %}
+        {{ all_customer.name }}<b> - </b>
+    {% endfor %}
+
+    <br>Crteate a new customer
+
+
+    <form method="POST" action="{% url 'customer_create'%}">
+        {% csrf_token %}
+        Code<br>
+        <input type="number" name="code">
+        <br>Name<br>
+        <input type="text" name="name">
+        <br>Type<br>
+        <select name="type">
+            {% for type in customer_types %}
+                <option value="{{ type.id }}">{{ type.name }}</option>
+            {% endfor %}
+        </select>
+        <br><button type="submit" name="submit">Save</button>
+    </form>
+
+{% endblock %}

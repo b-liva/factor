@@ -1,0 +1,13 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+    <form method="POST" action="{% url 'find_xpref' %}">
+    {% csrf_token %}
+        prefactor number:<br>
+        <input name="xpref_no" type="number"><br>
+        <button value="submit" type="submit">find</button>
+    </form>
+
+    {% if xpref_obj %}
+        <h3>prefactor no: {{ xpref_obj.number }}</h3>
+    {% endif %}
+{% endblock %}

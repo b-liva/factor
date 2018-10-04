@@ -1,0 +1,6 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+    {% for xpref in xprefs %}
+        <p>xpref no: <a href="{% url 'xpref_link' xpref_id=xpref.id %}">{{ xpref.number }}</a></p>
+    {% endfor %}
+{% endblock %}

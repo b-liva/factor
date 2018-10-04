@@ -14,17 +14,38 @@
                     <ul class="nav child_menu">
                       <li><a href="{% url 'requestPage' %}">All requests</a></li>
                       <li><a href="{% url 'createpage' %}">Create request</a></li>
+                      <li><a href="{% url 'xreq_pref_spec' %}">All Req and prefs with spec</a></li>
+                      <li><a href="{% url 'find_xpref' %}">Find a prefactor</a></li>
+                      {% if not user.is_authenticated%}
+                          <li><a href="{% url 'login' %}">Login</a></li>
+                      {% endif %}
                       <li><a href="#">Edit a request</a></li>
                     </ul>
                   </li>
+
+                  <li><a><i class="fa fa-desktop"></i> Xprefactors <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{% url 'create_pref_spec' %}">Create prefactor with spec</a></li>
+                      <li><a href="{% url 'xpref_ver_create' %}">Add Verification to xpref</a></li>
+                      <li><a href="{% url 'add_payment_page' %}">Add Payment</a></li>
+                      <li><a href="{% url 'payments' %}">Payments</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-table"></i> Customers <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{% url 'customer' %}">Add a customer</a></li>
+                        <li><a href="{% url 'customer_view' %}">View a customer</a></li>
+                    </ul>
+                  </li>
+
                   <li><a><i class="fa fa-desktop"></i> Prefactors <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{% url 'prefactorsPage' %}">All prefactors</a></li>
                       <li><a href="{% url 'find_pref' %}">Find a prefactor</a></li>
                       <li><a href="{% url 'createprefpage' %}">Create prefactor</a></li>
-                      <li><a href="{% url 'create_pref_spec' %}">Create prefactor with spec</a></li>
                     </ul>
                   </li>
+
                   <li><a><i class="fa fa-table"></i> Prefactor Verifications <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{% url 'prefVerificationPage' %}">All Verifications</a></li>

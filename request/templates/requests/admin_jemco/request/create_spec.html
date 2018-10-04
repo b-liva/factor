@@ -28,7 +28,7 @@
                         <th>IP</th>
                         <th>IC</th>
                         <th>SUMMARY</th>
-                        <th>PRICE</th>
+{#                        <th>PRICE</th>#}
                         <th>ACTION</th>
                     </tr>
                     {% for spec in specs %}
@@ -42,11 +42,11 @@
                         <td>{{ spec.ip }}</td>
                         <td>{{ spec.ic }}</td>
                         <td>{{ spec.summary }}</td>
-                        <td>{{ spec.price }}</td>
+{#                        <td>{{ spec.price }}</td>#}
                         <td>
                             <a href="{% url 'del_spec' spec_id=spec.pk %}"><button class="btn btn-primary btn-sm">Delete</button></a>
+                            <a href="{% url 'edit_xspec' spec_pk=spec.pk req_pk=req_obj.pk %}"><button class="btn btn-primary btn-sm">Edit</button></a>
 
-                            <button class="btn btn-primary btn-sm">Edit</button>
                         </td>
                     </tr>
                     {% endfor %}
@@ -84,13 +84,13 @@
                     <option value="Tender">Tender</option>
                 </select>
                     <br>QTY<br>
-                <input type="number" name="qty"><br>
+                <input type="number" name="qty" value="{{ spec.qty }}"><br>
                     KW<br>
-                <input type="number" name="kw">
+                <input type="number" name="kw" value="{{ spec.kw }}">
 
 
                    <br> RPM<br>
-                <input type="number" name="rpm">
+                <input type="number" name="rpm" value="{{ spec.rpm }}">
                 <br>
                 Voltage<br>
                 <select name="voltage">
@@ -113,10 +113,14 @@
                     <option value="511">511</option>
                     <option value="611">611</option>
                 </select><br>
-                <textarea name="summary"></textarea>
-                <br>Price<br>
-                <input name="price" type="text"><br>
+                <textarea name="summary">{{ spec.summary }}</textarea>
+                <br>
+{#                Price<br>#}
+{#                <input name="price" type="text">#}
+                <br>
                 <input type="hidden" name="req_id" value="{{ req_obj.pk }}"><br>
+                <input type="hidden" name="updating" value="{{ updating }}"><br>
+                <input type="hidden" name="spec_pk" value="{{ spec.pk }}"><br>
                 <input class="btn btn-primary" type="submit" value="Save" name="done">
             </form>
             </div>
