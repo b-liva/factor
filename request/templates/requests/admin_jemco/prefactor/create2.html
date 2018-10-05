@@ -1,0 +1,39 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+               {% if error %}
+                {{ error }}
+            {% endif %}
+            <form method="POST" action="{% url 'create_pref' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                Prefactor No.<br>
+                <input type="text" name="number"><br>
+                Request No.<br>
+                <select name="req_number">
+                {% for item in list %}
+                      <option value="{{item}}">{{item}}</option>
+                {% endfor %}
+
+{#                {% for req in allreq %}#}
+{#                      <option value="{{req.number}}">{{req.number}}</option>#}
+{#                {% endfor %}#}
+
+                </select>
+            <br>
+                Summary:<br>
+                <textarea name="summary"></textarea><br>
+                Image<br>
+                <input type="file" name="image"><br>
+
+                <input class="btn btn-primary" type="submit" value="Add New">
+
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

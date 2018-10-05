@@ -72,25 +72,74 @@ def customer_read(request):
     return render(request, 'customer/read.html')
 
 
-def customer_update(request):
+def customer_form(request):
+    customer_types = Type.objects.all()
+    return render(request, 'customer/customer.html', {
+        'customer_types': customer_types
+    })
+
+
+def customer_insert(request):
+    all_customers = Customer.objects.all()
+    customer_types = Type.objects.all()
+    customer_type = Type.objects.get(pk=request.POST['type'])
+    customer = Customer()
+    customer.name = request.POST['name']
+    customer.code = request.POST['code']
+    customer.type = customer_type
+    customer.save()
+    msg = 'Customer added successfully'
+    return render(request, 'customer/index.html', {
+        'msg': msg,
+        'customer_types': customer_types,
+        'customers': all_customers
+    })
+
+
+
+def customer_index(request):
+    customers = Customer.objects.all()
+    return render(request, 'customer/index.html', {'customers': customers})
+
+
+def customer_read2(request, customer_pk):
+    customer = Customer.objects.get(pk=customer_pk)
+    return render(request, 'customer/details.html', {'customer': customer})
+
+
+def customer_edit(request, customer_pk):
     pass
 
 
-def customer_delete(request):
+def customer_delete(request, customer_pk):
+    customer = Customer.objects.get(pk=customer_pk)
+    customer_name = customer.name
+    customer.delete()
+    msg = customer_name + ' removed successfully!'
+    return redirect('customer_index')
+
+
+
+
+# Type functions:
+def type_form(request):
     pass
 
 
-def type_create(request):
+def type_insert(request):
     pass
 
 
-def type_read(request):
+def type_index(request):
     pass
 
 
-def type_update(request):
+def type_read(request, type_pk):
     pass
 
 
-def type_delete(request):
+def type_edit(request, type_pk):
+    pass
+
+def type_delete(request, type_pk):
     pass

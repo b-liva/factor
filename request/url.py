@@ -22,6 +22,11 @@ import prefactor.views
 import prefactor_verification.views
 import tender.views
 import request.views
+from request import views2
+from request import prefViews
+from . import reqSpecViews
+
+
 
 urlpatterns = [
     path('request/', request.views.createpage, name='createpage'),
@@ -49,5 +54,53 @@ urlpatterns = [
     path('payments', request.views.payments, name='payments'),
     path('xpref_ver_create', request.views.xpref_ver_create, name='xpref_ver_create'),
     path('create_xverf', request.views.create_xverf, name='create_xverf'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
+    path('form', request.views2.request_form, name='request_form'),
+    path('insert', request.views2.request_insert, name='request_insert'),
+    path('index', request.views2.request_index, name='request_index'),
+    path('<int:request_pk>/', include([
+        path('', request.views2.request_read, name='request_details'),
+        path('delete', request.views2.request_delete, name='request_delete'),
+        path('edit', request.views2.request_edit, name='request_edit'),
+      ])),
+
+    path('pref_spec/add', request.views2.pref_spec_add, name='pref_spec_add'),
+    path('pref_spec/<int:ypref_spec_pk>/', include([
+        path('', request.views2.pref_spec_details, name='prefspec_details'),
+        path('delete', request.views2.pref_spec_del, name='pref_spec_delete'),
+        path('edit', request.views2.pref_spec_edit, name='pref_spec_edit'),
+    ])),
+
+    path('payment/form', request.views2.payment_form, name='payment_form'),
+    path('payment/insert', request.views2.payment_insert, name='payment_insert'),
+    path('payment/index', request.views2.payment_index, name='payment_index'),
+    path('payment/<int:ypayment_pk>/', include([
+        path('', request.views2.payment_details, name='payment_details'),
+        path('delete', request.views2.payment_delete, name='payment_delete'),
+        path('edit', request.views2.payment_edit, name='payment_edit'),
+    ])),
+
+    path('pref/form', prefViews.pref_form, name='pref_form'),
+    path('pref/form2', prefViews.pref_form2, name='pref_form2'),
+    path('pref/insert', request.prefViews.pref_insert, name='pref_insert'),
+    path('pref/index', request.prefViews.pref_index, name='pref_index'),
+    path('pref/<int:ypref_pk>/', include([
+        path('', request.prefViews.pref_details, name='pref_details'),
+        path('delete', request.prefViews.pref_delete, name='pref_delete'),
+        path('edit', request.prefViews.pref_edit, name='pref_edit'),
+    ])),
+
+    path('<int:req_pk>/reqSpec/form', reqSpecViews.reqspec_form, name='reqSpec_form'),
+    path('reqSpec/insert', request.reqSpecViews.reqspec_insert, name='reqSpec_insert'),
+    path('reqSpec/index', request.reqSpecViews.reqspec_index, name='reqSpec_index'),
+    path('<int:req_pk>/reqSpec/<int:yreqSpec_pk>/', include([
+        path('', request.reqSpecViews.reqspec_details, name='reqSpec_details'),
+        path('delete', request.reqSpecViews.reqspec_delete, name='reqSpec_delete'),
+        path('edit', request.reqSpecViews.reqspec_edit, name='reqSpec_edit'),
+    ])),
+
+    # path('pref/form', views2.pref_add, name='ypref_add'),
+    # path('pref/insert', views2.pref_insert, name='ypref_insert'),
+    # path('pref/<int:ypref_pk>/', views2.pref, name='ypref'),
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('number', models.IntegerField(blank=True, null=True)),
                 ('pub_date', models.DateTimeField(default=django.utils.timezone.now)),
-                ('image', models.ImageField(upload_to='', verbose_name='requests/prefactors/verifications/')),
+                ('image', models.ImageField(upload_to='', verbose_name='requests/views/verifications/')),
                 ('summary', models.TextField(max_length=1000)),
                 ('xpref', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='request.Xpref')),
             ],

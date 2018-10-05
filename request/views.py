@@ -27,7 +27,7 @@ def request_page(request):
 def prefactors_page(request):
     allPrefactos = Prefactor.objects
     return render(request, 'requests/admin_jemco/prefactors.html', {'allPrefactors': allPrefactos})
-    # return render(request, 'requests/prefactors.html', {'allPrefactors': allPrefactos})
+    # return render(request, 'requests/views.html', {'allPrefactors': allPrefactos})
 
 
 def prefactors_verification_page(request):
@@ -98,7 +98,7 @@ def create_spec(request, req_pk):
     # req_obj = Requests(pk=req_pk)
     print(req_obj.number)
     return render(request, 'requests/admin_jemco/request/create_spec.html', {'req_obj': req_obj, 'specs': specs})
-    # return render(request, 'requests/create_spec.html', {'req_obj': req_obj, 'specs': specs})
+    # return render(request, 'requests/form.html', {'req_obj': req_obj, 'specs': specs})
 
 def edit_xspec(request, spec_pk, req_pk):
     req = Requests.objects.get(pk=req_pk)
@@ -164,8 +164,8 @@ def del_spec(request, spec_id):
 #             )
 #             return redirect('allTables')
 #         else:
-#             return render(request, 'requests/create.html', {'error': 'some field is empty'})
-#     return render(request, 'requests/create.html')
+#             return render(request, 'requests/details.html', {'error': 'some field is empty'})
+#     return render(request, 'requests/details.html')
 
 @login_required
 def create_pref(request):
@@ -198,20 +198,20 @@ def createpage(request):
         'req': req,
         'customers': customers,
     })
-    # return render(request, 'requests/create.html', {'req': req})
+    # return render(request, 'requests/details.html', {'req': req})
 
 @login_required
 def createprefpage(request):
     list = allRequests()
     print(list)
     return render(request, 'requests/admin_jemco/prefactor/create.html', {'list': list})
-    # return render(request, 'prefactors/create.html', {'list': list})
+    # return render(request, 'views/details.html', {'list': list})
 
 @login_required
 def create_verf_page(request, error=''):
     list = allPref()
     return render(request, 'requests/admin_jemco/prefVerification/create.html', {'list': list, 'error': error})
-    # return render(request, 'prefVerification/create.html', {'list': list, 'error': error})
+    # return render(request, 'prefVerification/details.html', {'list': list, 'error': error})
 
 def create_verf(request):
     print(request)

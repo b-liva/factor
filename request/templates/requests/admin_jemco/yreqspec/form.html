@@ -1,0 +1,121 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+<div class="row">
+    <div class="col-md-9">
+        <div class="card mb-9 shadow-sm">
+            <div class="card-body">
+            <div>
+                <p><b>Request:</b></p>
+                <p>
+                    <span>id: {{ req_obj.pk }}</span>
+                    <span>- #: {{ req_obj.number }}</span>
+                    <span>- Date: {{ req_obj.pub_date }}</span>
+                </p>
+                <hr>
+
+            </div>
+            <div>
+                <p><b>Spec:</b></p>
+                <table class="withBorder">
+                    <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>QTY</th>
+                        <th>KW</th>
+                        <th>VOLTAGE</th>
+                        <th>RPM</th>
+                        <th>IP</th>
+                        <th>IC</th>
+                        <th>SUMMARY</th>
+{#                        <th>PRICE</th>#}
+                        <th>ACTION</th>
+                    </tr>
+                    {% for spec in specs %}
+                    <tr>
+                        <td>{{ spec.id }}</td>
+                        <td>{{ spec.type }}</td>
+                        <td>{{ spec.qty }}</td>
+                        <td>{{ spec.kw }}</td>
+                        <td>{{ spec.voltage }}</td>
+                        <td>{{ spec.rpm }}</td>
+                        <td>{{ spec.ip }}</td>
+                        <td>{{ spec.ic }}</td>
+                        <td>{{ spec.summary }}</td>
+{#                        <td>{{ spec.price }}</td>#}
+                        <td>
+                            <a href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}"><button class="btn btn-primary btn-sm">Delete</button></a>
+                            <a href="{% url 'reqSpec_edit' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}"><button class="btn btn-primary btn-sm">Edit</button></a>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <hr>
+            </div>
+               {% if msg %}
+                {{ msg }}
+            {% endif %}
+            <form method="POST" action="{% url 'reqSpec_insert' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                    Type<br>
+                <select name="type">
+                    <option value="Routine">Routine</option>
+                    <option value="Project">Project</option>
+                    <option value="Services">Services</option>
+                    <option value="Tender">Tender</option>
+                </select>
+                    <br>QTY<br>
+                <input type="number" name="qty" value="{{ spec.qty }}"><br>
+                    KW<br>
+                <input type="number" name="kw" value="{{ spec.kw }}">
+
+
+                   <br> RPM<br>
+                <input type="number" name="rpm" value="{{ spec.rpm }}">
+                <br>
+                Voltage<br>
+                <select name="voltage">
+                    <option value="380">380</option>
+                    <option value="400">400</option>
+                    <option value="3000">3000</option>
+                    <option value="3300">3300</option>
+                    <option value="6000">6000</option>
+                    <option value="6600">6600</option>
+                    <option value="11000">11000</option>
+                </select><br>
+                IP<br>
+                <select name="ip">
+                    <option value="55">55</option>
+                    <option value="56">56</option>
+                </select><br>
+                IC<br>
+                <select name="ic">
+                    <option value="411">411</option>
+                    <option value="511">511</option>
+                    <option value="611">611</option>
+                </select><br>
+                <textarea name="summary">{{ spec.summary }}</textarea>
+                <br>
+{#                Price<br>#}
+{#                <input name="price" type="text">#}
+                <br>
+                <input type="hidden" name="req_id" value="{{ req_obj.pk }}"><br>
+                <input type="hidden" name="updating" value="{{ updating }}"><br>
+                <input type="hidden" name="spec_pk" value="{{ spec.pk }}"><br>
+                <input class="btn btn-primary" type="submit" value="Save" name="done">
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+

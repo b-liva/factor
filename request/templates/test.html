@@ -1,0 +1,27 @@
+
+{% if is_add %}
+    <form method="post" action="{% url 'ypref_insert' %}">
+{% endif %}
+{% if not is_add %}
+    <form method="post" action="{% url 'ypref' ypref_pk=ypref_pk %}">
+{% endif %}
+    {% csrf_token %}
+    <input name="some" value="something">
+    <button type="submit" name="submit">Post</button>
+</form>
+
+{{ is_add|yesno:'basir, someone else' }}
+{##}
+{#<form method="post" action="{% url 'ypref' ypref_pk=ypref_pk %}">#}
+{#    {% csrf_token %}#}
+{#    <input type="hidden" name="_METHOD" value="PUT"/>#}
+{#    <input name="some" value="something">#}
+{#    <button type="submit" name="submit">Put</button>#}
+{#</form>#}
+{##}
+{#<form method="post" action="{% url 'ypref' ypref_pk=ypref_pk %}">#}
+{#    {% csrf_token %}#}
+{#        <input type="hidden" name="_METHOD" value="DELETE"/>#}
+{#    <input name="some" value="something">#}
+{#    <button type="submit" name="submit">Delete</button>#}
+{#</form>#}

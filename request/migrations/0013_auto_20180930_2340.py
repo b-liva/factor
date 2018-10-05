@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('number', models.IntegerField()),
                 ('pub_date', models.DateTimeField(default=django.utils.timezone.now)),
-                ('image', models.ImageField(upload_to='', verbose_name='requests/prefactors/original/')),
+                ('image', models.ImageField(upload_to='', verbose_name='requests/views/original/')),
                 ('req_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='request.Requests')),
             ],
         ),

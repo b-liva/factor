@@ -33,7 +33,7 @@ class Xpref(models.Model):
     req_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
     number = models.IntegerField()
     pub_date = models.DateTimeField(default=now)
-    image = models.ImageField('requests/prefactors/original/')
+    image = models.ImageField('requests/views/original/')
 
 class PrefSpec(models.Model):
     xpref_id = models.ForeignKey(Xpref, on_delete=models.CASCADE)
@@ -52,14 +52,14 @@ class XprefVerf(models.Model):
     xpref = models.ForeignKey(Xpref, on_delete=models.CASCADE)
     number = models.IntegerField(blank=True, null=True)
     pub_date = models.DateTimeField(default=now)
-    image = models.ImageField('requests/prefactors/verifications/')
+    image = models.ImageField('requests/views/verifications/')
     summary = models.TextField(max_length=1000)
 
 class Prefactor(models.Model):
     request_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
     number = models.IntegerField()
     pub_date = models.DateTimeField(default=now)
-    image = models.ImageField('requests/prefactors/original/')
+    image = models.ImageField('requests/views/original/')
     summary = models.TextField(max_length=1000)
 
     def pub_date_pretty(self):
@@ -70,7 +70,7 @@ class PrefactorVerification(models.Model):
     pref_id = models.ForeignKey(Prefactor, on_delete=models.CASCADE)
     number = models.IntegerField()
     pub_date = models.DateTimeField(default=now)
-    image = models.ImageField('requests/prefactors/verifications/')
+    image = models.ImageField('requests/views/verifications/')
     summary = models.TextField(max_length=1000)
 
     def pub_date_pretty(self):

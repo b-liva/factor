@@ -9,7 +9,7 @@
     <br>Crteate a new customer
 
 
-    <form method="POST" action="{% url 'customer_insert'%}">
+    <form method="POST" action="{% url 'customer_create'%}">
         {% csrf_token %}
         Code<br>
         <input type="number" name="code">
@@ -21,7 +21,7 @@
                 <option value="{{ type.id }}">{{ type.name }}</option>
             {% endfor %}
         </select>
-        <br><button type="submit" name="submit" class="btn-sm btn btn-success">Save</button>
+        <br><button type="submit" name="submit">Save</button>
     </form>
 
 {% endblock %}

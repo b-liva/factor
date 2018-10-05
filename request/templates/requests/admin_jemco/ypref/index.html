@@ -1,0 +1,41 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+                <h3>{{ msg }}</h3>
+                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Prefactors</h1>
+
+            <table class="withBorder tableFull">
+        <tr>
+            <th>Id</th>
+            <th>Number</th>
+            <th>Date</th>
+            <th>details</th>
+        </tr>
+        <tbody class="">
+        {% for pref in prefs %}
+            <tr>
+                <td>{{ pref.pk }}</td>
+                <td>{{ pref.number }}</td>
+                <td>{{ pref.pub_date }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs" href="{% url 'pref_details' ypref_pk=pref.pk %}">Details</a>
+                    <a class="btn btn-primary btn-xs btn-warning" href="{% url 'pref_delete' ypref_pk=pref.pk %}">Delete</a>
+                </td>
+
+
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+            <br>
+            <a href="{% url 'pref_form' %}" class="btn btn-success btn-sm">Add new Prefactor</a>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+                <h3>{{ msg }}</h3>
+    <table class="withBorder tableFull">
+        <tr>
+            <th>Id</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Action</th>
+        </tr>
+        <tbody>
+        {% for customer in customers %}
+            <tr>
+                <td>{{ customer.pk }}</td>
+                <td>{{ customer.code }}</td>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.type.name }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs" href="{% url 'customer_read' customer_pk=customer.pk %}">Details</a>
+                    <a class="btn btn-primary btn-xs btn-warning" href="{% url 'customer_delete' customer_pk=customer.pk %}">Delete</a>
+                </td>
+
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+    </table><br>
+    <a href="{% url 'customer_form' %}" class="btn btn-success btn-sm">Add new customer</a>
+        </div>
+
+    </div>
+
+{% endblock %}

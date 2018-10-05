@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='Prefactor',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to='', verbose_name='requests/prefactors/original/')),
+                ('image', models.ImageField(upload_to='', verbose_name='requests/views/original/')),
                 ('summary', models.TextField(max_length=1000)),
             ],
         ),
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
             name='PrefactorVerification',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to='', verbose_name='requests/prefactors/verifications/')),
+                ('image', models.ImageField(upload_to='', verbose_name='requests/views/verifications/')),
                 ('summary', models.TextField(max_length=1000)),
                 ('pref_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='request.Prefactor')),
             ],
