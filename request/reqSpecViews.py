@@ -48,7 +48,8 @@ def reqspec_insert(request):
 
 
 def reqspec_index(request):
-    pass
+    reqspecs = ReqSpec.objects.all()
+    return render(request, 'requests/admin_jemco/yreqspec/index.html', {'reqspecs': reqspecs})
 
 
 def reqspec_details(request, yreqSpec_pk):

@@ -6,10 +6,15 @@
             <h3>{{ msg }}</h3>
             <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
                 Proformas</h1>
-
+        <form method="POST" action="{% url 'pref_find' %}">
+            {% csrf_token %}
+            Proforma No <input name="pref_no" >
+            <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
+        </form>
             <table class="withBorder tableFull">
                 <tr>
                     <th>Id</th>
+{#                    <th>Id</th>#}
                     <th>Number</th>
                     <th>Date</th>
                     <th>Actions</th>
@@ -17,7 +22,8 @@
                 <tbody class="">
                 {% for pref in prefs %}
                     <tr>
-                        <td>{{ pref.pk }}</td>
+                        <td>{{ forloop.counter }}</td>
+{#                        <td>{{ pref.pk }}</td>#}
                         <td>{{ pref.number }}</td>
                         <td>{{ pref.pub_date }}</td>
                         <td>
@@ -26,10 +32,7 @@
                             <a class="btn btn-primary btn-xs btn-warning"
                                href="{% url 'pref_delete' ypref_pk=pref.pk %}">Delete</a>
                         </td>
-
-
                     </tr>
-
                 {% endfor %}
                 </tbody>
             </table>
@@ -37,8 +40,4 @@
             <a href="{% url 'pref_form' %}" class="btn btn-success btn-sm">Add new Prefactor</a>
         </div>
     </div>
-
-
-
-
 {% endblock %}

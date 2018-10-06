@@ -5,28 +5,26 @@
             <h3>{{ msg }}</h3>
             <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
                 Add new Payment</h1>
-            {% if  msg %}
-                <h3>Payment added successfully</h3>
-            {% endif %}
 
-            <br>reqs:
+            <hr>
+            <b>Request No | ID:</b><br>
             {% for req_single in reqs %}
                 {{ req_single.number }} | {{ req_single.id }} -
             {% endfor %}
 
-            <br>xprefs:
+            <hr>
+            <b>xprefs No | ID:</b><br>
             {% for xpref_single in xprefs %}
                 {{ xpref_single.number }} | {{ xpref_single.id }} -
             {% endfor %}
 
-            <br>xpayment:
+            <hr>
+            <b>xpayment | ID:</b><br>
             {% for xpayment_single in xpayments %}
                 {{ xpayment_single.number }} | {{ xpayment_single.id }} -
             {% endfor %}
-
-
             <br>
-            Add payment here.
+            <hr><b>Add payment here.</b><br>
             <form method="POST" action="{% url 'payment_insert' %}">
                 {% csrf_token %}
                 <br>enter prefactor number<br>

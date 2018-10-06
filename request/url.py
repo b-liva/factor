@@ -58,6 +58,7 @@ urlpatterns = [
     path('form', request.views2.request_form, name='request_form'),
     path('insert', request.views2.request_insert, name='request_insert'),
     path('index', request.views2.request_index, name='request_index'),
+    path('find', request.views2.request_find, name='request_find'),
     path('<int:request_pk>/', include([
         path('', request.views2.request_read, name='request_details'),
         path('delete', request.views2.request_delete, name='request_delete'),
@@ -74,6 +75,7 @@ urlpatterns = [
     path('payment/form', request.views2.payment_form, name='payment_form'),
     path('payment/insert', request.views2.payment_insert, name='payment_insert'),
     path('payment/index', request.views2.payment_index, name='payment_index'),
+    path('payment/find', request.views2.payment_find, name='payment_find'),
     path('payment/<int:ypayment_pk>/', include([
         path('', request.views2.payment_details, name='payment_details'),
         path('delete', request.views2.payment_delete, name='payment_delete'),
@@ -84,6 +86,7 @@ urlpatterns = [
     path('pref/form2', prefViews.pref_form2, name='pref_form2'),
     path('pref/insert', request.prefViews.pref_insert, name='pref_insert'),
     path('pref/index', request.prefViews.pref_index, name='pref_index'),
+    path('pref/find', request.prefViews.pref_find, name='pref_find'),
     path('pref/<int:ypref_pk>/', include([
         path('', request.prefViews.pref_details, name='pref_details'),
         path('delete', request.prefViews.pref_delete, name='pref_delete'),

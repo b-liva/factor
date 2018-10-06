@@ -1,0 +1,51 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+                <h3>{{ msg }}</h3>
+                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Request Specs</h1>
+            <table class="withBorder tableFull">
+        <tr>
+            <th style="border-right:2px solid black; ">No</th>
+{#            <th>Id</th>#}
+            <th>QTY</th>
+            <th>KW</th>
+            <th>RPM</th>
+            <th>Voltage</th>
+            <th>Request No</th>
+            <th>Customer</th>
+            <th>Action</th>
+        </tr>
+        <tbody class="">
+        {% for reqspec in reqspecs %}
+            <tr>
+                <td style="border-right:2px solid black; ">{{ forloop.counter }}</td>
+{#                <td>{{ reqspec.pk }}</td>#}
+                <td>{{ reqspec.qty }}</td>
+                <td>{{ reqspec.kw }}</td>
+                <td>{{ reqspec.rpm }}</td>
+                <td>{{ reqspec.voltage }}</td>
+                <td><a href="{% url 'request_details' request_pk=reqspec.req_id.pk %}">{{ reqspec.req_id.number }}</a></td>
+                <td><a href="{% url 'customer_read' customer_pk=reqspec.req_id.customer.pk %}">{{ reqspec.req_id.customer.name }}</a></td>
+                <td>
+                    <a class="btn btn-primary btn-xs" href="{% url 'reqSpec_details' req_pk=reqspec.req_id.pk yreqSpec_pk=reqspec.pk %}">Details</a>
+                    <a class="btn btn-primary btn-xs btn-warning" href="{% url 'reqSpec_delete' req_pk=reqspec.req_id.pk yreqSpec_pk=reqspec.pk %}">Delete</a>
+                </td>
+
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+    </table>
+        <br>
+        <a href="{% url 'request_form' %}" class="btn btn-success btn-sm">Add new request</a>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

@@ -54,9 +54,15 @@ def request_index(request):
     return render(request, 'requests/admin_jemco/yrequest/index.html', {'all_requests': requests})
 
 
+def request_find(request):
+    req = Requests.objects.get(number=request.POST['req_no'])
+    return redirect('request_details', request_pk=req.pk)
+
 def request_read(request, request_pk):
     req = Requests.objects.get(pk=request_pk)
-    return render(request, 'requests/admin_jemco/yrequest/details.html', {'request': req})
+    kw = total_kw(request_pk)
+
+    return render(request, 'requests/admin_jemco/yrequest/details.html', {'request': req, 'total_kw': kw})
 
 
 def request_delete(request, request_pk):
@@ -128,6 +134,9 @@ def payment_index(request):
         'debt_percent': debt_percent,
     })
 
+def payment_find(request):
+    payment = Payment.objects.get(number=request.POST['payment_no'])
+    return redirect('payment_details', ypayment_pk=payment.pk)
 def payment_details(request, ypayment_pk):
     payment = Payment.objects.get(pk=ypayment_pk)
     return render(request, 'requests/admin_jemco/ypayment/payment_details.html', {'payment': payment})
@@ -188,3 +197,15 @@ def pref(request, ypref_pk):
 
 
     # return HttpResponse('this is from a single line of code for: ' + str(ypref_ipk))
+
+
+
+
+def total_kw(req_id):
+    req = Requests.objects.get(pk=req_id)
+    reqspecs = req.reqspec_set.all()
+    total_kw = 0
+    for reqspec in reqspecs:
+        total_kw += reqspec.kw * reqspec.qty
+    return total_kw
+

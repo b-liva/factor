@@ -1,11 +1,16 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
 {% block right_col %}
     <div class="container">
-            <div class="col-md-6 col-md-offset-3">
-                    <h3>{{ msg }}</h3>
-                 <h3>{{ request.number }}</h3>
-                 <p>{{ request.pub_date }}</p>
+        <div class="col-md-6 col-md-offset-3">
+            <div>
+                <h3>{{ msg }}</h3>
+                <h3>{{ request.number }}</h3>
+                <p>{{ request.pub_date }}</p>
+                Total kw: <p>{{ total_kw }}</p>
             </div>
+            <div>
+                <a href="{% url 'reqSpec_form' req_pk=request.pk %}"><button type="submit" name="submit" class="btn btn-success btn-sm">Edit Specs</button></a>
+            </div>
+        </div>
     </div>
-
 {% endblock %}

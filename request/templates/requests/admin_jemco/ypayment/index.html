@@ -6,6 +6,11 @@
             <h3>{{ msg }}</h3>
             <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
                 Payments</h1>
+            <form method="POST" action="{% url 'payment_find' %}">
+                {% csrf_token %}
+                Payment No <input name="payment_no">
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
+            </form>
             <table class="withBorder tableFull">
                 <tr>
                     <th>Id</th>

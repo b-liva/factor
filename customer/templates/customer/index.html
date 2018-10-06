@@ -3,9 +3,17 @@
     <div class="container">
         <div class="col-md-6 col-md-offset-3">
                 <h3>{{ msg }}</h3>
+        <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                Customers</h1>
+            <form method="POST" action="{% url 'customer_find' %}">
+                {% csrf_token %}
+                Customer no <input name="customer_no">
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
+            </form>
     <table class="withBorder tableFull">
         <tr>
-            <th>Id</th>
+            <th>No</th>
+{#            <th>Id</th>#}
             <th>Code</th>
             <th>Name</th>
             <th>Type</th>
@@ -14,7 +22,8 @@
         <tbody>
         {% for customer in customers %}
             <tr>
-                <td>{{ customer.pk }}</td>
+                <td>{{ forloop.counter }}</td>
+{#                <td>{{ customer.pk }}</td>#}
                 <td>{{ customer.code }}</td>
                 <td>{{ customer.name }}</td>
                 <td>{{ customer.type.name }}</td>

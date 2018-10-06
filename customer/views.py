@@ -8,7 +8,7 @@ from request.models import Requests
 from request.models import Xpref
 from request.models import PrefSpec
 from request.models import Payment
-
+from request import views2
 
 from django.views import View
 
@@ -96,15 +96,34 @@ def customer_insert(request):
     })
 
 
-
 def customer_index(request):
     customers = Customer.objects.all()
     return render(request, 'customer/index.html', {'customers': customers})
 
 
+def customer_find(request):
+    customer = Customer.objects.get(code=request.POST['customer_no'])
+    return redirect('customer_read', customer_pk=customer.pk)
+
+
 def customer_read2(request, customer_pk):
     customer = Customer.objects.get(pk=customer_pk)
-    return render(request, 'customer/details.html', {'customer': customer})
+    customer_reqs = customer.requests_set.all()
+    kw = {}
+    some = {}
+    for customer_req in customer_reqs:
+        # specs = customer_req.reqspec_set.all()
+        kw[customer_req.pk] = views2.total_kw(customer_req.pk)
+        t_kw = views2.total_kw(customer_req.pk)
+        some[t_kw] = customer_req
+    print(type(kw))
+    print(some)
+    return render(request, 'customer/details.html', {
+        'customer': customer,
+        'customer_reqs': customer_reqs,
+        'kw': kw,
+        'some': some,
+    })
 
 
 def customer_edit(request, customer_pk):

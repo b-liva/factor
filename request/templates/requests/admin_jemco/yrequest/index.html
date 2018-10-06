@@ -3,35 +3,43 @@
 {% block right_col %}
     <div class="container">
         <div class="col-md-6 col-md-offset-3">
-                <h3>{{ msg }}</h3>
-                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Requests</h1>
-            <table class="withBorder tableFull">
-        <tr>
-            <th>Id</th>
-            <th>Number</th>
-            <th>Date</th>
-            <th>Action</th>
-        </tr>
-        <tbody class="">
-        {% for request in all_requests %}
-            <tr>
-                <td>{{ request.pk }}</td>
-                <td>{{ request.number }}</td>
-                <td>{{ request.pub_date }}</td>
-                <td>
-                    <a class="btn btn-primary btn-xs" href="{% url 'request_details' request_pk=request.pk %}">Details</a>
-                    <a class="btn btn-primary btn-xs btn-warning" href="{% url 'request_delete' request_pk=request.pk %}">Delete</a>
-                </td>
-
-
-            </tr>
-
-        {% endfor %}
-
-        </tbody>
-    </table>
+            <h3>{{ msg }}</h3>
+            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                Requests</h1>
+        <form method="POST" action="{% url 'request_find' %}">
+            {% csrf_token %}
+            Request No <input name="req_no" >
+            <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
+        </form>
         <br>
-        <a href="{% url 'request_form' %}" class="btn btn-success btn-sm">Add new request</a>
+            <table class="withBorder tableFull">
+                <tr>
+                    <th>Id</th>
+                    <th>Number</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+                <tbody class="">
+                {% for request in all_requests %}
+                    <tr>
+                        <td>{{ request.pk }}</td>
+                        <td>{{ request.number }}</td>
+                        <td>{{ request.pub_date }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="{% url 'request_details' request_pk=request.pk %}">Details</a>
+                            <a class="btn btn-primary btn-xs btn-warning"
+                               href="{% url 'request_delete' request_pk=request.pk %}">Delete</a>
+                        </td>
+
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+            <br>
+            <a href="{% url 'request_form' %}" class="btn btn-success btn-sm">Add new request</a>
         </div>
     </div>
 

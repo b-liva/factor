@@ -76,9 +76,12 @@ def pref_insert(request):
 
 def pref_index(request):
     prefs = Xpref.objects.all()
+    print(len(prefs))
     return render(request, 'requests/admin_jemco/ypref/index.html', {'prefs': prefs})
 
-
+def pref_find(request):
+    pref = Xpref.objects.get(number=request.POST['pref_no'])
+    return redirect('pref_details', ypref_pk=pref.pk)
 def pref_details(request, ypref_pk):
     pref = Xpref.objects.get(pk=ypref_pk)
     return render(request, 'requests/admin_jemco/ypref/details.html', {'pref': pref})

@@ -17,6 +17,7 @@ urlpatterns = [
     path('form', views.customer_form, name='customer_form'),
     path('insert', views.customer_insert, name='customer_insert'),
     path('index', views.customer_index, name='customer_index'),
+    path('find', views.customer_find, name='customer_find'),
     path('<int:customer_pk>/', include([
         path('', views.customer_read2, name='customer_read'),
         path('edit', views.customer_edit, name='customer_edit'),
