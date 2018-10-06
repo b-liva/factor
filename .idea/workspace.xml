@@ -2,20 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85c93896-8beb-4081-82f4-1287b6871527" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/customer/templates/customer/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/templates/customer/create.html" beforeDir="false" afterPath="$PROJECT_DIR$/customer/templates/customer/details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/templates/customer/customer.html" beforeDir="false" afterPath="$PROJECT_DIR$/customer/templates/customer/customer.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/url.py" beforeDir="false" afterPath="$PROJECT_DIR$/customer/url.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/customer/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/factor/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/factor/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/migrations/0012_auto_20180930_2040.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/migrations/0012_auto_20180930_2040.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/migrations/0013_auto_20180930_2340.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/migrations/0013_auto_20180930_2340.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/migrations/0016_xprefverf.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/migrations/0016_xprefverf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/url.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/url.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html" beforeDir="false" afterPath="$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/prefViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/prefViews.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create_spec.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create_spec.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/request/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -50,14 +50,26 @@
     <window id="1">
       <content type="file-editors">
         <state>
-          <leaf>
-            <file pinned="false" current-in-tab="true">
+          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+            <file pinned="false" current-in-tab="false">
               <entry file="file://$PROJECT_DIR$/request/url.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="269">
-                    <caret line="40" column="60" selection-start-line="40" selection-start-column="60" selection-end-line="40" selection-end-column="60" />
+                  <state relative-caret-position="202">
+                    <caret line="73" column="47" lean-forward="true" selection-start-line="73" selection-start-column="47" selection-end-line="73" selection-end-column="47" />
                     <folding>
                       <element signature="e#630#662#0" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/request/prefViews.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="153">
+                    <caret line="65" column="24" selection-start-line="65" selection-start-column="24" selection-end-line="65" selection-end-column="24" />
+                    <folding>
+                      <element signature="e#0#11#0" expanded="true" />
                     </folding>
                   </state>
                 </provider>
@@ -66,8 +78,8 @@
             <file pinned="false" current-in-tab="false">
               <entry file="file://$PROJECT_DIR$/request/views2.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="389">
-                    <caret line="45" column="37" lean-forward="true" selection-start-line="45" selection-start-column="37" selection-end-line="45" selection-end-column="37" />
+                  <state relative-caret-position="253">
+                    <caret line="84" column="60" lean-forward="true" selection-start-line="84" selection-start-column="60" selection-end-line="84" selection-end-column="60" />
                     <folding>
                       <element signature="e#0#11#0" expanded="true" />
                       <marker date="1538751028000" expanded="true" signature="731:925" ph="..." />
@@ -76,15 +88,6 @@
                       <marker date="1538751028000" expanded="true" signature="1868:2008" ph="..." />
                       <marker date="1538751028000" expanded="true" signature="2048:2151" ph="..." />
                     </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create.html">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="170">
-                    <caret line="10" column="54" lean-forward="true" selection-start-line="10" selection-start-column="54" selection-end-line="10" selection-end-column="54" />
                   </state>
                 </provider>
               </entry>
@@ -280,38 +283,41 @@
     <session id="-714410576">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.30" value="1" />
+          <entry key="project.open.time.35" value="1" />
           <entry key="project.open.time.39" value="1" />
           <entry key="project.open.time.44" value="1" />
           <entry key="project.open.time.54" value="1" />
-          <entry key="project.opened" value="6" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="html" value="83" />
-          <entry key="py" value="84" />
+          <entry key="html" value="94" />
+          <entry key="jpg" value="2" />
+          <entry key="py" value="86" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="HTML" value="83" />
-          <entry key="Python" value="84" />
+          <entry key="HTML" value="94" />
+          <entry key="Image" value="2" />
+          <entry key="Python" value="86" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="html" value="3614" />
-          <entry key="py" value="8894" />
+          <entry key="html" value="3927" />
+          <entry key="py" value="8920" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="3614" />
-          <entry key="Python" value="8894" />
+          <entry key="HTML" value="3927" />
+          <entry key="Python" value="8920" />
         </counts>
       </usages-collector>
     </session>
@@ -322,43 +328,52 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/request/reqSpecViews.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="388">
-              <caret line="63" column="32" lean-forward="true" selection-start-line="63" selection-start-column="32" selection-end-line="63" selection-end-column="32" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="47" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
+            <state relative-caret-position="170">
+              <caret line="10" column="21" lean-forward="true" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/request/views.py">
+        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="113" column="6" lean-forward="true" selection-start-line="103" selection-start-column="4" selection-end-line="113" selection-end-column="6" />
+            <state relative-caret-position="233">
+              <caret line="15" column="31" lean-forward="true" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
+                <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create_spec.html">
+        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="46" column="49" selection-start-line="46" selection-start-column="49" selection-end-line="46" selection-end-column="49" />
+            <state relative-caret-position="204">
+              <caret line="12" column="27" lean-forward="true" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+              <folding>
+                <element signature="e#225#327#0#HTML" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="6" column="119" lean-forward="true" selection-start-line="6" selection-start-column="119" selection-end-line="6" selection-end-column="119" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="11" column="35" lean-forward="true" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -366,8 +381,23 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/form.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="47" column="50" lean-forward="true" selection-start-line="47" selection-start-column="50" selection-end-line="47" selection-end-column="50" />
+            <state relative-caret-position="374">
+              <caret line="22" column="32" lean-forward="true" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
+              <folding>
+                <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/request/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="128">
+              <caret line="55" column="72" selection-start-line="55" selection-start-column="72" selection-end-line="55" selection-end-column="72" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -375,8 +405,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/form.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="54" selection-start-line="10" selection-start-column="54" selection-end-line="10" selection-end-column="54" />
+            <state relative-caret-position="29">
+              <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
+              <folding>
+                <element signature="e#351#453#0#HTML" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="44" selection-start-line="6" selection-start-column="44" selection-end-line="6" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create_spec.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="442">
+              <caret line="113" column="10" lean-forward="true" selection-start-line="113" selection-start-column="10" selection-end-line="113" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -448,7 +499,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/top-summary.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/dashboard.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/latest_orders.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/create_spec_pref2.html" />
@@ -463,19 +513,14 @@
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/create_spec_pref01.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/payments/add_payment.html" />
         <option value="$PROJECT_DIR$/customer/templates/customer/view.html" />
-        <option value="$PROJECT_DIR$/factor/urls.py" />
         <option value="$PROJECT_DIR$/factor/settings.py" />
         <option value="$PROJECT_DIR$/customer/models.py" />
         <option value="$PROJECT_DIR$/request/models.py" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefVerification/create.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/verifications/create.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/create_spec_pref02.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/report/xpref_details.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create_spec.html" />
         <option value="$PROJECT_DIR$/request/templates/test.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/form.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html" />
         <option value="$PROJECT_DIR$/customer/templates/customer/customer.html" />
         <option value="$PROJECT_DIR$/customer/url.py" />
@@ -486,19 +531,25 @@
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/details.html" />
         <option value="$PROJECT_DIR$/request/views/prefViews.py" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form2.html" />
-        <option value="$PROJECT_DIR$/request/prefViews.py" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_details.html" />
+        <option value="$PROJECT_DIR$/request/views2.py" />
+        <option value="$PROJECT_DIR$/request/url.py" />
+        <option value="$PROJECT_DIR$/request/reqSpecViews.py" />
+        <option value="$PROJECT_DIR$/factor/urls.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/form.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html" />
+        <option value="$PROJECT_DIR$/request/views.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/form.html" />
+        <option value="$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create_spec.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/form.html" />
+        <option value="$PROJECT_DIR$/request/prefViews.py" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_details.html" />
-        <option value="$PROJECT_DIR$/request/views.py" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/form.html" />
-        <option value="$PROJECT_DIR$/request/views2.py" />
-        <option value="$PROJECT_DIR$/request/url.py" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/form.html" />
-        <option value="$PROJECT_DIR$/request/reqSpecViews.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" />
       </list>
     </option>
   </component>
@@ -526,24 +577,6 @@
             <path>
               <item name="factor" type="b2602c69:ProjectViewProjectNode" />
               <item name="factor" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="customer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="customer" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="customer" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="customer" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="factor" type="b2602c69:ProjectViewProjectNode" />
@@ -626,7 +659,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
-    <property name="SearchEverywhereHistoryKey" value="01&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/prefactor/create_spec_pref01.html&#10;menu&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;form&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/ypref/form.html&#10;url&#9;FILE&#9;file://G:/factor/request/url.py&#10;setting&#9;FILE&#9;file://G:/factor/factor/settings.py&#10;setti&#9;FILE&#9;file://G:/factor/factor/settings.py&#10;prefactors&#9;FILE&#9;file://I:/factor/request/templates/prefactors&#10;model&#9;FILE&#9;file://G:/factor/request/models.py&#10;adminbas&#9;FILE&#9;file://C:/Users/liva/Desktop/Scs/2/dev files/django/factor/request/templates/requests/admin_jemco/admin_base.html&#10;base.&#9;FILE&#9;file://C:/Users/liva/Desktop/Scs/2/dev files/django/factor/request/templates/requests/admin_jemco/admin_base.html&#10;base&#9;FILE&#9;file://C:/Users/liva/Desktop/dev files/django/factor/request/templates/requests/base.html" />
+    <property name="SearchEverywhereHistoryKey" value="index&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/ypayment/index.html&#10;form&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/ypayment/form.html&#10;01&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/prefactor/create_spec_pref01.html&#10;menu&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;url&#9;FILE&#9;file://G:/factor/request/url.py&#10;setting&#9;FILE&#9;file://G:/factor/factor/settings.py&#10;setti&#9;FILE&#9;file://G:/factor/factor/settings.py&#10;prefactors&#9;FILE&#9;file://I:/factor/request/templates/prefactors&#10;model&#9;FILE&#9;file://G:/factor/request/models.py&#10;adminbas&#9;FILE&#9;file://C:/Users/liva/Desktop/Scs/2/dev files/django/factor/request/templates/requests/admin_jemco/admin_base.html&#10;base.&#9;FILE&#9;file://C:/Users/liva/Desktop/Scs/2/dev files/django/factor/request/templates/requests/admin_jemco/admin_base.html&#10;base&#9;FILE&#9;file://C:/Users/liva/Desktop/dev files/django/factor/request/templates/requests/base.html" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -746,15 +779,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1608" y="-145" width="1616" height="876" extended-state="6" />
+    <frame x="-1608" y="-8" width="1616" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49802372" visible="true" weight="0.17095116" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49802372" visible="true" weight="0.17287917" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5019763" side_tool="true" weight="0.27987897" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4993573" weight="0.32884097" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4993573" weight="0.20889488" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4993573" visible="true" weight="0.20889488" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3442623" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -808,7 +841,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/request/views.py</url>
-          <line>342</line>
+          <line>364</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
@@ -854,9 +887,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/customer/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/request/forms.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -942,16 +972,7 @@
     <entry file="file://$PROJECT_DIR$/request/templates/test.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="21" lean-forward="true" selection-start-column="21" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/add_payment_page.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/add_payment_page.html" />
     <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/payments/add_payment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
@@ -1029,13 +1050,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="42" lean-forward="true" selection-start-line="24" selection-start-column="42" selection-end-line="24" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/create_spec_pref02.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -1043,30 +1057,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/prefViews.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1136">
-          <caret line="81" column="59" selection-start-line="81" selection-start-column="59" selection-end-line="81" selection-end-column="59" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_details.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" column="38" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" selection-start-line="6" selection-end-line="7" />
-          <folding>
-            <element signature="e#225#327#0#HTML" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1091,16 +1085,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" selection-start-line="6" selection-end-line="7" />
-          <folding>
-            <element signature="e#225#321#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/request/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -1111,48 +1095,101 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html">
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/create_spec_pref01.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
-          <caret line="10" column="131" selection-start-line="10" selection-start-column="131" selection-end-line="10" selection-end-column="131" />
+          <caret line="10" column="34" lean-forward="true" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html">
+    <entry file="file://$PROJECT_DIR$/request/reqSpecViews.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="132" lean-forward="true" selection-start-line="3" selection-start-column="4" selection-end-line="6" selection-end-column="132" />
+        <state relative-caret-position="952">
+          <caret line="56" lean-forward="true" selection-start-line="56" selection-end-line="56" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/factor/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="34" column="55" selection-start-line="34" selection-start-column="55" selection-end-line="34" selection-end-column="55" />
+        <state relative-caret-position="216">
+          <caret line="30" column="56" lean-forward="true" selection-start-line="30" selection-start-column="56" selection-end-line="30" selection-end-column="56" />
           <folding>
             <element signature="e#630#662#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html">
+    <entry file="file://$PROJECT_DIR$/request/url.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="47" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
+        <state relative-caret-position="202">
+          <caret line="73" column="47" lean-forward="true" selection-start-line="73" selection-start-column="47" selection-end-line="73" selection-end-column="47" />
+          <folding>
+            <element signature="e#630#662#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="32" lean-forward="true" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
+          <folding>
+            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="55" column="72" selection-start-line="55" selection-start-column="72" selection-end-line="55" selection-end-column="72" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/form.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="54" selection-start-line="10" selection-start-column="54" selection-end-line="10" selection-end-column="54" />
+        <state relative-caret-position="29">
+          <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
+          <folding>
+            <element signature="e#351#453#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="44" selection-start-line="6" selection-start-column="44" selection-end-line="6" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/media/p4175.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create_spec.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="113" column="10" lean-forward="true" selection-start-line="113" selection-start-column="10" selection-end-line="113" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="47" column="31" lean-forward="true" selection-start-line="47" selection-start-column="31" selection-end-line="47" selection-end-column="31" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/request/views2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="45" column="37" lean-forward="true" selection-start-line="45" selection-start-column="37" selection-end-line="45" selection-end-column="37" />
+        <state relative-caret-position="253">
+          <caret line="84" column="60" lean-forward="true" selection-start-line="84" selection-start-column="60" selection-end-line="84" selection-end-column="60" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
             <marker date="1538751028000" expanded="true" signature="731:925" ph="..." />
@@ -1164,61 +1201,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create.html">
+    <entry file="file://$PROJECT_DIR$/request/prefViews.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="54" lean-forward="true" selection-start-line="10" selection-start-column="54" selection-end-line="10" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/create_spec_pref01.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="34" lean-forward="true" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create_spec.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="46" column="49" selection-start-line="46" selection-start-column="49" selection-end-line="46" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="47" column="50" lean-forward="true" selection-start-line="47" selection-start-column="50" selection-end-line="47" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/url.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="40" column="60" selection-start-line="40" selection-start-column="60" selection-end-line="40" selection-end-column="60" />
-          <folding>
-            <element signature="e#630#662#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="113" column="6" lean-forward="true" selection-start-line="103" selection-start-column="4" selection-end-line="113" selection-end-column="6" />
+        <state relative-caret-position="153">
+          <caret line="65" column="24" selection-start-line="65" selection-start-column="24" selection-end-line="65" selection-end-column="24" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/reqSpecViews.py">
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="63" column="32" lean-forward="true" selection-start-line="63" selection-start-column="32" selection-end-line="63" selection-end-column="32" />
+        <state relative-caret-position="233">
+          <caret line="15" column="31" lean-forward="true" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="27" lean-forward="true" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+          <folding>
+            <element signature="e#225#327#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="6" column="119" lean-forward="true" selection-start-line="6" selection-start-column="119" selection-end-line="6" selection-end-column="119" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="11" column="35" lean-forward="true" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="21" lean-forward="true" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
         </state>
       </provider>
     </entry>

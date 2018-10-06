@@ -15,6 +15,8 @@ from .models import Payment
 from .models import XprefVerf
 from customer.models import Customer
 from django.contrib.auth.decorators import login_required
+
+
 # Create your views here.
 
 
@@ -32,7 +34,8 @@ def prefactors_page(request):
 
 def prefactors_verification_page(request):
     allPrefVerifications = PrefactorVerification.objects
-    return render(request, 'requests/admin_jemco/prefVerificationsPage.html', {'allPrefVerifications': allPrefVerifications})
+    return render(request, 'requests/admin_jemco/prefVerificationsPage.html',
+                  {'allPrefVerifications': allPrefVerifications})
     # return render(request, 'requests/prefVerificationsPage.html', {'allPrefVerifications': allPrefVerifications})
 
 
@@ -41,6 +44,7 @@ def request_details(request, request_id):
     specs = req.reqspec_set.all()
     return render(request, 'requests/admin_jemco/request/req_details.html', {'request': req, 'specs': specs})
     # return render(request, 'requests/req_details.html', {'request': req, 'specs': specs})
+
 
 def prefactor_details(request, pref_id):
     pref = get_object_or_404(Prefactor, pk=pref_id)
@@ -53,12 +57,15 @@ def pref_ver_details(request, pref_ver_id):
 
 
 def allTable(request):
-    x = Requests.objects.get(pk=1)
+    # x = Requests.objects.get(pk=1)
     x2 = Requests.objects.all()
-    y = x.prefactor_set.all()
+    # y = x.prefactor_set.all()
     # z = Prefactor.objects.get(pk=1).prefactorverification_set
 
-    return render(request, 'prefactors/homepage.html', {'reqs': x2, 'prefs': y})
+    return render(request, 'prefactors/homepage.html', {
+        'reqs': x2,
+        # 'prefs': y
+    })
 
 
 def find_pref(request):
@@ -100,6 +107,7 @@ def create_spec(request, req_pk):
     return render(request, 'requests/admin_jemco/request/create_spec.html', {'req_obj': req_obj, 'specs': specs})
     # return render(request, 'requests/form.html', {'req_obj': req_obj, 'specs': specs})
 
+
 def edit_xspec(request, spec_pk, req_pk):
     req = Requests.objects.get(pk=req_pk)
     specs = ReqSpec.objects.filter(req_id=req)
@@ -112,6 +120,8 @@ def edit_xspec(request, spec_pk, req_pk):
         'req_obj': req,
         'updating': updating
     })
+
+
 def save_spec(request):
     if request.method == 'POST':
         spec = ReqSpec()
@@ -132,6 +142,7 @@ def save_spec(request):
         #     spec.price = request.POST['price']
         spec.save()
         return redirect('create_spec', req_pk=related_req.pk)
+
 
 def del_spec(request, spec_id):
     # print(request.content_params)
@@ -190,6 +201,7 @@ def create_pref(request):
             return render(request, 'prefactors/create.html', {'list': list, 'error': 'some field is empty'})
     return render(request, 'requests/admin_jemco/request/create.html')
 
+
 @login_required
 def createpage(request):
     req = Requests()
@@ -200,6 +212,7 @@ def createpage(request):
     })
     # return render(request, 'requests/details.html', {'req': req})
 
+
 @login_required
 def createprefpage(request):
     list = allRequests()
@@ -207,11 +220,13 @@ def createprefpage(request):
     return render(request, 'requests/admin_jemco/prefactor/create.html', {'list': list})
     # return render(request, 'views/details.html', {'list': list})
 
+
 @login_required
 def create_verf_page(request, error=''):
     list = allPref()
     return render(request, 'requests/admin_jemco/prefVerification/create.html', {'list': list, 'error': error})
     # return render(request, 'prefVerification/details.html', {'list': list, 'error': error})
+
 
 def create_verf(request):
     print(request)
@@ -232,8 +247,10 @@ def create_verf(request):
                     return render(request, 'prefVerification/create.html', {'error': 'no such request'})
         else:
             allprefactors = allPref()
-            return render(request, 'prefVerification/create.html', {'error': 'some field is empty', 'list': allprefactors})
+            return render(request, 'prefVerification/create.html',
+                          {'error': 'some field is empty', 'list': allprefactors})
     return render(request, 'prefVerification/create.html')
+
 
 def allPref():
     allPref = Prefactor.objects.all()
@@ -242,6 +259,7 @@ def allPref():
         list.append(pref.number)
     list.sort()
     return list
+
 
 def allRequests():
     allreq = Requests.objects.all()
@@ -267,13 +285,15 @@ def dashboard(request):
                       'last_n_requests': last_n_requests
                   })
 
+
 def no_of_requests():
     num_of_reqs = Requests.objects.all().count()
     return num_of_reqs
 
+
 def find_routine_kw():
-# ReqSpec is a class and ReqSpec() is an instance of it
-# command bellow works for clas and not working for instance
+    # ReqSpec is a class and ReqSpec() is an instance of it
+    # command bellow works for clas and not working for instance
 
     routine_specs = ReqSpec.objects.filter(kw__lte=450)
     project_specs = ReqSpec.objects.filter(kw__gt=450)
@@ -295,6 +315,7 @@ def find_routine_kw():
 def find_last_reqs():
     pass
 
+
 def specs_of_orders(orders):
     pass
 
@@ -308,6 +329,7 @@ class Orders:
 def create_pref_spec(request):
     Reqs = Requests.objects.all()
     return render(request, 'requests/admin_jemco/prefactor/create_spec_pref01.html', {'reqs': Reqs})
+
 
 def create_spec_pref_findReq(request):
     req = Requests.objects.get(number=request.POST['req_no'])
@@ -363,13 +385,14 @@ def save_pref_spec(request):
 
     return render(request, 'requests/admin_jemco/prefactor/create_spec_pref01.html', {
         'reqs': reqs
-                   })
+    })
 
 
 def xreq_pref_spec(request):
     xprefs = Xpref.objects.all()
 
     return render(request, 'requests/admin_jemco/report/report.html', {'xprefs': xprefs})
+
 
 def find_xpref(request):
     # xpref_obj = Xpref()
@@ -380,6 +403,7 @@ def find_xpref(request):
     xpref = Xpref.objects.get(number=request.POST['xpref_no'])
     xpref = get_object_or_404(Xpref, number=request.POST['xpref_no'])
     return render(request, 'requests/admin_jemco/prefactor/find_xpref.html', {'xpref_obj': xpref})
+
 
 def xpref_link(request, xpref_id):
     xpref = Xpref.objects.get(pk=xpref_id)
@@ -419,7 +443,6 @@ def add_payment_page(request):
 
 
 def add_payment(request):
-
     xpref = Xpref.objects.get(pk=request.POST['xpref_no'])
     payment = Payment()
     payment.xpref_id = xpref
@@ -449,8 +472,6 @@ def find_all_obj():
     xprefs = Xpref.objects.all()
     xpayment = Payment.objects.all()
     return reqs, xprefs, xpayment
-
-
 
 
 @login_required
@@ -489,6 +510,3 @@ def create_xverf(request):
             return render(request, 'prefVerification/create.html',
                           {'error': 'some field is empty', 'list': allprefactors})
     return render(request, 'prefVerification/create.html')
-
-
-

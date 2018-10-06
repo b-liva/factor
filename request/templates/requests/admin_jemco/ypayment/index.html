@@ -3,44 +3,46 @@
 {% block right_col %}
     <div class="container">
         <div class="col-md-6 col-md-offset-3">
-                <h3>{{ msg }}</h3>
-            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Payments</h1>
+            <h3>{{ msg }}</h3>
+            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                Payments</h1>
             <table class="withBorder tableFull">
-        <tr>
-            <th>Id</th>
-            <th>Number</th>
-            <th>Prefactor</th>
-            <th>Amount</th>
-            <th>Payment Date</th>
-            <th>details</th>
-        </tr>
-        <tbody class="">
-        {% for payment in payments %}
-            <tr>
-                <td>{{ payment.pk }}</td>
-                <td>{{ payment.number }}</td>
-                <td>{{ payment.xpref_id.number }}</td>
-                <td>{{ payment.amount|intcomma }}</td>
-                <td>{{ payment.payment_date }}</td>
-                <td>
-                    <a class="btn btn-primary btn-xs" href="{% url 'payment_details' ypayment_pk=payment.pk %}">Details</a>
-                    <a class="btn btn-primary btn-xs btn-warning" href="{% url 'payment_delete' ypayment_pk=payment.pk %}">Delete</a>
-                </td>
+                <tr>
+                    <th>Id</th>
+                    <th>Number</th>
+                    <th>Prefactor</th>
+                    <th>Amount</th>
+                    <th>Payment Date</th>
+                    <th>Actions</th>
+                </tr>
+                <tbody class="">
+                {% for payment in payments %}
+                    <tr>
+                        <td>{{ payment.pk }}</td>
+                        <td>{{ payment.number }}</td>
+                        <td>{{ payment.xpref_id.number }}</td>
+                        <td>{{ payment.amount|intcomma }}</td>
+                        <td>{{ payment.payment_date }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="{% url 'payment_details' ypayment_pk=payment.pk %}">Details</a>
+                            <a class="btn btn-primary btn-xs btn-warning"
+                               href="{% url 'payment_delete' ypayment_pk=payment.pk %}">Delete</a>
+                        </td>
 
 
-            </tr>
+                    </tr>
 
-        {% endfor %}
-            <tr style="border-top: 3px solid black;">
-                <td></td>
-                <td></td>
-                <td>{{ pref_sum|intcomma }}</td>
-                <td><b>{{ amount_sum|intcomma }}</b></td>
-                <td>{{ debt|intcomma }}</td>
-                <td>{{ debt_percent|floatformat:2 }}</td>
-            </tr>
-        </tbody>
-    </table>
+                {% endfor %}
+                <tr style="border-top: 3px solid black;">
+                    <td></td>
+                    <td></td>
+                    <td>{{ pref_sum|intcomma }}</td>
+                    <td><b>{{ amount_sum|intcomma }}</b></td>
+                    <td>{{ debt|intcomma }}</td>
+                    <td>{{ debt_percent|floatformat:2 }}</td>
+                </tr>
+                </tbody>
+            </table>
             <br>
             <a href="{% url 'payment_form' %}" class="btn btn-success btn-sm">Add new payment</a>
         </div>

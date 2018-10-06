@@ -35,6 +35,8 @@ def pref_form2(request):
         'reqspec': reqspec,
         'req_id': req.pk,
     })
+
+
 def pref_insert(request):
     reqs = Requests.objects.all()
     req_no = request.POST['req_no']
@@ -86,6 +88,7 @@ def pref_delete(request, ypref_pk):
     pref = Xpref.objects.get(pk=ypref_pk)
     pref.delete()
     return redirect('pref_index')
+
 
 def pref_edit(request, ypref_pk):
     pass

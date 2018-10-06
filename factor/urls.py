@@ -26,7 +26,8 @@ import request.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', prefactor.views.home, name='homepage'),
-    path('', request.views.allTable, name='allTables'),
+    path('', request.views.dashboard, name='dashboard'),
+    path('oldhomepage', request.views.allTable, name='allTables'),
     path('testPage/', prefactor.views.testpage, name='testPage'),
     path('prefPage/', prefactor.views.prefactors, name='prefPage'),
     path('pref_ver/', prefactor_verification.views.pref_verification, name='pref_ver'),

@@ -1,34 +1,33 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
 {% block right_col %}
-
     <div class="row">
-    <div class="col-md-4">
-        <div class="card mb-4 shadow-sm">
-            <div class="card-body">
-               {% if error %}
-                {{ error }}
-            {% endif %}
-            <form method="POST" action="{% url 'create_req' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                Req No.<br>
-                <input type="text" name="req_no"><br>
-                Customer<br>
-                <select name="customer_id">
-                    {% for customer in customers %}
-                        <option  value="{{ customer.id }}">{{ customer.name }}</option>
-                    {% endfor %}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    {% if error %}
+                        {{ error }}
+                    {% endif %}
+                    <form method="POST" action="{% url 'create_req' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        Req No.<br>
+                        <input type="text" name="req_no"><br>
+                        Customer<br>
+                        <select name="customer_id">
+                            {% for customer in customers %}
+                                <option value="{{ customer.id }}">{{ customer.name }}</option>
+                            {% endfor %}
 
-                </select><br>
-                Summary:<br>
-                <textarea name="req_summary"></textarea><br>
-Image<br>
-                <input type="file" name="req_file"><br>
-                <input class="btn btn-primary" type="submit" value="Save" name="done">
-            </form>
+                        </select><br>
+                        Summary:<br>
+                        <textarea name="req_summary"></textarea><br>
+                        Image<br>
+                        <input type="file" name="req_file"><br>
+                        <input class="btn btn-primary" type="submit" value="Save" name="done">
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
 {#{% extends 'requests/base.html' %}#}
 {#{% block mainContent %}#}
@@ -54,12 +53,6 @@ Image<br>
 {#    </div>#}
 {#</div>#}
 {#{% endblock %}#}
-
-
-
-
-
-
 
 
 {#                KW<br>#}
