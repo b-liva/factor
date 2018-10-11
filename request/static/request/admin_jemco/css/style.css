@@ -27,3 +27,7 @@ table.withBorder{
 table.tableFull{
   width:100%;
 }
+
+.results, .value{
+  color: lightgreen;
+}

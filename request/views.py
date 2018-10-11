@@ -15,13 +15,13 @@ from .models import Payment
 from .models import XprefVerf
 from customer.models import Customer
 from django.contrib.auth.decorators import login_required
-
+from .viewsFolder import permission
 
 # Create your views here.
-
-
+def errorpage(request):
+    return render(request, 'fund/error.html')
 def request_page(request):
-    allRequests = Requests.objects
+    allRequests = Requests.objects.all()
     return render(request, 'requests/admin_jemco/allRequests.html', {'allRequests': allRequests})
     # return render(request, 'requests/requests.html', {'allRequests': allRequests})
 
@@ -80,7 +80,7 @@ def find_pref(request):
         {'prefactor': prefactor, 'verification': pre_ver, 'related_request': related_request}
     )
 
-
+# @login_required(login_url='login')
 @login_required
 def create_req(request):
     if request.method == 'POST':
@@ -424,7 +424,7 @@ def edit_xpref(request, xpref_id):
         item.save()
         x += 1
 
-    msg = 'prefactor was updated'
+    msg = 'Proforma was updated'
     return render(request, 'requests/admin_jemco/report/xpref_details.html', {
         'xpref': xpref,
         'xpref_specs': xspec,

@@ -3,6 +3,7 @@ import datetime
 from django.utils.timezone import now
 from customer.models import Customer
 
+
 class Requests(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     number = models.IntegerField()
@@ -35,6 +36,7 @@ class Xpref(models.Model):
     pub_date = models.DateTimeField(default=now)
     image = models.ImageField('requests/views/original/')
 
+
 class PrefSpec(models.Model):
     xpref_id = models.ForeignKey(Xpref, on_delete=models.CASCADE)
     qty = models.IntegerField(default=1)
@@ -55,6 +57,7 @@ class XprefVerf(models.Model):
     image = models.ImageField('requests/views/verifications/')
     summary = models.TextField(max_length=1000)
 
+
 class Prefactor(models.Model):
     request_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
     number = models.IntegerField()
@@ -71,6 +74,16 @@ class PrefactorVerification(models.Model):
     number = models.IntegerField()
     pub_date = models.DateTimeField(default=now)
     image = models.ImageField('requests/views/verifications/')
+    summary = models.TextField(max_length=1000)
+
+    def pub_date_pretty(self):
+        return self.pub_date.strftime('%b %e %Y')
+
+
+class Permission(models.Model):
+    proforma = models.ForeignKey(Xpref, on_delete=models.CASCADE)
+    number = models.IntegerField()
+    pub_date = models.DateTimeField(default=now)
     summary = models.TextField(max_length=1000)
 
     def pub_date_pretty(self):

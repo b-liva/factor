@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.urls import reverse_lazy
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -25,7 +27,7 @@ SECRET_KEY = 'wf$gn46*y4((^9gsj8_4j=%i=40v2dpuyypf56xww72aj40b5='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['37a60399.ngrok.io', 'localhost', '192.168.1.4']
 
 # When Debug is set to false
 # ALLOWED_HOSTS = ['*']
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'prefactor.apps.PrefactorConfig',
     'prefactor_verification.apps.PrefactorVerificationConfig',
     'customer.apps.CustomerConfig',
+    'fund.apps.FundConfig',
     # 'accounts.apps.AppConfig',
     'accounts.apps.AccountsConfig',
     'django.contrib.admin',
@@ -131,3 +134,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+LOGIN_URL = reverse_lazy('login')

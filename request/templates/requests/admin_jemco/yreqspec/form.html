@@ -6,7 +6,7 @@
                 <div>
                     <h3>{{ msg }}</h3>
                     <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                        New Request</h1>
+                        Request Specs</h1>
                     <div>
                         <p><b>Request:</b></p>
                         <p>
@@ -47,10 +47,10 @@
                                     {#                        <td>{{ spec.price }}</td>#}
                                     <td>
                                         <a href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">
-                                            <button class="btn btn-primary btn-sm">Delete</button>
+                                            <button class="btn btn-primary btn-xs">Delete</button>
                                         </a>
                                         <a href="{% url 'reqSpec_edit' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">
-                                            <button class="btn btn-primary btn-sm">Edit</button>
+                                            <button class="btn btn-primary btn-xs">Edit</button>
                                         </a>
 
                                     </td>

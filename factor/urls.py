@@ -41,7 +41,9 @@ urlpatterns = [
     path('prefVerification/<int:pref_ver_id>', request.views.pref_ver_details, name="prefVerfDetailPage"),
     path('find_pref/', request.views.find_pref, name="find_prefPage"),
     path('dashboard/', request.views.dashboard, name="dashboard"),
+    path('errorpage/', request.views.errorpage, name="errorpage"),
     path('accounts/', include('accounts.url')),
     path('request/', include('request.url')),
     path('customer/', include('customer.url')),
+    path('fund/', include('fund.url')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

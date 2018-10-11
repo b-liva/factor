@@ -51,6 +51,7 @@ def request_insert(request):
 
 def request_index(request):
     requests = Requests.objects.all()
+
     return render(request, 'requests/admin_jemco/yrequest/index.html', {'all_requests': requests})
 
 
@@ -60,9 +61,14 @@ def request_find(request):
 
 def request_read(request, request_pk):
     req = Requests.objects.get(pk=request_pk)
+    reqspecs = req.reqspec_set.all()
     kw = total_kw(request_pk)
 
-    return render(request, 'requests/admin_jemco/yrequest/details.html', {'request': req, 'total_kw': kw})
+    return render(request, 'requests/admin_jemco/yrequest/details.html', {
+        'request': req,
+        'reqspecs': reqspecs,
+        'total_kw': kw
+    })
 
 
 def request_delete(request, request_pk):

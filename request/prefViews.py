@@ -79,12 +79,19 @@ def pref_index(request):
     print(len(prefs))
     return render(request, 'requests/admin_jemco/ypref/index.html', {'prefs': prefs})
 
+
 def pref_find(request):
     pref = Xpref.objects.get(number=request.POST['pref_no'])
     return redirect('pref_details', ypref_pk=pref.pk)
+
+
 def pref_details(request, ypref_pk):
     pref = Xpref.objects.get(pk=ypref_pk)
-    return render(request, 'requests/admin_jemco/ypref/details.html', {'pref': pref})
+    prefspecs = pref.prefspec_set.all()
+    return render(request, 'requests/admin_jemco/ypref/details.html', {
+        'pref': pref,
+        'prefspecs': prefspecs
+    })
 
 
 def pref_delete(request, ypref_pk):
@@ -93,5 +100,40 @@ def pref_delete(request, ypref_pk):
     return redirect('pref_index')
 
 
+def pref_edit_form(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    prof_specs = proforma.prefspec_set.all()
+    print('ok')
+    return render(request, 'requests/admin_jemco/ypref/edit_form.html', {
+        'proforma': proforma,
+        'prof_specs': prof_specs
+    })
+
+
 def pref_edit(request, ypref_pk):
-    pass
+    xpref = Xpref.objects.get(pk=ypref_pk)
+    spec_prices = request.POST.getlist('price')
+    xspec = xpref.prefspec_set.all()
+    x = 0
+    for item in xspec:
+        item.price = spec_prices[x]
+        item.save()
+        x += 1
+
+    msg = 'Proforma was updated'
+    return render(request, 'requests/admin_jemco/ypref/details.html', {
+        'pref': xpref,
+        'prefspecs': xspec,
+        'msg': msg,
+    })
+
+
+def xpref_link(request, xpref_id):
+    xpref = Xpref.objects.get(pk=xpref_id)
+    xpref_specs = xpref.prefspec_set.all()
+    return render(request, 'requests/admin_jemco/report/xpref_details.html', {
+        'xpref': xpref,
+        'xpref_specs': xpref_specs
+    })
+
+

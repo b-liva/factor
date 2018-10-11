@@ -1,0 +1,40 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <h3>{{ msg }}</h3>
+            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                Edit Proforma</h1>
+            <h3>Proforma No.</h3>
+            {{ proforma.number }}
+            <br>{{ proforma.pub_date }}
+            <br>
+
+            <form action="{% url 'pref_edit' ypref_pk=proforma.id %}" method="POST">
+                {% csrf_token %}
+                <table class="withBorder">
+                    <thead class="dark">
+                    <tr>
+                        <th>kw</th>
+                        <th>rpm</th>
+                        <th>price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for prof_spec in  prof_specs %}
+                        <tr>
+                            <td>{{ prof_spec.kw }}</td>
+                            <td>{{ prof_spec.rpm }}</td>
+                            <td><input type="number" name="price" value="{{ prof_spec.price }}"></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <button type="submit" name="edit" class="btn btn-sm btn-success">Save</button>
+                <a class="btn btn-danger btn-sm" href="{% url 'pref_index' %}">Cancel</a>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -25,7 +25,7 @@ import request.views
 from request import views2
 from request import prefViews
 from . import reqSpecViews
-
+from .viewsFolder import permission
 
 
 urlpatterns = [
@@ -72,6 +72,16 @@ urlpatterns = [
         path('edit', request.views2.pref_spec_edit, name='pref_spec_edit'),
     ])),
 
+    path('permission/form', permission.permission_form, name='permission_form'),
+    path('permission/insert', permission.permission_insert, name='permission_insert'),
+    path('permission/index', permission.permission_index, name='permission_index'),
+    path('permission/find', permission.permission_find, name='permission_find'),
+    path('permission/<int:permission_pk>/', include([
+        path('', permission.permission_details, name='permission_details'),
+        path('delete', permission.permission_delete, name='permission_delete'),
+        path('edit', permission.permission_edit, name='permission_edit'),
+    ])),
+
     path('payment/form', request.views2.payment_form, name='payment_form'),
     path('payment/insert', request.views2.payment_insert, name='payment_insert'),
     path('payment/index', request.views2.payment_index, name='payment_index'),
@@ -90,6 +100,7 @@ urlpatterns = [
     path('pref/<int:ypref_pk>/', include([
         path('', request.prefViews.pref_details, name='pref_details'),
         path('delete', request.prefViews.pref_delete, name='pref_delete'),
+        path('form', request.prefViews.pref_edit_form, name='pref_edit_form'),
         path('edit', request.prefViews.pref_edit, name='pref_edit'),
     ])),
 

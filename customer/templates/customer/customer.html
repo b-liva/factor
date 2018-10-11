@@ -1,27 +1,49 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
 {% block right_col %}
-    <h3>{{ msg }}</h3>
-
-    {% for all_customer in all_customers %}
-        {{ all_customer.name }}<b> - </b>
-    {% endfor %}
-
-    <br>Crteate a new customer
-
-
-    <form method="POST" action="{% url 'customer_insert'%}">
-        {% csrf_token %}
-        Code<br>
-        <input type="number" name="code">
-        <br>Name<br>
-        <input type="text" name="name">
-        <br>Type<br>
-        <select name="type">
-            {% for type in customer_types %}
-                <option value="{{ type.id }}">{{ type.name }}</option>
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <h3>{{ msg }}</h3>
+            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                Add new customer</h1>
+            {% for all_customer in all_customers %}
+                {{ all_customer.name }}<b> - </b>
             {% endfor %}
-        </select>
-        <br><button type="submit" name="submit" class="btn-sm btn btn-success">Save</button>
-    </form>
-
+            <br>
+            <div class="col-md-6">
+                <form method="POST" action="{% url 'customer_insert' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="customer-code">Code</label>
+                        <input type="number" class="form-control" id="customer-code" placeholder="Enter Customer Code"
+                               name="code">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-name">Name</label>
+                        <input type="text" class="form-control" id="customer-name" placeholder="Enter Customer Name"
+                               name="name">
+                    </div>
+                    {#                Code<br>#}
+                    {#                <input type="number" name="code">#}
+                    {#                <br>Name<br>#}
+                    {#                <input type="text" name="name">#}
+                    <div class="form-group">
+                        <label for="customer-type">Customer Type</label>
+                        <select class="form-control" id="customer-type" name="type">
+                            {% for type in customer_types %}
+                                <option value="{{ type.id }}">{{ type.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {#                <br>Type<br>#}
+                    {#                <select name="type">#}
+                    {#                    {% for type in customer_types %}#}
+                    {#                        <option value="{{ type.id }}">{{ type.name }}</option>#}
+                    {#                    {% endfor %}#}
+                    {#                </select>#}
+                    <br>
+                    <button type="submit" name="submit" class="btn-sm btn btn-success">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

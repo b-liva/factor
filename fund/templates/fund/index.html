@@ -1,0 +1,48 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-8 col-md-offset-2">
+                <h3>{{ msg }}</h3>
+        <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                Funds</h1>
+            <form method="POST" action="{% url 'fund_find' %}">
+                {% csrf_token %}
+                Fund No <input name="fund_pk">
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
+            </form>
+        <hr>
+            <a href="{% url 'fund_form' %}" class="btn btn-success btn-sm">Add new Fund</a>
+
+    <table class="withBorder tableFull">
+        <tr>
+            <th>No</th>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Summary</th>
+            <th>Date</th>
+            <th>Total Expenses</th>
+            <th>owner</th>
+            <th>Action</th>
+        </tr>
+        <tbody>
+        {% for total_exp, fund in amounts.items %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ fund.pk }}</td>
+                <td>{{ fund.title }}</td>
+                <td>{{ fund.summary }}</td>
+                <td>{{ fund.pub_date }}</td>
+                <td>{{ total_exp|floatformat:0|intcomma }}</td>
+                <td>{{ fund.owner.username }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs" href="{% url 'fund_details' fund_pk=fund.pk %}">Details</a>
+                    <a class="btn btn-primary btn-xs btn-warning" href="{% url 'fund_delete' fund_pk=fund.pk %}">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table><br>
+        </div>
+    </div>
+{% endblock %}

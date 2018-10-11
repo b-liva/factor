@@ -12,11 +12,21 @@
             </li>
             <li><a><i class="fa fa-home"></i> Temp <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
+                    <li><a href="{% url 'customer_index' %}">Customers</a></li>
                     <li><a href="{% url 'request_index' %}">Requests</a></li>
                     <li><a href="{% url 'pref_index' %}">Proformas</a></li>
                     <li><a href="{% url 'payment_index' %}">Payments</a></li>
                     <li><a href="{% url 'reqSpec_index' %}">Specs</a></li>
-                    <li><a href="{% url 'customer_index' %}">Customers</a></li>
+                    <li><a href="{% url 'fund_index' %}">Fund</a></li>
+                    <li><a href="{% url 'tenders_admin' %}">Find Tenders </a></li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link"
+                                                href="javascript:{document.getElementById('logout').submit()}">Logout</a>
+                        <form id="logout" method="POST" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <input type="hidden">
+                        </form>
+                    {% endif %}
                 </ul>
             </li>
             <hr>
@@ -26,6 +36,9 @@
                     <li><a href="{% url 'createpage' %}">Create request</a></li>
                     <li><a href="{% url 'xreq_pref_spec' %}">All Req and prefs with spec</a></li>
                     <li><a href="{% url 'find_xpref' %}">Find a prefactor</a></li>
+
+
+                    </li>
                     {% if not user.is_authenticated %}
                         <li><a href="{% url 'login' %}">Login</a></li>
                     {% endif %}

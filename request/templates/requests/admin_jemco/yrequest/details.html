@@ -8,8 +8,39 @@
                 <p>{{ request.pub_date }}</p>
                 Total kw: <p>{{ total_kw }}</p>
             </div>
+
+            <table class="withBorder tableFull">
+                <tr>
+                    <th>No</th>
+                    {#            <th>Id</th>#}
+                    <th>Qty</th>
+                    <th>kw</th>
+                    <th>rpm</th>
+                    <th>Summary</th>
+                </tr>
+                <tbody>
+                {% for reqspec in reqspecs %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        {#                <td>{{ customer.pk }}</td>#}
+                        <td>{{ reqspec.qty }}</td>
+                        <td>{{ reqspec.kw }}</td>
+                        <td>{{ reqspec.rpm }}</td>
+                        <td>{{ reqspec.summary }}</td>
+                        {#                        <td>#}
+                        {#                            <a class="btn btn-primary btn-xs" href="{% url 'reqSpec_edit' req_pk=customer.pk %}">Details</a>#}
+                        {#                            <a class="btn btn-primary btn-xs btn-warning"#}
+                        {#                               href="{% url 'customer_delete' customer_pk=customer.pk %}">Delete</a>#}
+                        {#                        </td>#}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <br>
             <div>
-                <a href="{% url 'reqSpec_form' req_pk=request.pk %}"><button type="submit" name="submit" class="btn btn-success btn-sm">Edit Specs</button></a>
+                <a href="{% url 'reqSpec_form' req_pk=request.pk %}">
+                    <button type="submit" name="submit" class="btn btn-success btn-sm">Edit Specs</button>
+                </a>
             </div>
         </div>
     </div>

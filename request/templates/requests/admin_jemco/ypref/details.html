@@ -1,11 +1,49 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
+{% load humanize %}
 {% block right_col %}
     <div class="container">
-            <div class="col-md-6 col-md-offset-3">
-                    <h3>{{ msg }}</h3>
-                 <h3>{{ pref.number }}</h3>
-                 <p>{{ pref.pub_date }}</p>
-            </div>
+        <div class="col-md-6 col-md-offset-3">
+            <h3>{{ msg }}</h3>
+            <p>Proforma Number:<span class="results">{{ pref.number }}</span></p>
+            <p>Proforma Date:<span class="value">{{ pref.pub_date }}</span></p>
+            <hr>
+
+        <h3>Proforma Details</h3>
+            <table class="withBorder tableFull">
+                <tr>
+                    <th>ID</th>
+                    <th>Qty</th>
+                    <th>Kw</th>
+                    <th>rpm</th>
+                    <th>voltage</th>
+                    <th>price</th>
+                </tr>
+                <tbody>
+                {% for prefspec in prefspecs %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        {#                <td>{{ customer.pk }}</td>#}
+                        <td>{{ prefspec.qty }}</td>
+                        <td>{{ prefspec.kw }}</td>
+                        <td>{{ prefspec.rpm }}</td>
+                        <td>{{ prefspec.voltage }}</td>
+                        <td>{{ prefspec.price|intcomma }}</td>
+{#                        <td>#}
+                            {#                    <a class="btn btn-primary btn-xs" href="{% url 'customer_read' customer_pk=customer.pk %}">Details</a>#}
+                            {#                    <a class="btn btn-primary btn-xs btn-warning" href="{% url 'customer_delete' customer_pk=customer.pk %}">Delete</a>#}
+{#                        </td>#}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <a href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
+                <button class="btn btn-success btn-sm" type="submit" name="submit">Edit Prof</button>
+            </a>
+
+            <br>
+
+        </div>
     </div>
 
 {% endblock %}
