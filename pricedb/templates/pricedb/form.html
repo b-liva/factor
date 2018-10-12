@@ -1,0 +1,30 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+    <h3>this is the form</h3>
+    <form method="POST" action="{% url 'pricedb_insert' %}">
+        {% csrf_token %}
+        <table class="withBorder">
+            <thead>
+            <tr>
+                <th>Kw</th>
+                {% for speed in db_speed %}
+                    <td>{{ speed }}</td>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                {% for kw, pks in motor_pks.items %}
+                    <tr>
+                        <td>{{ kw }}</td>
+                        {% for pk in pks %}
+                            <td><input type="number" name="pk_{{ pk }}" value="{{ pk }}"></td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success" type="submit">Save this set</button>
+    </form>
+{% endblock %}

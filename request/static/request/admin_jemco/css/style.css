@@ -31,3 +31,13 @@ table.tableFull{
 .results, .value{
   color: lightgreen;
 }
+
+td.good-conditions{
+  color: whitesmoke;
+  background: #228B22;
+}
+
+td.bad-conditions{
+  color: whitesmoke;
+  background: #7f0000;
+}

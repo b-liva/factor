@@ -18,6 +18,9 @@
                     <li><a href="{% url 'payment_index' %}">Payments</a></li>
                     <li><a href="{% url 'reqSpec_index' %}">Specs</a></li>
                     <li><a href="{% url 'fund_index' %}">Fund</a></li>
+                    <li><a href="{% url 'fund_index' %}">Motors</a></li>
+                    <li><a href="{% url 'pricedb_index' %}">PriceDb</a></li>
+                    <li><a href="{% url 'pricedb_clean' %}">PriceDb clean</a></li>
                     <li><a href="{% url 'tenders_admin' %}">Find Tenders </a></li>
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link"

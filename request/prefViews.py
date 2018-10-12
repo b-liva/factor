@@ -12,6 +12,10 @@ from .models import Prefactor
 from .models import PrefactorVerification
 from .models import PrefSpec
 from .models import Xpref
+from pricedb.models import PriceDb
+from pricedb.models import MotorDB
+
+
 from .models import Payment
 from .models import XprefVerf
 from customer.models import Customer
@@ -88,9 +92,28 @@ def pref_find(request):
 def pref_details(request, ypref_pk):
     pref = Xpref.objects.get(pk=ypref_pk)
     prefspecs = pref.prefspec_set.all()
+    nestes_dict = {}
+    i = 0
+    for prefspec in prefspecs:
+        kw = prefspec.kw
+        speed = prefspec.rpm
+        price = MotorDB.objects.filter(kw=kw).filter(speed=speed).last()
+        percentage = (prefspec.price/(price.prime_cost))
+        if percentage >= 1:
+            percentage_class = 'good-conditions'
+        else:
+            percentage_class = 'bad-conditions'
+        nestes_dict[i] = {
+            'obj': prefspec,
+            'sale_price': price.prime_cost,
+            'percentage': percentage,
+            'percentage_class': percentage_class
+        }
+        i += 1
     return render(request, 'requests/admin_jemco/ypref/details.html', {
         'pref': pref,
-        'prefspecs': prefspecs
+        'prefspecs': prefspecs,
+        'nested': nestes_dict
     })
 
 
@@ -119,13 +142,45 @@ def pref_edit(request, ypref_pk):
         item.price = spec_prices[x]
         item.save()
         x += 1
+    prefspecs = xpref.prefspec_set.all()
+    nestes_dict = {}
+    i = 0
+    for prefspec in prefspecs:
+        kw = prefspec.kw
+        speed = prefspec.rpm
+        price = MotorDB.objects.filter(kw=kw).filter(speed=speed).last()
+        percentage = (prefspec.price / (price.prime_cost))
+        if percentage >= 1:
+            percentage_class = 'good-conditions'
+        else:
+            percentage_class = 'bad-conditions'
+        nestes_dict[i] = {
+            'obj': prefspec,
+            'sale_price': price.prime_cost,
+            'percentage': percentage,
+            'percentage_class': percentage_class
+        }
+        i += 1
 
     msg = 'Proforma was updated'
+
     return render(request, 'requests/admin_jemco/ypref/details.html', {
         'pref': xpref,
-        'prefspecs': xspec,
-        'msg': msg,
+        'prefspecs': prefspecs,
+        'nested': nestes_dict,
+        'msg': msg
     })
+
+
+
+
+
+
+    # return render(request, 'requests/admin_jemco/ypref/details.html', {
+    #     'pref': xpref,
+    #     'prefspecs': xspec,
+    #     'msg': msg,
+    # })
 
 
 def xpref_link(request, xpref_id):

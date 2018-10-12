@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'prefactor_verification.apps.PrefactorVerificationConfig',
     'customer.apps.CustomerConfig',
     'fund.apps.FundConfig',
+    'pricedb.apps.PricedbConfig',
+    'motordb.apps.MotordbConfig',
     # 'accounts.apps.AppConfig',
     'accounts.apps.AccountsConfig',
     'django.contrib.admin',
