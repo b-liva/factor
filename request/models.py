@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 import datetime
 from django.utils.timezone import now
@@ -9,7 +10,7 @@ class Requests(models.Model):
     number = models.IntegerField()
     pub_date = models.DateTimeField(default=now)
     image = models.FileField('requests/', null=True, blank=True)
-
+    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     summary = models.TextField(max_length=1000, null=True, blank=True)
 
     def pub_date_pretty(self):

@@ -322,7 +322,8 @@ def specs_of_orders(orders):
 
 class Orders:
     def last_orders(self):
-        last_n_requests = Requests.objects.filter()[:10]
+        # last_n_requests = Requests.objects.filter()[:10].order_by('pub_date').reverse()
+        last_n_requests = Requests.objects.all().order_by('customer__requests__pub_date').reverse()
         return last_n_requests
 
 

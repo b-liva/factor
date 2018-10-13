@@ -2,18 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85c93896-8beb-4081-82f4-1287b6871527" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/motordb/url.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pricedb/templates/pricedb/details.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pricedb/templates/pricedb/form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pricedb/templates/pricedb/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pricedb/url.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/factor/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/factor/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/factor/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/factor/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fund/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/fund/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/request/prefViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/prefViews.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/static/request/admin_jemco/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/request/static/request/admin_jemco/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/views2.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/views2.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -186,7 +184,8 @@
     <session id="-1485093887">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="11" />
+          <entry key="project.closed" value="12" />
+          <entry key="project.open.time.26" value="1" />
           <entry key="project.open.time.32" value="1" />
           <entry key="project.open.time.34" value="1" />
           <entry key="project.open.time.35" value="1" />
@@ -196,38 +195,38 @@
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.53" value="1" />
           <entry key="project.open.time.58" value="1" />
-          <entry key="project.opened" value="11" />
+          <entry key="project.opened" value="12" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gitignore" value="1" />
-          <entry key="html" value="27" />
+          <entry key="html" value="30" />
           <entry key="js" value="1" />
-          <entry key="py" value="57" />
+          <entry key="py" value="65" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="HTML" value="27" />
+          <entry key="HTML" value="30" />
           <entry key="JavaScript" value="1" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="57" />
+          <entry key="Python" value="65" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Django Console" value="47" />
           <entry key="gitignore" value="16" />
-          <entry key="html" value="2335" />
-          <entry key="py" value="4573" />
+          <entry key="html" value="2595" />
+          <entry key="py" value="5470" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="2335" />
+          <entry key="HTML" value="2595" />
           <entry key="PLAIN_TEXT" value="16" />
-          <entry key="Python" value="4620" />
+          <entry key="Python" value="5517" />
         </counts>
       </usages-collector>
     </session>
@@ -238,6 +237,7 @@
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.30" value="1" />
+          <entry key="project.open.time.33" value="1" />
           <entry key="project.open.time.35" value="1" />
           <entry key="project.open.time.36" value="2" />
           <entry key="project.open.time.38" value="1" />
@@ -247,7 +247,7 @@
           <entry key="project.open.time.54" value="1" />
           <entry key="project.open.time.59" value="1" />
           <entry key="project.open.time.84" value="1" />
-          <entry key="project.opened" value="13" />
+          <entry key="project.opened" value="14" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -256,7 +256,7 @@
           <entry key="html" value="150" />
           <entry key="jpg" value="2" />
           <entry key="js" value="4" />
-          <entry key="py" value="167" />
+          <entry key="py" value="168" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -265,7 +265,7 @@
           <entry key="HTML" value="150" />
           <entry key="Image" value="2" />
           <entry key="JavaScript" value="4" />
-          <entry key="Python" value="167" />
+          <entry key="Python" value="168" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -274,7 +274,7 @@
           <entry key="css" value="75" />
           <entry key="html" value="9296" />
           <entry key="js" value="83" />
-          <entry key="py" value="17686" />
+          <entry key="py" value="17687" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -282,7 +282,7 @@
           <entry key="CSS" value="75" />
           <entry key="HTML" value="9296" />
           <entry key="JavaScript" value="83" />
-          <entry key="Python" value="17752" />
+          <entry key="Python" value="17753" />
         </counts>
       </usages-collector>
     </session>
@@ -295,90 +295,101 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/request/url.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="155">
-              <caret line="103" column="42" lean-forward="true" selection-start-line="103" selection-start-column="42" selection-end-line="103" selection-end-column="42" />
+            <state relative-caret-position="782">
+              <caret line="58" column="41" selection-start-line="58" selection-start-column="41" selection-end-line="58" selection-end-column="41" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/edit_form.html">
+        <entry file="file://$PROJECT_DIR$/request/views2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="12" column="40" lean-forward="true" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/request/static/request/admin_jemco/css/style.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="149">
-              <caret line="30" column="17" lean-forward="true" selection-start-line="30" selection-start-column="17" selection-end-line="30" selection-end-column="17" />
+            <state relative-caret-position="175">
+              <caret line="39" column="44" selection-start-line="39" selection-start-column="44" selection-end-line="39" selection-end-column="44" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html">
+        <entry file="file://$PROJECT_DIR$/factor/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1037">
-              <caret line="82" column="38" selection-start-line="82" selection-start-column="38" selection-end-line="82" selection-end-column="38" />
+            <state relative-caret-position="90">
+              <caret line="14" column="12" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="12" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form2.html">
+        <entry file="file://$PROJECT_DIR$/request/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="18" column="53" selection-start-line="18" selection-start-column="53" selection-end-line="18" selection-end-column="53" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="21" column="60" lean-forward="true" selection-start-line="21" selection-start-column="60" selection-end-line="21" selection-end-column="60" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pricedb/templates/pricedb/details.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="34" column="40" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
+            <state relative-caret-position="4709">
+              <caret line="294" column="32" selection-start-line="294" selection-start-column="32" selection-end-line="294" selection-end-column="32" />
               <folding>
-                <element signature="e#767#789#0#HTML" expanded="true" />
-                <element signature="e#1165#1191#0#HTML" expanded="true" />
-                <element signature="e#1247#1303#0#HTML" expanded="true" />
+                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pricedb/models.py">
+        <entry file="file://$PROJECT_DIR$/request/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="16" column="6" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
+            <state relative-caret-position="510">
+              <caret line="34" column="6" selection-start-line="34" selection-start-column="6" selection-end-line="34" selection-end-column="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/dashboard.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="493">
+              <caret line="29" column="62" selection-start-line="29" selection-start-column="62" selection-end-line="29" selection-end-column="62" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/latest_orders.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="459">
+              <caret line="27" column="50" selection-start-line="27" selection-start-column="50" selection-end-line="27" selection-end-column="50" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/request/prefViews.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1292">
+              <caret line="97" column="53" selection-start-line="97" selection-start-column="53" selection-end-line="97" selection-end-column="53" />
               <folding>
-                <element signature="e#0#28#0" expanded="true" />
-                <marker date="1539336996000" expanded="true" signature="124:129" ph="..." />
-                <marker date="1539336996000" expanded="true" signature="248:253" ph="..." />
+                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pricedb/templates/pricedb/index.html">
+        <entry file="file://$PROJECT_DIR$/fund/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
+            <state relative-caret-position="119">
+              <caret line="10" column="34" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
+              <folding>
+                <element signature="e#0#45#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fund/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="13" selection-start-line="13" selection-end-line="14" />
+              <folding>
+                <element signature="e#0#43#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -395,10 +406,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>jamshi</find>
-      <find>{% load humanize %}</find>
-      <find>intcomma</find>
-      <find>xpref_link</find>
       <find>ypref_pk</find>
       <find>edit_xpref</find>
       <find>prefactor was updated</find>
@@ -425,6 +432,10 @@
       <find>fund</find>
       <find>print</find>
       <find>edit prof</find>
+      <find>owner</find>
+      <find>jamshid</find>
+      <find>Dr j</find>
+      <find>path</find>
     </findStrings>
     <replaceStrings>
       <replace>pref_ver</replace>
@@ -455,8 +466,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_details.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/index.html" />
@@ -465,14 +474,11 @@
         <option value="$PROJECT_DIR$/customer/templates/customer/details.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/form.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/details.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/latest_orders.html" />
-        <option value="$PROJECT_DIR$/request/views2.py" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/form.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/form.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form2.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/edit_form.html" />
-        <option value="$PROJECT_DIR$/request/models.py" />
         <option value="$PROJECT_DIR$/request/views/permission.py" />
         <option value="$PROJECT_DIR$/request/url.py" />
         <option value="$PROJECT_DIR$/request/viewsFolder/permission.py" />
@@ -489,9 +495,7 @@
         <option value="$PROJECT_DIR$/fund/models.py" />
         <option value="$PROJECT_DIR$/fund/templates/fund/index.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/dashboard.html" />
-        <option value="$PROJECT_DIR$/request/views.py" />
         <option value="$PROJECT_DIR$/fund/templates/fund/expense/form.html" />
-        <option value="$PROJECT_DIR$/fund/views.py" />
         <option value="$PROJECT_DIR$/factor/settings.py" />
         <option value="$PROJECT_DIR$/factor/urls.py" />
         <option value="$PROJECT_DIR$/motordb/models.py" />
@@ -504,8 +508,15 @@
         <option value="$PROJECT_DIR$/pricedb/templates/pricedb/index.html" />
         <option value="$PROJECT_DIR$/pricedb/templates/pricedb/details.html" />
         <option value="$PROJECT_DIR$/request/static/request/admin_jemco/css/style.css" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/latest_orders.html" />
+        <option value="$PROJECT_DIR$/request/views.py" />
+        <option value="$PROJECT_DIR$/request/functions.py" />
+        <option value="$PROJECT_DIR$/fund/views.py" />
+        <option value="$PROJECT_DIR$/request/models.py" />
         <option value="$PROJECT_DIR$/request/prefViews.py" />
+        <option value="$PROJECT_DIR$/request/views2.py" />
       </list>
     </option>
   </component>
@@ -515,11 +526,11 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1608" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1616" />
-    <option name="height" value="876" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -527,7 +538,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -540,40 +550,11 @@
               <item name="factor" type="462c0819:PsiDirectoryNode" />
               <item name="request" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-              <item name="admin_jemco" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-              <item name="admin_jemco" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -698,14 +679,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1608" y="-8" width="1616" height="876" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49802372" visible="true" weight="0.17480719" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49802372" visible="true" weight="0.17927383" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5019763" side_tool="true" weight="0.27987897" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4993573" weight="0.32786885" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4993573" weight="0.30862534" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4993573" visible="true" weight="0.42459017" />
       <window_info anchor="bottom" x="-1297" y="71" width="1059" height="709" id="Debug" order="3" type="FLOATING" weight="0.44474393" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -714,7 +695,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3295082" />
       <window_info anchor="bottom" id="Database Changes" order="9" weight="0.3295082" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50064266" side_tool="true" weight="0.32884097" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.26954177" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.26885247" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32884097" />
       <window_info anchor="bottom" id="manage.py@factor" order="13" weight="0.3295082" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -759,7 +740,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/request/views.py</url>
-          <line>417</line>
+          <line>419</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -825,34 +806,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/customer/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/customer/templates/customer/customer.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="22" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/reqSpecViews.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="867">
-          <caret line="68" column="19" selection-start-line="68" selection-start-column="19" selection-end-line="68" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/form.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1105">
@@ -864,13 +817,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="6" selection-end-line="46" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/views2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="209" column="4" selection-start-line="209" selection-start-column="4" selection-end-line="209" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -930,13 +876,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/dashboard.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fund/templates/fund/error.html" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/utils/deprecation.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -980,16 +919,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="58" column="4" selection-start-line="58" selection-start-column="4" selection-end-line="58" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/request/templates/requests/page_elements/head.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1015,40 +944,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fund/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/factor/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="46" column="31" selection-start-line="46" selection-start-column="31" selection-end-line="46" selection-end-column="31" />
-          <folding>
-            <element signature="e#307#316#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/motordb/url.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#630#662#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fund/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/motordb/url.py" />
     <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -1063,17 +959,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/motordb/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="23" selection-start-line="5" selection-start-column="21" selection-end-line="9" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-            <marker date="1539326198000" expanded="true" signature="126:133" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/motordb/models.py" />
     <entry file="file://$PROJECT_DIR$/fund/templates/fund/details.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -1081,85 +967,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pricedb/url.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="29" column="23" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="23" />
-          <folding>
-            <element signature="e#630#662#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pricedb/templates/pricedb/form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/factor/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="45" column="38" lean-forward="true" selection-start-line="45" selection-start-column="38" selection-end-line="45" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="21" column="60" lean-forward="true" selection-start-line="21" selection-start-column="60" selection-end-line="21" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pricedb/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="16" column="6" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-            <marker date="1539336996000" expanded="true" signature="124:129" ph="..." />
-            <marker date="1539336996000" expanded="true" signature="248:253" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pricedb/templates/pricedb/details.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="34" column="40" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
-          <folding>
-            <element signature="e#767#789#0#HTML" expanded="true" />
-            <element signature="e#1165#1191#0#HTML" expanded="true" />
-            <element signature="e#1247#1303#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pricedb/templates/pricedb/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pricedb/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="86" column="12" lean-forward="true" selection-start-line="86" selection-start-column="12" selection-end-line="86" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#45#0" expanded="true" />
-            <marker date="1539342120000" expanded="true" signature="2594:2717" ph="..." />
-            <marker date="1539342120000" expanded="true" signature="2757:2871" ph="..." />
-            <marker date="1539342120000" expanded="true" signature="2998:3003" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/pricedb/url.py" />
+    <entry file="file://$PROJECT_DIR$/pricedb/templates/pricedb/form.html" />
+    <entry file="file://$PROJECT_DIR$/pricedb/models.py" />
+    <entry file="file://$PROJECT_DIR$/pricedb/templates/pricedb/details.html" />
+    <entry file="file://$PROJECT_DIR$/pricedb/templates/pricedb/index.html" />
+    <entry file="file://$PROJECT_DIR$/pricedb/views.py" />
     <entry file="file://$PROJECT_DIR$/request/static/request/admin_jemco/css/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="30" column="17" lean-forward="true" selection-start-line="30" selection-start-column="17" selection-end-line="30" selection-end-column="17" />
+        <state relative-caret-position="510">
+          <caret line="30" column="17" selection-start-line="30" selection-start-column="17" selection-end-line="30" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -1170,34 +987,124 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="21" column="60" selection-start-line="21" selection-start-column="60" selection-end-line="21" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/edit_form.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
-          <caret line="12" column="40" lean-forward="true" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
+          <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="348">
+          <caret line="28" column="87" selection-start-line="28" selection-start-column="87" selection-end-line="28" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="26" column="23" selection-start-line="26" selection-start-column="23" selection-end-line="26" selection-end-column="23" />
+          <folding>
+            <element signature="e#1727#1762#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/factor/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="42" column="39" selection-start-line="42" selection-start-column="39" selection-end-line="42" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/functions.py" />
     <entry file="file://$PROJECT_DIR$/request/url.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="103" column="42" lean-forward="true" selection-start-line="103" selection-start-column="42" selection-end-line="103" selection-end-column="42" />
+        <state relative-caret-position="782">
+          <caret line="58" column="41" selection-start-line="58" selection-start-column="41" selection-end-line="58" selection-end-column="41" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/prefViews.py">
+    <entry file="file://$PROJECT_DIR$/request/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="175" lean-forward="true" selection-start-line="175" selection-end-line="175" />
+        <state relative-caret-position="4709">
+          <caret line="294" column="32" selection-start-line="294" selection-start-column="32" selection-end-line="294" selection-end-column="32" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html">
+    <entry file="file://$PROJECT_DIR$/request/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1037">
-          <caret line="82" column="38" selection-start-line="82" selection-start-column="38" selection-end-line="82" selection-end-column="38" />
+        <state relative-caret-position="510">
+          <caret line="34" column="6" selection-start-line="34" selection-start-column="6" selection-end-line="34" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/dashboard.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="29" column="62" selection-start-line="29" selection-start-column="62" selection-end-line="29" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/latest_orders.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" column="50" selection-start-line="27" selection-start-column="50" selection-end-line="27" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/prefViews.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1292">
+          <caret line="97" column="53" selection-start-line="97" selection-start-column="53" selection-end-line="97" selection-end-column="53" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="10" column="34" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="13" selection-start-line="13" selection-end-line="14" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/views2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="39" column="44" selection-start-line="39" selection-start-column="44" selection-end-line="39" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/factor/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="14" column="12" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="12" />
         </state>
       </provider>
     </entry>

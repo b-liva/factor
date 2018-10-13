@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 # Create your views here.
 from fund.models import Fund, Expense
-
+import request.functions
 
 def fund_form(request):
     # fund.save()
@@ -15,7 +15,6 @@ def fund_form(request):
     return redirect('errorpage')
 
 
-
 def fund_insert(request):
     fund = Fund()
     if request.POST['updating']:
@@ -26,6 +25,7 @@ def fund_insert(request):
     fund.save()
     return redirect('expense_form', fund_pk=fund.pk)
     # return render(request, 'fund/form.html', {'fund_id': fund_id})
+
 
 def fund_index(request):
     funds = Fund.objects.filter(owner=request.user)
@@ -155,4 +155,3 @@ def has_perm_or_is_owner(user_obj, permissions, instance=None):
         if user_obj == instance.owner:
             return True
     return user_obj.has_perm(permissions)
-

@@ -95,7 +95,7 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="">Dr Jamshidi
+                    <img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="">{{ user }}
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -133,7 +133,7 @@
                       <a>
                         <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="Profile Image" /></span>
                         <span>
-                          <span>Dr Jamshidi</span>
+                          <span>{{ user }}</span>
                           <span class="time">3 mins ago</span>
                         </span>
                         <span class="message">
@@ -157,7 +157,7 @@
                       <a>
                         <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="Profile Image" /></span>
                         <span>
-                          <span>Dr Jamshidi</span>
+                          <span>{{ user }}</span>
                           <span class="time">3 mins ago</span>
                         </span>
                         <span class="message">

@@ -16,6 +16,7 @@
                     <th>Id</th>
 {#                    <th>Id</th>#}
                     <th>Number</th>
+                    <th>request</th>
                     <th>Date</th>
                     <th>Actions</th>
                 </tr>
@@ -25,6 +26,7 @@
                         <td>{{ forloop.counter }}</td>
 {#                        <td>{{ pref.pk }}</td>#}
                         <td>{{ pref.number }}</td>
+                        <td><a href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a></td>
                         <td>{{ pref.pub_date }}</td>
                         <td>
                             <a class="btn btn-primary btn-xs"

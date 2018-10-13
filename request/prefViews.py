@@ -1,10 +1,12 @@
 import json
 
+from django.contrib import messages
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
+from fund.views import has_perm_or_is_owner
 from request.views import allRequests, find_all_obj
 from .models import Requests
 from .models import ReqSpec
@@ -27,6 +29,10 @@ from django.contrib.auth.decorators import login_required
 
 def pref_form(request):
     Reqs = Requests.objects.all()
+    can_add = has_perm_or_is_owner(request.user, 'request.add_xpref')
+    if not can_add:
+        messages.error(request, 'You have not enough access')
+        return redirect('errorpage')
     return render(request, 'requests/admin_jemco/ypref/form.html', {'reqs': Reqs})
 
 
@@ -66,6 +72,7 @@ def pref_insert(request):
         else:
             pref_spec.price = spec_prices[x]
         pref_spec.kw = spec.kw
+        pref_spec.qty = spec.qty
         pref_spec.rpm = spec.rpm
         pref_spec.voltage = spec.voltage
         pref_spec.ip = spec.ip
@@ -79,9 +86,11 @@ def pref_insert(request):
 
 
 def pref_index(request):
-    prefs = Xpref.objects.all()
+    prefs = Xpref.objects.filter(req_id__owner=request.user)
     print(len(prefs))
-    return render(request, 'requests/admin_jemco/ypref/index.html', {'prefs': prefs})
+    return render(request, 'requests/admin_jemco/ypref/index.html', {
+        'prefs': prefs
+    })
 
 
 def pref_find(request):
@@ -90,14 +99,22 @@ def pref_find(request):
 
 
 def pref_details(request, ypref_pk):
+    spec_total = 0
+    proforma_total = 0
+    sales_total = 0
     pref = Xpref.objects.get(pk=ypref_pk)
     prefspecs = pref.prefspec_set.all()
+
     nestes_dict = {}
     i = 0
     for prefspec in prefspecs:
+
+        print("**" + str(prefspec.qty) + "**")
         kw = prefspec.kw
         speed = prefspec.rpm
         price = MotorDB.objects.filter(kw=kw).filter(speed=speed).last()
+        proforma_total += prefspec.qty * prefspec.price
+        sales_total += prefspec.qty * price.prime_cost
         percentage = (prefspec.price/(price.prime_cost))
         if percentage >= 1:
             percentage_class = 'good-conditions'
@@ -107,26 +124,46 @@ def pref_details(request, ypref_pk):
             'obj': prefspec,
             'sale_price': price.prime_cost,
             'percentage': percentage,
-            'percentage_class': percentage_class
+            'percentage_class': percentage_class,
+            'spec_total': prefspec.qty * prefspec.price
         }
         i += 1
+    total_percentage = proforma_total/sales_total
+    if total_percentage >= 1:
+        total_percentage_class = 'good-conditions'
+    else:
+        total_percentage_class = 'bad-conditions'
     return render(request, 'requests/admin_jemco/ypref/details.html', {
         'pref': pref,
         'prefspecs': prefspecs,
-        'nested': nestes_dict
+        'nested': nestes_dict,
+        'proforma_total': proforma_total,
+        'sales_total': sales_total,
+        'total_percentage': total_percentage,
+        'total_percentage_class': total_percentage_class,
     })
 
 
 def pref_delete(request, ypref_pk):
+
     pref = Xpref.objects.get(pk=ypref_pk)
-    pref.delete()
-    return redirect('pref_index')
+    can_del = has_perm_or_is_owner(request.user, 'request.delete_xpref', pref.req_id)
+    if can_del:
+        pref.delete()
+        return redirect('pref_index')
+    else:
+        messages.error(request, 'You have not enough access')
+        return redirect('errorpage')
 
 
 def pref_edit_form(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
+    can_edit = has_perm_or_is_owner(request.user, 'request.change_xpref', proforma.req_id)
+    print(can_edit)
+    if not can_edit:
+        messages.error(request, 'You have not enough access')
+        return redirect('errorpage')
     prof_specs = proforma.prefspec_set.all()
-    print('ok')
     return render(request, 'requests/admin_jemco/ypref/edit_form.html', {
         'proforma': proforma,
         'prof_specs': prof_specs

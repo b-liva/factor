@@ -10,71 +10,47 @@
 
             <h3>Proforma Details</h3>
             <table class="withBorder tableFull">
+                <thead>
                 <tr>
+                    <th>No</th>
                     <th>ID</th>
                     <th>Qty</th>
                     <th>Kw</th>
                     <th>rpm</th>
                     <th>voltage</th>
                     <th>price</th>
+                    <th>Total price</th>
                     <th>sale price</th>
                     <th>percent</th>
                 </tr>
+                </thead>
                 <tbody>
-                {#                {% for prefspec in prefspecs %}#}
-                {##}
-                {#                    <tr>#}
-                {#                        <td>{{ forloop.counter }}</td>#}
-                {#                <td>{{ customer.pk }}</td>#}
-                {#                        <td>{{ prefspec.qty }}</td>#}
-                {#                        <td>{{ prefspec.kw }}</td>#}
-                {#                        <td>{{ prefspec.rpm }}</td>#}
-                {#                        <td>{{ prefspec.voltage }}</td>#}
-                {#                        <td>{{ prefspec.price|intcomma }}</td>#}
-                {#                        <td>#}
-                {#                    <a class="btn btn-primary btn-xs" href="{% url 'customer_read' customer_pk=customer.pk %}">Details</a>#}
-                {#                    <a class="btn btn-primary btn-xs btn-warning" href="{% url 'customer_delete' customer_pk=customer.pk %}">Delete</a>#}
-                {#                        </td>#}
-                {#                    </tr>#}
-                {#                {% endfor %}#}
-                {#                </tbody>#}
-
-
-                {#                <tbody>#}
-                {#                {% for x, obj in nested.items %}#}
-                {#                    {{ obj }}#}
-                {#                    <tr>#}
-                {#                        {% for price, ob in obj.items %}#}
-                {#                            {{ ob }}#}
-                {#                            <tr>#}
-                {#                                <td>{{ forloop.counter }}</td>#}
-                {#                                <td>{{ ob.qty }}</td>#}
-                {#                                <td>{{ ob.kw }}</td>#}
-                {#                                <td>{{ ob.voltage }}</td>#}
-                {#                                <td>{{ ob.rpm }}</td>#}
-                {#                                <td>{{ ob.price }}</td>#}
-                {#                                <td>{{ price }}</td>#}
-                {#                                <td>{{ ob }}</td>#}
-                {#                            </tr>#}
-                {#                        {% endfor %}#}
-                {##}
-                {#                    </tr>#}
-                {#                {% endfor %}#}
-                {#                </tbody>#}
-
-                <tbody>
-                {% for index, obj in nested.items %}
+                {% for index, object in nested.items %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ obj.obj.qty }}</td>
-                        <td>{{ obj.obj.kw }}</td>
-                        <td>{{ obj.obj.voltage }}</td>
-                        <td>{{ obj.obj.rpm }}</td>
-                        <td>{{ obj.obj.price }}</td>
-                        <td>{{ obj.sale_price }}</td>
-                        <td class="{{ obj.percentage_class }}">{{ obj.percentage|floatformat:2 }}</td>
+                        <td>{{ object.obj.pk }}</td>
+                        <td>{{ object.obj.qty }}</td>
+                        <td>{{ object.obj.kw }}</td>
+                        <td>{{ object.obj.rpm }}</td>
+                        <td>{{ object.obj.voltage }}</td>
+                        <td>{{ object.obj.price }}</td>
+                        <td>{{ object.spec_total }}</td>
+                        <td>{{ object.sale_price }}</td>
+                        <td class="{{ object.percentage_class }}">{{ object.percentage|floatformat:2 }}</td>
                     </tr>
                 {% endfor %}
+                <tr style="border-top: 2px black solid">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>sum</td>
+                    <td>{{ proforma_total }}</td>
+                    <td>{{ sales_total }}</td>
+                    <td class="{{ total_percentage_class }}">{{ total_percentage|floatformat:2 }}</td>
+                </tr>
                 </tbody>
 
 

@@ -37,10 +37,11 @@ def request_insert(request):
         if request.POST['req_no']:
             print(request.POST['customer_id'])
             req = Requests()
-            req.number = request.POST['req_no']
+            req.number = request.POST['req_ no']
             req.summary = request.POST['req_summary']
             req.customer = Customer.objects.get(pk=request.POST['customer_id'])
             # req.image = request.FILES['req_file']
+            req.owner = request.user
             req.pub_date = timezone.datetime.now()
             req.save()
             return redirect('reqSpec_form', req_pk=req.pk)
