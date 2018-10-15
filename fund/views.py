@@ -1,9 +1,12 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 # Create your views here.
 from fund.models import Fund, Expense
 import request.functions
 
+
+@login_required
 def fund_form(request):
     # fund.save()
     can_add = has_perm_or_is_owner(request.user, 'fund.add_fund')
@@ -15,6 +18,7 @@ def fund_form(request):
     return redirect('errorpage')
 
 
+@login_required
 def fund_insert(request):
     fund = Fund()
     if request.POST['updating']:
@@ -27,6 +31,7 @@ def fund_insert(request):
     # return render(request, 'fund/form.html', {'fund_id': fund_id})
 
 
+@login_required
 def fund_index(request):
     funds = Fund.objects.filter(owner=request.user)
     if request.user.is_superuser:
@@ -45,7 +50,7 @@ def fund_index(request):
     })
 
 
-
+@login_required
 def fund_details(request, fund_pk):
     fund = Fund.objects.get(pk=fund_pk)
     expenses = fund.expense_set.all()
@@ -55,12 +60,14 @@ def fund_details(request, fund_pk):
     })
 
 
+@login_required
 def fund_find(request):
     fund = Fund.objects.get(pk=request.POST['fund_pk'])
 
     return redirect('fund_details', fund_pk=fund.pk)
 
 
+@login_required
 def fund_delete(request, fund_pk):
     fund = Fund.objects.get(pk=fund_pk)
     can_delete = has_perm_or_is_owner(request.user, 'fund.delete_fund', fund)
@@ -72,6 +79,7 @@ def fund_delete(request, fund_pk):
         return redirect('errorpage')
 
 
+@login_required
 def fund_edit(request, fund_pk):
 
     fund = Fund.objects.get(pk=fund_pk)
@@ -90,6 +98,7 @@ def fund_edit(request, fund_pk):
         return redirect('errorpage')
 
 
+@login_required
 def expense_form(request, fund_pk):
     fund = Fund.objects.get(pk=fund_pk)
     can_add = has_perm_or_is_owner(request.user, 'expense.add_expense', fund)
@@ -108,6 +117,7 @@ def expense_form(request, fund_pk):
     return redirect('errorpage')
 
 
+@login_required
 def expense_insert(request):
 
     expense = Expense()
@@ -123,20 +133,30 @@ def expense_insert(request):
     # funds = Fund.objects.all()
     return redirect('expense_form', fund_pk=request.POST['fund_id'])
 
+
+@login_required
 def expense_index(request):
     pass
 
+
+@login_required
 def expense_find(request):
     pass
 
+
+@login_required
 def expense_details(request):
     pass
 
+
+@login_required
 def expense_delete(request, expense_pk, fund_pk):
     exp = Expense.objects.get(pk=expense_pk)
     exp.delete()
     return redirect('expense_form', fund_pk=fund_pk)
 
+
+@login_required
 def expense_edit(request, expense_pk, fund_pk):
     fund = Fund.objects.get(pk=fund_pk)
     exps = fund.expense_set.all()

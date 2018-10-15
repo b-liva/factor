@@ -6,7 +6,10 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
-from fund.views import has_perm_or_is_owner
+import request.functions as funcs
+# from request.functions import has_perm_or_is_owner
+# from fund.views import has_perm_or_is_owner
+
 from request.views import allRequests, find_all_obj
 from .models import Requests
 from .models import ReqSpec
@@ -26,16 +29,17 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-
+@login_required
 def pref_form(request):
     Reqs = Requests.objects.all()
-    can_add = has_perm_or_is_owner(request.user, 'request.add_xpref')
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
     if not can_add:
         messages.error(request, 'You have not enough access')
         return redirect('errorpage')
     return render(request, 'requests/admin_jemco/ypref/form.html', {'reqs': Reqs})
 
 
+@login_required
 def pref_form2(request):
     req = Requests.objects.get(number=request.POST['req_no'])
     a = req
@@ -47,6 +51,7 @@ def pref_form2(request):
     })
 
 
+@login_required
 def pref_insert(request):
     reqs = Requests.objects.all()
     req_no = request.POST['req_no']
@@ -85,6 +90,7 @@ def pref_insert(request):
     return redirect('pref_form')
 
 
+@login_required
 def pref_index(request):
     prefs = Xpref.objects.filter(req_id__owner=request.user)
     print(len(prefs))
@@ -93,11 +99,13 @@ def pref_index(request):
     })
 
 
+@login_required
 def pref_find(request):
     pref = Xpref.objects.get(number=request.POST['pref_no'])
     return redirect('pref_details', ypref_pk=pref.pk)
 
 
+@login_required
 def pref_details(request, ypref_pk):
     spec_total = 0
     proforma_total = 0
@@ -144,10 +152,11 @@ def pref_details(request, ypref_pk):
     })
 
 
+@login_required
 def pref_delete(request, ypref_pk):
 
     pref = Xpref.objects.get(pk=ypref_pk)
-    can_del = has_perm_or_is_owner(request.user, 'request.delete_xpref', pref.req_id)
+    can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_xpref', pref.req_id)
     if can_del:
         pref.delete()
         return redirect('pref_index')
@@ -156,9 +165,10 @@ def pref_delete(request, ypref_pk):
         return redirect('errorpage')
 
 
+@login_required
 def pref_edit_form(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
-    can_edit = has_perm_or_is_owner(request.user, 'request.change_xpref', proforma.req_id)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.change_xpref', proforma.req_id)
     print(can_edit)
     if not can_edit:
         messages.error(request, 'You have not enough access')
@@ -170,6 +180,7 @@ def pref_edit_form(request, ypref_pk):
     })
 
 
+@login_required
 def pref_edit(request, ypref_pk):
     xpref = Xpref.objects.get(pk=ypref_pk)
     spec_prices = request.POST.getlist('price')
@@ -220,6 +231,7 @@ def pref_edit(request, ypref_pk):
     # })
 
 
+@login_required
 def xpref_link(request, xpref_id):
     xpref = Xpref.objects.get(pk=xpref_id)
     xpref_specs = xpref.prefspec_set.all()

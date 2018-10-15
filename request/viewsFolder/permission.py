@@ -14,42 +14,43 @@ from django.utils import timezone
 # from request.models import XpermissionVerf
 # from customer.models import Customer
 # from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-
+@login_required
 def permission_form(request):
     pass
 
-
+@login_required
 def permission_insert(request):
     pass
 
-
+@login_required
 def permission_index(request):
     pass
 
-
+@login_required
 def permission_find(request):
     pass
 
-
+@login_required
 def permission_details(request, ypermission_pk):
     pass
 
-
+@login_required
 def permission_delete(request, ypermission_pk):
     pass
 
-
+@login_required
 def permission_edit_form(request, ypermission_pk):
     pass
 
-
+@login_required
 def permission_edit(request, ypermission_pk):
     pass
 
-
+@login_required
 def xpermission_link(request, xpermission_id):
     pass
 

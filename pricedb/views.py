@@ -1,9 +1,12 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 import json
 from .models import PriceDb
 from .models import MotorDB
 # Create your views here.
 
+
+@login_required
 def pricedb_form(request):
     price_set = PriceDb()
     price_set.title = request.POST['title']
@@ -30,6 +33,7 @@ def pricedb_form(request):
         220,
         250,
         315,
+        355,
         400,
         450,
         ]
@@ -57,6 +61,7 @@ def pricedb_form(request):
     })
 
 
+@login_required
 def pricedb_insert(request):
     kv = {}
     for key in request.POST.keys():
@@ -73,15 +78,18 @@ def pricedb_insert(request):
     return redirect('pricedb_index')
 
 
+@login_required
 def pricedb_index(request):
     price_set = PriceDb.objects.all()
     return render(request, 'pricedb/index.html', {'price_set': price_set})
 
 
+@login_required
 def pricedb_find(request):
     pass
 
 
+@login_required
 def pricedb_details(request, pricedb_pk):
     db_kw = [
         5.5,
@@ -104,6 +112,7 @@ def pricedb_details(request, pricedb_pk):
         220,
         250,
         315,
+        355,
         400,
         450,
     ]
@@ -129,16 +138,20 @@ def pricedb_details(request, pricedb_pk):
     })
 
 
+@login_required
 def pricedb_delete(request, pricedb_pk):
     price_set = PriceDb.objects.get(pk=pricedb_pk)
     price_set.delete()
     return redirect('pricedb_index')
 
 
+@login_required
 def pricedb_edit(request, pricedb_pk):
     price_set = PriceDb.objects.get(pk=pricedb_pk)
     pass
 
+
+@login_required
 def pricedb_clean(request):
     motors = MotorDB.objects.all()
     for motor in motors:

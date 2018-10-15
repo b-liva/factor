@@ -21,14 +21,14 @@ class TestView(View):
 
 from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def customer(request):
     customer_types = Type.objects.all()
     return render(request, 'customer/customer.html', {
         'customer_types': customer_types
     })
 
-
+@login_required
 def customer_create(request):
     all_customers = Customer.objects.all()
     customer_types = Type.objects.all()
@@ -45,7 +45,7 @@ def customer_create(request):
         'all_customers': all_customers
     })
 
-
+@login_required
 def customer_read(request):
     customers = Customer.objects.all()
     print(customers)
@@ -71,14 +71,14 @@ def customer_read(request):
 
     return render(request, 'customer/read.html')
 
-
+@login_required
 def customer_form(request):
     customer_types = Type.objects.all()
     return render(request, 'customer/customer.html', {
         'customer_types': customer_types
     })
 
-
+@login_required
 def customer_insert(request):
     all_customers = Customer.objects.all()
     customer_types = Type.objects.all()
@@ -95,17 +95,17 @@ def customer_insert(request):
         'customers': all_customers
     })
 
-
+@login_required
 def customer_index(request):
     customers = Customer.objects.all()
     return render(request, 'customer/index.html', {'customers': customers})
 
-
+@login_required
 def customer_find(request):
     customer = Customer.objects.get(code=request.POST['customer_no'])
     return redirect('customer_read', customer_pk=customer.pk)
 
-
+@login_required
 def customer_read2(request, customer_pk):
     customer = Customer.objects.get(pk=customer_pk)
     customer_reqs = customer.requests_set.all()
@@ -125,7 +125,7 @@ def customer_read2(request, customer_pk):
         'some': some,
     })
 
-
+@login_required
 def customer_edit(request, customer_pk):
     pass
 
@@ -141,24 +141,26 @@ def customer_delete(request, customer_pk):
 
 
 # Type functions:
+@login_required
 def type_form(request):
     pass
 
-
+@login_required
 def type_insert(request):
     pass
 
-
+@login_required
 def type_index(request):
     pass
 
-
+@login_required
 def type_read(request, type_pk):
     pass
 
-
+@login_required
 def type_edit(request, type_pk):
     pass
 
+@login_required
 def type_delete(request, type_pk):
     pass

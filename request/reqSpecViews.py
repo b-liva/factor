@@ -19,12 +19,14 @@ from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@login_required
 def reqspec_form(request, req_pk):
     req_obj = Requests.objects.get(pk=req_pk)
     specs = req_obj.reqspec_set.all()
     return render(request, 'requests/admin_jemco/yreqspec/form.html', {'req_obj': req_obj, 'specs': specs})
 
 
+@login_required
 def reqspec_insert(request):
     if request.method == 'POST':
         spec = ReqSpec()
@@ -47,21 +49,26 @@ def reqspec_insert(request):
         return redirect('reqSpec_form', req_pk=related_req.pk)
 
 
+@login_required
 def reqspec_index(request):
     reqspecs = ReqSpec.objects.all()
     return render(request, 'requests/admin_jemco/yreqspec/index.html', {'reqspecs': reqspecs})
 
 
+@login_required
 def reqspec_details(request, yreqSpec_pk):
     pass
 
 
+@login_required
 def reqspec_delete(request, yreqSpec_pk, req_pk):
     reqspec = ReqSpec.objects.get(pk=yreqSpec_pk)
     req = reqspec.req_id
     reqspec.delete()
     return redirect('reqSpec_form', req_pk=req_pk)
 
+
+@login_required
 def reqspec_edit(request, yreqSpec_pk, req_pk):
     req = Requests.objects.get(pk=req_pk)
     specs = ReqSpec.objects.filter(req_id=req)

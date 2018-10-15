@@ -31,7 +31,7 @@ def request_form(request):
         'customers': customers,
     })
 
-
+@login_required
 def request_insert(request):
     if request.method == 'POST':
         if request.POST['req_no']:
@@ -49,17 +49,20 @@ def request_insert(request):
             return render(request, 'requests/admin_jemco/yrequest/form.html', {'error': 'some field is empty'})
     return render(request, 'requests/admin_jemco/yrequest/form.html')
 
-
+@login_required
 def request_index(request):
     requests = Requests.objects.all()
 
     return render(request, 'requests/admin_jemco/yrequest/index.html', {'all_requests': requests})
 
 
+@login_required
 def request_find(request):
     req = Requests.objects.get(number=request.POST['req_no'])
     return redirect('request_details', request_pk=req.pk)
 
+
+@login_required
 def request_read(request, request_pk):
     req = Requests.objects.get(pk=request_pk)
     reqspecs = req.reqspec_set.all()
@@ -72,26 +75,31 @@ def request_read(request, request_pk):
     })
 
 
+@login_required
 def request_delete(request, request_pk):
     req = Requests.objects.get(pk=request_pk)
     req.delete()
     return redirect('request_index')
 
 
+@login_required
 def request_edit(request, request_pk):
     return HttpResponse('request Edit' + str(request_pk))
 
 
+@login_required
 def pref_add(request):
     return render(request, 'test.html', {'is_add': True})
 
 
+@login_required
 def pref_insert(request):
     print('added to the db...')
     return render(request, 'test.html', {'is_add': True})
 
 
 # add payment to the prefactor
+@login_required
 def payment_form(request):
     reqs, xprefs, xpayments = find_all_obj()
 
@@ -102,6 +110,7 @@ def payment_form(request):
     })
 
 
+@login_required
 def payment_insert(request):
     xpref = Xpref.objects.get(number=request.POST['xpref_no'])
     payment = Payment()
@@ -122,6 +131,7 @@ def payment_insert(request):
     })
 
 
+@login_required
 def payment_index(request):
     payments = Payment.objects.all()
     pref_sum = 0
@@ -141,14 +151,20 @@ def payment_index(request):
         'debt_percent': debt_percent,
     })
 
+
+@login_required
 def payment_find(request):
     payment = Payment.objects.get(number=request.POST['payment_no'])
     return redirect('payment_details', ypayment_pk=payment.pk)
+
+
+@login_required
 def payment_details(request, ypayment_pk):
     payment = Payment.objects.get(pk=ypayment_pk)
     return render(request, 'requests/admin_jemco/ypayment/payment_details.html', {'payment': payment})
 
 
+@login_required
 def payment_delete(request, ypayment_pk):
     payment = Payment.objects.get(pk=ypayment_pk)
     payment.delete()
@@ -157,27 +173,34 @@ def payment_delete(request, ypayment_pk):
     # return render(request, 'requests/admin_jemco/ypayment/index.html', {'payments': payments, 'msg':msg})
     return redirect('payment_index')
 
+
+@login_required
 def payment_edit(request, ypayment_pk):
     return HttpResponse('payment payment_edit')
 
 
 # add spec to the prefactor
+@login_required
 def pref_spec_add(request):
     return HttpResponse('prefactor spec add')
 
 
+@login_required
 def pref_spec_details(request, ypref_spec_pk):
     return HttpResponse('prefactor spec details')
 
 
+@login_required
 def pref_spec_del(request, ypref_spec_pk):
     return HttpResponse('prefactor spec delete')
 
 
+@login_required
 def pref_spec_edit(request, ypref_spec_pk):
     return HttpResponse('prefactor spec edit')
 
 
+@login_required
 def pref(request, ypref_pk):
     if request.method == 'POST':
         if '_METHOD' not in request.POST:
@@ -204,7 +227,6 @@ def pref(request, ypref_pk):
 
 
     # return HttpResponse('this is from a single line of code for: ' + str(ypref_ipk))
-
 
 
 
