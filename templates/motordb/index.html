@@ -1,0 +1,53 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+            <a class="btn btn-sm btn-success" href="{% url 'test_view2' %}">click here</a>
+            <table class="tableFull withBorder">
+                <thead>
+                    <tr>
+                        <th>TYPE</th>
+                        <th>kw</th>
+                        <th>frame</th>
+                        <th>speed</th>
+                        <th>voltage</th>
+                        <th>IM</th>
+                        <th>IC</th>
+                        <th>IP</th>
+                        <th>efficiency</th>
+                        <th>pf</th>
+                        <th>current</th>
+                        <th>torque</th>
+                        <th>weight</th>
+                        <th>action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for motor in motors %}
+                    <tr>
+                        <td>{{ motor.type }}</td>
+                        <td>{{ motor.get_kw_display }}</td>
+                        <td>{{ motor.frame_size }}</td>
+                        <td>{{ motor.get_speed_display }}</td>
+                        <td>{{ motor.get_voltage_display }}</td>
+                        <td>{{ motor.get_im_display }}</td>
+                        <td>{{ motor.get_ic_display }}</td>
+                        <td>{{ motor.get_ip_display }}</td>
+                        <td>{{ motor.efficiency }}</td>
+                        <td>{{ motor.PF }}</td>
+                        <td>{{ motor.current_ln }}</td>
+                        <td>{{ motor.torque_tn | intcomma }}</td>
+                        <td>{{ motor.weight | intcomma }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" href="{% url 'motordb_edit_form' motordb_pk=motor.pk %}">Edit</a>
+                            <a class="btn btn-sm btn-danger" href="{% url 'motordb_delete' motordb_pk=motor.pk %}">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+

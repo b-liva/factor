@@ -18,29 +18,26 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from fund import views
+# from fund import views
+# from motordb import views
 import fund.views
+import motordb.views
 
 urlpatterns = [
-  path('form', fund.views.fund_form, name='fund_form'),
-  path('insert', fund.views.fund_insert, name='fund_insert'),
-  path('index', fund.views.fund_index, name='fund_index'),
-  path('find', fund.views.fund_find, name='fund_find'),
-  path('<int:fund_pk>/', include([
-      path('', fund.views.fund_details, name='fund_details'),
-      path('delete', fund.views.fund_delete, name='fund_delete'),
-      path('edit', fund.views.fund_edit, name='fund_edit'),
-  ])),
-
-
-  path('<int:fund_pk>/expense/form', fund.views.expense_form, name='expense_form'),
-  path('expense/insert', fund.views.expense_insert, name='expense_insert'),
-  path('expense/index', fund.views.expense_index, name='expense_index'),
-  path('<int:fund_pk>/expense/find', fund.views.expense_find, name='expense_find'),
-  path('<int:fund_pk>/expense/<int:expense_pk>/', include([
-      path('', fund.views.expense_details, name='expense_details'),
-      path('delete', fund.views.expense_delete, name='expense_delete'),
-      path('edit', fund.views.expense_edit, name='expense_edit'),
+  path('form', motordb.views.motordb_form, name='motordb_form'),
+  path('view', motordb.views.test_view, name='test_view'),
+  path('view2', motordb.views.test_view2, name='test_view2'),
+  path('delall', motordb.views.del_all_motors, name='del_all_motors'),
+  path('insert', motordb.views.motordb_insert, name='motordb_insert'),
+  path('index', motordb.views.motordb_index, name='motordb_index'),
+  path('find', motordb.views.motordb_find, name='motordb_find'),
+  path('search_form', motordb.views.motordb_search_form, name='motordb_search_form'),
+  path('search', motordb.views.motordb_search, name='motordb_search'),
+  path('<int:motordb_pk>/', include([
+      path('', motordb.views.motordb_details, name='motordb_details'),
+      path('delete', motordb.views.motordb_delete, name='motordb_delete'),
+      path('edit_form', motordb.views.motordb_edit_form, name='motordb_edit_form'),
+      path('edit', motordb.views.motordb_edit, name='motordb_edit'),
   ])),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

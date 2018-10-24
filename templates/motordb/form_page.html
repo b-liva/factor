@@ -1,0 +1,9 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}l
+        <input type="submit" class="btn btn-primary btn-sm" value="save">
+    </form>
+{% endblock %}
+

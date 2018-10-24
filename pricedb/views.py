@@ -16,7 +16,6 @@ def pricedb_form(request):
         5.5,
         7.5,
         11,
-        11,
         15,
         18.5,
         22,
@@ -94,7 +93,6 @@ def pricedb_details(request, pricedb_pk):
     db_kw = [
         5.5,
         7.5,
-        11,
         11,
         15,
         18.5,

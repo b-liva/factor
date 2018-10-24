@@ -4,6 +4,8 @@ from django.contrib.humanize.templatetags.humanize import intcomma
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
+from django.contrib import messages
+
 
 from request.views import allRequests, find_all_obj
 from .models import Requests
@@ -16,14 +18,20 @@ from .models import Payment
 from .models import XprefVerf
 from customer.models import Customer
 from django.contrib.auth.decorators import login_required
+import request.functions as funcs
 
 from . import views
 
 # Create your views here.
 
+
 @login_required
 # add a new request to the system
 def request_form(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_request')
+    if not can_add:
+        messages.error(request, 'Sorry, You need some priviliges to do this.')
+        return redirect('errorpage')
     req = Requests()
     customers = Customer.objects.all()
     return render(request, 'requests/admin_jemco/yrequest/form.html', {
@@ -31,16 +39,20 @@ def request_form(request):
         'customers': customers,
     })
 
+
 @login_required
 def request_insert(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_request')
+    if not can_add:
+        messages.error(request, 'No Priviliges')
+        return redirect('errorpage')
     if request.method == 'POST':
         if request.POST['req_no']:
-            print(request.POST['customer_id'])
             req = Requests()
-            req.number = request.POST['req_ no']
+            req.number = request.POST['req_no']
             req.summary = request.POST['req_summary']
             req.customer = Customer.objects.get(pk=request.POST['customer_id'])
-            # req.image = request.FILES['req_file']
+            req.image = request.FILES['req_file']
             req.owner = request.user
             req.pub_date = timezone.datetime.now()
             req.save()
@@ -49,10 +61,11 @@ def request_insert(request):
             return render(request, 'requests/admin_jemco/yrequest/form.html', {'error': 'some field is empty'})
     return render(request, 'requests/admin_jemco/yrequest/form.html')
 
+
 @login_required
 def request_index(request):
-    requests = Requests.objects.all()
-
+    # requests = Requests.objects.all()
+    requests = Requests.objects.filter(owner=request.user)
     return render(request, 'requests/admin_jemco/yrequest/index.html', {'all_requests': requests})
 
 
@@ -101,8 +114,11 @@ def pref_insert(request):
 # add payment to the prefactor
 @login_required
 def payment_form(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
+    if not can_add:
+        messages.error(request, 'Sorry, No way to access')
+        return redirect('errorpage')
     reqs, xprefs, xpayments = find_all_obj()
-
     return render(request, 'requests/admin_jemco/ypayment/form.html', {
         'reqs': reqs,
         'xprefs': xprefs,
@@ -112,6 +128,11 @@ def payment_form(request):
 
 @login_required
 def payment_insert(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
+    if not can_add:
+        messages.error(request, 'Sorry, No way to access')
+        return redirect('errorpage')
+
     xpref = Xpref.objects.get(number=request.POST['xpref_no'])
     payment = Payment()
     payment.xpref_id = xpref
@@ -123,11 +144,13 @@ def payment_insert(request):
 
     reqs, xprefs, xpayments = find_all_obj()
 
-    return render(request, 'requests/admin_jemco/ypayment/form.html', {
+    payments = Payment.objects.all()
+    return render(request, 'requests/admin_jemco/ypayment/index.html', {
         'msg': msg,
         'reqs': reqs,
         'xprefs': xprefs,
-        'xpayments': xpayments
+        'xpayments': xpayments,
+        'payments': payments
     })
 
 
@@ -167,6 +190,10 @@ def payment_details(request, ypayment_pk):
 @login_required
 def payment_delete(request, ypayment_pk):
     payment = Payment.objects.get(pk=ypayment_pk)
+    can_delete = funcs.has_perm_or_is_owner(request.user, 'request.delete_payment', payment)
+    if not can_delete:
+        messages.error(request, 'No access!')
+        return redirect('errorpage')
     payment.delete()
     payments = Payment.objects.all()
     msg = 'payment deleted successfully...'
@@ -176,6 +203,11 @@ def payment_delete(request, ypayment_pk):
 
 @login_required
 def payment_edit(request, ypayment_pk):
+    payment = Payment.objects.get(pk=ypayment_pk)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_payment', payment)
+    if not can_edit:
+        messages.error(request, 'No access for you')
+        return redirect('errorpage')
     return HttpResponse('payment payment_edit')
 
 

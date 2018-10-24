@@ -42,8 +42,18 @@
                     {#                </select>#}
                     <br>
                     <button type="submit" name="submit" class="btn-sm btn btn-success">Save</button>
+                    <a class="btn btn-sm btn-danger" href="{% url 'customer_index' %}">Cancel</a>
                 </form>
             </div>
         </div>
     </div>
+
+
+    <div>
+        {{ c_form.as_p }}
+
+        {{ c_form.type }}
+    </div>
+
+
 {% endblock %}

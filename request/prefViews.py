@@ -53,8 +53,10 @@ def pref_form2(request):
 
 @login_required
 def pref_insert(request):
+    # can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
     reqs = Requests.objects.all()
     req_no = request.POST['req_no']
+    print(req_no)
     xpref_no = request.POST['xpref']
     spec_prices = request.POST.getlist('price')
     spec_ids = request.POST.getlist('spec_id')
@@ -72,10 +74,11 @@ def pref_insert(request):
 
         pref_spec = PrefSpec()
         pref_spec.type = spec.type
-        if spec_prices[x] == '':
-            pref_spec.price = 0
-        else:
-            pref_spec.price = spec_prices[x]
+        pref_spec.price = 0
+        pref_spec.price = spec_prices[x]
+
+        # if spec_prices[x] == '':
+        # else:
         pref_spec.kw = spec.kw
         pref_spec.qty = spec.qty
         pref_spec.rpm = spec.rpm
@@ -90,9 +93,10 @@ def pref_insert(request):
     return redirect('pref_form')
 
 
-@login_required
+# @login_required
 def pref_index(request):
-    prefs = Xpref.objects.filter(req_id__owner=request.user)
+    prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date')
+    prefs = Xpref.objects.all()
     print(len(prefs))
     return render(request, 'requests/admin_jemco/ypref/index.html', {
         'prefs': prefs
@@ -110,6 +114,8 @@ def pref_details(request, ypref_pk):
     spec_total = 0
     proforma_total = 0
     sales_total = 0
+    percentage = 0
+    total_percentage = 0
     pref = Xpref.objects.get(pk=ypref_pk)
     prefspecs = pref.prefspec_set.all()
 
@@ -121,9 +127,11 @@ def pref_details(request, ypref_pk):
         kw = prefspec.kw
         speed = prefspec.rpm
         price = MotorDB.objects.filter(kw=kw).filter(speed=speed).last()
+        print(price.sale_price)
         proforma_total += prefspec.qty * prefspec.price
-        sales_total += prefspec.qty * price.prime_cost
-        percentage = (prefspec.price/(price.prime_cost))
+        if price.prime_cost:
+            sales_total += prefspec.qty * price.prime_cost
+            percentage = (prefspec.price/(price.prime_cost))
         if percentage >= 1:
             percentage_class = 'good-conditions'
         else:
@@ -136,7 +144,8 @@ def pref_details(request, ypref_pk):
             'spec_total': prefspec.qty * prefspec.price
         }
         i += 1
-    total_percentage = proforma_total/sales_total
+        if price.prime_cost:
+            total_percentage = proforma_total/sales_total
     if total_percentage >= 1:
         total_percentage_class = 'good-conditions'
     else:
@@ -154,15 +163,15 @@ def pref_details(request, ypref_pk):
 
 @login_required
 def pref_delete(request, ypref_pk):
-
     pref = Xpref.objects.get(pk=ypref_pk)
     can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_xpref', pref.req_id)
-    if can_del:
-        pref.delete()
-        return redirect('pref_index')
-    else:
+
+    if not can_del:
         messages.error(request, 'You have not enough access')
         return redirect('errorpage')
+    pref.delete()
+    return redirect('pref_index')
+
 
 
 @login_required

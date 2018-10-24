@@ -48,4 +48,5 @@ urlpatterns = [
     path('fund/', include('fund.url')),
     path('pricedb/', include('pricedb.url')),
     path('fund/', include('fund.url')),
+    path('motors/', include('motordb.url')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

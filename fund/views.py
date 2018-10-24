@@ -3,19 +3,19 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 # Create your views here.
 from fund.models import Fund, Expense
-import request.functions
+import request.functions as func
 
 
 @login_required
 def fund_form(request):
     # fund.save()
     can_add = has_perm_or_is_owner(request.user, 'fund.add_fund')
-    if can_add:
-        funds = Fund.objects.all()
-        btn = 'Next'
-        return render(request, 'fund/form.html', {'funds': funds, 'btn': btn})
-    messages.error(request, 'You have not enough access')
-    return redirect('errorpage')
+    if not can_add:
+        messages.error(request, 'No access for you')
+        return redirect('errorpage')
+    funds = Fund.objects.all()
+    btn = 'Next'
+    return render(request, 'fund/form.html', {'funds': funds, 'btn': btn})
 
 
 @login_required
@@ -33,6 +33,10 @@ def fund_insert(request):
 
 @login_required
 def fund_index(request):
+    can_view = has_perm_or_is_owner(request.user, 'fund.view_fund')
+    if not can_view:
+        messages.error(request, 'no access')
+        return redirect('errorpage')
     funds = Fund.objects.filter(owner=request.user)
     if request.user.is_superuser:
         funds = Fund.objects.all()
@@ -136,6 +140,10 @@ def expense_insert(request):
 
 @login_required
 def expense_index(request):
+    can_view = has_perm_or_is_owner(request.user, 'fund.view_expense')
+    if not can_view:
+        messages.error(request, 'no access')
+        return redirect('errorpage')
     pass
 
 

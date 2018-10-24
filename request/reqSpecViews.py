@@ -16,11 +16,17 @@ from .models import Payment
 from .models import XprefVerf
 from customer.models import Customer
 from django.contrib.auth.decorators import login_required
+import request.functions as funcs
+from django.contrib import messages
 
 
 # Create your views here.
 @login_required
 def reqspec_form(request, req_pk):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec')
+    if not can_add:
+        messages.error(request, 'You have not enough access')
+        return redirect('errorpage')
     req_obj = Requests.objects.get(pk=req_pk)
     specs = req_obj.reqspec_set.all()
     return render(request, 'requests/admin_jemco/yreqspec/form.html', {'req_obj': req_obj, 'specs': specs})
@@ -28,6 +34,10 @@ def reqspec_form(request, req_pk):
 
 @login_required
 def reqspec_insert(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec')
+    if not can_add:
+        messages.error(request, 'You have not enough access')
+        return redirect('errorpage')
     if request.method == 'POST':
         spec = ReqSpec()
         if request.POST['updating']:

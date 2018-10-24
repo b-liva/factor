@@ -18,7 +18,8 @@
                     <li><a href="{% url 'payment_index' %}">Payments</a></li>
                     <li><a href="{% url 'reqSpec_index' %}">Specs</a></li>
                     <li><a href="{% url 'fund_index' %}">Fund</a></li>
-                    <li><a href="{% url 'fund_index' %}">Motors</a></li>
+                    <li><a href="{% url 'motordb_index' %}">Motors</a></li>
+                    <li><a href="{% url 'motordb_search_form' %}">Search Motors</a></li>
                     <li><a href="{% url 'pricedb_index' %}">PriceDb</a></li>
                     <li><a href="{% url 'pricedb_clean' %}">PriceDb clean</a></li>
                     <li><a href="{% url 'tenders_admin' %}">Find Tenders </a></li>
@@ -33,6 +34,7 @@
                 </ul>
             </li>
             <hr>
+
             <li><a><i class="fa fa-edit"></i> Requests <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="{% url 'requestPage' %}">All requests</a></li>

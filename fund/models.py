@@ -15,9 +15,8 @@ class Fund(models.Model):
 
     class Meta:
         permissions = (
-            ("edit_own", "Can Edit own property"),
+            ("view_fund", "Can view funds"),
         )
-
 
 
 class Expense(models.Model):
@@ -25,3 +24,8 @@ class Expense(models.Model):
     title = models.CharField(max_length=40)
     amount = models.FloatField()
     summary = models.TextField(null=True, blank=True)
+
+    class Meta:
+        permissions = (
+            ("view_expense", "Can view expenses"),
+        )
