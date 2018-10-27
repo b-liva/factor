@@ -36,6 +36,7 @@ ALLOWED_HOSTS = ['37a60399.ngrok.io', 'localhost', '192.168.1.4']
 # Application definition
 
 INSTALLED_APPS = [
+    'django_jalali',
     'django.contrib.humanize',
     'request.apps.RequestConfig',
     'tender.apps.TenderConfig',
@@ -121,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 

@@ -24,7 +24,8 @@
                 {{ xpayment_single.number }} | {{ xpayment_single.id }} -
             {% endfor %}
             <br>
-            <hr><b>Add payment here.</b><br>
+            <hr>
+            <b>Add payment here.</b><br>
             <form method="POST" action="{% url 'payment_insert' %}">
                 {% csrf_token %}
                 <br>enter prefactor number<br>
@@ -33,7 +34,13 @@
                 <input type="number" name="number">
                 <br>enter payment amount<br>
                 <input type="number" name="amount">
-                <br>Summary<br>
+                <br>
+                <div class="form-group">
+                    <label for="date_fa">Date</label>
+                    <input name="date_fa" id="date_fa"><br>
+                </div>
+
+                Summary<br>
                 <textarea name="summary" rows="3" cols="20"></textarea><br>
                 <button type="submit" name="submit" class="btn btn-success btn-sm">Save Payment</button>
                 <a class="btn btn-danger btn-sm" href="{% url 'payment_index' %}">Cancel</a>

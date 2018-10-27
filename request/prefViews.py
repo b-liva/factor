@@ -65,6 +65,9 @@ def pref_insert(request):
     xpref = Xpref()
     xpref.number = xpref_no
     xpref.req_id = Requests.objects.get(pk=req_no)
+    xpref.date_fa = request.POST['date_fa']
+    xpref.exp_date_fa = request.POST['exp_date_fa']
+    xpref.owner = request.user
     xpref.save()
     for i in spec_ids:
         j = int(i)
@@ -87,6 +90,7 @@ def pref_insert(request):
         pref_spec.ic = spec.ic
         pref_spec.summary = spec.summary
         pref_spec.xpref_id = xpref
+        pref_spec.owner = request.user
         pref_spec.save()
         x += 1
 

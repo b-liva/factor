@@ -53,6 +53,7 @@ def reqspec_insert(request):
         spec.ic = request.POST['ic']
         spec.ip = request.POST['ip']
         spec.summary = request.POST['summary']
+        spec.owner = request.user
         # if request.POST['price']:
         #     spec.price = request.POST['price']
         spec.save()

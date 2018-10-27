@@ -6,6 +6,7 @@ from motordb import models
 #     if value[0] != 'z':
 #         raise forms.ValidationError('needs to start with z')
 
+
 class Motors(forms.Form):
     # name = forms.CharField(validators=[check_for_z])
     name = forms.CharField()

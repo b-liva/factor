@@ -51,6 +51,7 @@ def request_insert(request):
             req = Requests()
             req.number = request.POST['req_no']
             req.summary = request.POST['req_summary']
+            req.date_fa = request.POST['date_fa']
             req.customer = Customer.objects.get(pk=request.POST['customer_id'])
             req.image = request.FILES['req_file']
             req.owner = request.user
@@ -138,7 +139,10 @@ def payment_insert(request):
     payment.xpref_id = xpref
     payment.amount = request.POST['amount']
     payment.number = request.POST['number']
+    payment.date_fa = request.POST['date_fa']
     payment.summary = request.POST['summary']
+    payment.owner = request.user
+    payment.customer = xpref.req_id.customer
     payment.save()
     msg = 'payment added successfully'
 

@@ -2,13 +2,13 @@
 {% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8Total Users">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" href="{% static 'request/admin_jemco/images/favicon.ico' %}" type="image/ico" />
+    <link rel="icon" href="{% static 'request/admin_jemco/images/favicon.ico' %}" type="image/ico"/>
 
     <title>Jemco Motor! | </title>
 
@@ -18,7 +18,7 @@
     <!-- Bootstrap RTL 3.3.7.3 -->
     <!--<link rel='stylesheet' id='bootstrap-rtl-css' href='css/Bootstrap%20-%20rtl/bootstrap.rtl.min.css' type='text/css' />-->
     <!-- Font Awesome -->
-{#    <link href="{% static 'request/admin_jemco/css/font-awesome.min.css' %}" rel="stylesheet">#}
+    {#    <link href="{% static 'request/admin_jemco/css/font-awesome.min.css' %}" rel="stylesheet">#}
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
     <link href="{% static 'request/admin_jemco/css/nprogress.css' %}" rel="stylesheet">
@@ -33,159 +33,167 @@
     <link href="{% static 'request/admin_jemco/css/daterangepicker.css' %}" rel="stylesheet">
     <!--moris for charts-->
     <link rel='stylesheet' href='https://cdn.oesmith.co.uk/morris-0.5.1.css'>
+
+
+    <link rel="stylesheet" href="https://unpkg.com/persian-datepicker@latest/dist/css/persian-datepicker.min.css"/>
+
     <!-- Custom Theme Style -->
-      <link href="{% static 'request/admin_jemco/css/custom.min.css' %}" rel="stylesheet">
-      <link rel="stylesheet" href="{% static 'request/admin_jemco/css/style.css' %}">
-  </head>
+    <link href="{% static 'request/admin_jemco/css/custom.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'request/admin_jemco/css/style.css' %}">
+</head>
 
-  <body class="nav-md">
-    <div class="container body">
-      <div class="main_container">
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
         <div class="col-md-3 left_col">
-          <div class="left_col scroll-view">
-            <div class="navbar nav_title" style="border: 0;">
-              <a href="{% url 'allTables' %}" class="site_title"><i class="fa fa-paw"></i> <span>Jemco Motor!</span></a>
+            <div class="left_col scroll-view">
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="{% url 'allTables' %}" class="site_title"><i class="fa fa-paw"></i>
+                        <span>Jemco Motor!</span></a>
+                </div>
+                <div class="clearfix"></div>
+
+                <!-- menu profile quick info -->
+                <div class="profile clearfix">
+                    <div class="profile_pic">
+                        <img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="..."
+                             class="img-circle profile_img">
+                    </div>
+                    <div class="profile_info">
+                        <span>Welcome,</span>
+                        <h2>{{ user }}</h2>
+                    </div>
+                </div>
+                <!-- /menu profile quick info -->
+
+                <br/>
+
+                {% include 'requests/admin_jemco/page_elements/leftMenu.html' %}
+
+
+                <!-- /menu footer buttons -->
+                <div class="sidebar-footer hidden-small">
+                    <a data-toggle="tooltip" data-placement="top" title="Settings">
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    </a>
+                    <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                    </a>
+                    <a data-toggle="tooltip" data-placement="top" title="Lock">
+                        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                    </a>
+                    <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                    </a>
+                </div>
+                <!-- /menu footer buttons -->
             </div>
-            <div class="clearfix"></div>
-
-            <!-- menu profile quick info -->
-            <div class="profile clearfix">
-              <div class="profile_pic">
-                <img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="..." class="img-circle profile_img">
-              </div>
-              <div class="profile_info">
-                <span>Welcome,</span>
-                <h2>{{ user }}</h2>
-              </div>
-            </div>
-            <!-- /menu profile quick info -->
-
-            <br />
-
-              {% include 'requests/admin_jemco/page_elements/leftMenu.html' %}
-
-
-
-            <!-- /menu footer buttons -->
-            <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="Settings">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Lock">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
-            </div>
-            <!-- /menu footer buttons -->
-          </div>
         </div>
 
         <!-- top navigation -->
         <div class="top_nav">
-          <div class="nav_menu">
-            <nav>
-              <div class="nav toggle">
-                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-              </div>
+            <div class="nav_menu">
+                <nav>
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
 
-              <ul class="nav navbar-nav navbar-right">
-                <li class="">
-                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="">{{ user }}
-                    <span class=" fa fa-angle-down"></span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="javascript:;"> Profile</a></li>
-                    <li>
-                      <a href="javascript:;">
-                        <span class="badge bg-red pull-right">50%</span>
-                        <span>Settings</span>
-                      </a>
-                    </li>
-                    <li><a href="javascript:;">Help</a></li>
-                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
-                  </ul>
-                </li>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="">
+                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                               aria-expanded="false">
+                                <img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="">{{ user }}
+                                <span class=" fa fa-angle-down"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                <li><a href="javascript:;"> Profile</a></li>
+                                <li>
+                                    <a href="javascript:;">
+                                        <span class="badge bg-red pull-right">50%</span>
+                                        <span>Settings</span>
+                                    </a>
+                                </li>
+                                <li><a href="javascript:;">Help</a></li>
+                                <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                            </ul>
+                        </li>
 
-                <li role="presentation" class="dropdown">
-                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-envelope-o"></i>
-                    <span class="badge bg-green">6</span>
-                  </a>
-                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                    <li>
-                      <a>
-                        <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="Profile Image" /></span>
-                        <span>
+                        <li role="presentation" class="dropdown">
+                            <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown"
+                               aria-expanded="false">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="badge bg-green">6</span>
+                            </a>
+                            <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                <li>
+                                    <a>
+                                        <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}"
+                                                                 alt="Profile Image"/></span>
+                                        <span>
                           <span>User 01</span>
                           <span class="time">3 mins ago</span>
                         </span>
-                        <span class="message">
+                                        <span class="message">
                           Film festivals used to be do-or-die moments for movie makers. They were where...
                         </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="Profile Image" /></span>
-                        <span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}"
+                                                                 alt="Profile Image"/></span>
+                                        <span>
                           <span>{{ user }}</span>
                           <span class="time">3 mins ago</span>
                         </span>
-                        <span class="message">
+                                        <span class="message">
                           Film festivals used to be do-or-die moments for movie makers. They were where...
                         </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="Profile Image" /></span>
-                        <span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}"
+                                                                 alt="Profile Image"/></span>
+                                        <span>
                           <span>User 01</span>
                           <span class="time">3 mins ago</span>
                         </span>
-                        <span class="message">
+                                        <span class="message">
                           Film festivals used to be do-or-die moments for movie makers. They were where...
                         </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="Profile Image" /></span>
-                        <span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}"
+                                                                 alt="Profile Image"/></span>
+                                        <span>
                           <span>{{ user }}</span>
                           <span class="time">3 mins ago</span>
                         </span>
-                        <span class="message">
+                                        <span class="message">
                           Film festivals used to be do-or-die moments for movie makers. They were where...
                         </span>
-                      </a>
-                    </li>
-                    <li>
-                      <div class="text-center">
-                        <a>
-                          <strong>See All Alerts</strong>
-                          <i class="fa fa-angle-right"></i>
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </nav>
-          </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="text-center">
+                                        <a>
+                                            <strong>See All Alerts</strong>
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
         <!-- /top navigation -->
 
         <!-- page content -->
-
-
-
 
 
         <div class="right_col" role="main">
@@ -200,64 +208,70 @@
 
         <!-- footer content -->
         <footer>
-          <div class="pull-right">
-            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-          </div>
-          <div class="clearfix"></div>
+            <div class="pull-right">
+                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+            </div>
+            <div class="clearfix"></div>
         </footer>
         <!-- /footer content -->
-      </div>
     </div>
+</div>
 
-    <!-- jQuery -->
-    <script src="{% static 'request/admin_jemco/js/jquery.min.js' %}"></script>
-    <!-- Bootstrap -->
-    <script src="{% static 'request/admin_jemco/js/bootstrap.min.js' %}"></script>
+<!-- jQuery -->
+<script src="{% static 'request/admin_jemco/js/jquery.min.js' %}"></script>
+<!-- Bootstrap -->
+<script src="{% static 'request/admin_jemco/js/bootstrap.min.js' %}"></script>
 
-    <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>-->
-    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>-->
-    <!-- FastClick -->
-    <script src="{% static 'request/admin_jemco/js/fastclick.js' %}"></script>
-    <!-- NProgress -->
-    <script src="{% static 'request/admin_jemco/js/nprogress.js' %}"></script>
-    <!-- Chart.js -->
-    <script src="{% static 'request/admin_jemco/js/Chart.min.js' %}"></script>
-    <!-- gauge.js -->
-    <script src="{% static 'request/admin_jemco/js/gauge.min.js' %}"></script>
-    <!-- bootstrap-progressbar -->
-    <script src="{% static 'request/admin_jemco/js/bootstrap-progressbar.min.js' %}"></script>
-    <!-- iCheck -->
-    <script src="{% static 'request/admin_jemco/js/icheck.min.js' %}"></script>
-    <!-- Skycons -->
-    <script src="{% static 'request/admin_jemco/js/skycons.js' %}"></script>
-    <!-- Flot -->
-    <script src="{% static 'request/admin_jemco/js/jquery.flot.js' %}"></script>
-    <script src="{% static 'request/admin_jemco/js/jquery.flot.pie.js' %}"></script>
-    <script src="{% static 'request/admin_jemco/js/jquery.flot.time.js' %}"></script>
-    <script src="{% static 'request/admin_jemco/js/jquery.flot.stack.js' %}"></script>
-    <script src="{% static 'request/admin_jemco/js/jquery.flot.resize.js' %}"></script>
-    <!-- Flot plugins -->
-    <script src="{% static 'request/admin_jemco/js/jquery.flot.orderBars.js' %}"></script>
-    <script src="{% static 'request/admin_jemco/js/jquery.flot.spline.min.js' %}"></script>
-    <script src="{% static 'request/admin_jemco/js/curvedLines.js' %}"></script>
-    <!-- DateJS -->
-    <script src="{% static 'request/admin_jemco/js/date.js' %}"></script>
-    <!-- JQVMap -->
-    <script src="{% static 'request/admin_jemco/js/jquery.vmap.js' %}"></script>
-    <script src="{% static 'request/admin_jemco/js/jquery.vmap.world.js' %}"></script>
-    <script src="{% static 'request/admin_jemco/js/jquery.vmap.sampledata.js' %}"></script>
-    <!-- bootstrap-daterangepicker -->
-    <script src="{% static 'request/admin_jemco/js/moment.min.js' %}"></script>
-    <script src="{% static 'request/admin_jemco/js/daterangepicker.js' %}"></script>
+<!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>-->
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>-->
+<!-- FastClick -->
+<script src="{% static 'request/admin_jemco/js/fastclick.js' %}"></script>
+<!-- NProgress -->
+<script src="{% static 'request/admin_jemco/js/nprogress.js' %}"></script>
+<!-- Chart.js -->
+<script src="{% static 'request/admin_jemco/js/Chart.min.js' %}"></script>
+<!-- gauge.js -->
+<script src="{% static 'request/admin_jemco/js/gauge.min.js' %}"></script>
+<!-- bootstrap-progressbar -->
+<script src="{% static 'request/admin_jemco/js/bootstrap-progressbar.min.js' %}"></script>
+<!-- iCheck -->
+<script src="{% static 'request/admin_jemco/js/icheck.min.js' %}"></script>
+<!-- Skycons -->
+<script src="{% static 'request/admin_jemco/js/skycons.js' %}"></script>
+<!-- Flot -->
+<script src="{% static 'request/admin_jemco/js/jquery.flot.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/jquery.flot.pie.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/jquery.flot.time.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/jquery.flot.stack.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/jquery.flot.resize.js' %}"></script>
+<!-- Flot plugins -->
+<script src="{% static 'request/admin_jemco/js/jquery.flot.orderBars.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/jquery.flot.spline.min.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/curvedLines.js' %}"></script>
+<!-- DateJS -->
+<script src="{% static 'request/admin_jemco/js/date.js' %}"></script>
+<!-- JQVMap -->
+<script src="{% static 'request/admin_jemco/js/jquery.vmap.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/jquery.vmap.world.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/jquery.vmap.sampledata.js' %}"></script>
+<!-- bootstrap-daterangepicker -->
+<script src="{% static 'request/admin_jemco/js/moment.min.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/daterangepicker.js' %}"></script>
+<script src="//cdn.bootcss.com/bootstrap-datetimepicker/4.17.44/js/bootstrap-datetimepicker.min.js"></script>
 
-    <!--morris for charts-->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.0/morris.min.js'></script>
-     <script  src="{% static 'request/admin_jemco/js/index.js' %}"></script>
-    <!-- Custom Theme Scripts -->
-    <script src="{% static 'request/admin_jemco/js/custom.min.js' %}"></script>
-    <script src="{% static 'request/admin_jemco/js/jemco/jemco.js' %}"></script>
+<!--morris for charts-->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.0/morris.min.js'></script>
 
-  </body>
+
+<script src="https://unpkg.com/persian-date@latest/dist/persian-date.min.js"></script>
+<script src="https://unpkg.com/persian-datepicker@latest/dist/js/persian-datepicker.min.js"></script>
+
+<script src="{% static 'request/admin_jemco/js/index.js' %}"></script>
+<!-- Custom Theme Scripts -->
+<script src="{% static 'request/admin_jemco/js/custom.min.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/jemco/jemco.js' %}"></script>
+
+</body>
 </html>

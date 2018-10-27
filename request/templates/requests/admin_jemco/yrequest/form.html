@@ -15,18 +15,23 @@
                     {% endif %}
                     <form method="POST" action="{% url 'request_insert' %}" enctype="multipart/form-data">
                         {% csrf_token %}
-                        Req No.<br>
-                        <input type="text" name="req_no"><br>
+{#                        Req No.<br>#}
+                        <input class="form-control" type="text" name="req_no" placeholder="Request Number"><br>
                         Customer<br>
-                        <select name="customer_id">
+                        <select name="customer_id" class="form-control">
                             {% for customer in customers %}
                                 <option value="{{ customer.id }}">{{ customer.name }}</option>
                             {% endfor %}
 
                         </select><br>
-                        Summary:<br>
-                        <textarea name="req_summary"></textarea><br>
-                        Image<br>
+
+                        <div class="form-group" >
+                            <label for="pub_date2">Date</label>
+                            <input name="date_fa" class=" form-control" type="text" id="pub_date2" >
+                        </div>
+{#                        Summary:<br>#}
+                        <textarea name="req_summary" class="form-control" placeholder="Enter summary here..."></textarea><br>
+                        Upload Related files<br>
                         <input type="file" name="req_file"><br>
                         <input class="btn btn-primary" type="submit" value="Save" name="done">
                         <a class="btn btn-danger btn-sm" href="{% url 'request_index' %}">Cancel</a>

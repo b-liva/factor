@@ -57,8 +57,8 @@
             <input name="fund_id" value="{{ fund_pk }}" type="hidden">
             <input name="expense_id" value="{{ expense.pk }}" type="hidden">
             <input name="updating" value="{{ updating }}" type="hidden">
-            <button type="submit" name="submit" class="btn btn-success btn-sm">Save</button>
-            <a class="btn btn-danger btn-sm" href="{% url 'fund_index' %}">Cancel</a>
+            <button type="submit" name="submit" class="btn btn-success btn-sm">Save and add another</button>
+            <a class="btn btn-primary btn-sm" href="{% url 'fund_index' %}">Done</a>
         </form>
     </div>
 {% endblock %}

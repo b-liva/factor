@@ -1,11 +1,13 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
 {% load humanize %}
+{% load jformat %}
 {% block right_col %}
     <div class="container">
         <div class="col-md-6 ">
             <h3>{{ msg }}</h3>
             <h3>{{ customer.name }}</h3>
-            <p>{{ customer.pub_date }}</p>
+            <p>{{ customer.pub_date|jformat }}</p>
+            <p>{{ customer.date2|jformat }}</p>
         </div>
         <div class="col-md-6 ">
             Requests belongs to <b>{{ customer.name }}</b>:<br>

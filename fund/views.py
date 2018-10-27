@@ -25,6 +25,7 @@ def fund_insert(request):
         fund = Fund.objects.get(pk=request.POST['fund_id'])
     fund.title = request.POST['title']
     fund.summary = request.POST['summary']
+    fund.date_fa = request.POST['date_fa']
     fund.owner = request.user
     fund.save()
     return redirect('expense_form', fund_pk=fund.pk)

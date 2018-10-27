@@ -76,6 +76,7 @@ def customer_read(request):
 @login_required
 def customer_form(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'customer.add_customer')
+    can_add = True
     if not can_add:
         messages.error(request, 'Sorry, No access for you')
         return redirect('errorpage')
@@ -89,6 +90,7 @@ def customer_form(request):
 
 @login_required
 def customer_insert(request):
+    print(request.POST)
     can_add = funcs.has_perm_or_is_owner(request.user, 'customer.add_customer')
     if not can_add:
         messages.error(request, 'Sorry, No access for you')
@@ -99,6 +101,8 @@ def customer_insert(request):
     customer_to_insert = Customer()
     customer_to_insert.name = request.POST['name']
     customer_to_insert.code = request.POST['code']
+    customer_to_insert.pub_date = request.POST['pub_date']
+    customer_to_insert.date2 = request.POST['date2']
     customer_to_insert.type = customer_type
     customer_to_insert.save()
     msg = 'Customer added successfully'

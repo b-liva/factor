@@ -1,7 +1,7 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
 {% block right_col %}
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-8 col-md-offset-2">
             <div class="card mb-9 shadow-sm">
                 <div class="card-body">
                     <div>
@@ -18,9 +18,19 @@
                         <p><b>Spec:</b></p>
                         <form action="{% url 'pref_insert' %}" method="POST">
                             {% csrf_token %}
-                            Prefactor No<br>
-                            <input type="number" name="xpref" value="" required><br>
-                            <table class="withBorder">
+                            <div class="col-md-3">
+                                <div>Prefactor No<br>
+                                    <input type="number" name="xpref" value="" required class="form-control"><br></div>
+                            </div>
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="row">
+                                    Prof. Date<input id="date_fa" name="date_fa"><br>
+                                    Exp. Date<input id="exp_date_fa" name="exp_date_fa">
+                                </div>
+                            </div>
+
+
+                            <table class="withBorder tableFull">
                                 <tbody>
                                 <tr>
                                     <th>ID</th>
@@ -62,7 +72,7 @@
                                 </tbody>
                             </table>
                             <input type="hidden" name="req_no" value="{{ req_id }}"><br>
-                            <input class="btn btn-primary" type="submit" value="Save" name="done">
+                            <input class="btn btn-primary btn-sm" type="submit" value="Save" name="done">
                             <a class="btn btn-danger btn-sm" href="{% url 'pref_index' %}">Cancel</a>
                         </form>
                         <hr>

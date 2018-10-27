@@ -10,7 +10,7 @@
             {% endfor %}
             <br>
             <div class="col-md-6">
-                <form method="POST" action="{% url 'customer_insert' %}">
+                <form method="POST" action="{% url 'customer_insert' %}" id="newCustomer">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="customer-code">Code</label>
@@ -22,10 +22,15 @@
                         <input type="text" class="form-control" id="customer-name" placeholder="Enter Customer Name"
                                name="name">
                     </div>
-                    {#                Code<br>#}
-                    {#                <input type="number" name="code">#}
-                    {#                <br>Name<br>#}
-                    {#                <input type="text" name="name">#}
+                    <div class="form-group">
+                        <label for="pub_datePicker">Date:</label>
+                        <input name="pub_date" class=" form-control" type="text" id="pub_datePicker" >
+                    </div>
+                    <div class="form-group">
+                        <label for="pub_date2">Date2:</label>
+                        <input name="date2" class=" form-control" type="text" id="pub_date2" >
+                    </div>
+
                     <div class="form-group">
                         <label for="customer-type">Customer Type</label>
                         <select class="form-control" id="customer-type" name="type">
@@ -34,13 +39,11 @@
                             {% endfor %}
                         </select>
                     </div>
-                    {#                <br>Type<br>#}
-                    {#                <select name="type">#}
-                    {#                    {% for type in customer_types %}#}
-                    {#                        <option value="{{ type.id }}">{{ type.name }}</option>#}
-                    {#                    {% endfor %}#}
-                    {#                </select>#}
+
+
                     <br>
+                    {#                            {{ c_form.as_p }}#}
+
                     <button type="submit" name="submit" class="btn-sm btn btn-success">Save</button>
                     <a class="btn btn-sm btn-danger" href="{% url 'customer_index' %}">Cancel</a>
                 </form>

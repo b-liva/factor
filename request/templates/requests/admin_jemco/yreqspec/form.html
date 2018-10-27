@@ -1,4 +1,5 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
+{% load jformat %}
 {% block right_col %}
     <div class="row">
         <div class="container">
@@ -12,7 +13,7 @@
                         <p>
                             <span>id: {{ req_obj.pk }}</span>
                             <span>- #: {{ req_obj.number }}</span>
-                            <span>- Date: {{ req_obj.pub_date }}</span>
+                            <span>- Date: {{ req_obj.pub_date|jformat }}</span>
                         </p>
                         <hr>
                     </div>
@@ -65,52 +66,61 @@
                     {% endif %}
                     <form method="POST" action="{% url 'reqSpec_insert' %}" enctype="multipart/form-data">
                         {% csrf_token %}
-                        Type<br>
-                        <select name="type">
-                            <option value="Routine">Routine</option>
-                            <option value="Project">Project</option>
-                            <option value="Services">Services</option>
-                            <option value="Tender">Tender</option>
-                        </select>
-                        <br>QTY<br>
-                        <input type="number" name="qty" value="{{ spec.qty }}"><br>
-                        KW<br>
-                        <input type="number" name="kw" value="{{ spec.kw }}">
+                        <div class="form-group col-md-6">
+                            Type<br>
+                            <select name="type" class="form-control">
+                                <option value="Routine">Routine</option>
+                                <option value="Project">Project</option>
+                                <option value="Services">Services</option>
+                                <option value="Tender">Tender</option>
+                            </select>
+                            <br>QTY<br>
+                            <input type="number" name="qty" value="{{ spec.qty }}" class="form-control form"><br>
+                            KW<br>
+                            <input type="number" name="kw" value="{{ spec.kw }}" class="form-control">
 
 
-                        <br> RPM<br>
-                        <input type="number" name="rpm" value="{{ spec.rpm }}">
-                        <br>
-                        Voltage<br>
-                        <select name="voltage">
-                            <option value="380">380</option>
-                            <option value="400">400</option>
-                            <option value="3000">3000</option>
-                            <option value="3300">3300</option>
-                            <option value="6000">6000</option>
-                            <option value="6600">6600</option>
-                            <option value="11000">11000</option>
-                        </select><br>
-                        IP<br>
-                        <select name="ip">
-                            <option value="55">55</option>
-                            <option value="56">56</option>
-                        </select><br>
-                        IC<br>
-                        <select name="ic">
-                            <option value="411">411</option>
-                            <option value="511">511</option>
-                            <option value="611">611</option>
-                        </select><br>
-                        <textarea name="summary">{{ spec.summary }}</textarea>
-                        <br>
-                        {#                Price<br>#}
-                        {#                <input name="price" type="text">#}
-                        <br>
-                        <input type="hidden" name="req_id" value="{{ req_obj.pk }}"><br>
-                        <input type="hidden" name="updating" value="{{ updating }}"><br>
-                        <input type="hidden" name="spec_pk" value="{{ spec.pk }}"><br>
-                        <input class="btn btn-primary" type="submit" value="Save" name="done">
+                            <br> RPM<br>
+                            <input type="number" name="rpm" value="{{ spec.rpm }}" class="form-control">
+                            <br>
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            Voltage<br>
+                            <select name="voltage" class="form-control">
+                                <option value="380">380</option>
+                                <option value="400">400</option>
+                                <option value="3000">3000</option>
+                                <option value="3300">3300</option>
+                                <option value="6000">6000</option>
+                                <option value="6600">6600</option>
+                                <option value="11000">11000</option>
+                            </select><br>
+                            IP<br>
+                            <select name="ip" class="form-control">
+                                <option value="55">55</option>
+                                <option value="56">56</option>
+                            </select><br>
+                            IC<br>
+                            <select name="ic" class="form-control">
+                                <option value="411">411</option>
+                                <option value="511">511</option>
+                                <option value="611">611</option>
+                            </select><br>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <textarea name="summary" class="form-control" rows="5" placeholder="Enter summary here...">{{ spec.summary }}</textarea>
+                            <br>
+                            {#                Price<br>#}
+                            {#                <input name="price" type="text">#}
+                            <br>
+                            <input type="hidden" name="req_id" value="{{ req_obj.pk }}" class="form-control"><br>
+                            <input type="hidden" name="updating" value="{{ updating }}" class="form-control"><br>
+                            <input type="hidden" name="spec_pk" value="{{ spec.pk }}" class="form-control"><br>
+{#                            <input class="btn btn-primary" type="submit" value="save and add another" name="done">#}
+                            <button class="btn btn-primary" type="submit">Save and add antoher</button>
+                            <a class="btn btn-success" href="{% url 'request_index' %}">Done</a>
+                        </div>
                     </form>
                 </div>
             </div>

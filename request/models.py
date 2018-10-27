@@ -3,12 +3,15 @@ from django.db import models
 import datetime
 from django.utils.timezone import now
 from customer.models import Customer
+from django_jalali.db import models as jmodels
+
 
 
 class Requests(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     number = models.IntegerField()
     pub_date = models.DateTimeField(default=now)
+    date_fa = jmodels.jDateField(default=now)
     image = models.FileField(upload_to='requests/', null=True, blank=True)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     summary = models.TextField(max_length=1000, null=True, blank=True)
@@ -37,6 +40,8 @@ class Xpref(models.Model):
     req_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
     number = models.IntegerField()
     pub_date = models.DateTimeField(default=now)
+    date_fa = jmodels.jDateField(default=now)
+    exp_date_fa = jmodels.jDateField(default=now)
     image = models.ImageField(upload_to='prefactors/')
 
     def pub_date_pretty(self):
@@ -108,12 +113,13 @@ class Permission(models.Model):
 
 class Payment(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-
+    customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     xpref_id = models.ForeignKey(Xpref, on_delete=models.CASCADE)
     number = models.IntegerField()
     amount = models.FloatField()
     image = models.ImageField(upload_to='payments/', default='payments/default.jpg')
     payment_date = models.DateTimeField(default=now)
+    date_fa = jmodels.jDateField(default=now)
     summary = models.TextField(max_length=600, blank=True, null=True)
 
     def pub_date_pretty(self):
