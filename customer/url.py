@@ -25,8 +25,8 @@ urlpatterns = [
 
     ])),
 
-    path('form', views.type_form, name='type_form'),
-    path('insert', views.type_insert, name='type_insert'),
+    path('type/form', views.type_form, name='type_form'),
+    path('type/insert', views.type_insert, name='type_insert'),
     path('index', views.type_index, name='type_index'),
     path('<int:type_pk>/', include([
         path('', views.type_read, name='type_read'),

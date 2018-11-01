@@ -15,6 +15,14 @@ class Requests(models.Model):
     image = models.FileField(upload_to='requests/', null=True, blank=True)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     summary = models.TextField(max_length=1000, null=True, blank=True)
+
+    class Meta:
+        permissions = (
+            ('index_requests', 'can see list of requests'),
+            ('read_requests', 'can read requests'),
+        )
+
+
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')
 

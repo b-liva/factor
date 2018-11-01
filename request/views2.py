@@ -28,7 +28,7 @@ from . import views
 @login_required
 # add a new request to the system
 def request_form(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_request')
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
     if not can_add:
         messages.error(request, 'Sorry, You need some priviliges to do this.')
         return redirect('errorpage')
@@ -42,7 +42,7 @@ def request_form(request):
 
 @login_required
 def request_insert(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_request')
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
     if not can_add:
         messages.error(request, 'No Priviliges')
         return redirect('errorpage')
@@ -66,6 +66,10 @@ def request_insert(request):
 @login_required
 def request_index(request):
     # requests = Requests.objects.all()
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not can_index:
+        messages.error(request, 'Sorry No access...')
+        return redirect('errorpage')
     requests = Requests.objects.filter(owner=request.user)
     return render(request, 'requests/admin_jemco/yrequest/index.html', {'all_requests': requests})
 
@@ -78,7 +82,16 @@ def request_find(request):
 
 @login_required
 def request_read(request, request_pk):
+    if not Requests.objects.filter(pk=request_pk):
+        messages.error(request, 'Nothin found')
+        return redirect('errorpage')
+
     req = Requests.objects.get(pk=request_pk)
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_requests', req)
+    if not can_read:
+        messages.error(request, 'No access!!!')
+        return redirect('errorpage')
+
     reqspecs = req.reqspec_set.all()
     kw = total_kw(request_pk)
 
@@ -91,13 +104,24 @@ def request_read(request, request_pk):
 
 @login_required
 def request_delete(request, request_pk):
+    if not Requests.objects.filter(pk=request_pk):
+        messages.error(request, 'Nothing found')
+        return redirect('errorpage')
     req = Requests.objects.get(pk=request_pk)
+    can_delete = funcs.has_perm_or_is_owner(request.user, 'request.delete_requests', req)
+    # can_delete = True
+    if not can_delete:
+        messages.error(request, 'No access')
+        return redirect('errorpage')
     req.delete()
     return redirect('request_index')
 
 
 @login_required
 def request_edit(request, request_pk):
+    if not Requests.objects.filter(pk=request_pk):
+        messages.error(request, 'Nothing found')
+        return redirect('errorpage')
     return HttpResponse('request Edit' + str(request_pk))
 
 

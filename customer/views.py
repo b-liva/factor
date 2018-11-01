@@ -76,7 +76,6 @@ def customer_read(request):
 @login_required
 def customer_form(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'customer.add_customer')
-    can_add = True
     if not can_add:
         messages.error(request, 'Sorry, No access for you')
         return redirect('errorpage')
@@ -90,7 +89,6 @@ def customer_form(request):
 
 @login_required
 def customer_insert(request):
-    print(request.POST)
     can_add = funcs.has_perm_or_is_owner(request.user, 'customer.add_customer')
     if not can_add:
         messages.error(request, 'Sorry, No access for you')
@@ -115,6 +113,10 @@ def customer_insert(request):
 
 @login_required
 def customer_index(request):
+    can_index = funcs.has_perm_or_is_owner(request.user, 'customer.index_customer')
+    if not can_index:
+        messages.error(request, 'No access to see list of customers')
+        return redirect('errorpage')
     customers = Customer.objects.all()
     return render(request, 'customer/index.html', {'customers': customers})
 
@@ -125,7 +127,15 @@ def customer_find(request):
 
 @login_required
 def customer_read2(request, customer_pk):
+    if not Customer.objects.filter(pk=customer_pk):
+        messages.error(request, 'No such customer')
+        return redirect('errorpage')
     customer = Customer.objects.get(pk=customer_pk)
+    can_read = funcs.has_perm_or_is_owner(request.user, 'customer.read_customer', customer)
+    if not can_read:
+        messages.error(request, 'Sorry, no way for you to do that')
+        return redirect('errorpage')
+    # customer = Customer.objects.get(pk=customer_pk)
     customer_reqs = customer.requests_set.all()
     kw = {}
     some = {}
@@ -145,8 +155,12 @@ def customer_read2(request, customer_pk):
 
 @login_required
 def customer_edit(request, customer_pk):
+    if not Customer.objects.filter(pk=customer_pk):
+        messages.error(request, 'No such Customer')
+        return redirect('errorpage')
+
     customer_instance = Customer.objects.get(pk=customer_pk)
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'customer.edit_customer')
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'customer.edit_customer', customer_instance)
     if not can_edit:
         messages.error(request, 'Sorry, No access for you')
         return redirect('errorpage')
@@ -154,7 +168,11 @@ def customer_edit(request, customer_pk):
 
 
 def customer_delete(request, customer_pk):
-    can_delete = funcs.has_perm_or_is_owner(request.user, 'customer.delete_customer')
+    if not Customer.objects.filter(pk=customer_pk):
+        messages.error(request, 'No such Customer')
+        return redirect('errorpage')
+    customer_instance = Customer.objects.get(pk=customer_pk)
+    can_delete = funcs.has_perm_or_is_owner(request.user, 'customer.delete_customer', customer_instance)
     if not can_delete:
         messages.error(request, 'Sorry, No access for you')
         return redirect('errorpage')
@@ -172,7 +190,7 @@ def type_form(request):
     if not can_add:
         messages.error(request, 'No access')
         return redirect('errorpage')
-    pass
+    return HttpResponse('customer type form goes here.')
 
 
 @login_required
@@ -181,8 +199,8 @@ def type_insert(request):
     if not can_add:
         messages.error(request, 'No access')
         return redirect('errorpage')
+    return HttpResponse('customer type insertion goes here.')
 
-    pass
 
 
 @login_required
@@ -207,10 +225,14 @@ def type_edit(request, type_pk):
 
 @login_required
 def type_delete(request, type_pk):
-    can_delete = funcs.has_perm_or_is_owner(request.user, 'customer.delete_type')
+    if not Type.objects.filter(pk=type_pk):
+        messages.error(request, 'type not found')
+        return redirect('errorpage')
+    type = Type.objects.get(pk=type_pk)
+    can_delete = funcs.has_perm_or_is_owner(request.user, 'customer.delete_type', type)
     if not can_delete:
         messages.error(request, 'No access')
         return redirect('errorpage')
-
-    pass
+    type.delete()
+    return redirect('type_index')
 

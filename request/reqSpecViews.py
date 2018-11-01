@@ -23,9 +23,12 @@ from django.contrib import messages
 # Create your views here.
 @login_required
 def reqspec_form(request, req_pk):
+    if not Requests.objects.filter(pk=req_pk):
+        messages.error(request, 'No such Request')
+        return redirect('errorpage')
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec')
     if not can_add:
-        messages.error(request, 'You have not enough access')
+        messages.error(request, 'You have not enough access to add request specs')
         return redirect('errorpage')
     req_obj = Requests.objects.get(pk=req_pk)
     specs = req_obj.reqspec_set.all()
@@ -81,9 +84,16 @@ def reqspec_delete(request, yreqSpec_pk, req_pk):
 
 @login_required
 def reqspec_edit(request, yreqSpec_pk, req_pk):
+    if not Requests.objects.filter(pk=req_pk) or not ReqSpec.objects.filter(pk=yreqSpec_pk):
+        messages.error(request, 'no request or specs')
+        return redirect('errorpage')
     req = Requests.objects.get(pk=req_pk)
     specs = ReqSpec.objects.filter(req_id=req)
     spec = ReqSpec.objects.get(pk=yreqSpec_pk)
+    # checks the mismach for request and specs
+    if spec not in specs:
+        messages.error(request, 'mismatch')
+        return redirect('errorpage')
     updating = True
     # specs = PrefSpec.objects.all()
     return render(request, 'requests/admin_jemco/yreqspec/form.html', {

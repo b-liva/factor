@@ -270,19 +270,29 @@ def allRequests():
     return list
 
 
+def find_total_payment():
+    payments = Payment.objects.all()
+    amount = 0
+    for payment in payments:
+        amount += payment.amount
+    return amount
+
+
 @login_required
 def dashboard(request):
     routine_kw, project_kw, allKw = find_routine_kw()
     num_of_requests = no_of_requests()
     orders = Orders()
     last_n_requests = orders.last_orders()
+    total_payments = find_total_payment()
     return render(request, 'requests/admin_jemco/dashboard.html',
                   {
                       'routine_kw': intcomma(routine_kw),
                       'project_kw': intcomma(project_kw),
                       'allKw': intcomma(allKw),
                       'num_of_reqs': num_of_requests,
-                      'last_n_requests': last_n_requests
+                      'last_n_requests': last_n_requests,
+                      'total_payments': total_payments
                   })
 
 

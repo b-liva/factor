@@ -55,6 +55,8 @@ urlpatterns = [
     path('xpref_ver_create', request.views.xpref_ver_create, name='xpref_ver_create'),
     path('create_xverf', request.views.create_xverf, name='create_xverf'),
 
+
+
     path('form', request.views2.request_form, name='request_form'),
     path('insert', request.views2.request_insert, name='request_insert'),
     path('index', request.views2.request_index, name='request_index'),

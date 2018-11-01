@@ -5,6 +5,8 @@ from django.contrib import messages
 from fund.models import Fund, Expense
 import request.functions as func
 
+from django.contrib.admin.models import LogEntry
+
 
 @login_required
 def fund_form(request):
