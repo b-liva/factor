@@ -1,21 +1,24 @@
-{% extends 'requests/base.html' %}
+{% extends 'requests/base_minimal.html' %}
 
 {% block mainContent %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                {% if error %}
-                    {{ error }}
-                {% endif %}
-                <form method="POST" action="{% url 'login' %}">
-                    {% csrf_token %}
-                    Username:<br>
-                    <input type="text" name="username"><br>
-                    Password:<br>
-                    <input type="password" name="password"><br>
-                    <input type="submit" value="Login" class="btn btn-success btn-sm">
-                </form>
-            </div>
+
+
+    <div class="row mt-4">
+        <div class="col-md-4 offset-md-4">
+            {% if error %}
+                {{ error }}
+            {% endif %}
+        <h4 style="border-bottom: solid 1px black"> Login here</h4>
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                Username:<br>
+                <input type="text" name="username" class="form-control"><br>
+                Password:<br>
+                <input type="password" name="password" class="form-control"><br>
+                <input type="submit" value="Login" class="btn btn-success btn-sm" >
+            </form>
         </div>
     </div>
+
+
 {% endblock %}

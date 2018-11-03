@@ -1,0 +1,54 @@
+<div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <h3>{{ msg }}</h3>
+            {% if messages %}
+                <div class="alert alert-danger">
+                    {% for msg in messages %}
+                        <p>{{ msg }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                Add new customer</h1>
+            {% for all_customer in all_customers %}
+                {{ all_customer.name }}<b> - </b>
+            {% endfor %}
+            <br>
+            <div class="col-md-6">
+                <form method="POST" action="{% url 'customer_insert' %}" id="newCustomer">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="customer-code">Code</label>
+                        <input type="number" class="form-control" id="customer-code" placeholder="Enter Customer Code"
+                               name="code">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-name">Name</label>
+                        <input type="text" class="form-control" id="customer-name" placeholder="Enter Customer Name"
+                               name="name">
+                    </div>
+                                        <div class="form-group">
+                                            <label for="pub_datePicker">Date:</label>
+                                            <input name="pub_date" class=" form-control" type="text" id="pub_datePicker" >
+                                        </div>
+                    <div class="form-group">
+                        <label for="pub_date2">Date:</label>
+                        <input name="date2" class=" form-control" type="text" id="pub_date2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer-type">Customer Type</label>
+                        <select class="form-control" id="customer-type" name="type">
+                            {% for type in customer_types %}
+                                <option value="{{ type.id }}">{{ type.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" name="submit" class="btn-sm btn btn-success">Save</button>
+                    <a class="btn btn-sm btn-danger" href="{% url 'customer_index' %}">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>

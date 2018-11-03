@@ -93,15 +93,27 @@ def customer_insert(request):
     if not can_add:
         messages.error(request, 'Sorry, No access for you')
         return redirect('errorpage')
+    name = request.POST['name']
+    code = request.POST['code']
+    # if not name or not code:
+    #     messages.error(request, 'required field')
+    #     return redirect('customer_form')
+    #
+    customer = Customer.objects.filter(code=code)
+    if customer:
+        messages.error(request, 'customer code already existing')
+        return redirect('customer_form')
     all_customers = Customer.objects.all()
     customer_types = Type.objects.all()
     customer_type = Type.objects.get(pk=request.POST['type'])
     customer_to_insert = Customer()
-    customer_to_insert.name = request.POST['name']
-    customer_to_insert.code = request.POST['code']
-    customer_to_insert.pub_date = request.POST['pub_date']
+    customer_to_insert.name = name
+    customer_to_insert.code = code
+    # if request.POST['pub_date']:
+    #     customer_to_insert.pub_date = request.POST['pub_date']
     customer_to_insert.date2 = request.POST['date2']
     customer_to_insert.type = customer_type
+    customer_to_insert.owner = request.user
     customer_to_insert.save()
     msg = 'Customer added successfully'
     return render(request, 'customer/index.html', {

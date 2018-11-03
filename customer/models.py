@@ -20,8 +20,8 @@ class Type(models.Model):
 class Customer(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     code = models.IntegerField()
-    name = models.TextField()
-    type = models.ForeignKey(Type, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    type = models.ForeignKey(Type, on_delete=models.DO_NOTHING)
     # type = models.(choices=types)
     pub_date = models.DateTimeField(default=now)
     # date2 = jmodels.jDateTimeField(default=now)
