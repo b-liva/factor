@@ -35,6 +35,26 @@ $('#newCustomer215').on('submit', function (e) {
     // alert('hi there');
 });
 
+$('.imgClr').on('click', function () {
+    var pdata = {
+        'id': this.id,
+        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+
+    };
+    $.ajax({
+        url: 'img/del',
+        method: "POST",
+        data: pdata,
+        success: function (data) {
+            console.log('success');
+        },
+        error: function (error) {
+            console.log('error');
+        }
+    });
+
+});
+
 
 // $(function () {
 //         $('.pub_date').datetimepicker({

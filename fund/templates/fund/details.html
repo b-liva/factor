@@ -8,7 +8,8 @@
             <h3>{{ fund.title }}</h3>
             <h3>{{ fund.summary }}</h3>
             <p>{{ fund.pub_date }}</p>
-            <a class="btn btn-sm btn-success" href="{% url 'fund_edit' fund_pk=fund.pk %}">Edit This Fund</a>
+{#            <a class="btn btn-sm btn-success" href="{% url 'fund_edit' fund_pk=fund.pk %}">Edit This Fund</a>#}
+            <a class="btn btn-sm btn-success" href="{% url 'ex_form' fund_pk=fund.pk %}">Edit Expenses</a>
             <a href="{% url 'fund_index' %}" class="btn btn-danger btn-sm">Cancel</a>
 
         </div>

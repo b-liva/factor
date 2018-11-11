@@ -2,7 +2,7 @@
 {% load jformat %}
 {% block right_col %}
     <div class="container">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-10 col-md-offset-1">
                 <h3>{{ msg }}</h3>
         <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
                 Customers</h1>
@@ -14,11 +14,12 @@
     <table class="withBorder tableFull">
         <tr>
             <th>No</th>
+            <th>pk</th>
 {#            <th>Id</th>#}
             <th>Code</th>
             <th>Name</th>
             <th>Type</th>
-            <th>Date</th>
+{#            <th>Date</th>#}
             <th>Jdate</th>
             <th>Action</th>
         </tr>
@@ -26,15 +27,16 @@
         {% for customer in customers %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-{#                <td>{{ customer.pk }}</td>#}
+                <td>{{ customer.pk }}</td>
                 <td>{{ customer.code }}</td>
                 <td>{{ customer.name }}</td>
                 <td>{{ customer.type.name }}</td>
-                <td>{{ customer.pub_date|jformat }}</td>
+{#                <td>{{ customer.pub_date|jformat }}</td>#}
                 <td>{{ customer.date2|jformat }}</td>
                 <td>
                     <a class="btn btn-primary btn-xs" href="{% url 'customer_read' customer_pk=customer.pk %}">Details</a>
-                    <a class="btn btn-primary btn-xs btn-warning" href="{% url 'customer_delete' customer_pk=customer.pk %}">Delete</a>
+                    <a class="btn btn-warning btn-xs" href="{% url 'customer_edit_form' customer_pk=customer.pk %}">Edit</a>
+                    <a class="btn btn-danger btn-xs " href="{% url 'customer_delete' customer_pk=customer.pk %}">Delete</a>
                 </td>
 
 
@@ -44,7 +46,7 @@
 
         </tbody>
     </table><br>
-    <a href="{% url 'customer_form' %}" class="btn btn-success btn-sm">Add new customer</a>
+    <a href="{% url 'cform' %}" class="btn btn-success btn-sm">Add new customer</a>
         </div>
 
     </div>

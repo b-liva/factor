@@ -17,9 +17,12 @@ from customer.models import Customer
 from django.contrib.auth.decorators import login_required
 from .viewsFolder import permission
 
+
 # Create your views here.
 def errorpage(request):
     return render(request, 'fund/error.html')
+
+
 def request_page(request):
     allRequests = Requests.objects.all()
     return render(request, 'requests/admin_jemco/allRequests.html', {'allRequests': allRequests})
@@ -79,6 +82,7 @@ def find_pref(request):
         'requests/results.html',
         {'prefactor': prefactor, 'verification': pre_ver, 'related_request': related_request}
     )
+
 
 # @login_required(login_url='login')
 @login_required

@@ -43,10 +43,11 @@ urlpatterns = [
     path('dashboard/', request.views.dashboard, name="dashboard"),
     path('errorpage/', request.views.errorpage, name="errorpage"),
     path('accounts/', include('accounts.url')),
-    path('request/', include('request.url')),
+    path('request/', include('request.urls.url')),
     path('customer/', include('customer.url')),
     path('fund/', include('fund.url')),
     path('pricedb/', include('pricedb.url')),
     path('fund/', include('fund.url')),
     path('motors/', include('motordb.url')),
+    # path('v1/request', include('request.urls.url')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

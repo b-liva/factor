@@ -2,7 +2,7 @@
 {% load humanize %}
 {% block right_col %}
     <div class="container">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
                 <h3>{{ msg }}</h3>
         <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
                 Funds</h1>
@@ -19,7 +19,7 @@
             <th>No</th>
             <th>ID</th>
             <th>Title</th>
-            <th>Summary</th>
+            <th style="width: 30%;">Summary</th>
             <th>Date</th>
             <th>Total Expenses</th>
             <th>owner</th>
@@ -37,7 +37,8 @@
                 <td>{{ fund.owner.username }}</td>
                 <td>
                     <a class="btn btn-primary btn-xs" href="{% url 'fund_details' fund_pk=fund.pk %}">Details</a>
-                    <a class="btn btn-primary btn-xs btn-warning" href="{% url 'fund_delete' fund_pk=fund.pk %}">Delete</a>
+                    <a class="btn btn-warning btn-xs" href="{% url 'fund_edit_form' fund_pk=fund.pk %}">Edit</a>
+                    <a class="btn btn-primary btn-xs btn-danger" href="{% url 'fund_delete' fund_pk=fund.pk %}">Delete</a>
                 </td>
             </tr>
         {% endfor %}

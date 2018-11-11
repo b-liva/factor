@@ -1,23 +1,11 @@
-import json
+from django.shortcuts import render, redirect
 
-from django.contrib.humanize.templatetags.humanize import intcomma
-from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
-
-from request.views import allRequests, find_all_obj
 from .models import Requests
 from .models import ReqSpec
-from .models import Prefactor
-from .models import PrefactorVerification
-from .models import PrefSpec
-from .models import Xpref
-from .models import Payment
-from .models import XprefVerf
-from customer.models import Customer
 from django.contrib.auth.decorators import login_required
-import request.functions as funcs
+import request.templatetags.functions as funcs
 from django.contrib import messages
+from request.forms import forms
 
 
 # Create your views here.
@@ -79,7 +67,8 @@ def reqspec_delete(request, yreqSpec_pk, req_pk):
     reqspec = ReqSpec.objects.get(pk=yreqSpec_pk)
     req = reqspec.req_id
     reqspec.delete()
-    return redirect('reqSpec_form', req_pk=req_pk)
+    return redirect('spec_form', req_pk=req_pk)
+    # return redirect('reqSpec_form', req_pk=req_pk)
 
 
 @login_required
@@ -102,3 +91,55 @@ def reqspec_edit(request, yreqSpec_pk, req_pk):
         'req_obj': req,
         'updating': updating
     })
+
+
+@login_required
+def spec_form(request, req_pk):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec')
+    if not can_add:
+        messages.error(request, 'You have not enough access to add request specs')
+        return redirect('errorpage')
+    form = forms.SpecForm()
+    req = Requests.objects.get(pk=req_pk)
+
+    if request.method == 'POST':
+        form = forms.SpecForm(request.POST)
+        if form.is_valid():
+            spec = form.save(commit=False)
+            spec.req_id = req
+            spec.owner = request.user
+            spec.save()
+            return redirect('spec_form', req_pk=req_pk)
+    else:
+        form = forms.SpecForm()
+
+    specs = req.reqspec_set.all()
+    print(specs)
+
+    return render(request, 'requests/admin_jemco/yreqspec/spec_form.html', {
+        'form': form,
+        'req_obj': req,
+        'specs': specs
+    })
+
+
+@login_required
+def reqspec_edit_form(request, yreqSpec_pk, req_pk):
+    req = Requests.objects.get(pk=req_pk)
+    specs = req.reqspec_set.all()
+    spec = ReqSpec.objects.get(pk=yreqSpec_pk)
+    form = forms.SpecForm(request.POST or None, instance=spec)
+    print(f'request is: {request.method}')
+    if request.method == 'POST':
+        if form.is_valid():
+            print('form is valid')
+            form.save()
+            form = forms.SpecForm()
+            return redirect('spec_form', req_pk=req.pk)
+
+    return render(request, 'requests/admin_jemco/yreqspec/spec_form.html', {
+        'req_obj': req,
+        'specs': specs,
+        'form': form
+    })
+    # return redirect('req')

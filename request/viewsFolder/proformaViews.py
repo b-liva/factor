@@ -1,0 +1,327 @@
+from django.contrib import messages
+from django.shortcuts import render, redirect
+
+import request.templatetags.functions as funcs
+from request import models
+from request.models import Requests
+from request.models import Xpref
+from pricedb.models import MotorDB
+
+from request.forms import forms
+from request.forms import proforma_forms
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def pref_index(request):
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma')
+    can_read = True
+    if not can_read:
+        messages.error(request, 'no access for you')
+        return redirect('errorpage')
+    prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date').reverse()
+    # prefs = Xpref.objects.all()
+    print(prefs)
+    return render(request, 'requests/admin_jemco/ypref/index.html', {
+        'prefs': prefs
+    })
+
+
+@login_required
+def pref_find(request):
+    term = request.POST['text']
+    prof_no = request.POST['pref_no']
+    prefs = Xpref.objects.filter(number=prof_no).filter(summary__contains=term).all()
+    search_items = {
+        'term': term,
+        'proforma_no': prof_no,
+    }
+    if prefs is None:
+        messages.error(request, 'no match found')
+        return redirect('errorpage')
+    return render(request, 'requests/admin_jemco/ypref/search_index.html', {
+        'prefs': prefs,
+        'search_items': search_items
+    })
+
+
+@login_required
+def pref_details(request, ypref_pk):
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma')
+    if not can_read:
+        messages.error(request, 'no access for you')
+        return redirect('errorpage')
+    nestes_dict = {}
+
+
+    spec_total = 0
+    proforma_total = 0
+    sales_total = 0
+    percentage = 0
+    total_percentage = 0
+    pref = Xpref.objects.get(pk=ypref_pk)
+
+    prof_images = pref.proffiles_set.all()
+    prefspecs = pref.prefspec_set.all()
+    print('pref and specs found')
+    print(f'pk={pref.pk} - number={pref.number}')
+    print(f'specs: {prefspecs}')
+    i = 0
+    for prefspec in prefspecs:
+        kw = prefspec.kw
+        speed = prefspec.rpm
+        price = MotorDB.objects.filter(kw=kw).filter(speed=speed).last()
+        print(f'price is exactly: {price} with type: {type(price)}')
+        proforma_total += prefspec.qty * prefspec.price
+        if hasattr(price, 'prime_cost'):
+            sales_total += prefspec.qty * price.prime_cost
+            percentage = (prefspec.price/(price.prime_cost))
+            prime = price.prime_cost
+        else:
+            prime = 'N/A'
+            sales_total = "N/A"
+            percentage = False
+        if percentage >= 1:
+            percentage_class = 'good-conditions'
+        elif percentage < 1:
+            percentage_class = 'bad-conditions'
+        else:
+            percentage_class = 'no-value'
+        nestes_dict[i] = {
+            'obj': prefspec,
+            'sale_price': prime,
+            'percentage': percentage,
+            'percentage_class': percentage_class,
+            'spec_total': prefspec.qty * prefspec.price
+        }
+        i += 1
+        if hasattr(price, 'prime_cost'):
+            total_percentage = proforma_total/sales_total
+    if total_percentage >= 1:
+        total_percentage_class = 'good-conditions'
+    else:
+        total_percentage_class = 'bad-conditions'
+    return render(request, 'requests/admin_jemco/ypref/details.html', {
+        'pref': pref,
+        'prefspecs': prefspecs,
+        'nested': nestes_dict,
+        'proforma_total': proforma_total,
+        'sales_total': sales_total,
+        'total_percentage': total_percentage,
+        'total_percentage_class': total_percentage_class,
+        'prof_images': prof_images,
+    })
+
+
+@login_required
+def pref_delete(request, ypref_pk):
+    pref = Xpref.objects.get(pk=ypref_pk)
+    can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_xpref', pref.req_id)
+
+    if not can_del:
+        messages.error(request, 'You have not enough access')
+        return redirect('errorpage')
+    pref.delete()
+    return redirect('pref_index')
+
+
+@login_required
+def pro_form(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
+    if not can_add:
+        messages.error(request, 'You have not enough access')
+        return redirect('errorpage')
+
+    reqs = Requests.objects.all()
+    form = forms.ProformaForm(request.user.pk)
+    owners_reqs = Requests.objects.filter(owner=request.user)
+    # prof_file_form = forms.ProfFileForm(request.POST or None, instance=)
+    imgform = proforma_forms.ProfFileForm()
+
+    if request.method == 'POST':
+        form = forms.ProformaForm(request.user.pk, request.POST)
+        img_form = proforma_forms.ProfFileForm(request.POST, request.FILES)
+        files = request.FILES.getlist('image')
+        if form.is_valid():
+            # Save Proforma
+            proforma = form.save(commit=False)
+            proforma.owner = request.user
+            proforma.save()
+
+            # Save files
+            for f in files:
+                file_instance = models.ProfFiles(image=f, prof=proforma)
+                file_instance.save()
+
+            # make a list of specs for this proforma
+            req = proforma.req_id
+            specs_set = req.reqspec_set.all()
+            print(f'request is: {req}')
+            print(f'specs: {specs_set}')
+
+            for spec in specs_set:
+
+                form = forms.ProfSpecForm()
+                specItem = form.save(commit=False)
+
+                specItem.type = spec.type
+                specItem.price = 0
+                specItem.kw = spec.kw
+                specItem.qty = spec.qty
+                specItem.rpm = spec.rpm
+                specItem.voltage = spec.voltage
+                specItem.ip = spec.ip
+                specItem.ic = spec.ic
+                specItem.summary = spec.summary
+                specItem.owner = request.user
+
+                specItem.xpref_id = proforma
+                specItem.save()
+
+            return redirect('prof_spec_form', ypref_pk=proforma.pk)
+        else:
+            print('form is not Valid')
+    else:
+        form = forms.ProformaForm(request.user.pk)
+        file_instance = models.ProfFiles()
+    return render(request, 'requests/admin_jemco/ypref/proforma_form.html', {
+        'form': form,
+        'reqs': reqs,
+        'prof_file': imgform,
+        'owner_reqs': owners_reqs
+    })
+
+
+@login_required
+def pref_insert_spec_form(request, ypref_pk):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
+    if not can_add:
+        messages.error(request, 'no access for you')
+        return redirect('errorpage')
+    pref = Xpref.objects.get(pk=ypref_pk)
+    req = Requests.objects.get(pk=pref.req_id.pk)
+    specs = req.reqspec_set.all()
+    prefspecs = pref.prefspec_set.all()
+
+    prices = request.POST.getlist('price')
+    qty = request.POST.getlist('qty')
+    i = 0
+    for s in prefspecs:
+        s.qty = qty[i]
+        s.price = prices[i]
+        s.save()
+        i += 1
+
+    return redirect('pref_index')
+
+
+@login_required
+def pref_edit(request, ypref_pk):
+
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref')
+    if not can_edit:
+        messages.error(request, 'no access ')
+        return redirect('errorpage')
+
+    xpref = Xpref.objects.get(pk=ypref_pk)
+    spec_prices = request.POST.getlist('price')
+    prof_images = xpref.proffiles_set.all()
+
+    xspec = xpref.prefspec_set.all()
+    x = 0
+    for item in xspec:
+        item.price = spec_prices[x]
+        item.save()
+        x += 1
+    prefspecs = xpref.prefspec_set.all()
+    nestes_dict = {}
+    i = 0
+    for prefspec in prefspecs:
+        kw = prefspec.kw
+        speed = prefspec.rpm
+        price = MotorDB.objects.filter(kw=kw).filter(speed=speed).last()
+        if hasattr(price, 'prime_cost'):
+            prime = price.prime_cost
+            percentage = (prefspec.price / (prime))
+        else:
+            percentage = False
+            prime = 'N/A'
+        if percentage >= 1:
+            percentage_class = 'good-conditions'
+        elif percentage < 1:
+            percentage_class = 'bad-conditions'
+        else:
+            percentage_class = 'No class'
+        nestes_dict[i] = {
+            'obj': prefspec,
+            'sale_price': prime,
+            'percentage': percentage,
+            'percentage_class': percentage_class
+        }
+        i += 1
+
+    msg = 'Proforma was updated'
+
+    # return render(request, 'requests/admin_jemco/ypref/details.html', {
+    return render(request, 'requests/admin_jemco/ypref/index.html', {
+        'pref': xpref,
+        'prefspecs': prefspecs,
+        'nested': nestes_dict,
+        'prof_images': prof_images,
+        # 'msg': msg
+    })
+
+
+    # return render(request, 'requests/admin_jemco/ypref/details.html', {
+    #     'pref': xpref,
+    #     'prefspecs': xspec,
+    #     'msg': msg,
+    # })
+
+@login_required
+def pref_edit2(request, ypref_pk):
+    # 1- check for permissions
+    # 2 - find proforma and related images and specs
+    # 3 - make request image form
+    # 4 - prepare image names to use in template
+    # 5 - get the list of files from request
+    # 6 - if form is valid the save request and its related images
+    # 7 - render the template file
+
+    prof = models.Xpref.objects.get(pk=ypref_pk)
+    prof_images = prof.proffiles_set.all()
+    print(f'req id equals to: {prof.req_id}')
+    img_names = {}
+    for p in prof_images:
+        name = p.image.name
+        newname = name.split('/')
+        las = newname[-1]
+        img_names[p.pk] = las
+    # form = proforma_forms.ProfEditForm(request.POST or None, request.FILES or None, instance=prof)
+    form = forms.ProformaForm(request.user.pk, request.POST or None, request.FILES or None, instance=prof)
+    # form.req_id = prof.req_id
+    # form = forms.ProformaForm(request.POST or None, request.FILES or None)
+    img_form = proforma_forms.ProfFileForm(request.POST, request.FILES)
+    files = request.FILES.getlist('image')
+    fv = form.is_valid()
+    fvi = img_form.is_valid()
+    print(f'fv is: {fv}')
+    print(f'fvi is: {fvi}')
+    if form.is_valid() and img_form.is_valid():
+        prof_item = form.save(commit=False)
+        prof_item.owner = request.user
+        prof_item.req_id = prof.req_id
+        prof_item.number = prof.number
+        prof_item.save()
+        for f in files:
+            file_instance = models.ProfFiles(image=f, prof=prof_item)
+            file_instance.save()
+        return redirect('pref_index')
+
+    return render(request, 'requests/admin_jemco/ypref/proforma_form.html', {
+        'form': form,
+        'prof_file': img_form,
+        'prof_images': prof_images,
+        'img_names': img_names
+    })
+

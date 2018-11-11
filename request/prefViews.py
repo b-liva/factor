@@ -1,29 +1,16 @@
-import json
-
 from django.contrib import messages
-from django.contrib.humanize.templatetags.humanize import intcomma
-from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
+from django.shortcuts import render, redirect
 
-import request.functions as funcs
+import request.templatetags.functions as funcs
 # from request.functions import has_perm_or_is_owner
 # from fund.views import has_perm_or_is_owner
 
-from request.views import allRequests, find_all_obj
 from .models import Requests
 from .models import ReqSpec
-from .models import Prefactor
-from .models import PrefactorVerification
 from .models import PrefSpec
 from .models import Xpref
-from pricedb.models import PriceDb
-from pricedb.models import MotorDB
 
-
-from .models import Payment
-from .models import XprefVerf
-from customer.models import Customer
+from request.forms import forms
 from django.contrib.auth.decorators import login_required
 
 
@@ -97,87 +84,6 @@ def pref_insert(request):
     return redirect('pref_form')
 
 
-# @login_required
-def pref_index(request):
-    prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date')
-    prefs = Xpref.objects.all()
-    print(len(prefs))
-    return render(request, 'requests/admin_jemco/ypref/index.html', {
-        'prefs': prefs
-    })
-
-
-@login_required
-def pref_find(request):
-    pref = Xpref.objects.get(number=request.POST['pref_no'])
-    return redirect('pref_details', ypref_pk=pref.pk)
-
-
-@login_required
-def pref_details(request, ypref_pk):
-    spec_total = 0
-    proforma_total = 0
-    sales_total = 0
-    percentage = 0
-    total_percentage = 0
-    pref = Xpref.objects.get(pk=ypref_pk)
-    prefspecs = pref.prefspec_set.all()
-
-    nestes_dict = {}
-    i = 0
-    for prefspec in prefspecs:
-
-        print("**" + str(prefspec.qty) + "**")
-        kw = prefspec.kw
-        speed = prefspec.rpm
-        price = MotorDB.objects.filter(kw=kw).filter(speed=speed).last()
-        print(price.sale_price)
-        proforma_total += prefspec.qty * prefspec.price
-        if price.prime_cost:
-            sales_total += prefspec.qty * price.prime_cost
-            percentage = (prefspec.price/(price.prime_cost))
-        if percentage >= 1:
-            percentage_class = 'good-conditions'
-        else:
-            percentage_class = 'bad-conditions'
-        nestes_dict[i] = {
-            'obj': prefspec,
-            'sale_price': price.prime_cost,
-            'percentage': percentage,
-            'percentage_class': percentage_class,
-            'spec_total': prefspec.qty * prefspec.price
-        }
-        i += 1
-        if price.prime_cost:
-            total_percentage = proforma_total/sales_total
-    if total_percentage >= 1:
-        total_percentage_class = 'good-conditions'
-    else:
-        total_percentage_class = 'bad-conditions'
-    return render(request, 'requests/admin_jemco/ypref/details.html', {
-        'pref': pref,
-        'prefspecs': prefspecs,
-        'nested': nestes_dict,
-        'proforma_total': proforma_total,
-        'sales_total': sales_total,
-        'total_percentage': total_percentage,
-        'total_percentage_class': total_percentage_class,
-    })
-
-
-@login_required
-def pref_delete(request, ypref_pk):
-    pref = Xpref.objects.get(pk=ypref_pk)
-    can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_xpref', pref.req_id)
-
-    if not can_del:
-        messages.error(request, 'You have not enough access')
-        return redirect('errorpage')
-    pref.delete()
-    return redirect('pref_index')
-
-
-
 @login_required
 def pref_edit_form(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
@@ -187,61 +93,12 @@ def pref_edit_form(request, ypref_pk):
         messages.error(request, 'You have not enough access')
         return redirect('errorpage')
     prof_specs = proforma.prefspec_set.all()
+    print(proforma)
+    print(prof_specs)
     return render(request, 'requests/admin_jemco/ypref/edit_form.html', {
         'proforma': proforma,
         'prof_specs': prof_specs
     })
-
-
-@login_required
-def pref_edit(request, ypref_pk):
-    xpref = Xpref.objects.get(pk=ypref_pk)
-    spec_prices = request.POST.getlist('price')
-    xspec = xpref.prefspec_set.all()
-    x = 0
-    for item in xspec:
-        item.price = spec_prices[x]
-        item.save()
-        x += 1
-    prefspecs = xpref.prefspec_set.all()
-    nestes_dict = {}
-    i = 0
-    for prefspec in prefspecs:
-        kw = prefspec.kw
-        speed = prefspec.rpm
-        price = MotorDB.objects.filter(kw=kw).filter(speed=speed).last()
-        percentage = (prefspec.price / (price.prime_cost))
-        if percentage >= 1:
-            percentage_class = 'good-conditions'
-        else:
-            percentage_class = 'bad-conditions'
-        nestes_dict[i] = {
-            'obj': prefspec,
-            'sale_price': price.prime_cost,
-            'percentage': percentage,
-            'percentage_class': percentage_class
-        }
-        i += 1
-
-    msg = 'Proforma was updated'
-
-    return render(request, 'requests/admin_jemco/ypref/details.html', {
-        'pref': xpref,
-        'prefspecs': prefspecs,
-        'nested': nestes_dict,
-        'msg': msg
-    })
-
-
-
-
-
-
-    # return render(request, 'requests/admin_jemco/ypref/details.html', {
-    #     'pref': xpref,
-    #     'prefspecs': xspec,
-    #     'msg': msg,
-    # })
 
 
 @login_required
@@ -254,3 +111,38 @@ def xpref_link(request, xpref_id):
     })
 
 
+@login_required
+def prof_spec_form(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    req = proforma.req_id
+    reqspecs = req.reqspec_set.all()
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
+    if not can_add:
+        messages.error(request, 'You have not enough access')
+        return redirect('errorpage')
+
+    if request.method == 'POST':
+        print('spec02')
+
+        # form = forms.ProfSpecForm(request.POST, request.user)
+        form = forms.ProfSpecForm(request.POST)
+        if form.is_valid():
+            print('form is valid')
+
+            spec = form.save(commit=False)
+            spec.xpref_id = proforma
+            spec.save()
+            print('saved')
+            # return redirect('prof_spec_form', ypref_pk=proforma.pk)
+            return redirect('pref_insert_spec_form', ypref_pk=proforma.pk)
+        else:
+            print('form is not valid')
+    else:
+        form = forms.ProfSpecForm(request.POST)
+
+    return render(request, 'requests/admin_jemco/ypref/proforma_specs.html', {
+        'form': form,
+        'proforma': proforma,
+        'req_obj': req,
+        'reqspec': reqspecs
+    })

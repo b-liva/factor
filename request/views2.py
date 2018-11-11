@@ -1,28 +1,42 @@
-import json
-
-from django.contrib.humanize.templatetags.humanize import intcomma
 from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.contrib import messages
 
-
 from request.views import allRequests, find_all_obj
 from .models import Requests
-from .models import ReqSpec
-from .models import Prefactor
-from .models import PrefactorVerification
-from .models import PrefSpec
 from .models import Xpref
 from .models import Payment
-from .models import XprefVerf
+from . import models
 from customer.models import Customer
 from django.contrib.auth.decorators import login_required
-import request.functions as funcs
+import request.templatetags.functions as funcs
+from request.forms import forms
 
-from . import views
 
 # Create your views here.
+
+@login_required
+def project_type_form(request):
+
+    if request.method == 'POST':
+        form = forms.ProjectTypeForm(request.POST)
+        project_type = form.save(commit=False)
+        project_type.save()
+        return redirect('projects_type_index')
+    else:
+        form = forms.ProjectTypeForm()
+    return render(request, 'requests/admin_jemco/project_type/form.html', {
+        'form': form,
+    })
+
+
+@login_required
+def projects_type_index(request):
+    all_project_types = models.ProjectType.objects.all()
+    return render(request, 'requests/admin_jemco/project_type/index.html', {
+        'projects': all_project_types,
+    })
 
 
 @login_required
@@ -37,6 +51,36 @@ def request_form(request):
     return render(request, 'requests/admin_jemco/yrequest/form.html', {
         'req': req,
         'customers': customers,
+    })
+
+
+@login_required
+def req_form(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
+    if not can_add:
+        messages.error(request, 'Sorry, You need some priviliges to do this.')
+        return redirect('errorpage')
+    file_instance = forms.RequestFileForm()
+
+    if request.method == 'POST':
+        form = forms.RequestFrom(request.POST or None, request.FILES or None)
+        img_form = forms.RequestFileForm(request.POST, request.FILES)
+        files = request.FILES.getlist('image')
+        if form.is_valid() and img_form.is_valid():
+            req_item = form.save(commit=False)
+            req_item.owner = request.user
+            req_item.save()
+            for f in files:
+                file_instance = models.RequestFiles(image=f, req=req_item)
+                file_instance.save()
+            return redirect('spec_form', req_pk=req_item.pk)
+    else:
+        print('request is GET')
+        form = forms.RequestFrom()
+        file_instance = forms.RequestFileForm()
+    return render(request, 'requests/admin_jemco/yrequest/req_form.html', {
+        'form': form,
+        'req_img': file_instance
     })
 
 
@@ -93,11 +137,13 @@ def request_read(request, request_pk):
         return redirect('errorpage')
 
     reqspecs = req.reqspec_set.all()
+    req_images = req.requestfiles_set.all()
     kw = total_kw(request_pk)
 
     return render(request, 'requests/admin_jemco/yrequest/details.html', {
         'request': req,
         'reqspecs': reqspecs,
+        'req_images': req_images,
         'total_kw': kw
     })
 
@@ -136,107 +182,8 @@ def pref_insert(request):
     return render(request, 'test.html', {'is_add': True})
 
 
-# add payment to the prefactor
-@login_required
-def payment_form(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
-    if not can_add:
-        messages.error(request, 'Sorry, No way to access')
-        return redirect('errorpage')
-    reqs, xprefs, xpayments = find_all_obj()
-    return render(request, 'requests/admin_jemco/ypayment/form.html', {
-        'reqs': reqs,
-        'xprefs': xprefs,
-        'xpayments': xpayments
-    })
 
 
-@login_required
-def payment_insert(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
-    if not can_add:
-        messages.error(request, 'Sorry, No way to access')
-        return redirect('errorpage')
-
-    xpref = Xpref.objects.get(number=request.POST['xpref_no'])
-    payment = Payment()
-    payment.xpref_id = xpref
-    payment.amount = request.POST['amount']
-    payment.number = request.POST['number']
-    payment.date_fa = request.POST['date_fa']
-    payment.summary = request.POST['summary']
-    payment.owner = request.user
-    payment.customer = xpref.req_id.customer
-    payment.save()
-    msg = 'payment added successfully'
-
-    reqs, xprefs, xpayments = find_all_obj()
-
-    payments = Payment.objects.all()
-    return render(request, 'requests/admin_jemco/ypayment/index.html', {
-        'msg': msg,
-        'reqs': reqs,
-        'xprefs': xprefs,
-        'xpayments': xpayments,
-        'payments': payments
-    })
-
-
-@login_required
-def payment_index(request):
-    payments = Payment.objects.all()
-    pref_sum = 0
-    sum = 0
-
-    for payment in payments:
-        for spec in payment.xpref_id.prefspec_set.all():
-            pref_sum += spec.price
-        sum += payment.amount
-    debt = sum - pref_sum
-    debt_percent = debt / pref_sum
-    return render(request, 'requests/admin_jemco/ypayment/index.html', {
-        'payments': payments,
-        'amount_sum': sum,
-        'pref_sum': pref_sum,
-        'debt': debt,
-        'debt_percent': debt_percent,
-    })
-
-
-@login_required
-def payment_find(request):
-    payment = Payment.objects.get(number=request.POST['payment_no'])
-    return redirect('payment_details', ypayment_pk=payment.pk)
-
-
-@login_required
-def payment_details(request, ypayment_pk):
-    payment = Payment.objects.get(pk=ypayment_pk)
-    return render(request, 'requests/admin_jemco/ypayment/payment_details.html', {'payment': payment})
-
-
-@login_required
-def payment_delete(request, ypayment_pk):
-    payment = Payment.objects.get(pk=ypayment_pk)
-    can_delete = funcs.has_perm_or_is_owner(request.user, 'request.delete_payment', payment)
-    if not can_delete:
-        messages.error(request, 'No access!')
-        return redirect('errorpage')
-    payment.delete()
-    payments = Payment.objects.all()
-    msg = 'payment deleted successfully...'
-    # return render(request, 'requests/admin_jemco/ypayment/index.html', {'payments': payments, 'msg':msg})
-    return redirect('payment_index')
-
-
-@login_required
-def payment_edit(request, ypayment_pk):
-    payment = Payment.objects.get(pk=ypayment_pk)
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_payment', payment)
-    if not can_edit:
-        messages.error(request, 'No access for you')
-        return redirect('errorpage')
-    return HttpResponse('payment payment_edit')
 
 
 # add spec to the prefactor
@@ -298,3 +245,90 @@ def total_kw(req_id):
         total_kw += reqspec.kw * reqspec.qty
     return total_kw
 
+
+
+
+@login_required
+def request_edit_form(request, request_pk):
+
+    # 1- check for permissions
+    # 2 - find request and related images
+    # 3 - make request image form
+    # 4 - prepare image name to use in template
+    # 5 - get the list of files from request
+    # 6 - if form is valid the save request and its related images
+    # 7 - render the template file
+
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
+    if not can_add:
+        messages.error(request, 'Sorry, You need some priviliges to do this.')
+        return redirect('errorpage')
+
+    req = Requests.objects.get(pk=request_pk)
+    req_images = req.requestfiles_set.all()
+    img_names = {}
+    for r in req_images:
+        name = r.image.name
+        newname = name.split('/')
+        las = newname[-1]
+        img_names[r.pk] = las
+    form = forms.RequestFrom(request.POST or None, request.FILES or None, instance=req)
+    img_form = forms.RequestFileForm(request.POST, request.FILES)
+    files = request.FILES.getlist('image')
+    if form.is_valid() and img_form.is_valid():
+        req_item = form.save(commit=False)
+        req_item.owner = request.user
+        req_item.save()
+        for f in files:
+            file_instance = models.RequestFiles(image=f, req=req_item)
+            file_instance.save()
+        return redirect('request_index')
+
+    return render(request, 'requests/admin_jemco/yrequest/req_form.html', {
+        'form': form,
+        'req_img': img_form,
+        'req_images': req_images,
+        'img_names': img_names
+    })
+
+
+@login_required
+def image_delete(request, img_pk):
+
+    img = models.RequestFiles.objects.get(pk=img_pk)
+    req = img.req
+    imgForm = forms.RequestFileForm(instance=img)
+    imgForm.delete()
+    return True
+
+@login_required
+def img_del(request, img_pk):
+    print(request)
+    # with ajax
+    # image = models.RequestFiles.objects.get(pk=request.POST['id'])
+
+    # withour ajax
+    image = models.RequestFiles.objects.get(pk=img_pk)
+    req = image.req
+
+    # auto_delete_file_on_delete(sender=,instance=image)
+
+
+    image.delete()
+
+    return redirect('request_edit_form', request_pk=req.pk)
+
+
+@login_required
+def prof_img_del(request, img_pk):
+    # withour ajax
+    image = models.ProfFiles.objects.get(pk=img_pk)
+    prof = image.prof
+
+    image.delete()
+
+    return redirect('pref_edit2', ypref_pk=prof.pk)
+
+
+def payment_form2(request):
+    return HttpResponse('hello world')

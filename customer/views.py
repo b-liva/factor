@@ -1,7 +1,5 @@
-from django.contrib.humanize.templatetags.humanize import intcomma
 from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
+from django.shortcuts import render, redirect
 from .models import Customer
 from .models import Type
 from request.models import Requests
@@ -13,7 +11,7 @@ from django.contrib import messages
 from customer import forms
 
 
-import request.functions as funcs
+import request.templatetags.functions as funcs
 from django.views import View
 
 class TestView(View):
@@ -79,6 +77,7 @@ def customer_form(request):
     if not can_add:
         messages.error(request, 'Sorry, No access for you')
         return redirect('errorpage')
+
     customer_types = Type.objects.all()
     customer_form = forms.CustomerForm()
     return render(request, 'customer/customer.html', {
@@ -88,11 +87,40 @@ def customer_form(request):
 
 
 @login_required
+def cform(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'customer.add_customer')
+    if not can_add:
+        messages.error(request, 'Sorry, No access for you')
+        return redirect('errorpage')
+
+    if request.method == 'POST':
+        customer_form = forms.CustomerForm(request.POST)
+
+        if customer_form.is_valid():
+            customer_item = customer_form.save(commit=False)
+            customer_item.owner = request.user
+            customer_item.save()
+            return redirect('customer_index')
+    else:
+        customer_form = forms.CustomerForm()
+        # customer_form.owner = request.user
+    return render(request, 'customer2/customer_form.html', {'form': customer_form})
+
+
+@login_required
 def customer_insert(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'customer.add_customer')
     if not can_add:
         messages.error(request, 'Sorry, No access for you')
         return redirect('errorpage')
+    # print('001')
+    # form = forms.CustomerForm(request.POST)
+    # if form.is_valid():
+    #     print('form is valid')
+    #     form.save(commit=True)
+    #     return customer_index(request)
+    # print('002')
+
     name = request.POST['name']
     code = request.POST['code']
     # if not name or not code:
@@ -105,14 +133,14 @@ def customer_insert(request):
         return redirect('customer_form')
     all_customers = Customer.objects.all()
     customer_types = Type.objects.all()
-    customer_type = Type.objects.get(pk=request.POST['type'])
+    # customer_type = Type.objects.get(pk=request.POST['type'])
     customer_to_insert = Customer()
-    customer_to_insert.name = name
-    customer_to_insert.code = code
+    # customer_to_insert.name = name
+    # customer_to_insert.code = code
     # if request.POST['pub_date']:
     #     customer_to_insert.pub_date = request.POST['pub_date']
-    customer_to_insert.date2 = request.POST['date2']
-    customer_to_insert.type = customer_type
+    # customer_to_insert.date2 = request.POST['date2']
+    # customer_to_insert.type = customer_type
     customer_to_insert.owner = request.user
     customer_to_insert.save()
     msg = 'Customer added successfully'
@@ -132,10 +160,12 @@ def customer_index(request):
     customers = Customer.objects.all()
     return render(request, 'customer/index.html', {'customers': customers})
 
+
 @login_required
 def customer_find(request):
     customer = Customer.objects.get(code=request.POST['customer_no'])
     return redirect('customer_read', customer_pk=customer.pk)
+
 
 @login_required
 def customer_read2(request, customer_pk):
@@ -165,6 +195,7 @@ def customer_read2(request, customer_pk):
         'some': some,
     })
 
+
 @login_required
 def customer_edit(request, customer_pk):
     if not Customer.objects.filter(pk=customer_pk):
@@ -179,6 +210,7 @@ def customer_edit(request, customer_pk):
     pass
 
 
+@login_required
 def customer_delete(request, customer_pk):
     if not Customer.objects.filter(pk=customer_pk):
         messages.error(request, 'No such Customer')
@@ -214,7 +246,6 @@ def type_insert(request):
     return HttpResponse('customer type insertion goes here.')
 
 
-
 @login_required
 def type_index(request):
     pass
@@ -248,3 +279,14 @@ def type_delete(request, type_pk):
     type.delete()
     return redirect('type_index')
 
+
+@login_required
+def customer_edit_form(request, customer_pk):
+    customer_instance = Customer.objects.get(pk=customer_pk)
+    form = forms.CustomerForm(request.POST or None, instance=customer_instance)
+
+    if form.is_valid():
+        form.save()
+    return render(request, 'customer2/customer_form.html', {
+        'form': form,
+    })

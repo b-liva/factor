@@ -8,6 +8,19 @@ from django import forms
 # Create your models here.
 
 
+def default_customer_code():
+    last_customer = Customer.objects.all().order_by('pk').last()
+    last_id = last_customer.pk
+    print(last_id)
+    customer = Customer.objects.filter(pk=last_id)
+    while customer is not None:
+        last_id += 1
+        customer = Customer.objects.filter(code=last_id)
+        if not customer:
+            break
+    return last_id
+
+
 class Type(models.Model):
     name = models.TextField()
     code = models.IntegerField()
@@ -19,7 +32,7 @@ class Type(models.Model):
 
 class Customer(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    code = models.IntegerField()
+    code = models.IntegerField(unique=True, default=default_customer_code, blank=True)
     name = models.CharField(max_length=50)
     type = models.ForeignKey(Type, on_delete=models.DO_NOTHING)
     # type = models.(choices=types)
@@ -33,4 +46,7 @@ class Customer(models.Model):
             ('read_customer', 'Can read a customer details'),
             ('index_customer', 'Can see list of customers'),
         )
+
+    def __str__(self):
+        return '%s' % self.name
 

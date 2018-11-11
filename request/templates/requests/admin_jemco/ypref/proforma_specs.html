@@ -1,0 +1,94 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="card mb-9 shadow-sm">
+                <div class="card-body">
+                    <div>
+                        <p><b>Request Form:</b></p>
+                        <p>
+                            <span>id: {{ req_obj.pk }}</span>
+                            <span>- #: {{ req_obj.number }}</span>
+                            <span>- Date: {{ req_obj.pub_date }}</span>
+                        </p>
+                        <hr>
+
+                    </div>
+                    <div>
+                        <p><b>Spec:</b></p>
+                        <form action="{% url 'pref_insert_spec_form' ypref_pk=proforma.pk %}" method="POST">
+{#                        <form  method="POST">#}
+                            {% csrf_token %}
+{#                            <div class="col-md-3">#}
+{#                                <div>Prefactor No<br>#}
+{#                                    <input type="number" name="xpref" value="" required class="form-control"><br></div>#}
+{#                            </div>#}
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="row">
+                                    Prof. Date<input id="date_fa" name="date_fa"><br>
+                                    Exp. Date<input id="exp_date_fa" name="exp_date_fa">
+                                </div>
+                            </div>
+
+
+                            <table class="withBorder tableFull">
+                                <tbody>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>QTY</th>
+                                    <th>KW</th>
+                                    <th>VOLTAGE</th>
+                                    <th>RPM</th>
+                                    <th>IP</th>
+                                    <th>IC</th>
+                                    <th>SUMMARY</th>
+                                    <th>PRICE</th>
+                                    <th>ACTION</th>
+                                </tr>
+                                {% for spec in reqspec %}
+                                    <tr>
+                                        <td>{{ spec.id }}</td>
+                                        <td>{{ spec.type }}</td>
+                                        <td><input name="qty" type="number" value="{{ spec.qty }}"></td>
+                                        <td>{{ spec.kw }}</td>
+                                        <td>{{ spec.voltage }}</td>
+                                        <td>{{ spec.rpm }}</td>
+                                        <td>{{ spec.ip }}</td>
+                                        <td>{{ spec.ic }}</td>
+                                        <td>{{ spec.summary }}</td>
+                                        <td>
+                                            <input type="number" name="price" value="{{ spec.price }}">
+                                            <input type="hidden" name="spec_id" value="{{ spec.id }}">
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'del_spec' spec_id=spec.pk %}">
+                                                <button class="btn btn-primary btn-sm">Delete</button>
+                                            </a>
+
+                                            <button class="btn btn-primary btn-sm">Edit</button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <input type="hidden" name="req_no" value="{{ req_id }}"><br>
+                            <input class="btn btn-primary btn-sm" type="submit" value="Save" name="done">
+                            <a class="btn btn-danger btn-sm" href="{% url 'pref_index' %}">Cancel</a>
+                        </form>
+                        <hr>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+

@@ -2,16 +2,62 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85c93896-8beb-4081-82f4-1287b6871527" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/request/templates/requests/base_minimal.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/customer/templates/customer2/customer_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fund/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fund/templates/fund/expense/expense_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fund/templates/fund/fund_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/forms/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/forms/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/forms/payment_forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/forms/proforma_forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/project_type/form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/project_type/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/proforma_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/proforma_specs.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/search_index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/spec_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/req_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templatetags/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/urls/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/urls/req_urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/urls/url.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/viewsFolder/paymentViews.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/viewsFolder/proformaViews.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/viewsFolder/requestViews.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/factor.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/factor.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/templates/accounts/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/templates/accounts/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/templates/accounts/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/templates/accounts/signup.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/customer/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/customer/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/customer/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/customer/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/templates/customer/customer.html" beforeDir="false" afterPath="$PROJECT_DIR$/customer/templates/customer/customer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customer/templates/customer/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/customer/templates/customer/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customer/url.py" beforeDir="false" afterPath="$PROJECT_DIR$/customer/url.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/customer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/customer/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/factor/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/factor/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/factor/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/factor/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fund/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/fund/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fund/templates/fund/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/fund/templates/fund/details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fund/templates/fund/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/fund/templates/fund/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fund/url.py" beforeDir="false" afterPath="$PROJECT_DIR$/fund/url.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fund/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/fund/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pricedb/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/pricedb/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/forms.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/templatetags/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/prefViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/prefViews.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/reqSpecViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/reqSpecViews.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js" beforeDir="false" afterPath="$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/page_elements/jumbotron.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/page_elements/jumbotron.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/page_elements/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/page_elements/navbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/url.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/views2.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/views2.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -187,7 +233,7 @@
     <session id="-1485093887">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="19" />
+          <entry key="project.closed" value="20" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.26" value="1" />
           <entry key="project.open.time.3" value="1" />
@@ -195,6 +241,7 @@
           <entry key="project.open.time.34" value="1" />
           <entry key="project.open.time.35" value="1" />
           <entry key="project.open.time.36" value="1" />
+          <entry key="project.open.time.37" value="1" />
           <entry key="project.open.time.38" value="1" />
           <entry key="project.open.time.41" value="3" />
           <entry key="project.open.time.43" value="2" />
@@ -204,119 +251,215 @@
           <entry key="project.open.time.53" value="1" />
           <entry key="project.open.time.58" value="1" />
           <entry key="project.open.time.81" value="1" />
-          <entry key="project.opened" value="19" />
+          <entry key="project.opened" value="20" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gitignore" value="1" />
-          <entry key="html" value="37" />
+          <entry key="html" value="45" />
           <entry key="js" value="3" />
           <entry key="json" value="1" />
-          <entry key="py" value="79" />
+          <entry key="py" value="85" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="HTML" value="37" />
+          <entry key="HTML" value="45" />
           <entry key="JSON" value="1" />
           <entry key="JavaScript" value="3" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="79" />
+          <entry key="Python" value="85" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Django Console" value="95" />
           <entry key="gitignore" value="16" />
-          <entry key="html" value="2916" />
+          <entry key="html" value="3045" />
           <entry key="js" value="793" />
           <entry key="json" value="1" />
-          <entry key="py" value="5578" />
+          <entry key="py" value="7519" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="2916" />
+          <entry key="HTML" value="3045" />
           <entry key="JSON" value="1" />
           <entry key="JavaScript" value="793" />
           <entry key="PLAIN_TEXT" value="16" />
-          <entry key="Python" value="5673" />
+          <entry key="Python" value="7614" />
         </counts>
       </usages-collector>
     </session>
     <session id="-714410576">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="31" />
+          <entry key="project.closed" value="36" />
           <entry key="project.open.time.113" value="1" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.16" value="1" />
           <entry key="project.open.time.20" value="2" />
           <entry key="project.open.time.23" value="1" />
           <entry key="project.open.time.25" value="1" />
-          <entry key="project.open.time.28" value="1" />
+          <entry key="project.open.time.28" value="2" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.30" value="1" />
           <entry key="project.open.time.31" value="1" />
           <entry key="project.open.time.33" value="1" />
-          <entry key="project.open.time.35" value="1" />
+          <entry key="project.open.time.34" value="1" />
+          <entry key="project.open.time.35" value="2" />
           <entry key="project.open.time.36" value="2" />
           <entry key="project.open.time.38" value="1" />
           <entry key="project.open.time.39" value="1" />
           <entry key="project.open.time.40" value="4" />
           <entry key="project.open.time.42" value="1" />
-          <entry key="project.open.time.44" value="3" />
+          <entry key="project.open.time.44" value="4" />
           <entry key="project.open.time.45" value="1" />
           <entry key="project.open.time.46" value="1" />
           <entry key="project.open.time.51" value="1" />
           <entry key="project.open.time.54" value="1" />
+          <entry key="project.open.time.55" value="1" />
           <entry key="project.open.time.59" value="1" />
           <entry key="project.open.time.68" value="1" />
+          <entry key="project.open.time.73" value="1" />
+          <entry key="project.open.time.74" value="1" />
           <entry key="project.open.time.75" value="1" />
           <entry key="project.open.time.78" value="1" />
           <entry key="project.open.time.81" value="1" />
           <entry key="project.open.time.84" value="1" />
-          <entry key="project.opened" value="35" />
+          <entry key="project.opened" value="42" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="5" />
           <entry key="gitignore" value="1" />
-          <entry key="html" value="210" />
+          <entry key="html" value="243" />
           <entry key="jpg" value="2" />
           <entry key="js" value="9" />
-          <entry key="py" value="309" />
+          <entry key="pstat" value="1" />
+          <entry key="py" value="365" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="5" />
-          <entry key="HTML" value="210" />
+          <entry key="HTML" value="243" />
           <entry key="Image" value="2" />
           <entry key="JavaScript" value="9" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="309" />
+          <entry key="Profiler Session" value="1" />
+          <entry key="Python" value="365" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Django Console" value="688" />
+          <entry key="Django Console" value="804" />
           <entry key="css" value="150" />
           <entry key="gitignore" value="35" />
-          <entry key="html" value="12437" />
+          <entry key="html" value="13013" />
           <entry key="js" value="591" />
-          <entry key="py" value="29645" />
+          <entry key="py" value="34703" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSS" value="150" />
-          <entry key="HTML" value="12437" />
+          <entry key="HTML" value="13013" />
           <entry key="JavaScript" value="591" />
           <entry key="PLAIN_TEXT" value="35" />
-          <entry key="Python" value="30333" />
+          <entry key="Python" value="35507" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="-832952279">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="9" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.13" value="1" />
+          <entry key="project.open.time.25" value="1" />
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.30" value="1" />
+          <entry key="project.open.time.37" value="1" />
+          <entry key="project.open.time.44" value="1" />
+          <entry key="project.open.time.51" value="2" />
+          <entry key="project.open.time.56" value="1" />
+          <entry key="project.open.time.57" value="1" />
+          <entry key="project.opened" value="11" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="Django Console" value="196" />
+          <entry key="dummy" value="1" />
+          <entry key="html" value="1234" />
+          <entry key="js" value="115" />
+          <entry key="py" value="7346" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="HTML" value="1234" />
+          <entry key="JavaScript" value="115" />
+          <entry key="PLAIN_TEXT" value="1" />
+          <entry key="Python" value="7542" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="html" value="49" />
+          <entry key="js" value="1" />
+          <entry key="py" value="111" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="HTML" value="49" />
+          <entry key="JavaScript" value="1" />
+          <entry key="Python" value="111" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="-1428456309">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="3" />
+          <entry key="project.open.time.44" value="1" />
+          <entry key="project.open.time.49" value="1" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="gitignore" value="1" />
+          <entry key="html" value="17" />
+          <entry key="pstat" value="1" />
+          <entry key="py" value="22" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="HTML" value="17" />
+          <entry key="PLAIN_TEXT" value="1" />
+          <entry key="Profiler Session" value="1" />
+          <entry key="Python" value="22" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="gitignore" value="8" />
+          <entry key="html" value="619" />
+          <entry key="py" value="3910" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="HTML" value="619" />
+          <entry key="PLAIN_TEXT" value="8" />
+          <entry key="Python" value="3910" />
         </counts>
       </usages-collector>
     </session>
@@ -327,88 +470,28 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/customer/views.py">
+        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="99" column="33" lean-forward="true" selection-start-line="99" selection-start-column="33" selection-end-line="99" selection-end-column="33" />
-              <folding>
-                <element signature="e#0#66#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="233">
+              <caret line="22" column="45" lean-forward="true" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/customer/templates/customer/customer.html">
+        <entry file="file://$PROJECT_DIR$/fund/url.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="37" lean-forward="true" selection-start-column="37" selection-end-column="37" />
-              <folding>
-                <element signature="e#485#587#0#HTML" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="72" lean-forward="true" selection-start-line="9" selection-start-column="72" selection-end-line="9" selection-end-column="72" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/request/templates/requests/base_minimal.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="11" lean-forward="true" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
+            <state relative-caret-position="128">
+              <caret line="25" column="31" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/motordb/forms.py">
+        <entry file="file://$PROJECT_DIR$/fund/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="31" column="49" lean-forward="true" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
-              <folding>
-                <element signature="e#0#24#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/customer/forms.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="28" column="42" selection-start-line="28" selection-start-column="42" selection-end-line="28" selection-end-column="42" />
-              <folding>
-                <element signature="e#0#24#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="556">
-              <caret line="92" column="27" lean-forward="true" selection-start-line="92" selection-start-column="27" selection-end-line="92" selection-end-column="27" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/customer/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="22" column="41" selection-start-line="22" selection-start-column="41" selection-end-line="22" selection-end-column="41" />
-              <folding>
-                <element signature="e#0#28#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="308">
+              <caret line="205" column="18" selection-start-line="205" selection-start-column="18" selection-end-line="205" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -425,36 +508,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>if request.POST['updating']:</find>
-      <find>login_requ</find>
-      <find>index</find>
-      <find>welcome</find>
-      <find>User</find>
-      <find>index.html</find>
-      <find>print</find>
-      <find>edit prof</find>
-      <find>owner</find>
-      <find>jamshid</find>
-      <find>Dr j</find>
-      <find>path</find>
-      <find>has</find>
-      <find>has_perm_or_is_owner</find>
-      <find>sales_total</find>
-      <find>request_form</find>
-      <find>pref_verification</find>
-      <find>upload_to</find>
-      <find>fund</find>
-      <find>load</find>
-      <find>font</find>
-      <find>date</find>
-      <find>zone</find>
-      <find>'createpage'</find>
-      <find>delete_</find>
-      <find>HttpResponse</find>
-      <find>You have not enough access</find>
-      <find>type</find>
-      <find>simple</find>
       <find>/simple</find>
+      <find>form =</find>
+      <find>url '</find>
+      <find>form2</find>
+      <find>prof</find>
+      <find>ProformaForm</find>
+      <find>insert</find>
+      <find>form</find>
+      <find>index</find>
+      <find>pref_index</find>
+      <find>expenseForm</find>
+      <find>ex_form</find>
+      <find>spec_form</find>
+      <find>choices</find>
+      <find>get</find>
+      <find>getlist</find>
+      <find>Edit spec</find>
+      <find>func</find>
+      <find>createpage</find>
+      <find>request_index</find>
+      <find>createpageall</find>
+      <find>as viewsFolder</find>
+      <find>pay_form</find>
+      <find>payment_insert</find>
+      <find>payment_index</find>
+      <find>payment_find</find>
+      <find>payment_details</find>
+      <find>payment_delete</find>
+      <find>col-md-6</find>
+      <find>payment_edit</find>
     </findStrings>
     <replaceStrings>
       <replace>pref_ver</replace>
@@ -486,57 +569,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/pricedb/views.py" />
-        <option value="$PROJECT_DIR$/factor/urls.py" />
-        <option value="$PROJECT_DIR$/templates/motordb/form_page.html" />
-        <option value="$PROJECT_DIR$/templates/motordb/index.html" />
-        <option value="$PROJECT_DIR$/motordb/url.py" />
-        <option value="$PROJECT_DIR$/motordb/models.py" />
-        <option value="$PROJECT_DIR$/motordb/views.py" />
-        <option value="$PROJECT_DIR$/templates/motordb/search.html" />
-        <option value="$PROJECT_DIR$/request/static/request/admin_jemco/css/font-awesome.min.css" />
-        <option value="$PROJECT_DIR$/motordb/forms.py" />
-        <option value="$PROJECT_DIR$/package-lock.json" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html" />
-        <option value="$PROJECT_DIR$/factor/settings.py" />
-        <option value="$PROJECT_DIR$/customer/templates/customer/details.html" />
-        <option value="$PROJECT_DIR$/customer/templates/customer/index.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/form.html" />
-        <option value="$PROJECT_DIR$/request/static/request/admin_jemco/css/style.css" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form2.html" />
-        <option value="$PROJECT_DIR$/request/prefViews.py" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/form.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_details.html" />
-        <option value="$PROJECT_DIR$/fund/models.py" />
-        <option value="$PROJECT_DIR$/fund/templates/fund/form.html" />
-        <option value="$PROJECT_DIR$/fund/templates/fund/expense/form.html" />
-        <option value="$PROJECT_DIR$/fund/views.py" />
-        <option value="$PROJECT_DIR$/request/views.py" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/top-summary.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" />
-        <option value="$PROJECT_DIR$/request/url.py" />
-        <option value="$PROJECT_DIR$/request/functions.py" />
-        <option value="$PROJECT_DIR$/customer/url.py" />
-        <option value="$PROJECT_DIR$/request/models.py" />
-        <option value="$PROJECT_DIR$/request/views2.py" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/form.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/spec_form.html" />
         <option value="$PROJECT_DIR$/request/reqSpecViews.py" />
+        <option value="$PROJECT_DIR$/pricedb/models.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/proforma_specs.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/search_index.html" />
+        <option value="$PROJECT_DIR$/request/prefViews.py" />
+        <option value="$PROJECT_DIR$/fund/templates/fund/fund_form.html" />
+        <option value="$PROJECT_DIR$/fund/url.py" />
+        <option value="$PROJECT_DIR$/fund/templates/fund/details.html" />
+        <option value="$PROJECT_DIR$/fund/templates/fund/expense/expense_form.html" />
+        <option value="$PROJECT_DIR$/fund/views.py" />
+        <option value="$PROJECT_DIR$/customer/templates/customer/index.html" />
+        <option value="$PROJECT_DIR$/fund/templates/fund/index.html" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/request/templates/requests/page_elements/jumbotron.html" />
-        <option value="$PROJECT_DIR$/accounts/templates/accounts/signup.html" />
-        <option value="$PROJECT_DIR$/accounts/templates/accounts/login.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/page_elements/navbar.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/page_elements/sipmle/navbar.html" />
-        <option value="$PROJECT_DIR$/request/templates/requests/base_minimal.html" />
-        <option value="$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js" />
-        <option value="$PROJECT_DIR$/customer/forms.py" />
-        <option value="$PROJECT_DIR$/customer/templates/tempFiles/c_form.html" />
-        <option value="$PROJECT_DIR$/customer/templates/customer/customer.html" />
-        <option value="$PROJECT_DIR$/customer/models.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/project_type/index.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/project_type/form.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html" />
         <option value="$PROJECT_DIR$/customer/views.py" />
+        <option value="$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js" />
+        <option value="$PROJECT_DIR$/factor/settings.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/details.html" />
+        <option value="$PROJECT_DIR$/request/functions.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/req_form.html" />
+        <option value="$PROJECT_DIR$/request/forms.py" />
+        <option value="$PROJECT_DIR$/request/forms/proforma_forms.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html" />
+        <option value="$PROJECT_DIR$/request/url.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" />
+        <option value="$PROJECT_DIR$/request/urls/prof_urls.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/proforma_form.html" />
+        <option value="$PROJECT_DIR$/request/viewsFolder/proformaViews.py" />
+        <option value="$PROJECT_DIR$/request/models.py" />
+        <option value="$PROJECT_DIR$/request/viewsFolder/requestViews.py" />
+        <option value="$PROJECT_DIR$/request/urls/req_urls.py" />
+        <option value="$PROJECT_DIR$/request/urls/old_url.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/pref_details.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html" />
+        <option value="$PROJECT_DIR$/request/views.py" />
+        <option value="$PROJECT_DIR$/factor/urls.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" />
+        <option value="$PROJECT_DIR$/request/urls/payment_urls2.py" />
+        <option value="$PROJECT_DIR$/request/urls/url.py" />
+        <option value="$PROJECT_DIR$/request/views2.py" />
+        <option value="$PROJECT_DIR$/request/urls/payment_urls.py" />
+        <option value="$PROJECT_DIR$/request/forms/payment_form.py" />
+        <option value="$PROJECT_DIR$/request/forms/__init__.py" />
+        <option value="$PROJECT_DIR$/request/forms/forms.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_form.html" />
+        <option value="$PROJECT_DIR$/request/viewsFolder/paymentViews.py" />
+        <option value="$PROJECT_DIR$/request/forms/payment_forms.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" />
       </list>
     </option>
   </component>
@@ -545,155 +628,6 @@
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
-  </component>
-  <component name="NodePackageJsonFileManager">
-    <packageJsonPaths>
-      <path value="$PROJECT_DIR$/node_modules/acorn-jsx/node_modules/acorn/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/acorn-jsx/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/acorn/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/ajv-keywords/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/ajv/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/ansi-escapes/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/ansi-regex/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/ansi-styles/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/argparse/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/array-union/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/array-uniq/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/arrify/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/babel-code-frame/node_modules/chalk/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/babel-code-frame/node_modules/strip-ansi/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/babel-code-frame/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/balanced-match/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/brace-expansion/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/buffer-from/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/caller-path/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/callsites/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/chalk/node_modules/ansi-styles/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/chalk/node_modules/supports-color/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/chalk/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/chardet/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/circular-json/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/cli-cursor/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/cli-width/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/co/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/color-convert/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/color-name/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/concat-map/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/concat-stream/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/core-util-is/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/cross-spawn/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/debug/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/deep-is/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/del/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/doctrine/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/escape-string-regexp/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/eslint-scope/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/eslint-visitor-keys/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/eslint/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/espree/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/esprima/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/esquery/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/esrecurse/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/estraverse/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/esutils/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/external-editor/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/fast-deep-equal/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/fast-json-stable-stringify/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/fast-levenshtein/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/figures/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/file-entry-cache/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/flat-cache/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/fs.realpath/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/functional-red-black-tree/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/glob/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/globals/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/globby/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/graceful-fs/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/has-ansi/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/has-flag/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/iconv-lite/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/ignore/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/imurmurhash/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/inflight/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/inherits/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/inquirer/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/is-fullwidth-code-point/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/is-path-cwd/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/is-path-in-cwd/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/is-path-inside/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/is-promise/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/is-resolvable/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/isarray/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/isexe/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/jalaali-js/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/jquery/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/js-tokens/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/js-yaml/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/json-schema-traverse/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/json-stable-stringify-without-jsonify/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/levn/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/lodash/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/lru-cache/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/mimic-fn/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/minimatch/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/minimist/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/mkdirp/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/ms/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/mute-stream/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/natural-compare/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/object-assign/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/once/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/onetime/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/optionator/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/os-tmpdir/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/path-is-absolute/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/path-is-inside/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/persian-date/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/persian-datepicker/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/pify/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/pinkie-promise/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/pinkie/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/pluralize/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/prelude-ls/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/process-nextick-args/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/progress/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/pseudomap/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/readable-stream/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/regexpp/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/require-uncached/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/resolve-from/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/restore-cursor/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/rimraf/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/run-async/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/rx-lite-aggregates/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/rx-lite/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/safe-buffer/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/safer-buffer/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/semver/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/shebang-command/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/shebang-regex/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/signal-exit/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/slice-ansi/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/sprintf-js/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/string-width/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/string_decoder/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/strip-ansi/node_modules/ansi-regex/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/strip-ansi/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/strip-json-comments/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/supports-color/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/table/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/text-table/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/through/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/tmp/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/type-check/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/typedarray/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/util-deprecate/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/which/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/wordwrap/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/wrappy/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/write/package.json" />
-      <path value="$PROJECT_DIR$/node_modules/yallist/package.json" />
-    </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
@@ -707,69 +641,205 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
             <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
             </path>
             <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="customer" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
             <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="factor" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
             <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="requests" type="462c0819:PsiDirectoryNode" />
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="fund" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
             <path>
-              <item name="factor" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="requests" type="462c0819:PsiDirectoryNode" />
-              <item name="page_elements" type="462c0819:PsiDirectoryNode" />
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="fund" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="fund" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="fund" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="requests" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="viewsFolder" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factorV2" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factorV2" type="462c0819:PsiDirectoryNode" />
+              <item name="factor" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factorV2" type="462c0819:PsiDirectoryNode" />
+              <item name="request" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factorV2" type="462c0819:PsiDirectoryNode" />
+              <item name="request" type="462c0819:PsiDirectoryNode" />
+              <item name="forms" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factorV2" type="462c0819:PsiDirectoryNode" />
+              <item name="request" type="462c0819:PsiDirectoryNode" />
+              <item name="urls" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factorV2" type="462c0819:PsiDirectoryNode" />
+              <item name="request" type="462c0819:PsiDirectoryNode" />
+              <item name="viewsFolder" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
+              <item name="Lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
+              <item name="Lib" type="462c0819:PsiDirectoryNode" />
+              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
+              <item name="Lib" type="462c0819:PsiDirectoryNode" />
+              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
+              <item name="django" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
+              <item name="Lib" type="462c0819:PsiDirectoryNode" />
+              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
+              <item name="django" type="462c0819:PsiDirectoryNode" />
+              <item name="contrib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
+              <item name="Lib" type="462c0819:PsiDirectoryNode" />
+              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
+              <item name="django" type="462c0819:PsiDirectoryNode" />
+              <item name="contrib" type="462c0819:PsiDirectoryNode" />
+              <item name="humanize" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
+              <item name="Lib" type="462c0819:PsiDirectoryNode" />
+              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
+              <item name="django" type="462c0819:PsiDirectoryNode" />
+              <item name="contrib" type="462c0819:PsiDirectoryNode" />
+              <item name="humanize" type="462c0819:PsiDirectoryNode" />
+              <item name="templatetags" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
-    <property name="SearchEverywhereHistoryKey" value="leftmen&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;payment&#9;null&#9;null&#10;jemco.js&#9;FILE&#9;file://G:/factor/request/static/request/admin_jemco/js/jemco/jemco.js&#10;setting&#9;FILE&#9;file://G:/factor/factor/settings.py&#10;lefmen&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;lef&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;menu&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;base&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/admin_base.html&#10;left&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;dash&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/dashboard.html&#10;index&#9;FILE&#9;file://G:/factor/fund/templates/fund/index.html&#10;url&#9;FILE&#9;file://I:/factor/factor/urls.py&#10;form&#9;FILE&#9;file://I:/factor/request/templates/requests/admin_jemco/ypref/form.html&#10;setti&#9;FILE&#9;file://I:/factor/factor/settings.py&#10;models&#9;FILE&#9;file://I:/factor/request/models.py&#10;login&#9;FILE&#9;file://I:/factor/accounts/templates/accounts/login.html&#10;init&#9;FILE&#9;file://G:/factor/prefactor/__init__.py&#10;settings&#9;null&#9;null&#10;read&#9;FILE&#9;file://G:/factor/customer/templates/customer/read.html&#10;details&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/ypayment/payment_details.html&#10;01&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/prefactor/create_spec_pref01.html&#10;prefactors&#9;FILE&#9;file://I:/factor/request/templates/prefactors&#10;model&#9;FILE&#9;file://G:/factor/request/models.py&#10;adminbas&#9;FILE&#9;file://C:/Users/liva/Desktop/Scs/2/dev files/django/factor/request/templates/requests/admin_jemco/admin_base.html&#10;base.&#9;FILE&#9;file://C:/Users/liva/Desktop/Scs/2/dev files/django/factor/request/templates/requests/admin_jemco/admin_base.html" />
+    <property name="SearchEverywhereHistoryKey" value="left&#9;FILE&#9;file://G:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;leftMen&#9;FILE&#9;file://G:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;jemco.js&#9;FILE&#9;file://G:/factorV2/request/static/request/admin_jemco/js/jemco/jemco.js&#10;leftmenu&#9;FILE&#9;file://I:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;lef&#9;FILE&#9;file://G:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;leftmen&#9;FILE&#9;file://I:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;leftme&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;payment&#9;null&#9;null&#10;setting&#9;FILE&#9;file://G:/factor/factor/settings.py&#10;lefmen&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;menu&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;base&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/admin_base.html&#10;dash&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/dashboard.html&#10;index&#9;FILE&#9;file://G:/factor/fund/templates/fund/index.html&#10;url&#9;FILE&#9;file://I:/factor/factor/urls.py&#10;form&#9;FILE&#9;file://I:/factor/request/templates/requests/admin_jemco/ypref/form.html&#10;setti&#9;FILE&#9;file://I:/factor/factor/settings.py&#10;models&#9;FILE&#9;file://I:/factor/request/models.py&#10;login&#9;FILE&#9;file://I:/factor/accounts/templates/accounts/login.html&#10;init&#9;FILE&#9;file://G:/factor/prefactor/__init__.py&#10;settings&#9;null&#9;null&#10;read&#9;FILE&#9;file://G:/factor/customer/templates/customer/read.html&#10;details&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/ypayment/payment_details.html&#10;01&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/prefactor/create_spec_pref01.html&#10;prefactors&#9;FILE&#9;file://I:/factor/request/templates/prefactors&#10;model&#9;FILE&#9;file://G:/factor/request/models.py&#10;adminbas&#9;FILE&#9;file://C:/Users/liva/Desktop/Scs/2/dev files/django/factor/request/templates/requests/admin_jemco/admin_base.html&#10;base.&#9;FILE&#9;file://C:/Users/liva/Desktop/Scs/2/dev files/django/factor/request/templates/requests/admin_jemco/admin_base.html" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="G:\factorV2\request\urls" />
+      <recent name="G:\factorV2\request\forms" />
+      <recent name="G:\factorV2\request\templatetags" />
       <recent name="G:\factor\request\templates\requests\page_elements\sipmle" />
       <recent name="I:\factor\fund\templates\fund" />
-      <recent name="G:\factor\request" />
-      <recent name="I:\factor\request\templates\requests\admin_jemco\prefactor\payment" />
-      <recent name="I:\factor\request\templates\requests\admin_jemco\report" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="G:\factor\request\templates\requests\page_elements" />
-      <recent name="G:\factor\request\templates\requests" />
-      <recent name="G:\factor\request\static\request\admin_jemco\css" />
-      <recent name="G:\factor\templates\motordb" />
-      <recent name="G:\factor\pricedb\templates\pricedb" />
+      <recent name="G:\factorV2\request\urls" />
+      <recent name="G:\factorV2\request\viewsFolder" />
+      <recent name="G:\factorV2\request\forms" />
+      <recent name="G:\factorV2\request" />
+      <recent name="I:\factorV2\request\templates\requests\admin_jemco\ypref" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -810,6 +880,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="views (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="factor" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/fund" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/fund/views.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="views" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="factor" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -824,6 +916,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/customer/views.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="views2" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="factor" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/request" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/request/views2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -861,9 +975,13 @@
       <item itemvalue="JavaScript Debug.tenders.html" />
       <item itemvalue="Python.views" />
       <item itemvalue="Python.forms" />
+      <item itemvalue="Python.views2" />
+      <item itemvalue="Python.views (1)" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.views (1)" />
+        <item itemvalue="Python.views2" />
         <item itemvalue="Python.forms" />
         <item itemvalue="Python.views" />
         <item itemvalue="JavaScript Debug.tenders.html" />
@@ -896,22 +1014,22 @@
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4973404" visible="true" weight="0.1860817" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4973404" visible="true" weight="0.18305598" />
       <window_info id="Structure" order="1" sideWeight="0.50265956" side_tool="true" weight="0.17776097" />
       <window_info id="Favorites" order="2" sideWeight="0.5019763" side_tool="true" weight="0.27987897" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4993573" weight="0.32749325" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4993573" visible="true" weight="0.33606556" />
-      <window_info anchor="bottom" x="116" y="217" width="873" height="507" id="Debug" order="3" type="FLOATING" weight="0.44474393" />
+      <window_info active="true" anchor="bottom" x="63" y="304" width="1240" height="120" id="Run" order="2" sideWeight="0.49848714" visible="true" weight="0.1590164" />
+      <window_info anchor="bottom" x="255" y="241" width="867" height="501" id="Debug" order="3" type="FLOATING" weight="0.44474393" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295082" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32786885" />
       <window_info anchor="bottom" id="Database Changes" order="9" weight="0.32786885" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50075644" side_tool="true" weight="0.3262295" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.25081968" />
-      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49924356" weight="0.3045822" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50226927" side_tool="true" weight="0.26065573" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4977307" weight="0.41147542" />
+      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49924356" weight="0.552459" />
       <window_info anchor="bottom" id="manage.py@factor" order="13" weight="0.3295082" />
       <window_info anchor="bottom" id="Concurrent Activities Diagram" order="14" weight="0.32884097" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -919,32 +1037,8 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Database" order="3" weight="0.32980332" />
       <window_info anchor="right" id="SciView" order="4" weight="0.32969153" />
+      <window_info anchor="right" id="Coverage" order="5" side_tool="true" />
     </layout>
-    <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4973404" visible="true" weight="0.18835099" />
-      <window_info id="Structure" order="1" sideWeight="0.50265956" side_tool="true" weight="0.17776097" />
-      <window_info id="Favorites" order="2" sideWeight="0.5019763" side_tool="true" weight="0.27987897" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4993573" weight="0.32749325" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4993573" weight="0.28360656" />
-      <window_info anchor="bottom" x="563" y="162" width="620" height="513" id="Debug" order="3" type="FLOATING" weight="0.44474393" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.3295082" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32884097" />
-      <window_info anchor="bottom" id="Database Changes" order="9" weight="0.32786885" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50075644" side_tool="true" weight="0.3262295" />
-      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.27704918" />
-      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49924356" weight="0.34262297" />
-      <window_info anchor="bottom" id="manage.py@factor" order="13" weight="0.3295082" />
-      <window_info anchor="bottom" id="Concurrent Activities Diagram" order="14" weight="0.32884097" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" weight="0.32980332" />
-      <window_info anchor="right" id="SciView" order="4" weight="0.32969153" />
-    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -955,37 +1049,40 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/request/views.py</url>
-          <line>429</line>
+          <line>443</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/fund/views.py</url>
-          <line>141</line>
+          <line>146</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/request/views2.py</url>
-          <line>110</line>
-          <option name="timeStamp" value="20" />
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/customer/models.py</url>
+          <line>29</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/request/prefViews.py</url>
+          <line>87</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/request/models.py</url>
+          <line>38</line>
+          <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/request/views2.py</url>
-          <line>112</line>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/request/functions.py</url>
-          <line>5</line>
-          <option name="timeStamp" value="23" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/request/views2.py</url>
-          <line>48</line>
-          <option name="timeStamp" value="24" />
+          <url>file://$PROJECT_DIR$/request/views.py</url>
+          <line>286</line>
+          <option name="timeStamp" value="43" />
         </line-breakpoint>
       </breakpoints>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -998,437 +1095,495 @@
   <component name="debuggerHistoryManager">
     <expressions id="evaluateExpression">
       <expression>
-        <expression-string>user_obj.has_perm(permissions)</expression-string>
+        <expression-string>instance._meta.model_name</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>permissions</expression-string>
+        <expression-string>instance._meta.modelname</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>request_index</expression-string>
+        <expression-string>instance._meta.modelnam</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>can_delete</expression-string>
+        <expression-string>instance</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>instance.</expression-string>
+        <expression-string>instance.prof</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>instance.owner.username</expression-string>
+        <expression-string>type(instance.prof)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>instance.owner.name</expression-string>
+        <expression-string>instance.prof.id</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>instance.owner</expression-string>
+        <expression-string>instance.prof.number</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>user_obj.user.username</expression-string>
+        <expression-string>instance.prof_id</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/dashboard.html">
+    <entry file="file://$PROJECT_DIR$/customer/templates/customer/customer.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="57" selection-start-line="4" selection-start-column="57" selection-end-line="4" selection-end-column="57" />
+        <state relative-caret-position="289">
+          <caret line="17" column="54" selection-start-line="17" selection-start-column="54" selection-end-line="17" selection-end-column="54" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/top-summary.html">
+    <entry file="file://$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="39" column="19" lean-forward="true" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
+        <state relative-caret-position="252">
+          <caret line="44" column="14" selection-start-line="44" selection-start-column="14" selection-end-line="44" selection-end-column="14" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html">
+    <entry file="file://$PROJECT_DIR$/customer/url.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1394">
-          <caret line="86" column="10" selection-start-line="86" selection-start-column="10" selection-end-line="86" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fund/templates/fund/expense/form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="62" column="10" selection-start-line="62" selection-start-column="10" selection-end-line="62" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="36" column="76" selection-start-line="36" selection-start-column="76" selection-end-line="36" selection-end-column="76" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/core/handlers/exception.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="37" selection-start-line="37" selection-end-line="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/utils/deprecation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="94" selection-start-line="94" selection-end-line="94" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/core/handlers/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="126" selection-start-line="126" selection-end-line="126" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/db/models/fields/related_descriptors.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="177" selection-start-line="177" selection-end-line="177" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/messages/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/requests/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/views2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="59" column="32" selection-start-line="59" selection-start-column="32" selection-end-line="59" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/url.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1649">
-          <caret line="109" column="58" selection-start-line="109" selection-start-column="58" selection-end-line="109" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/reqSpecViews.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="38" column="4" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="12" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tender/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1122">
-          <caret line="66" column="63" selection-start-line="66" selection-start-column="63" selection-end-line="66" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="21" column="27" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-            <marker date="1541060660000" expanded="true" signature="670:679" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/auth/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="133" column="8" selection-start-line="133" selection-start-column="8" selection-end-line="133" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/auth/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="118" column="4" selection-start-line="118" selection-start-column="4" selection-end-line="118" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/auth/decorators.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="37" column="4" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="4" />
+        <state relative-caret-position="187">
+          <caret line="24" column="43" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/factor/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="139" column="27" lean-forward="true" selection-start-line="139" selection-start-column="27" selection-end-line="139" selection-end-column="27" />
-          <folding>
-            <element signature="e#307#316#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="272">
+          <caret line="49" column="38" selection-start-line="49" selection-start-column="38" selection-end-line="49" selection-end-column="38" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/url.py">
+    <entry file="file://$PROJECT_DIR$/customer/forms.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
-          <caret line="13" column="27" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
+          <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/page_elements/jumbotron.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/page_elements/footer.html">
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/admin/templatetags/admin_list.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/page_elements/head.html">
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/admin/templatetags/admin_modify.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templatetags/functions.py" />
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/humanize/templatetags/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/humanize/templatetags/humanize.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templatetags/__init__.py" />
+    <entry file="file://$PROJECT_DIR$/customer/templates/customer2/customer_form.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="118" selection-start-line="10" selection-start-column="4" selection-end-line="11" selection-end-column="118" />
+        <state relative-caret-position="120">
+          <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/views.py">
+    <entry file="file://$PROJECT_DIR$/customer/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="21" column="43" selection-start-line="21" selection-start-column="43" selection-end-line="21" selection-end-column="43" />
+        <state relative-caret-position="256">
+          <caret line="289" column="48" selection-start-line="289" selection-start-column="48" selection-end-line="289" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/edit_form.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/details.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="918">
+          <caret line="54" column="14" selection-start-line="54" selection-start-column="14" selection-end-line="54" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/reqSpecViews.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="109" column="4" selection-start-line="109" selection-start-column="4" selection-end-line="109" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1054">
+          <caret line="62" column="68" selection-start-line="62" selection-start-column="68" selection-end-line="62" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/req_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="30" column="27" selection-start-line="30" selection-start-column="27" selection-end-line="30" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="45" column="78" selection-start-line="45" selection-start-column="78" selection-end-line="45" selection-end-column="78" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/urls/prof_urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
           <folding>
-            <element signature="e#0#45#0" expanded="true" />
+            <element signature="e#1#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/page_elements/navbar.html">
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/proforma_form.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="49" column="14" lean-forward="true" selection-start-line="3" selection-start-column="8" selection-end-line="49" selection-end-column="14" />
+        <state relative-caret-position="200">
+          <caret line="28" column="48" selection-start-line="28" selection-start-column="48" selection-end-line="28" selection-end-column="48" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/base.html">
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/auth/decorators.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="42" lean-forward="true" selection-start-line="5" selection-start-column="42" selection-end-line="5" selection-end-column="42" />
+        <state relative-caret-position="51">
+          <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/login.html">
+    <entry file="file://$PROJECT_DIR$/request/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="28" selection-start-column="28" selection-end-column="28" />
+        <state relative-caret-position="-16">
+          <caret line="181" column="6" selection-start-line="181" selection-start-column="6" selection-end-line="181" selection-end-column="6" />
           <folding>
-            <element signature="e#231#272#0#HTML" expanded="true" />
+            <element signature="e#951#1595#0" />
+            <element signature="e#1636#1774#0" />
+            <element signature="e#1810#2568#0" />
+            <element signature="e#2604#3371#0" />
+            <element signature="e#3582#4251#0" />
+            <element signature="e#4289#4706#0" />
+            <element signature="e#4744#5155#0" />
+            <element signature="e#5205#5611#0" />
+            <element signature="e#5650#5925#0" />
+            <marker date="1541936022000" expanded="true" signature="6726:6731" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/signup.html">
+    <entry file="file://$PROJECT_DIR$/request/viewsFolder/requestViews.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="29" lean-forward="true" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="29" />
+        <state relative-caret-position="272">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
           <folding>
-            <element signature="e#230#268#0#HTML" expanded="true" />
+            <element signature="e#0#36#0" expanded="true" />
+            <element signature="e#567#922#0" />
+            <element signature="e#978#1153#0" />
+            <element signature="e#1237#1638#0" />
+            <element signature="e#1684#2800#0" />
+            <element signature="e#2852#3777#0" />
+            <element signature="e#3828#4217#0" />
+            <element signature="e#4267#4382#0" />
+            <element signature="e#4444#5120#0" />
+            <element signature="e#5184#5635#0" />
+            <element signature="e#5697#5887#0" />
+            <element signature="e#5933#5986#0" />
+            <element signature="e#6035#6120#0" />
+            <element signature="e#6201#6593#0" />
+            <element signature="e#6645#7560#0" />
+            <element signature="e#7611#8112#0" />
+            <element signature="e#8162#8289#0" />
+            <element signature="e#8355#8503#0" />
+            <element signature="e#8568#9059#0" />
+            <element signature="e#9122#9415#0" />
+            <element signature="e#9494#9535#0" />
+            <element signature="e#9605#9650#0" />
+            <element signature="e#9716#9760#0" />
+            <element signature="e#9827#9869#0" />
+            <element signature="e#9921#10855#0" />
+            <element signature="e#10885#11070#0" />
+            <element signature="e#11116#11665#0" />
+            <element signature="e#11733#13218#0" />
+            <element signature="e#13277#13430#0" />
+            <element signature="e#13482#13816#0" />
+            <element signature="e#13874#14035#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/urls/old_url.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="32" lean-forward="true" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
+          <folding>
+            <element signature="e#1#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/factor/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="43" column="40" selection-start-line="43" selection-start-column="40" selection-end-line="43" selection-end-column="40" />
+        <state relative-caret-position="748">
+          <caret line="52" column="54" lean-forward="true" selection-start-line="52" selection-start-column="54" selection-end-line="52" selection-end-column="54" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fund/templates/fund/error.html">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/request/views.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="292" column="19" selection-start-line="292" selection-start-column="19" selection-end-line="292" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#645#686#0" />
+            <element signature="e#718#937#0" />
+            <element signature="e#974#1191#0" />
+            <element signature="e#1241#1553#0" />
+            <element signature="e#1602#1886#0" />
+            <element signature="e#2110#2262#0" />
+            <element signature="e#2589#2945#0" />
+            <element signature="e#3029#3732#0" />
+            <element signature="e#3773#4124#0" />
+            <element signature="e#4173#4541#0" />
+            <element signature="e#4572#5313#0" />
+            <element signature="e#5352#5543#0" />
+            <element signature="e#5546#5563#0" />
+            <element signature="e#6533#7600#0" />
+            <element signature="e#7648#7903#0" />
+            <element signature="e#7955#8147#0" />
+            <element signature="e#8211#8433#0" />
+            <element signature="e#8466#9607#0" />
+            <element signature="e#9629#9766#0" />
+            <element signature="e#9792#9924#0" />
+            <element signature="e#10793#10860#0" />
+            <element signature="e#10890#11460#0" />
+            <element signature="e#11529#11533#0" />
+            <element signature="e#11554#11797#0" />
+            <element signature="e#11835#11965#0" />
+            <element signature="e#12011#12491#0" />
+            <element signature="e#12527#13673#0" />
+            <element signature="e#13709#13828#0" />
+            <element signature="e#13860#14250#0" />
+            <element signature="e#14292#14518#0" />
+            <element signature="e#14560#14981#0" />
+            <element signature="e#15019#15235#0" />
+            <element signature="e#15268#15809#0" />
+            <element signature="e#15839#15979#0" />
+            <element signature="e#16006#16139#0" />
+            <element signature="e#16203#16368#0" />
+            <element signature="e#16402#17841#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/dashboard.html">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
-          <caret line="21" column="37" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
-          <folding>
-            <marker date="1540971250000" expanded="true" signature="9952:10087" ph="..." />
-          </folding>
+          <caret line="4" column="55" lean-forward="true" selection-start-line="4" selection-start-column="55" selection-end-line="4" selection-end-column="55" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/motordb/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1682" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/customer/url.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fund/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/customer/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="42" selection-start-line="28" selection-start-column="42" selection-end-line="28" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/fast-json-stable-stringify/test/str.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/top-summary.html">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1979">
+          <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/pref_details.html">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
-          <caret line="9" column="72" lean-forward="true" selection-start-line="9" selection-start-column="72" selection-end-line="9" selection-end-column="72" />
+          <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/page_elements/simple/navbar.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="9" lean-forward="true" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/base_minimal.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="11" lean-forward="true" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="556">
-          <caret line="92" column="27" lean-forward="true" selection-start-line="92" selection-start-column="27" selection-end-line="92" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/customer/templates/tempFiles/c_form.html">
+    <entry file="file://$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
-          <caret line="14" column="49" lean-forward="true" selection-start-line="14" selection-start-column="49" selection-end-line="14" selection-end-column="49" />
+          <caret line="14" column="47" lean-forward="true" selection-start-line="14" selection-start-column="47" selection-end-line="14" selection-end-column="47" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/customer/models.py">
+    <entry file="file://$PROJECT_DIR$/request/urls/req_urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="22" column="41" selection-start-line="22" selection-start-column="41" selection-end-line="22" selection-end-column="41" />
+        <state relative-caret-position="172">
+          <caret line="16" column="53" selection-start-line="16" selection-start-column="53" selection-end-line="16" selection-end-column="53" />
           <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#0#37#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/customer/templates/customer/customer.html">
+    <entry file="file://$PROJECT_DIR$/request/viewsFolder/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/viewsFolder/permission.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="37" lean-forward="true" selection-start-column="37" selection-end-column="37" />
           <folding>
-            <element signature="e#485#587#0#HTML" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/customer/views.py">
+    <entry file="file://$PROJECT_DIR$/request/urls/url.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="708">
+          <caret line="67" column="51" lean-forward="true" selection-start-line="67" selection-start-column="51" selection-end-line="67" selection-end-column="51" />
+          <folding>
+            <element signature="e#630#662#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/forms/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="42" selection-start-line="1" selection-start-column="42" selection-end-line="1" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/urls/payment_urls2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
-          <caret line="99" column="33" lean-forward="true" selection-start-line="99" selection-start-column="33" selection-end-line="99" selection-end-column="33" />
+          <caret line="18" column="65" selection-start-line="18" selection-start-column="65" selection-end-line="18" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="6" column="40" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/viewsFolder/paymentViews.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="154" column="38" selection-start-line="154" selection-start-column="38" selection-end-line="154" selection-end-column="38" />
           <folding>
-            <element signature="e#0#66#0" expanded="true" />
+            <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/motordb/forms.py">
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="31" column="49" lean-forward="true" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
+        <state relative-caret-position="150">
+          <caret line="54" column="31" selection-start-line="54" selection-start-column="31" selection-end-line="54" selection-end-column="31" />
+          <folding>
+            <element signature="e#2024#2060#0#HTML" expanded="true" />
+            <element signature="e#2378#2414#0#HTML" expanded="true" />
+            <element signature="e#2903#2927#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/forms/payment_forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="9" lean-forward="true" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/urls/payment_urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="37" selection-start-line="15" selection-start-column="37" selection-end-line="15" selection-end-column="37" />
+          <folding>
+            <element signature="e#1#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/views2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="37" column="26" lean-forward="true" selection-start-line="37" selection-start-column="26" selection-end-line="37" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+            <element signature="e#9921#10855#0" />
+            <element signature="e#10885#11070#0" />
+            <element signature="e#11733#13218#0" />
+            <element signature="e#13277#13430#0" />
+            <element signature="e#13482#13816#0" />
+            <element signature="e#13874#14035#0" />
+            <marker date="1541940950000" expanded="false" signature="10181:10186" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/forms/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/forms/proforma_forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/viewsFolder/proformaViews.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="292" column="23" lean-forward="true" selection-start-line="292" selection-start-column="23" selection-end-line="292" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="22" column="45" lean-forward="true" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/url.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="25" column="31" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="205" column="18" selection-start-line="205" selection-start-column="18" selection-end-line="205" selection-end-column="18" />
         </state>
       </provider>
     </entry>

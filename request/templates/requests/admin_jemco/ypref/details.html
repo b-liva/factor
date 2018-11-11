@@ -59,12 +59,21 @@
             </table>
             <br>
             <a href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
-                <button class="btn btn-success btn-sm" type="submit" name="submit">Edit Prof</button>
+                <button class="btn btn-success btn-sm" type="submit" name="submit">Edit Prices</button>
+                <a class="btn btn-warning btn-sm" href="{% url 'pref_edit2' ypref_pk=pref.pk %}">Edit Prof</a>
             </a>
 
             <br>
 
         </div>
+
+        <div class="col-md-10 col-lg-offset-1">
+            {% for img in prof_images %}
+                <a href="{{ img.image.url }}"><img class="img-responsive img-thumbnail col-md-4"
+                                                   src="{{ img.image.url }}" style="max-height: 150px;"></a>
+            {% endfor %}
+        </div>
+
     </div>
 
 {% endblock %}

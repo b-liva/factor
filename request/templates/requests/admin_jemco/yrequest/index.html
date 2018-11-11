@@ -2,7 +2,7 @@
 {% load humanize %}
 {% block right_col %}
     <div class="container">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-10 col-md-offset-1">
             <h3>{{ msg }}</h3>
             <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
                 Requests</h1>
@@ -14,9 +14,10 @@
             <br>
             <table class="withBorder tableFull">
                 <tr>
-                    <th>Id</th>
+                    <th>pk</th>
                     <th>Number</th>
                     <th>Date</th>
+                    <th>Image</th>
                     <th>Action</th>
                 </tr>
                 <tbody class="">
@@ -25,9 +26,15 @@
                         <td>{{ request.pk }}</td>
                         <td>{{ request.number }}</td>
                         <td>{{ request.pub_date }}</td>
+                        {% if request.image %}
+                            <td><img class="" width="60px" src="{{ request.image.url }}"></td>
+                        {% else %}
+                            <td >No Image</td>
+                        {% endif %}
                         <td>
                             <a class="btn btn-primary btn-xs" href="{% url 'request_details' request_pk=request.pk %}">Details</a>
-                            <a class="btn btn-primary btn-xs btn-warning"
+                            <a class="btn btn-warning btn-xs" href="{% url 'request_edit_form' request_pk=request.pk %}">Edit</a>
+                            <a class="btn btn-primary btn-xs btn-danger"
                                href="{% url 'request_delete' request_pk=request.pk %}">Delete</a>
                         </td>
 
@@ -39,7 +46,7 @@
                 </tbody>
             </table>
             <br>
-            <a href="{% url 'request_form' %}" class="btn btn-success btn-sm">Add new request</a>
+            <a href="{% url 'req_form' %}" class="btn btn-success btn-sm">Add new request</a>
         </div>
     </div>
 

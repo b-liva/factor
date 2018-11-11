@@ -3,9 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 # Create your views here.
 from fund.models import Fund, Expense
-import request.functions as func
-
-from django.contrib.admin.models import LogEntry
+from . import forms
 
 
 @login_required
@@ -59,8 +57,11 @@ def fund_index(request):
 
 @login_required
 def fund_details(request, fund_pk):
+    print('01')
     fund = Fund.objects.get(pk=fund_pk)
     expenses = fund.expense_set.all()
+    print(f'fund: {fund}')
+    print(f'fund: {expenses}')
     return render(request, 'fund/details.html', {
         'fund': fund,
         'expenses': expenses,
@@ -164,7 +165,8 @@ def expense_details(request):
 def expense_delete(request, expense_pk, fund_pk):
     exp = Expense.objects.get(pk=expense_pk)
     exp.delete()
-    return redirect('expense_form', fund_pk=fund_pk)
+    # return redirect('expense_form', fund_pk=fund_pk)
+    return redirect('ex_form', fund_pk=fund_pk)
 
 
 @login_required
@@ -186,3 +188,85 @@ def has_perm_or_is_owner(user_obj, permissions, instance=None):
         if user_obj == instance.owner:
             return True
     return user_obj.has_perm(permissions)
+
+
+@login_required
+def fform(request):
+
+    if request.method == 'POST':
+        form = forms.FundForm(request.POST)
+        if form.is_valid():
+            fund = form.save(commit=False)
+            fund.owner = request.user
+
+            fund.save()
+            return redirect('ex_form', fund_pk=fund.pk)
+
+    else:
+        # fund = Fund.objects.get(pk=fund_pk)
+        # form = forms.FundForm(instance=fund)
+        form = forms.FundForm()
+
+    return render(request, 'fund/fund_form.html', {
+        'form': form
+    })
+
+
+@login_required
+def ex_form(request, fund_pk):
+    fund = Fund.objects.get(pk=fund_pk)
+
+    if request.method == 'POST':
+        form = forms.ExpenseForm(request.POST)
+        if form.is_valid():
+            print('form is valid')
+            expense = form.save(commit=False)
+            expense.fund = fund
+            expense.save()
+        else:
+            messages.error(request, 'Oops, somethind in form is wrong')
+            return redirect('errorpage')
+    else:
+        form = forms.ExpenseForm()
+    expenses = Expense.objects.filter(fund=fund)
+    return render(request, 'fund/expense/expense_form.html', {
+        'form': form,
+        'fund': fund,
+        'expenses': expenses
+    })
+
+@login_required
+def fund_edit_form(request, fund_pk):
+    fund_instance = Fund.objects.get(pk=fund_pk)
+    form = forms.FundForm(request.POST or None, instance=fund_instance)
+    if form.is_valid():
+        fund = form.save(commit=False)
+        fund.save()
+    return render(request, 'fund/fund_form.html', {
+        'form': form
+    })
+
+
+@login_required
+def expense_edit_form(request, fund_pk, expense_pk):
+    fund_inst = Fund.objects.get(pk=fund_pk)
+    expense_instance = Expense.objects.get(pk=expense_pk)
+    expenses = Expense.objects.filter(fund=fund_inst.pk)
+    print(f'fund: {fund_inst}')
+    print(f'exp: {expense_instance}')
+    form = forms.ExpenseForm(request.POST or None, instance=expense_instance)
+    if form.is_valid():
+        print('form is valid')
+        exp = form.save(commit=False)
+        exp.save()
+        return redirect('expense_form', fund_pk=fund_inst.pk)
+    else:
+        print('form is not valid')
+        form = forms.ExpenseForm()
+    print(f'form: {form.is_valid()}')
+    # print(f'exp: {expenses}')
+    return render(request, 'fund/expense/expense_form.html', {
+        'form': form,
+        'fund': fund_inst,
+        'expenses': expenses
+    })

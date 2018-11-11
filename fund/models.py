@@ -9,7 +9,7 @@ from factor import settings
 
 
 class Fund(models.Model):
-    title = models.TextField(null=True, blank=True)
+    title = models.CharField(max_length=150, null=True, blank=True)
     # number = models.AutoField()
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
@@ -20,6 +20,9 @@ class Fund(models.Model):
         permissions = (
             ("view_fund", "Can view funds"),
         )
+
+    def __str__(self):
+        return '%s' % self.title
 
 
 class Expense(models.Model):
@@ -32,3 +35,5 @@ class Expense(models.Model):
         permissions = (
             ("view_expense", "Can view expenses"),
         )
+
+

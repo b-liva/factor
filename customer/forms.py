@@ -14,7 +14,7 @@ class CustomerForm(forms.ModelForm):
     class Meta:
         model = models.Customer
         fields = '__all__'
-        exclude = ('pub_date',)
+        exclude = ('pub_date', 'owner', 'representator')
         widgets = {
             'pub_date': forms.DateInput(attrs={
                 'class': 'datetime-input form-control',
@@ -41,6 +41,7 @@ class CustomerForm(forms.ModelForm):
             'date2': ('Date'),
             'type': ('Customer Type'),
         }
+        
 
         # types = forms.ModelChoiceField(queryset=Type.objects.filter(), label='room', widget=forms.Select)
 

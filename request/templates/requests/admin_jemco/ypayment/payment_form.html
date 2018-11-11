@@ -1,0 +1,18 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <h3>{{ msg }}</h3>
+            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Add new Payment</h1>
+            <form method="POST" action="">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" name="submit" class="btn btn-success btn-sm">Save Payment</button>
+                <a class="btn btn-danger btn-sm" href="{% url 'payment_index' %}">Cancel</a>
+
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}

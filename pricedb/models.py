@@ -13,7 +13,6 @@ class PrimeCost(models.Model):
     kw5_5 = models.FloatField()
 
 
-
 class MotorDB(models.Model):
     price_set = models.ForeignKey(PriceDb, on_delete=models.CASCADE)
     kw = models.FloatField()
@@ -23,3 +22,7 @@ class MotorDB(models.Model):
     base_price = models.FloatField(null=True, blank=True)
     sale_price = models.FloatField(null=True, blank=True)
     pub_date = models.DateTimeField(default=now)
+
+    def __str__(self):
+        return 'prime cost: %s' % (self.prime_cost)
+

@@ -1,0 +1,59 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+
+    <div class="col-md-6 col-md-offset-3">
+        <table class="withBorder tableFull">
+            <tr>
+                <th>No</th>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Summary</th>
+                <th>Actions</th>
+            </tr>
+            <tbody>
+            {% for expense in expenses %}
+                <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ expense.title }}</td>
+                <td>{{ expense.amount|intcomma }}</td>
+                <td>{{ expense.summary }}</td>
+                <td>
+{#                    <a class="btn btn-primary btn-xs" href="{% url 'expense_edit' fund_pk=expense.fund.pk expense_pk=expense.pk %}">Edit</a>#}
+                    <a class="btn btn-primary btn-xs"
+                       href="{% url 'expense_edit_form' fund_pk=expense.fund.pk expense_pk=expense.pk %}">Edit</a>
+                    <a class="btn btn-primary btn-xs btn-warning"
+                       href="{% url 'expense_delete' expense_pk=expense.pk fund_pk=expense.fund.pk %}">Delete</a>
+                </td>
+            {% endfor %}
+            </tr>
+            <tr>
+                <td></td>
+                <td>Sum</td>ex_form
+                <td>{{ sum|intcomma }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+    </div>
+
+    <div class="col-md-6 col-md-offset-3">
+        <form action="{% url 'ex_form' fund_pk=fund.pk %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="fun-title">Title </label>
+                {{ form.title }}
+            </div>
+            <div class="form-group">
+                <label for="fun-amount">Amount </label>
+                {{ form.amount }}
+            </div>
+            <div class="form-group">
+                <label for="fun-title">summary</label>
+                {{ form.summary }}
+            </div>
+            <button type="submit" name="submit" class="btn btn-success btn-sm">Save and add another</button>
+            <a class="btn btn-primary btn-sm" href="{% url 'fund_index' %}">Back to index</a>
+        </form>
+    </div>
+{% endblock %}

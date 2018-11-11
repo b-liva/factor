@@ -1,0 +1,49 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <h3>{{ msg }}</h3>
+            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                Proformas</h1>
+        <form method="POST" action="{% url 'pref_find' %}">
+            {% csrf_token %}
+            Proforma No <input name="pref_no" value="{{ search_items.proforma_no }}">
+            <input name="text" value="{{ search_items.term }}">
+            <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
+            <span><a href="{% url 'pref_index' %}" class="btn btn-xs btn-danger">Reset</a></span>
+        </form>
+            <table class="withBorder tableFull">
+                <tr>
+                    <th>Id</th>
+{#                    <th>Id</th>#}
+                    <th>Number</th>
+                    <th>request</th>
+                    <th>Date</th>
+                    <th>Summary</th>
+                    <th>Actions</th>
+                </tr>
+                <tbody class="">
+                {% for pref in prefs %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+{#                        <td>{{ pref.pk }}</td>#}
+                        <td>{{ pref.number }}</td>
+                        <td><a href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a></td>
+                        <td>{{ pref.pub_date }}</td>
+                        <td>{{ pref.summary }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs"
+                               href="{% url 'pref_details' ypref_pk=pref.pk %}">Details</a>
+                            <a class="btn btn-primary btn-xs btn-warning"
+                               href="{% url 'pref_delete' ypref_pk=pref.pk %}">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <a href="{% url 'pref_form' %}" class="btn btn-success btn-sm">Add new Prefactor</a>
+        </div>
+    </div>
+{% endblock %}

@@ -23,6 +23,7 @@ import fund.views
 
 urlpatterns = [
   path('form', fund.views.fund_form, name='fund_form'),
+  path('fform', fund.views.fform, name='fform'),
   path('insert', fund.views.fund_insert, name='fund_insert'),
   path('index', fund.views.fund_index, name='fund_index'),
   path('find', fund.views.fund_find, name='fund_find'),
@@ -30,10 +31,12 @@ urlpatterns = [
       path('', fund.views.fund_details, name='fund_details'),
       path('delete', fund.views.fund_delete, name='fund_delete'),
       path('edit', fund.views.fund_edit, name='fund_edit'),
+      path('edit_form', fund.views.fund_edit_form, name='fund_edit_form'),
   ])),
 
 
   path('<int:fund_pk>/expense/form', fund.views.expense_form, name='expense_form'),
+  path('<int:fund_pk>/expenseForm', fund.views.ex_form, name='ex_form'),
   path('expense/insert', fund.views.expense_insert, name='expense_insert'),
   path('expense/index', fund.views.expense_index, name='expense_index'),
   path('<int:fund_pk>/expense/find', fund.views.expense_find, name='expense_find'),
@@ -41,6 +44,7 @@ urlpatterns = [
       path('', fund.views.expense_details, name='expense_details'),
       path('delete', fund.views.expense_delete, name='expense_delete'),
       path('edit', fund.views.expense_edit, name='expense_edit'),
+      path('edit_form', fund.views.expense_edit_form, name='expense_edit_form'),
   ])),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)
