@@ -3,17 +3,13 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.contrib import messages
 
-from request.views import allRequests, find_all_obj
-from request.models import Requests
+from request.views import find_all_obj
 from request.models import Xpref
 from request.models import Payment
 from request import models
-from customer.models import Customer
 from django.contrib.auth.decorators import login_required
 import request.templatetags.functions as funcs
-# from request.forms import forms
-# from request.forms.payment_forms import PaymentFrom
-from request.forms import payment_forms, proforma_forms
+from request.forms import payment_forms
 
 
 # add payment to the prefactor
@@ -31,24 +27,34 @@ def payment_form(request):
     })
 
 
-
 @login_required
 def pay_form(request):
+    img_form = payment_forms.PaymentFileForm()
     if request.method == 'POST':
-        form = payment_forms.PaymentFrom(request.POST)
-        if form.is_valid():
+        form = payment_forms.PaymentFrom(request.POST, request.FILES)
+        add_img_form = payment_forms.PaymentFileForm(request.POST or None, request.FILES or None)
+        files = request.FILES.getlist('image')
+        print(f'files are: {files}')
+        if form.is_valid() and add_img_form.is_valid():
+            print('forms are valid')
             payment = form.save(commit=False)
             payment.owner = request.user
             payment.customer = payment.xpref_id.req_id.customer
             payment.save()
-
+            print(f'payment id is: {payment.pk}')
+            for f in files:
+                img = models.PaymentFiles(image=f, pay=payment)
+                img.save()
             return redirect('payment_index')
+        else:
+            print('forms are not valid')
     else:
         form = payment_forms.PaymentFrom()
 
     payments = Payment.objects.all()
     return render(request, 'requests/admin_jemco/ypayment/payment_form.html', {
         'form': form,
+        'img_form': img_form,
         'xpayments': payments
     })
 
@@ -90,7 +96,6 @@ def payment_index(request):
     payments = Payment.objects.all()
     pref_sum = 0
     sum = 0
-
     for payment in payments:
         for spec in payment.xpref_id.prefspec_set.all():
             pref_sum += spec.price
@@ -115,7 +120,11 @@ def payment_find(request):
 @login_required
 def payment_details(request, ypayment_pk):
     payment = Payment.objects.get(pk=ypayment_pk)
-    return render(request, 'requests/admin_jemco/ypayment/payment_details.html', {'payment': payment})
+    images = models.PaymentFiles.objects.filter(pay=payment)
+    return render(request, 'requests/admin_jemco/ypayment/payment_details.html', {
+        'payment': payment,
+        'images': images
+    })
 
 
 @login_required
@@ -158,4 +167,24 @@ def payment_edit(request, ypayment_pk):
 
     return render(request, 'requests/admin_jemco/ypayment/payment_form.html', {
         'form': form,
+    })
+
+
+def testimage(request):
+    payment = models.Payment.objects.last()
+    form = payment_forms.PaymentFileForm()
+    files = False
+    if request.method == 'POST':
+        files = request.FILES.getlist('image')
+        print(f'files: {files} and paymentis: {payment}')
+        if form.is_valid():
+            for f in files:
+                img = models.PaymentFiles(image=f, payment=payment)
+                img.save()
+            return redirect('testimage')
+
+    return render(request, 'requests/admin_jemco/ypayment/test.html', {
+        'form': form,
+        'payment': payment,
+        'fiels': files
     })

@@ -1,12 +1,57 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
+{% load humanize %}
 {% block right_col %}
     <div class="container">
-        <div class="col-md-6 col-md-offset-3">
-            <h3>{{ msg }}</h3>
-            <p>Number: {{ payment.number }}</p>
-            <p>Number: {{ payment.amount }}</p>
-            <p>Date: {{ payment.payment_date }}</p>
-            <p>Date_fa: {{ payment.date_fa }}</p>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h2 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                    payment No.{{ payment.number }} Details</h2>
+            </div>
+
+            <div class="col-md-6 col-md-offset-1 ">
+
+                <h3>{{ msg }}</h3>
+                <table class="table-bordered">
+                    <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <td>{{ payment.pk }}</td>
+                    </tr>
+                    <tr>
+                        <th>Number</th>
+                        <td>{{ payment.number }}</td>
+                    </tr>
+                    <tr>
+                        <th>Amount</th>
+                        <td>{{ payment.amount|intcomma }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <td>{{ payment.payment_date }}</td>
+                    </tr>
+                    <th>Date_fa</th>
+                    <td>{{ payment.date_fa }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+                <div>
+                    {% for i in images %}
+                        <div class="col-md-3 col-sm-4 col-xs-4">
+                            <a href="{{ i.image.url }}">
+                                <img src="{{ i.image.url }}" class="img-thumbnail ">
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="">
+                    <a href="{% url 'payment_edit' ypayment_pk=payment.pk %}" class="btn btn-warning btn-xs">Edit Payment</a>
+                    <a href="{% url 'payment_index' %}" class="btn btn-success btn-xs">payment index</a>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

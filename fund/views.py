@@ -1,4 +1,6 @@
+# from django import forms
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 # Create your views here.
@@ -223,6 +225,7 @@ def ex_form(request, fund_pk):
             expense = form.save(commit=False)
             expense.fund = fund
             expense.save()
+            return redirect('ex_form', fund_pk=fund.pk)
         else:
             messages.error(request, 'Oops, somethind in form is wrong')
             return redirect('errorpage')
@@ -235,13 +238,16 @@ def ex_form(request, fund_pk):
         'expenses': expenses
     })
 
+
 @login_required
 def fund_edit_form(request, fund_pk):
     fund_instance = Fund.objects.get(pk=fund_pk)
     form = forms.FundForm(request.POST or None, instance=fund_instance)
     if form.is_valid():
+        print(f'fund is: valid')
         fund = form.save(commit=False)
         fund.save()
+        return redirect('fund_index')
     return render(request, 'fund/fund_form.html', {
         'form': form
     })
@@ -252,21 +258,24 @@ def expense_edit_form(request, fund_pk, expense_pk):
     fund_inst = Fund.objects.get(pk=fund_pk)
     expense_instance = Expense.objects.get(pk=expense_pk)
     expenses = Expense.objects.filter(fund=fund_inst.pk)
-    print(f'fund: {fund_inst}')
-    print(f'exp: {expense_instance}')
     form = forms.ExpenseForm(request.POST or None, instance=expense_instance)
+    fundform = forms.FundForm(request.POST or None, instance=fund_inst)
+    print(f'errors: {form.errors.as_data()}')
+
     if form.is_valid():
         print('form is valid')
         exp = form.save(commit=False)
+        exp.fund = fund_inst
         exp.save()
-        return redirect('expense_form', fund_pk=fund_inst.pk)
-    else:
-        print('form is not valid')
-        form = forms.ExpenseForm()
-    print(f'form: {form.is_valid()}')
-    # print(f'exp: {expenses}')
+        return redirect('ex_form', fund_pk=fund_inst.pk)
     return render(request, 'fund/expense/expense_form.html', {
-        'form': form,
+        'form2': form,
         'fund': fund_inst,
-        'expenses': expenses
+        'expenses': expenses,
+        'fundform': fundform,
+        'expinst': expense_instance
     })
+
+
+def exedif(request):
+    return HttpResponse('hello')

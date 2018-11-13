@@ -13,7 +13,6 @@
                     <li><a href="{% url 'customer_index' %}">Customers</a></li>
                     <li><a href="{% url 'project_type_form' %}">Add ProjectTypes</a></li>
                     <li><a href="{% url 'projects_type_index' %}">ProjectTypes</a></li>
-{#                    <li><a href="{% url 'cform' %}">add Customers</a></li>#}
                     <li><a href="{% url 'request_index' %}">Requests</a></li>
                     <li><a href="{% url 'pref_index' %}">Proformas</a></li>
                     <li><a href="{% url 'pro_form' %}">Add Proformas</a></li>
@@ -27,7 +26,6 @@
                     <li><a href="{% url 'pricedb_index' %}">PriceDb</a></li>
                     <li><a href="{% url 'pricedb_clean' %}">PriceDb clean</a></li>
                     <li><a href="{% url 'tenders_admin' %}">Find Tenders </a></li>
-                    <li><a href="{% url 'payment_form' %}">Find Tenders </a></li>
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link"
                                                 href="javascript:{document.getElementById('logout').submit()}">Logout</a>

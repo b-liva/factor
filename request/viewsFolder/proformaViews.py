@@ -7,8 +7,7 @@ from request.models import Requests
 from request.models import Xpref
 from pricedb.models import MotorDB
 
-from request.forms import forms
-from request.forms import proforma_forms
+from request.forms import proforma_forms, forms
 from django.contrib.auth.decorators import login_required
 
 
@@ -52,7 +51,6 @@ def pref_details(request, ypref_pk):
         messages.error(request, 'no access for you')
         return redirect('errorpage')
     nestes_dict = {}
-
 
     spec_total = 0
     proforma_total = 0
@@ -133,9 +131,7 @@ def pro_form(request):
         return redirect('errorpage')
 
     reqs = Requests.objects.all()
-    form = forms.ProformaForm(request.user.pk)
     owners_reqs = Requests.objects.filter(owner=request.user)
-    # prof_file_form = forms.ProfFileForm(request.POST or None, instance=)
     imgform = proforma_forms.ProfFileForm()
 
     if request.method == 'POST':
@@ -183,7 +179,6 @@ def pro_form(request):
             print('form is not Valid')
     else:
         form = forms.ProformaForm(request.user.pk)
-        file_instance = models.ProfFiles()
     return render(request, 'requests/admin_jemco/ypref/proforma_form.html', {
         'form': form,
         'reqs': reqs,

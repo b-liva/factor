@@ -21,6 +21,7 @@ def upload_location(instance, filename):
     if instance._meta.model_name == 'paymentfiles':
         id = instance.pay.id
         no = instance.pay.number
+    print(f'model name: {instance._meta.model_name}')
     return '%s/id%s_No%s/%s' % (instance._meta.model_name, id, no, filename)
 
 
@@ -196,6 +197,6 @@ class Payment(models.Model):
         return '#%s and $%s ' % (self.number, self.amount)
 
 
-class PaymentFiels(models.Model):
+class PaymentFiles(models.Model):
     image = models.FileField(upload_to=upload_location, null=True, blank=True)
     pay = models.ForeignKey(Payment, on_delete=models.CASCADE)

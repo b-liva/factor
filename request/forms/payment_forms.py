@@ -1,5 +1,4 @@
 from django import forms
-from django.utils.timezone import now
 from request import models
 
 
@@ -27,7 +26,7 @@ class PaymentEditForm(forms.ModelForm):
 class PaymentFileForm(forms.ModelForm):
 
     class Meta:
-        model = models.PaymentFiels
+        model = models.PaymentFiles
         fields = '__all__'
-        # exclude = ('prof',)
+        exclude = ('pay',)
         widgets = {"image": forms.FileInput(attrs={'multiple': True})}

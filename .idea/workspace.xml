@@ -2,62 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85c93896-8beb-4081-82f4-1287b6871527" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/customer/templates/customer2/customer_form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fund/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fund/templates/fund/expense/expense_form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fund/templates/fund/fund_form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/forms/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/forms/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/forms/payment_forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/forms/proforma_forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/project_type/form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/project_type/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/proforma_form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/proforma_specs.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/search_index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/spec_form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/req_form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/templatetags/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/urls/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/urls/req_urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/urls/url.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/viewsFolder/paymentViews.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/viewsFolder/proformaViews.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/viewsFolder/requestViews.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/factor.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/factor.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/migrations/0041_auto_20181112_1703.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/test.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/customer/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/customer/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/templates/customer/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/customer/templates/customer/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/url.py" beforeDir="false" afterPath="$PROJECT_DIR$/customer/url.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/customer/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/factor/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/factor/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/factor/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/factor/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fund/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/fund/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fund/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/fund/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fund/templates/fund/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/fund/templates/fund/details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fund/templates/fund/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/fund/templates/fund/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fund/templates/fund/expense/expense_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/fund/templates/fund/expense/expense_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fund/templates/fund/fund_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/fund/templates/fund/fund_form.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fund/url.py" beforeDir="false" afterPath="$PROJECT_DIR$/fund/url.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fund/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/fund/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pricedb/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/pricedb/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/forms.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/templatetags/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/forms/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/forms/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/forms/payment_forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/forms/payment_forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/request/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/prefViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/prefViews.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/reqSpecViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/reqSpecViews.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js" beforeDir="false" afterPath="$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/form.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/page_elements/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/page_elements/navbar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/url.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/views2.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/views2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/urls/payment_urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/urls/payment_urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/viewsFolder/paymentViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/viewsFolder/paymentViews.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/viewsFolder/proformaViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/viewsFolder/proformaViews.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -376,90 +339,97 @@
     <session id="-832952279">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="9" />
+          <entry key="project.closed" value="14" />
           <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.10" value="1" />
+          <entry key="project.open.time.12" value="2" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.25" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.30" value="1" />
+          <entry key="project.open.time.31" value="1" />
+          <entry key="project.open.time.36" value="1" />
           <entry key="project.open.time.37" value="1" />
           <entry key="project.open.time.44" value="1" />
           <entry key="project.open.time.51" value="2" />
           <entry key="project.open.time.56" value="1" />
           <entry key="project.open.time.57" value="1" />
-          <entry key="project.opened" value="11" />
+          <entry key="project.opened" value="16" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Django Console" value="196" />
+          <entry key="Django Console" value="1203" />
           <entry key="dummy" value="1" />
-          <entry key="html" value="1234" />
+          <entry key="html" value="2142" />
           <entry key="js" value="115" />
-          <entry key="py" value="7346" />
+          <entry key="py" value="9687" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="1234" />
+          <entry key="HTML" value="2142" />
           <entry key="JavaScript" value="115" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="7542" />
+          <entry key="Python" value="10890" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="html" value="49" />
+          <entry key="html" value="68" />
           <entry key="js" value="1" />
-          <entry key="py" value="111" />
+          <entry key="py" value="182" />
+          <entry key="rnc" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="HTML" value="49" />
+          <entry key="HTML" value="68" />
           <entry key="JavaScript" value="1" />
-          <entry key="Python" value="111" />
+          <entry key="Python" value="182" />
+          <entry key="RNG Compact" value="1" />
         </counts>
       </usages-collector>
     </session>
     <session id="-1428456309">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.44" value="1" />
+          <entry key="project.open.time.47" value="1" />
           <entry key="project.open.time.49" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gitignore" value="1" />
-          <entry key="html" value="17" />
+          <entry key="html" value="20" />
           <entry key="pstat" value="1" />
-          <entry key="py" value="22" />
+          <entry key="py" value="24" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="HTML" value="17" />
+          <entry key="HTML" value="20" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="Profiler Session" value="1" />
-          <entry key="Python" value="22" />
+          <entry key="Python" value="24" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gitignore" value="8" />
-          <entry key="html" value="619" />
-          <entry key="py" value="3910" />
+          <entry key="html" value="667" />
+          <entry key="py" value="3970" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="619" />
+          <entry key="HTML" value="667" />
           <entry key="PLAIN_TEXT" value="8" />
-          <entry key="Python" value="3910" />
+          <entry key="Python" value="3970" />
         </counts>
       </usages-collector>
     </session>
@@ -470,19 +440,13 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="22" column="45" lean-forward="true" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fund/url.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="25" column="31" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
+            <state relative-caret-position="231">
+              <caret line="44" column="42" selection-start-line="44" selection-start-column="42" selection-end-line="44" selection-end-column="42" />
+              <folding>
+                <element signature="e#630#667#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -490,8 +454,90 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fund/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="205" column="18" selection-start-line="205" selection-start-column="18" selection-end-line="205" selection-end-column="18" />
+            <state relative-caret-position="256">
+              <caret line="269" column="56" selection-start-line="269" selection-start-column="56" selection-end-line="269" selection-end-column="56" />
+              <folding>
+                <element signature="e#27#84#0" expanded="true" />
+                <marker date="1542121084000" expanded="true" signature="7809:7814" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/request/viewsFolder/paymentViews.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="237">
+              <caret line="157" lean-forward="true" selection-start-line="157" selection-end-line="157" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/request/urls/payment_urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fund/templates/fund/details.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="62" lean-forward="true" selection-start-line="11" selection-start-column="62" selection-end-line="11" selection-end-column="62" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fund/templates/fund/fund_form.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="42" lean-forward="true" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fund/templates/fund/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="222">
+              <caret line="39" column="73" lean-forward="true" selection-start-line="39" selection-start-column="73" selection-end-line="39" selection-end-column="73" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fund/templates/fund/expense/expense_form.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" column="23" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fund/forms.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
+              <folding>
+                <element signature="e#0#24#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fund/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="167">
+              <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#43#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -508,16 +554,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>/simple</find>
-      <find>form =</find>
-      <find>url '</find>
-      <find>form2</find>
-      <find>prof</find>
-      <find>ProformaForm</find>
-      <find>insert</find>
-      <find>form</find>
-      <find>index</find>
-      <find>pref_index</find>
       <find>expenseForm</find>
       <find>ex_form</find>
       <find>spec_form</find>
@@ -538,6 +574,16 @@
       <find>payment_delete</find>
       <find>col-md-6</find>
       <find>payment_edit</find>
+      <find>ProfSpecForm</find>
+      <find>ProformaForm</find>
+      <find>rforms</find>
+      <find>PaymentFiels</find>
+      <find>file_instance</find>
+      <find>prof</find>
+      <find>Xpref</find>
+      <find>redirect</find>
+      <find>form</find>
+      <find>expense_edit_form</find>
     </findStrings>
     <replaceStrings>
       <replace>pref_ver</replace>
@@ -569,17 +615,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/spec_form.html" />
-        <option value="$PROJECT_DIR$/request/reqSpecViews.py" />
-        <option value="$PROJECT_DIR$/pricedb/models.py" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/proforma_specs.html" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/search_index.html" />
         <option value="$PROJECT_DIR$/request/prefViews.py" />
-        <option value="$PROJECT_DIR$/fund/templates/fund/fund_form.html" />
-        <option value="$PROJECT_DIR$/fund/url.py" />
-        <option value="$PROJECT_DIR$/fund/templates/fund/details.html" />
-        <option value="$PROJECT_DIR$/fund/templates/fund/expense/expense_form.html" />
-        <option value="$PROJECT_DIR$/fund/views.py" />
         <option value="$PROJECT_DIR$/customer/templates/customer/index.html" />
         <option value="$PROJECT_DIR$/fund/templates/fund/index.html" />
         <option value="$PROJECT_DIR$/.gitignore" />
@@ -599,8 +636,6 @@
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" />
         <option value="$PROJECT_DIR$/request/urls/prof_urls.py" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/proforma_form.html" />
-        <option value="$PROJECT_DIR$/request/viewsFolder/proformaViews.py" />
-        <option value="$PROJECT_DIR$/request/models.py" />
         <option value="$PROJECT_DIR$/request/viewsFolder/requestViews.py" />
         <option value="$PROJECT_DIR$/request/urls/req_urls.py" />
         <option value="$PROJECT_DIR$/request/urls/old_url.py" />
@@ -608,18 +643,29 @@
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html" />
         <option value="$PROJECT_DIR$/request/views.py" />
         <option value="$PROJECT_DIR$/factor/urls.py" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" />
         <option value="$PROJECT_DIR$/request/urls/payment_urls2.py" />
         <option value="$PROJECT_DIR$/request/urls/url.py" />
         <option value="$PROJECT_DIR$/request/views2.py" />
-        <option value="$PROJECT_DIR$/request/urls/payment_urls.py" />
         <option value="$PROJECT_DIR$/request/forms/payment_form.py" />
-        <option value="$PROJECT_DIR$/request/forms/__init__.py" />
         <option value="$PROJECT_DIR$/request/forms/forms.py" />
-        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_form.html" />
-        <option value="$PROJECT_DIR$/request/viewsFolder/paymentViews.py" />
-        <option value="$PROJECT_DIR$/request/forms/payment_forms.py" />
         <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" />
+        <option value="$PROJECT_DIR$/request/forms/__init__.py" />
+        <option value="$PROJECT_DIR$/request/viewsFolder/proformaViews.py" />
+        <option value="$PROJECT_DIR$/request/urls/payment_urls.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/test.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_form.html" />
+        <option value="$PROJECT_DIR$/request/models.py" />
+        <option value="$PROJECT_DIR$/request/viewsFolder/paymentViews.py" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_details.html" />
+        <option value="$PROJECT_DIR$/fund/templates/fund/fund_form.html" />
+        <option value="$PROJECT_DIR$/request/forms/payment_forms.py" />
+        <option value="$PROJECT_DIR$/fund/templates/fund/details.html" />
+        <option value="$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html" />
+        <option value="$PROJECT_DIR$/fund/url.py" />
+        <option value="$PROJECT_DIR$/fund/models.py" />
+        <option value="$PROJECT_DIR$/fund/forms.py" />
+        <option value="$PROJECT_DIR$/fund/templates/fund/expense/expense_form.html" />
+        <option value="$PROJECT_DIR$/fund/views.py" />
       </list>
     </option>
   </component>
@@ -641,69 +687,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="customer" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="factor" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="fund" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="fund" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="fund" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="fund" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="requests" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="viewsFolder" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -714,30 +697,23 @@
             <path>
               <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
               <item name="factorV2" type="462c0819:PsiDirectoryNode" />
-              <item name="factor" type="462c0819:PsiDirectoryNode" />
+              <item name="customer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="factorV2" type="462c0819:PsiDirectoryNode" />
+              <item name="fund" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
               <item name="factorV2" type="462c0819:PsiDirectoryNode" />
               <item name="request" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factorV2" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-              <item name="forms" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
               <item name="factorV2" type="462c0819:PsiDirectoryNode" />
               <item name="request" type="462c0819:PsiDirectoryNode" />
               <item name="urls" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factorV2" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-              <item name="viewsFolder" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
@@ -811,6 +787,79 @@
               <item name="humanize" type="462c0819:PsiDirectoryNode" />
               <item name="templatetags" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
+              <item name="Lib" type="462c0819:PsiDirectoryNode" />
+              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
+              <item name="django" type="462c0819:PsiDirectoryNode" />
+              <item name="forms" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="customer" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="factor" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="fund" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="fund" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="fund" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="fund" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="templates" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="requests" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="factorV2" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="viewsFolder" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -819,7 +868,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
-    <property name="SearchEverywhereHistoryKey" value="left&#9;FILE&#9;file://G:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;leftMen&#9;FILE&#9;file://G:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;jemco.js&#9;FILE&#9;file://G:/factorV2/request/static/request/admin_jemco/js/jemco/jemco.js&#10;leftmenu&#9;FILE&#9;file://I:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;lef&#9;FILE&#9;file://G:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;leftmen&#9;FILE&#9;file://I:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;leftme&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;payment&#9;null&#9;null&#10;setting&#9;FILE&#9;file://G:/factor/factor/settings.py&#10;lefmen&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;menu&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;base&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/admin_base.html&#10;dash&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/dashboard.html&#10;index&#9;FILE&#9;file://G:/factor/fund/templates/fund/index.html&#10;url&#9;FILE&#9;file://I:/factor/factor/urls.py&#10;form&#9;FILE&#9;file://I:/factor/request/templates/requests/admin_jemco/ypref/form.html&#10;setti&#9;FILE&#9;file://I:/factor/factor/settings.py&#10;models&#9;FILE&#9;file://I:/factor/request/models.py&#10;login&#9;FILE&#9;file://I:/factor/accounts/templates/accounts/login.html&#10;init&#9;FILE&#9;file://G:/factor/prefactor/__init__.py&#10;settings&#9;null&#9;null&#10;read&#9;FILE&#9;file://G:/factor/customer/templates/customer/read.html&#10;details&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/ypayment/payment_details.html&#10;01&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/prefactor/create_spec_pref01.html&#10;prefactors&#9;FILE&#9;file://I:/factor/request/templates/prefactors&#10;model&#9;FILE&#9;file://G:/factor/request/models.py&#10;adminbas&#9;FILE&#9;file://C:/Users/liva/Desktop/Scs/2/dev files/django/factor/request/templates/requests/admin_jemco/admin_base.html&#10;base.&#9;FILE&#9;file://C:/Users/liva/Desktop/Scs/2/dev files/django/factor/request/templates/requests/admin_jemco/admin_base.html" />
+    <property name="SearchEverywhereHistoryKey" value="مثبف&#9;FILE&#9;file://G:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;left&#9;FILE&#9;file://G:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;leftMen&#9;FILE&#9;file://G:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;jemco.js&#9;FILE&#9;file://G:/factorV2/request/static/request/admin_jemco/js/jemco/jemco.js&#10;leftmenu&#9;FILE&#9;file://I:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;lef&#9;FILE&#9;file://G:/factorV2/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;leftmen&#9;FILE&#9;file://I:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;leftme&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;payment&#9;null&#9;null&#10;setting&#9;FILE&#9;file://G:/factor/factor/settings.py&#10;lefmen&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;menu&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/page_elements/leftMenu.html&#10;base&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/admin_base.html&#10;dash&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/dashboard.html&#10;index&#9;FILE&#9;file://G:/factor/fund/templates/fund/index.html&#10;url&#9;FILE&#9;file://I:/factor/factor/urls.py&#10;form&#9;FILE&#9;file://I:/factor/request/templates/requests/admin_jemco/ypref/form.html&#10;setti&#9;FILE&#9;file://I:/factor/factor/settings.py&#10;models&#9;FILE&#9;file://I:/factor/request/models.py&#10;login&#9;FILE&#9;file://I:/factor/accounts/templates/accounts/login.html&#10;init&#9;FILE&#9;file://G:/factor/prefactor/__init__.py&#10;settings&#9;null&#9;null&#10;read&#9;FILE&#9;file://G:/factor/customer/templates/customer/read.html&#10;details&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/ypayment/payment_details.html&#10;01&#9;FILE&#9;file://G:/factor/request/templates/requests/admin_jemco/prefactor/create_spec_pref01.html&#10;prefactors&#9;FILE&#9;file://I:/factor/request/templates/prefactors&#10;model&#9;FILE&#9;file://G:/factor/request/models.py&#10;adminbas&#9;FILE&#9;file://C:/Users/liva/Desktop/Scs/2/dev files/django/factor/request/templates/requests/admin_jemco/admin_base.html&#10;base.&#9;FILE&#9;file://C:/Users/liva/Desktop/Scs/2/dev files/django/factor/request/templates/requests/admin_jemco/admin_base.html" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -1012,15 +1061,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4973404" visible="true" weight="0.18305598" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4973404" weight="0.20121029" />
       <window_info id="Structure" order="1" sideWeight="0.50265956" side_tool="true" weight="0.17776097" />
       <window_info id="Favorites" order="2" sideWeight="0.5019763" side_tool="true" weight="0.27987897" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4993573" weight="0.32749325" />
-      <window_info active="true" anchor="bottom" x="63" y="304" width="1240" height="120" id="Run" order="2" sideWeight="0.49848714" visible="true" weight="0.1590164" />
-      <window_info anchor="bottom" x="255" y="241" width="867" height="501" id="Debug" order="3" type="FLOATING" weight="0.44474393" />
+      <window_info anchor="bottom" x="63" y="304" width="1240" height="120" id="Run" order="2" sideWeight="0.49848714" weight="0.37540984" />
+      <window_info anchor="bottom" x="101" y="176" width="1114" height="501" id="Debug" order="3" type="FLOATING" weight="0.44474393" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295082" />
@@ -1028,8 +1076,8 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32786885" />
       <window_info anchor="bottom" id="Database Changes" order="9" weight="0.32786885" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50226927" side_tool="true" weight="0.26065573" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4977307" weight="0.41147542" />
-      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49924356" weight="0.552459" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4977307" weight="0.31311476" />
+      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49924356" weight="0.18032786" />
       <window_info anchor="bottom" id="manage.py@factor" order="13" weight="0.3295082" />
       <window_info anchor="bottom" id="Concurrent Activities Diagram" order="14" weight="0.32884097" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -1039,6 +1087,32 @@
       <window_info anchor="right" id="SciView" order="4" weight="0.32969153" />
       <window_info anchor="right" id="Coverage" order="5" side_tool="true" />
     </layout>
+    <layout-to-restore>
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4973404" visible="true" weight="0.20121029" />
+      <window_info id="Structure" order="1" sideWeight="0.50265956" side_tool="true" weight="0.17776097" />
+      <window_info id="Favorites" order="2" sideWeight="0.5019763" side_tool="true" weight="0.27987897" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4993573" weight="0.32749325" />
+      <window_info anchor="bottom" x="63" y="304" width="1240" height="120" id="Run" order="2" sideWeight="0.49848714" visible="true" weight="0.37540984" />
+      <window_info anchor="bottom" x="101" y="176" width="1114" height="501" id="Debug" order="3" type="FLOATING" weight="0.44474393" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.3295082" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32786885" />
+      <window_info anchor="bottom" id="Database Changes" order="9" weight="0.32786885" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50226927" side_tool="true" weight="0.26065573" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4977307" weight="0.31311476" />
+      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49924356" weight="0.18032786" />
+      <window_info anchor="bottom" id="manage.py@factor" order="13" weight="0.3295082" />
+      <window_info anchor="bottom" id="Concurrent Activities Diagram" order="14" weight="0.32884097" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" weight="0.32980332" />
+      <window_info anchor="right" id="SciView" order="4" weight="0.32969153" />
+      <window_info anchor="right" id="Coverage" order="5" side_tool="true" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -1051,12 +1125,12 @@
       <breakpoints>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/request/views.py</url>
-          <line>443</line>
+          <line>447</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/fund/views.py</url>
-          <line>146</line>
+          <line>148</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
@@ -1071,13 +1145,23 @@
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/request/models.py</url>
-          <line>38</line>
+          <line>43</line>
           <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/request/views.py</url>
-          <line>286</line>
-          <option name="timeStamp" value="43" />
+          <url>file://$PROJECT_DIR$/request/models.py</url>
+          <line>12</line>
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/request/viewsFolder/proformaViews.py</url>
+          <line>145</line>
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/fund/views.py</url>
+          <line>264</line>
+          <option name="timeStamp" value="50" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -1095,133 +1179,53 @@
   <component name="debuggerHistoryManager">
     <expressions id="evaluateExpression">
       <expression>
-        <expression-string>instance._meta.model_name</expression-string>
+        <expression-string>form.is_valid()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>instance._meta.modelname</expression-string>
+        <expression-string>request.method</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>instance._meta.modelnam</expression-string>
+        <expression-string>form.fields</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>instance</expression-string>
+        <expression-string>form.fields['title']</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>instance.prof</expression-string>
+        <expression-string>form.fields.title</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>type(instance.prof)</expression-string>
+        <expression-string>form.fields['fund'].title</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>instance.prof.id</expression-string>
+        <expression-string>form.fields['fund']</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>instance.prof.number</expression-string>
+        <expression-string>form</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>instance.prof_id</expression-string>
+        <expression-string>form.title</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/customer/templates/customer/customer.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="54" selection-start-line="17" selection-start-column="54" selection-end-line="17" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="44" column="14" selection-start-line="44" selection-start-column="14" selection-end-line="44" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/customer/url.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="24" column="43" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/factor/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="49" column="38" selection-start-line="49" selection-start-column="38" selection-end-line="49" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/customer/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/admin/templatetags/admin_list.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/admin/templatetags/admin_modify.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templatetags/functions.py" />
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/humanize/templatetags/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/humanize/templatetags/humanize.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templatetags/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/customer/templates/customer2/customer_form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/customer/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="289" column="48" selection-start-line="289" selection-start-column="48" selection-end-line="289" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/edit_form.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/details.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="54" column="14" selection-start-line="54" selection-start-column="14" selection-end-line="54" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/reqSpecViews.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="109" column="4" selection-start-line="109" selection-start-column="4" selection-end-line="109" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1054">
@@ -1236,23 +1240,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="45" column="78" selection-start-line="45" selection-start-column="78" selection-end-line="45" selection-end-column="78" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/urls/prof_urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="103">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#1#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/proforma_form.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
@@ -1260,133 +1247,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/auth/decorators.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-16">
-          <caret line="181" column="6" selection-start-line="181" selection-start-column="6" selection-end-line="181" selection-end-column="6" />
-          <folding>
-            <element signature="e#951#1595#0" />
-            <element signature="e#1636#1774#0" />
-            <element signature="e#1810#2568#0" />
-            <element signature="e#2604#3371#0" />
-            <element signature="e#3582#4251#0" />
-            <element signature="e#4289#4706#0" />
-            <element signature="e#4744#5155#0" />
-            <element signature="e#5205#5611#0" />
-            <element signature="e#5650#5925#0" />
-            <marker date="1541936022000" expanded="true" signature="6726:6731" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/viewsFolder/requestViews.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-            <element signature="e#567#922#0" />
-            <element signature="e#978#1153#0" />
-            <element signature="e#1237#1638#0" />
-            <element signature="e#1684#2800#0" />
-            <element signature="e#2852#3777#0" />
-            <element signature="e#3828#4217#0" />
-            <element signature="e#4267#4382#0" />
-            <element signature="e#4444#5120#0" />
-            <element signature="e#5184#5635#0" />
-            <element signature="e#5697#5887#0" />
-            <element signature="e#5933#5986#0" />
-            <element signature="e#6035#6120#0" />
-            <element signature="e#6201#6593#0" />
-            <element signature="e#6645#7560#0" />
-            <element signature="e#7611#8112#0" />
-            <element signature="e#8162#8289#0" />
-            <element signature="e#8355#8503#0" />
-            <element signature="e#8568#9059#0" />
-            <element signature="e#9122#9415#0" />
-            <element signature="e#9494#9535#0" />
-            <element signature="e#9605#9650#0" />
-            <element signature="e#9716#9760#0" />
-            <element signature="e#9827#9869#0" />
-            <element signature="e#9921#10855#0" />
-            <element signature="e#10885#11070#0" />
-            <element signature="e#11116#11665#0" />
-            <element signature="e#11733#13218#0" />
-            <element signature="e#13277#13430#0" />
-            <element signature="e#13482#13816#0" />
-            <element signature="e#13874#14035#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/urls/old_url.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="32" lean-forward="true" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
-          <folding>
-            <element signature="e#1#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/request/viewsFolder/requestViews.py" />
+    <entry file="file://$PROJECT_DIR$/request/urls/old_url.py" />
     <entry file="file://$PROJECT_DIR$/factor/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="748">
           <caret line="52" column="54" lean-forward="true" selection-start-line="52" selection-start-column="54" selection-end-line="52" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="292" column="19" selection-start-line="292" selection-start-column="19" selection-end-line="292" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#645#686#0" />
-            <element signature="e#718#937#0" />
-            <element signature="e#974#1191#0" />
-            <element signature="e#1241#1553#0" />
-            <element signature="e#1602#1886#0" />
-            <element signature="e#2110#2262#0" />
-            <element signature="e#2589#2945#0" />
-            <element signature="e#3029#3732#0" />
-            <element signature="e#3773#4124#0" />
-            <element signature="e#4173#4541#0" />
-            <element signature="e#4572#5313#0" />
-            <element signature="e#5352#5543#0" />
-            <element signature="e#5546#5563#0" />
-            <element signature="e#6533#7600#0" />
-            <element signature="e#7648#7903#0" />
-            <element signature="e#7955#8147#0" />
-            <element signature="e#8211#8433#0" />
-            <element signature="e#8466#9607#0" />
-            <element signature="e#9629#9766#0" />
-            <element signature="e#9792#9924#0" />
-            <element signature="e#10793#10860#0" />
-            <element signature="e#10890#11460#0" />
-            <element signature="e#11529#11533#0" />
-            <element signature="e#11554#11797#0" />
-            <element signature="e#11835#11965#0" />
-            <element signature="e#12011#12491#0" />
-            <element signature="e#12527#13673#0" />
-            <element signature="e#13709#13828#0" />
-            <element signature="e#13860#14250#0" />
-            <element signature="e#14292#14518#0" />
-            <element signature="e#14560#14981#0" />
-            <element signature="e#15019#15235#0" />
-            <element signature="e#15268#15809#0" />
-            <element signature="e#15839#15979#0" />
-            <element signature="e#16006#16139#0" />
-            <element signature="e#16203#16368#0" />
-            <element signature="e#16402#17841#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1421,91 +1287,225 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/urls/req_urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="16" column="53" selection-start-line="16" selection-start-column="53" selection-end-line="16" selection-end-column="53" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/request/urls/req_urls.py" />
     <entry file="file://$PROJECT_DIR$/request/viewsFolder/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/request/viewsFolder/permission.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/urls/url.py" />
+    <entry file="file://$PROJECT_DIR$/request/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/urls/payment_urls2.py" />
+    <entry file="file://$PROJECT_DIR$/request/forms/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/forms/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="1156">
+          <caret line="68" column="6" selection-start-line="68" selection-start-column="6" selection-end-line="68" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="286" selection-start-line="286" selection-end-line="286" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/urls/url.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/db/models/manager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="708">
-          <caret line="67" column="51" lean-forward="true" selection-start-line="67" selection-start-column="51" selection-end-line="67" selection-end-column="51" />
-          <folding>
-            <element signature="e#630#662#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="121">
+          <caret line="81" selection-start-line="81" selection-end-line="81" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/__init__.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/db/models/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="654" column="8" selection-start-line="654" selection-start-column="8" selection-end-line="654" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/db/models/fields/files.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113">
+          <caret line="301" selection-start-line="301" selection-end-line="301" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/forms/proforma_forms.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/forms/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="42" selection-start-line="1" selection-start-column="42" selection-end-line="1" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/request/views2.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/urls/payment_urls2.py">
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_details.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="18" column="65" selection-start-line="18" selection-start-column="65" selection-end-line="18" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="6" column="40" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/viewsFolder/paymentViews.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="154" column="38" selection-start-line="154" selection-start-column="38" selection-end-line="154" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="242">
+          <caret line="51" column="78" selection-start-line="51" selection-start-column="78" selection-end-line="51" selection-end-column="78" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="54" column="31" selection-start-line="54" selection-start-column="31" selection-end-line="54" selection-end-column="31" />
-          <folding>
-            <element signature="e#2024#2060#0#HTML" expanded="true" />
-            <element signature="e#2378#2414#0#HTML" expanded="true" />
-            <element signature="e#2903#2927#0#HTML" expanded="true" />
-          </folding>
+        <state relative-caret-position="119">
+          <caret line="7" column="29" selection-start-line="6" selection-start-column="12" selection-end-line="7" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="72" selection-start-line="6" selection-start-column="72" selection-end-line="6" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/test.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="60" selection-start-line="3" selection-start-column="60" selection-end-line="3" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/viewsFolder/proformaViews.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="23" column="58" selection-start-line="23" selection-start-column="58" selection-end-line="23" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="89">
+          <caret line="35" column="51" lean-forward="true" selection-start-line="35" selection-start-column="51" selection-end-line="35" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/urls/prof_urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="25" column="50" selection-start-line="25" selection-start-column="50" selection-end-line="25" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/forms/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/pycharm.jar!/resources/html5-schema/html5/web-forms.rnc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="556" column="22" selection-start-line="556" selection-start-column="22" selection-end-line="556" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/request/forms/payment_forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="9" lean-forward="true" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
+        <state relative-caret-position="17">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/tests.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/apps.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/django/contrib/auth/decorators.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="26" column="63" lean-forward="true" selection-start-line="26" selection-start-column="63" selection-end-line="26" selection-end-column="63" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/customer/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-119">
+          <caret line="14" column="87" selection-start-line="14" selection-start-column="87" selection-end-line="14" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/templates/fund/details.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="62" lean-forward="true" selection-start-line="11" selection-start-column="62" selection-end-line="11" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/templates/fund/fund_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="42" lean-forward="true" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/url.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="44" column="42" selection-start-line="44" selection-start-column="42" selection-end-line="44" selection-end-column="42" />
+          <folding>
+            <element signature="e#630#667#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/templates/fund/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="39" column="73" lean-forward="true" selection-start-line="39" selection-start-column="73" selection-end-line="39" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/templates/fund/expense/expense_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="23" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fund/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>
@@ -1514,76 +1514,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/request/urls/payment_urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="37" selection-start-line="15" selection-start-column="37" selection-end-line="15" selection-end-column="37" />
-          <folding>
-            <element signature="e#1#38#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="221">
+          <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/request/views2.py">
+    <entry file="file://$PROJECT_DIR$/request/viewsFolder/paymentViews.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="37" column="26" lean-forward="true" selection-start-line="37" selection-start-column="26" selection-end-line="37" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-            <element signature="e#9921#10855#0" />
-            <element signature="e#10885#11070#0" />
-            <element signature="e#11733#13218#0" />
-            <element signature="e#13277#13430#0" />
-            <element signature="e#13482#13816#0" />
-            <element signature="e#13874#14035#0" />
-            <marker date="1541940950000" expanded="false" signature="10181:10186" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/forms/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/forms/proforma_forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret lean-forward="true" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/viewsFolder/proformaViews.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="292" column="23" lean-forward="true" selection-start-line="292" selection-start-column="23" selection-end-line="292" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/request/templates/requests/admin_jemco/page_elements/leftMenu.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="22" column="45" lean-forward="true" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fund/url.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="25" column="31" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
+        <state relative-caret-position="237">
+          <caret line="157" lean-forward="true" selection-start-line="157" selection-end-line="157" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fund/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="205" column="18" selection-start-line="205" selection-start-column="18" selection-end-line="205" selection-end-column="18" />
+        <state relative-caret-position="256">
+          <caret line="269" column="56" selection-start-line="269" selection-start-column="56" selection-end-line="269" selection-end-column="56" />
+          <folding>
+            <element signature="e#27#84#0" expanded="true" />
+            <marker date="1542121084000" expanded="true" signature="7809:7814" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

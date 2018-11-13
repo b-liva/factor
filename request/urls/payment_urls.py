@@ -5,6 +5,7 @@ from request.viewsFolder import paymentViews
 
 urlpatterns = [
 
+    path('testimage', paymentViews.testimage, name='testimage'),
     path('form', paymentViews.payment_form, name='payment_form'),
     path('pay_form', paymentViews.pay_form, name='pay_form'),
     # path('insert', paymentViews.payment_insert, name='payment_insert'),
