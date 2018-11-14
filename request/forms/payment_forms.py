@@ -4,6 +4,17 @@ from request import models
 
 class PaymentFrom(forms.ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super(PaymentFrom, self).__init__(*args, **kwargs)
+        # list = [ 'images']
+        list = []
+        for visible in self.visible_fields():
+            if visible.name not in list:
+                visible.field.widget.attrs['class'] = 'form-control'
+
+        self.fields['xpref_id'].queryset = self.fields['xpref_id'].queryset.order_by('number')
+
+
     class Meta:
         model = models.Payment
         fields = '__all__'
@@ -12,6 +23,17 @@ class PaymentFrom(forms.ModelForm):
             'payment_date',
             'customer',
         )
+        widgets = {
+            'date_fa': forms.DateInput(attrs={
+                'id': 'date_fa'
+            })
+        }
+
+        labels = {
+            'xpref_id': 'Select Proforma',
+            'number': 'Payment Number',
+            'date_fa': 'Payment Date',
+        }
 
 
 class PaymentEditForm(forms.ModelForm):

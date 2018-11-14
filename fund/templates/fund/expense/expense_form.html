@@ -3,17 +3,6 @@
 {% block right_col %}
 
     <div class="col-md-6 col-md-offset-3">
-        <div>
-            {% if form.errors %}
-                <ul>
-                    {% for key,value in form.errors.items %}
-                        <li>{{ key|escape }} : {{ value|escape }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
-        <div>{{ expinst }}</div>
-        <div>{{ fund }}</div>
 
         <table class="withBorder tableFull">
             <tr>
@@ -42,8 +31,7 @@
             <tr>
                 <td></td>
                 <td>Sum</td>
-                ex_form
-                <td>{{ sum|intcomma }}</td>
+                <td>{{ amount_sum|intcomma }}</td>
             </tr>
             </tbody>
         </table>
@@ -51,37 +39,10 @@
     </div>
 
     <div class="col-md-6 col-md-offset-3">
-        {#        <form action="{% url 'ex_form' fund_pk=fund.pk %}" method="POST">#}
-        {#        <form action="" method="POST">#}
-        {#            {% csrf_token %}#}
-        {#            <div class="form-group">#}
-        {#                <label for="fun-title">Title </label>#}
-        {#                {{ form.title }}#}
-        {#            </div>#}
-        {#            <div class="form-group">#}
-        {#                <label for="fun-amount">Amount </label>#}
-        {#                {{ form.amount }}#}
-        {#            </div>#}
-        {#            <div class="form-group">#}
-        {#                <label for="fun-title">summary</label>#}
-        {#                {{ form.summary }}#}
-        {#            </div>#}
-        {#            <button type="submit" name="submit" class="btn btn-success btn-sm">Save and add another</button>#}
-        {#            <a class="btn btn-primary btn-sm" href="{% url 'fund_index' %}">Back to index</a>#}
-        {#        </form>#}
 
         <form method="POST" action="">
             {% csrf_token %}
-            {#            {{ form.errors }}#}
-            {{ form.non_field_errors }}
             {{ form.as_p }}
-            {{ form2.as_p }}
-            <button class="btn btn-sm btn-success" type="submit">Save</button>
-            <a class="btn btn-primary btn-sm" href="{% url 'fund_index' %}">Back to index</a>
-        </form>
-        <form method="POST" action="">
-            {% csrf_token %}
-            {# {{ fundform.as_p }}
             <button class="btn btn-sm btn-success" type="submit">Save</button>
             <a class="btn btn-primary btn-sm" href="{% url 'fund_index' %}">Back to index</a>
         </form>

@@ -8,6 +8,11 @@ class ProjectTypeForm(forms.ModelForm):
     class Meta:
         model = models.ProjectType
         fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+            })
+        }
 
 
 class RequestFrom(forms.ModelForm):
@@ -20,9 +25,34 @@ class RequestFrom(forms.ModelForm):
         model = models.Requests
         fields = '__all__'
         exclude = ('owner', 'pub_date',)
+        widgets = {
+            'customer': forms.Select(attrs={
+                'class': 'form-control',
+
+            }),
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter Title here',
+
+            }),
+            'number': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter Number here',
+
+            }),
+            'date_fa': forms.DateInput(attrs={
+                'class': 'datetime-input form-control',
+                'id': 'date_fa'
+            }),
+            'summary': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter Summary Here...'
+            })
+        }
 
 
 class RequestFileForm(forms.ModelForm):
+
 
     class Meta:
         model = models.RequestFiles
@@ -33,6 +63,14 @@ class RequestFileForm(forms.ModelForm):
 
 
 class SpecForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(SpecForm, self).__init__(*args, **kwargs)
+        # list = [ 'images']
+        list = []
+        for visible in self.visible_fields():
+            if visible.name not in list:
+                visible.field.widget.attrs['class'] = 'form-control'
 
     class Meta:
         model = models.ReqSpec
@@ -60,10 +98,33 @@ class ProformaForm(forms.ModelForm):
         # this renders the items in form drop down menu
         # self.fields['req_id'].label_from_instance = lambda obj: "%s" % obj.number
 
+        list = []
+        for visible in self.visible_fields():
+            if visible.name not in list:
+                visible.field.widget.attrs['class'] = 'form-control'
+
     class Meta:
         model = models.Xpref
         fields = '__all__'
-        exclude = ('owner', 'pub_date')
+        exclude = ('owner', 'pub_date', )
+        widgets = {
+
+            'date_fa': forms.DateInput(attrs={
+                'id': 'date_fa'
+            }),
+            'exp_date_fa': forms.DateInput(attrs={
+                'id': 'exp_date_fa'
+            })
+        }
+
+        labels = {
+            'req_id': 'Select The Request',
+            'number': 'Enter Proforma Number',
+            'date_fa': 'Date',
+            'exp_date_fa': 'Expiry Date',
+            'summary': 'Summary',
+
+        }
 
 
 class ProfSpecForm(forms.ModelForm):

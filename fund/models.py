@@ -11,7 +11,6 @@ from factor import settings
 class Fund(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=150, null=True, blank=True)
-    # number = models.AutoField()
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     summary = models.TextField(max_length=600, null=True, blank=True)
@@ -19,6 +18,7 @@ class Fund(models.Model):
     class Meta:
         permissions = (
             ("view_fund", "Can view funds"),
+            ("index_fund", "Can view list of funds"),
         )
 
     def __str__(self):

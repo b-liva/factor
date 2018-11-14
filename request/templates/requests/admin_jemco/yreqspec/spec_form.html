@@ -3,76 +3,93 @@
 {% block right_col %}
     <div class="row">
         <div class="container">
-            <div class="col-md-6 col-md-offset-3">
-                <div>
-                    <h3>{{ msg }}</h3>
-                    <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                        Request Specs</h1>
+            <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2">
+                <h3>{{ msg }}</h3>
+                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                    Request Specs</h1>
                 {{ req_obj.pk }}
-                    <div>
-                        <p><b>Request:</b></p>
-                        <p>
-                            <span>id: {{ req_obj.pk }}</span>
-                            <span>- #: {{ req_obj.number }}</span>
-                            <span>- Date: {{ req_obj.pub_date|jformat }}</span>
-                        </p>
-                        <hr>
-                    </div>
-                    <div>
-                        <p><b>Spec:</b></p>
-                        <table class="withBorder">
-                            <tbody>
-                            <tr>
-                                <th>ID</th>
-                                <th>Type</th>
-                                <th>QTY</th>
-                                <th>KW</th>
-                                <th>VOLTAGE</th>
-                                <th>RPM</th>
-                                <th>IP</th>
-                                <th>IC</th>
-                                <th>SUMMARY</th>
-                                {#                        <th>PRICE</th>#}
-                                <th>ACTION</th>
-                            </tr>
-                            {% for spec in specs %}
-                                <tr>
-                                    <td>{{ spec.id }}</td>
-                                    <td>{{ spec.type }}</td>
-                                    <td>{{ spec.qty }}</td>
-                                    <td>{{ spec.kw }}</td>
-                                    <td>{{ spec.voltage }}</td>
-                                    <td>{{ spec.rpm }}</td>
-                                    <td>{{ spec.ip }}</td>
-                                    <td>{{ spec.ic }}</td>
-                                    <td>{{ spec.summary }}</td>
-                                    {#                        <td>{{ spec.price }}</td>#}
-                                    <td>
-                                        <a href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">
-                                            <button class="btn btn-primary btn-xs">Delete</button>
-                                        </a>
-                                        <a href="{% url 'reqspec_edit_form' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">
-                                            <button class="btn btn-primary btn-xs">Edit</button>
-                                        </a>
+                <div>
+                    <p><b>Request:</b></p>
 
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                        <hr>
-                    </div>
                     {% if msg %}
                         {{ msg }}
                     {% endif %}
-{#                    <form method="POST" action="{% url 'spec_form' req_pk=req_obj.pk %}" enctype="multipart/form-data">#}
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-{#                            <input class="btn btn-primary" type="submit" value="save and add another" name="done">#}
+                    <p>
+                        <span>id: {{ req_obj.pk }}</span>
+                        <span>- #: {{ req_obj.number }}</span>
+                        <span>- Date: {{ req_obj.pub_date|jformat }}</span>
+                    </p>
+                    <hr>
+                </div>
+            </div>
+            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">
+                <p><b>Spec:</b></p>
+                <table class="withBorder tableFull">
+                    <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>QTY</th>
+                        <th>KW</th>
+                        <th>VOLTAGE</th>
+                        <th>RPM</th>
+                        <th>IP</th>
+                        <th>IC</th>
+                        <th>SUMMARY</th>
+                        {#                        <th>PRICE</th>#}
+                        <th>ACTION</th>
+                    </tr>
+                    {% for spec in specs %}
+                        <tr>
+                            <td>{{ spec.id }}</td>
+                            <td>{{ spec.type }}</td>
+                            <td>{{ spec.qty }}</td>
+                            <td>{{ spec.kw }}</td>
+                            <td>{{ spec.voltage }}</td>
+                            <td>{{ spec.rpm }}</td>
+                            <td>{{ spec.ip }}</td>
+                            <td>{{ spec.ic }}</td>
+                            <td>{{ spec.summary }}</td>
+                            {#                        <td>{{ spec.price }}</td>#}
+                            <td>
+
+                                <a href="{% url 'reqspec_edit_form' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">
+                                    <button class="btn btn-warning btn-xs">Edit</button>
+                                </a>
+                                <a href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">
+                                    <button class="btn btn-danger btn-xs">Delete</button>
+                                </a>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
+                <div>
+                    {#                    <form method="POST" action="{% url 'spec_form' req_pk=req_obj.pk %}" enctype="multipart/form-data">#}
+                    <div class="">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            {#                            <input class="btn btn-primary" type="submit" value="save and add another" name="done">#}
+{#                            <div class="col-md-4">#}
+{#                                {% for visible in form.visible_fields %}#}
+{#                                    {% if visible.name in list %}#}
+{#                                        {{ visible.name }}#}
+{#                                        {{ visible }}#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            </div>#}
+{#                            <div class="col-md-4">#}
+{##}
+{#                            </div>#}
                             <button class="btn btn-primary" type="submit">Save</button>
                             <a class="btn btn-success" href="{% url 'request_index' %}">Back to Index</a>
-                    </form>
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>

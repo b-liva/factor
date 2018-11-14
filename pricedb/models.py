@@ -26,3 +26,8 @@ class MotorDB(models.Model):
     def __str__(self):
         return 'prime cost: %s' % (self.prime_cost)
 
+    class Meta:
+        permissions = (
+            ('view_pricedb', 'can view price database'),
+            ('clean_pricedb', 'can view price database'),
+        )

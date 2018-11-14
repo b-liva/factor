@@ -21,15 +21,12 @@ from fund import views
 import fund.views
 
 urlpatterns = [
-  path('form', fund.views.fund_form, name='fund_form'),
-  path('fform', fund.views.fform, name='fform'),
-  path('insert', fund.views.fund_insert, name='fund_insert'),
+  path('form', fund.views.fform, name='fform'),
   path('index', fund.views.fund_index, name='fund_index'),
   path('find', fund.views.fund_find, name='fund_find'),
   path('<int:fund_pk>/', include([
       path('', fund.views.fund_details, name='fund_details'),
       path('delete', fund.views.fund_delete, name='fund_delete'),
-      path('edit', fund.views.fund_edit, name='fund_edit'),
       path('edit_form', fund.views.fund_edit_form, name='fund_edit_form'),
   ])),
 

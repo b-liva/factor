@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'pricedb.apps.PricedbConfig',
     'motordb.apps.MotordbConfig',
     # 'accounts.apps.AppConfig',
+    # 'crispy_forms',
     'django_cleanup.apps.CleanupConfig',
     'accounts.apps.AccountsConfig',
     'django.contrib.admin',

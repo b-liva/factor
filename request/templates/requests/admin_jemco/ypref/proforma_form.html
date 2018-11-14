@@ -12,27 +12,32 @@
                     <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
                         New Proforma Form</h1>
 
+
+{#                    <h3>Requests:</h3>#}
+
                     {% if msg %}
                         {{ msg }}
                     {% endif %}
-                    <h3>Requests:</h3>
-                    {% for req in  reqs %}
-                        {{ req.number }} -
-                    {% endfor %}
+                    {#                    {% for req in  reqs %}#}
+                    {#                        {{ req.number }} -#}
+                    {#                    {% endfor %}#}
+                    {##}
+                    {#                    <h3>Logged in user Requests:</h3>#}
+                    {#                    {% for req in  owner_reqs %}#}
+                    {#                        {{ req.number }} -#}
+                    {#                    {% endfor %}#}
 
-                    <h3>Logged in user Requests:</h3>
-                    {% for req in  owner_reqs %}
-                        {{ req.number }} -
-                    {% endfor %}
-
-                    <hr>
                     <form method="POST" action="" enctype="multipart/form-data">
                         {% csrf_token %}
 
                         {{ form.as_p }}
                         {% for img in prof_images %}
-{#                            <div ><img src="{{ img.image.url }}" width="30px" height="30px"></div><span id="{{ img.pk }}" class="imgClr">Clear</span>#}
-                            <div ><span class="img-thumbnail"><img  src="{{ img.image.url }}" width="50px" height="50px"></span>  <span>{{ img_names|hash:img.pk  }}</span><span><a href="{% url 'prof_img_del' img_pk=img.pk %}"><i class="fa fa-times" aria-hidden="true"></i></a></span></div>
+                            {#                            <div ><img src="{{ img.image.url }}" width="30px" height="30px"></div><span id="{{ img.pk }}" class="imgClr">Clear</span>#}
+                            <div><span class="img-thumbnail"><img src="{{ img.image.url }}" width="50px" height="50px"></span>
+                                <span>{{ img_names|hash:img.pk }}</span><span><a
+                                        href="{% url 'prof_img_del' img_pk=img.pk %}"><i class="fa fa-times"
+                                                                                         aria-hidden="true"></i></a></span>
+                            </div>
                         {% endfor %}
                         {{ prof_file.as_p }}
                         <button class="btn btn-success btn-sm" type="submit" name="submit">Next</button>

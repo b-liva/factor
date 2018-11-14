@@ -2,14 +2,19 @@
 {% load humanize %}
 {% block right_col %}
     <div class="container">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-4">
             <h3>{{ msg }}</h3>
             <p>Proforma Number:<span class="results">{{ pref.number }}</span></p>
             <p>Proforma Date:<span class="value">{{ pref.pub_date }}</span></p>
             <p>Proforma Date:<span class="value">{{ pref.date_fa }}</span></p>
             <p>Proforma Date:<span class="value">{{ pref.exp_date_fa }}</span></p>
-            <hr>
-
+        </div>
+        <div class="col-md-8">
+            <a class="btn btn-success btn-sm" type="submit" name="submit"
+               href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">Edit Prices</a>
+            <a class="btn btn-warning btn-sm" href="{% url 'pref_edit2' ypref_pk=pref.pk %}">Edit Prof</a>
+        </div>
+        <div class="col-md-10 col-md-offset-1">
             <h3>Proforma Details</h3>
             <table class="withBorder tableFull">
                 <thead>
@@ -57,20 +62,14 @@
 
 
             </table>
-            <br>
-            <a href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
-                <button class="btn btn-success btn-sm" type="submit" name="submit">Edit Prices</button>
-                <a class="btn btn-warning btn-sm" href="{% url 'pref_edit2' ypref_pk=pref.pk %}">Edit Prof</a>
-            </a>
-
-            <br>
-
         </div>
-
-        <div class="col-md-10 col-lg-offset-1">
+    
+        <div class="col-md-10 col-md-offset-1">
             {% for img in prof_images %}
-                <a href="{{ img.image.url }}"><img class="img-responsive img-thumbnail col-md-4"
-                                                   src="{{ img.image.url }}" style="max-height: 150px;"></a>
+                <a href="{{ img.image.url }}" target="_blank">
+                    <img class="img-responsive img-thumbnail col-md-3"
+                                                   src="{{ img.image.url }}" style="" >
+                </a>
             {% endfor %}
         </div>
 

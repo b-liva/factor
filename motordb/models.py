@@ -122,5 +122,8 @@ class Motors(models.Model):
 
     summary = models.TextField(max_length=500, blank=True, null=True)
 
-    # qty = models.IntegerField(default=1)
-    # type = models.TextField(default=1)
+    class Meta:
+        permissions = (
+            ('view_motordb', 'can view motor database'),
+            ('index_motordb', 'can view list of motor database'),
+        )

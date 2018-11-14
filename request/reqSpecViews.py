@@ -116,10 +116,13 @@ def spec_form(request, req_pk):
     specs = req.reqspec_set.all()
     print(specs)
 
+    list = ['kw', 'qty']
+
     return render(request, 'requests/admin_jemco/yreqspec/spec_form.html', {
         'form': form,
         'req_obj': req,
-        'specs': specs
+        'specs': specs,
+        'list': list,
     })
 
 

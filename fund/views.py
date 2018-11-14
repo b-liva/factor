@@ -9,32 +9,6 @@ from . import forms
 
 
 @login_required
-def fund_form(request):
-    # fund.save()
-    can_add = has_perm_or_is_owner(request.user, 'fund.add_fund')
-    if not can_add:
-        messages.error(request, 'No access for you')
-        return redirect('errorpage')
-    funds = Fund.objects.all()
-    btn = 'Next'
-    return render(request, 'fund/form.html', {'funds': funds, 'btn': btn})
-
-
-@login_required
-def fund_insert(request):
-    fund = Fund()
-    if request.POST['updating']:
-        fund = Fund.objects.get(pk=request.POST['fund_id'])
-    fund.title = request.POST['title']
-    fund.summary = request.POST['summary']
-    fund.date_fa = request.POST['date_fa']
-    fund.owner = request.user
-    fund.save()
-    return redirect('expense_form', fund_pk=fund.pk)
-    # return render(request, 'fund/form.html', {'fund_id': fund_id})
-
-
-@login_required
 def fund_index(request):
     can_view = has_perm_or_is_owner(request.user, 'fund.view_fund')
     if not can_view:
@@ -84,25 +58,6 @@ def fund_delete(request, fund_pk):
     if can_delete:
         fund.delete()
         return redirect('fund_index')
-    else:
-        messages.error(request, 'You have not enough access')
-        return redirect('errorpage')
-
-
-@login_required
-def fund_edit(request, fund_pk):
-
-    fund = Fund.objects.get(pk=fund_pk)
-    can_edit = has_perm_or_is_owner(request.user, 'fund.change_fund', fund)
-    if can_edit:
-
-        updating = True
-        btn = 'Save'
-        return render(request, 'fund/form.html', {
-            'updating': updating,
-            'fund': fund,
-            'btn': btn
-        })
     else:
         messages.error(request, 'You have not enough access')
         return redirect('errorpage')
@@ -194,19 +149,19 @@ def has_perm_or_is_owner(user_obj, permissions, instance=None):
 
 @login_required
 def fform(request):
+    can_add = has_perm_or_is_owner(request.user, 'fund.add_fund')
+    if not can_add:
+        messages.error(request, 'No access for you')
+        return redirect('errorpage')
 
     if request.method == 'POST':
         form = forms.FundForm(request.POST)
         if form.is_valid():
             fund = form.save(commit=False)
             fund.owner = request.user
-
             fund.save()
             return redirect('ex_form', fund_pk=fund.pk)
-
     else:
-        # fund = Fund.objects.get(pk=fund_pk)
-        # form = forms.FundForm(instance=fund)
         form = forms.FundForm()
 
     return render(request, 'fund/fund_form.html', {
@@ -217,11 +172,11 @@ def fform(request):
 @login_required
 def ex_form(request, fund_pk):
     fund = Fund.objects.get(pk=fund_pk)
+    amount_sum = expenses_sum(fund)
 
     if request.method == 'POST':
         form = forms.ExpenseForm(request.POST)
         if form.is_valid():
-            print('form is valid')
             expense = form.save(commit=False)
             expense.fund = fund
             expense.save()
@@ -235,6 +190,7 @@ def ex_form(request, fund_pk):
     return render(request, 'fund/expense/expense_form.html', {
         'form': form,
         'fund': fund,
+        'amount_sum': amount_sum,
         'expenses': expenses
     })
 
@@ -257,25 +213,39 @@ def fund_edit_form(request, fund_pk):
 def expense_edit_form(request, fund_pk, expense_pk):
     fund_inst = Fund.objects.get(pk=fund_pk)
     expense_instance = Expense.objects.get(pk=expense_pk)
-    expenses = Expense.objects.filter(fund=fund_inst.pk)
+    # expenses = Expense.objects.filter(fund=fund_inst.pk)
+    expenses = fund_inst.expense_set.all()
+
+    amount_sum = expenses_sum(fund_inst)
+
+
     form = forms.ExpenseForm(request.POST or None, instance=expense_instance)
     fundform = forms.FundForm(request.POST or None, instance=fund_inst)
-    print(f'errors: {form.errors.as_data()}')
+
 
     if form.is_valid():
-        print('form is valid')
         exp = form.save(commit=False)
         exp.fund = fund_inst
         exp.save()
         return redirect('ex_form', fund_pk=fund_inst.pk)
     return render(request, 'fund/expense/expense_form.html', {
-        'form2': form,
+        'form': form,
         'fund': fund_inst,
         'expenses': expenses,
         'fundform': fundform,
-        'expinst': expense_instance
+        'expinst': expense_instance,
+        'amount_sum': amount_sum
     })
 
 
 def exedif(request):
     return HttpResponse('hello')
+
+
+def expenses_sum(fund):
+    expenses = fund.expense_set.all()
+    amounts = []
+    for e in expenses:
+        amounts.append(e.amount)
+    amount_sum = sum(amounts)
+    return amount_sum

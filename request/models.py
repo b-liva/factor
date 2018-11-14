@@ -74,16 +74,20 @@ class ReqSpec(models.Model):
     # type = models.IntegerField(choices=project_type, default=0)
     type = models.ForeignKey(ProjectType, on_delete=models.DO_NOTHING)
     # probably this price should be removed.
-    price = models.FloatField(null=True, blank=True)
+    # price = models.FloatField(null=True, blank=True)
     kw = models.FloatField()
     rpm = models.IntegerField()
     voltage = models.IntegerField(default=380)
     ip = models.IntegerField(null=True, blank=True)
     ic = models.IntegerField(null=True, blank=True)
-    images = models.FileField(upload_to='specs/', blank=True, null=True)
+    # images = models.FileField(upload_to='specs/', blank=True, null=True)
     summary = models.TextField(max_length=500, blank=True, null=True)
 
-
+    class Meta:
+        permissions = (
+            ('index_reqspecs', 'can see list of request Specs'),
+            ('read_reqspecs', 'can read request Specs'),
+        )
 
 
 class Xpref(models.Model):
@@ -195,6 +199,12 @@ class Payment(models.Model):
 
     def __str__(self):
         return '#%s and $%s ' % (self.number, self.amount)
+
+    class Meta:
+        permissions = (
+            ('read_payment', 'Can read a customer details'),
+            ('index_payment', 'Can see list of customers'),
+        )
 
 
 class PaymentFiles(models.Model):
