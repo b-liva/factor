@@ -6,6 +6,7 @@ from django.contrib import messages
 # Create your views here.
 from fund.models import Fund, Expense
 from . import forms
+import jdatetime
 
 
 @login_required
@@ -14,16 +15,18 @@ def fund_index(request):
     if not can_view:
         messages.error(request, 'no access')
         return redirect('errorpage')
-    funds = Fund.objects.filter(owner=request.user)
+    funds = Fund.objects.filter(owner=request.user).order_by('date_fa')
     if request.user.is_superuser:
-        funds = Fund.objects.all()
+        funds = Fund.objects.all().order_by('pk').reverse()
     amounts = {}
     for fund in funds:
         expenses = fund.expense_set.all()
         sum = 0
         for expense in expenses:
             sum += expense.amount
-        amounts[sum] = fund
+        # amounts[sum] = fund
+        amounts[fund] = sum
+
 
     return render(request, 'fund/index.html', {
         'funds': funds,
@@ -33,14 +36,16 @@ def fund_index(request):
 
 @login_required
 def fund_details(request, fund_pk):
-    print('01')
     fund = Fund.objects.get(pk=fund_pk)
     expenses = fund.expense_set.all()
-    print(f'fund: {fund}')
-    print(f'fund: {expenses}')
+    sum = 0
+    for e in expenses:
+        sum += e.amount
+
     return render(request, 'fund/details.html', {
         'fund': fund,
         'expenses': expenses,
+        'amount_sum': sum
     })
 
 
@@ -114,8 +119,18 @@ def expense_find(request):
 
 
 @login_required
-def expense_details(request):
-    pass
+def expense_details(request, fund_pk, expense_pk):
+    if not Expense.objects.filter(pk=expense_pk):
+        messages.error(request, 'no such expese')
+        return redirect('errorpage')
+
+    exp = Expense.objects.get(pk=expense_pk)
+    fund = exp.fund
+    context = {
+        'expense': exp,
+        'fund': fund
+    }
+    return render(request, 'fund/expense/details.html', context)
 
 
 @login_required
@@ -198,6 +213,7 @@ def ex_form(request, fund_pk):
 @login_required
 def fund_edit_form(request, fund_pk):
     fund_instance = Fund.objects.get(pk=fund_pk)
+    fund_instance.date_fa = fund_instance.date_fa.togregorian()
     form = forms.FundForm(request.POST or None, instance=fund_instance)
     if form.is_valid():
         print(f'fund is: valid')
@@ -218,10 +234,8 @@ def expense_edit_form(request, fund_pk, expense_pk):
 
     amount_sum = expenses_sum(fund_inst)
 
-
     form = forms.ExpenseForm(request.POST or None, instance=expense_instance)
     fundform = forms.FundForm(request.POST or None, instance=fund_inst)
-
 
     if form.is_valid():
         exp = form.save(commit=False)

@@ -86,16 +86,17 @@ def pref_insert(request):
 
 @login_required
 def pref_edit_form(request, ypref_pk):
+    if not Xpref.objects.filter(pk=ypref_pk):
+        messages.error(request, 'no Proforma')
+        return redirect('errorpage')
     proforma = Xpref.objects.get(pk=ypref_pk)
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.change_xpref', proforma.req_id)
-    print(can_edit)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', proforma)
     if not can_edit:
         messages.error(request, 'You have not enough access')
         return redirect('errorpage')
     prof_specs = proforma.prefspec_set.all()
-    print(proforma)
-    print(prof_specs)
     return render(request, 'requests/admin_jemco/ypref/edit_form.html', {
+    # return render(request, 'requests/admin_jemco/ypref/index.html', {
         'proforma': proforma,
         'prof_specs': prof_specs
     })
@@ -113,6 +114,9 @@ def xpref_link(request, xpref_id):
 
 @login_required
 def prof_spec_form(request, ypref_pk):
+    if not Xpref.objects.filter(pk=ypref_pk):
+        messages.error(request, 'no Proforma')
+        return redirect('errorpage')
     proforma = Xpref.objects.get(pk=ypref_pk)
     req = proforma.req_id
     reqspecs = req.reqspec_set.all()
@@ -122,13 +126,10 @@ def prof_spec_form(request, ypref_pk):
         return redirect('errorpage')
 
     if request.method == 'POST':
-        print('spec02')
-
         # form = forms.ProfSpecForm(request.POST, request.user)
         form = forms.ProfSpecForm(request.POST)
         if form.is_valid():
             print('form is valid')
-
             spec = form.save(commit=False)
             spec.xpref_id = proforma
             spec.save()

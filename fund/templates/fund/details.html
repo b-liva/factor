@@ -1,49 +1,59 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
 {% load humanize %}
+{% load jformat %}
 {% block right_col %}
     <div class="container">
-        <div class="col-md-6 ">
-            <h3>{{ msg }}</h3>
-            <p>{{ fund.pk }}</p>
-            <h3>{{ fund.title }}</h3>
-            <h3>{{ fund.summary }}</h3>
-            <p>{{ fund.pub_date }}</p>
-            <a class="btn btn-sm btn-success" href="{% url 'fund_edit' fund_pk=fund.pk %}">Edit This Fund</a>
-            <a class="btn btn-sm btn-success" href="{% url 'ex_form' fund_pk=fund.pk %}">Edit Expenses</a>
-            <a href="{% url 'fund_index' %}" class="btn btn-danger btn-sm">Cancel</a>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-10">
+                <h3>{{ fund.title }}</h3>
+                <div class="row"></div>
+                <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+                    <p>{{ fund.summary }}</p>
+                    <p>{{ fund.date_fa }}</p>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <a class="btn btn-sm btn-success" href="{% url 'fund_edit_form' fund_pk=fund.pk %}">Edit This
+                        Fund</a>
+                    <a class="btn btn-sm btn-success" href="{% url 'ex_form' fund_pk=fund.pk %}">Edit Expenses</a>
+                    <a href="{% url 'fund_index' %}" class="btn btn-danger btn-sm">Cancel</a>
+                </div>
 
-        </div>
-        <div class="col-md-6 ">
-            Expenses belongs to <b>{{ fund.title }}</b>:<br>
-            <table class="withBorder tableFull">
-                <tr>
-                    <th>No</th>
-                    <th>Id</th>
-                    <th>Title</th>
-                    <th>Total Expenses</th>
-                </tr>
-                <tbody class="">
-                {% for expense in expenses %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ expense.pk }}</td>
-                        <td>
-                            <a href="{% url 'expense_details' fund_pk=fund.pk expense_pk=expense.pk %}">{{ expense.title }}</a>
-                        </td>
-                        <td>{{ expense.amount }}</td>
+
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-10">
+                Expenses belongs to this fund:<br>
+                <table class="table table-hover text-center">
+                    <thead>
+                    <tr class="dark">
+                        <th class="text-center">No</th>
+                        <th class="text-center">Id</th>
+                        <th class="text-center">Title</th>
+                        <th class="text-center">Total Expenses</th>
                     </tr>
-                {% endfor %}
-                <tr style="border-top: 3px solid black;">
-                    <td>{{ pref_sum|intcomma }}</td>
-                    <td><b>{{ amount_sum|intcomma }}</b></td>
-                    {#                    <td>{{ debt|intcomma }}</td>#}
-                    {#                    <td>{{ debt_percent|floatformat:2 }}</td>#}
-                </tr>
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody class="">
+                    {% for expense in expenses %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ expense.pk }}</td>
+                            <td>
+                                <a class="btn btn-link no-padding no-margin" href="{% url 'expense_details' fund_pk=fund.pk expense_pk=expense.pk %}">{{ expense.title }}</a>
+                            </td>
+                            <td>{{ expense.amount|intcomma }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr style="border-top: 3px solid black;">
+                        <td colspan="3" class="emphsize">SUM</td>
+                        <td class="emphsize"><b>{{ amount_sum|intcomma }}</b></td>
+                    </tr>
+                    </tbody>
+                </table>
 
 
+            </div>
         </div>
+
     </div>
 
 {% endblock %}

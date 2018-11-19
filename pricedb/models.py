@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils.timezone import now
 
-# Create your models here.
 
+# Create your models here.
 class PriceDb(models.Model):
     title = models.CharField(max_length=40)
     summary = models.TextField(max_length=600)

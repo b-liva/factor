@@ -130,6 +130,7 @@ class PrefSpec(models.Model):
     ip = models.IntegerField(null=True, blank=True)
     ic = models.IntegerField(null=True, blank=True)
     summary = models.TextField(max_length=500, blank=True, null=True)
+    considerations = models.TextField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return 'pk:%s | %s | %sKW - %sRPM - %sV' % (self.pk, self.qty, self.kw, self.rpm, self.voltage)

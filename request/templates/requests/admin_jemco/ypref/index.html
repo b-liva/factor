@@ -6,29 +6,39 @@
             <h3>{{ msg }}</h3>
             <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
                 Proformas</h1>
-        <form method="POST" action="{% url 'pref_find' %}">
-            {% csrf_token %}
-            Proforma No <input name="pref_no" >
-            <input name="text">
-            <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
-        </form>
-            <table class="withBorder tableFull">
+            {% if messages %}
+                <div class="alert alert-danger">
+                    {% for msg in messages %}
+                        <p>{{ msg }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <form method="POST" action="{% url 'pref_find' %}">
+                {% csrf_token %}
+                Proforma No <input name="pref_no">
+                <input name="text">
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
+            </form>
+            <table class="table table-hover text-center">
+                <thead>
                 <tr>
-                    <th>Id</th>
-{#                    <th>Id</th>#}
-                    <th>Number</th>
-                    <th>request</th>
-                    <th>Date</th>
-                    <th>Summary</th>
-                    <th>Actions</th>
+                    <th scope="col" class="text-center">Id</th>
+                    <th scope="col" class="text-center">Number</th>
+                    <th scope="col" class="text-center">request</th>
+                    <th scope="col" class="text-center">Date</th>
+                    <th scope="col" class="text-center">Summary</th>
+                    <th scope="col" class="text-center">Actions</th>
                 </tr>
+                </thead>
+
                 <tbody class="">
                 {% for pref in prefs %}
                     <tr>
-                        <td>{{ forloop.counter }}</td>
-{#                        <td>{{ pref.pk }}</td>#}
+                        <td scope="row">{{ forloop.counter }}</td>
+                        {#                        <td>{{ pref.pk }}</td>#}
                         <td>{{ pref.number }}</td>
-                        <td><a href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a></td>
+                        <td><a href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
+                        </td>
                         <td>{{ pref.pub_date }}</td>
                         <td>{{ pref.summary|truncatechars:60 }}</td>
                         <td>
@@ -42,7 +52,7 @@
                 </tbody>
             </table>
             <br>
-{#            <a href="{% url 'pref_form' %}" class="btn btn-success btn-sm">Add new Prefactor</a>#}
+            {#            <a href="{% url 'pref_form' %}" class="btn btn-success btn-sm">Add new Prefactor</a>#}
             <a href="{% url 'pro_form' %}" class="btn btn-success btn-sm">New Proforma</a>
         </div>
     </div>

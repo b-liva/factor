@@ -53,20 +53,44 @@ def reqspec_insert(request):
 
 @login_required
 def reqspec_index(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_reqspecs')
+    if not can_add:
+        messages.error(request, 'You have not enough access')
+        return redirect('errorpage')
+
     reqspecs = ReqSpec.objects.all()
     return render(request, 'requests/admin_jemco/yreqspec/index.html', {'reqspecs': reqspecs})
 
 
 @login_required
 def reqspec_details(request, yreqSpec_pk):
+    if not ReqSpec.objects.filter(pk=yreqSpec_pk):
+        messages.error(request, 'No such Spec')
+        return redirect('errorpage')
+    reqspec = ReqSpec.objects.get(pk=yreqSpec_pk)
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.read_reqspecs', reqspec)
+    if not can_add:
+        messages.error(request, 'You have not enough access')
+        return redirect('errorpage')
     pass
 
 
 @login_required
 def reqspec_delete(request, yreqSpec_pk, req_pk):
+
+    if not ReqSpec.objects.filter(pk=yreqSpec_pk):
+        messages.error(request, 'No such Spec.')
+        return redirect('errorpage')
+
     reqspec = ReqSpec.objects.get(pk=yreqSpec_pk)
+    can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_reqspecs', reqspec)
+    if not can_del:
+        messages.error(request, 'You have not enough access')
+        return redirect('errorpage')
+
     req = reqspec.req_id
     reqspec.delete()
+    messages.add_message(request, level=20, message='spec deleted successfully')
     return redirect('spec_form', req_pk=req_pk)
     # return redirect('reqSpec_form', req_pk=req_pk)
 
@@ -99,6 +123,7 @@ def spec_form(request, req_pk):
     if not can_add:
         messages.error(request, 'You have not enough access to add request specs')
         return redirect('errorpage')
+
     form = forms.SpecForm()
     req = Requests.objects.get(pk=req_pk)
 
@@ -109,13 +134,12 @@ def spec_form(request, req_pk):
             spec.req_id = req
             spec.owner = request.user
             spec.save()
+            messages.add_message(request, level=20, message=f'specs added successfully to request no.{req.number}')
             return redirect('spec_form', req_pk=req_pk)
     else:
         form = forms.SpecForm()
 
     specs = req.reqspec_set.all()
-    print(specs)
-
     list = ['kw', 'qty']
 
     return render(request, 'requests/admin_jemco/yreqspec/spec_form.html', {
@@ -128,6 +152,17 @@ def spec_form(request, req_pk):
 
 @login_required
 def reqspec_edit_form(request, yreqSpec_pk, req_pk):
+
+    if not Requests.objects.filter(pk=req_pk) or not ReqSpec.objects.filter(pk=yreqSpec_pk):
+        messages.error(request, 'no request or specs')
+        return redirect('errorpage')
+
+    reqspec = ReqSpec.objects.get(pk=yreqSpec_pk)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec', reqspec)
+    if not can_edit:
+        messages.error(request, 'You have not enough access to edit request specs')
+        return redirect('errorpage')
+
     req = Requests.objects.get(pk=req_pk)
     specs = req.reqspec_set.all()
     spec = ReqSpec.objects.get(pk=yreqSpec_pk)
@@ -137,7 +172,8 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
         if form.is_valid():
             print('form is valid')
             form.save()
-            form = forms.SpecForm()
+            # form = forms.SpecForm()
+            messages.add_message(request, level=20,  message='specs updated successfully')
             return redirect('spec_form', req_pk=req.pk)
 
     return render(request, 'requests/admin_jemco/yreqspec/spec_form.html', {
@@ -145,4 +181,3 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
         'specs': specs,
         'form': form
     })
-    # return redirect('req')
