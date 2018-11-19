@@ -46,6 +46,7 @@ def request_form(request):
     if not can_add:
         messages.error(request, 'Sorry, You need some priviliges to do this.')
         return redirect('errorpage')
+
     req = Requests()
     customers = Customer.objects.all()
     return render(request, 'requests/admin_jemco/yrequest/form.html', {
@@ -60,6 +61,7 @@ def req_form(request):
     if not can_add:
         messages.error(request, 'Sorry, You need some priviliges to do this.')
         return redirect('errorpage')
+
     file_instance = forms.RequestFileForm()
 
     if request.method == 'POST':
@@ -155,10 +157,10 @@ def request_delete(request, request_pk):
         return redirect('errorpage')
     req = Requests.objects.get(pk=request_pk)
     can_delete = funcs.has_perm_or_is_owner(request.user, 'request.delete_requests', req)
-    # can_delete = True
     if not can_delete:
         messages.error(request, 'No access')
         return redirect('errorpage')
+
     req.delete()
     return redirect('request_index')
 
@@ -258,6 +260,9 @@ def request_edit_form(request, request_pk):
     # 5 - get the list of files from request
     # 6 - if form is valid the save request and its related images
     # 7 - render the template file
+    if not Requests.objects.filter(pk=request_pk):
+        messages.error(request, 'Nothin found')
+        return redirect('errorpage')
 
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
     if not can_add:

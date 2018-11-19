@@ -9,6 +9,7 @@ from request.models import Payment
 from request import views2
 from django.contrib import messages
 from customer import forms
+import jdatetime
 
 
 import request.templatetags.functions as funcs
@@ -157,6 +158,7 @@ def customer_index(request):
     if not can_index:
         messages.error(request, 'No access to see list of customers')
         return redirect('errorpage')
+
     customers = Customer.objects.all()
     return render(request, 'customer/index.html', {'customers': customers})
 
@@ -181,19 +183,26 @@ def customer_read2(request, customer_pk):
     customer_reqs = customer.requests_set.all()
     kw = {}
     some = {}
+    kwList = []
     for customer_req in customer_reqs:
         # specs = customer_req.reqspec_set.all()
         kw[customer_req.pk] = views2.total_kw(customer_req.pk)
         t_kw = views2.total_kw(customer_req.pk)
         some[t_kw] = customer_req
-    print(type(kw))
-    print(some)
-    return render(request, 'customer/details.html', {
+        kwList.append(kw[customer_req.pk])
+
+    payment_list, payment_sum = customers_payment(customer.pk)
+
+    print(payment_list)
+    print(payment_sum)
+    context = {
         'customer': customer,
         'customer_reqs': customer_reqs,
         'kw': kw,
         'some': some,
-    })
+        'customer_kw_total': sum(kwList)
+    }
+    return render(request, 'customer/details.html', context)
 
 
 @login_required
@@ -282,11 +291,35 @@ def type_delete(request, type_pk):
 
 @login_required
 def customer_edit_form(request, customer_pk):
+    if not Customer.objects.filter(pk=customer_pk):
+        messages.error(request, 'No such Customer')
+        return redirect('errorpage')
+
     customer_instance = Customer.objects.get(pk=customer_pk)
+    if customer_instance.date2:
+        customer_instance.date2 = customer_instance.date2.togregorian()
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_customer', customer_instance)
+    if not can_edit:
+        messages.error(request, 'No access')
+        return redirect('errorpage')
+
+
     form = forms.CustomerForm(request.POST or None, instance=customer_instance)
 
     if form.is_valid():
         form.save()
+        return redirect('customer_index')
     return render(request, 'customer2/customer_form.html', {
         'form': form,
     })
+
+
+def customers_payment(customer_pk):
+    customer = Customer.objects.get(pk=customer_pk)
+    payments = customer.payment_set.all()
+    priceList = []
+    for p in payments:
+        priceList.append(p.amount)
+    total_payments = sum(priceList)
+    return (priceList, total_payments)
+

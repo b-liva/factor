@@ -16,39 +16,43 @@
         </div>
         <div class="col-md-10 col-md-offset-1">
             <h3>Proforma Details</h3>
-            <table class="table table-hover text-center">
+            <table class="withBorder tableFull">
                 <thead>
                 <tr>
-                    <th scope="col" class="text-center">No</th>
-                    <th scope="col" class="text-center">ID</th>
-                    <th scope="col" class="text-center">Qty</th>
-                    <th scope="col" class="text-center">Kw</th>
-                    <th scope="col" class="text-center">rpm</th>
-                    <th scope="col" class="text-center">voltage</th>
-                    <th scope="col" class="text-center">consideration</th>
-                    <th scope="col" class="text-center">price</th>
-                    <th scope="col" class="text-center">Total price</th>
+                    <th>No</th>
+                    <th>ID</th>
+                    <th>Qty</th>
+                    <th>Kw</th>
+                    <th>rpm</th>
+                    <th>voltage</th>
+                    <th>consideration</th>
+                    <th>price</th>
+                    <th>Total price</th>
+                    <th>sale price</th>
+                    <th>percent</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for index, object in nested.items %}
                     <tr>
-                        <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ object.obj.pk }}</td>
                         <td>{{ object.obj.qty }}</td>
                         <td>{{ object.obj.kw }}</td>
                         <td>{{ object.obj.rpm }}</td>
                         <td>{{ object.obj.voltage }}</td>
                         <td>{{ object.obj.considerations }}</td>
-                        <td>{{ object.obj.price|intcomma:0 }}</td>
-                        <td>{{ object.spec_total|intcomma:0 }}</td>
+                        <td>{{ object.obj.price }}</td>
+                        <td>{{ object.spec_total }}</td>
+                        <td>{{ object.sale_price }}</td>
+                        <td class="{{ object.percentage_class }}">{{ object.percentage|floatformat:2 }}</td>
                     </tr>
                 {% endfor %}
                 <tr style="border-top: 2px black solid">
-                    <td colspan="3" class="emphsize">sum</td>
-                    <td class="kw-total emphsize">{{ kw_total|intcomma }}</td>
-                    <td colspan="4"></td>
-                    <td class="amount-total emphsize">{{ proforma_total|intcomma:0 }}</td>
+                    <td colspan="8">sum</td>
+                    <td>{{ proforma_total }}</td>
+                    <td>{{ sales_total }}</td>
+                    <td class="{{ total_percentage_class }}">{{ total_percentage|floatformat:2 }}</td>
                 </tr>
                 </tbody>
 

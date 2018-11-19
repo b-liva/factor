@@ -4,8 +4,6 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
-import prefactor.views
-import prefactor_verification.views
 import tender.views
 import request.views
 

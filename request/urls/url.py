@@ -13,19 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-import prefactor.views
-import prefactor_verification.views
-import tender.views
 import request.views
 from request import views2
-from request import prefViews
 from request import reqSpecViews
-from request.viewsFolder import permission, proformaViews
+from request.viewsFolder import permission
 
 
 urlpatterns = [
@@ -63,7 +58,6 @@ path('request/', request.views.createpage, name='createpage'),
     path('<int:img_pk>/prof_img/del', request.views2.prof_img_del, name='prof_img_del'),
 
     path('', include('request.urls.req_urls')),
-    path('old/', include('request.urls.old_url')),
     path('pref/', include('request.urls.prof_urls')),
     path('payment/', include('request.urls.payment_urls')),
 

@@ -3,39 +3,44 @@
 {% block right_col %}
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <h2 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                    payment No.{{ payment.number }} Details</h2>
+            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                    payment No.{{ payment.number }} Details</h1>
             </div>
 
-            <div class="col-md-6 col-md-offset-1 ">
+            <div class="col-md-5 col-md-offset-1 col-sm-5 col-sm-offset-1">
 
                 <h3>{{ msg }}</h3>
-                <table class="table-bordered">
+                <table class="table table-hover">
                     <tbody>
                     <tr>
-                        <th>ID</th>
+                        <th class="dark">ID</th>
                         <td>{{ payment.pk }}</td>
                     </tr>
                     <tr>
-                        <th>Number</th>
+                        <th class="dark">Number</th>
                         <td>{{ payment.number }}</td>
                     </tr>
                     <tr>
-                        <th>Amount</th>
+                        <th class="dark">Amount</th>
                         <td>{{ payment.amount|intcomma }}</td>
                     </tr>
                     <tr>
-                        <th>Date</th>
+                        <th class="dark">Date</th>
                         <td>{{ payment.payment_date }}</td>
                     </tr>
-                    <th>Date_fa</th>
+                    <th class="dark">Date_fa</th>
                     <td>{{ payment.date_fa }}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <hr>
+            <div class="col-md-5 col-md-offset-1 col-sm-5 col-sm-offset-1">
+                <a href="{% url 'payment_edit' ypayment_pk=payment.pk %}" class="btn btn-warning btn-xs">Edit
+                    Payment</a>
+                <a href="{% url 'payment_index' %}" class="btn btn-success btn-xs">payment index</a>
+            </div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
                 <div>
                     {% for i in images %}
@@ -47,10 +52,7 @@
                     {% endfor %}
                 </div>
 
-                <div class="">
-                    <a href="{% url 'payment_edit' ypayment_pk=payment.pk %}" class="btn btn-warning btn-xs">Edit Payment</a>
-                    <a href="{% url 'payment_index' %}" class="btn btn-success btn-xs">payment index</a>
-                </div>
+
             </div>
         </div>
     </div>

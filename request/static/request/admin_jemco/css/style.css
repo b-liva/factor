@@ -48,3 +48,12 @@ td.bad-conditions{
 .testback2{
   background: #4fafcb;
 }
+
+.emphsize{
+  font-size: large;
+  font-style: italic;
+}
+.table-hover>tbody>tr:hover {
+    background-color: #2a3f54;
+    color: white;
+}

@@ -12,26 +12,26 @@
                 <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
             </form>
             <br>
-            <table class="withBorder tableFull">
+            <table class="table table-hover">
                 <tr>
-                    <th>pk</th>
-                    <th>Number</th>
-                    <th>Date</th>
-                    <th>Image</th>
-                    <th>Action</th>
+                    <th colspan="col" class="text-center">pk</th>
+                    <th colspan="col" class="text-center">Number</th>
+                    <th colspan="col" class="text-center">Date</th>
+                    <th colspan="col" class="text-center">Image</th>
+                    <th colspan="col" class="text-center">Action</th>
                 </tr>
                 <tbody class="">
                 {% for request in all_requests %}
                     <tr>
-                        <td>{{ request.pk }}</td>
-                        <td>{{ request.number }}</td>
-                        <td>{{ request.pub_date }}</td>
+                        <td scope="row" class="text-center">{{ request.pk }}</td>
+                        <td class="text-center">{{ request.number }}</td>
+                        <td class="text-center">{{ request.pub_date }}</td>
                         {% if request.image %}
-                            <td><img class="" width="60px" src="{{ request.image.url }}"></td>
+                            <td class="text-center"><img class="" width="60px" src="{{ request.image.url }}"></td>
                         {% else %}
-                            <td >No Image</td>
+                            <td class="text-center">No Image</td>
                         {% endif %}
-                        <td>
+                        <td class="text-center">
                             <a class="btn btn-primary btn-xs" href="{% url 'request_details' request_pk=request.pk %}">Details</a>
                             <a class="btn btn-warning btn-xs" href="{% url 'request_edit_form' request_pk=request.pk %}">Edit</a>
                             <a class="btn btn-primary btn-xs btn-danger"

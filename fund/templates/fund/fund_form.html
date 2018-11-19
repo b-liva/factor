@@ -2,8 +2,9 @@
 {% block right_col %}
 
     <div class="col-md-6 col-md-offset-3">
-    <h2 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Add new Fund</h2>
-{#        <form action="{% url 'fform' %}" method="POST">#}
+        <h2 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Add
+            new Fund</h2>
+        {#        <form action="{% url 'fform' %}" method="POST">#}
         <form action="" method="POST">
             {% csrf_token %}
             {{ form.as_p }}

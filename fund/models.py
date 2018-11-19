@@ -9,6 +9,7 @@ from factor import settings
 
 
 class Fund(models.Model):
+    objects = jmodels.jManager()
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=150, null=True, blank=True)
     pub_date = models.DateTimeField(default=now)

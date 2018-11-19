@@ -9,19 +9,21 @@
                 Total kw: <p>{{ total_kw }}</p>
             </div>
 
-            <table class="withBorder tableFull">
-                <tr>
-                    <th>No</th>
-                    {#            <th>Id</th>#}
-                    <th>Qty</th>
-                    <th>kw</th>
-                    <th>rpm</th>
-                    <th>Summary</th>
+            <table class="table table-hover text-center">
+            <thead class="dark">
+            <tr>
+                    <th scope="col" class="text-center">No</th>
+                    <th scope="col" class="text-center">Qty</th>
+                    <th scope="col" class="text-center">kw</th>
+                    <th scope="col" class="text-center">rpm</th>
+                    <th scope="col" class="text-center">Summary</th>
                 </tr>
+            </thead>
+
                 <tbody>
                 {% for reqspec in reqspecs %}
                     <tr>
-                        <td>{{ forloop.counter }}</td>
+                        <td class="dark">{{ forloop.counter }}</td>
                         {#                <td>{{ customer.pk }}</td>#}
                         <td>{{ reqspec.qty }}</td>
                         <td>{{ reqspec.kw }}</td>
@@ -47,7 +49,7 @@
         </div>
         <div class="col-md-10 col-lg-offset-1">
             {% for img in req_images %}
-                <a href="{{ img.image.url }}"><img class="img-responsive img-thumbnail col-md-4"
+                <a href="{{ img.image.url }}" target="_blank"><img class="img-responsive img-thumbnail col-md-4"
                                                    src="{{ img.image.url }}" style="max-height: 150px;"></a>
             {% endfor %}
         </div>

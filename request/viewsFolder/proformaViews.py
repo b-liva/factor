@@ -13,14 +13,11 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def pref_index(request):
-    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma')
-    can_read = True
-    if not can_read:
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
+    if not can_index:
         messages.error(request, 'no access for you')
         return redirect('errorpage')
     prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date').reverse()
-    # prefs = Xpref.objects.all()
-    print(prefs)
     return render(request, 'requests/admin_jemco/ypref/index.html', {
         'prefs': prefs
     })
@@ -46,7 +43,52 @@ def pref_find(request):
 
 @login_required
 def pref_details(request, ypref_pk):
-    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma')
+    if not Xpref.objects.filter(pk=ypref_pk):
+        messages.error(request, 'Nothin found')
+        return redirect('errorpage')
+
+    pref = Xpref.objects.get(pk=ypref_pk)
+
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
+    if not can_read:
+        messages.error(request, 'no access for you')
+        return redirect('errorpage')
+    nestes_dict = {}
+    proforma_total = 0
+    kw_total = 0
+
+    prof_images = pref.proffiles_set.all()
+    prefspecs = pref.prefspec_set.all()
+    i = 0
+    for prefspec in prefspecs:
+        kw = prefspec.kw
+        speed = prefspec.rpm
+        proforma_total += prefspec.qty * prefspec.price
+        kw_total += prefspec.qty * prefspec.kw
+        nestes_dict[i] = {
+            'obj': prefspec,
+            'spec_total': prefspec.qty * prefspec.price
+        }
+        i += 1
+    return render(request, 'requests/admin_jemco/ypref/details.html', {
+        'pref': pref,
+        'prefspecs': prefspecs,
+        'nested': nestes_dict,
+        'proforma_total': proforma_total,
+        'kw_total': kw_total,
+        'prof_images': prof_images,
+    })
+
+
+@login_required
+def pref_details_backup(request, ypref_pk):
+    if not Xpref.objects.filter(pk=ypref_pk):
+        messages.error(request, 'Nothin found')
+        return redirect('errorpage')
+
+    pref = Xpref.objects.get(pk=ypref_pk)
+
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
     if not can_read:
         messages.error(request, 'no access for you')
         return redirect('errorpage')
@@ -57,7 +99,7 @@ def pref_details(request, ypref_pk):
     sales_total = 0
     percentage = 0
     total_percentage = 0
-    pref = Xpref.objects.get(pk=ypref_pk)
+    # pref = Xpref.objects.get(pk=ypref_pk)
 
     prof_images = pref.proffiles_set.all()
     prefspecs = pref.prefspec_set.all()
@@ -113,8 +155,12 @@ def pref_details(request, ypref_pk):
 
 @login_required
 def pref_delete(request, ypref_pk):
+
+    if not Xpref.objects.filter(pk=ypref_pk):
+        messages.error(request, 'Nothin found')
+        return redirect('errorpage')
     pref = Xpref.objects.get(pk=ypref_pk)
-    can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_xpref', pref.req_id)
+    can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_xpref', pref)
 
     if not can_del:
         messages.error(request, 'You have not enough access')
@@ -200,10 +246,12 @@ def pref_insert_spec_form(request, ypref_pk):
 
     prices = request.POST.getlist('price')
     qty = request.POST.getlist('qty')
+    considerations = request.POST.getlist('considerations')
     i = 0
     for s in prefspecs:
         s.qty = qty[i]
         s.price = prices[i]
+        s.considerations = considerations[i]
         s.save()
         i += 1
 
@@ -212,6 +260,9 @@ def pref_insert_spec_form(request, ypref_pk):
 
 @login_required
 def pref_edit(request, ypref_pk):
+    if not Xpref.objects.filter(pk=ypref_pk):
+        messages.error(request, 'no Proforma')
+        return redirect('errorpage')
 
     can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref')
     if not can_edit:
@@ -255,16 +306,16 @@ def pref_edit(request, ypref_pk):
         }
         i += 1
 
-    msg = 'Proforma was updated'
+    messages.add_message(request, level=20, message='Proforma updated successfulley.')
 
-    # return render(request, 'requests/admin_jemco/ypref/details.html', {
-    return render(request, 'requests/admin_jemco/ypref/index.html', {
-        'pref': xpref,
-        'prefspecs': prefspecs,
-        'nested': nestes_dict,
-        'prof_images': prof_images,
-        # 'msg': msg
-    })
+    return redirect('pref_index')
+
+    # return render(request, 'requests/admin_jemco/ypref/index.html', {
+    #     'pref': xpref,
+    #     'prefspecs': prefspecs,
+    #     'nested': nestes_dict,
+    #     'prof_images': prof_images,
+    # })
 
 
     # return render(request, 'requests/admin_jemco/ypref/details.html', {
@@ -283,7 +334,18 @@ def pref_edit2(request, ypref_pk):
     # 6 - if form is valid the save request and its related images
     # 7 - render the template file
 
-    prof = models.Xpref.objects.get(pk=ypref_pk)
+    if not Xpref.objects.filter(pk=ypref_pk):
+        messages.error(request, 'Nothin found')
+        return redirect('errorpage')
+
+    prof = Xpref.objects.get(pk=ypref_pk)
+
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', prof)
+    if not can_read:
+        messages.error(request, 'no access for you')
+        return redirect('errorpage')
+
+    # prof = models.Xpref.objects.get(pk=ypref_pk)
     prof_images = prof.proffiles_set.all()
     print(f'req id equals to: {prof.req_id}')
     img_names = {}
@@ -319,4 +381,3 @@ def pref_edit2(request, ypref_pk):
         'prof_images': prof_images,
         'img_names': img_names
     })
-

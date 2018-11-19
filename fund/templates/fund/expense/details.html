@@ -1,0 +1,31 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% load humanize %}
+{% load jformat %}
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-10 ">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Expense details</div>
+                    <div class="panel-body">
+                        <h3>{{ expense.title }}</h3>
+                        <p>{{ expense.summary }}</p>
+                        <p>Amount: {{ expense.amount|intcomma }}</p>
+                        <hr>
+                        <a class="btn btn-sm btn-link"
+                           href="{% url 'expense_edit_form' fund_pk=fund.pk expense_pk=expense.pk %}">Edit This
+                            Expese</a>
+                        <a href="{% url 'fund_details' fund_pk=fund.pk %}" class="btn btn-link btn-sm">related fund</a>
+                        <a href="{% url 'fund_index' %}" class="btn btn-link btn-sm">Cancel</a>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

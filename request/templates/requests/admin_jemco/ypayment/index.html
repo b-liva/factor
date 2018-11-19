@@ -12,7 +12,7 @@
                 <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
             </form>
         <div class="row">
-            <table class="withBorder tableFull">
+            <table class="table table-hover text-center">
                 <tr>
                     <th>Id</th>
                     <th>Number</th>
@@ -43,11 +43,11 @@
 
                 {% endfor %}
                 <tr style="border-top: 3px solid black;">
-                    <td colspan="2">SUM</td>
-                    <td>{{ pref_sum|intcomma }}</td>
-                    <td><b>{{ amount_sum|intcomma }}</b></td>
-                    <td>{{ debt|intcomma }}</td>
-                    <td>{{ debt_percent|floatformat:2 }}</td>
+                    <td colspan="2" class="emphsize">SUM</td>
+                    <td class="emphsize">{{ pref_sum|intcomma }}</td>
+                    <td class="emphsize"><b>{{ amount_sum|intcomma }}</b></td>
+                    <td class="emphsize">{{ debt|intcomma }}</td>
+                    <td class="emphsize">{{ debt_percent|floatformat:2 }}</td>
                 </tr>
                 <table style="border-top: 3px solid black " class="col-md-4 table-bordered ">
                     <tr><td>Proforma Sum</td><td>{{ pref_sum|intcomma }}</td></tr>

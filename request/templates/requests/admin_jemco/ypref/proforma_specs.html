@@ -1,7 +1,7 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
 {% block right_col %}
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
             <div class="card mb-9 shadow-sm">
                 <div class="card-body">
                     <div>
@@ -44,7 +44,7 @@
                                     <th>IC</th>
                                     <th>SUMMARY</th>
                                     <th>PRICE</th>
-                                    <th>ACTION</th>
+                                    <th>CONSIDERATIONS</th>
                                 </tr>
                                 {% for spec in reqspec %}
                                     <tr>
@@ -62,11 +62,13 @@
                                             <input type="hidden" name="spec_id" value="{{ spec.id }}">
                                         </td>
                                         <td>
-                                            <a href="{% url 'del_spec' spec_id=spec.pk %}">
-                                                <button class="btn btn-primary btn-sm">Delete</button>
-                                            </a>
-
-                                            <button class="btn btn-primary btn-sm">Edit</button>
+                                            <textarea type="number" name="considerations" value="">{{ spec.considerations }}</textarea>
+                                        </td>
+                                        <td>
+{#                                            <a class="btn btn-danger btn-sm" href="{% url 'del_pref_spec' spec_pk=spec.pk prof_pk=proforma.pk  %}">#}
+{#                                                Delete#}
+{#                                            </a>#}
+{#                                            <a class="btn btn-sm btn-warning" href="#">Edit</a>#}
                                         </td>
                                     </tr>
                                 {% endfor %}

@@ -1,8 +1,9 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
+{% load jformat %}
 {% load humanize %}
 {% block right_col %}
     <div class="container">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-12">
                 <h3>{{ msg }}</h3>
         <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
                 Funds</h1>
@@ -14,25 +15,26 @@
         <hr>
             <a href="{% url 'fform' %}" class="btn btn-success btn-sm">Add new Fund</a>
 
-    <table class="withBorder tableFull">
+    <table class="table table-hover text-center">
         <tr>
-            <th>No</th>
-            <th>ID</th>
-            <th>Title</th>
-            <th style="width: 30%;">Summary</th>
-            <th>Date</th>
-            <th>Total Expenses</th>
-            <th>owner</th>
-            <th>Action</th>
+            <th scope="col" class="text-center">No</th>
+            <th scope="col" class="text-center">ID</th>
+            <th scope="col" class="text-center">Title</th>
+            <th scope="col" class="text-center" style="width: 30%;">Summary</th>
+            <th scope="col" class="text-center">Date</th>
+            <th scope="col" class="text-center">Total Expenses</th>
+            <th scope="col" class="text-center">owner</th>
+            <th scope="col" class="text-center">Action</th>
         </tr>
         <tbody>
-        {% for total_exp, fund in amounts.items %}
+{#        {% for total_exp, fund in amounts.items %}#}
+        {% for fund, total_exp in amounts.items %}
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ fund.pk }}</td>
                 <td>{{ fund.title }}</td>
                 <td>{{ fund.summary }}</td>
-                <td>{{ fund.pub_date }}</td>
+                <td>{{ fund.date_fa }}</td>
                 <td>{{ total_exp|floatformat:0|intcomma }}</td>
                 <td>{{ fund.owner.username }}</td>
                 <td>

@@ -114,6 +114,13 @@ $(document).ready(function () {
         calendarType: 'persian',
         format: 'YYYY-MM-DD',
     });
+    $("#test").pDatepicker({
+        minDate: 2,
+        maxDate: "+10D",
+        isRTL: true,
+        format: 'YYYY-MM-DD',
+
+    });
     // $('#pub_datePicker').val(15654);
     // $('.pub_date2').pDatepicker("setDate", new Date());
     // $('.pub_date2').pDatepicker("setDate", new Date);
