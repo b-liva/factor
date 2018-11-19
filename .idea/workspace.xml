@@ -1,95 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="85c93896-8beb-4081-82f4-1287b6871527" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/fund/templates/fund/expense/details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/url.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/url.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/templates/customer/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/customer/templates/customer/details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/templates/customer/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/customer/templates/customer/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/customer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/customer/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/factor/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/factor/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/factor/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/factor/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fund/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/fund/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fund/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/fund/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fund/templates/fund/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/fund/templates/fund/details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fund/templates/fund/fund_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/fund/templates/fund/fund_form.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fund/templates/fund/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/fund/templates/fund/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fund/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/fund/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor/migrations/0002_auto_20180914_2143.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor/migrations/0003_auto_20180914_2157.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor/templates/prefactors/homepage.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor/templates/prefactors/prefactors.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor_verification/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor_verification/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor_verification/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor_verification/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor_verification/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor_verification/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor_verification/templates/prefVerification/create.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor_verification/templates/prefVerification/prefVerification.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor_verification/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prefactor_verification/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pricedb/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/pricedb/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/prefViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/prefViews.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/reqSpecViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/reqSpecViews.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/static/request/admin_jemco/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/request/static/request/admin_jemco/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/static/request/admin_jemco/images/img.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/request/static/request/admin_jemco/images/img.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js" beforeDir="false" afterPath="$PROJECT_DIR$/request/static/request/admin_jemco/js/jemco/jemco.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/prefactors/create.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/admin_base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/create-req.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefVerification/create.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefVerificationsPage.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/create.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/create2.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/create_spec_pref01.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/create_spec_pref02.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/find_xpref.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/payments/add_payment.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/payments/add_payment_page.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/payments/payments.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactor/verifications/create.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/prefactors.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/report/report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/report/xpref_details.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/request/create_spec.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/request/req_details.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypayment/payment_details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/proforma_specs.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/ypref/proforma_specs.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/spec_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yreqspec/spec_form.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/request/templates/requests/admin_jemco/yrequest/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/base.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/create-backup.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/create_spec.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/prefVerificationsPage.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/pref_details.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/pref_ver_details.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/prefactors.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/req_details.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/requests.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/results.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/templates/requests/testpage.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/urls/old_url.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/urls/prof_urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/urls/prof_urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/urls/url.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/urls/url.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/views2.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/views2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/viewsFolder/proformaViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/viewsFolder/proformaViews.py" afterDir="false" />
-    </list>
+    <list default="true" id="85c93896-8beb-4081-82f4-1287b6871527" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -560,7 +472,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/customer/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
+            <state relative-caret-position="96">
               <caret line="153" lean-forward="true" selection-start-line="153" selection-end-line="153" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
@@ -750,172 +662,6 @@
             <path>
               <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
               <item name="factorV2" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factorV2" type="462c0819:PsiDirectoryNode" />
-              <item name="customer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factorV2" type="462c0819:PsiDirectoryNode" />
-              <item name="fund" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="factorV2" type="462c0819:PsiDirectoryNode" />
-              <item name="request" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-              <item name="django" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-              <item name="django" type="462c0819:PsiDirectoryNode" />
-              <item name="contrib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-              <item name="django" type="462c0819:PsiDirectoryNode" />
-              <item name="contrib" type="462c0819:PsiDirectoryNode" />
-              <item name="postgres" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-              <item name="django" type="462c0819:PsiDirectoryNode" />
-              <item name="contrib" type="462c0819:PsiDirectoryNode" />
-              <item name="postgres" type="462c0819:PsiDirectoryNode" />
-              <item name="fields" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-              <item name="django" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-              <item name="django" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="handlers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-              <item name="django" type="462c0819:PsiDirectoryNode" />
-              <item name="forms" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-              <item name="django_jalali" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-              <item name="django_jalali" type="462c0819:PsiDirectoryNode" />
-              <item name="db" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-              <item name="django_jalali" type="462c0819:PsiDirectoryNode" />
-              <item name="forms" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-              <item name="django_jalali" type="462c0819:PsiDirectoryNode" />
-              <item name="templatetags" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="factorV2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="Python37-32" type="462c0819:PsiDirectoryNode" />
-              <item name="Lib" type="462c0819:PsiDirectoryNode" />
-              <item name="site-packages" type="462c0819:PsiDirectoryNode" />
-              <item name="jdatetime" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -1181,14 +927,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4973404" visible="true" weight="0.1913767" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4973404" visible="true" weight="0.1913767" />
       <window_info id="Structure" order="1" sideWeight="0.50265956" side_tool="true" weight="0.17776097" />
       <window_info id="Favorites" order="2" sideWeight="0.5019763" side_tool="true" weight="0.27987897" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4993573" weight="0.32749325" />
-      <window_info active="true" anchor="bottom" x="63" y="304" width="1240" height="120" id="Run" order="2" sideWeight="0.7760968" visible="true" weight="0.23114754" />
+      <window_info anchor="bottom" x="63" y="304" width="1240" height="120" id="Run" order="2" sideWeight="0.7760968" visible="true" weight="0.23114754" />
       <window_info anchor="bottom" x="144" y="227" width="1114" height="501" id="Debug" order="3" type="FLOATING" weight="0.44474393" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1742,7 +1487,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/customer/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
+        <state relative-caret-position="96">
           <caret line="153" lean-forward="true" selection-start-line="153" selection-end-line="153" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
