@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Customer
@@ -179,28 +180,58 @@ def customer_read2(request, customer_pk):
     if not can_read:
         messages.error(request, 'Sorry, no way for you to do that')
         return redirect('errorpage')
-    # customer = Customer.objects.get(pk=customer_pk)
     customer_reqs = customer.requests_set.all()
-    kw = {}
-    some = {}
     kwList = []
+    pList = []
+    totalRes = {}
+    tempDict = {}
+    proformaDict = {}
     for customer_req in customer_reqs:
-        # specs = customer_req.reqspec_set.all()
-        kw[customer_req.pk] = views2.total_kw(customer_req.pk)
-        t_kw = views2.total_kw(customer_req.pk)
-        some[t_kw] = customer_req
-        kwList.append(kw[customer_req.pk])
+        tempDict = {}
+        tempDict['kw'] = views2.total_kw(customer_req.pk)
+        kwList.append(tempDict['kw'])
+        req_profs = customer_req.xpref_set.all()
+        for p in req_profs:
+            paymentList = []
+            proformaDict = {}
+            pList.append(p)
+            payments = p.payment_set.all()
+            for pmnt in payments:
+                paymentList.append(pmnt)
+            proformaDict['payments'] = paymentList
 
+        proformaDict['proformas'] = req_profs
+        reqspec = customer_req.reqspec_set.all()
+        tempDict['profs'] = req_profs
+        tempDict['profs2'] = proformaDict
+        tempDict['specs'] = reqspec
+        tempDict['req'] = customer_req
+        totalRes[customer_req.pk] = tempDict
+
+        # reqId->
+        #         profs->
+        #                 payments->
+        #         specs->
+        #         kw->
+        #         req->
+    totalpaymenst = customer.payment_set.all()
+    print(f'total payment: {totalpaymenst}')
+    payList = []
+    for pay in totalpaymenst:
+        payList.append(pay.amount)
+
+    paySum = sum(payList)
     payment_list, payment_sum = customers_payment(customer.pk)
-
-    print(payment_list)
-    print(payment_sum)
     context = {
         'customer': customer,
         'customer_reqs': customer_reqs,
-        'kw': kw,
-        'some': some,
-        'customer_kw_total': sum(kwList)
+        # 'kw': kw,
+        # 'some': some,
+        'customer_kw_total': sum(kwList),
+        'payment_list': payment_list,
+        'payment_sum': payment_sum,
+        'totalRes': totalRes,
+        'pay_sum': paySum,
     }
     return render(request, 'customer/details.html', context)
 

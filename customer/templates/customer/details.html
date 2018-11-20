@@ -9,35 +9,62 @@
         </div>
         <div class="col-md-6 ">
             <h2>Requests belongs to <span class="emphsize">{{ customer.name }}</span></h2>
-            <table class="table table-hover text-center text-center">
+
+            <table class="table table-hover text-center">
                 <thead>
                 <tr>
                     <th class="text-center">Id</th>
-                    <th class="text-center">Id</th>
+                    <th class="text-center">Pk</th>
                     <th class="text-center">Request No</th>
                     <th class="text-center">Total KW</th>
+                    <th class="text-center">Proformas</th>
+                    <th class="text-center">Payments</th>
                 </tr>
                 </thead>
-
-                <tbody class="">
-                {% for tkw, customer_req in some.items %}
+                <tbody>
+                {% for req_id, val in totalRes.items %}
                     <tr>
                         <th scope="row" class="text-center">{{ forloop.counter }}</th>
-                        <td>{{ customer_req.pk }}</td>
+                        <td>{{ req_id }}</td>
                         <td>
-                            <a href="{% url 'request_details' request_pk=customer_req.pk %}">{{ customer_req.number }}</a>
+                            <a href="{% url 'request_details' request_pk=req_id %}">{{ val.req.number }}</a>
                         </td>
-                        <td>{{ tkw|floatformat:0|intcomma }}</td>
+                        <td>{{ val.kw|intcomma }}</td>
+                        <td style="margin: 0px; padding: 0px;">
+                            <table class="col-md-4 col-md-offset-4 text-center">
+                                <tbody>
+                                {% for prof in val.profs2.proformas %}
+                                    <tr style="border-bottom: 1px solid black">
+                                        <td class="text-center"><a
+                                                href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof }}</a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tbody>
+                                {% for pay in val.profs2.payments %}
+                                    <tr>
+                                        <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">{{ pay }}</a>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+
+
                     </tr>
                 {% endfor %}
                 <tr style="border-top: 3px solid black;">
                     <td colspan="3">SUM</td>
                     <td><b>{{ customer_kw_total|floatformat:0|intcomma }}</b></td>
+                    <td></td>
+                    <td ><b>{{ pay_sum }}</b></td>
                 </tr>
                 </tbody>
             </table>
-
-
         </div>
     </div>
 

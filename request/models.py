@@ -89,6 +89,9 @@ class ReqSpec(models.Model):
             ('read_reqspecs', 'can read request Specs'),
         )
 
+    def __str__(self):
+        return '%s - %skw' % (self.qty, self.kw)
+
 
 class Xpref(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
