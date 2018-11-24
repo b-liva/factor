@@ -2,19 +2,58 @@
 {% load humanize %}
 {% block right_col %}
     <div class="container">
-        <div class="col-md-4">
-            <h3>{{ msg }}</h3>
-            <p>Proforma Number:<span class="results">{{ pref.number }}</span></p>
-            <p>Proforma Date:<span class="value">{{ pref.pub_date }}</span></p>
-            <p>Proforma Date:<span class="value">{{ pref.date_fa }}</span></p>
-            <p>Proforma Date:<span class="value">{{ pref.exp_date_fa }}</span></p>
+        <div class="row">
+            <div id="customerDetails" class="col-md-3 col-sm-3 col-xs-12 col-xs-offset-0">
+                <h3>{{ pref.req_id.customer }}</h3>
+                <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ pref.date_fa }}</p>
+                <p><i class="fa fa-phone" aria-hidden="true"></i> {{ pref.req_id.customer.phone }}</p>
+                <p><i class="fa fa-fax" aria-hidden="true"></i> {{ pref.req_id.customer.fax }}</p>
+                <p><i class="fa fa-map-marker" aria-hidden="true"></i>
+                    {{ pref.req_id.customer.address }}</p>
+            </div>
+            <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
+                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="tile-stats">
+                        <div class="icon">
+                        </div>
+                        <div class="count">{{ pref.number }}</div>
+
+                        <h3>Number#</h3>
+                    </div>
+                </div>
+                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="tile-stats">
+                        <div class="icon">
+                        </div>
+                        <div class="count">{{ pref.exp_date_fa }}</div>
+
+                        <h3>Ex.Date</h3>
+                    </div>
+                </div>
+
+
+                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="tile-stats">
+                        <div class="icon col-md-6">
+                            {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
+                        </div>
+                        <div class="count">${{ proforma_total|floatformat:0|intcomma }}</div>
+
+                        <h3>Payable</h3>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-8">
-            <a class="btn btn-success btn-sm" type="submit" name="submit"
-               href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">Edit Prices</a>
-            <a class="btn btn-warning btn-sm" href="{% url 'pref_edit2' ypref_pk=pref.pk %}">Edit Prof</a>
-        </div>
-        <div class="col-md-10 col-md-offset-1">
+
+        <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
+
+            <div class="pull-right">
+                <a class="btn btn-success btn-sm" type="submit" name="submit"
+                   href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
+                    <i class="fa fa-pencil"></i> Prices</a>
+                <a class="btn btn-warning btn-sm" href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
+                    <i class="fa fa-pencil"></i> Prof</a>
+            </div>
             <h3>Proforma Details</h3>
             <table class="table table-hover text-center">
                 <thead>
@@ -55,12 +94,12 @@
 
             </table>
         </div>
-    
+
         <div class="col-md-10 col-md-offset-1">
             {% for img in prof_images %}
                 <a href="{{ img.image.url }}" target="_blank">
                     <img class="img-responsive img-thumbnail col-md-3"
-                                                   src="{{ img.image.url }}" style="" >
+                         src="{{ img.image.url }}" style="">
                 </a>
             {% endfor %}
         </div>

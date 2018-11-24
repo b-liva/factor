@@ -2,46 +2,67 @@
 {% load humanize %}
 {% block right_col %}
     <div class="container">
-        <div class="row">
+        <div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
                 <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                    payment No.{{ payment.number }} Details</h1>
+                    payment Details</h1>
             </div>
+        </div>
+        <div class="row">
+            <div id="customerDetails" class="col-md-3 col-sm-3 col-xs-12 col-xs-offset-0">
+                <h3>{{ payment.xpref_id.req_id.customer }}</h3>
+                <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ payment.date_fa }}</p>
+                <p><i class="fa fa-phone" aria-hidden="true"></i> {{ payment.xpref_id.req_id.customer.phone }}</p>
+                <p><i class="fa fa-fax" aria-hidden="true"></i> {{ payment.xpref_id.req_id.customer.fax }}</p>
+                <p><i class="fa fa-map-marker" aria-hidden="true"></i>
+                    {{ payment.xpref_id.req_id.customer.address }}</p>
+            </div>
+            <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
+                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="tile-stats">
+                        <div class="icon">
+                        </div>
+                        <div class="count">{{ payment.number }}</div>
+
+                        <h3>Number</h3>
+                    </div>
+                </div>
+                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="tile-stats">
+                        <div class="icon">
+                        </div>
+                        <div class="count">{{ payment.date_fa }}</div>
+
+                        <h3>Date</h3>
+                    </div>
+                </div>
+
+
+                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="tile-stats">
+                        <div class="icon col-md-6">
+                            {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
+                        </div>
+                        <div class="count">${{ payment.amount|floatformat:0|intcomma }}</div>
+
+                        <h3>Payments</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
 
             <div class="col-md-5 col-md-offset-1 col-sm-5 col-sm-offset-1">
 
-                <h3>{{ msg }}</h3>
-                <table class="table table-hover">
-                    <tbody>
-                    <tr>
-                        <th class="dark">ID</th>
-                        <td>{{ payment.pk }}</td>
-                    </tr>
-                    <tr>
-                        <th class="dark">Number</th>
-                        <td>{{ payment.number }}</td>
-                    </tr>
-                    <tr>
-                        <th class="dark">Amount</th>
-                        <td>{{ payment.amount|intcomma }}</td>
-                    </tr>
-                    <tr>
-                        <th class="dark">Date</th>
-                        <td>{{ payment.payment_date }}</td>
-                    </tr>
-                    <th class="dark">Date_fa</th>
-                    <td>{{ payment.date_fa }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <hr>
-            <div class="col-md-5 col-md-offset-1 col-sm-5 col-sm-offset-1">
-                <a href="{% url 'payment_edit' ypayment_pk=payment.pk %}" class="btn btn-warning btn-xs">Edit
-                    Payment</a>
-                <a href="{% url 'payment_index' %}" class="btn btn-success btn-xs">payment index</a>
             </div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+                <div class="pull-right">
+                    <a href="{% url 'payment_edit' ypayment_pk=payment.pk %}" class="btn btn-warning btn-xs">
+                        <i class="fa fa-pencil"></i> Payment</a>
+                    <a href="{% url 'payment_index' %}" class="btn btn-success btn-xs">
+                        <i class="fa fa-list"></i> payment</a>
+                </div>
+
                 <div>
                     {% for i in images %}
                         <div class="col-md-3 col-sm-4 col-xs-4">

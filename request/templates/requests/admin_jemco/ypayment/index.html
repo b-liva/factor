@@ -9,59 +9,81 @@
             <form method="POST" action="{% url 'payment_find' %}">
                 {% csrf_token %}
                 Payment No <input name="payment_no">
-                <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
             </form>
-        <div class="row">
-            <table class="table table-hover text-center">
-                <tr>
-                    <th>Id</th>
-                    <th>Number</th>
-                    <th>Prefactor</th>
-                    <th>Amount</th>
-                    <th>Payment Date</th>
-                    <th>Payment date fa</th>
-                    <th>Actions</th>
-                </tr>
-                <tbody class="">
-                {% for payment in payments %}
+            <a href="{% url 'pay_form' %}" class="btn btn-success btn-sm pull-right">
+                <i class="fa fa-plus"></i> Payment</a>
+            <div class="row">
+                <table class="table table-hover text-center">
                     <tr>
-                        <td>{{ payment.pk }}</td>
-                        <td>{{ payment.number }}</td>
-                        <td>{{ payment.xpref_id.number }}</td>
-                        <td>{{ payment.amount|intcomma }}</td>
-                        <td>{{ payment.payment_date }}</td>
-                        <td>{{ payment.date_fa }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-xs" href="{% url 'payment_details' ypayment_pk=payment.pk %}">Details</a>
-                            <a class="btn btn-primary btn-xs" href="{% url 'payment_edit' ypayment_pk=payment.pk %}">Edit</a>
-                            <a class="btn btn-primary btn-xs btn-warning"
-                               href="{% url 'payment_delete' ypayment_pk=payment.pk %}">Delete</a>
-                        </td>
-
-
+                        <th>Id</th>
+                        <th>Number</th>
+                        <th>Request</th>
+                        <th>Prefactor</th>
+                        <th>Amount</th>
+                        <th>Payment Date</th>
+                        <th>Payment date fa</th>
+                        <th>Actions</th>
                     </tr>
+                    <tbody class="">
+                    {% for payment in payments %}
+                        <tr>
+                            <td>{{ payment.pk }}</td>
+                            <td>{{ payment.number }}</td>
+                            <td>{{ payment.xpref_id.req_id.number }}</td>
+                            <td>{{ payment.xpref_id.number }}</td>
+                            <td>{{ payment.amount|intcomma }}</td>
+                            <td>{{ payment.payment_date }}</td>
+                            <td>{{ payment.date_fa }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-xs"
+                                   href="{% url 'payment_details' ypayment_pk=payment.pk %}">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a class="btn btn-primary btn-xs btn-warning"
+                                   href="{% url 'payment_edit' ypayment_pk=payment.pk %}">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a class="btn btn-primary btn-xs btn-danger"
+                                   href="{% url 'payment_delete' ypayment_pk=payment.pk %}">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
 
-                {% endfor %}
-                <tr style="border-top: 3px solid black;">
-                    <td colspan="2" class="emphsize">SUM</td>
-                    <td class="emphsize">{{ pref_sum|intcomma }}</td>
-                    <td class="emphsize"><b>{{ amount_sum|intcomma }}</b></td>
-                    <td class="emphsize">{{ debt|intcomma }}</td>
-                    <td class="emphsize">{{ debt_percent|floatformat:2 }}</td>
-                </tr>
-                <table style="border-top: 3px solid black " class="col-md-4 table-bordered ">
-                    <tr><td>Proforma Sum</td><td>{{ pref_sum|intcomma }}</td></tr>
-                    <tr><td>Payment Sum</td><td>{{ amount_sum|intcomma }}</td></tr>
-                    <tr><td>+/-</td><td>{{ debt|intcomma }}</td></tr>
-                    <tr><td>%</td><td>{{ debt_percent|floatformat:2 }}</td></tr>
+
+                        </tr>
+
+                    {% endfor %}
+                    <tr style="border-top: 3px solid black;">
+                        <td colspan="2" class="emphsize">SUM</td>
+                        <td class="emphsize">{{ pref_sum|intcomma }}</td>
+                        <td class="emphsize"><b>{{ amount_sum|intcomma }}</b></td>
+                        <td class="emphsize">{{ debt|intcomma }}</td>
+                        <td class="emphsize">{{ debt_percent|floatformat:2 }}</td>
+                    </tr>
+                    <table style="border-top: 3px solid black " class="col-md-4 table-bordered ">
+                        <tr>
+                            <td>Proforma Sum</td>
+                            <td>{{ pref_sum|intcomma }}</td>
+                        </tr>
+                        <tr>
+                            <td>Payment Sum</td>
+                            <td>{{ amount_sum|intcomma }}</td>
+                        </tr>
+                        <tr>
+                            <td>+/-</td>
+                            <td>{{ debt|intcomma }}</td>
+                        </tr>
+                        <tr>
+                            <td>%</td>
+                            <td>{{ debt_percent|floatformat:2 }}</td>
+                        </tr>
+                    </table>
+
+                    </tbody>
                 </table>
-
-                </tbody>
-            </table>
-        </div>
-
-            <div class="container" style="margin-top: 50px">
-                <a href="{% url 'pay_form' %}" class="btn btn-success btn-sm">Add new payment</a>
             </div>
         </div>
     </div>

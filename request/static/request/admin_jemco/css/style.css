@@ -57,3 +57,19 @@ td.bad-conditions{
     background-color: #2a3f54;
     color: white;
 }
+
+#customerDetails{
+  background: #247BA0;
+  color: whitesmoke;
+}
+.hasBorder{
+  border: 1px solid darkblue;
+}
+.hasBackground{
+  background: #c6c5ee;
+  color: #000;
+}
+.DetailsCard{
+  background: #70C1B3;
+  color: black;
+}

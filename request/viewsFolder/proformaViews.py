@@ -18,9 +18,10 @@ def pref_index(request):
         messages.error(request, 'no access for you')
         return redirect('errorpage')
     prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date').reverse()
-    return render(request, 'requests/admin_jemco/ypref/index.html', {
+    context = {
         'prefs': prefs
-    })
+    }
+    return render(request, 'requests/admin_jemco/ypref/index.html', context)
 
 
 @login_required
@@ -70,14 +71,16 @@ def pref_details(request, ypref_pk):
             'spec_total': prefspec.qty * prefspec.price
         }
         i += 1
-    return render(request, 'requests/admin_jemco/ypref/details.html', {
+
+    context = {
         'pref': pref,
         'prefspecs': prefspecs,
         'nested': nestes_dict,
         'proforma_total': proforma_total,
         'kw_total': kw_total,
         'prof_images': prof_images,
-    })
+    }
+    return render(request, 'requests/admin_jemco/ypref/details.html', context)
 
 
 @login_required

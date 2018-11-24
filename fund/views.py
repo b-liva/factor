@@ -27,11 +27,11 @@ def fund_index(request):
         # amounts[sum] = fund
         amounts[fund] = sum
 
-
-    return render(request, 'fund/index.html', {
+    context = {
         'funds': funds,
         'amounts': amounts
-    })
+    }
+    return render(request, 'fund/index.html', context)
 
 
 @login_required

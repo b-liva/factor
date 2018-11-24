@@ -3,68 +3,122 @@
 {% load jformat %}
 {% block right_col %}
     <div class="container">
-        <div class="col-md-6 ">
-            <h3>{{ customer.name }}</h3>
-            <p>{{ customer.date2 }}</p>
+        <div class="row">
+            <div id="customerDetails" class="col-md-3 col-sm-3 col-xs-12 col-xs-offset-0">
+                <h3>{{ customer.name }}</h3>
+                <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ customer.date2 }}</p>
+                <p><i class="fa fa-phone" aria-hidden="true"></i> {{ customer.phone }}</p>
+                <p><i class="fa fa-fax" aria-hidden="true"></i> {{ customer.fax }}</p>
+                <p><i class="fa fa-map-marker" aria-hidden="true"></i>
+                    {{ customer.address }}</p>
+            </div>
+            <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
+                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="tile-stats">
+                        <div class="icon">
+                        </div>
+                        <div class="count">{{ req_count }}</div>
+
+                        <h3>Requests</h3>
+                    </div>
+                </div>
+                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="tile-stats">
+                        <div class="icon">
+                        </div>
+                        <div class="count">{{ customer_kw_total|floatformat:0|intcomma }}</div>
+
+                        <h3>KW</h3>
+                    </div>
+                </div>
+
+
+                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="tile-stats">
+                        <div class="icon col-md-6">
+                            {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
+                        </div>
+                        <div class="count">${{ pay_sum|floatformat:0|intcomma }}</div>
+
+                        <h3>Payments</h3>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6 ">
-            <h2>Requests belongs to <span class="emphsize">{{ customer.name }}</span></h2>
+        <div class="row customerTable">
 
-            <table class="table table-hover text-center">
-                <thead>
-                <tr>
-                    <th class="text-center">Id</th>
-                    <th class="text-center">Pk</th>
-                    <th class="text-center">Request No</th>
-                    <th class="text-center">Total KW</th>
-                    <th class="text-center">Proformas</th>
-                    <th class="text-center">Payments</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for req_id, val in totalRes.items %}
-                    <tr>
-                        <th scope="row" class="text-center">{{ forloop.counter }}</th>
-                        <td>{{ req_id }}</td>
-                        <td>
-                            <a href="{% url 'request_details' request_pk=req_id %}">{{ val.req.number }}</a>
-                        </td>
-                        <td>{{ val.kw|intcomma }}</td>
-                        <td style="margin: 0px; padding: 0px;">
-                            <table class="col-md-4 col-md-offset-4 text-center">
-                                <tbody>
-                                {% for prof in val.profs2.proformas %}
-                                    <tr style="border-bottom: 1px solid black">
-                                        <td class="text-center"><a
-                                                href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof }}</a></td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </td>
-                        <td>
-                            <table>
-                                <tbody>
-                                {% for pay in val.profs2.payments %}
-                                    <tr>
-                                        <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">{{ pay }}</a>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </td>
+            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
+            <div class="row">
+                <div class="pull-right">
+                    <a class="btn btn-sm btn-info" href="{% url 'customer_index' %}"><i class="fa fa-list-ul" aria-hidden="true"></i> index</a>
+                    <a class="btn btn-sm btn-warning" href="{% url 'customer_edit_form' customer_pk=customer.pk %}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+                </div>
+            </div>
+                <div class="row">
+                    <h2>Requests belongs to <span class="emphsize">{{ customer.name }}</span></h2>
+
+                    <table class="table table-hover text-center">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">Pk</th>
+                            <th class="text-center">Request No</th>
+                            <th class="text-center">Total KW</th>
+                            <th class="text-center">Proformas</th>
+                            <th class="text-center">Payments</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for req_id, val in totalRes.items %}
+                            <tr>
+                                <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                <td>{{ req_id }}</td>
+                                <td>
+                                    <a href="{% url 'request_details' request_pk=req_id %}">{{ val.req.number }}</a>
+                                </td>
+                                <td>{{ val.kw|intcomma }}</td>
+                                <td style="margin: 0px; padding: 0px;">
+                                    <table class="col-md-4 col-md-offset-4 text-center">
+                                        <tbody>
+                                        {% for prof in val.profs2.proformas %}
+                                            <tr style="border-bottom: 1px solid black">
+                                                <td class="text-center"><a
+                                                        href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof }}</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tbody>
+                                        {% for pay in val.profs2.payments %}
+                                            <tr>
+                                                <td>
+                                                    <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">#{{ pay.xpref_id.number }}
+                                                        - ${{ pay.amount|floatformat:0|intcomma }}</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </td>
 
 
-                    </tr>
-                {% endfor %}
-                <tr style="border-top: 3px solid black;">
-                    <td colspan="3">SUM</td>
-                    <td><b>{{ customer_kw_total|floatformat:0|intcomma }}</b></td>
-                    <td></td>
-                    <td ><b>{{ pay_sum }}</b></td>
-                </tr>
-                </tbody>
-            </table>
+                            </tr>
+                        {% endfor %}
+                        <tr style="border-top: 3px solid black;">
+                            <td colspan="3">SUM</td>
+                            <td class="emphsize"><b>{{ customer_kw_total|floatformat:0|intcomma }}</b></td>
+                            <td></td>
+                            <td class="emphsize"><b>{{ pay_sum|floatformat:0|intcomma }}</b></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
         </div>
     </div>
 

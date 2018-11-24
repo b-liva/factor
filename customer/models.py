@@ -40,6 +40,9 @@ class Customer(models.Model):
     # date2 = jmodels.jDateTimeField(default=now)
     date2 = jmodels.jDateField(default=now)
     representator = models.IntegerField(default=0)
+    phone = models.IntegerField(blank=True, null=True)
+    fax = models.IntegerField(blank=True, null=True)
+    address = models.TextField(max_length=600, blank=True, null=True)
 
     class Meta:
         permissions = (

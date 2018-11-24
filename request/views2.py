@@ -141,13 +141,13 @@ def request_read(request, request_pk):
     reqspecs = req.reqspec_set.all()
     req_images = req.requestfiles_set.all()
     kw = total_kw(request_pk)
-
-    return render(request, 'requests/admin_jemco/yrequest/details.html', {
+    context = {
         'request': req,
         'reqspecs': reqspecs,
         'req_images': req_images,
         'total_kw': kw
-    })
+    }
+    return render(request, 'requests/admin_jemco/yrequest/details.html', context)
 
 
 @login_required

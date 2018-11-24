@@ -102,13 +102,14 @@ def payment_index(request):
         sum += payment.amount
     debt = sum - pref_sum
     debt_percent = debt / pref_sum
-    return render(request, 'requests/admin_jemco/ypayment/index.html', {
+    context = {
         'payments': payments,
         'amount_sum': sum,
         'pref_sum': pref_sum,
         'debt': debt,
         'debt_percent': debt_percent,
-    })
+    }
+    return render(request, 'requests/admin_jemco/ypayment/index.html', context)
 
 
 @login_required
@@ -121,10 +122,11 @@ def payment_find(request):
 def payment_details(request, ypayment_pk):
     payment = Payment.objects.get(pk=ypayment_pk)
     images = models.PaymentFiles.objects.filter(pay=payment)
-    return render(request, 'requests/admin_jemco/ypayment/payment_details.html', {
+    context = {
         'payment': payment,
         'images': images
-    })
+    }
+    return render(request, 'requests/admin_jemco/ypayment/payment_details.html', context)
 
 
 @login_required

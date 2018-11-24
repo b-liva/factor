@@ -10,6 +10,7 @@ from request.models import Payment
 from request import views2
 from django.contrib import messages
 from customer import forms
+import reportlab
 import jdatetime
 
 
@@ -161,7 +162,8 @@ def customer_index(request):
         return redirect('errorpage')
 
     customers = Customer.objects.all()
-    return render(request, 'customer/index.html', {'customers': customers})
+    context = {'customers': customers}
+    return render(request, 'customer/index.html', context)
 
 
 @login_required
@@ -191,14 +193,17 @@ def customer_read2(request, customer_pk):
         tempDict['kw'] = views2.total_kw(customer_req.pk)
         kwList.append(tempDict['kw'])
         req_profs = customer_req.xpref_set.all()
+        paymentList = []
         for p in req_profs:
-            paymentList = []
             proformaDict = {}
             pList.append(p)
             payments = p.payment_set.all()
+            print(f'payments is: {payments}')
             for pmnt in payments:
                 paymentList.append(pmnt)
             proformaDict['payments'] = paymentList
+
+        print(f'***payment list is: {paymentList}')
 
         proformaDict['proformas'] = req_profs
         reqspec = customer_req.reqspec_set.all()
@@ -222,6 +227,7 @@ def customer_read2(request, customer_pk):
 
     paySum = sum(payList)
     payment_list, payment_sum = customers_payment(customer.pk)
+    request_count = customer.requests_set.count()
     context = {
         'customer': customer,
         'customer_reqs': customer_reqs,
@@ -232,6 +238,7 @@ def customer_read2(request, customer_pk):
         'payment_sum': payment_sum,
         'totalRes': totalRes,
         'pay_sum': paySum,
+        'req_count': request_count
     }
     return render(request, 'customer/details.html', context)
 

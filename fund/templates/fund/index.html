@@ -10,10 +10,13 @@
             <form method="POST" action="{% url 'fund_find' %}">
                 {% csrf_token %}
                 Fund No <input name="fund_pk">
-                <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
             </form>
         <hr>
-            <a href="{% url 'fform' %}" class="btn btn-success btn-sm">Add new Fund</a>
+
+            <a href="{% url 'fform' %}" class="pull-right btn btn-success btn-sm"><i class="fa fa-plus"></i> Fund</a>
 
     <table class="table table-hover text-center">
         <tr>
@@ -38,9 +41,15 @@
                 <td>{{ total_exp|floatformat:0|intcomma }}</td>
                 <td>{{ fund.owner.username }}</td>
                 <td>
-                    <a class="btn btn-primary btn-xs" href="{% url 'fund_details' fund_pk=fund.pk %}">Details</a>
-                    <a class="btn btn-warning btn-xs" href="{% url 'fund_edit_form' fund_pk=fund.pk %}">Edit</a>
-                    <a class="btn btn-primary btn-xs btn-danger" href="{% url 'fund_delete' fund_pk=fund.pk %}">Delete</a>
+                    <a class="btn btn-primary btn-xs" href="{% url 'fund_details' fund_pk=fund.pk %}">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                    <a class="btn btn-warning btn-xs" href="{% url 'fund_edit_form' fund_pk=fund.pk %}">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <a class="btn btn-primary btn-xs btn-danger" href="{% url 'fund_delete' fund_pk=fund.pk %}">
+                        <i class="fa fa-trash"></i>
+                    </a>
                 </td>
             </tr>
         {% endfor %}

@@ -9,8 +9,14 @@
             <form method="POST" action="{% url 'customer_find' %}">
                 {% csrf_token %}
                 Customer no <input name="customer_no">
-                <button type="submit" name="submit" class="btn btn-sm btn-primary">Find</button>
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
             </form>
+            <div class="pull-right">
+                <a href="{% url 'cform' %}" class="btn btn-success btn-sm">
+                    <i class="fa fa-plus"></i> Customer</a>
+            </div>
             <table class="table table-hover text-center">
                 <thead class="text-center">
                 <tr class="text-center">
@@ -21,7 +27,7 @@
                     <th class="text-center">Name</th>
                     <th class="text-center">Type</th>
                     {#            <th>Date</th>#}
-                    <th class="text-center">Jdate</th>
+                    <th class="text-center">Date</th>
                     <th class="text-center">Action</th>
                 </tr>
                 </thead>
@@ -36,11 +42,17 @@
                         <td>{{ customer.type.name }}</td>
                         <td>{{ customer.date2 }}</td>
                         <td>
-                            <a class="btn btn-primary btn-xs" href="{% url 'customer_read' customer_pk=customer.pk %}">Details</a>
+                            <a class="btn btn-primary btn-xs" href="{% url 'customer_read' customer_pk=customer.pk %}">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
                             <a class="btn btn-warning btn-xs"
-                               href="{% url 'customer_edit_form' customer_pk=customer.pk %}">Edit</a>
+                               href="{% url 'customer_edit_form' customer_pk=customer.pk %}">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </a>
                             <a class="btn btn-danger btn-xs "
-                               href="{% url 'customer_delete' customer_pk=customer.pk %}">Delete</a>
+                               href="{% url 'customer_delete' customer_pk=customer.pk %}">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
                         </td>
 
 
@@ -51,7 +63,8 @@
                 </tbody>
             </table>
             <br>
-            <a href="{% url 'cform' %}" class="btn btn-success btn-sm">Add new customer</a>
+{#            <a href="{% url 'cform' %}" class="btn btn-success btn-sm">#}
+{#                <i class="fa fa-plus"></i> Customer</a>#}
         </div>
 
     </div>

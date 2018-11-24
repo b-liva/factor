@@ -35,6 +35,15 @@ class CustomerForm(forms.ModelForm):
             'type': forms.Select(attrs={
                 'class': 'form-control',
             }),
+            'phone': forms.NumberInput(attrs={
+                'class': 'form-control',
+            }),
+            'fax': forms.NumberInput(attrs={
+                'class': 'form-control',
+            }),
+            'address': forms.Textarea(attrs={
+                'class': 'form-control',
+            }),
         }
         labels = {
             'code': ('Code'),
