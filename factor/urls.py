@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', prefactor.views.home, name='homepage'),
     path('', request.views.dashboard, name='dashboard'),
+    path('dashboard2', request.views.dashboard2, name='dashboard2'),
     path('oldhomepage', request.views.allTable, name='allTables'),
     path('tenders/', tender.views.tenders, name='tenders'),
     path('tenders_admin/', tender.views.tenders_admin, name='tenders_admin'),

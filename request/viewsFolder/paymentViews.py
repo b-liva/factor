@@ -157,7 +157,8 @@ def payment_edit(request, ypayment_pk):
     if not can_edit:
         messages.error(request, 'No access for you')
         return redirect('errorpage')
-
+    if payment.date_fa:
+        payment.date_fa = payment.date_fa.togregorian()
     form = payment_forms.PaymentFrom(request.POST or None, instance=payment)
     if form.is_valid():
         print('form is valid')

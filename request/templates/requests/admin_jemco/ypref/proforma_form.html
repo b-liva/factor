@@ -10,22 +10,7 @@
                 <div>
                     <h3>{{ msg }}</h3>
                     <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                        New Proforma Form</h1>
-
-
-{#                    <h3>Requests:</h3>#}
-
-                    {% if msg %}
-                        {{ msg }}
-                    {% endif %}
-                    {#                    {% for req in  reqs %}#}
-                    {#                        {{ req.number }} -#}
-                    {#                    {% endfor %}#}
-                    {##}
-                    {#                    <h3>Logged in user Requests:</h3>#}
-                    {#                    {% for req in  owner_reqs %}#}
-                    {#                        {{ req.number }} -#}
-                    {#                    {% endfor %}#}
+                        ثبت پیشفاکتور</h1>
 
                     <form method="POST" action="" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -40,8 +25,8 @@
                             </div>
                         {% endfor %}
                         {{ prof_file.as_p }}
-                        <button class="btn btn-success btn-sm" type="submit" name="submit">Next</button>
-                        <a class="btn btn-danger btn-sm" href="{% url 'pref_index' %}">Cancel</a>
+                        <button class="btn btn-success btn-sm" type="submit" name="submit">ادامه</button>
+                        <a class="btn btn-danger btn-sm" href="{% url 'pref_index' %}">انصراف</a>
 
                     </form>
                 </div>

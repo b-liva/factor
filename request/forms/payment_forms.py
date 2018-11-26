@@ -30,9 +30,11 @@ class PaymentFrom(forms.ModelForm):
         }
 
         labels = {
-            'xpref_id': 'Select Proforma',
-            'number': 'Payment Number',
-            'date_fa': 'Payment Date',
+            'xpref_id': 'شماره پیشفاکتور',
+            'number': 'شماره پرداخت',
+            'date_fa': 'تاریخ پرداخت',
+            'amount': 'مبلغ',
+            'summary': 'شرح',
         }
 
 

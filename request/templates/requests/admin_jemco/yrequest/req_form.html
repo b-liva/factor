@@ -9,7 +9,7 @@
                 <div>
                     <h3>{{ msg }}</h3>
                     <h3 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                        New Request - Form</h3>
+                        ثبت درخواست جدید</h3>
 
                     {% if error %}
                         {{ error }}
@@ -25,8 +25,8 @@
                         {{ req_img.as_p }}
 {#                        <input class="btn btn-primary" type="submit" value="Save" name="done">#}
 
-                        <button class="btn btn-sm btn-success">Save</button>
-                        <a class="btn btn-danger btn-sm" href="{% url 'request_index' %}">Cancel</a>
+                        <button class="btn btn-sm btn-success pull-left">ذخیره</button>
+                        <a class="btn btn-danger btn-sm pull-left" href="{% url 'request_index' %}">انصراف</a>
 
                     </form>
                 </div>

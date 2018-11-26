@@ -49,6 +49,12 @@ class RequestFrom(forms.ModelForm):
                 'placeholder': 'Enter Summary Here...'
             })
         }
+        labels = {
+            'customer': ('مشتری'),
+            'number': ('شماره درخواست'),
+            'date_fa': ('تاریخ'),
+            'summary': ('چزئیات'),
+        }
 
 
 class RequestFileForm(forms.ModelForm):
@@ -60,6 +66,9 @@ class RequestFileForm(forms.ModelForm):
         exclude = ('req',)
         # widgets = {"image": forms.FileInput(attrs={'id': 'files', 'required': True, 'multiple': True})}
         widgets = {"image": forms.FileInput(attrs={'multiple': True})}
+        labels = {
+            'image': ('آپلود تصاویر'),
+        }
 
 
 class SpecForm(forms.ModelForm):
@@ -76,6 +85,14 @@ class SpecForm(forms.ModelForm):
         model = models.ReqSpec
         fields = '__all__'
         exclude = ('owner', 'req_id')
+        labels = {
+            'qty': ('تعداد'),
+            'type': ('نوع'),
+            'kw': ('کیلووات'),
+            'rpm': ('سرعت'),
+            'voltage': ('ولتاژ'),
+            'summary': ('جزئیات'),
+        }
 
 
 def user_choices(user):
@@ -118,11 +135,11 @@ class ProformaForm(forms.ModelForm):
         }
 
         labels = {
-            'req_id': 'Select The Request',
-            'number': 'Enter Proforma Number',
-            'date_fa': 'Date',
-            'exp_date_fa': 'Expiry Date',
-            'summary': 'Summary',
+            'req_id': 'درخواست',
+            'number': 'شماره پیشفاکتور',
+            'date_fa': 'تاریخ صدور',
+            'exp_date_fa': 'تاریخ انقضا',
+            'summary': 'جزئیات',
 
         }
 

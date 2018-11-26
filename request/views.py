@@ -289,15 +289,33 @@ def dashboard(request):
     orders = Orders()
     last_n_requests = orders.last_orders()
     total_payments = find_total_payment()
-    return render(request, 'requests/admin_jemco/dashboard.html',
-                  {
+    context = {
                       'routine_kw': intcomma(routine_kw),
                       'project_kw': intcomma(project_kw),
                       'allKw': intcomma(allKw),
                       'num_of_reqs': num_of_requests,
                       'last_n_requests': last_n_requests,
                       'total_payments': total_payments
-                  })
+                  }
+    return render(request, 'requests/admin_jemco/dashboard.html', context)
+
+
+@login_required
+def dashboard2(request):
+    routine_kw, project_kw, allKw = find_routine_kw()
+    num_of_requests = no_of_requests()
+    orders = Orders()
+    last_n_requests = orders.last_orders()
+    total_payments = find_total_payment()
+    context = {
+                      'routine_kw': intcomma(routine_kw),
+                      'project_kw': intcomma(project_kw),
+                      'allKw': intcomma(allKw),
+                      'num_of_reqs': num_of_requests,
+                      'last_n_requests': last_n_requests,
+                      'total_payments': total_payments
+                  }
+    return render(request, 'requests/admin_jemco/dashboard2.html', context)
 
 
 def no_of_requests():

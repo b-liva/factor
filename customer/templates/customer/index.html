@@ -5,30 +5,30 @@
         <div class="col-md-10 col-md-offset-1">
             <h3>{{ msg }}</h3>
             <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                Customers</h1>
+                مشتریان</h1>
             <form method="POST" action="{% url 'customer_find' %}">
                 {% csrf_token %}
-                Customer no <input name="customer_no">
+                کد مشتری<input name="customer_no">
                 <button type="submit" name="submit" class="btn btn-sm btn-primary">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
             </form>
-            <div class="pull-right">
+            <div class="pull-left">
                 <a href="{% url 'cform' %}" class="btn btn-success btn-sm">
-                    <i class="fa fa-plus"></i> Customer</a>
+                    <i class="fa fa-plus"></i> مشتری جدید </a>
             </div>
             <table class="table table-hover text-center">
                 <thead class="text-center">
                 <tr class="text-center">
-                    <th class="text-center">No</th>
-                    <th class="text-center">pk</th>
+                    <th class="text-center">ردیف</th>
+{#                    <th class="text-center">pk</th>#}
                     {#            <th>Id</th>#}
-                    <th class="text-center">Code</th>
-                    <th class="text-center">Name</th>
-                    <th class="text-center">Type</th>
+                    <th class="text-center">کد مشتری</th>
+                    <th class="text-center">نام</th>
+                    <th class="text-center">نوع</th>
                     {#            <th>Date</th>#}
-                    <th class="text-center">Date</th>
-                    <th class="text-center">Action</th>
+                    <th class="text-center">تاریخ عضویت</th>
+                    <th class="text-center"></th>
                 </tr>
                 </thead>
 
@@ -36,22 +36,22 @@
                 {% for customer in customers %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ customer.pk }}</td>
+{#                        <td>{{ customer.pk }}</td>#}
                         <td>{{ customer.code }}</td>
                         <td>{{ customer.name }}</td>
                         <td>{{ customer.type.name }}</td>
                         <td>{{ customer.date2 }}</td>
                         <td>
                             <a class="btn btn-primary btn-xs" href="{% url 'customer_read' customer_pk=customer.pk %}">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                <i class="fa fa-eye" aria-hidden="true"></i> مشاهده
                             </a>
                             <a class="btn btn-warning btn-xs"
                                href="{% url 'customer_edit_form' customer_pk=customer.pk %}">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
                             </a>
                             <a class="btn btn-danger btn-xs "
                                href="{% url 'customer_delete' customer_pk=customer.pk %}">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                <i class="fa fa-trash" aria-hidden="true"></i> حذف
                             </a>
                         </td>
 

@@ -41,12 +41,12 @@ def fund_details(request, fund_pk):
     sum = 0
     for e in expenses:
         sum += e.amount
-
-    return render(request, 'fund/details.html', {
+    context = {
         'fund': fund,
         'expenses': expenses,
         'amount_sum': sum
-    })
+    }
+    return render(request, 'fund/details.html', context)
 
 
 @login_required
@@ -202,12 +202,14 @@ def ex_form(request, fund_pk):
     else:
         form = forms.ExpenseForm()
     expenses = Expense.objects.filter(fund=fund)
-    return render(request, 'fund/expense/expense_form.html', {
+
+    context = {
         'form': form,
         'fund': fund,
         'amount_sum': amount_sum,
         'expenses': expenses
-    })
+    }
+    return render(request, 'fund/expense/expense_form.html', context)
 
 
 @login_required
@@ -220,9 +222,11 @@ def fund_edit_form(request, fund_pk):
         fund = form.save(commit=False)
         fund.save()
         return redirect('fund_index')
-    return render(request, 'fund/fund_form.html', {
+
+    context = {
         'form': form
-    })
+    }
+    return render(request, 'fund/fund_form.html', context)
 
 
 @login_required

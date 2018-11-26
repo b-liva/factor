@@ -176,8 +176,9 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
             messages.add_message(request, level=20,  message='specs updated successfully')
             return redirect('spec_form', req_pk=req.pk)
 
-    return render(request, 'requests/admin_jemco/yreqspec/spec_form.html', {
+    context = {
         'req_obj': req,
         'specs': specs,
         'form': form
-    })
+    }
+    return render(request, 'requests/admin_jemco/yreqspec/spec_form.html', context)

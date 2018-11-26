@@ -1,0 +1,75 @@
+#area-chart,
+#line-chart,
+#bar-chart,
+#stacked,
+#pie-chart{
+  min-height: 250px;
+}
+.card-img-top{
+  width: 100%;
+  max-height: 200px;
+}
+table.withBorder tbody,
+table.withBorder th,
+table.withBorder td{
+  /*border:1px solid black;*/
+  /*text-align: center;*/
+}
+.withBorder th,
+.withBorder td,
+.withBorder tbody{
+  border:1px solid black;
+  text-align: center;
+}
+table.withBorder{
+    /*width:100%;*/
+}
+table.tableFull{
+  width:100%;
+}
+
+.results, .value{
+  color: lightgreen;
+}
+
+td.good-conditions{
+  color: whitesmoke;
+  background: #228B22;
+}
+
+td.bad-conditions{
+  color: whitesmoke;
+  background: #7f0000;
+}
+
+.testback1{
+  background: #85ac58;
+}
+.testback2{
+  background: #4fafcb;
+}
+
+.emphsize{
+  font-size: large;
+  font-style: italic;
+}
+.table-hover>tbody>tr:hover {
+    background-color: #2a3f54;
+    color: white;
+}
+
+#customerDetails{
+  background: #247BA0;
+  color: whitesmoke;
+}
+.hasBorder{
+  border: 1px solid darkblue;
+}
+.hasBackground{
+  background: #c6c5ee;
+  color: #000;
+}
+.DetailsCard{
+  background: #70C1B3;
+  color: black;
+}

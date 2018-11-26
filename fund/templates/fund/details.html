@@ -12,23 +12,26 @@
                     <p>{{ fund.date_fa }}</p>
                 </div>
                 <div class="col-md-12 col-sm-12">
-                    <a class="btn btn-sm btn-success" href="{% url 'fund_edit_form' fund_pk=fund.pk %}">Edit This
-                        Fund</a>
-                    <a class="btn btn-sm btn-success" href="{% url 'ex_form' fund_pk=fund.pk %}">Edit Expenses</a>
-                    <a href="{% url 'fund_index' %}" class="btn btn-danger btn-sm">Cancel</a>
+                    <a class="btn btn-sm btn-success" href="{% url 'fund_edit_form' fund_pk=fund.pk %}">
+                        <i class="fa fa-pencil"></i> ویرایش تنخواه
+                    </a>
+                    <a class="btn btn-sm btn-success" href="{% url 'ex_form' fund_pk=fund.pk %}">
+                        <i class="fa fa-pencil"></i> ویرایش هزینه
+                    </a>
+                    <a href="{% url 'fund_index' %}" class="btn btn-danger btn-sm">انصراف</a>
                 </div>
 
 
             </div>
             <div class="col-md-6 col-sm-6 col-xs-10">
-                Expenses belongs to this fund:<br>
+                هزینه های مربوط به <span class="">{{ fund.title }}</span>:<br>
                 <table class="table table-hover text-center">
                     <thead>
                     <tr class="dark">
-                        <th class="text-center">No</th>
-                        <th class="text-center">Id</th>
-                        <th class="text-center">Title</th>
-                        <th class="text-center">Total Expenses</th>
+                        <th class="text-center">ردیف</th>
+                        <th class="text-center">شماره هزینه</th>
+                        <th class="text-center">عنوان</th>
+                        <th class="text-center">مجموع هزینه</th>
                     </tr>
                     </thead>
 
@@ -44,7 +47,7 @@
                         </tr>
                     {% endfor %}
                     <tr style="border-top: 3px solid black;">
-                        <td colspan="3" class="emphsize">SUM</td>
+                        <td colspan="3" class="emphsize">مجموع</td>
                         <td class="emphsize"><b>{{ amount_sum|intcomma }}</b></td>
                     </tr>
                     </tbody>

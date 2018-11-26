@@ -341,7 +341,6 @@ def customer_edit_form(request, customer_pk):
         messages.error(request, 'No access')
         return redirect('errorpage')
 
-
     form = forms.CustomerForm(request.POST or None, instance=customer_instance)
 
     if form.is_valid():

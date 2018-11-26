@@ -11,6 +11,10 @@ class ProfFileForm(forms.ModelForm):
         exclude = ('prof',)
         widgets = {"image": forms.FileInput(attrs={'multiple': True})}
 
+        labels = {
+            'image': ('آپلود تصاویر'),
+        }
+
 
 class ProfEditForm(forms.ModelForm):
 
@@ -19,3 +23,4 @@ class ProfEditForm(forms.ModelForm):
         fields = '__all__'
         exclude = ('req_id', 'owner', 'pub_date')
         widgets = {"image": forms.FileInput(attrs={'multiple': True})}
+

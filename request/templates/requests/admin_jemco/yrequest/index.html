@@ -5,7 +5,7 @@
         <div class="col-md-10 col-md-offset-1">
             <h3>{{ msg }}</h3>
             <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                Requests</h1>
+                درخواست ها</h1>
             <form method="POST" action="{% url 'request_find' %}">
                 {% csrf_token %}
                 Request No <input name="req_no">
@@ -14,39 +14,41 @@
                 </button>
             </form>
             <br>
-            <a href="{% url 'req_form' %}" class="btn btn-success btn-sm pull-right">
-                <i class="fa fa-plus"></i> Request</a>
+            <a href="{% url 'req_form' %}" class="btn btn-success btn-sm pull-left">
+                <i class="fa fa-plus"></i> درخواست جدید</a>
             <table class="table table-hover">
                 <tr>
-                    <th colspan="col" class="text-center">pk</th>
-                    <th colspan="col" class="text-center">Number</th>
-                    <th colspan="col" class="text-center">Date</th>
-                    <th colspan="col" class="text-center">Image</th>
-                    <th colspan="col" class="text-center">Action</th>
+                    <th colspan="col" class="text-center">ردیف</th>
+                    <th colspan="col" class="text-center">کد</th>
+                    <th colspan="col" class="text-center">شماره درخواست</th>
+                    <th colspan="col" class="text-center">تاریخ ثبت</th>
+                    <th colspan="col" class="text-center">تصویر</th>
+                    <th colspan="col" class="text-center"></th>
                 </tr>
                 <tbody class="">
                 {% for request in all_requests %}
                     <tr>
+                        <td scope="row" class="text-center">{{ forloop.counter }}</td>
                         <td scope="row" class="text-center">{{ request.pk }}</td>
                         <td class="text-center">{{ request.number }}</td>
-                        <td class="text-center">{{ request.pub_date }}</td>
+                        <td class="text-center">{{ request.date_fa }}</td>
                         {% if request.image %}
                             <td class="text-center"><img class="" width="60px" src="{{ request.image.url }}"></td>
                         {% else %}
-                            <td class="text-center">No Image</td>
+                            <td class="text-center">بدون تصویر</td>
                         {% endif %}
                         <td class="text-center">
                             <a class="btn btn-primary btn-xs" href="{% url 'request_details' request_pk=request.pk %}">
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-eye"></i> مشاهده
                             </a>
                             <a class="btn btn-warning btn-xs"
                                href="{% url 'request_edit_form' request_pk=request.pk %}">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil"></i> ویرایش
 
                             </a>
                             <a class="btn btn-primary btn-xs btn-danger"
                                href="{% url 'request_delete' request_pk=request.pk %}">
-                                <i class="fa fa-trash"></i>
+                                <i class="fa fa-trash"></i> حذف
                             </a>
                         </td>
 

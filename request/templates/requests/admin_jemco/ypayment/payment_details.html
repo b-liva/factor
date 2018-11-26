@@ -5,7 +5,7 @@
         <div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
                 <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                    payment Details</h1>
+                    پرداخت</h1>
             </div>
         </div>
         <div class="row">
@@ -24,7 +24,7 @@
                         </div>
                         <div class="count">{{ payment.number }}</div>
 
-                        <h3>Number</h3>
+                        <h3>شماره پرداخت</h3>
                     </div>
                 </div>
                 <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -33,7 +33,7 @@
                         </div>
                         <div class="count">{{ payment.date_fa }}</div>
 
-                        <h3>Date</h3>
+                        <h3>تاریخ پرداخت</h3>
                     </div>
                 </div>
 
@@ -45,7 +45,7 @@
                         </div>
                         <div class="count">${{ payment.amount|floatformat:0|intcomma }}</div>
 
-                        <h3>Payments</h3>
+                        <h3>پرداخت ها</h3>
                     </div>
                 </div>
             </div>
@@ -56,11 +56,11 @@
 
             </div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
-                <div class="pull-right">
+                <div class="pull-left">
                     <a href="{% url 'payment_edit' ypayment_pk=payment.pk %}" class="btn btn-warning btn-xs">
-                        <i class="fa fa-pencil"></i> Payment</a>
+                        <i class="fa fa-pencil"></i> ویرایش </a>
                     <a href="{% url 'payment_index' %}" class="btn btn-success btn-xs">
-                        <i class="fa fa-list"></i> payment</a>
+                        <i class="fa fa-list"></i> لیست پرداخت ها</a>
                 </div>
 
                 <div>

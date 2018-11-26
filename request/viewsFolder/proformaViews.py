@@ -228,12 +228,14 @@ def pro_form(request):
             print('form is not Valid')
     else:
         form = forms.ProformaForm(request.user.pk)
-    return render(request, 'requests/admin_jemco/ypref/proforma_form.html', {
+
+    context = {
         'form': form,
         'reqs': reqs,
         'prof_file': imgform,
         'owner_reqs': owners_reqs
-    })
+    }
+    return render(request, 'requests/admin_jemco/ypref/proforma_form.html', context)
 
 
 @login_required
@@ -350,7 +352,6 @@ def pref_edit2(request, ypref_pk):
 
     # prof = models.Xpref.objects.get(pk=ypref_pk)
     prof_images = prof.proffiles_set.all()
-    print(f'req id equals to: {prof.req_id}')
     img_names = {}
     for p in prof_images:
         name = p.image.name
@@ -358,6 +359,10 @@ def pref_edit2(request, ypref_pk):
         las = newname[-1]
         img_names[p.pk] = las
     # form = proforma_forms.ProfEditForm(request.POST or None, request.FILES or None, instance=prof)
+    if prof.date_fa:
+        prof.date_fa = prof.date_fa.togregorian()
+    if prof.exp_date_fa:
+        prof.exp_date_fa = prof.exp_date_fa.togregorian()
     form = forms.ProformaForm(request.user.pk, request.POST or None, request.FILES or None, instance=prof)
     # form.req_id = prof.req_id
     # form = forms.ProformaForm(request.POST or None, request.FILES or None)
@@ -378,9 +383,10 @@ def pref_edit2(request, ypref_pk):
             file_instance.save()
         return redirect('pref_index')
 
-    return render(request, 'requests/admin_jemco/ypref/proforma_form.html', {
+    context = {
         'form': form,
         'prof_file': img_form,
         'prof_images': prof_images,
         'img_names': img_names
-    })
+    }
+    return render(request, 'requests/admin_jemco/ypref/proforma_form.html', context)

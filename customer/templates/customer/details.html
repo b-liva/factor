@@ -19,7 +19,7 @@
                         </div>
                         <div class="count">{{ req_count }}</div>
 
-                        <h3>Requests</h3>
+                        <h3>درخواست ها</h3>
                     </div>
                 </div>
                 <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -28,7 +28,7 @@
                         </div>
                         <div class="count">{{ customer_kw_total|floatformat:0|intcomma }}</div>
 
-                        <h3>KW</h3>
+                        <h3>کیلووات</h3>
                     </div>
                 </div>
 
@@ -40,7 +40,7 @@
                         </div>
                         <div class="count">${{ pay_sum|floatformat:0|intcomma }}</div>
 
-                        <h3>Payments</h3>
+                        <h3>پرداخت ها</h3>
                     </div>
                 </div>
             </div>
@@ -49,23 +49,23 @@
 
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
             <div class="row">
-                <div class="pull-right">
-                    <a class="btn btn-sm btn-info" href="{% url 'customer_index' %}"><i class="fa fa-list-ul" aria-hidden="true"></i> index</a>
-                    <a class="btn btn-sm btn-warning" href="{% url 'customer_edit_form' customer_pk=customer.pk %}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+                <div class="pull-left">
+                    <a class="btn btn-sm btn-warning" href="{% url 'customer_edit_form' customer_pk=customer.pk %}"><i class="fa fa-pencil" aria-hidden="true"></i> ویرایش</a>
+                    <a class="btn btn-sm btn-info" href="{% url 'customer_index' %}"><i class="fa fa-list-ul" aria-hidden="true"></i> لیست مشتریان</a>
                 </div>
             </div>
                 <div class="row">
-                    <h2>Requests belongs to <span class="emphsize">{{ customer.name }}</span></h2>
+                    <h4>درخواست های مربوط به <span class="emphsize">{{ customer.name }}</span></h4>
 
                     <table class="table table-hover text-center">
                         <thead>
                         <tr>
-                            <th class="text-center">Id</th>
-                            <th class="text-center">Pk</th>
-                            <th class="text-center">Request No</th>
-                            <th class="text-center">Total KW</th>
-                            <th class="text-center">Proformas</th>
-                            <th class="text-center">Payments</th>
+                            <th class="text-center">کد</th>
+                            <th class="text-center">یونیکد</th>
+                            <th class="text-center">شماره درخواست</th>
+                            <th class="text-center">جمع کیلووات</th>
+                            <th class="text-center">پیشفاکتورها</th>
+                            <th class="text-center">پرداخت ها</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -108,7 +108,7 @@
                             </tr>
                         {% endfor %}
                         <tr style="border-top: 3px solid black;">
-                            <td colspan="3">SUM</td>
+                            <td colspan="3">مجموع</td>
                             <td class="emphsize"><b>{{ customer_kw_total|floatformat:0|intcomma }}</b></td>
                             <td></td>
                             <td class="emphsize"><b>{{ pay_sum|floatformat:0|intcomma }}</b></td>

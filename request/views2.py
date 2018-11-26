@@ -289,12 +289,13 @@ def request_edit_form(request, request_pk):
             file_instance.save()
         return redirect('request_index')
 
-    return render(request, 'requests/admin_jemco/yrequest/req_form.html', {
+    context = {
         'form': form,
         'req_img': img_form,
         'req_images': req_images,
         'img_names': img_names
-    })
+    }
+    return render(request, 'requests/admin_jemco/yrequest/req_form.html', context)
 
 
 @login_required

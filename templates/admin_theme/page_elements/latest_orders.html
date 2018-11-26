@@ -1,0 +1,49 @@
+<div class="col-md-4 col-sm-4 col-xs-12">
+    <div class="x_panel tile fixed_height_320">
+        <div class="x_title">
+            <h2>Latest Orders</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i
+                            class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="dashboard-widget-content">
+                <ul class="quick-list">
+                    <li><b>Latest orders</b>
+                    </li>
+                    {% for item in last_n_requests %}
+                        <li><i class="fa fa-bars"></i>
+                        <a href="{% url 'request_details' request_pk=item.pk %}">{{ item.number }}
+                            - {{ item.customer.name }} - {{ item.pub_date }}</a>
+                    {% endfor %}
+                    <li><i class="fa fa-bars"></i><a href="#">Abfa - 250kw - 2qty</a>
+                    </li>
+                    <li><i class="fa fa-bars"></i><a href="#">Sazesh - 325kw - 5qty</a>
+                    <li><i class="fa fa-bars"></i><a href="#">Pumpiran - 500kw - 14qty</a>
+                    </li>
+                    <li><i class="fa fa-bars"></i><a href="#">Mapna - 1200kw - 2qty</a>
+                    <li><i class="fa fa-bars"></i><a href="#">Abfa - 480kw - 3qty</a>
+                    </li>
+                    <li><i class="fa fa-bars"></i><a href="#">Havayar - 250kw - 1qty</a>
+                    </li>
+                </ul>
+
+
+            </div>
+        </div>
+    </div>
+</div>

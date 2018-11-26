@@ -36,9 +36,9 @@ class FundForm(forms.ModelForm):
             })
         }
         labels = {
-            'title': 'Title',
-            'summary': 'Summary',
-            'date_fa': 'Date',
+            'title': 'عنوان',
+            'summary': 'شرح',
+            'date_fa': 'تاریخ',
         }
 
 
@@ -52,20 +52,20 @@ class ExpenseForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Enter Title here',
+                'placeholder': 'عنوان هزینه',
 
             }),
             'amount': forms.NumberInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Payment Amount'
+                'placeholder': 'مبلغ هزینه'
             }),
             'summary': forms.Textarea(attrs={
                 'class': 'form-control',
-                'placeholder': 'Enter Summary Here...'
+                'placeholder': 'شرح هزینه'
             })
         }
         labels = {
-            'title': 'Title',
-            'summary': 'Summary',
-            'amount': 'Amount',
+            'title': 'عنوان',
+            'summary': 'شرح',
+            'amount': 'مبلغ',
         }

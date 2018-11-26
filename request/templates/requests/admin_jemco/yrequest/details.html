@@ -18,7 +18,7 @@
                         </div>
                         <div class="count">{{ request.number }}</div>
 
-                        <h3>Number</h3>
+                        <h3>شماره درخواست</h3>
                     </div>
                 </div>
                 <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -27,7 +27,7 @@
                         </div>
                         <div class="count">{{ total_kw|floatformat:1|intcomma }}</div>
 
-                        <h3>KW</h3>
+                        <h3>مجموع کیلووات</h3>
                     </div>
                 </div>
 
@@ -39,34 +39,34 @@
                         </div>
                         <div class="count">${{ pay_sum|floatformat:0|intcomma }}</div>
 
-                        <h3>Payments</h3>
+                        <h3>پرداخت ها</h3>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
-            <div class="row pull-right">
+            <div class="row pull-left">
 
 
                 <a href="{% url 'spec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">
-                    <i class="fa fa-pencil"></i> Specs
+                    <i class="fa fa-pencil"></i> ویرایش ردیف
                 </a>
 
 
                 <a href="{% url 'request_edit_form' request_pk=request.pk %}" class="btn btn-sm btn-warning">
-                    <i class="fa fa-pencil"></i> Request
+                    <i class="fa fa-pencil"></i> ویرایش درخواست
                 </a>
             </div>
 
             <table class="table table-hover text-center">
                 <thead class="dark">
                 <tr>
-                    <th scope="col" class="text-center">No</th>
-                    <th scope="col" class="text-center">Qty</th>
-                    <th scope="col" class="text-center">kw</th>
-                    <th scope="col" class="text-center">rpm</th>
-                    <th scope="col" class="text-center">Summary</th>
+                    <th scope="col" class="text-center">شماره</th>
+                    <th scope="col" class="text-center">تعداد</th>
+                    <th scope="col" class="text-center">کیلووات</th>
+                    <th scope="col" class="text-center">سرعت</th>
+                    <th scope="col" class="text-center">جزئیات</th>
                 </tr>
                 </thead>
 
@@ -82,11 +82,11 @@
                         <td>
                             <a class="btn btn-xs btn-warning"
                                href="{% url 'reqspec_edit_form' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
                             </a>
                             <a class="btn btn-xs btn-danger"
                                href="{% url 'reqSpec_delete' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                <i class="fa fa-trash" aria-hidden="true"></i> حذف
                             </a>
                         </td>
                         {#                        <td>#}

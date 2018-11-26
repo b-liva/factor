@@ -18,7 +18,7 @@
                         </div>
                         <div class="count">{{ pref.number }}</div>
 
-                        <h3>Number#</h3>
+                        <h3>شماره پیشفاکتور</h3>
                     </div>
                 </div>
                 <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -27,7 +27,7 @@
                         </div>
                         <div class="count">{{ pref.exp_date_fa }}</div>
 
-                        <h3>Ex.Date</h3>
+                        <h3>تاریخ انقضا</h3>
                     </div>
                 </div>
 
@@ -39,7 +39,7 @@
                         </div>
                         <div class="count">${{ proforma_total|floatformat:0|intcomma }}</div>
 
-                        <h3>Payable</h3>
+                        <h3>قابل پرداخت</h3>
                     </div>
                 </div>
             </div>
@@ -47,26 +47,26 @@
 
         <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
 
-            <div class="pull-right">
-                <a class="btn btn-success btn-sm" type="submit" name="submit"
+            <div class="pull-left">
+                <a class="btn btn-success btn-sm pull-left" type="submit" name="submit"
                    href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
-                    <i class="fa fa-pencil"></i> Prices</a>
-                <a class="btn btn-warning btn-sm" href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
-                    <i class="fa fa-pencil"></i> Prof</a>
+                    <i class="fa fa-pencil"></i> ویرایش قیمت</a>
+                <a class="btn btn-warning btn-sm pull-left" href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
+                    <i class="fa fa-pencil"></i> ویرایش پیشفاکتور</a>
             </div>
-            <h3>Proforma Details</h3>
+            <h3>جزئیات پیشفاکتور</h3>
             <table class="table table-hover text-center">
                 <thead>
                 <tr>
-                    <th scope="col" class="text-center">No</th>
-                    <th scope="col" class="text-center">ID</th>
-                    <th scope="col" class="text-center">Qty</th>
-                    <th scope="col" class="text-center">Kw</th>
-                    <th scope="col" class="text-center">rpm</th>
-                    <th scope="col" class="text-center">voltage</th>
-                    <th scope="col" class="text-center">consideration</th>
-                    <th scope="col" class="text-center">price</th>
-                    <th scope="col" class="text-center">Total price</th>
+                    <th scope="col" class="text-center">ردیف</th>
+                    <th scope="col" class="text-center">کد</th>
+                    <th scope="col" class="text-center">تعداد</th>
+                    <th scope="col" class="text-center">کیلووات</th>
+                    <th scope="col" class="text-center">سرعت</th>
+                    <th scope="col" class="text-center">ولتاژ</th>
+                    <th scope="col" class="text-center">ملاحظات</th>
+                    <th scope="col" class="text-center">قیمت واحد</th>
+                    <th scope="col" class="text-center">مجموع قیمت</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -84,7 +84,7 @@
                     </tr>
                 {% endfor %}
                 <tr style="border-top: 2px black solid">
-                    <td colspan="3" class="emphsize">sum</td>
+                    <td colspan="3" class="emphsize">مجموع</td>
                     <td class="kw-total emphsize">{{ kw_total|intcomma }}</td>
                     <td colspan="4"></td>
                     <td class="amount-total emphsize">{{ proforma_total|intcomma:0 }}</td>

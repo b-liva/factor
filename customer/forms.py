@@ -46,9 +46,13 @@ class CustomerForm(forms.ModelForm):
             }),
         }
         labels = {
-            'code': ('Code'),
-            'date2': ('Date'),
-            'type': ('Customer Type'),
+            'code': ('کد'),
+            'name': ('نام'),
+            'date2': ('تاریخ'),
+            'type': ('دسته بندی'),
+            'phone': ('تلفن'),
+            'fax': ('فکس'),
+            'address': ('آدرس'),
         }
         
 

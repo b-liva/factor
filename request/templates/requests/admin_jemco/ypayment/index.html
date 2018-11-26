@@ -5,27 +5,27 @@
         <div class="col-md-10 col-md-offset-1">
             <h3>{{ msg }}</h3>
             <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                Payments</h1>
+                پرداخت ها</h1>
             <form method="POST" action="{% url 'payment_find' %}">
                 {% csrf_token %}
-                Payment No <input name="payment_no">
+                شماره پرداخت <input name="payment_no">
                 <button type="submit" name="submit" class="btn btn-sm btn-primary">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
             </form>
-            <a href="{% url 'pay_form' %}" class="btn btn-success btn-sm pull-right">
-                <i class="fa fa-plus"></i> Payment</a>
+            <a href="{% url 'pay_form' %}" class="btn btn-success btn-sm pull-left">
+                <i class="fa fa-plus"></i> ثبت پرداخت </a>
             <div class="row">
                 <table class="table table-hover text-center">
                     <tr>
-                        <th>Id</th>
-                        <th>Number</th>
-                        <th>Request</th>
-                        <th>Prefactor</th>
-                        <th>Amount</th>
-                        <th>Payment Date</th>
-                        <th>Payment date fa</th>
-                        <th>Actions</th>
+                        <th>کد</th>
+                        <th>شماره</th>
+                        <th>درخواست</th>
+                        <th>پیشفاکتور</th>
+                        <th>مبلغ</th>
+                        <th>تاریخ پرداخت</th>
+                        <th>تاریخ پرداخت</th>
+                        <th></th>
                     </tr>
                     <tbody class="">
                     {% for payment in payments %}
@@ -40,15 +40,15 @@
                             <td>
                                 <a class="btn btn-primary btn-xs"
                                    href="{% url 'payment_details' ypayment_pk=payment.pk %}">
-                                    <i class="fa fa-eye"></i>
+                                    <i class="fa fa-eye"></i> مشاهده
                                 </a>
                                 <a class="btn btn-primary btn-xs btn-warning"
                                    href="{% url 'payment_edit' ypayment_pk=payment.pk %}">
-                                    <i class="fa fa-pencil"></i>
+                                    <i class="fa fa-pencil"></i> ویرایش
                                 </a>
                                 <a class="btn btn-primary btn-xs btn-danger"
                                    href="{% url 'payment_delete' ypayment_pk=payment.pk %}">
-                                    <i class="fa fa-trash"></i>
+                                    <i class="fa fa-trash"></i> حذف
                                 </a>
                             </td>
 
@@ -57,7 +57,7 @@
 
                     {% endfor %}
                     <tr style="border-top: 3px solid black;">
-                        <td colspan="2" class="emphsize">SUM</td>
+                        <td colspan="2" class="emphsize">مجموع</td>
                         <td class="emphsize">{{ pref_sum|intcomma }}</td>
                         <td class="emphsize"><b>{{ amount_sum|intcomma }}</b></td>
                         <td class="emphsize">{{ debt|intcomma }}</td>

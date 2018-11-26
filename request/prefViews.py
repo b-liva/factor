@@ -141,9 +141,10 @@ def prof_spec_form(request, ypref_pk):
     else:
         form = forms.ProfSpecForm(request.POST)
 
-    return render(request, 'requests/admin_jemco/ypref/proforma_specs.html', {
+    context = {
         'form': form,
         'proforma': proforma,
         'req_obj': req,
         'reqspec': reqspecs
-    })
+    }
+    return render(request, 'requests/admin_jemco/ypref/proforma_specs.html', context)
