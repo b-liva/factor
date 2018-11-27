@@ -182,7 +182,7 @@ def customer_read2(request, customer_pk):
     if not can_read:
         messages.error(request, 'Sorry, no way for you to do that')
         return redirect('errorpage')
-    customer_reqs = customer.requests_set.all()
+    customer_reqs = customer.requests_set.all().order_by('date_fa').reverse()
     kwList = []
     pList = []
     totalRes = {}

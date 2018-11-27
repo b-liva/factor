@@ -73,3 +73,10 @@ td.bad-conditions{
   background: #70C1B3;
   color: black;
 }
+
+ul.quick-list{
+  width: 100%;
+}
+.x_panel{
+  overflow: scroll;
+}

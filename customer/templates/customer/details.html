@@ -63,6 +63,7 @@
                             <th class="text-center">کد</th>
                             <th class="text-center">یونیکد</th>
                             <th class="text-center">شماره درخواست</th>
+                            <th class="text-center">تاریخ</th>
                             <th class="text-center">جمع کیلووات</th>
                             <th class="text-center">پیشفاکتورها</th>
                             <th class="text-center">پرداخت ها</th>
@@ -75,6 +76,9 @@
                                 <td>{{ req_id }}</td>
                                 <td>
                                     <a href="{% url 'request_details' request_pk=req_id %}">{{ val.req.number }}</a>
+                                </td>
+                                <td>
+                                    {{ val.req.date_fa }}
                                 </td>
                                 <td>{{ val.kw|intcomma }}</td>
                                 <td style="margin: 0px; padding: 0px;">
@@ -108,7 +112,7 @@
                             </tr>
                         {% endfor %}
                         <tr style="border-top: 3px solid black;">
-                            <td colspan="3">مجموع</td>
+                            <td colspan="4">مجموع</td>
                             <td class="emphsize"><b>{{ customer_kw_total|floatformat:0|intcomma }}</b></td>
                             <td></td>
                             <td class="emphsize"><b>{{ pay_sum|floatformat:0|intcomma }}</b></td>

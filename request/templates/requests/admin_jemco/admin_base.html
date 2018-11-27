@@ -21,8 +21,9 @@
         <div class="col-md-3 left_col">
             <div class="left_col scroll-view">
                 <div class="navbar nav_title" style="border: 0;">
-                    <a href="{% url 'allTables' %}" class="site_title"><i class="fa fa-paw"></i>
-                        <span>Jemco Motor!</span></a>
+                    <a href="{% url 'allTables' %}" class="site_title">
+{#                        <i class="fa fa-paw"></i>#}
+                        <span>شرکت جمکو!</span></a>
                 </div>
                 <div class="clearfix"></div>
 
@@ -33,7 +34,7 @@
                              class="img-circle profile_img">
                     </div>
                     <div class="profile_info">
-                        <span>Welcome,</span>
+                        <span>سلام,</span>
                         <h2>{{ user }}</h2>
                     </div>
                 </div>
@@ -67,10 +68,10 @@
                                 <span class=" fa fa-angle-down"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                <li><a href="javascript:;"> Profile</a></li>
+                                <li><a href="javascript:;"> مشخصات کاربری</a></li>
                                 {% if user.is_authenticated %}
                                     <li class="nav-item"><a class="nav-link"
-                                                            href="javascript:{document.getElementById('logout').submit()}">Logout</a>
+                                                            href="javascript:{document.getElementById('logout').submit()}">خروج</a>
                                     <form id="logout" method="POST" action="{% url 'logout' %}">
                                         {% csrf_token %}
                                         <input type="hidden">
@@ -170,7 +171,7 @@
         <!-- footer content -->
         <footer>
             <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+{#                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>#}
             </div>
             <div class="clearfix"></div>
         </footer>

@@ -28,18 +28,8 @@
                     {% for item in last_n_requests %}
                         <li><i class="fa fa-bars"></i>
                         <a href="{% url 'request_details' request_pk=item.pk %}">{{ item.number }}
-                            - {{ item.customer.name }} - {{ item.pub_date }}</a>
+                            - {{ item.customer.name }} - {{ item.date_fa }}</a>
                     {% endfor %}
-                    <li><i class="fa fa-bars"></i><a href="#">Abfa - 250kw - 2qty</a>
-                    </li>
-                    <li><i class="fa fa-bars"></i><a href="#">Sazesh - 325kw - 5qty</a>
-                    <li><i class="fa fa-bars"></i><a href="#">Pumpiran - 500kw - 14qty</a>
-                    </li>
-                    <li><i class="fa fa-bars"></i><a href="#">Mapna - 1200kw - 2qty</a>
-                    <li><i class="fa fa-bars"></i><a href="#">Abfa - 480kw - 3qty</a>
-                    </li>
-                    <li><i class="fa fa-bars"></i><a href="#">Havayar - 250kw - 1qty</a>
-                    </li>
                 </ul>
 
 

@@ -288,6 +288,7 @@ def dashboard(request):
     num_of_requests = no_of_requests()
     orders = Orders()
     last_n_requests = orders.last_orders()
+    print(f'order numbers: {len(last_n_requests)}')
     total_payments = find_total_payment()
     context = {
                       'routine_kw': intcomma(routine_kw),
@@ -355,7 +356,7 @@ def specs_of_orders(orders):
 class Orders:
     def last_orders(self):
         # last_n_requests = Requests.objects.filter()[:10].order_by('pub_date').reverse()
-        last_n_requests = Requests.objects.all().order_by('customer__requests__pub_date').reverse()
+        last_n_requests = Requests.objects.all().order_by('date_fa').reverse()
         return last_n_requests
 
 
