@@ -11,6 +11,7 @@
                 <p><i class="fa fa-fax" aria-hidden="true"></i> {{ customer.fax }}</p>
                 <p><i class="fa fa-map-marker" aria-hidden="true"></i>
                     {{ customer.address }}</p>
+                <a href="{% url 'addr-list' customer_pk=customer.pk %}" class="btn btn-link btn-xs"> سایر آدرس ها</a>
             </div>
             <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
                 <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -43,6 +44,7 @@
                         <h3>پرداخت ها</h3>
                     </div>
                 </div>
+                <a href="{% url 'add-address' customer_pk=customer.pk %}" class="btn btn-success btn-xs">افزودن آدرس جدید</a>
             </div>
         </div>
         <div class="row customerTable">
@@ -125,5 +127,6 @@
             </div>
         </div>
     </div>
+
 
 {% endblock %}

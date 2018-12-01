@@ -16,6 +16,14 @@ urlpatterns = [
 
     ])),
 
+    path('<int:customer_pk>/addr/', include([
+        path('add-address', views.add_address, name='add-address'),
+        path('addr-list', views.addr_list, name='addr-list'),
+        path('<int:addr_pk>/', include([
+            path('add-phone', views.add_phone, name='add-phone'),
+        ])),
+    ])),
+
     path('type/form', views.type_form, name='type_form'),
     path('type/insert', views.type_insert, name='type_insert'),
     path('index', views.type_index, name='type_index'),

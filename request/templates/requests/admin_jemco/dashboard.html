@@ -6,18 +6,5 @@
     <div class="row">
 
         {% include 'requests/admin_jemco/page_elements/latest_orders.html' with last_n_requests=last_n_requests %}
-
-
     </div>
-
-    <div class="container">
-        <div class="row">
-            <ul class="row">
-                {% for order in last_n_requests %}
-                    <li><a href="">{{ order.number }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-
 {% endblock %}

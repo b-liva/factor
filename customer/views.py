@@ -1,7 +1,7 @@
 import json
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import Customer
+from .models import Customer, Address
 from .models import Type
 from request.models import Requests
 from request.models import Xpref
@@ -26,12 +26,14 @@ class TestView(View):
 
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
 def customer(request):
     customer_types = Type.objects.all()
     return render(request, 'customer/customer.html', {
         'customer_types': customer_types
     })
+
 
 @login_required
 def customer_create(request):
@@ -49,6 +51,7 @@ def customer_create(request):
         'customer_types': customer_types,
         'all_customers': all_customers
     })
+
 
 @login_required
 def customer_read(request):
@@ -360,3 +363,61 @@ def customers_payment(customer_pk):
     total_payments = sum(priceList)
     return (priceList, total_payments)
 
+
+def add_address(request, customer_pk):
+    c = Customer.objects.get(pk=customer_pk)
+    if request.method == 'POST':
+        addr_form = forms.AddressForm(request.POST)
+
+        if addr_form.is_valid():
+            addr_item = addr_form.save(commit=False)
+            addr_item.customer = c
+            addr_item.save()
+            return redirect('customer_index')
+    else:
+        addr_form = forms.AddressForm()
+        # customer_form.owner = request.user
+    context = {
+        'form': addr_form,
+        'customer': c,
+    }
+    return render(request, 'customer2/addAddress.html', context)
+
+
+def addr_list(request, customer_pk):
+    c = Customer.objects.get(pk=customer_pk)
+    addrs = c.address_set.all()
+    addrs_dict = {}
+    for a in addrs:
+        phoneList = []
+        phones = a.phone_set.all()
+        for p in phones:
+            phoneList.append(p.phone_number)
+        addrs_dict[a.pk] = phoneList
+    print(addrs_dict)
+
+    context = {
+        'customer': c,
+        'addresses': addrs
+    }
+
+    return render(request, 'customer2/addrList.html', context)
+
+
+def add_phone(request, customer_pk, addr_pk):
+    c = Customer.objects.get(pk=customer_pk)
+    address = Address.objects.get(pk=addr_pk)
+    if request.method == "POST":
+        form = forms.PhoneForm(request.POST or None)
+        if form.is_valid():
+            phone_item = form.save(commit=False)
+            phone_item.add = address
+            phone_item.save()
+            return redirect('addr-list', customer_pk=c.pk)
+    else:
+        form = forms.PhoneForm()
+    context = {
+        'form': form,
+        address: address,
+    }
+    return render(request, 'customer2/addPhone.html', context)

@@ -1,0 +1,41 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+{% block right_col %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h3>{{ msg }}</h3>
+            {% if messages %}
+                <div class="alert alert-danger">
+                    {% for msg in messages %}
+                        <p>{{ msg }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <h3 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                آدرس</h3>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+            آدرس های <a href="{% url 'customer_read' customer_pk=customer.pk %}">{{ customer.name }}</a>
+            <hr>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+            {% for addr in addresses %}
+                <div class="">
+                    <p>فکس: {{ addr.fax }}</p>
+                    <p>کد پستی: {{ addr.postal_code }}</p>
+                    <p>آدرس: {{ addr.address }}</p>
+                    {% for phone in addr.phone_set.item %}
+                        {{ phone }}
+                        {{ phone.phone_number }}
+                    {% endfor %}
+                </div>
+                <a href="{% url 'add-phone' customer_pk=customer.pk addr_pk=addr.pk %}" class="btn btn-link">افزودن
+                    شماره تماس</a>
+                <hr>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+{% endblock %}

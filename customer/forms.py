@@ -26,7 +26,7 @@ class CustomerForm(forms.ModelForm):
             }),
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Enter Name here',
+                'placeholder': 'نام مشتری',
 
             }),
             'date2': forms.DateInput(attrs={
@@ -35,13 +35,16 @@ class CustomerForm(forms.ModelForm):
             'type': forms.Select(attrs={
                 'class': 'form-control',
             }),
-            'phone': forms.NumberInput(attrs={
+            'phone': forms.TextInput(attrs={
                 'class': 'form-control',
             }),
-            'fax': forms.NumberInput(attrs={
+            'fax': forms.TextInput(attrs={
                 'class': 'form-control',
             }),
-            'address': forms.Textarea(attrs={
+            'postal_code': forms.TextInput(attrs={
+                'class': 'form-control',
+            }),
+            'addr': forms.Textarea(attrs={
                 'class': 'form-control',
             }),
         }
@@ -52,11 +55,49 @@ class CustomerForm(forms.ModelForm):
             'type': ('دسته بندی'),
             'phone': ('تلفن'),
             'fax': ('فکس'),
-            'address': ('آدرس'),
+            'postal_code': ('کد پستی'),
+            'addr': ('آدرس'),
         }
-        
 
         # types = forms.ModelChoiceField(queryset=Type.objects.filter(), label='room', widget=forms.Select)
 
 
+class AddressForm(forms.ModelForm):
 
+    class Meta:
+        model = models.Address
+        fields = '__all__'
+        exclude = ('customer', 'name')
+        widgets = {
+            'fax': forms.NumberInput(attrs={
+                'class': 'form-control',
+            }),
+            'postal_code': forms.NumberInput(attrs={
+                'class': 'form-control',
+            }),
+            'address': forms.Textarea(attrs={
+                'class': 'form-control',
+            }),
+        }
+        labels = {
+            'fax': ('فکس'),
+            'postal_code': ('کد پستی'),
+            'address': ('آدرس'),
+        }
+
+
+class PhoneForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Phone
+
+        fields = '__all__'
+        exclude = ('add',)
+        widgets = {
+            'phone_number': forms.TextInput(attrs={
+                'class': 'form-control',
+            }),
+        }
+        labels = {
+            'phone_number': ('شماره تلفن'),
+        }

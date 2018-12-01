@@ -277,6 +277,8 @@ def request_edit_form(request, request_pk):
         newname = name.split('/')
         las = newname[-1]
         img_names[r.pk] = las
+    if req.date_fa:
+        req.date_fa = req.date_fa.togregorian()
     form = forms.RequestFrom(request.POST or None, request.FILES or None, instance=req)
     img_form = forms.RequestFileForm(request.POST, request.FILES)
     files = request.FILES.getlist('image')

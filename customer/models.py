@@ -5,13 +5,13 @@ from django.contrib.auth.models import User
 
 from django import forms
 
+
 # Create your models here.
 
 
 def default_customer_code():
     last_customer = Customer.objects.all().order_by('pk').last()
     last_id = last_customer.pk
-    print(last_id)
     customer = Customer.objects.filter(pk=last_id)
     while customer is not None:
         last_id += 1
@@ -40,9 +40,10 @@ class Customer(models.Model):
     # date2 = jmodels.jDateTimeField(default=now)
     date2 = jmodels.jDateField(default=now)
     representator = models.IntegerField(default=0)
-    phone = models.IntegerField(blank=True, null=True)
-    fax = models.IntegerField(blank=True, null=True)
-    address = models.TextField(max_length=600, blank=True, null=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    fax = models.CharField(max_length=15, blank=True, null=True)
+    postal_code = models.CharField(max_length=15, blank=True, null=True)
+    addr = models.TextField(max_length=600, blank=True, null=True)
 
     class Meta:
         permissions = (
@@ -53,3 +54,15 @@ class Customer(models.Model):
     def __str__(self):
         return '%s' % self.name
 
+
+class Address(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    fax = models.IntegerField(blank=True, null=True)
+    postal_code = models.IntegerField(blank=True, null=True)
+    address = models.TextField(max_length=600, blank=True, null=True)
+
+
+class Phone(models.Model):
+    add = models.ForeignKey(Address, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=15)

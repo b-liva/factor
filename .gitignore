@@ -7,8 +7,11 @@
 __pycache__/
 local_settings.py
 db.sqlite3
+db1.sqlite3
 db - Copy.sqlite3
 /media
+/media1
+/newmedia.zip
 /static
 design.txt
 githublink.txt

@@ -38,18 +38,24 @@
                             <td class="text-center">بدون تصویر</td>
                         {% endif %}
                         <td class="text-center">
-                            <a class="btn btn-primary btn-xs" href="{% url 'request_details' request_pk=request.pk %}">
-                                <i class="fa fa-eye"></i> مشاهده
-                            </a>
-                            <a class="btn btn-warning btn-xs"
-                               href="{% url 'request_edit_form' request_pk=request.pk %}">
-                                <i class="fa fa-pencil"></i> ویرایش
-
-                            </a>
-                            <a class="btn btn-primary btn-xs btn-danger"
-                               href="{% url 'request_delete' request_pk=request.pk %}">
-                                <i class="fa fa-trash"></i> حذف
-                            </a>
+                            {% if perms.request.add_requests %}
+                                <a class="btn btn-primary btn-xs"
+                                   href="{% url 'request_details' request_pk=request.pk %}">
+                                    <i class="fa fa-eye"></i> مشاهده
+                                </a>
+                            {% endif %}
+                            {% if perms.request.change_requests %}
+                                <a class="btn btn-warning btn-xs"
+                                   href="{% url 'request_edit_form' request_pk=request.pk %}">
+                                    <i class="fa fa-pencil"></i> ویرایش
+                                </a>
+                            {% endif %}
+                            {% if perms.request.delete_requests %}
+                                <a class="btn btn-primary btn-xs btn-danger"
+                                   href="{% url 'request_delete' request_pk=request.pk %}">
+                                    <i class="fa fa-trash"></i> حذف
+                                </a>
+                            {% endif %}
                         </td>
 
 
