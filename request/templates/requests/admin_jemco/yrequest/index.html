@@ -8,14 +8,16 @@
                 درخواست ها</h1>
             <form method="POST" action="{% url 'request_find' %}">
                 {% csrf_token %}
-                Request No <input name="req_no">
+                شماره درخواست <input name="req_no">
                 <button type="submit" name="submit" class="btn btn-sm btn-primary">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
             </form>
             <br>
-            <a href="{% url 'req_form' %}" class="btn btn-success btn-sm pull-left">
-                <i class="fa fa-plus"></i> درخواست جدید</a>
+            {% if perms.request.add_requests %}
+                <a href="{% url 'req_form' %}" class="btn btn-success btn-sm pull-left">
+                    <i class="fa fa-plus"></i> درخواست جدید</a>
+            {% endif %}
             <table class="table table-hover">
                 <tr>
                     <th colspan="col" class="text-center">ردیف</th>
@@ -38,19 +40,18 @@
                             <td class="text-center">بدون تصویر</td>
                         {% endif %}
                         <td class="text-center">
-                            {% if perms.request.add_requests %}
-                                <a class="btn btn-primary btn-xs"
-                                   href="{% url 'request_details' request_pk=request.pk %}">
-                                    <i class="fa fa-eye"></i> مشاهده
-                                </a>
-                            {% endif %}
-                            {% if perms.request.change_requests %}
+                            <a class="btn btn-primary btn-xs"
+                               href="{% url 'request_details' request_pk=request.pk %}">
+                                <i class="fa fa-eye"></i> مشاهده
+                            </a>
+
+                            {% if perms.request.public_requests %}
                                 <a class="btn btn-warning btn-xs"
                                    href="{% url 'request_edit_form' request_pk=request.pk %}">
                                     <i class="fa fa-pencil"></i> ویرایش
                                 </a>
                             {% endif %}
-                            {% if perms.request.delete_requests %}
+                            {% if perms.request.public_requests %}
                                 <a class="btn btn-primary btn-xs btn-danger"
                                    href="{% url 'request_delete' request_pk=request.pk %}">
                                     <i class="fa fa-trash"></i> حذف

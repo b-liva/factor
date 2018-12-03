@@ -1,0 +1,29 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+
+{% block right_col %}
+
+
+    <div class="row mt-4">
+        <div class="col-md-4 col-md-offset-4">
+            {% if error %}
+                {{ error }}
+            {% endif %}
+        {% if messages %}
+            {% for msg in messages %}
+                {{ msg }}
+            {% endfor %}
+        {% endif %}
+        <h4 style="border-bottom: solid 1px #73879c; margin-bottom: 10px; padding-bottom: 10px; "> مشخصات کاربری </h4>
+            <p>نام کاربری: {{ user.username }}</p>
+            <p>نام : {{ user.first_name }}</p>
+            <p>نام خانوادگی: {{ user.last_name }}</p>
+            <p>ایمیل: {{ user.email }}</p>
+        <div class="pull-left">
+            <a class="btn btn-xs btn-warning" href="{% url 'edit-profile' %}">ویرایش</a>
+            <a class="btn btn-xs btn-warning" href="{% url 'change-password' %}">تغییر رمز</a>
+        </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -11,9 +11,9 @@ urlpatterns = [
     path('project-type/index', request.views2.projects_type_index, name='projects_type_index'),
 
 
-    path('form', request.views2.request_form, name='request_form'),
+    # path('form', request.views2.request_form, name='request_form'),
     path('req_form', request.views2.req_form, name='req_form'),
-    path('insert', request.views2.request_insert, name='request_insert'),
+    # path('insert', request.views2.request_insert, name='request_insert'),
     path('index', request.views2.request_index, name='request_index'),
     path('find', request.views2.request_find, name='request_find'),
     path('<int:request_pk>/', include([

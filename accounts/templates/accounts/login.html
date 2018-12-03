@@ -4,16 +4,17 @@
 
 
     <div class="row mt-4">
-        <div class="col-md-4 offset-md-4">
+{#        <div class="col-md-4 offset-md-4">#}
+        <div class="col-md-4 col-md-offset-4">
             {% if error %}
                 {{ error }}
             {% endif %}
-        <h4 style="border-bottom: solid 1px black"> Login here</h4>
+        <h4 style="border-bottom: solid 1px black"> ورود</h4>
             <form method="POST" action="{% url 'login' %}">
                 {% csrf_token %}
-                Username:<br>
+                نام کاربری:<br>
                 <input type="text" name="username" class="form-control"><br>
-                Password:<br>
+                رمز عبور:<br>
                 <input type="password" name="password" class="form-control"><br>
                 <input type="submit" value="Login" class="btn btn-success btn-sm" >
             </form>

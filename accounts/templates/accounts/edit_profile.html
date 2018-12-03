@@ -1,0 +1,26 @@
+{% extends 'requests/admin_jemco/admin_base.html' %}
+
+{% block right_col %}
+
+
+    <div class="row mt-4">
+        <div class="col-md-4 col-md-offset-4">
+            {% if error %}
+                {{ error }}
+            {% endif %}
+        <h4 style="border-bottom: solid 1px #73879c; padding-bottom: 10px; margin-bottom: 10px;"> ویرایش مشخصات کاربری </h4>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="pull-left">
+                    <a class="btn btnxs btn-danger btn-xs" href="{% url 'profile' %}">انصراف</a>
+                    <button class="btn btn-success btn-xs" type="submit">ذخیره</button>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}

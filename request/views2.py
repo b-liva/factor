@@ -5,8 +5,7 @@ from django.contrib import messages
 
 from request.views import allRequests, find_all_obj
 from .models import Requests
-from .models import Xpref
-from .models import Payment
+from .models import Xpref, Payment
 from . import models
 from customer.models import Customer
 from django.contrib.auth.decorators import login_required
@@ -59,7 +58,7 @@ def request_form(request):
 def req_form(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
     if not can_add:
-        messages.error(request, 'Sorry, You need some priviliges to do this.')
+        messages.error(request, 'عدم دستری کافی!')
         return redirect('errorpage')
 
     file_instance = forms.RequestFileForm()
@@ -77,7 +76,6 @@ def req_form(request):
                 file_instance.save()
             return redirect('spec_form', req_pk=req_item.pk)
     else:
-        print('request is GET')
         form = forms.RequestFrom()
         file_instance = forms.RequestFileForm()
     return render(request, 'requests/admin_jemco/yrequest/req_form.html', {
@@ -114,7 +112,7 @@ def request_index(request):
     # requests = Requests.objects.all()
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
     if not can_index:
-        messages.error(request, 'Sorry No access...')
+        messages.error(request, 'عدم دسترسی کافی!')
         return redirect('errorpage')
     requests = Requests.objects.filter(owner=request.user)
     return render(request, 'requests/admin_jemco/yrequest/index.html', {'all_requests': requests})
@@ -129,7 +127,7 @@ def request_find(request):
 @login_required
 def request_read(request, request_pk):
     if not Requests.objects.filter(pk=request_pk):
-        messages.error(request, 'Nothin found')
+        messages.error(request, 'درخواست مورد نظر یافت نشد')
         return redirect('errorpage')
 
     req = Requests.objects.get(pk=request_pk)

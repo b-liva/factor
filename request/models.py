@@ -56,6 +56,7 @@ class Requests(models.Model):
         permissions = (
             ('index_requests', 'can see list of requests'),
             ('read_requests', 'can read requests'),
+            ('public_requests', 'public in requests'),
         )
 
     def pub_date_pretty(self):

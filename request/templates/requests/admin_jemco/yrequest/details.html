@@ -48,15 +48,16 @@
         <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
             <div class="row pull-left">
 
-
-                <a href="{% url 'spec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">
-                    <i class="fa fa-pencil"></i> ویرایش ردیف
-                </a>
-
-
-                <a href="{% url 'request_edit_form' request_pk=request.pk %}" class="btn btn-sm btn-warning">
-                    <i class="fa fa-pencil"></i> ویرایش درخواست
-                </a>
+                {% if perms.request.public_requests %}
+                    <a href="{% url 'spec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">
+                        <i class="fa fa-pencil"></i> ویرایش ردیف
+                    </a>
+                {% endif %}
+                {% if perms.request.public_requests %}
+                    <a href="{% url 'request_edit_form' request_pk=request.pk %}" class="btn btn-sm btn-warning">
+                        <i class="fa fa-pencil"></i> ویرایش درخواست
+                    </a>
+                {% endif %}
             </div>
 
             <table class="table table-hover text-center">
@@ -79,16 +80,19 @@
                         <td>{{ reqspec.kw }}</td>
                         <td>{{ reqspec.rpm }}</td>
                         <td>{{ reqspec.summary }}</td>
-                        <td>
-                            <a class="btn btn-xs btn-warning"
-                               href="{% url 'reqspec_edit_form' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
-                                <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
-                            </a>
-                            <a class="btn btn-xs btn-danger"
-                               href="{% url 'reqSpec_delete' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
-                                <i class="fa fa-trash" aria-hidden="true"></i> حذف
-                            </a>
-                        </td>
+                        {% if perms.request.public_requests %}
+
+                            <td>
+                                <a class="btn btn-xs btn-warning"
+                                   href="{% url 'reqspec_edit_form' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
+                                </a>
+                                <a class="btn btn-xs btn-danger"
+                                   href="{% url 'reqSpec_delete' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
+                                    <i class="fa fa-trash" aria-hidden="true"></i> حذف
+                                </a>
+                            </td>
+                        {% endif %}
                         {#                        <td>#}
                         {#                            <a class="btn btn-primary btn-xs" href="{% url 'reqSpec_edit' req_pk=customer.pk %}">Details</a>#}
                         {#                            <a class="btn btn-primary btn-xs btn-warning"#}
@@ -102,10 +106,10 @@
             <br>
             <div>
                 {#                <a href="{% url 'reqSpec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">Edit Specs</a>#}
-{#                <a href="{% url 'spec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">#}
-{#                    <i class="fa fa-pencil"></i> Specs</a>#}
-{#                <a href="{% url 'request_edit_form' request_pk=request.pk %}" class="btn btn-sm btn-warning">#}
-{#                    <i class="fa fa-pencil"></i> Request</a>#}
+                {#                <a href="{% url 'spec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">#}
+                {#                    <i class="fa fa-pencil"></i> Specs</a>#}
+                {#                <a href="{% url 'request_edit_form' request_pk=request.pk %}" class="btn btn-sm btn-warning">#}
+                {#                    <i class="fa fa-pencil"></i> Request</a>#}
             </div>
 
         </div>

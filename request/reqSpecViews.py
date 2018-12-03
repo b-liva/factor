@@ -89,8 +89,9 @@ def reqspec_delete(request, yreqSpec_pk, req_pk):
         return redirect('errorpage')
 
     req = reqspec.req_id
+    msg = f'ردیف مربوط به {reqspec.qty} دستگاه {reqspec.kw} کیلوات  - {reqspec.rpm} دور حذف گردید'
     reqspec.delete()
-    messages.add_message(request, level=20, message='spec deleted successfully')
+    messages.add_message(request, level=20, message=msg)
     return redirect('spec_form', req_pk=req_pk)
     # return redirect('reqSpec_form', req_pk=req_pk)
 
@@ -134,7 +135,7 @@ def spec_form(request, req_pk):
             spec.req_id = req
             spec.owner = request.user
             spec.save()
-            messages.add_message(request, level=20, message=f'specs added successfully to request no.{req.number}')
+            messages.add_message(request, level=20, message=f'یک ردیف به درخواست شماره {req.number} اضافه شد.')
             return redirect('spec_form', req_pk=req_pk)
     else:
         form = forms.SpecForm()
@@ -173,7 +174,7 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
             print('form is valid')
             form.save()
             # form = forms.SpecForm()
-            messages.add_message(request, level=20,  message='specs updated successfully')
+            messages.add_message(request, level=20,  message='جزئیات درخواست اصلاح شد')
             return redirect('spec_form', req_pk=req.pk)
 
     context = {
