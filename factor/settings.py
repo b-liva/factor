@@ -137,6 +137,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 LOGIN_URL = reverse_lazy('login')
-
+#STATIC_ROOT = '/home/jemco/factor/static'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
