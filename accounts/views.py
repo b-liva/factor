@@ -1,11 +1,21 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm, PasswordResetForm
+from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import auth, messages
+from django.template.response import TemplateResponse
+
 from accounts.forms import EditProfileForm, PassChangeForm
+from django.contrib.auth.views import (
+    password_reset,
+    password_reset_complete,
+    password_reset_confirm,
+    password_reset_done,
+)
+
 
 # Create your views here.
 
@@ -35,7 +45,7 @@ def login(request):
             auth.login(request, user)
             return redirect('dashboard')
         else:
-            return render(request, 'accounts/login.html', {'error': 'username or password is incorrect'})
+            return render(request, 'accounts/login.html', {'error': 'اشکال در فیلدهای وارد شده'})
     else:
         return render(request, 'accounts/login.html')
 
@@ -81,3 +91,35 @@ def change_password(request):
         form = PassChangeForm(user=request.user)
         args = {'form': form}
         return render(request, 'accounts/change_password.html', args)
+
+
+def password_reset_custome(request):
+    request, template_name, context = password_reset(
+        request,
+        template_name='accounts/registration/password_reset_form.html',
+        email_template_name='registration/password_reset_email.html',
+        subject_template_name='registration/password_reset_subject.txt',
+        password_reset_form=PasswordResetForm,
+        token_generator=default_token_generator,
+        post_reset_redirect=None,
+        from_email=None,
+        extra_context=None,
+        html_email_template_name=None,
+        extra_email_context=None)
+    return TemplateResponse(request, template_name, context)
+
+
+def password_reset_done_custome(request):
+    request, template_name, context = password_reset_done(
+        request,
+        template_name='registration/password_reset_complete.html',
+        extra_context=None)
+    return TemplateResponse(request, template_name, context)
+
+
+def password_reset_confirm_custome(request):
+    password_reset_confirm()
+
+
+def password_reset_complete_custome(request):
+    password_reset_complete()

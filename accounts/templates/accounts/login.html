@@ -5,7 +5,7 @@
 
     <div class="row mt-4">
 {#        <div class="col-md-4 offset-md-4">#}
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
             {% if error %}
                 {{ error }}
             {% endif %}
@@ -16,7 +16,8 @@
                 <input type="text" name="username" class="form-control"><br>
                 رمز عبور:<br>
                 <input type="password" name="password" class="form-control"><br>
-                <input type="submit" value="Login" class="btn btn-success btn-sm" >
+{#                <input type="submit" value="Login" class="btn btn-success btn-sm" >#}
+                <button type="submit" class="btn btn-success btn-sm">ورود</button>
             </form>
         </div>
     </div>

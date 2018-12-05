@@ -24,7 +24,6 @@
                     <th colspan="col" class="text-center">کد</th>
                     <th colspan="col" class="text-center">شماره درخواست</th>
                     <th colspan="col" class="text-center">تاریخ ثبت</th>
-                    <th colspan="col" class="text-center">تصویر</th>
                     <th colspan="col" class="text-center"></th>
                 </tr>
                 <tbody class="">
@@ -34,11 +33,6 @@
                         <td scope="row" class="text-center">{{ request.pk }}</td>
                         <td class="text-center">{{ request.number }}</td>
                         <td class="text-center">{{ request.date_fa }}</td>
-                        {% if request.image %}
-                            <td class="text-center"><img class="" width="60px" src="{{ request.image.url }}"></td>
-                        {% else %}
-                            <td class="text-center">بدون تصویر</td>
-                        {% endif %}
                         <td class="text-center">
                             <a class="btn btn-primary btn-xs"
                                href="{% url 'request_details' request_pk=request.pk %}">

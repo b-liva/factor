@@ -109,12 +109,12 @@ def request_insert(request):
 
 @login_required
 def request_index(request):
-    # requests = Requests.objects.all()
+    # requests =request_form Requests.objects.all()
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
     if not can_index:
         messages.error(request, 'عدم دسترسی کافی!')
         return redirect('errorpage')
-    requests = Requests.objects.filter(owner=request.user)
+    requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
     return render(request, 'requests/admin_jemco/yrequest/index.html', {'all_requests': requests})
 
 
@@ -180,10 +180,6 @@ def pref_add(request):
 def pref_insert(request):
     print('added to the db...')
     return render(request, 'test.html', {'is_add': True})
-
-
-
-
 
 
 # add spec to the prefactor

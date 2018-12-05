@@ -68,6 +68,7 @@
                     <th scope="col" class="text-center">کیلووات</th>
                     <th scope="col" class="text-center">سرعت</th>
                     <th scope="col" class="text-center">جزئیات</th>
+                    <th scope="col" class="text-center">ارسال شده</th>
                 </tr>
                 </thead>
 
@@ -80,6 +81,8 @@
                         <td>{{ reqspec.kw }}</td>
                         <td>{{ reqspec.rpm }}</td>
                         <td>{{ reqspec.summary }}</td>
+                        <td><input type="checkbox" {% if reqspec.sent %} checked {% endif %} disabled></td>
+
                         {% if perms.request.public_requests %}
 
                             <td>
@@ -93,6 +96,7 @@
                                 </a>
                             </td>
                         {% endif %}
+
                         {#                        <td>#}
                         {#                            <a class="btn btn-primary btn-xs" href="{% url 'reqSpec_edit' req_pk=customer.pk %}">Details</a>#}
                         {#                            <a class="btn btn-primary btn-xs btn-warning"#}

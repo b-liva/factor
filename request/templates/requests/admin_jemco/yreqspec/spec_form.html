@@ -1,5 +1,6 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
 {% load jformat %}
+{% load humanize %}
 {% block right_col %}
     <div class="row">
         <div class="container">
@@ -17,18 +18,19 @@
             </div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">
 
-                <table class="withBorder tableFull">
+                <table class="table table-hover text-center">
                     <tbody>
                     <tr>
-                        <th>کد</th>
-                        <th>نوع</th>
-                        <th>تعداد</th>
-                        <th>کیلووات</th>
-                        <th>ولتاژ</th>
-                        <th>سرعت</th>
-                        <th>IP</th>
-                        <th>IC</th>
-                        <th>جزئیات</th>
+                        <th class="text-center">کد</th>
+                        <th class="text-center">نوع</th>
+                        <th class="text-center">تعداد</th>
+                        <th class="text-center">کیلووات</th>
+                        <th class="text-center">ولتاژ</th>
+                        <th class="text-center">سرعت</th>
+                        <th class="text-center">IP</th>
+                        <th class="text-center">IC</th>
+                        <th class="text-center">جزئیات</th>
+                        <th class="text-center">ارسال شده</th>
                         {#                        <th>PRICE</th>#}
                         <th></th>
                     </tr>
@@ -37,12 +39,13 @@
                             <td>{{ spec.id }}</td>
                             <td>{{ spec.type }}</td>
                             <td>{{ spec.qty }}</td>
-                            <td>{{ spec.kw }}</td>
-                            <td>{{ spec.voltage }}</td>
+                            <td>{{ spec.kw | floatformat:0 | intcomma }}</td>
+                            <td>{{ spec.voltage | floatformat:0 | intcomma }}</td>
                             <td>{{ spec.rpm }}</td>
                             <td>{{ spec.ip }}</td>
                             <td>{{ spec.ic }}</td>
                             <td>{{ spec.summary }}</td>
+                            <td><input type="checkbox" {% if spec.sent %} checked {% endif %} disabled></td>
                             {#                        <td>{{ spec.price }}</td>#}
                             <td>
 

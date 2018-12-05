@@ -138,7 +138,7 @@ def spec_form(request, req_pk):
             messages.add_message(request, level=20, message=f'یک ردیف به درخواست شماره {req.number} اضافه شد.')
             return redirect('spec_form', req_pk=req_pk)
     else:
-        form = forms.SpecForm()
+        form = forms.SpecAddForm()
 
     specs = req.reqspec_set.all()
     list = ['kw', 'qty']

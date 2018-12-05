@@ -83,6 +83,7 @@ class ReqSpec(models.Model):
     ic = models.IntegerField(null=True, blank=True)
     # images = models.FileField(upload_to='specs/', blank=True, null=True)
     summary = models.TextField(max_length=500, blank=True, null=True)
+    sent = models.BooleanField(default=False)
 
     class Meta:
         permissions = (

@@ -137,3 +137,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 LOGIN_URL = reverse_lazy('login')
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
