@@ -30,6 +30,10 @@ def payment_form(request):
 @login_required
 def pay_form(request):
     img_form = payment_forms.PaymentFileForm()
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
+    if not can_add:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
     if request.method == 'POST':
         form = payment_forms.PaymentFrom(request.POST, request.FILES)
         add_img_form = payment_forms.PaymentFileForm(request.POST or None, request.FILES or None)
@@ -121,6 +125,10 @@ def payment_find(request):
 @login_required
 def payment_details(request, ypayment_pk):
     payment = Payment.objects.get(pk=ypayment_pk)
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_payment', payment)
+    if not can_read:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
     images = models.PaymentFiles.objects.filter(pay=payment)
     context = {
         'payment': payment,
@@ -155,7 +163,7 @@ def payment_edit(request, ypayment_pk):
     payment = Payment.objects.get(pk=ypayment_pk)
     can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_payment', payment)
     if not can_edit:
-        messages.error(request, 'No access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     if payment.date_fa:
         payment.date_fa = payment.date_fa.togregorian()

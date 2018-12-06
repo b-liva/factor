@@ -1,5 +1,6 @@
 {% extends 'requests/admin_jemco/admin_base.html' %}
 {% load humanize %}
+{% load static %}
 {% block right_col %}
     <div class="container">
         <div class="row">
@@ -48,12 +49,12 @@
         <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
             <div class="row pull-left">
 
-                {% if perms.request.public_requests %}
+                {% if perms.request.sale_expert %}
                     <a href="{% url 'spec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">
                         <i class="fa fa-pencil"></i> ویرایش ردیف
                     </a>
                 {% endif %}
-                {% if perms.request.public_requests %}
+                {% if perms.request.sale_expert %}
                     <a href="{% url 'request_edit_form' request_pk=request.pk %}" class="btn btn-sm btn-warning">
                         <i class="fa fa-pencil"></i> ویرایش درخواست
                     </a>
@@ -83,7 +84,7 @@
                         <td>{{ reqspec.summary }}</td>
                         <td><input type="checkbox" {% if reqspec.sent %} checked {% endif %} disabled></td>
 
-                        {% if perms.request.public_requests %}
+                        {% if perms.request.sale_expert %}
 
                             <td>
                                 <a class="btn btn-xs btn-warning"
@@ -117,10 +118,55 @@
             </div>
 
         </div>
+        {#        <div class="col-md-10 col-lg-offset-1">#}
+        {#            {% for img in req_images %}#}
+        {#                <a href="{{ img.image.url }}" target="_blank"><img class="img-responsive img-thumbnail col-md-4"#}
+        {#                                                                   src="{{ img.image.url }}" style="max-height: 150px;"></a>#}
+        {#            {% endfor %}#}
+        {#        </div>#}
         <div class="col-md-10 col-lg-offset-1">
-            {% for img in req_images %}
-                <a href="{{ img.image.url }}" target="_blank"><img class="img-responsive img-thumbnail col-md-4"
-                                                                   src="{{ img.image.url }}" style="max-height: 150px;"></a>
+            {% for index, img in xfiles.img.items %}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="height: 150px;">
+                    <a href="{{ img.url }}" target="_blank">
+                        <div style="height: 125px;" class="text-center"><img class="img-responsive img-thumbnail "
+                                                                             src="{{ img.url }}"
+                                                                             style="max-height: 125px;">
+                        </div>
+                        <div class="text-center">{{ img.name }}</div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-10 col-lg-offset-1">
+            {% for index, file in xfiles.pdf.items %}
+                <div class="">
+                    <a href="{{ file.url }}" target="_blank">
+                        <div class="col-md-1"><img class="img-responsive img-thumbnail "
+                                                   src="{% static 'request/rtl/build/img/pdf.png' %}">
+                        </div>
+                        <div class="col-md-11">{{ file.name }}</div>
+                    </a>
+                </div>
+            {% endfor %}
+            <hr>
+            {% for index, file in xfiles.doc.items %}
+                <div class="" style=" ">
+                    <a href="{{ file.url }}" target="_blank">
+                        <div class="col-md-1" style=" "><img
+                                class="img-responsive img-thumbnail "
+                                src="{% static 'request/rtl/build/img/doc.png' %}">
+                        </div>
+                        <div class="col-md-11">{{ file.name }}</div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+
+        <div class="col-md-10 col-lg-offset-1">
+            {% for img in nested_files.pdf %}
+                <a href="{{ img.url }}" target="_blank"> {{ img.name }} </a>
             {% endfor %}
         </div>
     </div>

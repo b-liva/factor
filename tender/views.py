@@ -56,7 +56,7 @@ def tenders_admin(request, key='', path_to_html_file=''):
     pars_tenders, aria_tenders = find_tenders(key)
     path_to_html_file = 'requests/admin_jemco/tenders/tenders.html'
     # render_tenders(pars_tenders, aria_tenders, key)
-    return render(request, path_to_html_file, {'tenders_items': pars_tenders, 'aria_tenders': aria_tenders, 'key': key})
+    return render(request, 'requests/admin_jemco/tenders/tenders.html', {'tenders_items': pars_tenders, 'aria_tenders': aria_tenders, 'key': key})
 
 
 

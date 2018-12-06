@@ -280,7 +280,7 @@ def payment_edit(request, ypayment_pk):
     payment = Payment.objects.get(pk=ypayment_pk)
     can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_payment', payment)
     if not can_edit:
-        messages.error(request, 'No access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     return HttpResponse('payment payment_edit')
 

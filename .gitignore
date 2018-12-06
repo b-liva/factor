@@ -18,4 +18,5 @@ githublink.txt
 /node_modules
 package-lock.json
 /venv
+/z_mine
 /.idea

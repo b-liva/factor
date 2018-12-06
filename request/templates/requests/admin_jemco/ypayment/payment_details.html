@@ -57,10 +57,12 @@
             </div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
                 <div class="pull-left">
-                    <a href="{% url 'payment_edit' ypayment_pk=payment.pk %}" class="btn btn-warning btn-xs">
-                        <i class="fa fa-pencil"></i> ویرایش </a>
-                    <a href="{% url 'payment_index' %}" class="btn btn-success btn-xs">
-                        <i class="fa fa-list"></i> لیست پرداخت ها</a>
+                    {% if perms.request.add_payment %}
+                        <a href="{% url 'payment_edit' ypayment_pk=payment.pk %}" class="btn btn-warning btn-sm">
+                            <i class="fa fa-pencil"></i> ویرایش </a>
+                    {% endif %}
+                    <a href="{% url 'payment_index' %}" class="btn btn-info btn-sm">
+                        <i class="fa fa-list "></i> لیست پرداخت ها</a>
                 </div>
 
                 <div>

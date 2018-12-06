@@ -35,9 +35,9 @@ class RequestFrom(forms.ModelForm):
                 'placeholder': 'Enter Title here',
 
             }),
-            'number': forms.NumberInput(attrs={
+            'number': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Enter Number here',
+                'placeholder': 'شماره درخواست',
 
             }),
             'date_fa': forms.DateInput(attrs={
@@ -46,7 +46,7 @@ class RequestFrom(forms.ModelForm):
             }),
             'summary': forms.Textarea(attrs={
                 'class': 'form-control',
-                'placeholder': 'Enter Summary Here...'
+                'placeholder': 'شرح درخواست'
             })
         }
         labels = {

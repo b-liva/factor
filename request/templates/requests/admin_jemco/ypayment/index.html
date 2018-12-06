@@ -13,19 +13,20 @@
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
             </form>
-            <a href="{% url 'pay_form' %}" class="btn btn-success btn-sm pull-left">
-                <i class="fa fa-plus"></i> ثبت پرداخت </a>
+            {% if perms.request.add_payment %}
+                <a href="{% url 'pay_form' %}" class="btn btn-success btn-sm pull-left">
+                    <i class="fa fa-plus"></i> ثبت پرداخت </a>
+            {% endif %}
             <div class="row">
                 <table class="table table-hover text-center">
                     <tr>
-                        <th>کد</th>
-                        <th>شماره</th>
-                        <th>درخواست</th>
-                        <th>پیشفاکتور</th>
-                        <th>مبلغ</th>
-                        <th>تاریخ پرداخت</th>
-                        <th>تاریخ پرداخت</th>
-                        <th></th>
+                        <th class="text-center">کد</th>
+                        <th class="text-center">شماره</th>
+                        <th class="text-center">درخواست</th>
+                        <th class="text-center">پیشفاکتور</th>
+                        <th class="text-center">مبلغ</th>
+                        <th class="text-center">تاریخ پرداخت</th>
+                        <th class="text-center"></th>
                     </tr>
                     <tbody class="">
                     {% for payment in payments %}
@@ -35,21 +36,22 @@
                             <td>{{ payment.xpref_id.req_id.number }}</td>
                             <td>{{ payment.xpref_id.number }}</td>
                             <td>{{ payment.amount|intcomma }}</td>
-                            <td>{{ payment.payment_date }}</td>
                             <td>{{ payment.date_fa }}</td>
                             <td>
                                 <a class="btn btn-primary btn-xs"
                                    href="{% url 'payment_details' ypayment_pk=payment.pk %}">
                                     <i class="fa fa-eye"></i> مشاهده
                                 </a>
-                                <a class="btn btn-primary btn-xs btn-warning"
-                                   href="{% url 'payment_edit' ypayment_pk=payment.pk %}">
-                                    <i class="fa fa-pencil"></i> ویرایش
-                                </a>
-                                <a class="btn btn-primary btn-xs btn-danger"
-                                   href="{% url 'payment_delete' ypayment_pk=payment.pk %}">
-                                    <i class="fa fa-trash"></i> حذف
-                                </a>
+                                {% if perms.request.add_payment %}
+                                    <a class="btn btn-primary btn-xs btn-warning"
+                                       href="{% url 'payment_edit' ypayment_pk=payment.pk %}">
+                                        <i class="fa fa-pencil"></i> ویرایش
+                                    </a>
+                                    <a class="btn btn-primary btn-xs btn-danger"
+                                       href="{% url 'payment_delete' ypayment_pk=payment.pk %}">
+                                        <i class="fa fa-trash"></i> حذف
+                                    </a>
+                                {% endif %}
                             </td>
 
 

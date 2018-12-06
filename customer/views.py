@@ -81,7 +81,7 @@ def customer_read(request):
 def customer_form(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'customer.add_customer')
     if not can_add:
-        messages.error(request, 'Sorry, No access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     customer_types = Type.objects.all()
@@ -96,7 +96,7 @@ def customer_form(request):
 def cform(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'customer.add_customer')
     if not can_add:
-        messages.error(request, 'Sorry, No access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     if request.method == 'POST':
@@ -117,7 +117,7 @@ def cform(request):
 def customer_insert(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'customer.add_customer')
     if not can_add:
-        messages.error(request, 'Sorry, No access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     # print('001')
     # form = forms.CustomerForm(request.POST)
@@ -183,7 +183,7 @@ def customer_read2(request, customer_pk):
     customer = Customer.objects.get(pk=customer_pk)
     can_read = funcs.has_perm_or_is_owner(request.user, 'customer.read_customer', customer)
     if not can_read:
-        messages.error(request, 'Sorry, no way for you to do that')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     customer_reqs = customer.requests_set.all().order_by('date_fa').reverse()
     kwList = []
@@ -223,7 +223,7 @@ def customer_read2(request, customer_pk):
         #         kw->
         #         req->
     totalpaymenst = customer.payment_set.all()
-    print(f'total payment: {totalpaymenst}')
+    print(f'total result: {totalRes}')
     payList = []
     for pay in totalpaymenst:
         payList.append(pay.amount)
@@ -255,7 +255,7 @@ def customer_edit(request, customer_pk):
     customer_instance = Customer.objects.get(pk=customer_pk)
     can_edit = funcs.has_perm_or_is_owner(request.user, 'customer.edit_customer', customer_instance)
     if not can_edit:
-        messages.error(request, 'Sorry, No access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     pass
 
@@ -268,7 +268,7 @@ def customer_delete(request, customer_pk):
     customer_instance = Customer.objects.get(pk=customer_pk)
     can_delete = funcs.has_perm_or_is_owner(request.user, 'customer.delete_customer', customer_instance)
     if not can_delete:
-        messages.error(request, 'Sorry, No access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     customer = Customer.objects.get(pk=customer_pk)
     customer_name = customer.name
@@ -339,7 +339,7 @@ def customer_edit_form(request, customer_pk):
     customer_instance = Customer.objects.get(pk=customer_pk)
     if customer_instance.date2:
         customer_instance.date2 = customer_instance.date2.togregorian()
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_customer', customer_instance)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'customer.change_customer', customer_instance)
     if not can_edit:
         messages.error(request, 'No access')
         return redirect('errorpage')

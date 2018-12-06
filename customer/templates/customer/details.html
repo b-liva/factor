@@ -44,18 +44,28 @@
                         <h3>پرداخت ها</h3>
                     </div>
                 </div>
-                <a href="{% url 'add-address' customer_pk=customer.pk %}" class="btn btn-success btn-xs">افزودن آدرس جدید</a>
+                {% if perms.customer.add_address %}
+                    <a href="{% url 'add-address' customer_pk=customer.pk %}" class="btn btn-success btn-xs">افزودن آدرس
+                        جدید</a>
+                {% endif %}
             </div>
         </div>
         <div class="row customerTable">
 
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
-            <div class="row">
-                <div class="pull-left">
-                    <a class="btn btn-sm btn-warning" href="{% url 'customer_edit_form' customer_pk=customer.pk %}"><i class="fa fa-pencil" aria-hidden="true"></i> ویرایش</a>
-                    <a class="btn btn-sm btn-info" href="{% url 'customer_index' %}"><i class="fa fa-list-ul" aria-hidden="true"></i> لیست مشتریان</a>
+                <div class="row">
+                    <div class="pull-left">
+                        {% if perms.customer.add_customer %}
+                            <a class="btn btn-sm btn-warning"
+                               href="{% url 'customer_edit_form' customer_pk=customer.pk %}"><i class="fa fa-pencil"
+                                                                                                aria-hidden="true"></i>
+                                ویرایش</a>
+                        {% endif %}
+                        <a class="btn btn-sm btn-info" href="{% url 'customer_index' %}"><i class="fa fa-list-ul"
+                                                                                            aria-hidden="true"></i> لیست
+                            مشتریان</a>
+                    </div>
                 </div>
-            </div>
                 <div class="row">
                     <h4>درخواست های مربوط به <span class="emphsize">{{ customer.name }}</span></h4>
 

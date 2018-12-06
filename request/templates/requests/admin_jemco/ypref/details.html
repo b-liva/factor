@@ -47,13 +47,21 @@
 
         <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
 
+
             <div class="pull-left">
-                <a class="btn btn-success btn-sm pull-left" type="submit" name="submit"
-                   href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
-                    <i class="fa fa-pencil"></i> ویرایش قیمت</a>
-                <a class="btn btn-warning btn-sm pull-left" href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
-                    <i class="fa fa-pencil"></i> ویرایش پیشفاکتور</a>
+                {% if perms.request.add_xpref %}
+                    <a class="btn btn-success btn-sm pull-left" type="submit" name="submit"
+                       href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
+                        <i class="fa fa-pencil"></i> ویرایش قیمت</a>
+                    <a class="btn btn-warning btn-sm pull-left" href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
+                        <i class="fa fa-pencil"></i> ویرایش پیشفاکتور</a>
+                {% endif %}
+                <a class="btn btn-sm btn-info" href="{% url 'pref_index' %}">
+                    <i class="fa fa-list-ul" aria-hidden="true"></i>
+                    پیش فاکتورها</a>
             </div>
+
+
             <h3>جزئیات پیشفاکتور</h3>
             <table class="table table-hover text-center">
                 <thead>

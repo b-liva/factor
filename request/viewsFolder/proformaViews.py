@@ -15,9 +15,10 @@ from django.contrib.auth.decorators import login_required
 def pref_index(request):
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
     if not can_index:
-        messages.error(request, 'no access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
-    prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date').reverse()
+    # prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date').reverse()
+    prefs = Xpref.objects.all().order_by('pub_date').reverse()
     context = {
         'prefs': prefs
     }
@@ -52,7 +53,7 @@ def pref_details(request, ypref_pk):
 
     can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
     if not can_read:
-        messages.error(request, 'no access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     nestes_dict = {}
     proforma_total = 0
@@ -93,7 +94,7 @@ def pref_details_backup(request, ypref_pk):
 
     can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
     if not can_read:
-        messages.error(request, 'no access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     nestes_dict = {}
 
@@ -166,7 +167,7 @@ def pref_delete(request, ypref_pk):
     can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_xpref', pref)
 
     if not can_del:
-        messages.error(request, 'You have not enough access')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     pref.delete()
     return redirect('pref_index')
@@ -176,7 +177,7 @@ def pref_delete(request, ypref_pk):
 def pro_form(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
     if not can_add:
-        messages.error(request, 'You have not enough access')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     reqs = Requests.objects.all()
@@ -242,7 +243,7 @@ def pro_form(request):
 def pref_insert_spec_form(request, ypref_pk):
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
     if not can_add:
-        messages.error(request, 'no access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     pref = Xpref.objects.get(pk=ypref_pk)
     req = Requests.objects.get(pk=pref.req_id.pk)
@@ -347,7 +348,7 @@ def pref_edit2(request, ypref_pk):
 
     can_read = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', prof)
     if not can_read:
-        messages.error(request, 'no access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     # prof = models.Xpref.objects.get(pk=ypref_pk)

@@ -16,7 +16,7 @@ def reqspec_form(request, req_pk):
         return redirect('errorpage')
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec')
     if not can_add:
-        messages.error(request, 'You have not enough access to add request specs')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     req_obj = Requests.objects.get(pk=req_pk)
     specs = req_obj.reqspec_set.all()
@@ -55,7 +55,7 @@ def reqspec_insert(request):
 def reqspec_index(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_reqspecs')
     if not can_add:
-        messages.error(request, 'You have not enough access')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     reqspecs = ReqSpec.objects.all()
@@ -70,7 +70,7 @@ def reqspec_details(request, yreqSpec_pk):
     reqspec = ReqSpec.objects.get(pk=yreqSpec_pk)
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.read_reqspecs', reqspec)
     if not can_add:
-        messages.error(request, 'You have not enough access')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     pass
 
@@ -85,7 +85,7 @@ def reqspec_delete(request, yreqSpec_pk, req_pk):
     reqspec = ReqSpec.objects.get(pk=yreqSpec_pk)
     can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_reqspecs', reqspec)
     if not can_del:
-        messages.error(request, 'You have not enough access')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     req = reqspec.req_id
@@ -122,7 +122,7 @@ def reqspec_edit(request, yreqSpec_pk, req_pk):
 def spec_form(request, req_pk):
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec')
     if not can_add:
-        messages.error(request, 'You have not enough access to add request specs')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     form = forms.SpecForm()

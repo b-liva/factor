@@ -42,8 +42,8 @@ class ProjectType(models.Model):
 
 
 class Requests(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    number = models.IntegerField(unique=True)
+    customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
+    number = models.CharField(unique=True, max_length=10)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
@@ -57,6 +57,7 @@ class Requests(models.Model):
             ('index_requests', 'can see list of requests'),
             ('read_requests', 'can read requests'),
             ('public_requests', 'public in requests'),
+            ('sale_expert', 'can edit own stuff'),
         )
 
     def pub_date_pretty(self):
@@ -208,8 +209,8 @@ class Payment(models.Model):
 
     class Meta:
         permissions = (
-            ('read_payment', 'Can read a customer details'),
-            ('index_payment', 'Can see list of customers'),
+            ('read_payment', 'Can read payment details'),
+            ('index_payment', 'Can see list of payments'),
         )
 
 

@@ -11,6 +11,8 @@ from customer.models import Customer
 from django.contrib.auth.decorators import login_required
 import request.templatetags.functions as funcs
 from request.forms import forms
+import nested_dict as nd
+from collections import defaultdict as dd
 
 
 # Create your views here.
@@ -114,7 +116,8 @@ def request_index(request):
     if not can_index:
         messages.error(request, 'عدم دسترسی کافی!')
         return redirect('errorpage')
-    requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
+    # requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
+    requests = Requests.objects.all().order_by('date_fa').reverse()
     return render(request, 'requests/admin_jemco/yrequest/index.html', {'all_requests': requests})
 
 
@@ -133,17 +136,80 @@ def request_read(request, request_pk):
     req = Requests.objects.get(pk=request_pk)
     can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_requests', req)
     if not can_read:
-        messages.error(request, 'No access!!!')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     reqspecs = req.reqspec_set.all()
-    req_images = req.requestfiles_set.all()
+    req_files = req.requestfiles_set.all()
+    req_imgs = []
+    req_pdfs = []
+    req_words = []
+    req_other_files = []
+    files = {}
+    nested_files = nd.nested_dict()
+    # default_nested_files = dd.default_factory()
+
+    xfiles = {
+        'img': {},
+        'pdf': {},
+        'doc': {},
+        'other': {},
+    }
+
+    for f in req_files:
+        if str(f.image).lower().endswith('.jpg') or str(f.image).lower().endswith('.jpeg') or str(f.image).lower().endswith('.png'):
+            req_imgs.append(f)
+            nested_files['ximg'][f.pk]['url'] = f.image.url
+            nested_files['ximg'][f.pk]['name'] = f.image.name.split('/')[-1]
+            # nested_files['img']['name'] = f.image.name.split('/')
+            xfiles['img'][f.pk] = {}
+            xfiles['img'][f.pk]['url'] = f.image.url
+            xfiles['img'][f.pk]['name'] = f.image.name.split('/')[-1]
+        elif str(f.image).lower().endswith('.pdf'):
+            req_pdfs.append(f)
+            nested_files['pdf']['url'] = f.image.url
+            nested_files['pdf']['name'] = f.image.name.split('/')[-1]
+            xfiles['pdf'][f.pk] = {}
+            xfiles['pdf'][f.pk]['url'] = f.image.url
+            xfiles['pdf'][f.pk]['name'] = f.image.name.split('/')[-1]
+
+        elif str(f.image).lower().endswith('.doc'):
+            req_words.append(f)
+            xfiles['doc'][f.pk] = {}
+            xfiles['doc'][f.pk]['url'] = f.image.url
+            xfiles['doc'][f.pk]['name'] = f.image.name.split('/')[-1]
+        else:
+            req_other_files.append(f)
+            xfiles['other'][f.pk] = {}
+            xfiles['other'][f.pk]['url'] = f.image.url
+            xfiles['other'][f.pk]['name'] = f.image.name.split('/')[-1]
+
+    files['req_imgs'] = req_imgs
+    files['req_pdfs'] = req_pdfs
+    files['req_words'] = req_words
+    files['req_other_files'] = req_other_files
+
+    img_names = {}
+    for r in req_files:
+        name = r.image.name
+        newname = name.split('/')
+        las = newname[-1]
+        img_names[r.pk] = las
+
+    for x, y in nested_files['ximg'].items():
+        print(f"last is: {y['name']}")
+
+    print(f'file names: {nested_files}')
+
     kw = total_kw(request_pk)
     context = {
         'request': req,
         'reqspecs': reqspecs,
-        'req_images': req_images,
-        'total_kw': kw
+        'req_images': req_files,
+        'total_kw': kw,
+        'files': files,
+        'nested_files': nested_files,
+        'xfiles': xfiles
     }
     return render(request, 'requests/admin_jemco/yrequest/details.html', context)
 

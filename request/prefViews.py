@@ -21,7 +21,7 @@ def pref_form(request):
     Reqs = Requests.objects.all()
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
     if not can_add:
-        messages.error(request, 'You have not enough access')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     return render(request, 'requests/admin_jemco/ypref/form.html', {'reqs': Reqs})
 
@@ -92,7 +92,7 @@ def pref_edit_form(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
     can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', proforma)
     if not can_edit:
-        messages.error(request, 'You have not enough access')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     prof_specs = proforma.prefspec_set.all()
     return render(request, 'requests/admin_jemco/ypref/edit_form.html', {
@@ -122,7 +122,7 @@ def prof_spec_form(request, ypref_pk):
     reqspecs = req.reqspec_set.all()
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
     if not can_add:
-        messages.error(request, 'You have not enough access')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     if request.method == 'POST':

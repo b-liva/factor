@@ -11,7 +11,7 @@
             {% if perms.request.index_requests %}
                 <li><a><i class="fa fa-home"></i> مدیریت درخواست ها <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        {% if perms.request.index_customer %}
+                        {% if perms.customer.index_customer %}
                             <li><a href="{% url 'customer_index' %}">مشتریان</a></li>
                         {% endif %}
 

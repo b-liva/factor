@@ -64,7 +64,7 @@ def fund_delete(request, fund_pk):
         fund.delete()
         return redirect('fund_index')
     else:
-        messages.error(request, 'You have not enough access')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
 
@@ -83,7 +83,7 @@ def expense_form(request, fund_pk):
             'expenses': expenses,
             'sum': sum
         })
-    messages.error(request, 'You have not enough access')
+    messages.error(request, 'عدم دسترسی کافی')
     return redirect('errorpage')
 
 
@@ -166,7 +166,7 @@ def has_perm_or_is_owner(user_obj, permissions, instance=None):
 def fform(request):
     can_add = has_perm_or_is_owner(request.user, 'fund.add_fund')
     if not can_add:
-        messages.error(request, 'No access for you')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     if request.method == 'POST':

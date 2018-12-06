@@ -39,13 +39,13 @@
                                 <i class="fa fa-eye"></i> مشاهده
                             </a>
 
-                            {% if perms.request.public_requests %}
+                            {% if perms.request.add_requests %}
                                 <a class="btn btn-warning btn-xs"
                                    href="{% url 'request_edit_form' request_pk=request.pk %}">
                                     <i class="fa fa-pencil"></i> ویرایش
                                 </a>
                             {% endif %}
-                            {% if perms.request.public_requests %}
+                            {% if perms.request.add_requests %}
                                 <a class="btn btn-primary btn-xs btn-danger"
                                    href="{% url 'request_delete' request_pk=request.pk %}">
                                     <i class="fa fa-trash"></i> حذف
