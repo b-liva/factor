@@ -164,7 +164,19 @@ def customer_index(request):
         messages.error(request, 'No access to see list of customers')
         return redirect('errorpage')
 
-    customers = Customer.objects.all()
+    customers = Customer.objects.filter(agent=False)
+    context = {'customers': customers}
+    return render(request, 'customer/index.html', context)
+
+
+@login_required
+def repr_index(request):
+    can_index = funcs.has_perm_or_is_owner(request.user, 'customer.index_customer')
+    if not can_index:
+        messages.error(request, 'No access to see list of customers')
+        return redirect('errorpage')
+
+    customers = Customer.objects.filter(agent=True)
     context = {'customers': customers}
     return render(request, 'customer/index.html', context)
 

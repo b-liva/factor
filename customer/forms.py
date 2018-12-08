@@ -47,6 +47,9 @@ class CustomerForm(forms.ModelForm):
             'addr': forms.Textarea(attrs={
                 'class': 'form-control',
             }),
+            # 'agent': forms.Select(attrs={
+            #     'class': 'form-control',
+            # }),
         }
         labels = {
             'code': ('کد'),
@@ -57,6 +60,7 @@ class CustomerForm(forms.ModelForm):
             'fax': ('فکس'),
             'postal_code': ('کد پستی'),
             'addr': ('آدرس'),
+            'agent': ('نماینده'),
         }
 
         # types = forms.ModelChoiceField(queryset=Type.objects.filter(), label='room', widget=forms.Select)

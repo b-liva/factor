@@ -6,6 +6,7 @@ urlpatterns = [
     path('form', views.customer_form, name='customer_form'),
     path('cform', views.cform, name='cform'),
     path('insert', views.customer_insert, name='customer_insert'),
+    path('repr/index', views.repr_index, name='repr_index'),
     path('index', views.customer_index, name='customer_index'),
     path('find', views.customer_find, name='customer_find'),
     path('<int:customer_pk>/', include([

@@ -1,20 +1,23 @@
+import json
 from django.contrib.humanize.templatetags.humanize import intcomma
+from django.db.models import Sum
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.utils.timezone import now
 import datetime
 import jdatetime
-
-
-from .models import Requests
-from .models import ReqSpec
-from .models import Prefactor
-from .models import PrefactorVerification
-from .models import PrefSpec
-from .models import Xpref
-from .models import Payment
-from .models import XprefVerf
+from django.core import serializers
+from .models import (
+    Requests,
+    ReqSpec,
+    Prefactor,
+    PrefactorVerification,
+    PrefSpec,
+    Xpref,
+    Payment,
+    XprefVerf
+)
 from customer.models import Customer
 from django.contrib.auth.decorators import login_required
 import request.templatetags.functions as funcs
@@ -286,11 +289,40 @@ def find_total_payment():
     return amount
 
 
+def find_kw(spc_kw, rqs):
+    for r in rqs:
+        spc = r.reqspec_set.all()
+        for s in spc:
+            spc_kw += s.kw * s.qty
+    return spc_kw
+
+
+def find_proformas(amount, profs):
+    # amount = 0
+    # print(profs)
+    for p in profs:
+        prefspc = p.prefspec_set.all()
+        for p in prefspc:
+            amount += p.price * p.qty
+        print(p)
+        # amount = p.objects.aggregate(Sum('amount'))
+        print(f'amount : {amount}')
+        # amount += amount
+    return amount
+
+
+def find_payment(pay_amnt, pmnts):
+    amount = pmnts.aggregate(amount__sum=Sum('amount'))
+    print(amount)
+    if amount['amount__sum']:
+        pay_amnt += amount['amount__sum']
+    return pay_amnt
+
+
 def kwjs(request, *args, **kwargs):
     days = 30
     print(days)
     if request.method == "POST":
-
         days = int(request.POST['days'])
         print(f'request is post and days: {days}')
     ntoday = datetime.date.today()
@@ -301,32 +333,109 @@ def kwjs(request, *args, **kwargs):
     endDate = startDate + jdatetime.timedelta(tdelta)
     req_nums = []
     req_nums_dict = {}
+    req_kw_dict = {}
     proformas_nums_dict = {}
+    proformas_amount_dict = {}
+    payments_nums_dict = {}
+    payments_amnt_dict = {}
     temp = 0
     temp_proforma = 0
-    while endDate <= today:
+    temp_payment = 0
+    spc_kw = 0
+    amnt = 0
+
+    requests_obj_temp = Requests.objects.all()
+    i = 1
+    for r in requests_obj_temp:
+        spc = r.reqspec_set.all()
+        for s in spc:
+            spc_kw += s.kw * s.qty
+        # print(f'#{i} - {r} - {spc_kw}')
+        i += 1
+    spc_kw = 0
+    amnt = 0
+    pay_amnt = 0
+    while endDate <= today + jdatetime.timedelta(1):
         # requests = Requests.objects.filter(date_fa__range=(startDate, endDate)).count()
         # requests = Requests.objects.filter(date_fa__in=(startDate, endDate)).count()
         requests = Requests.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
+        requests_obj_temp = Requests.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
         proformas = Xpref.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
+        proformas_obj_temp = Xpref.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
+        payments = Payment.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
+        payments_obj_temp = Payment.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
+
+
+        spc_kw = find_kw(spc_kw, requests_obj_temp)
+        amnt = find_proformas(amnt, proformas_obj_temp)
+        pay_amnt = find_payment(pay_amnt, payments_obj_temp)
+
+
+        print(f'outside amount: {pay_amnt}')
+
+
+
+        # print(spc)
+        # if spc['kw__sum']:
+        #     spc_kw += spc['kw__sum']
+
         if len(req_nums):
             req_nums.append(req_nums[-1] + requests)
         else:
             req_nums.append(requests)
         temp += requests
         temp_proforma += proformas
+        temp_payment += payments
         req_nums_dict[str(startDate)] = temp
+        req_kw_dict[str(startDate)] = spc_kw
         proformas_nums_dict[str(startDate)] = temp_proforma
+        proformas_amount_dict[str(startDate)] = amnt
+        payments_nums_dict[str(startDate)] = temp_payment
+        payments_amnt_dict[str(startDate)] = pay_amnt
 
         startDate = endDate
         endDate = endDate + jdatetime.timedelta(tdelta)
 
+    print(f'total kw: {spc_kw}')
     data = {
-        'reqs': req_nums_dict,
-        'proformas': proformas_nums_dict,
+        'reqs': req_kw_dict,
+        'proformas': proformas_amount_dict,
+        'payments': payments_amnt_dict,
     }
     print(f'data passed is: {data}')
     return JsonResponse(data, safe=False)
+
+
+def agentjs(request):
+    days = 30
+    if request.method == "POST":
+        days = int(request.POST['days'])
+        print(f'request is post and days: {days}')
+    today = jdatetime.date.today()
+    startDate = today + jdatetime.timedelta(-days)
+    endDate = today + jdatetime.timedelta(1)
+
+    agents = Customer.objects.filter(agent=True)
+    agent_data = {}
+    kw_total = 0
+    temp = {}
+    for a in agents:
+        temp = {}
+        spc_kw = 0
+        # reqs = a.requests_set.all()
+        reqs = a.requests_set.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
+        spc_kw = find_kw(spc_kw, reqs)
+        temp['kw'] = spc_kw
+        js = serializers.serialize('json', [a, ])
+        temp['customer_name'] = a.name
+        temp['customer'] = js
+
+        agent_data[a.pk] = temp
+        # agent_data = temp
+
+    print(agent_data)
+    return JsonResponse(agent_data, safe=False)
+
 
 @login_required
 def dashboard(request):
@@ -340,16 +449,19 @@ def dashboard(request):
     last_n_requests = orders.last_orders()
     print(f'order numbers: {len(last_n_requests)}')
     total_payments = find_total_payment()
+
+    agent_data = agentjs(request)
     context = {
-                      'routine_kw': intcomma(routine_kw),
-                      'project_kw': intcomma(project_kw),
-                      'allKw': intcomma(allKw),
-                      'num_of_reqs': num_of_requests,
-                      'last_n_requests': last_n_requests,
-                      'total_payments': total_payments,
-                      # 'rq': rq,
-                      # 'rq_dict': rq_dict,
-                  }
+        'routine_kw': intcomma(routine_kw),
+        'project_kw': intcomma(project_kw),
+        'allKw': intcomma(allKw),
+        'num_of_reqs': num_of_requests,
+        'last_n_requests': last_n_requests,
+        'total_payments': total_payments,
+        'agent_data': agent_data,
+        # 'rq': rq,
+        # 'rq_dict': rq_dict,
+    }
     return render(request, 'requests/admin_jemco/dashboard.html', context)
 
 
@@ -361,13 +473,13 @@ def dashboard2(request):
     last_n_requests = orders.last_orders()
     total_payments = find_total_payment()
     context = {
-                      'routine_kw': intcomma(routine_kw),
-                      'project_kw': intcomma(project_kw),
-                      'allKw': intcomma(allKw),
-                      'num_of_reqs': num_of_requests,
-                      'last_n_requests': last_n_requests,
-                      'total_payments': total_payments
-                  }
+        'routine_kw': intcomma(routine_kw),
+        'project_kw': intcomma(project_kw),
+        'allKw': intcomma(allKw),
+        'num_of_reqs': num_of_requests,
+        'last_n_requests': last_n_requests,
+        'total_payments': total_payments
+    }
     return render(request, 'requests/admin_jemco/dashboard2.html', context)
 
 

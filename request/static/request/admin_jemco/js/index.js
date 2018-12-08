@@ -15,7 +15,7 @@ var data = [];
 var config = {
     data: data,
     xkey: 'y',
-    ykeys: ['a', 'b'],
+    ykeys: ['a', 'b', 'c'],
     labels: ['درخواست های دریافتی', 'Money received'],
     fillOpacity: 0.6,
     hideHover: 'auto',
@@ -25,9 +25,8 @@ var config = {
     pointStrokeColors: ['black'],
     lineColors: ['gray', 'red'],
     xLabel: ['day'],
+    redraw: true,
 };
-
-console.log('this is old data: ' + data);
 
 var endPoint = '/kwjs/';
 
@@ -36,51 +35,18 @@ $('#ajaxbtn').click(function (e) {
     this_ = $('#dayNumers');
     var ajaxUrlRaw = this_.attr('rawUrl') + this_.val() + '/';
 
-    alert('raw: ' + ajaxUrlRaw);
+    // alert('raw: ' + ajaxUrlRaw);
     var data = {
         'days': this_.val(),
         'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
     };
-
-    // $.ajax({
-    //     method: 'POST',
-    //     url: endPoint,
-    //
-    //     data: data,
-    //     success: function (data_obj) {
-    //         alert('data: ' + data_obj);
-    //         console.log('data: ' + data_obj);
-    //         var newData = [];
-    //         var temp = {};
-    //
-    //         Object.keys(data_obj).forEach(function (key) {
-    //             console.log(key, data_obj[key]);
-    //             newData.push({
-    //                 y: key,
-    //                 a: data_obj[key],
-    //             });
-    //         });
-    //         // for (var x in data_obj) {
-    //         //     console.log('x is: ' + x);
-    //         //     temp.y = x;
-    //         //     temp.a = data_obj[x];
-    //         //     newData.push(temp);
-    //         // }
-    //         console.log(newData)
-    //     },
-    //     error: function (error_data) {
-    //         alert('errors: ' + error_data);
-    //         console.log('error: ' + error_data);
-    //     },
-    // });
-
 
     $.ajax({
         method: 'POST',
         url: endPoint,
         data: data,
         success: function (data_obj) {
-            alert('success_data: ' + data_obj);
+            // alert('success_data: ' + data_obj);
             console.log('success_data: ' + data_obj);
             var newData = [];
             var ProformaData = [];
@@ -95,41 +61,58 @@ $('#ajaxbtn').click(function (e) {
                         });
                     }
                     else if (key == 'proformas') {
-                        ProformaData.push({
-                            y: k,
+                        newData.push({
+                            // y: k,
                             b: data_obj[key][k],
                         });
                     }
                 });
             });
             console.log(newData);
-            console.log(ProformaData);
+            // console.log(ProformaData);
             config.data = newData;
             do_chart(true, newData, 'a', 'area-chart', 'درخواست های دریافتی');
-            do_chart(true, ProformaData, 'b', 'line-chart', 'پیش فاکتورهای صادر شده');
+            // do_chart(true, ProformaData, 'b', 'line-chart', 'پیش فاکتورهای صادر شده');
             // chart.setDate(newData);
             chart.redraw();
 
 
         },
         error: function (error_data) {
-            alert('failure');
-
-            alert('errors: ' + error_data);
+            // alert('failure');
+            //
+            // alert('errors: ' + error_data);
             console.log('error: ' + error_data);
         },
     });
 
 });
 
-var test = function () {
+var update_chart = function (method, element) {
+    if (element) {
+        this_ = $(element);
+        // var ajaxUrlRaw = this_.attr('rawUrl') + this_.val() + '/';
+
+        // alert('raw: ' + ajaxUrlRaw);
+        var data = {
+            'days': this_.val(),
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+        };
+        redraw = true;
+    }
+    else {
+        var redraw = false;
+    }
+
     $.ajax({
-        method: 'GET',
+        method: method,
         url: endPoint,
+        data: data,
+
         success: function (data_obj) {
-            console.log('data: ' + data_obj);
             var newData = [];
             var ProformaData = [];
+            var paymentData = [];
 
             Object.keys(data_obj).forEach(function (key) {
                 console.log(key, data_obj[key]);
@@ -145,18 +128,65 @@ var test = function () {
                             y: k,
                             b: data_obj[key][k],
                         });
+
+                    }
+                    else if (key == 'payments') {
+                        paymentData.push({
+                            y: k,
+                            a: data_obj[key][k],
+                        });
+                        paymentData.b = ProformaData.b;
                     }
                 });
             });
             console.log(newData);
             console.log(ProformaData);
-            config.data = newData;
-            do_chart(false, newData, 'a', 'area-chart', 'درخواست های دریافتی');
-            do_chart(false, ProformaData, 'b', 'line-chart', 'پیش فاکتورهای صادر شده');
-            // chart.setDate(newData);
-            // chart.redraw();
+            console.log(paymentData);
 
+            do_chart(redraw, newData, 'a', 'area-chart', 'درخواست های دریافتی');
+            do_chart(redraw, ProformaData, 'b', 'line-chart', 'پیش فاکتورهای صادر شده');
+            do_chart(redraw, paymentData, 'a', 'payment-line-chart', 'پرداخت های انجام شده');
+        },
+        error: function (error_data) {
+            // alert('errors: ' + error_data);
+            console.log('error: ' + error_data);
+        },
+    });
+};
 
+var customer_bar = function (method, element) {
+    if (element) {
+        this_ = $(element);
+        // var ajaxUrlRaw = this_.attr('rawUrl') + this_.val() + '/';
+
+        // alert('raw: ' + ajaxUrlRaw);
+        var data = {
+            'days': this_.val(),
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+        };
+        redraw = true;
+    }
+    else {
+        var redraw = false;
+    }
+    var endPoint_customer = '/agentjs/';
+
+    $.ajax({
+        method: method,
+        url: endPoint_customer,
+        data: data,
+
+        success: function (data_obj) {
+            var newData = [];
+            Object.keys(data_obj).forEach(function (key) {
+                console.log('customer data: ' + key, data_obj[key]);
+                newData.push({
+                    label: data_obj[key].customer_name,
+                    value: data_obj[key].kw,
+                });
+            });
+
+            do_chart_bar(redraw, newData, 'a', 'customer_bar', 'درخواست های دریافتی');
         },
         error: function (error_data) {
             alert('errors: ' + error_data);
@@ -165,31 +195,70 @@ var test = function () {
     });
 };
 
-function do_chart(redraw, params, yk, chartType, lables) {
+function do_chart(redraw, params, yk, chartElement, lables) {
 //    do chart stuff
     config.data = params;
     config.ykeys = [yk];
     config.xLabel = ['day'];
-    config.element = chartType;
+    config.element = chartElement;
     config.labels = [lables];
-    // config.element = 'area-chart';
-    // line = Morris.Area(config);
     if (redraw === false) {
-        area = Morris.Line(config);
+        if (chartElement === 'area-chart') {
+            req_chart_obj = Morris.Line(config);
+            console.log('req rendered');
+        }
+        if (chartElement === 'line-chart') {
+            prof_chart_obj = Morris.Line(config);
+            console.log('prof rendered');
+        }
+        if (chartElement === 'payment-line-chart') {
+            payment_chart_obj = Morris.Line(config);
+            console.log('payment rendered');
+        }
+        console.log('redraw: ' + redraw);
     }
     else {
-        area.redraw();
+        console.log('params: ' + params);
+        if (chartElement === 'area-chart') {
+            req_chart_obj.setData(params);
+            console.log('req rendered again');
+        }
+        if (chartElement === 'line-chart') {
+            prof_chart_obj.setData(params);
+            console.log('prof rendered again');
+        }
+        if (chartElement === 'payment-line-chart') {
+            payment_chart_obj.setData(params);
+            console.log('payment rendered again');
+        }
+
+        console.log('redraw: ' + redraw);
+
     }
-    // setData(params);
-    // chart.setData(data);
-    // chart.redraw();
+}
+
+function do_chart_bar(redraw, params, yk, chartElement, lables) {
+//    do chart stuff
+    config.data = params;
+    config.element = chartElement;
+    config.labels = [lables];
+    if (redraw === false) {
+        customer_pie = Morris.Donut(config);
+    }else {
+        customer_pie.setData(params);
+    }
 }
 
 console.log('config data: ' + config.data);
-// var aData = test();
-test();
-console.log('this is what you want: ' + aData);
+update_chart('GET', false);
+customer_bar('GET', false);
+$('#ajaxbtn2').click(function (e) {
+    e.preventDefault();
+    update_chart('POST', '#dayNumers_noajax');
+    customer_bar('POST', '#dayNumers_noajax');
+});
 
+// console.log('this is what you want: ' + aData);
 // config.element = 'line-chart';
 // Morris.Line(config);
 // config.element = 'bar-chart';

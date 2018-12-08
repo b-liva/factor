@@ -39,11 +39,11 @@ class Customer(models.Model):
     pub_date = models.DateTimeField(default=now)
     # date2 = jmodels.jDateTimeField(default=now)
     date2 = jmodels.jDateField(default=now)
-    representator = models.IntegerField(default=0)
     phone = models.CharField(max_length=15, blank=True, null=True)
     fax = models.CharField(max_length=15, blank=True, null=True)
     postal_code = models.CharField(max_length=15, blank=True, null=True)
     addr = models.TextField(max_length=600, blank=True, null=True)
+    agent = models.BooleanField(default=False)
 
     class Meta:
         permissions = (

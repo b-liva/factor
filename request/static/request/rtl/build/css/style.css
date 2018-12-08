@@ -2,81 +2,109 @@
 #line-chart,
 #bar-chart,
 #stacked,
-#pie-chart{
-  min-height: 250px;
+#pie-chart {
+    min-height: 250px;
 }
-.card-img-top{
-  width: 100%;
-  max-height: 200px;
+
+.morris-chart-custom {
+    min-height: 250px;
+
 }
+
+.card-img-top {
+    width: 100%;
+    max-height: 200px;
+}
+
 table.withBorder tbody,
 table.withBorder th,
-table.withBorder td{
-  /*border:1px solid black;*/
-  /*text-align: center;*/
+table.withBorder td {
+    /*border:1px solid black;*/
+    /*text-align: center;*/
 }
+
 .withBorder th,
 .withBorder td,
-.withBorder tbody{
-  border:1px solid black;
-  text-align: center;
+.withBorder tbody {
+    border: 1px solid black;
+    text-align: center;
 }
-table.withBorder{
+
+table.withBorder {
     /*width:100%;*/
 }
-table.tableFull{
-  width:100%;
+
+table.tableFull {
+    width: 100%;
 }
 
-.results, .value{
-  color: lightgreen;
+.results, .value {
+    color: lightgreen;
 }
 
-td.good-conditions{
-  color: whitesmoke;
-  background: #228B22;
+td.good-conditions {
+    color: whitesmoke;
+    background: #228B22;
 }
 
-td.bad-conditions{
-  color: whitesmoke;
-  background: #7f0000;
+td.bad-conditions {
+    color: whitesmoke;
+    background: #7f0000;
 }
 
-.testback1{
-  background: #85ac58;
-}
-.testback2{
-  background: #4fafcb;
+.testback1 {
+    background: #85ac58;
 }
 
-.emphsize{
-  font-size: large;
-  font-style: italic;
+.testback2 {
+    background: #4fafcb;
 }
-.table-hover>tbody>tr:hover {
+
+.emphsize {
+    font-size: large;
+    font-style: italic;
+}
+
+.table-hover > tbody > tr:hover {
     background-color: #2a3f54;
     color: white;
 }
 
-#customerDetails{
-  background: #247BA0;
-  color: whitesmoke;
-}
-.hasBorder{
-  border: 1px solid darkblue;
-}
-.hasBackground{
-  background: #c6c5ee;
-  color: #000;
-}
-.DetailsCard{
-  background: #70C1B3;
-  color: black;
+#customerDetails {
+    background: #247BA0;
+    color: whitesmoke;
 }
 
-ul.quick-list{
-  width: 100%;
+.hasBorder {
+    border: 1px solid darkblue;
 }
-.x_panel{
-  overflow: scroll;
+
+.hasBackground {
+    background: #c6c5ee;
+    color: #000;
+}
+
+.DetailsCard {
+    background: #70C1B3;
+    color: black;
+}
+
+ul.quick-list {
+    width: 100%;
+}
+
+.x_panel {
+    overflow: scroll;
+}
+
+@media (min-width: 768px) {
+    .tile_count .tile_stats_count .count {
+        font-size: 30px;
+    }
+}
+
+.agentDetailPage .is_agent {
+    background: #247BA0;
+    margin: 20px 0 20px;
+    color: whitesmoke;
 }

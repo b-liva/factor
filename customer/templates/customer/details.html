@@ -2,8 +2,14 @@
 {% load humanize %}
 {% load jformat %}
 {% block right_col %}
-    <div class="container">
+    <div class="container agentDetailPage">
         <div class="row">
+            {% if customer.agent %}
+                <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 is_agent">
+                    <h2 class="text-center">نماینده</h2>
+                </div>
+            {% endif %}
+
             <div id="customerDetails" class="col-md-3 col-sm-3 col-xs-12 col-xs-offset-0">
                 <h3>{{ customer.name }}</h3>
                 <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ customer.date2 }}</p>
