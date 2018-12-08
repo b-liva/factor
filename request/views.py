@@ -1,9 +1,11 @@
-import json
-
 from django.contrib.humanize.templatetags.humanize import intcomma
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
+from django.utils.timezone import now
+import datetime
+import jdatetime
+
 
 from .models import Requests
 from .models import ReqSpec
@@ -15,6 +17,8 @@ from .models import Payment
 from .models import XprefVerf
 from customer.models import Customer
 from django.contrib.auth.decorators import login_required
+import request.templatetags.functions as funcs
+
 from .viewsFolder import permission
 
 
@@ -282,8 +286,54 @@ def find_total_payment():
     return amount
 
 
+def kwjs(request, *args, **kwargs):
+    days = 30
+    print(days)
+    if request.method == "POST":
+
+        days = int(request.POST['days'])
+        print(f'request is post and days: {days}')
+    ntoday = datetime.date.today()
+    today = jdatetime.date.today()
+    startDate = today + jdatetime.timedelta(-days)
+    print(f'startDate: {startDate}')
+    tdelta = 1
+    endDate = startDate + jdatetime.timedelta(tdelta)
+    req_nums = []
+    req_nums_dict = {}
+    proformas_nums_dict = {}
+    temp = 0
+    temp_proforma = 0
+    while endDate <= today:
+        # requests = Requests.objects.filter(date_fa__range=(startDate, endDate)).count()
+        # requests = Requests.objects.filter(date_fa__in=(startDate, endDate)).count()
+        requests = Requests.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
+        proformas = Xpref.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
+        if len(req_nums):
+            req_nums.append(req_nums[-1] + requests)
+        else:
+            req_nums.append(requests)
+        temp += requests
+        temp_proforma += proformas
+        req_nums_dict[str(startDate)] = temp
+        proformas_nums_dict[str(startDate)] = temp_proforma
+
+        startDate = endDate
+        endDate = endDate + jdatetime.timedelta(tdelta)
+
+    data = {
+        'reqs': req_nums_dict,
+        'proformas': proformas_nums_dict,
+    }
+    print(f'data passed is: {data}')
+    return JsonResponse(data, safe=False)
+
 @login_required
 def dashboard(request):
+    # rq, rq_dict = kwjs()
+    # rq = kwjs(),
+    # print(f'requests: {rq}')
+    # print(f'request dict: {rq_dict}')
     routine_kw, project_kw, allKw = find_routine_kw()
     num_of_requests = no_of_requests()
     orders = Orders()
@@ -296,7 +346,9 @@ def dashboard(request):
                       'allKw': intcomma(allKw),
                       'num_of_reqs': num_of_requests,
                       'last_n_requests': last_n_requests,
-                      'total_payments': total_payments
+                      'total_payments': total_payments,
+                      # 'rq': rq,
+                      # 'rq_dict': rq_dict,
                   }
     return render(request, 'requests/admin_jemco/dashboard.html', context)
 
