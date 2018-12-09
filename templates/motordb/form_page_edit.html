@@ -1,4 +1,4 @@
-{% extends 'requests/admin_jemco/admin_base.html' %}
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
 {% block right_col %}
     <form action="{% url 'motordb_edit' motordb_pk=motor.pk %}" method="POST">
         {% csrf_token %}

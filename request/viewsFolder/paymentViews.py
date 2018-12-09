@@ -100,12 +100,15 @@ def payment_index(request):
     payments = Payment.objects.all()
     pref_sum = 0
     sum = 0
+    debt_percent = 0
     for payment in payments:
         for spec in payment.xpref_id.prefspec_set.all():
             pref_sum += spec.price
         sum += payment.amount
     debt = sum - pref_sum
-    debt_percent = debt / pref_sum
+    if pref_sum != 0:
+        debt_percent = debt / pref_sum
+
     context = {
         'payments': payments,
         'amount_sum': sum,

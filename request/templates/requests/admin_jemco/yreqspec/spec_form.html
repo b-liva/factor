@@ -1,4 +1,4 @@
-{% extends 'requests/admin_jemco/admin_base.html' %}
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
 {% load jformat %}
 {% load humanize %}
 {% block right_col %}
@@ -44,7 +44,7 @@
                             <td>{{ spec.rpm }}</td>
                             <td>{{ spec.ip }}</td>
                             <td>{{ spec.ic }}</td>
-                            <td>{{ spec.summary }}</td>
+                            <td class="text-right">{{ spec.summary }}</td>
                             <td><input type="checkbox" {% if spec.sent %} checked {% endif %} disabled></td>
                             {#                        <td>{{ spec.price }}</td>#}
                             <td>

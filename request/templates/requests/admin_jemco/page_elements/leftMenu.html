@@ -5,7 +5,7 @@
             <li><a><i class="fa fa-home"></i> داشبورد <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="{% url 'dashboard' %}">داشبورد</a></li>
-                    <li><a href="{% url 'dashboard2' %}">داشبورد2</a></li>
+{#                    <li><a href="{% url 'dashboard2' %}">داشبورد2</a></li>#}
                 </ul>
             </li>
             {% if perms.request.index_requests %}
@@ -56,7 +56,7 @@
                     </ul>
                 </li>
             {% endif %}
-            {% if perms.request.index_fund %}
+            {% if perms.fund.index_fund %}
                 <li><a><i class="fa fa-home"></i> تنخواه <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
 

@@ -1,4 +1,4 @@
-{% extends 'requests/admin_jemco/admin_base.html' %}
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
 {% load humanize %}
 {% load jformat %}
 {% block right_col %}
@@ -11,14 +11,26 @@
             {% endif %}
 
             <div id="customerDetails" class="col-md-3 col-sm-3 col-xs-12 col-xs-offset-0">
-                <h3>{{ customer.name }}</h3>
-                <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ customer.date2 }}</p>
-                <p><i class="fa fa-phone" aria-hidden="true"></i> {{ customer.phone }}</p>
-                <p><i class="fa fa-fax" aria-hidden="true"></i> {{ customer.fax }}</p>
-                <p><i class="fa fa-map-marker" aria-hidden="true"></i>
-                    {{ customer.address }}</p>
-                <a href="{% url 'addr-list' customer_pk=customer.pk %}" class="btn btn-link btn-xs"> سایر آدرس ها</a>
+                <div>
+                    <h3>{{ customer.name }}</h3>
+                    <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ customer.date2 }}</p>
+                    <p><i class="fa fa-phone" aria-hidden="true"></i> {{ customer.phone }}</p>
+                    <p><i class="fa fa-fax" aria-hidden="true"></i> {{ customer.fax }}</p>
+                    <p><i class="fa fa-map-marker" aria-hidden="true"></i>
+                        {{ customer.addr }}</p>
+                </div>
+                <div>
+                    <a href="{% url 'addr-list' customer_pk=customer.pk %}" class="btn btn-link btn-xs"
+                       style="color: whitesmoke;">
+                        سایر آدرس ها</a>
+                    {% if perms.customer.add_address %}
+                    <a href="{% url 'add-address' customer_pk=customer.pk %}" class="btn btn-success btn-xs">افزودن آدرس
+                        جدید</a>
+                {% endif %}
+                </div>
+
             </div>
+
             <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
                 <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
                     <div class="tile-stats">
@@ -50,10 +62,6 @@
                         <h3>پرداخت ها</h3>
                     </div>
                 </div>
-                {% if perms.customer.add_address %}
-                    <a href="{% url 'add-address' customer_pk=customer.pk %}" class="btn btn-success btn-xs">افزودن آدرس
-                        جدید</a>
-                {% endif %}
             </div>
         </div>
         <div class="row customerTable">
@@ -65,7 +73,7 @@
                             <a class="btn btn-sm btn-warning"
                                href="{% url 'customer_edit_form' customer_pk=customer.pk %}"><i class="fa fa-pencil"
                                                                                                 aria-hidden="true"></i>
-                                ویرایش</a>
+                                ویرایش اطلاعات مشتری</a>
                         {% endif %}
                         <a class="btn btn-sm btn-info" href="{% url 'customer_index' %}"><i class="fa fa-list-ul"
                                                                                             aria-hidden="true"></i> لیست
@@ -79,7 +87,7 @@
                         <thead>
                         <tr>
                             <th class="text-center">کد</th>
-                            <th class="text-center">یونیکد</th>
+                            {#                            <th class="text-center">یونیکد</th>#}
                             <th class="text-center">شماره درخواست</th>
                             <th class="text-center">تاریخ</th>
                             <th class="text-center">جمع کیلووات</th>
@@ -91,7 +99,7 @@
                         {% for req_id, val in totalRes.items %}
                             <tr>
                                 <th scope="row" class="text-center">{{ forloop.counter }}</th>
-                                <td>{{ req_id }}</td>
+                                {#                                <td>{{ req_id }}</td>#}
                                 <td>
                                     <a href="{% url 'request_details' request_pk=req_id %}">{{ val.req.number }}</a>
                                 </td>

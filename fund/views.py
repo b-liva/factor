@@ -11,7 +11,8 @@ import jdatetime
 
 @login_required
 def fund_index(request):
-    can_view = has_perm_or_is_owner(request.user, 'fund.view_fund')
+    # can_view = has_perm_or_is_owner(request.user, 'fund.view_fund')
+    can_view = has_perm_or_is_owner(request.user, 'fund.index_fund')
     if not can_view:
         messages.error(request, 'no access')
         return redirect('errorpage')

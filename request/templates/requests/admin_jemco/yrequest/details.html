@@ -1,4 +1,4 @@
-{% extends 'requests/admin_jemco/admin_base.html' %}
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
 {% load humanize %}
 {% load static %}
 {% block right_col %}
@@ -81,7 +81,7 @@
                         <td>{{ reqspec.qty }}</td>
                         <td>{{ reqspec.kw }}</td>
                         <td>{{ reqspec.rpm }}</td>
-                        <td>{{ reqspec.summary }}</td>
+                        <td class="text-right">{{ reqspec.summary }}</td>
                         <td><input type="checkbox" {% if reqspec.sent %} checked {% endif %} disabled></td>
 
                         {% if perms.request.sale_expert %}
