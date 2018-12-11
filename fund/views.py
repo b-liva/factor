@@ -6,6 +6,9 @@ from django.contrib import messages
 # Create your views here.
 from fund.models import Fund, Expense
 from . import forms
+import request.templatetags.functions as funcs
+from django.contrib import messages
+
 import jdatetime
 
 
@@ -38,6 +41,10 @@ def fund_index(request):
 @login_required
 def fund_details(request, fund_pk):
     fund = Fund.objects.get(pk=fund_pk)
+    can_read = funcs.has_perm_or_is_owner(request.user, 'view_fund', fund)
+    if not can_read:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
     expenses = fund.expense_set.all()
     sum = 0
     for e in expenses:
@@ -216,6 +223,10 @@ def ex_form(request, fund_pk):
 @login_required
 def fund_edit_form(request, fund_pk):
     fund_instance = Fund.objects.get(pk=fund_pk)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'fund.edit_fund', fund_instance)
+    if not can_edit:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
     fund_instance.date_fa = fund_instance.date_fa.togregorian()
     form = forms.FundForm(request.POST or None, instance=fund_instance)
     if form.is_valid():
