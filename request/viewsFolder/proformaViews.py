@@ -18,7 +18,10 @@ def pref_index(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     # prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date').reverse()
-    prefs = Xpref.objects.all().order_by('pub_date').reverse()
+    # prefs = Xpref.objects.all().order_by('date_fa').reverse()
+    prefs = Xpref.objects.filter(owner=request.user).order_by('date_fa').reverse()
+    if request.user.is_superuser:
+        prefs = Xpref.objects.all().order_by('date_fa').reverse()
     context = {
         'prefs': prefs
     }

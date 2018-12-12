@@ -21,7 +21,8 @@ def fund_index(request):
         return redirect('errorpage')
     funds = Fund.objects.filter(owner=request.user).order_by('date_fa')
     if request.user.is_superuser:
-        funds = Fund.objects.all().order_by('pk').reverse()
+        # funds = Fund.objects.all().order_by('pk').reverse()
+        funds = Fund.objects.all().order_by('date_fa').reverse()
     amounts = {}
     for fund in funds:
         expenses = fund.expense_set.all()
@@ -36,6 +37,32 @@ def fund_index(request):
         'amounts': amounts
     }
     return render(request, 'fund/index.html', context)
+
+
+@login_required
+def fund_index2(request):
+    # can_view = has_perm_or_is_owner(request.user, 'fund.view_fund')
+    can_view = has_perm_or_is_owner(request.user, 'fund.index_fund')
+    if not can_view:
+        messages.error(request, 'no access')
+        return redirect('errorpage')
+    funds = Fund.objects.filter(owner=request.user).order_by('date_fa')
+    if request.user.is_superuser:
+        funds = Fund.objects.all().order_by('pk').reverse()
+    amounts = {}
+    for fund in funds:
+        expenses = fund.expense_set.all()
+        sum = 0
+        for expense in expenses:
+            sum += expense.amount
+        # amounts[sum] = fund
+        amounts[fund] = sum
+
+    context = {
+        'funds': funds,
+        'amounts': amounts
+    }
+    return render(request, 'fund/api/index2.html', context)
 
 
 @login_required

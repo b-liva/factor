@@ -97,7 +97,10 @@ def payment_insert(request):
 
 @login_required
 def payment_index(request):
-    payments = Payment.objects.all()
+    # payments = Payment.objects.all().order_by('date_fa').reverse()
+    payments = Payment.objects.filter(owner=request.user).order_by('date_fa').reverse()
+    if request.user.is_superuser:
+        payments = Payment.objects.all().order_by('date_fa').reverse()
     pref_sum = 0
     sum = 0
     debt_percent = 0

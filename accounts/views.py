@@ -73,6 +73,7 @@ def edit_profile(request):
 
 @login_required
 def profile(request):
+    return redirect('comming_soon')
     user = request.user
     args = {'user': user}
     return render(request, 'accounts/profile.html', args)

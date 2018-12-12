@@ -28,11 +28,12 @@
             <table class="table table-hover text-center">
                 <thead>
                 <tr>
-                    <th scope="col" class="text-center">کد</th>
-                    <th scope="col" class="text-center">شماره</th>
+                    <th scope="col" class="text-center">ردیف</th>
+                    <th scope="col" class="text-center">شماره پیش فاکتور</th>
                     <th scope="col" class="text-center">شماره درخواست</th>
                     <th scope="col" class="text-center">تاریخ</th>
                     <th scope="col" class="text-center">جزئیات</th>
+                    <th scope="col" class="text-center"></th>
                     <th scope="col" class="text-center"></th>
                 </tr>
                 </thead>
@@ -46,6 +47,7 @@
                         </td>
                         <td>{{ pref.date_fa }}</td>
                         <td>{{ pref.summary|truncatechars:60 }}</td>
+                        <td>{{ pref.owner.last_name }}</td>
                         <td>
                             <a class="btn btn-primary btn-xs"
                                href="{% url 'pref_details' ypref_pk=pref.pk %}">

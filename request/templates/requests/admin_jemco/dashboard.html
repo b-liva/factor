@@ -1,19 +1,14 @@
 {% extends 'requests/admin_jemco/page_elements/base_html/admin_base_dashboard.html' %}
-
 {% block right_col %}
-
     {% include 'requests/admin_jemco/page_elements/top-summary.html' with r_kw=routine_kw  project_kw=project_kw allKw=allKw num_of_reqs=num_of_reqs %}
 
     <div class="container">
         <div class="row">
             {% include 'requests/admin_jemco/page_elements/morischart.html' with rq=rq rq_dict=rq_dict %}
             {% include 'requests/admin_jemco/page_elements/latest_orders.html' with last_n_requests=last_n_requests %}
-
-
         </div>
     </div>
     <div class="row" style="margin: 50px 0 0;">
         {#        {% include 'requests/admin_jemco/page_elements/agent_shares.html' with agent_data=agent_data %}#}
     </div>
-
 {% endblock %}

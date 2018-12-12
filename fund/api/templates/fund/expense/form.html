@@ -1,0 +1,64 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+
+    <div class="col-md-6 col-md-offset-3">
+        <table class="withBorder tableFull">
+            <tr>
+                <th>No</th>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Summary</th>
+                <th>Actions</th>
+            </tr>
+            <tbody>
+            {% for expense in expenses %}
+                <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ expense.title }}</td>
+                <td>{{ expense.amount|intcomma }}</td>
+                <td>{{ expense.summary }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs"
+                       href="{% url 'expense_edit' fund_pk=expense.fund.pk expense_pk=expense.pk %}">Edit</a>
+                    <a class="btn btn-primary btn-xs btn-warning"
+                       href="{% url 'expense_delete' expense_pk=expense.pk fund_pk=expense.fund.pk %}">Delete</a>
+                </td>
+            {% endfor %}
+            </tr>
+            <tr>
+                <td></td>
+                <td>Sum</td>
+                <td>{{ sum|intcomma }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+    </div>
+
+    <div class="col-md-6 col-md-offset-3">
+        <form action="{% url 'expense_insert' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="fun-title">Title </label>
+                <input type="text" class="form-control" id="fun-title" placeholder="Enter Title"
+                       name="title" value="{{ expense.title }}">
+            </div>
+            <div class="form-group">
+                <label for="fun-amount">Amount </label>
+                <input type="number" class="form-control" id="fun-amount" placeholder="Enter Amount" name="amount"
+                       value="{{ expense.amount }}" required>
+            </div>
+            <div class="form-group">
+                <label for="fun-title">summary</label>
+                {#                <input type="number" class="form-control" id="fund-amount" placeholder="Enter amount">#}
+                <textarea class="form-control" placeholder="Summary" name="summary">{{ expense.summary }}</textarea>
+            </div>
+            <input name="fund_id" value="{{ fund_pk }}" type="hidden">
+            <input name="expense_id" value="{{ expense.pk }}" type="hidden">
+            <input name="updating" value="{{ updating }}" type="hidden">
+            <button type="submit" name="submit" class="btn btn-success btn-sm">Save and add another</button>
+            <a class="btn btn-primary btn-sm" href="{% url 'fund_index' %}">Done</a>
+        </form>
+    </div>
+{% endblock %}

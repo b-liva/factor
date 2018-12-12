@@ -117,7 +117,10 @@ def request_index(request):
         messages.error(request, 'عدم دسترسی کافی!')
         return redirect('errorpage')
     # requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
-    requests = Requests.objects.all().order_by('date_fa').reverse()
+    # requests = Requests.objects.all().order_by('date_fa').reverse()
+    requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
+    if request.user.is_superuser:
+        requests = Requests.objects.all().order_by('date_fa').reverse()
     return render(request, 'requests/admin_jemco/yrequest/index.html', {'all_requests': requests})
 
 

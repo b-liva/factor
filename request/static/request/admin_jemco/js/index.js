@@ -33,8 +33,12 @@ var endPoint = '/kwjs/';
 $('#ajaxbtn').click(function (e) {
     e.preventDefault();
     this_ = $('#dayNumers');
-    var ajaxUrlRaw = this_.attr('rawUrl') + this_.val() + '/';
-
+    var days = this_.val();
+    if (days == null) {
+        days = 30;
+    }
+    // var ajaxUrlRaw = this_.attr('rawUrl') + this_.val() + '/';
+    var ajaxUrlRaw = this_.attr('rawUrl') + days + '/';
     // alert('raw: ' + ajaxUrlRaw);
     var data = {
         'days': this_.val(),
@@ -92,10 +96,20 @@ var update_chart = function (method, element) {
     if (element) {
         this_ = $(element);
         // var ajaxUrlRaw = this_.attr('rawUrl') + this_.val() + '/';
-
+        var days = this_.val();
+        // alert(typeof (days));
+        // console.log('this days ' + days);
+        // if (days.length == 0) {
+        //     alert('checked');
+        //     days = 30;
+        //     days= days.toString();
+        //
+        //     alert(typeof days);
+        //     alert(days);
+        // }
         // alert('raw: ' + ajaxUrlRaw);
         var data = {
-            'days': this_.val(),
+            'days': days,
             'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
         };
         redraw = true;
@@ -244,7 +258,7 @@ function do_chart_bar(redraw, params, yk, chartElement, lables) {
     config.labels = [lables];
     if (redraw === false) {
         customer_pie = Morris.Donut(config);
-    }else {
+    } else {
         customer_pie.setData(params);
     }
 }

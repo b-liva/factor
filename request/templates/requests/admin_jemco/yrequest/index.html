@@ -21,18 +21,20 @@
             <table class="table table-hover">
                 <tr>
                     <th colspan="col" class="text-center">ردیف</th>
-                    <th colspan="col" class="text-center">کد</th>
+{#                    <th colspan="col" class="text-center">کد</th>#}
                     <th colspan="col" class="text-center">شماره درخواست</th>
                     <th colspan="col" class="text-center">تاریخ ثبت</th>
+                    <th colspan="col" class="text-center"></th>
                     <th colspan="col" class="text-center"></th>
                 </tr>
                 <tbody class="">
                 {% for request in all_requests %}
                     <tr>
                         <td scope="row" class="text-center">{{ forloop.counter }}</td>
-                        <td scope="row" class="text-center">{{ request.pk }}</td>
+{#                        <td scope="row" class="text-center">{{ request.pk }}</td>#}
                         <td class="text-center">{{ request.number }}</td>
                         <td class="text-center">{{ request.date_fa }}</td>
+                        <td class="text-center">{{ request.owner.last_name }}</td>
                         <td class="text-center">
                             <a class="btn btn-primary btn-xs"
                                href="{% url 'request_details' request_pk=request.pk %}">

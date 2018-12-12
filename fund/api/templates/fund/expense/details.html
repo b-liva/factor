@@ -1,0 +1,32 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load jformat %}
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-10 ">
+                <div class="panel panel-default">
+                    <div class="panel-heading">جزئیات هزینه</div>
+                    <div class="panel-body">
+                        <h3>{{ expense.title }}</h3>
+                        <p>{{ expense.summary }}</p>
+                        <p>مبلغ: {{ expense.amount|intcomma }}</p>
+                        <hr>
+                        <a class="btn btn-sm btn-link"
+                           href="{% url 'expense_edit_form' fund_pk=fund.pk expense_pk=expense.pk %}">
+                            ویرایش هزینه
+                        </a>
+                        <a href="{% url 'fund_details' fund_pk=fund.pk %}" class="btn btn-link btn-sm">تنخواه مربوطه</a>
+                        <a href="{% url 'fund_index' %}" class="btn btn-link btn-sm">انصراف</a>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

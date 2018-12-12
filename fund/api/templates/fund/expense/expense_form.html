@@ -1,0 +1,59 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+
+    <div class="col-md-6 col-md-offset-3">
+
+        <table class="withBorder tableFull">
+            <tr>
+                <th>ردیف</th>
+                <th>عنوان</th>
+                <th>مبلغ</th>
+                <th>جزئیات</th>
+                <th></th>
+            </tr>
+            <tbody>
+            {% for expense in expenses %}
+                <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ expense.title }}</td>
+                <td>{{ expense.amount|intcomma }}</td>
+                <td>{{ expense.summary }}</td>
+                <td>
+                    {#                    <a class="btn btn-primary btn-xs" href="{% url 'expense_edit' fund_pk=expense.fund.pk expense_pk=expense.pk %}">Edit</a>#}
+                    <a class="btn btn-warning btn-xs"
+                       href="{% url 'expense_edit_form' fund_pk=expense.fund.pk expense_pk=expense.pk %}">
+                        <i class="fa fa-pencil"></i> ویرایش
+                    </a>
+                    <a class="btn btn-danger btn-xs btn-warning"
+                       href="{% url 'expense_delete' expense_pk=expense.pk fund_pk=expense.fund.pk %}">
+                        <i class="fa fa-trash"></i> حذف
+                    </a>
+                </td>
+            {% endfor %}
+            </tr>
+            <tr>
+                <td></td>
+                <td>مجموع</td>
+                <td>{{ amount_sum|intcomma }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+    </div>
+
+    <div class="col-md-6 col-md-offset-3">
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-sm btn-success pull-left" type="submit">
+                <i class="fa fa-pencil"></i> ذخیره
+            </button>
+            <a class="btn btn-primary btn-sm pull-left" href="{% url 'fund_index' %}">
+                <i class="fa fa-list"></i> لیست تنخواه
+            </a>
+        </form>
+
+    </div>
+{% endblock %}

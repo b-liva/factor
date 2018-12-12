@@ -23,6 +23,7 @@ import fund.views
 urlpatterns = [
   path('form', fund.views.fform, name='fform'),
   path('index', fund.views.fund_index, name='fund_index'),
+  path('index2', fund.views.fund_index2, name='fund_index2'),
   path('find', fund.views.fund_find, name='fund_find'),
   path('<int:fund_pk>/', include([
       path('', fund.views.fund_details, name='fund_details'),
