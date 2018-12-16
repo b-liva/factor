@@ -49,6 +49,7 @@ class Requests(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     summary = models.TextField(max_length=1000, null=True, blank=True)
 
+
     def __str__(self):
         return '%s' % self.number
 
@@ -84,6 +85,9 @@ class ReqSpec(models.Model):
     ic = models.IntegerField(null=True, blank=True)
     # images = models.FileField(upload_to='specs/', blank=True, null=True)
     summary = models.TextField(max_length=500, blank=True, null=True)
+    tech = models.BooleanField(default=False)
+    price = models.BooleanField(default=False)
+    permission = models.BooleanField(default=False)
     sent = models.BooleanField(default=False)
 
     class Meta:
@@ -105,6 +109,7 @@ class Xpref(models.Model):
     exp_date_fa = jmodels.jDateField(default=now)
     # image = models.ImageField(upload_to=upload_location, blank=True, null=True)
     summary = models.TextField(max_length=600, null=True, blank=True)
+    verified = models.BooleanField(default=False)
 
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')

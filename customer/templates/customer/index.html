@@ -57,11 +57,9 @@
 {#                                   href="">#}
 {#                                    <i class="fa fa-trash" aria-hidden="true"></i> حذف#}
 {#                                </a>#}
-                                <div class="btn btn-primary btn-xs btn-danger " id=""><i
-                                            class="fa fa-trash"></i> حذف
-                                    </div>
                                     <a class="btn btn-xs btn-danger "
-                                       href="{% url 'customer_delete' customer_pk=customer.pk %}">حذف</a>
+                                       href="{% url 'customer_delete' customer_pk=customer.pk %}"><i
+                                            class="fa fa-trash"></i> حذف</a>
                             {% endif %}
                         </td>
 

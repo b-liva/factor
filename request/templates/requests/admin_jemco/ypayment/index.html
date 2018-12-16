@@ -49,15 +49,9 @@
                                        href="{% url 'payment_edit' ypayment_pk=payment.pk %}">
                                         <i class="fa fa-pencil"></i> ویرایش
                                     </a>
-                                    {#                                    <a class="btn btn-primary btn-xs btn-danger"#}
-                                    {#                                       href="{% url 'payment_delete' ypayment_pk=payment.pk %}">#}
-                                    {#                                        <i class="fa fa-trash"></i> حذف#}
-                                    {#                                    </a>#}
-                                    <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i
-                                            class="fa fa-trash"></i> حذف
-                                    </div>
                                     <a class="btn btn-primary btn-xs btn-danger"
-                                       href="{% url 'payment_delete' ypayment_pk=payment.pk %}">حذف</a>
+                                       href="{% url 'payment_delete' ypayment_pk=payment.pk %}"><i
+                                            class="fa fa-trash"></i> حذف</a>
                                 {% endif %}
                             </td>
 

@@ -76,7 +76,7 @@ class SpecForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SpecForm, self).__init__(*args, **kwargs)
         # list = [ 'images']
-        list = ['sent']
+        list = ['sent', 'tech', 'price', 'permission']
         for visible in self.visible_fields():
             if visible.name not in list:
                 visible.field.widget.attrs['class'] = 'form-control'
@@ -93,13 +93,16 @@ class SpecForm(forms.ModelForm):
             'voltage': ('ولتاژ'),
             'summary': ('جزئیات'),
             'sent': ('ارسال شده'),
+            'tech': ('اطلاعات فنی'),
+            'price': ('پیشنهاد مالی'),
+            'permission': ('مجوز ساخت'),
         }
 
 
 class SpecAddForm(SpecForm):
     
     class Meta(SpecForm.Meta):
-        exclude = SpecForm.Meta.exclude + ('sent',)
+        exclude = SpecForm.Meta.exclude + ('sent', 'tech', 'price', 'permission')
 
 
 def user_choices(user):

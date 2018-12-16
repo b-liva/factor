@@ -111,3 +111,21 @@ ul.quick-list {
 .tile-stats .count{
     font-size: 30px;
 }
+.rotate_deg {
+
+/* Safari */
+-webkit-transform: rotate(-20deg);
+
+/* Firefox */
+-moz-transform: rotate(-0deg);
+
+/* IE */
+-ms-transform: rotate(-45deg);
+
+/* Opera */
+-o-transform: rotate(-45deg);
+
+/* Internet Explorer */
+filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+}

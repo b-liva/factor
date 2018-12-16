@@ -127,7 +127,10 @@ def request_index(request):
     # requests = Requests.objects.all().order_by('date_fa').reverse()
     today = jdatetime.date.today()
 
-    requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
+    requests = Requests.objects.all().order_by('date_fa').reverse()
+    print(f'super user: {request.user.is_superuser}')
+    if not request.user.is_superuser:
+        requests = requests.filter(owner=request.user)
     response = {}
 
     date_format = "%m/%d/%Y"

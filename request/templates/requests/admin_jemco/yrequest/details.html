@@ -49,11 +49,11 @@
         <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
             <div class="row pull-left">
 
-                {% if perms.request.sale_expert %}
-                    <a href="{% url 'spec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">
-                        <i class="fa fa-pencil"></i> ویرایش ردیف
-                    </a>
-                {% endif %}
+{#                {% if perms.request.sale_expert %}#}
+{#                    <a href="{% url 'spec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">#}
+{#                        <i class="fa fa-pencil"></i> ویرایش ردیف#}
+{#                    </a>#}
+{#                {% endif %}#}
                 {% if perms.request.sale_expert %}
                     <a href="{% url 'request_edit_form' request_pk=request.pk %}" class="btn btn-sm btn-warning">
                         <i class="fa fa-pencil"></i> ویرایش درخواست
@@ -64,12 +64,15 @@
             <table class="table table-hover text-center">
                 <thead class="dark">
                 <tr>
-                    <th scope="col" class="text-center">شماره</th>
-                    <th scope="col" class="text-center">تعداد</th>
-                    <th scope="col" class="text-center">کیلووات</th>
-                    <th scope="col" class="text-center">سرعت</th>
-                    <th scope="col" class="text-center">جزئیات</th>
-                    <th scope="col" class="text-center">ارسال شده</th>
+                    <th scope="col" class="text-center rotate_deg">شماره</th>
+                    <th scope="col" class="text-center rotate_deg">تعداد</th>
+                    <th scope="col" class="text-center rotate_deg">کیلووات</th>
+                    <th scope="col" class="text-center rotate_deg">سرعت</th>
+                    <th scope="col" class="text-center rotate_deg">جزئیات</th>
+                    <th scope="col" class="text-center rotate_deg">فنی</th>
+                    <th scope="col" class="text-center rotate_deg">مالی</th>
+                    <th scope="col" class="text-center rotate_deg">مجوز ساخت</th>
+                    <th scope="col" class="text-center rotate_deg">ارسال شده</th>
                 </tr>
                 </thead>
 
@@ -82,6 +85,9 @@
                         <td>{{ reqspec.kw }}</td>
                         <td>{{ reqspec.rpm }}</td>
                         <td class="text-right">{{ reqspec.summary }}</td>
+                        <td><input type="checkbox" {% if reqspec.tech %} checked {% endif %} disabled></td>
+                        <td><input type="checkbox" {% if reqspec.price %} checked {% endif %} disabled></td>
+                        <td><input type="checkbox" {% if reqspec.permission %} checked {% endif %} disabled></td>
                         <td><input type="checkbox" {% if reqspec.sent %} checked {% endif %} disabled></td>
 
                         {% if perms.request.sale_expert %}
@@ -95,11 +101,10 @@
                                 {#                                   href="">#}
                                 {#                                    <i class="fa fa-trash" aria-hidden="true"></i> حذف#}
                                 {#                                </a>#}
-                                <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i
-                                        class="fa fa-trash"></i> حذف
-                                </div>
+
                                 <a class="btn btn-primary btn-xs btn-danger"
-                                   href="{% url 'reqSpec_delete' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">حذف</a>
+                                   href="{% url 'reqSpec_delete' req_pk=request.pk yreqSpec_pk=reqspec.pk %}"><i
+                                        class="fa fa-trash"></i> حذف</a>
                             </td>
                         {% endif %}
 

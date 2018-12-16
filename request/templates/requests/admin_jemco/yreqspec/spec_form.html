@@ -21,16 +21,19 @@
                 <table class="table table-hover text-center">
                     <tbody>
                     <tr>
-                        <th class="text-center">کد</th>
-                        <th class="text-center">نوع</th>
-                        <th class="text-center">تعداد</th>
-                        <th class="text-center">کیلووات</th>
-                        <th class="text-center">ولتاژ</th>
-                        <th class="text-center">سرعت</th>
-                        <th class="text-center">IP</th>
-                        <th class="text-center">IC</th>
-                        <th class="text-center">جزئیات</th>
-                        <th class="text-center">ارسال شده</th>
+                        <th class="text-center rotate_deg">کد</th>
+                        <th class="text-center rotate_deg">نوع</th>
+                        <th class="text-center rotate_deg">تعداد</th>
+                        <th class="text-center rotate_deg">کیلووات</th>
+                        <th class="text-center rotate_deg">ولتاژ</th>
+                        <th class="text-center rotate_deg">سرعت</th>
+                        <th class="text-center rotate_deg">IP</th>
+                        <th class="text-center rotate_deg">IC</th>
+                        <th class="text-center rotate_deg">جزئیات</th>
+                        <th class="text-center rotate_deg">فنی</th>
+                        <th class="text-center rotate_deg">مالی</th>
+                        <th class="text-center rotate_deg">مجوز ساخت</th>
+                        <th class="text-center rotate_deg">ارسال شده</th>
                         {#                        <th>PRICE</th>#}
                         <th></th>
                     </tr>
@@ -45,6 +48,9 @@
                             <td>{{ spec.ip }}</td>
                             <td>{{ spec.ic }}</td>
                             <td class="text-right">{{ spec.summary }}</td>
+                            <td><input type="checkbox" {% if spec.tech %} checked {% endif %} disabled></td>
+                            <td><input type="checkbox" {% if spec.price %} checked {% endif %} disabled></td>
+                            <td><input type="checkbox" {% if spec.permission %} checked {% endif %} disabled></td>
                             <td><input type="checkbox" {% if spec.sent %} checked {% endif %} disabled></td>
                             {#                        <td>{{ spec.price }}</td>#}
                             <td>
