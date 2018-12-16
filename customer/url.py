@@ -34,4 +34,5 @@ urlpatterns = [
         path('delete', views.type_delete, name='type_delete'),
 
     ])),
+    path('autocomplete', views.autocomplete, name='autocomplete'),
 ]

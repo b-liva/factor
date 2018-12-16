@@ -172,7 +172,14 @@ def pref_delete(request, ypref_pk):
     if not can_del:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
-    pref.delete()
+    if request.method == 'GET':
+        context = {
+            'id': pref.pk,
+            'fn': 'prof_del',
+        }
+        return render(request, 'general/confirmation_page.html', context)
+    elif request.method == 'POST':
+        pref.delete()
     return redirect('pref_index')
 
 

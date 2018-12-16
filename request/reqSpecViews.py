@@ -77,7 +77,7 @@ def reqspec_details(request, yreqSpec_pk):
 
 @login_required
 def reqspec_delete(request, yreqSpec_pk, req_pk):
-
+    print('eeee')
     if not ReqSpec.objects.filter(pk=yreqSpec_pk):
         messages.error(request, 'No such Spec.')
         return redirect('errorpage')
@@ -89,9 +89,21 @@ def reqspec_delete(request, yreqSpec_pk, req_pk):
         return redirect('errorpage')
 
     req = reqspec.req_id
-    msg = f'ردیف مربوط به {reqspec.qty} دستگاه {reqspec.kw} کیلوات  - {reqspec.rpm} دور حذف گردید'
-    reqspec.delete()
-    messages.add_message(request, level=20, message=msg)
+
+
+    if request.method == 'GET':
+        print('getttttt')
+        context = {
+            'req_id': reqspec.req_id.pk,
+            'reqspec_id': reqspec.pk,
+            'fn': 'reqspec_del',
+        }
+        return render(request, 'general/confirmation_page.html', context)
+    elif request.method == 'POST':
+        msg = f'ردیف مربوط به {reqspec.qty} دستگاه {reqspec.kw} کیلوات  - {reqspec.rpm} دور حذف گردید'
+        messages.add_message(request, level=20, message=msg)
+
+        reqspec.delete()
     return redirect('spec_form', req_pk=req_pk)
     # return redirect('reqSpec_form', req_pk=req_pk)
 

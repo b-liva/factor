@@ -1,3 +1,5 @@
+from datetime import datetime
+import jdatetime
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
@@ -64,14 +66,19 @@ def req_form(request):
         return redirect('errorpage')
 
     file_instance = forms.RequestFileForm()
-
     if request.method == 'POST':
+        c_cookie = request.COOKIES.get('customer')
+        print(f"coockie: {c_cookie}")
         form = forms.RequestFrom(request.POST or None, request.FILES or None)
         img_form = forms.RequestFileForm(request.POST, request.FILES)
         files = request.FILES.getlist('image')
+        # customer = Customer.objects.get(name=request.POST['cu'])
+        customer = Customer.objects.get(pk=c_cookie)
         if form.is_valid() and img_form.is_valid():
             req_item = form.save(commit=False)
             req_item.owner = request.user
+            print(f"autocomplete user is: {customer}")
+            req_item.customer = customer
             req_item.save()
             for f in files:
                 file_instance = models.RequestFiles(image=f, req=req_item)
@@ -118,10 +125,27 @@ def request_index(request):
         return redirect('errorpage')
     # requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
     # requests = Requests.objects.all().order_by('date_fa').reverse()
+    today = jdatetime.date.today()
+
     requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
+    response = {}
+
+    date_format = "%m/%d/%Y"
+    for req in requests:
+        diff = today - req.date_fa
+        print(f'diff is: {diff.days}')
+        response[req.pk] = {
+            'req': req,
+            'delay': diff.days
+        }
+    print(response)
     if request.user.is_superuser:
         requests = Requests.objects.all().order_by('date_fa').reverse()
-    return render(request, 'requests/admin_jemco/yrequest/index.html', {'all_requests': requests})
+    context = {
+        'all_requests': requests,
+        'response': response
+    }
+    return render(request, 'requests/admin_jemco/yrequest/index.html', context)
 
 
 @login_required
@@ -227,8 +251,14 @@ def request_delete(request, request_pk):
     if not can_delete:
         messages.error(request, 'No access')
         return redirect('errorpage')
-
-    req.delete()
+    if request.method == 'GET':
+        context = {
+            'id': req.pk,
+            'fn': 'req_del',
+        }
+        return render(request, 'general/confirmation_page.html', context)
+    elif request.method == 'POST':
+        req.delete()
     return redirect('request_index')
 
 

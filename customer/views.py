@@ -1,5 +1,5 @@
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from .models import Customer, Address
 from .models import Type
@@ -278,14 +278,20 @@ def customer_delete(request, customer_pk):
         messages.error(request, 'No such Customer')
         return redirect('errorpage')
     customer_instance = Customer.objects.get(pk=customer_pk)
+    c_name = customer_instance.name
     can_delete = funcs.has_perm_or_is_owner(request.user, 'customer.delete_customer', customer_instance)
     if not can_delete:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
-    customer = Customer.objects.get(pk=customer_pk)
-    customer_name = customer.name
-    customer.delete()
-    msg = customer_name + ' removed successfully!'
+    if request.method == 'GET':
+        context = {
+            'id': customer_instance.pk,
+            'fn': 'customer_del',
+        }
+        return render(request, 'general/confirmation_page.html', context)
+    elif request.method == 'POST':
+        customer_instance.delete()
+    msg = c_name + ' removed successfully!'
     return redirect('customer_index')
 
 
@@ -433,3 +439,25 @@ def add_phone(request, customer_pk, addr_pk):
         address: address,
     }
     return render(request, 'customer2/addPhone.html', context)
+
+
+def autocomplete(request):
+    lookup = request.GET['query']
+    list = {}
+    print(f'request: {request.GET}')
+    # customers = Customer.objects.filter(name__contains=request.GET)
+    customers = Customer.objects.filter(name__contains=request.GET['query'])
+    print(customers)
+    list2 = []
+    list3 = {}
+    for c in customers:
+        list = {
+            'data': c.pk,
+            'value': c.name
+        }
+        list2.append(list)
+    list3['suggestions'] = list2
+    print(list2)
+    print(f'list3: {list3}')
+    return JsonResponse(list3, safe=False)
+    # return HttpResponse(list2)

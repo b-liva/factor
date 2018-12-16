@@ -91,10 +91,15 @@
                                    href="{% url 'reqspec_edit_form' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
                                     <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
                                 </a>
-                                <a class="btn btn-xs btn-danger"
-                                   href="{% url 'reqSpec_delete' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
-                                    <i class="fa fa-trash" aria-hidden="true"></i> حذف
-                                </a>
+                                {#                                <a class="btn btn-xs btn-danger"#}
+                                {#                                   href="">#}
+                                {#                                    <i class="fa fa-trash" aria-hidden="true"></i> حذف#}
+                                {#                                </a>#}
+                                <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i
+                                        class="fa fa-trash"></i> حذف
+                                </div>
+                                <a class="btn btn-primary btn-xs btn-danger"
+                                   href="{% url 'reqSpec_delete' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">حذف</a>
                             </td>
                         {% endif %}
 

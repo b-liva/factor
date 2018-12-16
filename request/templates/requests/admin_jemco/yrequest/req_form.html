@@ -14,16 +14,26 @@
                     {% if error %}
                         {{ error }}
                     {% endif %}
-{#                    <form method="POST" action="{% url 'req_form' %}" enctype="multipart/form-data">#}
+                    {#                    <form method="POST" action="{% url 'req_form' %}" enctype="multipart/form-data">#}
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
+{#                        customer_chosen:#}
+{#                        <select name="cu_chosen" id="cu_chosen" class="" style="width:200px">#}
+{#                            <option></option>#}
+{#                        </select><br>#}
+                        <label for="autocomplete">مشتری:</label>
+                        <input class="form-control" type="text" name="cu" id="autocomplete"/>
                         {{ form.as_p }}
                         {% for img in req_images %}
-{#                            <div ><img src="{{ img.image.url }}" width="30px" height="30px"></div><span id="{{ img.pk }}" class="imgClr">Clear</span>#}
-                            <div ><span class="img-thumbnail"><img  src="{{ img.image.url }}" width="50px" height="50px"></span>  <span>{{ img_names|hash:img.pk  }}</span><span><a href="{% url 'img_del' img_pk=img.pk %}"><i class="fa fa-times" aria-hidden="true"></i></a></span></div>
+                            {#                            <div ><img src="{{ img.image.url }}" width="30px" height="30px"></div><span id="{{ img.pk }}" class="imgClr">Clear</span>#}
+                            <div><span class="img-thumbnail"><img src="{{ img.image.url }}" width="50px" height="50px"></span>
+                                <span>{{ img_names|hash:img.pk }}</span><span><a
+                                        href="{% url 'img_del' img_pk=img.pk %}"><i class="fa fa-times"
+                                                                                    aria-hidden="true"></i></a></span>
+                            </div>
                         {% endfor %}
                         {{ req_img.as_p }}
-{#                        <input class="btn btn-primary" type="submit" value="Save" name="done">#}
+                        {#                        <input class="btn btn-primary" type="submit" value="Save" name="done">#}
 
                         <button class="btn btn-sm btn-success pull-left">ذخیره</button>
                         <a class="btn btn-danger btn-sm pull-left" href="{% url 'request_index' %}">انصراف</a>

@@ -58,10 +58,15 @@
                                    href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
                                     <i class="fa fa-pencil"></i> ویرایش
                                 </a>
-                                <a class="btn btn-primary btn-xs btn-danger"
-                                   href="{% url 'pref_delete' ypref_pk=pref.pk %}">
-                                    <i class="fa fa-trash"></i> حذف
-                                </a>
+                                {#                                <a class="btn btn-primary btn-xs btn-danger"#}
+                                {#                                   href="{% url 'pref_delete' ypref_pk=pref.pk %}">#}
+                                {#                                    <i class="fa fa-trash"></i> حذف#}
+                                {#                                </a>#}
+                                <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i
+                                        class="fa fa-trash"></i> حذف
+                                </div>
+                                <a class="btn btn-primary btn-xs btn-danger" href="{% url 'pref_delete' ypref_pk=pref.pk %}">Delete</a>
+
                             {% endif %}
                         </td>
                     </tr>

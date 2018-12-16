@@ -47,9 +47,14 @@
                     <a class="btn btn-warning btn-xs" href="{% url 'fund_edit_form' fund_pk=fund.pk %}">
                         <i class="fa fa-pencil"></i> ویرایش
                     </a>
-                    <a class="btn btn-primary btn-xs btn-danger" href="{% url 'fund_delete' fund_pk=fund.pk %}">
-                        <i class="fa fa-trash"></i> حذف
-                    </a>
+{#                    <a class="btn btn-primary btn-xs btn-danger" href="">#}
+{#                        <i class="fa fa-trash"></i> حذف#}
+{#                    </a>#}
+                    <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i
+                                            class="fa fa-trash"></i> حذف
+                                    </div>
+                                    <a class="deleteBtnConfirmed"
+                                       href="{% url 'fund_delete' fund_pk=fund.pk %}"></a>
                 </td>
             </tr>
         {% endfor %}

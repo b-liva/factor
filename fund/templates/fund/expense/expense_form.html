@@ -25,10 +25,15 @@
                        href="{% url 'expense_edit_form' fund_pk=expense.fund.pk expense_pk=expense.pk %}">
                         <i class="fa fa-pencil"></i> ویرایش
                     </a>
-                    <a class="btn btn-danger btn-xs btn-warning"
-                       href="{% url 'expense_delete' expense_pk=expense.pk fund_pk=expense.fund.pk %}">
-                        <i class="fa fa-trash"></i> حذف
-                    </a>
+{#                    <a class="btn btn-danger btn-xs btn-warning"#}
+{#                       href="">#}
+{#                        <i class="fa fa-trash"></i> حذف#}
+{#                    </a>#}
+                <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i
+                                            class="fa fa-trash"></i> حذف
+                                    </div>
+                                    <a class="deleteBtnConfirmed"
+                                       href="{% url 'expense_delete' expense_pk=expense.pk fund_pk=expense.fund.pk %}"></a>
                 </td>
             {% endfor %}
             </tr>

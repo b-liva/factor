@@ -54,11 +54,16 @@
                                         <i class="fa fa-pencil"></i> ویرایش
                                     </button>
                                 </a>
-                                <a href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">
-                                    <button class="btn btn-danger btn-xs">
-                                        <i class="fa fa-trash"></i> حذف
-                                    </button>
-                                </a>
+{#                                <a href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">#}
+{#                                    <button class="btn btn-danger btn-xs">#}
+{#                                        <i class="fa fa-trash"></i> حذف#}
+{#                                    </button>#}
+{#                                </a>#}
+                                <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i
+                                            class="fa fa-trash"></i> حذف
+                                    </div>
+                                    <a class="deleteBtnConfirmed"
+                                       href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}"></a>
 
                             </td>
                         </tr>

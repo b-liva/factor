@@ -150,7 +150,14 @@ def payment_delete(request, ypayment_pk):
     if not can_delete:
         messages.error(request, 'No access!')
         return redirect('errorpage')
-    payment.delete()
+    if request.method == 'GET':
+        context = {
+            'id': payment.pk,
+            'fn': 'payment_del',
+        }
+        return render(request, 'general/confirmation_page.html', context)
+    elif request.method == 'POST':
+        payment.delete()
     payments = Payment.objects.all()
     msg = 'payment deleted successfully...'
     # return render(request, 'requests/admin_jemco/ypayment/index.html', {'payments': payments, 'msg':msg})

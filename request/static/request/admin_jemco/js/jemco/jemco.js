@@ -124,6 +124,53 @@ $(document).ready(function () {
     // $('#pub_datePicker').val(15654);
     // $('.pub_date2').pDatepicker("setDate", new Date());
     // $('.pub_date2').pDatepicker("setDate", new Date);
+
+
+    $('.deleteBtn').click(function (e) {
+        // e.preventDefault();
+        bootbox.confirm("آیا مطمئن هستید؟", function (result) {
+            // Example.show("Confirm result: " + result);
+            if (result === true) {
+                // alert("Confirm result: " + result);
+                // $('a#deleteBtnConfirmed').click();
+                // var element = $('.deleteBtnConfirmed');
+                var element = $(this).find('.deleteBtnConfirmed');
+                // var element = $('.deleteBtnConfirmed', this);
+                // element.mousedown();
+                console.log(element);
+                console.log(element.attr('href'));
+                // window.location.href = element.attr('href');
+            }
+
+        });
+    });
+
+    // $('#autocomplete').onKeyUp(function (e) {
+    //     console.log(e)
+    // });
+    var arr = ['first', 'secon', 'third'];
+
+    $('#autocomplete').autocomplete({
+        serviceUrl: '/customer/autocomplete',
+        // lookup: arr,
+        // onSearchComplete: function (query, suggestions) {
+        //     alert(suggestions);
+        // }
+        // select: function (suggestion) {
+        //     $(this).val(suggestion);
+        //     console.log(suggestion);
+        // }
+        onSelect: function (suggestion) {
+            // $(this).val(suggestion.data);
+            document.cookie = "customer=" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            // document.cookie("customer", suggestion.data);
+            document.cookie = "customer=" + suggestion.data;
+            // alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+        }
+    });
+    $('#cu_chosen').chosen();
+
+
 });
 
 
@@ -133,3 +180,17 @@ $(document).ready(function () {
 //         alert(e);
 //     });
 // });
+
+
+function checkBeforeDelete() {
+    alert('are you sure?');
+}
+
+
+$("#myModal").on("show", function () {    // wire up the OK button to dismiss the modal when shown
+    $("#myModal a.btn").on("click", function (e) {
+        console.log("button pressed");   // just as an example...
+        $("#myModal").modal('hide');     // dismiss the dialog
+    });
+});
+

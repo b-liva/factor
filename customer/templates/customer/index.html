@@ -3,6 +3,7 @@
 {% block right_col %}
     <div class="container">
         <div class="col-md-10 col-md-offset-1">
+
             <h3>{{ msg }}</h3>
             <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
                 مشتریان</h1>
@@ -52,10 +53,15 @@
                                    href="{% url 'customer_edit_form' customer_pk=customer.pk %}">
                                     <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
                                 </a>
-                                <a class="btn btn-danger btn-xs "
-                                   href="{% url 'customer_delete' customer_pk=customer.pk %}">
-                                    <i class="fa fa-trash" aria-hidden="true"></i> حذف
-                                </a>
+{#                                <a class="btn btn-danger btn-xs "#}
+{#                                   href="">#}
+{#                                    <i class="fa fa-trash" aria-hidden="true"></i> حذف#}
+{#                                </a>#}
+                                <div class="btn btn-primary btn-xs btn-danger " id=""><i
+                                            class="fa fa-trash"></i> حذف
+                                    </div>
+                                    <a class="btn btn-xs btn-danger "
+                                       href="{% url 'customer_delete' customer_pk=customer.pk %}">حذف</a>
                             {% endif %}
                         </td>
 
