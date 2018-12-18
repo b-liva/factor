@@ -23,4 +23,3 @@ class ProfEditForm(forms.ModelForm):
         fields = '__all__'
         exclude = ('req_id', 'owner', 'pub_date')
         widgets = {"image": forms.FileInput(attrs={'multiple': True})}
-

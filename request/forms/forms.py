@@ -125,7 +125,7 @@ class ProformaForm(forms.ModelForm):
         # this renders the items in form drop down menu
         # self.fields['req_id'].label_from_instance = lambda obj: "%s" % obj.number
 
-        list = []
+        list = ['verified', ]
         for visible in self.visible_fields():
             if visible.name not in list:
                 visible.field.widget.attrs['class'] = 'form-control'
@@ -150,6 +150,7 @@ class ProformaForm(forms.ModelForm):
             'date_fa': 'تاریخ صدور',
             'exp_date_fa': 'تاریخ انقضا',
             'summary': 'جزئیات',
+            'verified': 'تاییدیه',
 
         }
 

@@ -39,7 +39,7 @@ class Customer(models.Model):
     pub_date = models.DateTimeField(default=now)
     # date2 = jmodels.jDateTimeField(default=now)
     date2 = jmodels.jDateField(default=now)
-    phone = models.CharField(max_length=15, blank=True, null=True)
+    phone = models.CharField(max_length=25, blank=True, null=True)
     fax = models.CharField(max_length=15, blank=True, null=True)
     postal_code = models.CharField(max_length=15, blank=True, null=True)
     addr = models.TextField(max_length=600, blank=True, null=True)
