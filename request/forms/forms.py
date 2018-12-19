@@ -91,6 +91,7 @@ class SpecForm(forms.ModelForm):
             'kw': ('کیلووات'),
             'rpm': ('سرعت'),
             'voltage': ('ولتاژ'),
+            'frame_size': ('فریم سایز'),
             'summary': ('جزئیات'),
             'sent': ('ارسال شده'),
             'tech': ('اطلاعات فنی'),
@@ -102,7 +103,8 @@ class SpecForm(forms.ModelForm):
 class SpecAddForm(SpecForm):
     
     class Meta(SpecForm.Meta):
-        exclude = SpecForm.Meta.exclude + ('sent', 'tech', 'price', 'permission')
+        # exclude = SpecForm.Meta.exclude + ('sent', 'tech', 'price', 'permission')
+        exclude = SpecForm.Meta.exclude
 
 
 def user_choices(user):

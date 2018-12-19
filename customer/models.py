@@ -26,7 +26,8 @@ class Type(models.Model):
     code = models.IntegerField()
     pub_date = models.DateTimeField(default=now)
 
-
+    def __str__(self):
+        return '%s' % self.name
 # types = Type.objects.all()
 
 

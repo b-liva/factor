@@ -70,6 +70,13 @@ class RequestFiles(models.Model):
     req = models.ForeignKey(Requests, on_delete=models.CASCADE)
 
 
+class FrameSize(models.Model):
+    size = models.CharField(max_length=10)
+
+    def __str__(self):
+        return '%s' % self.size
+
+
 class ReqSpec(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     req_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
@@ -83,6 +90,8 @@ class ReqSpec(models.Model):
     voltage = models.IntegerField(default=380)
     ip = models.IntegerField(null=True, blank=True)
     ic = models.IntegerField(null=True, blank=True)
+    # frame_size = models.CharField(null=True, blank=True, max_length=10)
+    frame_size = models.ForeignKey(FrameSize, on_delete=models.DO_NOTHING, blank=True, null=True)
     # images = models.FileField(upload_to='specs/', blank=True, null=True)
     summary = models.TextField(max_length=500, blank=True, null=True)
     tech = models.BooleanField(default=False)
