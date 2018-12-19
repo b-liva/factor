@@ -25,8 +25,6 @@ def default_customer_code():
 
 class Type(models.Model):
     name = models.CharField(max_length=20)
-    code = models.IntegerField()
-    pub_date = models.DateTimeField(default=now)
 
     def __str__(self):
         return '%s' % self.name
