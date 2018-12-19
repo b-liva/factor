@@ -10,7 +10,7 @@ from request.models import Payment
 from request import views2
 from django.contrib import messages
 from customer import forms
-import reportlab
+# import reportlab
 import jdatetime
 
 

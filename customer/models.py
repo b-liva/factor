@@ -11,7 +11,9 @@ from django import forms
 
 def default_customer_code():
     last_customer = Customer.objects.all().order_by('pk').last()
-    last_id = last_customer.pk
+    last_id = 0
+    if last_id:
+        last_id = last_customer.pk
     customer = Customer.objects.filter(pk=last_id)
     while customer is not None:
         last_id += 1
