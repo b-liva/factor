@@ -443,7 +443,8 @@ def dashboard(request):
     # rq = kwjs(),
     # print(f'requests: {rq}')
     # print(f'request dict: {rq_dict}')
-    routine_kw, project_kw, allKw = find_routine_kw()
+    routine_kw, project_kw, services_kw, ex_kw, allKw = find_routine_kw()
+    project_kw += ex_kw
     num_of_requests = no_of_requests()
     orders = Orders()
     last_n_requests = orders.last_orders()
@@ -452,9 +453,12 @@ def dashboard(request):
 
     agent_data = agentjs(request)
     context = {
-        'routine_kw': intcomma(routine_kw),
-        'project_kw': intcomma(project_kw),
-        'allKw': intcomma(allKw),
+        # 'routine_kw': intcomma(routine_kw),
+        'routine_kw': routine_kw,
+        'project_kw': project_kw,
+        'services_kw': services_kw,
+        'ex_kw': ex_kw,
+        'allKw': allKw,
         'num_of_reqs': num_of_requests,
         'last_n_requests': last_n_requests,
         'total_payments': total_payments,
@@ -492,21 +496,31 @@ def find_routine_kw():
     # ReqSpec is a class and ReqSpec() is an instance of it
     # command bellow works for clas and not working for instance
 
-    routine_specs = ReqSpec.objects.filter(kw__lte=450)
-    project_specs = ReqSpec.objects.filter(kw__gt=450)
+    routine_specs = ReqSpec.objects.filter(type__title='روتین')
+    project_specs = ReqSpec.objects.filter(type__title='پروژه')
+    services_specs = ReqSpec.objects.filter(type__title='تعمیرات')
+    ex_specs = ReqSpec.objects.filter(type__title='ضد انفجار')
+    # routine_specs = ReqSpec.objects.filter(kw__lte=450)
+    # project_specs = ReqSpec.objects.filter(kw__gt=450)
     allSpecs = ReqSpec.objects.all()
     allKw = 0
     routine_kw = 0
     project_kw = 0
+    services_kw = 0
+    ex_kw = 0
     for spec in routine_specs:
         routine_kw += spec.kw * spec.qty
 
     for spec in project_specs:
         project_kw += spec.kw * spec.qty
+    for spec in services_specs:
+        services_kw += spec.kw * spec.qty
+    for spec in ex_specs:
+        ex_kw += spec.kw * spec.qty
     for spec in allSpecs:
         allKw += spec.kw * spec.qty
 
-    return routine_kw, project_kw, allKw
+    return routine_kw, project_kw, services_kw, ex_kw, allKw
 
 
 def find_last_reqs():

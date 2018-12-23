@@ -1,7 +1,9 @@
 import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-from .models import Customer, Address
+from .models import (Customer,
+                     Address,
+                     )
 from .models import Type
 from request.models import Requests
 from request.models import Xpref
