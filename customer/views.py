@@ -1,3 +1,4 @@
+import requests
 import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
@@ -444,11 +445,12 @@ def add_phone(request, customer_pk, addr_pk):
 
 
 def autocomplete(request):
-    lookup = request.GET['query']
+    # lookup = lookup.encode('utf-8')
+    # lookup = requests.utils.quote(request.GET['query'])
+    lookup = str(request.GET['query'])
     list = {}
-    print(f'request: {request.GET}')
-    # customers = Customer.objects.filter(name__contains=request.GET)
-    customers = Customer.objects.filter(name__contains=request.GET['query'])
+    print(f'request: {lookup}')
+    customers = Customer.objects.filter(name__contains=lookup)
     print(customers)
     list2 = []
     list3 = {}

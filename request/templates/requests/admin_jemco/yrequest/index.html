@@ -4,7 +4,8 @@
     <div class="container">
         <div class="col-md-10 col-md-offset-1">
             <h3>{{ msg }}</h3>
-            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+{#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
+            <h1 class="page-header">
                 درخواست ها</h1>
             <form method="POST" action="{% url 'request_find' %}">
                 {% csrf_token %}
@@ -37,7 +38,11 @@
                         <td class="text-center">{{ request.req.customer }}</td>
                         <td class="text-center">{{ request.req.number }}</td>
                         <td class="text-center">{{ request.req.date_fa }}</td>
-                        <td class="text-center">{{ request.req.owner.last_name }}</td>
+                        <td class="text-center">{{ request.req.owner.last_name }}
+                            {% for colleague in request.colleagues %}
+                                , {{ colleague.last_name }}
+                            {% endfor %}
+                        </td>
                         <td class="text-center">{{ request.delay }}</td>
                         <td class="text-center">
                             <a class="btn btn-primary btn-xs"

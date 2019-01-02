@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.timezone import now
 from django_jalali.db import models as jmodels
@@ -67,3 +68,4 @@ class Address(models.Model):
 class Phone(models.Model):
     add = models.ForeignKey(Address, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=15)
+

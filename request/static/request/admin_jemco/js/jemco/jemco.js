@@ -152,6 +152,8 @@ $(document).ready(function () {
 
     $('#autocomplete').autocomplete({
         serviceUrl: '/customer/autocomplete',
+        // contentType: 'application/json',
+        // dataType:'json',
         // lookup: arr,
         // onSearchComplete: function (query, suggestions) {
         //     alert(suggestions);

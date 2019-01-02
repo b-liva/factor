@@ -5,7 +5,8 @@
         <div class="col-md-10 col-md-offset-1">
 
             <h3>{{ msg }}</h3>
-            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+{#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
+            <h1 class="page-header">
                 مشتریان</h1>
             <form method="POST" action="{% url 'customer_find' %}">
                 {% csrf_token %}

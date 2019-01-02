@@ -20,6 +20,7 @@ from .models import (
 )
 from customer.models import Customer
 from django.contrib.auth.decorators import login_required
+
 import request.templatetags.functions as funcs
 
 from .viewsFolder import permission
@@ -443,6 +444,8 @@ def dashboard(request):
     # rq = kwjs(),
     # print(f'requests: {rq}')
     # print(f'request dict: {rq_dict}')
+    if not request.user.is_superuser:
+        return redirect(sales_expert_dashboard)
     routine_kw, project_kw, services_kw, ex_kw, allKw = find_routine_kw()
     project_kw += ex_kw
     num_of_requests = no_of_requests()
@@ -467,6 +470,11 @@ def dashboard(request):
         # 'rq_dict': rq_dict,
     }
     return render(request, 'requests/admin_jemco/dashboard.html', context)
+
+
+@login_required
+def sales_expert_dashboard(request):
+    return render(request, 'requests/admin_jemco/dashboard/dashboard.html')
 
 
 @login_required

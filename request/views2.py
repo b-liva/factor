@@ -139,7 +139,8 @@ def request_index(request):
         print(f'diff is: {diff.days}')
         response[req.pk] = {
             'req': req,
-            'delay': diff.days
+            'delay': diff.days,
+            'colleagues': req.colleagues.all(),
         }
     print(response)
     if request.user.is_superuser:

@@ -129,3 +129,9 @@ ul.quick-list {
 filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 
 }
+
+.page-header{
+    /*background: #3E5367;*/
+    /*color: whitesmoke;*/
+    text-align: center;
+}
