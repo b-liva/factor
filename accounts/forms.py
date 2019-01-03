@@ -4,6 +4,11 @@ from accounts import models
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+
+
 
 class EditProfileForm(UserChangeForm):
     class Meta:
@@ -91,3 +96,15 @@ class PassChangeForm(PasswordChangeForm):
     )
 
 
+class CustomUserCreationForm(UserCreationForm):
+
+    class Meta(UserCreationForm):
+        model = User
+        fields = ('username', 'email')
+
+
+class CustomUserChangeForm(UserChangeForm):
+
+    class Meta:
+        model = User
+        fields = UserChangeForm.Meta.fields

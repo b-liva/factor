@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['37a60399.ngrok.io', 'localhost', '192.168.1.4', '127.0.0.1', '
 # When Debug is set to false
 # ALLOWED_HOSTS = ['*']
 
+AUTH_USER_MODEL = 'accounts.User'
 
 # Application definition
 

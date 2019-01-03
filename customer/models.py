@@ -2,7 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.timezone import now
 from django_jalali.db import models as jmodels
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from accounts.models import User
 
 from django import forms
 

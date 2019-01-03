@@ -19,4 +19,5 @@ githublink.txt
 package-lock.json
 /venv
 /z_mine
+/fixtures
 /.idea
