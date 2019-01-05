@@ -165,7 +165,13 @@ def request_read(request, request_pk):
         return redirect('errorpage')
 
     req = Requests.objects.get(pk=request_pk)
-    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_requests', req)
+    colleagues = req.colleagues.all()
+    print(f'colleagues: {colleagues}')
+    colleague = False
+    if request.user in colleagues:
+        colleague = True
+
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_requests', req, colleague)
     if not can_read:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
@@ -360,13 +366,16 @@ def request_edit_form(request, request_pk):
     if not Requests.objects.filter(pk=request_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
-
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
+    req = Requests.objects.get(pk=request_pk)
+    colleagues = req.colleagues.all()
+    colleague = False
+    if request.user in colleagues:
+        colleague = True
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.edit_requests', colleague=colleague)
     if not can_add:
-        messages.error(request, 'Sorry, You need some priviliges to do this.')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    req = Requests.objects.get(pk=request_pk)
     req_images = req.requestfiles_set.all()
     img_names = {}
     for r in req_images:
@@ -381,7 +390,7 @@ def request_edit_form(request, request_pk):
     files = request.FILES.getlist('image')
     if form.is_valid() and img_form.is_valid():
         req_item = form.save(commit=False)
-        req_item.owner = request.user
+        # req_item.owner = request.user
         req_item.save()
         for f in files:
             file_instance = models.RequestFiles(image=f, req=req_item)

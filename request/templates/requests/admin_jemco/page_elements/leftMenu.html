@@ -19,6 +19,7 @@
                         {% endif %}
 
                         <li><a href="{% url 'request_index' %}">درخواست ها</a></li>
+                        <li><a href="{% url 'req_search' %}">درخواست ها2</a></li>
 
                         {% if perms.request.index_proforma %}
                             <li><a href="{% url 'pref_index' %}">پیش فاکتورها</a></li>

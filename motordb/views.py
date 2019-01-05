@@ -150,10 +150,11 @@ def motordb_search(request):
 
     motors = models.Motors.objects.filter(**kwargs)
     # motor_instance = forms.SearchForm()
-    return render(request, 'motordb/search.html', {
+    context = {
         'motors': motors,
         'motor_instance': motor_instance,
-    })
+    }
+    return render(request, 'motordb/search.html', context)
 
 
 ## drafts:

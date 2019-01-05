@@ -171,9 +171,13 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
         return redirect('errorpage')
 
     reqspec = ReqSpec.objects.get(pk=yreqSpec_pk)
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec', reqspec)
+    colleagues = reqspec.req_id.colleagues.all()
+    colleague = False
+    if request.user in colleagues:
+        colleague = True
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_reqspec', reqspec, colleague)
     if not can_edit:
-        messages.error(request, 'You have not enough access to edit request specs')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     req = Requests.objects.get(pk=req_pk)

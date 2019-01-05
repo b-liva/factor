@@ -4,7 +4,9 @@ from django.conf.urls.static import static
 import request.views
 from request import views2
 from .. import reqSpecViews
-
+from request.viewsFolder.request.request import (RequestList,
+                                                 # RequestDetailsView
+                                                 )
 urlpatterns = [
     path('project_type', request.views2.project_type_form, name='project_type_form'),
     path('project-type/index', request.views2.projects_type_index, name='projects_type_index'),
@@ -13,6 +15,11 @@ urlpatterns = [
     path('req_form', request.views2.req_form, name='req_form'),
     path('insert', request.views2.request_insert, name='request_insert'),
     path('index', request.views2.request_index, name='request_index'),
+    path('search', RequestList.as_view(), name='req_search'),
+    # path('<int:pk>/details', RequestDetailsView.as_view(), name='request_details_cbv'),
+    path('<int:pk>/', include([
+        # path('details', RequestDetailsView.as_view(), name='request_details_cbv'),
+    ])),
     path('find', request.views2.request_find, name='request_find'),
     path('<int:request_pk>/', include([
         path('', request.views2.request_read, name='request_details'),
@@ -32,5 +39,6 @@ urlpatterns = [
         path('editForm', request.reqSpecViews.reqspec_edit_form, name='reqspec_edit_form'),
     ])),
 
-    
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

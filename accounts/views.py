@@ -16,7 +16,15 @@ from django.contrib.auth.views import (
     password_reset_confirm,
     password_reset_done,
 )
+from django.db import models
 
+
+class qsome(models.QuerySet):
+    pass
+
+
+class Some(models.Manager):
+    pass
 
 # Create your views here.
 
