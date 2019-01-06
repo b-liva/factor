@@ -56,10 +56,11 @@ class RequestFrom(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'شرح درخواست'
             }),
-            'colleagues': forms.SelectMultiple(attrs={
-                'class': 'form-control',
-            })
+            # 'colleagues': forms.SelectMultiple(attrs={
+            #     'class': 'form-control',
+            # })
         }
+
         labels = {
             'customer': ('مشتری'),
             'number': ('شماره درخواست'),

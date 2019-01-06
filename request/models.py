@@ -48,7 +48,7 @@ class Requests(models.Model):
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='req_owner')
-    colleagues = models.ManyToManyField(User)
+    colleagues = models.ManyToManyField(User, blank=True, null=True)
     summary = models.TextField(max_length=1000, null=True, blank=True)
 
     def __str__(self):
