@@ -1,5 +1,6 @@
 from django.contrib.auth import password_validation
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from accounts.models import User
 from accounts import models
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
@@ -7,7 +8,6 @@ from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-
 
 
 class EditProfileForm(UserChangeForm):
@@ -100,10 +100,25 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm):
         model = User
-        fields = ('username', 'email')
+        # fields = ('username', 'email')
+        fields = '__all__'
 
 
 class CustomUserChangeForm(UserChangeForm):
+
+    class Meta:
+        model = User
+        # fields = UserChangeForm.Meta.fields
+        fields = '__all__'
+
+class CustomerUserCreationForm(UserCreationForm):
+
+    class Meta(UserCreationForm):
+        model = User
+        fields = ('username', 'email')
+
+
+class CustomerUserChangeForm(UserChangeForm):
 
     class Meta:
         model = User

@@ -46,6 +46,7 @@ urlpatterns = [
       path('request/', include('request.urls.url')),
       path('customer/', include('customer.url')),
       path('fund/', include('fund.url')),
+      path('bugs/', include('reposrbugs.url')),
       path('pricedb/', include('pricedb.url')),
       path('fund/', include('fund.url')),
       path('motors/', include('motordb.url')),

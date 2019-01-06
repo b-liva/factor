@@ -13,7 +13,8 @@
                 <form action="{% url 'request_delete' request_pk=id %}" method="POST">
                     {% csrf_token %}
                     <button class="btn btn-sm btn-primary" type="submit">بله</button>
-                    <a class="btn btn-sm btn-danger" href="{% url 'request_index' %}">خیر</a>
+{#                    <a class="btn btn-sm btn-danger" href="{% url 'request_index' %}">خیر</a>#}
+                    <a class="btn btn-sm btn-danger" href="{% url 'req_search' %}">خیر</a>
                 </form>
             {% endif %}
             {% if fn == 'customer_del' %}

@@ -160,7 +160,8 @@ def request_delete(request, request_pk):
         messages.error(request, 'No access')
         return redirect('errorpage')
     req.delete()
-    return redirect('request_index')
+    # return redirect('request_index')
+    return redirect('req_search')
 
 
 @login_required
@@ -400,7 +401,8 @@ def request_edit_form(request, request_pk):
         for f in files:
             file_instance = models.RequestFiles(image=f, req=req_item)
             file_instance.save()
-        return redirect('request_index')
+        # return redirect('request_index')
+        return redirect('req_search')
 
     return render(request, 'requests/admin_jemco/yrequest/req_form.html', {
         'form': form,

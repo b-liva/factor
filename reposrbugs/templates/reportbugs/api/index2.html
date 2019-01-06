@@ -1,0 +1,84 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load jformat %}
+{% load humanize %}
+{% block right_col %}
+    <div id="vueapp">
+        post id:
+        <input type="number" class="" id="PostId" v-model="FundIdModel">
+        [[ FundIdModel ]]
+        <a class="btn btn-sm btn-success" type="submit" id="" v-on:click="getFundDetails">Fund</a>
+        <div>
+            <h4>[[ fund.title ]]</h4>
+            <p>[[ fund.date_fa ]]</p>
+        </div>
+
+        <a class="btn btn-sm btn-primary" v-on:click="getFunds">find funds</a>
+        <ul>
+            <li v-for="f in funds">[[ f.owner ]]: [[ f.title ]]</li>
+        </ul>
+
+
+    </div>
+    <div class="container">
+        <div class="col-md-12">
+            <h3>{{ msg }}</h3>
+            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                تنخواه</h1>
+            <form method="POST" action="{% url 'fund_find' %}">
+                {% csrf_token %}
+                شماره تنخواه<input name="fund_pk">
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </form>
+            <hr>
+
+            <a href="{% url 'fform' %}" class="pull-left btn btn-success btn-sm"><i class="fa fa-plus"></i> ثبت
+                تنخواه</a>
+
+            <table class="table table-hover text-center">
+                <tr>
+                    <th scope="col" class="text-center">ردیف</th>
+                    <th scope="col" class="text-center">شماره</th>
+                    <th scope="col" class="text-center">عنوان</th>
+                    <th scope="col" class="text-center" style="width: 30%;">جزئیات</th>
+                    <th scope="col" class="text-center">تاریخ</th>
+                    <th scope="col" class="text-center">مجموع هزینه ها</th>
+                    <th scope="col" class="text-center">owner</th>
+                    <th scope="col" class="text-center"></th>
+                </tr>
+                <tbody>
+                {#        {% for total_exp, fund in amounts.items %}#}
+                {% for fund, total_exp in amounts.items %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ fund.pk }}</td>
+                        <td>{{ fund.title }}</td>
+                        <td>{{ fund.summary }}</td>
+                        <td>{{ fund.date_fa }}</td>
+                        <td>{{ total_exp|floatformat:0|intcomma }}</td>
+                        <td>{{ fund.owner.username }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="{% url 'fund_details' fund_pk=fund.pk %}">
+                                <i class="fa fa-eye"></i> مشاهده
+                            </a>
+                            <a class="btn btn-warning btn-xs" href="{% url 'fund_edit_form' fund_pk=fund.pk %}">
+                                <i class="fa fa-pencil"></i> ویرایش
+                            </a>
+                            {#                            <a class="btn btn-primary btn-xs btn-danger" href="">#}
+                            {#                                <i class="fa fa-trash"></i> حذف#}
+                            {#                            </a>#}
+                            <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i
+                                    class="fa fa-trash"></i> حذف
+                            </div>
+                            <a class="deleteBtnConfirmed"
+                               href="{% url 'fund_delete' fund_pk=fund.pk %}"></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <br>
+        </div>
+    </div>
+{% endblock %}

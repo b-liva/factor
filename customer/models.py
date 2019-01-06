@@ -3,7 +3,8 @@ from django.db import models
 from django.utils.timezone import now
 from django_jalali.db import models as jmodels
 # from django.contrib.auth.models import User
-from accounts.models import User
+from accounts.models import User, CustomerUser
+
 
 from django import forms
 
@@ -47,6 +48,7 @@ class Customer(models.Model):
     postal_code = models.CharField(max_length=15, blank=True, null=True)
     addr = models.TextField(max_length=600, blank=True, null=True)
     agent = models.BooleanField(default=False)
+    customer_user = models.OneToOneField(CustomerUser, on_delete=models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         permissions = (

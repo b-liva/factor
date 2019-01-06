@@ -21,8 +21,10 @@ class RequestList(ListView):
 
         if not self.request.user.is_superuser:
             # requests = requests.filter(owner=self.request.user) | requests.filter(colleagues=self.request.user)
+            # requests = requests.distinct()
             # this is also true
             requests = requests.filter(Q(owner=self.request.user) | Q(colleagues=self.request.user))
+            requests = requests.distinct()
         for req in requests:
             diff = self.today - req.date_fa
             print(f'diff is: {diff.days}')

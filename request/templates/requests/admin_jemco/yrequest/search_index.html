@@ -16,6 +16,11 @@
                 </button>
             </form>
             <br>
+            {% if perms.request.add_requests %}
+                <a href="{% url 'req_form' %}" class="btn btn-success btn-sm pull-left">
+                    <i class="fa fa-plus"></i> درخواست جدید</a>
+            {% endif %}
+
             <table class="table table-hover">
                 <tr>
                     <th colspan="col" class="text-center">ردیف</th>
@@ -23,13 +28,13 @@
                     <th colspan="col" class="text-center">مشتری</th>
                     {#                    <th colspan="col" class="text-center">کد</th>#}
                     <th colspan="col" class="text-center">تاریخ ثبت</th>
-{#                    <th colspan="col" class="text-center"></th>#}
+                    {#                    <th colspan="col" class="text-center"></th>#}
                     <th colspan="col" class="text-center">زمان</th>
                     <th colspan="col" class="text-center"></th>
                 </tr>
                 <tbody class="">
-{#                {{ requests_list }}#}
-{#                {{ object_list }}#}
+                {#                {{ requests_list }}#}
+                {#                {{ object_list }}#}
                 {% for r in object_list %}
                     <tr>
                         <td scope="row" class="text-center">
@@ -49,6 +54,21 @@
                                href="{% url 'request_details' request_pk=r.req.pk %}">
                                 <i class="fa fa-eye"></i> مشاهده
                             </a>
+                            {% if perms.request.add_requests %}
+                                <a class="btn btn-warning btn-xs"
+                                   href="{% url 'request_edit_form' request_pk=r.req.pk %}">
+                                    <i class="fa fa-pencil"></i> ویرایش
+                                </a>
+                            {% endif %}
+                            {% if perms.request.add_requests %}
+                                {#                                <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i#}
+                                {#                                        class="fa fa-trash"></i> حذف#}
+                                {#                                </div>#}
+
+                                <a class="btn btn-primary btn-xs btn-danger"
+                                   href="{% url 'request_delete' request_pk=r.req.pk %}"><i
+                                        {# class="fa fa-trash"></i> حذف</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

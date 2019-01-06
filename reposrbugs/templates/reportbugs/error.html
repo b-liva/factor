@@ -1,0 +1,14 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% block right_col %}
+    <div class="col-md-6 col-md-offset-3">
+        <div class="form-group">
+            <ul class="message">
+                {% for msg in messages %}
+                    <li class="alert alert-error">{{ msg }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <a href="{% url 'dashboard' %}" class="btn btn-success btn-sm">بازگشت</a>
+    </div>
+{% endblock %}
+

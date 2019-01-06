@@ -80,6 +80,7 @@ def req_form(request):
             print(f"autocomplete user is: {customer}")
             req_item.customer = customer
             req_item.save()
+            req_item.save_m2m()
             for f in files:
                 file_instance = models.RequestFiles(image=f, req=req_item)
                 file_instance.save()
@@ -269,7 +270,8 @@ def request_delete(request, request_pk):
         return render(request, 'general/confirmation_page.html', context)
     elif request.method == 'POST':
         req.delete()
-    return redirect('request_index')
+    # return redirect('request_index')
+    return redirect('req_search')
 
 
 @login_required
@@ -368,10 +370,11 @@ def request_edit_form(request, request_pk):
         return redirect('errorpage')
     req = Requests.objects.get(pk=request_pk)
     colleagues = req.colleagues.all()
+    print(colleagues)
     colleague = False
     if request.user in colleagues:
         colleague = True
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.edit_requests', colleague=colleague)
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.edit_requests', req, colleague=colleague)
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
@@ -392,10 +395,12 @@ def request_edit_form(request, request_pk):
         req_item = form.save(commit=False)
         # req_item.owner = request.user
         req_item.save()
+        form.save_m2m()
         for f in files:
             file_instance = models.RequestFiles(image=f, req=req_item)
             file_instance.save()
-        return redirect('request_index')
+        # return redirect('request_index')
+        return redirect('req_search')
 
     context = {
         'form': form,

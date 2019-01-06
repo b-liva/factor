@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.timezone import now
 from request import models
+from accounts.models import User
 
 
 class ProjectTypeForm(forms.ModelForm):
@@ -20,6 +21,13 @@ class RequestFrom(forms.ModelForm):
     # pub_date = forms.DateTimeField(default=now)
     # image = forms.FileField()
     # summary = forms.Textarea(max_length=1000)
+
+    def __init__(self, *args, **kwargs):
+        super(RequestFrom, self).__init__(*args, **kwargs)
+        self.fields['colleagues'].queryset = User.objects.filter(sales_exp=True)
+        # this renders the items in form drop down menu
+        # self.fields['req_id'].label_from_instance = lambda obj: "%s" % obj.number
+
 
     class Meta:
         model = models.Requests
@@ -47,12 +55,16 @@ class RequestFrom(forms.ModelForm):
             'summary': forms.Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'شرح درخواست'
+            }),
+            'colleagues': forms.SelectMultiple(attrs={
+                'class': 'form-control',
             })
         }
         labels = {
             'customer': ('مشتری'),
             'number': ('شماره درخواست'),
             'date_fa': ('تاریخ'),
+            'colleagues': ('مشترک با'),
             'summary': ('چزئیات'),
         }
 
