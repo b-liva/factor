@@ -56,9 +56,8 @@ class RequestFrom(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'شرح درخواست'
             }),
-            # 'colleagues': forms.SelectMultiple(attrs={
-            #     'class': 'form-control',
-            # })
+            'colleagues': forms.CheckboxSelectMultiple(attrs={
+            })
         }
 
         labels = {
