@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'fund.apps.FundConfig',
     'pricedb.apps.PricedbConfig',
     'motordb.apps.MotordbConfig',
-    'reportbugs.apps.ReportbugsConfig',
     # 'accounts.apps.AppConfig',
     'django_cleanup.apps.CleanupConfig',
     'accounts.apps.AccountsConfig',
