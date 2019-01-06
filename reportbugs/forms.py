@@ -1,5 +1,5 @@
 from django import forms
-from reposrbugs.models import Bugs
+from reportbugs.models import Bugs
 from accounts.models import User
 from django.core import validators
 

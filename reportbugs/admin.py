@@ -1,5 +1,5 @@
 from django.contrib import admin
-from reposrbugs.models import Bugs
+from reportbugs.models import Bugs
 # Register your models here.
 
 

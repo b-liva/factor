@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'fund.apps.FundConfig',
     'pricedb.apps.PricedbConfig',
     'motordb.apps.MotordbConfig',
-    'reposrbugs.apps.ReposrbugsConfig',
+    'reportbugs.apps.ReportbugsConfig',
     # 'accounts.apps.AppConfig',
     'django_cleanup.apps.CleanupConfig',
     'accounts.apps.AccountsConfig',
@@ -72,7 +72,7 @@ ROOT_URLCONF = 'factor.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'request/templates'), os.path.join(BASE_DIR, 'reposrbugs/templates'), os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'request/templates'), os.path.join(BASE_DIR, 'reportbugs/templates'), os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
