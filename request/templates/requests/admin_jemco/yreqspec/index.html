@@ -2,7 +2,7 @@
 {% load humanize %}
 {% block right_col %}
     <div class="container">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-12">
             <h3>{{ msg }}</h3>
             {#                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Request Specs</h1>#}
             <h1 class="page-header">Request Specs</h1>
@@ -113,7 +113,7 @@
             <table id="req_search_table" class="table table-hover">
                 <tr>
                     <th>No</th>
-                    <th>Id</th>
+                    <th>مشتری</th>
                     <th>QTY</th>
                     <th>KW</th>
                     <th>RPM</th>
@@ -126,16 +126,17 @@
                     <th>شماره درخواست</th>
                     <th>پیشفاکتور</th>
                     <th>پرداخت</th>
-                    <th>مشتری</th>
                     <th>زمان</th>
-                    <th>Action</th>
+                    <th></th>
                 </tr>
-                <tbody class="">
+                <tbody class="request-table-body">
                 {#                            {% for reqspec in reqspecs %}#}
                 {% for i, reqspec in response.items %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ reqspec.pk }}</td>
+                        <td>
+                            <a href="{% url 'customer_read' customer_pk=reqspec.spec.req_id.customer.pk %}">{{ reqspec.spec.req_id.customer.name }}</a>
+                        </td>
                         <td>{{ reqspec.spec.qty }}</td>
                         <td>{{ reqspec.spec.kw }}</td>
                         <td>{{ reqspec.spec.rpm }}</td>
@@ -163,9 +164,7 @@
                                 <a href="{% url 'payment_details' ypayment_pk=payment.pk %}">{{ payment.number }}</a> -
                             {% endfor %}
                         </td>
-                        <td>
-                            <a href="{% url 'customer_read' customer_pk=reqspec.spec.req_id.customer.pk %}">{{ reqspec.spec.req_id.customer.name }}</a>
-                        </td>
+
                         <td>{{ reqspec.spec.req_id.date_fa }} ({{ reqspec.delay }})</td>
                         <td>
                             <a class="btn btn-primary btn-xs"

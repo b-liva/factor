@@ -100,9 +100,9 @@ def fsearch(request):
     if not can_index:
         messages.error(request, 'عدم دسترسی کافی!')
         return redirect('errorpage')
+    form_data = {}
     specs = ReqSpec.objects.all()
     if request.method == 'POST':
-        form_data = {}
         # specs = ReqSpec.objects
         if request.POST['date_min']:
             form_data['date_min'] = (request.POST['date_min'])
@@ -159,8 +159,9 @@ def fsearch(request):
         search_form = search.SpecSearchForm(form_data)
 
     else:
-        specs = ReqSpec.objects.all()
-        search_form = search.SpecSearchForm()
+        specs = ReqSpec.objects.filter(sent=True)
+        form_data['sent'] = True
+        search_form = search.SpecSearchForm(form_data)
 
 
     today = jdatetime.date.today()

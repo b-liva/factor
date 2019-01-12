@@ -139,3 +139,6 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 #req_search_table td{
     text-align: center;
 }
+.request-table-body td{
+    font-size: medium;
+}
