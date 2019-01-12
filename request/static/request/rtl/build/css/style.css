@@ -108,37 +108,46 @@ ul.quick-list {
     margin: 20px 0 20px;
     color: whitesmoke;
 }
-.tile-stats .count{
+
+.tile-stats .count {
     font-size: 30px;
 }
+
 .rotate_deg {
 
-/* Safari */
--webkit-transform: rotate(-20deg);
+    /* Safari */
+    -webkit-transform: rotate(-20deg);
 
-/* Firefox */
--moz-transform: rotate(-0deg);
+    /* Firefox */
+    -moz-transform: rotate(-0deg);
 
-/* IE */
--ms-transform: rotate(-45deg);
+    /* IE */
+    -ms-transform: rotate(-45deg);
 
-/* Opera */
--o-transform: rotate(-45deg);
+    /* Opera */
+    -o-transform: rotate(-45deg);
 
-/* Internet Explorer */
-filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 
 }
 
-.page-header{
+.page-header {
     /*background: #3E5367;*/
     /*color: whitesmoke;*/
     text-align: center;
 }
+
 #req_search_table th,
-#req_search_table td{
+#req_search_table td {
     text-align: center;
+    font-size: 0.9em;
+
 }
-.request-table-body td{
-    font-size: small;
+
+.request-table-body td {
+}
+
+.customer-column {
+    max-width: 90px;
 }

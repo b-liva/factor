@@ -111,7 +111,7 @@
             <table id="req_search_table" class="table table-hover">
                 <tr>
                     <th>No</th>
-                    <th>مشتری</th>
+                    <th class="customer-column">مشتری</th>
                     <th>QTY</th>
                     <th>KW</th>
                     <th>RPM</th>
@@ -132,7 +132,7 @@
                 {% for i, reqspec in response.items %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>
+                        <td class="customer-column">
                             <a href="{% url 'customer_read' customer_pk=reqspec.spec.req_id.customer.pk %}">{{ reqspec.spec.req_id.customer.name }}</a>
                         </td>
                         <td>{{ reqspec.spec.qty }}</td>

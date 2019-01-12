@@ -159,8 +159,7 @@ def fsearch(request):
         search_form = search.SpecSearchForm(form_data)
 
     else:
-        specs = ReqSpec.objects.filter(sent=True)
-        form_data['sent'] = True
+        specs = ReqSpec.objects.filter(sent=False, price=False, tech=False, permission=False)
         search_form = search.SpecSearchForm(form_data)
 
 
