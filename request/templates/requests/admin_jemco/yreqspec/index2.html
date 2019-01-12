@@ -1,0 +1,25 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-10 col-md-offset-1">
+            <h3>{{ msg }}</h3>
+            {#                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Request Specs</h1>#}
+            <h1 class="page-header">Request Specs</h1>
+
+            <form method="" action="">
+                {% csrf_token %}
+                {{ search_form }}
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+                <a class="btn btn-sm btn-success" id="ReqSearchBtn">select</a>
+                <a href="{% url 'fsearch' %}" class="btn btn-sm btn-danger">حذف فیلترها</a>
+            </form>
+            <div id="example-table"></div>
+        </div>
+    </div>
+
+<div id="vueapp"></div>
+
+{% endblock %}

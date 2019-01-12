@@ -20,7 +20,8 @@
             <p>ایمیل: {{ user.email }}</p>
         <div class="pull-left">
             <a class="btn btn-xs btn-warning" href="{% url 'edit-profile' %}">ویرایش</a>
-            <a class="btn btn-xs btn-warning" href="{% url 'change-password' %}">تغییر رمز</a>
+{#            <a class="btn btn-xs btn-warning" href="{% url 'change-password' %}">تغییر رمز</a>#}
+            <a class="btn btn-xs btn-warning" href="{% url 'account_change_password' %}">تغییر رمز</a>
         </div>
         </div>
     </div>

@@ -1,0 +1,64 @@
+from django import forms
+from django_jalali import forms as jforms
+
+
+class SpecSearchForm(forms.Form):
+    customer_name = forms.CharField(label='مشتری', max_length=100, required=False)
+    customer_name.widget = forms.TextInput(attrs={
+        'class': 'form-control',
+        'id': 'autocomplete'
+    })
+    # rpm = forms.CheckboxSelectMultiple()
+
+    date_min = jforms.jDateField(label='زمان(از)', required=False)
+    date_min.widget = jforms.jDateInput(attrs={
+        'id': 'date_fa_start',
+        'autocomplete': 'off',
+        'class': 'form-control',
+    })
+    date_max = jforms.jDateField(label='زمان(تا)', required=False)
+    date_max.widget = jforms.jDateInput(attrs={
+        'id': 'date_fa_end',
+        'autocomplete': 'off',
+        'class': 'form-control',
+    })
+
+    kw_min = forms.FloatField(label='کیلووات(از)', max_value=10000, required=False)
+    kw_min.widget = forms.TextInput(attrs={
+        'class': 'form-control',
+    })
+    kw_max = forms.FloatField(label='کیلووات(تا)', max_value=10000, required=False)
+    kw_max.widget = forms.TextInput(attrs={
+        'class': 'form-control',
+    })
+    rpm = forms.IntegerField(label='سرعت', max_value=3001, required=False)
+    rpm.widget = forms.TextInput(attrs={
+        'class': 'form-control'
+    })
+    price = forms.BooleanField(label='مالی', required=False)
+    price.widget = forms.CheckboxInput()
+    tech = forms.BooleanField(label='فنی', required=False)
+    tech.widget = forms.CheckboxInput()
+    permission = forms.BooleanField(label='مجوز', required=False)
+    permission.widget = forms.CheckboxInput()
+    sent = forms.BooleanField(label='ارسال شده', required=False)
+    sent.widget = forms.CheckboxInput()
+
+    CHOICES = (
+        ('1', 'کیلووات',),
+        # ('2', 'customer',),
+        ('3', 'تاریخ',),
+        ('4', 'تعداد',),
+    )
+
+    sort_asc_dsc = (
+        (1, 'صعودی',),
+        (2, 'نزولی',),
+    )
+    sort_by = forms.ChoiceField(widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=CHOICES, required=False)
+
+    dsc_asc = forms.ChoiceField(widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=sort_asc_dsc, required=False)

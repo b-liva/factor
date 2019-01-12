@@ -69,6 +69,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
                                 <li><a href="{% url 'profile' %}"> مشخصات کاربری</a></li>
+                                <li><a href="{% url 'account-details' pk=user.pk %}"> مشخصات کاربری</a></li>
                                 {% if user.is_authenticated %}
                                     <li class="nav-item"><a class="nav-link"
                                                             href="javascript:{document.getElementById('logout').submit()}">خروج</a>

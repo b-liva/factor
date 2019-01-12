@@ -135,3 +135,7 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     /*color: whitesmoke;*/
     text-align: center;
 }
+#req_search_table th,
+#req_search_table td{
+    text-align: center;
+}

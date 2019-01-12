@@ -108,6 +108,18 @@ $(document).ready(function () {
         calendarType: 'persian',
         format: 'YYYY-MM-DD',
     });
+    $("#date_fa_start").pDatepicker({
+        autoClose: true,
+        initialValue: false,
+        calendarType: 'persian',
+        format: 'YYYY-MM-DD',
+    });
+    $("#date_fa_end").pDatepicker({
+        autoClose: true,
+        initialValue: false,
+        calendarType: 'persian',
+        format: 'YYYY-MM-DD',
+    });
     $("#id_date2").pDatepicker({
         autoClose: true,
         initialValue: true,
@@ -152,8 +164,8 @@ $(document).ready(function () {
 
     $('#autocomplete').autocomplete({
         serviceUrl: '/customer/autocomplete',
-        // contentType: 'application/json',
-        // dataType:'json',
+        contentType: 'application/json',
+        dataType:'json',
         // lookup: arr,
         // onSearchComplete: function (query, suggestions) {
         //     alert(suggestions);
@@ -195,4 +207,3 @@ $("#myModal").on("show", function () {    // wire up the OK button to dismiss th
         $("#myModal").modal('hide');     // dismiss the dialog
     });
 });
-

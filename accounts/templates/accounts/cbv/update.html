@@ -1,0 +1,13 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+
+{% block right_col %}
+    <div class="row mt-4">
+
+        <form method="post" action="" >
+            {% csrf_token %}
+            {{ form }}
+            <a href="{% url 'account-details' pk=user.pk %}" class="btn btn-danger btn-sm">انصراف</a>
+            <button type="submit" class="btn btn-success btn-sm">ثبت</button>
+
+        </form>
+{% endblock %}

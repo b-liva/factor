@@ -1,0 +1,203 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-10 col-md-offset-1">
+            <h3>{{ msg }}</h3>
+            {#                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Request Specs</h1>#}
+            <h1 class="page-header">Request Specs</h1>
+
+            <div id="example-table"></div>
+            {#            <div class="searchApp">#}
+            {##}
+            {#                <table>#}
+            {#                    <thead>#}
+            {#                    <tr>#}
+            {#                        <th v-on:click="sort('name')">Name</th>#}
+            {#                        <th v-on:click="sort('age')">Age</th>#}
+            {#                        <th v-on:click="sort('breed')">Breed</th>#}
+            {#                        <th v-on:click="sort('gender')">Gender</th>#}
+            {#                    </tr>#}
+            {#                    </thead>#}
+            {#                    <tbody>#}
+            {#                    <tr v-for="spec in sortedSpecs">#}
+            {#                        <td>[[ spec.price ]]</td>#}
+            {#                        <td>[[ spec.tech ]]</td>#}
+            {#                        <td>[[ spec.customer_name ]]</td>#}
+            {#                        <td>[[ spec.kw ]]</td>#}
+            {#                    </tr>#}
+            {#                    </tbody>#}
+            {#                </table>#}
+            {#                <p>#}
+            {#                    <button @click="prevPage">Previous</button>#}
+            {#                    <button @click="nextPage">Next</button>#}
+            {#                </p>#}
+            {##}
+            {#                debug: sort=[[ currentSort ]] dir=[[ currentSortDir ]] page=[[ currentPage ]]#}
+            {#            </div>#}
+            <div class="searchApp">
+
+{#                <form method="POST" action="{% url 'fsearch' %}">#}
+                <form method="" action="">
+                    {% csrf_token %}
+                    price:
+                    <input type="checkbox" v-model="filter.price">
+                    [[ filter.price ]]
+<br>
+                    tech:
+                    <input type="checkbox" v-model="filter.tech">
+                    [[ filter.tech ]]
+                    {{ search_form }}
+{#                    <button type="submit" name="submit" class="btn btn-sm btn-primary">#}
+{#                        <i class="fa fa-search" aria-hidden="true"></i>#}
+{#                    </button>#}
+                    {#                <a class="btn btn-sm btn-success" id="ReqSearchBtn" v-on:click="doSearch(spec.tech, spec.price)">select</a>#}
+{#                    <span class="btn btn-sm btn-success" @click="doSearch('spec.price', 'spec.tech')">select2</span>#}
+                    <span class="btn btn-sm btn-success" @click="doSearch2()">select2</span>
+
+                    <a href="{% url 'fsearch' %}" class="btn btn-sm btn-danger">حذف فیلترها</a>
+                </form>
+                <table id="req_search_table" class="table table-hover">
+                    <tr>
+                        <th>No</th>
+                        <th>Id</th>
+                        <th @click="sort('qty')">QTY</th>
+                        <th @click="sort('kw')">KW</th>
+                        <th @click="sort('rpm')">RPM</th>
+                        <th @click="sort('voltage')">Voltage</th>
+                        <th @click="sort('tech')">فنی</th>
+                        <th @click="sort('price')">مالی</th>
+                        <th @click="sort('permissoin')">مجوز</th>
+                        <th @click="sort('sent')">ارسال شده</th>
+                        <th @click="sort('reqNo')">شماره درخواست</th>
+                        <th @click="sort('customer_name')">مشتری</th>
+                        <th @click="sort('delay')">زمان</th>
+                        <th>Action</th>
+                    </tr>
+                    <tbody class="">
+                    {#                            {% for reqspec in reqspecs %}#}
+                    {#                            {% for i, reqspec in response.items %}#}
+                    <tr v-for="spec in sortedSpecs">
+
+                        {#                    <td>{{ forloop.counter }}</td>#}
+                        <td></td>
+                        <td>[[ spec.pk ]]</td>
+                        <td>[[ spec.qty ]]</td>
+                        <td>[[ spec.kw ]]</td>
+                        <td>[[ spec.rpm ]]</td>
+                        <td>[[ spec.voltage ]]</td>
+                        <td><input type="checkbox" v-model="spec.tech" disabled></td>
+                        <td><input type="checkbox" v-model="spec.price" disabled></td>
+                        <td><input type="checkbox" v-model="spec.permission" disabled></td>
+                        <td><input type="checkbox" v-model="spec.sent" disabled></td>
+                        <td><a :href="spec.url">[[ spec.reqNo ]]</a></td>
+
+                        {#                    <td><input type="checkbox" {% if spec.price %} checked {% endif %} disabled></td>#}
+                        {#                    <td><input type="checkbox" {% if spec.permission %} checked {% endif %} disabled></td>#}
+                        {#                    <td><input type="checkbox" {% if spec.sent %} checked {% endif %} disabled></td>#}
+                        <td>
+                            {#                                        <a href="{% url 'request_details' request_pk=spec.req_id.pk %}">{{ spec.req_id.number }}</a>#}
+                        </td>
+                        <td>
+                            {#                                        <a href="{% url 'customer_read' customer_pk=spec.req_id.customer.pk %}">{{ spec.req_id.customer.name }}</a>#}
+                        </td>
+                        {#                        <td>[[ spec.req_id.date_fa ]] ([[ delay ]])</td>#}
+                        <td>
+                            {#                                        <a class="btn btn-primary btn-xs"#}
+                            {#                                           href="{% url 'request_details' request_pk=spec.req_id.pk %}">#}
+                            {#                                            <i class="fa fa-eye"></i> مشاهده#}
+                            {#                                        </a>#}
+                        </td>
+
+
+                    </tr>
+
+                    {#                            {% endfor %}#}
+
+                    </tbody>
+                </table>
+                <p>
+                    <button @click="prevPage">Previous</button>
+                    <button @click="nextPage">Next</button>
+                </p>
+            </div>
+
+            {#            <table id="req_search_table" class="table table-hover">#}
+            {#                <tr>#}
+            {#                    <th>No</th>#}
+            {#            <th>Id</th>#}
+            {#                    <th>QTY</th>#}
+            {#                    <th>KW</th>#}
+            {#                    <th>RPM</th>#}
+            {#                    <th>Voltage</th>#}
+            {#                    <th>فنی</th>#}
+            {#                    <th>مالی</th>#}
+            {#                    <th>مجوز</th>#}
+            {#                    <th>ارسال شده</th>#}
+            {#                    <th>شماره درخواست</th>#}
+            {#                    <th>مشتری</th>#}
+            {#                    <th>زمان</th>#}
+            {#                    <th>Action</th>#}
+            {#                </tr>#}
+            {#                <tbody class="">#}
+            {#                {% for reqspec in reqspecs %}#}
+            {#                {% for i, reqspec in response.items %}#}
+            {#                    <tr>#}
+            {#                        <td>{{ forloop.counter }}</td>#}
+            {#                <td>{{ reqspec.pk }}</td>#}
+            {#                        <td>{{ reqspec.spec.qty }}</td>#}
+            {#                        <td>{{ reqspec.spec.kw }}</td>#}
+            {#                        <td>{{ reqspec.spec.rpm }}</td>#}
+            {#                        <td>{{ reqspec.spec.voltage }}</td>#}
+            {##}
+            {#                        <td><input type="checkbox" {% if reqspec.spec.tech %} checked {% endif %} disabled></td>#}
+            {#                        <td><input type="checkbox" {% if reqspec.spec.price %} checked {% endif %} disabled></td>#}
+            {#                        <td><input type="checkbox" {% if reqspec.spec.permission %} checked {% endif %} disabled></td>#}
+            {#                        <td><input type="checkbox" {% if reqspec.spec.sent %} checked {% endif %} disabled></td>#}
+            {#                        <td>#}
+            {#                            <a href="{% url 'request_details' request_pk=reqspec.spec.req_id.pk %}">{{ reqspec.spec.req_id.number }}</a>#}
+            {#                        </td>#}
+            {#                        <td>#}
+            {#                            <a href="{% url 'customer_read' customer_pk=reqspec.spec.req_id.customer.pk %}">{{ reqspec.spec.req_id.customer.name }}</a>#}
+            {#                        </td>#}
+            {#                        <td>{{ reqspec.spec.req_id.date_fa }} ({{ reqspec.delay }})</td>#}
+            {#                        <td>#}
+            {#                            <a class="btn btn-primary btn-xs"#}
+            {#                               href="{% url 'request_details' request_pk=reqspec.spec.req_id.pk %}">#}
+            {#                                <i class="fa fa-eye"></i> مشاهده#}
+            {#                            </a>#}
+            {#                        </td>#}
+            {##}
+            {##}
+            {#                    </tr>#}
+            {##}
+            {#                {% endfor %}#}
+            {##}
+            {#                </tbody>#}
+            {#            </table>#}
+            <br>
+            <a href="{% url 'request_form' %}" class="btn btn-success btn-sm">Add new request</a>
+        </div>
+    </div>
+
+
+
+    <div id="vueapp">
+        post id:
+        <input type="number" class="" id="PostId" v-model="FundIdModel">
+        [[ FundIdModel ]]
+        <a class="btn btn-sm btn-success" type="submit" id="" v-on:click="getFundDetails">Fund</a>
+        <div>
+            <h4>[[ fund.title ]]</h4>
+            <p>[[ fund.date_fa ]]</p>
+        </div>
+
+        <a class="btn btn-sm btn-primary" v-on:click="getFunds">find funds</a>
+        <ul>
+            <li v-for="f in funds">[[ f.owner ]]: [[ f.title ]]</li>
+        </ul>
+
+
+    </div>
+
+{% endblock %}

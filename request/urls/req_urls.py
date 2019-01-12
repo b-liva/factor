@@ -15,6 +15,9 @@ urlpatterns = [
     path('req_form', request.views2.req_form, name='req_form'),
     path('insert', request.views2.request_insert, name='request_insert'),
     path('index', request.views2.request_index, name='request_index'),
+    path('fsearch', request.views2.fsearch, name='fsearch'),
+    path('fsearch3', request.views2.fsearch, name='fsearch3'),
+    path('fsearch2', request.views2.fsearch2, name='fsearch2'),
     path('search', RequestList.as_view(), name='req_search'),
     # path('<int:pk>/details', RequestDetailsView.as_view(), name='request_details_cbv'),
     path('<int:pk>/', include([

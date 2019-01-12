@@ -28,7 +28,6 @@ class RequestFrom(forms.ModelForm):
         # this renders the items in form drop down menu
         # self.fields['req_id'].label_from_instance = lambda obj: "%s" % obj.number
 
-
     class Meta:
         model = models.Requests
         fields = '__all__'

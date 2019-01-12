@@ -1,19 +1,21 @@
 from datetime import datetime
 import jdatetime
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
 
 from request.views import allRequests, find_all_obj
-from .models import Requests
+from .models import Requests, ReqSpec
 from .models import Xpref, Payment
 from . import models
 from customer.models import Customer
 from django.contrib.auth.decorators import login_required
 import request.templatetags.functions as funcs
-from request.forms import forms
+from request.forms import forms, search
 import nested_dict as nd
+
 from collections import defaultdict as dd
 
 
@@ -21,7 +23,6 @@ from collections import defaultdict as dd
 
 @login_required
 def project_type_form(request):
-
     if request.method == 'POST':
         form = forms.ProjectTypeForm(request.POST)
         project_type = form.save(commit=False)
@@ -92,6 +93,208 @@ def req_form(request):
         'form': form,
         'req_img': file_instance
     })
+
+
+def fsearch(request):
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
+    specs = ReqSpec.objects.all()
+    if request.method == 'POST':
+        form_data = {}
+        # specs = ReqSpec.objects
+        if request.POST['date_min']:
+            form_data['date_min'] = (request.POST['date_min'])
+            specs = specs.filter(req_id__date_fa__gte=form_data['date_min'])
+        if request.POST['date_max']:
+            form_data['date_max'] = (request.POST['date_max'])
+            specs = specs.filter(req_id__date_fa__lte=form_data['date_max'])
+        if request.POST['kw_min']:
+            form_data['kw_min'] = (request.POST['kw_min'])
+            specs = specs.filter(kw__gte=form_data['kw_min'])
+        if request.POST['kw_max']:
+            form_data['kw_max'] = (request.POST['kw_max'])
+            specs = specs.filter(kw__lte=form_data['kw_max'])
+        if 'price' in request.POST:
+            form_data['price'] = True
+            specs = specs.filter(price=form_data['price'])
+        if 'sent' in request.POST:
+            form_data['sent'] = True
+            specs = specs.filter(sent=form_data['sent'])
+        if 'permission' in request.POST:
+            form_data['permission'] = True
+            specs = specs.filter(permission=form_data['permission'])
+        if 'tech' in request.POST:
+            form_data['tech'] = True
+            specs = specs.filter(tech=form_data['tech'])
+        if request.POST['rpm']:
+            rpm = form_data['rpm'] = int(request.POST['rpm'])
+            rng = [750, 1000, 1500, 3000]
+            i = 1
+            for r in rng:
+                if r < rpm <= rng[i]:
+                    rpm = rng[i]
+                i += 1
+            # specs = specs.filter(rpm=form_data['rpm'])
+            specs = specs.filter(rpm=rpm)
+        if request.POST['customer_name']:
+            form_data['customer_name'] = request.POST['customer_name']
+            specs = specs.filter(req_id__customer__name__icontains=form_data['customer_name'])
+        if request.POST['sort_by']:
+            form_data['sort_by'] = request.POST['sort_by']
+            if form_data['sort_by'] == '1':
+                specs = specs.order_by('kw')
+            # if form_data['sort_by'] == '2':
+            #     specs = specs.order_by('req_id__customer__name')
+            if form_data['sort_by'] == '3':
+                specs = specs.order_by('req_id__date_fa')
+            if form_data['sort_by'] == '4':
+                specs = specs.order_by('qty')
+        if request.POST['dsc_asc'] == '2':
+            form_data['dsc_asc'] = request.POST['dsc_asc']
+            specs = specs.reverse()
+
+        print(form_data)
+        search_form = search.SpecSearchForm(form_data)
+
+    else:
+        specs = ReqSpec.objects.all()
+        search_form = search.SpecSearchForm()
+
+
+    today = jdatetime.date.today()
+
+    # print(f'super user: {request.user.is_superuser}')
+    # if not request.user.is_superuser:
+    #     requests = requests.filter(owner=request.user)
+    response = {}
+    total_kw = 0
+    total_qty = 0
+    date_format = "%m/%d/%Y"
+    if not request.user.is_superuser:
+        specs = specs.filter(req_id__owner=request.user) | specs.filter(req_id__colleagues=request.user)
+
+    for spec in specs:
+        owner_colleagues = []
+        total_kw += spec.qty * spec.kw
+        total_qty += spec.qty
+        diff = today - spec.req_id.date_fa
+        proformas = spec.req_id.xpref_set.all()
+        payments = []
+        for prof in proformas:
+            pmnts = prof.payment_set.all()
+            for pay in pmnts:
+                payments.append(pay)
+        owner_colleagues.append(spec.req_id.owner.last_name)
+        for colleage in spec.req_id.colleagues.all():
+            owner_colleagues.append(colleage.last_name)
+        response[spec.pk] = {
+            'spec': spec,
+            'delay': diff.days,
+            'owner_colleagues': owner_colleagues,
+            'proformas': proformas,
+            'payments': payments,
+            # 'colleagues': req.colleagues.all(),
+        }
+        print(payments)
+    context = {
+        # 'reqspecs': specs,
+        'response': response,
+        'search_form': search_form,
+        'total_kw': total_kw,
+        'total_qty': total_qty,
+    }
+    return render(request, 'requests/admin_jemco/yreqspec/index.html', context)
+
+
+def fsearch2(request):
+    print('wlahh..')
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
+    specs = ReqSpec.objects.all()
+    print(request.POST)
+    if request.method == 'POST':
+        form_data = {}
+        # specs = ReqSpec.objects
+        # if request.POST['date_min']:
+        #     form_data['date_min'] = request.POST['date_min']
+        #     specs = specs.filter(req_id__date_fa__gte=form_data['date_min'])
+        # if request.POST['date_max']:
+        #     form_data['date_max'] = (request.POST['date_max'])
+        #     specs = specs.filter(req_id__date_fa__lte=form_data['date_max'])
+        if request.POST['kw_min']:
+            form_data['kw_min'] = (request.POST['kw_min'])
+            specs = specs.filter(kw__gte=form_data['kw_min'])
+        if request.POST['kw_max']:
+            form_data['kw_max'] = (request.POST['kw_max'])
+            specs = specs.filter(kw__lte=form_data['kw_max'])
+        if request.POST.get('price') == 'true':
+            form_data['price'] = True
+            specs = specs.filter(price=form_data['price'])
+        if request.POST.get('sent') == 'true':
+            form_data['sent'] = True
+            specs = specs.filter(sent=form_data['sent'])
+
+        if request.POST.get('permission') == 'true':
+            form_data['permission'] = True
+            specs = specs.filter(permission=form_data['permission'])
+        if request.POST.get('tech') == 'true':
+            form_data['tech'] = True
+            specs = specs.filter(tech=form_data['tech'])
+        if request.POST['rpm']:
+            form_data['rpm'] = request.POST['rpm']
+            specs = specs.filter(rpm=form_data['rpm'])
+        if request.POST['customer_name']:
+            form_data['customer_name'] = request.POST['customer_name']
+            specs = specs.filter(req_id__customer__name__icontains=form_data['customer_name'])
+        print(form_data)
+        # specs = ReqSpec.objects.filter(req_id__customer__name__icontains=customer_name).filter(kw=kw).filter(rpm=rpm)
+        # print(f"items: {form_data['kw']} + {form_data['rpm']} + {form_data['customer_name']}")
+        search_form = search.SpecSearchForm(form_data)
+        # search_form = search.SpecSearchForm()
+    # elif request.method == 'GET':
+    else:
+        specs = ReqSpec.objects.all()
+        search_form = search.SpecSearchForm()
+
+    today = jdatetime.date.today()
+
+    response = []
+
+    date_format = "%m/%d/%Y"
+
+    for spec in specs:
+        diff = today - spec.req_id.date_fa
+        # url = url(request_read, request_pk=spec.req_id.pk)
+        url = reverse('request_details', kwargs={'request_pk': spec.req_id.pk})
+
+        response.append(
+            {
+                # 'spec': spec,
+                # 'date_fa': str(spec.req_id.date_fa),
+                'delay': diff.days,
+                'customer_name': spec.req_id.customer.name,
+                'qty': spec.qty,
+                'rpm': spec.rpm,
+                'kw': spec.kw,
+                'voltage': spec.voltage,
+                'reqNo': spec.req_id.number,
+                'price': spec.price,
+                'tech': spec.tech,
+                'url': url,
+                # 'colleagues': req.colleagues.all(),
+            })
+
+    context = {
+        # 'reqspecs': specs,
+        'response': response,
+        'search_form': search_form,
+    }
+    # return render(request, 'requests/admin_jemco/yreqspec/index.html', context)
+    return JsonResponse(response, safe=False)
 
 
 @login_required
@@ -195,7 +398,8 @@ def request_read(request, request_pk):
     }
 
     for f in req_files:
-        if str(f.image).lower().endswith('.jpg') or str(f.image).lower().endswith('.jpeg') or str(f.image).lower().endswith('.png'):
+        if str(f.image).lower().endswith('.jpg') or str(f.image).lower().endswith('.jpeg') or str(
+                f.image).lower().endswith('.png'):
             req_imgs.append(f)
             nested_files['ximg'][f.pk]['url'] = f.image.url
             nested_files['ximg'][f.pk]['name'] = f.image.name.split('/')[-1]
@@ -339,9 +543,7 @@ def pref(request, ypref_pk):
         # })
         # return render(request, 'test.html', {'ypref_pk': ypref_pk})
 
-
     # return HttpResponse('this is from a single line of code for: ' + str(ypref_ipk))
-
 
 
 def total_kw(req_id):
@@ -353,11 +555,8 @@ def total_kw(req_id):
     return total_kw
 
 
-
-
 @login_required
 def request_edit_form(request, request_pk):
-
     # 1- check for permissions
     # 2 - find request and related images
     # 3 - make request image form
@@ -413,12 +612,12 @@ def request_edit_form(request, request_pk):
 
 @login_required
 def image_delete(request, img_pk):
-
     img = models.RequestFiles.objects.get(pk=img_pk)
     req = img.req
     imgForm = forms.RequestFileForm(instance=img)
     imgForm.delete()
     return True
+
 
 @login_required
 def img_del(request, img_pk):
@@ -431,7 +630,6 @@ def img_del(request, img_pk):
     req = image.req
 
     # auto_delete_file_on_delete(sender=,instance=image)
-
 
     image.delete()
 

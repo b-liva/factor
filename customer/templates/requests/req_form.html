@@ -1,0 +1,41 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load functions %}
+{% block right_col %}
+
+    <div class="row">
+
+        <div class="container">
+            <div class="col-md-6 col-md-offset-3">
+                <div>
+                    <h3>{{ msg }}</h3>
+                    <h3 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                        ثبت درخواست جدید</h3>
+
+                    {% if error %}
+                        {{ error }}
+                    {% endif %}
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="autocomplete">مشتری:</label>
+                        <input class="form-control" type="text" name="cu" id="autocomplete"/>
+                        {{ form.as_p }}
+                        {% for img in req_images %}
+
+                            <div><span class="img-thumbnail"><img src="{{ img.image.url }}" width="50px" height="50px"></span>
+                                <span>{{ img_names|hash:img.pk }}</span><span><a
+                                        href="{% url 'img_del' img_pk=img.pk %}"><i class="fa fa-times"
+                                                                                    aria-hidden="true"></i></a></span>
+                            </div>
+                        {% endfor %}
+                        {{ req_img.as_p }}
+                        <button class="btn btn-sm btn-success pull-left">ذخیره</button>
+
+                        <a class="btn btn-danger btn-sm pull-left" href="{% url 'req_search' %}">انصراف</a>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

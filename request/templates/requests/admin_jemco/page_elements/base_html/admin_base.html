@@ -22,7 +22,7 @@
             <div class="left_col scroll-view">
                 <div class="navbar nav_title" style="border: 0;">
                     <a href="{% url 'dashboard' %}" class="site_title">
-{#                        <i class="fa fa-paw"></i>#}
+                        {#                        <i class="fa fa-paw"></i>#}
                         <span>جمکو!</span></a>
                 </div>
                 <div class="clearfix"></div>
@@ -34,8 +34,8 @@
                              class="img-circle profile_img">
                     </div>
                     <div class="profile_info">
-{#                        <span>سلام,</span>#}
-{#                        <h2>{{ user.last_name }}</h2>#}
+                        {#                        <span>سلام,</span>#}
+                        {#                        <h2>{{ user.last_name }}</h2>#}
                     </div>
                 </div>
                 <!-- /menu profile quick info -->
@@ -68,7 +68,8 @@
                                 <span class=" fa fa-angle-down"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                <li><a href="{% url 'profile' %}"> مشخصات کاربری</a></li>
+{#                                <li><a href="{% url 'profile' %}"> مشخصات کاربری</a></li>#}
+                                <li><a href="{% url 'account-details' pk=user.pk %}"> مشخصات کاربری</a></li>
                                 {% if user.is_authenticated %}
                                     <li class="nav-item"><a class="nav-link"
                                                             href="javascript:{document.getElementById('logout').submit()}">خروج</a>
@@ -101,7 +102,7 @@
         <!-- footer content -->
         <footer>
             <div class="pull-right">
-{#                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>#}
+                {#                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>#}
             </div>
             <div class="clearfix"></div>
         </footer>
@@ -121,8 +122,6 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-
-
 
 
 <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
@@ -180,11 +179,13 @@
 
 {#<script src="{% static 'request/admin_jemco/js/index.js' %}"></script>#}
 
-
+<script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.1.4/dist/js/tabulator.min.js"></script>
 <!-- Custom Theme Scripts -->
 <script src="{% static 'request/admin_jemco/js/custom.min.js' %}"></script>
 <script src="{% static 'request/rtl/build/js/vue_app.js' %}"></script>
 <script src="{% static 'request/admin_jemco/js/jemco/jemco.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/jemco/tables.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/jemco/vuetable.js' %}"></script>
 
 </body>
 </html>

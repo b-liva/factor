@@ -1,0 +1,31 @@
+{% extends 'requests/base_minimal.html' %}
+
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+
+{% block mainContent %}
+
+    <div class="row mt-4">
+        {#        <div class="col-md-4 offset-md-4">#}
+        <div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+
+            <h1>{% trans "ثبت نام" %}</h1>
+
+            <p>{% blocktrans %}در صورتی که قبلا ثبت نام کرده اید از طریق این لینک وارد شوید <a href="{{ login_url }}">ورود</a>
+                .{% endblocktrans %}</p>
+
+            <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                {% endif %}
+                <button type="submit" class="btn btn-sm btn-success">{% trans "ثبت نام" %} &raquo;</button>
+            </form>
+
+        </div>
+    </div>
+{% endblock %}

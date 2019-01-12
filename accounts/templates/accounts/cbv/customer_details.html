@@ -1,0 +1,13 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+
+{% block right_col %}
+    <div class="row mt-4">
+        <div class="col-md-4 col-md-offset-4">
+            <p>{{ customer.name }}</p> <span>{{ customer.phone }}</span>
+            <p>{{ customer.fax }}</p>
+            <p>{{ customer.addr }}</p>
+        </div>
+        <a class="btn btn-xs btn-warning" href="{% url 'customer_profile_update' pk=customer.pk %}">ویرایش پروفایل</a>
+        <a class="btn btn-xs btn-warning" href="{% url 'customer_read' customer_pk=customer.pk %}">داشبورد</a>
+    </div>
+{% endblock %}

@@ -153,9 +153,9 @@ var update_chart = function (method, element) {
                     }
                 });
             });
-            console.log(newData);
-            console.log(ProformaData);
-            console.log(paymentData);
+            // console.log(newData);
+            // console.log(ProformaData);
+            // console.log(paymentData);
 
             do_chart(redraw, newData, 'a', 'area-chart', 'درخواست های دریافتی');
             do_chart(redraw, ProformaData, 'b', 'line-chart', 'پیش فاکتورهای صادر شده');

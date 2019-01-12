@@ -1,0 +1,16 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+
+{% block right_col %}
+    <div class="row mt-4">
+        <ul>
+        {{ object_list }}
+            {% for user in object_list %}
+                <li>{{ user.username }} - {{ user.last_name }}</li>
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+
+{% endblock %}

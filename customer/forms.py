@@ -3,6 +3,12 @@ from django.contrib.auth.models import User
 from django.core import validators
 from customer import models
 from customer.models import Type
+from request.forms.forms import (
+    RequestFrom,
+    RequestFileForm,
+    SpecForm,
+)
+from request.models import Requests
 
 
 class CustomerForm(forms.ModelForm):
@@ -67,7 +73,6 @@ class CustomerForm(forms.ModelForm):
 
 
 class AddressForm(forms.ModelForm):
-
     class Meta:
         model = models.Address
         fields = '__all__'
@@ -91,7 +96,6 @@ class AddressForm(forms.ModelForm):
 
 
 class PhoneForm(forms.ModelForm):
-
     class Meta:
         model = models.Phone
 
@@ -105,3 +109,26 @@ class PhoneForm(forms.ModelForm):
         labels = {
             'phone_number': ('شماره تلفن'),
         }
+
+
+class CustomerRequestCreateForm(RequestFrom):
+    # def __init__(self, *args, **kwargs):
+    #     super(CustomerRequestCreateForm, self).__init__(*args, **kwargs)
+    # self.fields.pop('colleague')
+    # class Meta:
+    #     model = Requests
+    #     exclude = [
+    #         'colleagues',
+    #     ]
+
+    def __init__(self, *args, **kwargs):
+        super(CustomerRequestCreateForm, self).__init__(*args, **kwargs)
+        self.fields.pop('colleagues')
+
+
+class CustomerRequestFileCreateForm(RequestFileForm):
+    pass
+
+
+# class CustomerReqSpecCreateForm(SpecForm):
+

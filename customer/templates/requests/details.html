@@ -1,0 +1,174 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load static %}
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+            <div id="customerDetails" class="col-md-3 col-sm-3 col-xs-12 col-xs-offset-0">
+                <h3>{{ request.customer }}</h3>
+                <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ request.date_fa }}</p>
+                <p><i class="fa fa-phone" aria-hidden="true"></i> {{ request.customer.phone }}</p>
+                <p><i class="fa fa-fax" aria-hidden="true"></i> {{ request.customer.fax }}</p>
+                <p><i class="fa fa-map-marker" aria-hidden="true"></i>
+                    {{ request.customer.address }}</p>
+            </div>
+            <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
+                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="tile-stats">
+                        <div class="icon">
+                        </div>
+                        <div class="count">{{ request.number }}</div>
+
+                        <h3>شماره درخواست</h3>
+                    </div>
+                </div>
+                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="tile-stats">
+                        <div class="icon">
+                        </div>
+                        <div class="count">{{ total_kw|floatformat:1|intcomma }}</div>
+
+                        <h3>مجموع کیلووات</h3>
+                    </div>
+                </div>
+
+
+                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="tile-stats">
+                        <div class="icon col-md-6">
+                            {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
+                        </div>
+                        <div class="count">${{ pay_sum|floatformat:0|intcomma }}</div>
+
+                        <h3>پرداخت ها</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
+            <div class="row pull-left">
+                <a href="{% url 'customer_request_create' %}" class="btn btn-sm btn-success">
+                    <i class="fa fa-pencil"></i>درخواست جدید
+                </a>
+                {% if perms.request.sale_expert %}
+                    <a href="{% url 'spec_form' req_pk=requests.pk %}" class="btn btn-sm btn-warning">
+                        <i class="fa fa-pencil"></i> ویرایش ردیف
+                    </a>
+                {% endif %}
+                {% if perms.requests.sale_expert %}
+                    <a href="{% url 'request_edit_form' request_pk=request.pk %}" class="btn btn-sm btn-warning">
+                        <i class="fa fa-pencil"></i> ویرایش درخواست
+                    </a>
+                {% endif %}
+            </div>
+
+            <table class="table table-hover text-center">
+                <thead class="dark">
+                <tr>
+                    <th scope="col" class="text-center rotate_deg">شماره</th>
+                    <th scope="col" class="text-center rotate_deg">تعداد</th>
+                    <th scope="col" class="text-center rotate_deg">کیلووات</th>
+                    <th scope="col" class="text-center rotate_deg">سرعت</th>
+                    <th scope="col" class="text-center rotate_deg">جزئیات</th>
+                    <th scope="col" class="text-center rotate_deg">فنی</th>
+                    <th scope="col" class="text-center rotate_deg">مالی</th>
+                    <th scope="col" class="text-center rotate_deg">مجوز ساخت</th>
+                    <th scope="col" class="text-center rotate_deg">ارسال شده</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for reqspec in reqspecs %}
+                    <tr>
+                        <td class="dark">{{ forloop.counter }}</td>
+                        {#                <td>{{ customer.pk }}</td>#}
+                        <td>{{ reqspec.qty }}</td>
+                        <td>{{ reqspec.kw }}</td>
+                        <td>{{ reqspec.rpm }}</td>
+                        <td class="text-right">{{ reqspec.summary }}</td>
+                        <td><input type="checkbox" {% if reqspec.tech %} checked {% endif %} disabled></td>
+                        <td><input type="checkbox" {% if reqspec.price %} checked {% endif %} disabled></td>
+                        <td><input type="checkbox" {% if reqspec.permission %} checked {% endif %} disabled></td>
+                        <td><input type="checkbox" {% if reqspec.sent %} checked {% endif %} disabled></td>
+
+                        {% if perms.request.sale_expert %}
+
+                            <td>
+                                <a class="btn btn-xs btn-warning"
+                                   href="{% url 'reqspec_edit_form' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
+                                </a>
+                                {#                                <a class="btn btn-xs btn-danger"#}
+                                {#                                   href="">#}
+                                {#                                    <i class="fa fa-trash" aria-hidden="true"></i> حذف#}
+                                {#                                </a>#}
+
+                                <a class="btn btn-primary btn-xs btn-danger"
+                                   href="{% url 'reqSpec_delete' req_pk=request.pk yreqSpec_pk=reqspec.pk %}"><i
+                                        class="fa fa-trash"></i> حذف</a>
+                            </td>
+                        {% endif %}
+
+                        {#                        <td>#}
+                        {#                            <a class="btn btn-primary btn-xs" href="{% url 'reqSpec_edit' req_pk=customer.pk %}">Details</a>#}
+                        {#                            <a class="btn btn-primary btn-xs btn-warning"#}
+                        {#                               href="{% url 'customer_delete' customer_pk=customer.pk %}">Delete</a>#}
+                        {#                        </td>#}
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+            <br>
+            <div>
+            </div>
+
+        </div>
+        <div class="col-md-10 col-lg-offset-1">
+            {% for index, img in xfiles.img.items %}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="height: 150px;">
+                    <a href="{{ img.url }}" target="_blank">
+                        <div style="height: 125px;" class="text-center"><img class="img-responsive img-thumbnail "
+                                                                             src="{{ img.url }}"
+                                                                             style="max-height: 125px;">
+                        </div>
+                        <div class="text-center">{{ img.name }}</div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-10 col-lg-offset-1">
+            {% for index, file in xfiles.pdf.items %}
+                <div class="">
+                    <a href="{{ file.url }}" target="_blank">
+                        <div class="col-md-1"><img class="img-responsive img-thumbnail "
+                                                   src="{% static 'request/rtl/build/img/pdf.png' %}">
+                        </div>
+                        <div class="col-md-11">{{ file.name }}</div>
+                    </a>
+                </div>
+            {% endfor %}
+            <hr>
+            {% for index, file in xfiles.doc.items %}
+                <div class="" style=" ">
+                    <a href="{{ file.url }}" target="_blank">
+                        <div class="col-md-1" style=" "><img
+                                class="img-responsive img-thumbnail "
+                                src="{% static 'request/rtl/build/img/doc.png' %}">
+                        </div>
+                        <div class="col-md-11">{{ file.name }}</div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+
+        <div class="col-md-10 col-lg-offset-1">
+            {% for img in nested_files.pdf %}
+                <a href="{{ img.url }}" target="_blank"> {{ img.name }} </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

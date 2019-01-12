@@ -1,0 +1,36 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+
+{% block right_col %}
+    <div class="row mt-4">
+        <div class="col-md-4 col-md-offset-4">
+            {% if error %}
+                {{ error }}
+            {% endif %}
+            <div class="form-group">
+                <ul class="message">
+                    {% for msg in messages %}
+                        <li class="alert alert-error">{{ msg }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <h4 style="border-bottom: solid 1px #73879c; margin-bottom: 10px; padding-bottom: 10px; "> مشخصات
+                کاربری </h4>
+            <p>نام کاربری: {{ user.username }}</p>
+            <p>نام : {{ user.first_name }}</p>
+            <p>نام خانوادگی: {{ user.last_name }}</p>
+            <p>ایمیل: {{ user.email }}</p>
+            <div class="pull-left">
+                {% if user.is_customer %}
+                    <a class="btn btn-xs btn-warning" href="{% url 'customer_profile' pk=user.pk %}">مشاهده پروفایل</a>
+
+                {% endif %}
+                <a class="btn btn-xs btn-warning" href="{% url 'account_update' pk=user.pk %}">ویرایش</a>
+                {#            <a class="btn btn-xs btn-warning" href="{% url 'change-password' %}">تغییر رمز</a>#}
+                <a class="btn btn-xs btn-warning" href="{% url 'account_change_password' %}">تغییر رمز</a>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+

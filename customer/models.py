@@ -1,5 +1,7 @@
+# from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 from django.utils.timezone import now
 from django_jalali.db import models as jmodels
 # from django.contrib.auth.models import User
@@ -35,7 +37,7 @@ class Type(models.Model):
 
 
 class Customer(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='owner')
     code = models.IntegerField(unique=True, default=default_customer_code, blank=True)
     name = models.CharField(max_length=50)
     type = models.ForeignKey(Type, on_delete=models.DO_NOTHING)
@@ -48,7 +50,7 @@ class Customer(models.Model):
     postal_code = models.CharField(max_length=15, blank=True, null=True)
     addr = models.TextField(max_length=600, blank=True, null=True)
     agent = models.BooleanField(default=False)
-    customer_user = models.OneToOneField(CustomerUser, on_delete=models.DO_NOTHING, blank=True, null=True)
+    user = models.OneToOneField(User, on_delete=models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         permissions = (
@@ -58,6 +60,9 @@ class Customer(models.Model):
 
     def __str__(self):
         return '%s' % self.name
+
+    def get_absolute_url(self):
+        return reverse('customer_read', args=[self.pk])
 
 
 class Address(models.Model):

@@ -26,7 +26,7 @@ SECRET_KEY = 'wf$gn46*y4((^9gsj8_4j=%i=40v2dpuyypf56xww72aj40b5='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['37a60399.ngrok.io', 'localhost', '192.168.1.4', '127.0.0.1', 'jemco.pythonanywhere.com']
+ALLOWED_HOSTS = ['localhost', '192.168.1.4', '192.168.56.102', '127.0.0.1', 'jemco.pythonanywhere.com']
 
 # When Debug is set to false
 # ALLOWED_HOSTS = ['*']
@@ -54,7 +54,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # allauth stuff
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,6 +89,11 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 WSGI_APPLICATION = 'factor.wsgi.application'
 
@@ -166,8 +177,22 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-LOGIN_URL = reverse_lazy('login')
+LOGIN_URL = reverse_lazy('account_login')
 # STATIC_ROOT = '/home/jemco/factor/static'
 # STATIC_ROOT = '/static'
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 1025
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 1025
+ACCOUNT_FORMS = {
+    'login': 'accounts.forms.CustomLoginForm',
+    'signup': 'accounts.forms.CustomSignForm',
+    'change_password': 'accounts.forms.CustomChangePasswordForm',
+    'reset_password': 'accounts.forms.CustomerResetPasswordForm',
+    'set_password': 'accounts.forms.CustomerResetPasswordForm',
+    'reset_password_from_key': 'accounts.forms.CustomResetPasswordKeyForm',
+}
+ACCOUNT_SESSION_REMEMBER = False
+SIGNUP_PASSWORD_ENTER_TWICE = True
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'accounts/login'
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

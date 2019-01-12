@@ -1,12 +1,14 @@
 from django.contrib import admin
 # from django.contrib.auth.models import User as DefaultUser
-from accounts.models import User, CustomerUser
+from django.contrib.auth import get_user_model
+from accounts.models import CustomerUser
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
 from accounts.forms import CustomUserCreationForm, CustomUserChangeForm, CustomerUserCreationForm, CustomerUserChangeForm
 
+User = get_user_model()
 
 class CustomUserAdmin(UserAdmin):
     model = User

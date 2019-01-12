@@ -62,7 +62,8 @@ def login(request):
 def logout(request):
     if request.method == 'POST':
         auth.logout(request)
-        return redirect('login')
+        # return redirect('login')
+        return redirect('account_login')
 
 
 @login_required
@@ -82,7 +83,7 @@ def edit_profile(request):
 
 @login_required
 def profile(request):
-    return redirect('comming_soon')
+    # return redirect('comming_soon')
     user = request.user
     args = {'user': user}
     return render(request, 'accounts/profile.html', args)

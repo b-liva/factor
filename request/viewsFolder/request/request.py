@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.views.generic import ListView, DetailView
 from request.models import Requests
 from request.forms.forms import RequestFrom, SpecForm
+from request.forms.search import SpecSearchForm
 
 
 class RequestList(ListView):
@@ -25,6 +26,17 @@ class RequestList(ListView):
             # this is also true
             requests = requests.filter(Q(owner=self.request.user) | Q(colleagues=self.request.user))
             requests = requests.distinct()
+        """
+                now filter the request by data of form
+        """
+
+        try:
+            name = self.kwargs['your_name']
+        except:
+            name = ''
+        if name != '':
+            requests = requests.filter(customer__name__icontains=name)
+
         for req in requests:
             diff = self.today - req.date_fa
             print(f'diff is: {diff.days}')
@@ -39,6 +51,8 @@ class RequestList(ListView):
         context = super(RequestList, self).get_context_data(**kwargs)
         context['req_form'] = RequestFrom
         context['spec_form'] = SpecForm
+        context['filter_items'] = SpecSearchForm
+        print(context)
         return context
 
 
