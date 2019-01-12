@@ -116,18 +116,19 @@ def fsearch(request):
         if request.POST['kw_max']:
             form_data['kw_max'] = (request.POST['kw_max'])
             specs = specs.filter(kw__lte=form_data['kw_max'])
-        if 'price' in request.POST:
-            form_data['price'] = True
+        form_data['price'] = request.POST.get('price')
+        form_data['tech'] = request.POST.get('tech')
+        form_data['permission'] = request.POST.get('permission')
+        form_data['sent'] = request.POST.get('sent')
+        if form_data['price'] != '0':
             specs = specs.filter(price=form_data['price'])
-        if 'sent' in request.POST:
-            form_data['sent'] = True
-            specs = specs.filter(sent=form_data['sent'])
-        if 'permission' in request.POST:
-            form_data['permission'] = True
-            specs = specs.filter(permission=form_data['permission'])
-        if 'tech' in request.POST:
-            form_data['tech'] = True
+        if form_data['tech'] != '0':
             specs = specs.filter(tech=form_data['tech'])
+        if form_data['permission'] != '0':
+            specs = specs.filter(permission=form_data['permission'])
+        if form_data['sent'] != '0':
+            specs = specs.filter(sent=form_data['sent'])
+
         if request.POST['rpm']:
             rpm = form_data['rpm'] = int(request.POST['rpm'])
             rng = [750, 1000, 1500, 3000]
@@ -159,7 +160,9 @@ def fsearch(request):
         search_form = search.SpecSearchForm(form_data)
 
     else:
-        specs = ReqSpec.objects.filter(sent=False, price=False, tech=False, permission=False)
+        form_data['price'] = 'False'
+        form_data['tech'] = 'False'
+        specs = ReqSpec.objects.filter(price=form_data['price'], tech=form_data['tech'])
         search_form = search.SpecSearchForm(form_data)
 
 

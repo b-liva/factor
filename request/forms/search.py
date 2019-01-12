@@ -35,16 +35,53 @@ class SpecSearchForm(forms.Form):
     rpm.widget = forms.TextInput(attrs={
         'class': 'form-control'
     })
-    price = forms.BooleanField(label='مالی', required=False)
-    price.widget = forms.CheckboxInput()
-    tech = forms.BooleanField(label='فنی', required=False)
-    tech.widget = forms.CheckboxInput()
-    permission = forms.BooleanField(label='مجوز', required=False)
-    permission.widget = forms.CheckboxInput()
-    sent = forms.BooleanField(label='ارسال شده', required=False)
-    sent.widget = forms.CheckboxInput()
-
+    # price = forms.BooleanField(label='مالی', required=False)
+    # price.widget = forms.CheckboxInput()
+    # tech = forms.BooleanField(label='فنی', required=False)
+    # tech.widget = forms.CheckboxInput()
+    # permission = forms.BooleanField(label='مجوز', required=False)
+    # permission.widget = forms.CheckboxInput()
+    # sent = forms.BooleanField(label='ارسال شده', required=False)
+    # sent.widget = forms.CheckboxInput()
+    PRICE_CHOICES = (
+        ('0', '---',),
+        ('True', 'بله',),
+        ('False', 'خیر',),
+    )
+    SENT_CHOICES = (
+        ('0', '---',),
+        ('True', 'بله',),
+        ('False', 'خیر',),
+    )
+    PERMISSION_CHOICES = (
+        ('0', '---',),
+        ('True', 'بله',),
+        ('False', 'خیر',),
+    )
+    TECH_CHOICES = (
+        ('0', '---',),
+        ('True', 'بله',),
+        ('False', 'خیر',),
+    )
     CHOICES = (
+        ('0', '---',),
+        ('True', 'بله',),
+        ('False', 'خیر',),
+    )
+    price = forms.ChoiceField(widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=CHOICES, required=False)
+    tech = forms.ChoiceField(widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=CHOICES, required=False)
+    permission = forms.ChoiceField(widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=CHOICES, required=False)
+    sent = forms.ChoiceField(widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=CHOICES, required=False)
+
+    SORT_CHOICES = (
         ('1', 'کیلووات',),
         # ('2', 'customer',),
         ('3', 'تاریخ',),
@@ -57,7 +94,7 @@ class SpecSearchForm(forms.Form):
     )
     sort_by = forms.ChoiceField(widget=forms.Select(attrs={
         'class': 'form-control',
-    }), choices=CHOICES, required=False)
+    }), choices=SORT_CHOICES, required=False)
 
     dsc_asc = forms.ChoiceField(widget=forms.Select(attrs={
         'class': 'form-control',

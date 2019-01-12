@@ -42,28 +42,36 @@
                                 {{ search_form.rpm }}
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            {{ search_form.price.errors }}
-                            <label for="{{ search_form.price.id_for_label }}">مالی</label>
-                            {{ search_form.price }}
-
-                            {{ search_form.tech.errors }}
-                            <label for="{{ search_form.tech.id_for_label }}">فنی</label>
-                            {{ search_form.tech }}
-
-
-                            {{ search_form.permission.errors }}
-                            <label for="{{ search_form.permission.id_for_label }}">مجوز</label>
-                            {{ search_form.permission }}
-
-
-                            {{ search_form.sent.errors }}
-                            <label for="{{ search_form.sent.id_for_label }}">ارسال شده</label>
-                            {{ search_form.sent }}
-
-                        </div>
                     </div>
                     <div class="col-md-4">
+                        <div class="col-md-12">
+
+                            <div class="col-md-6">
+                                {{ search_form.price.errors }}
+                                <label for="{{ search_form.price.id_for_label }}">مالی</label>
+                                {{ search_form.price }}
+
+                            </div>
+                            <div class="col-md-6">
+                                {{ search_form.tech.errors }}
+                                <label for="{{ search_form.tech.id_for_label }}">فنی</label>
+                                {{ search_form.tech }}
+
+                            </div>
+                            <div class="col-md-6">
+                                {{ search_form.permission.errors }}
+                                <label for="{{ search_form.permission.id_for_label }}">مجوز</label>
+                                {{ search_form.permission }}
+
+                            </div>
+                            <div class="col-md-6">
+                                {{ search_form.sent.errors }}
+                                <label for="{{ search_form.sent.id_for_label }}">ارسال شده</label>
+                                {{ search_form.sent }}
+
+                            </div>
+
+                        </div>
 
 
                     </div>
