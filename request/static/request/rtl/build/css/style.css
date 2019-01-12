@@ -140,5 +140,5 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     text-align: center;
 }
 .request-table-body td{
-    font-size: medium;
+    font-size: small;
 }
