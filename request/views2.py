@@ -1,5 +1,7 @@
 from datetime import datetime
+import json
 import jdatetime
+from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -165,7 +167,6 @@ def fsearch(request):
         specs = ReqSpec.objects.filter(price=form_data['price'], tech=form_data['tech'])
         search_form = search.SpecSearchForm(form_data)
 
-
     today = jdatetime.date.today()
 
     # print(f'super user: {request.user.is_superuser}')
@@ -212,47 +213,77 @@ def fsearch(request):
 
 
 def fsearch2(request):
-    print('wlahh..')
+    print('vue compatible')
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
     if not can_index:
         messages.error(request, 'عدم دسترسی کافی!')
         return redirect('errorpage')
+
+    data = json.loads(request.body.decode('utf-8'))
+    print(data)
     specs = ReqSpec.objects.all()
-    print(request.POST)
     if request.method == 'POST':
         form_data = {}
-        # specs = ReqSpec.objects
-        # if request.POST['date_min']:
-        #     form_data['date_min'] = request.POST['date_min']
-        #     specs = specs.filter(req_id__date_fa__gte=form_data['date_min'])
-        # if request.POST['date_max']:
-        #     form_data['date_max'] = (request.POST['date_max'])
-        #     specs = specs.filter(req_id__date_fa__lte=form_data['date_max'])
-        if request.POST['kw_min']:
-            form_data['kw_min'] = (request.POST['kw_min'])
-            specs = specs.filter(kw__gte=form_data['kw_min'])
-        if request.POST['kw_max']:
-            form_data['kw_max'] = (request.POST['kw_max'])
-            specs = specs.filter(kw__lte=form_data['kw_max'])
-        if request.POST.get('price') == 'true':
-            form_data['price'] = True
+        form_data['price'] = data['price']
+        form_data['tech'] = data['tech']
+        form_data['permission'] = data['permission']
+        form_data['sent'] = data['sent']
+        form_data['customer_name'] = data['customer_name']
+        form_data['kw_min'] = data['kw_min']
+        form_data['kw_max'] = data['kw_max']
+        form_data['rpm'] = data['rpm']
+        # if request.POST['kw_min']:
+        #     form_data['kw_min'] = (request.POST['kw_min'])
+        #     specs = specs.filter(kw__gte=form_data['kw_min'])
+        # if request.POST['kw_max']:
+        #     form_data['kw_max'] = (request.POST['kw_max'])
+        #     specs = specs.filter(kw__lte=form_data['kw_max'])
+        if form_data['price']:
             specs = specs.filter(price=form_data['price'])
-        if request.POST.get('sent') == 'true':
-            form_data['sent'] = True
-            specs = specs.filter(sent=form_data['sent'])
-
-        if request.POST.get('permission') == 'true':
-            form_data['permission'] = True
+        if form_data['permission']:
             specs = specs.filter(permission=form_data['permission'])
-        if request.POST.get('tech') == 'true':
-            form_data['tech'] = True
+        if form_data['sent']:
+            specs = specs.filter(sent=form_data['sent'])
+        if form_data['tech']:
             specs = specs.filter(tech=form_data['tech'])
-        if request.POST['rpm']:
-            form_data['rpm'] = request.POST['rpm']
-            specs = specs.filter(rpm=form_data['rpm'])
-        if request.POST['customer_name']:
-            form_data['customer_name'] = request.POST['customer_name']
+        if form_data['customer_name']:
             specs = specs.filter(req_id__customer__name__icontains=form_data['customer_name'])
+        if form_data['kw_min']:
+            specs = specs.filter(kw__gte=form_data['kw_min'])
+        if form_data['kw_max']:
+            specs = specs.filter(kw__lte=form_data['kw_max'])
+        if form_data['rpm']:
+
+            # specs = specs.filter(rpm=form_data['rpm'])
+            rng = [750, 1000, 1500, 3000]
+            i = 0
+            if int(form_data['rpm']) <= rng[0]:
+                form_data['rpm'] = rng[0]
+            for r in rng:
+                if r < int(form_data['rpm']) <= rng[i] and i > 0:
+                    form_data['rpm'] = rng[i]
+                i += 1
+            if int(form_data['rpm']) > max(rng):
+                form_data['rpm'] = 3000
+
+            # specs = specs.filter(rpm=form_data['rpm'])
+            specs = specs.filter(rpm=form_data['rpm'])
+
+
+        # if request.POST.get('sent') == 'true':
+        #     form_data['sent'] = True
+        #     specs = specs.filter(sent=form_data['sent'])
+
+        # if request.POST.get('permission') == 'true':
+        #     form_data['permission'] = True
+        #     specs = specs.filter(permission=form_data['permission'])
+
+        # if request.POST['rpm']:
+        #     form_data['rpm'] = request.POST['rpm']
+        #     specs = specs.filter(rpm=form_data['rpm'])
+        # if request.POST['customer_name']:
+        #     form_data['customer_name'] = request.POST['customer_name']
+        #     specs = specs.filter(req_id__customer__name__icontains=form_data['customer_name'])
         print(form_data)
         # specs = ReqSpec.objects.filter(req_id__customer__name__icontains=customer_name).filter(kw=kw).filter(rpm=rpm)
         # print(f"items: {form_data['kw']} + {form_data['rpm']} + {form_data['customer_name']}")
@@ -268,11 +299,41 @@ def fsearch2(request):
     response = []
 
     date_format = "%m/%d/%Y"
-
+    total_kw = 0
+    total_qty = 0
     for spec in specs:
         diff = today - spec.req_id.date_fa
         # url = url(request_read, request_pk=spec.req_id.pk)
         url = reverse('request_details', kwargs={'request_pk': spec.req_id.pk})
+        customer_url = reverse('customer_read', kwargs={'customer_pk': spec.req_id.customer.pk})
+
+        owner_colleagues = []
+        total_kw += spec.qty * spec.kw
+        total_qty += spec.qty
+        diff = today - spec.req_id.date_fa
+        proformas = spec.req_id.xpref_set.all()
+        profs = []
+        payments = []
+        for prof in proformas:
+            profs.append({
+                'number': prof.number,
+                'prof_url': reverse('pref_details', kwargs={'ypref_pk': prof.pk}),
+            })
+            pmnts = prof.payment_set.all()
+            for pay in pmnts:
+                payments.append({
+                   'number': pay.number,
+                   'pmnt_url': reverse('payment_details', kwargs={'ypayment_pk': pay.pk}),
+                })
+        owner_colleagues.append({
+            'last_name': spec.req_id.owner.last_name,
+        })
+        for colleage in spec.req_id.colleagues.all():
+            owner_colleagues.append({
+                'last_name': colleage.last_name,
+            })
+
+
 
         response.append(
             {
@@ -280,6 +341,7 @@ def fsearch2(request):
                 # 'date_fa': str(spec.req_id.date_fa),
                 'delay': diff.days,
                 'customer_name': spec.req_id.customer.name,
+                'customer_url': customer_url,
                 'qty': spec.qty,
                 'rpm': spec.rpm,
                 'kw': spec.kw,
@@ -287,17 +349,36 @@ def fsearch2(request):
                 'reqNo': spec.req_id.number,
                 'price': spec.price,
                 'tech': spec.tech,
+                'permission': spec.permission,
+                'sent': spec.sent,
                 'url': url,
+                'owner_colleagues': owner_colleagues,
+                'profs': profs,
+                'payments': payments,
+                # 'date_fa': spec.req_id.date_fa,
                 # 'colleagues': req.colleagues.all(),
             })
 
+    response.append({
+
+    })
     context = {
         # 'reqspecs': specs,
         'response': response,
-        'search_form': search_form,
+        # 'search_form': search_form,
+        'total_kw': total_kw,
+        'total_qty': total_qty,
+        'rpm': form_data['rpm'],
     }
     # return render(request, 'requests/admin_jemco/yreqspec/index.html', context)
-    return JsonResponse(response, safe=False)
+    return JsonResponse(context, safe=False)
+
+
+def fsearch3(request):
+    context = {
+        'search_form': search.SpecSearchForm()
+    }
+    return render(request, 'requests/admin_jemco/yreqspec/index-vue.html', context)
 
 
 @login_required

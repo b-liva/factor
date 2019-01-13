@@ -23,7 +23,7 @@ urlpatterns = [
     path('find', views.customer_find, name='customer_find'),
     path('<int:customer_pk>/', include([
         path('', views.customer_read2, name='customer_read'),
-        path('dashboard', views.customer_read2, name='customer_read'),
+        path('dashboard', views.customer_read2, name='customer_dashboard'),
         path('edit', views.customer_edit, name='customer_edit'),
         path('editForm', views.customer_edit_form, name='customer_edit_form'),
         path('delete', views.customer_delete, name='customer_delete'),
