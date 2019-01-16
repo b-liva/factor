@@ -71,11 +71,11 @@
                     <table class="table table-hover">
                         <tbody>
                         <tr v-if="extra_info.total_qty">
-                            <td>تعداد دستگاه</td>
+                            <td>تعداد دستگاه(استعلام شده)</td>
                             <td>[[ extra_info.total_qty ]]</td>
                         </tr>
                         <tr v-if="extra_info.total_kw">
-                            <td>توان</td>
+                            <td>توان(استعلام شده)</td>
                             <td>[[ extra_info.total_kw ]]</td>
                         </tr>
                         <tr v-if="filter.kw_min">
@@ -118,7 +118,7 @@
                             <th @click="sort('customer_name')">مبالغ دریافتی</th>
                             <th @click="sort('customer_name')">مشتری</th>
                             <th @click="sort('customer_name')">کارشناس</th>
-                            <th @click="sort('delay')">زمان</th>
+                            <th @click="sort('delay')">تاریخ (زمان)</th>
                             <th></th>
                         </tr>
                         <tbody class="">
@@ -138,7 +138,7 @@
                             <td><a :href="spec.customer_url">[[ spec.customer_name ]]</a></td>
                             <td><span v-for="c in spec.owner_colleagues">[[ c.last_name ]]<br></span></td>
                             {#                        <td><span>[[ spec.owner_colleagues ]]</span></td>#}
-                            <td>[[ spec.delay ]]</td>
+                            <td>[[ spec.date_fa ]] ([[ spec.delay ]])</td>
 
                             {#                    <td><input type="checkbox" {% if spec.price %} checked {% endif %} disabled></td>#}
                             {#                    <td><input type="checkbox" {% if spec.permission %} checked {% endif %} disabled></td>#}

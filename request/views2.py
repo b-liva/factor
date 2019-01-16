@@ -12,6 +12,7 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
+# from django.utils.datetime_safe import strftime
 
 from request.views import allRequests, find_all_obj
 from .models import Requests, ReqSpec
@@ -383,14 +384,12 @@ def fsearch2(request):
                 'owner_colleagues': owner_colleagues,
                 'profs': profs,
                 'payments': payments,
-                'date_fa': json_tricks.dumps(spec.req_id.date_fa),
-                # 'date_fa': serialize('json', spec.req_id.date_fa, cls=LazyEncoder),
+                'date_fa': spec.req_id.date_fa.strftime("%Y-%m-%d"),
+                # 'date_fa': jdatetime.date.fromgregorian(date=spec.req_id.pub_date),
+                # 'date_fa': json_tricks.dumps(spec.req_id.date_fa),
+                # 'date_fa': serialize('json', spec.req_id.date_fa, cls=DateTimeEncoder),
                 # 'colleagues': req.colleagues.all(),
             })
-
-    response.append({
-
-    })
     context = {
         # 'reqspecs': specs,
         'response': response,
@@ -767,7 +766,7 @@ def payment_form2(request):
 
 class DateTimeEncoder(json.JSONEncoder):
     def default(self, o):
-        if isinstance(o, datetime):
+        if isinstance(o, jdatetime):
             return o.isoformat()
 
         return json.JSONEncoder.default(self, o)
