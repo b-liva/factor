@@ -2,43 +2,55 @@
 {% load humanize %}
 {% block right_col %}
     <div class="container">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-12 col-xs-12">
             <h3>{{ msg }}</h3>
             {#                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Request Specs</h1>#}
             <h1 class="page-header">Request Specs</h1>
 
             <div id="example-table"></div>
             <div class="searchApp">
-                <div class="col-md-5">
+                <div class="col-md-5 col-sm-5">
                     <form method="POST" action="">
                         {% csrf_token %}
-                        <div class="col-md-12">
+                        <div class="col-md-12 col-sm-12">
                             <label for="customer_name">مشتری</label>
                             <input id="customer_name" class="form-control" type="text" name="customer_name"
                                    v-model="filter.customer">
                             [[ customer ]]
 
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-sm-6">
+                            <label for="kw_min">تاریخ(از)</label>
+                            <input id="date_fa" class="form-control" type="text" name="date_min" v-model="filter.date_min">
+                            {#                    [[ filter.kw_min ]]#}
+
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <label for="kw_max">تاریخ(تا)</label>
+                            <input id="exp_date_fa" class="form-control" type="text" name="date_max" v-model="filter.date_max">
+                            {#                    [[ filter.kw_max ]]#}
+
+                        </div>
+                        <div class="col-md-6 col-sm-6">
                             <label for="kw_min">کیلووات(حداقل)</label>
                             <input id="kw_min" class="form-control" type="text" name="kw_min" v-model="filter.kw_min">
                             {#                    [[ filter.kw_min ]]#}
 
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-sm-6">
                             <label for="kw_max">کیلووات(حداکثر)</label>
                             <input id="kw_max" class="form-control" type="text" name="kw_max" v-model="filter.kw_max">
                             {#                    [[ filter.kw_max ]]#}
 
                         </div>
-                        <div class="col-md-6"><br>rpm:
+                        <div class="col-md-6 col-sm-6"><br>rpm:
                             <label for="rpm">سرعت</label>
                             <input id="rpm" class="form-control" type="text" name="rpm" v-model="filter.rpm">
                             {#                    [[ filter.rpm ]]#}
                         </div>
 
 
-                        <div class="col-md-12">
+                        <div class="col-md-12 col-sm-12">
                             <label for="price">مالی</label>
                         <input id="price" type="checkbox" v-model="filter.price" name="price">
                         {#                    [[ filter.price ]]#}
@@ -54,7 +66,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-md-4 col-md-offset-3">
+                <div class="col-md-4 col-md-offset-3 col-sm-4 col-sm-offset-3">
                     <h5 :class="answerClass">[[ answer ]]</h5>
                     <table class="table table-hover">
                         <tbody>
@@ -78,6 +90,10 @@
                             <td>سرعت</td>
                             <td>[[ extra_info.rpm ]]</td>
                         </tr>
+                        <tr v-if="extra_info.payment_sum">
+                            <td>مبلغ دریافتی</td>
+                            <td>[[ extra_info.payment_sum ]]</td>
+                        </tr>
 
                         </tbody>
                     </table>
@@ -85,25 +101,25 @@
                         فیلترها</a>
 
                 </div>
-                <div class="col-md-12">
-                    <table id="req_search_table" class="table table-hover" style="margin-top: 50px">
+                <div class="col-md-12 col-sm-12">
+                    <table id="req_search_table" class="table-hover col-md-12 col-sm-12" style="margin-top: 50px">
                         <tr>
                             <th>No</th>
-                            <th @click="sort('qty')">QTY</th>
-                            <th @click="sort('kw')">KW</th>
-                            <th @click="sort('rpm')">RPM</th>
-                            <th @click="sort('voltage')">Voltage</th>
+                            <th @click="sort('qty')">تعداد</th>
+                            <th @click="sort('kw')">کیلووات</th>
+                            <th @click="sort('rpm')">سرعت</th>
+                            <th @click="sort('voltage')">ولتاژ</th>
                             <th @click="sort('tech')">فنی</th>
                             <th @click="sort('price')">مالی</th>
                             <th @click="sort('permissoin')">مجوز</th>
                             <th @click="sort('sent')">ارسال شده</th>
                             <th @click="sort('reqNo')">شماره درخواست</th>
-                            <th @click="sort('customer_name')">پیش فاکتور</th>
-                            <th @click="sort('customer_name')">پرداخت</th>
+                            <th @click="sort('customer_name')">شماره پیش فاکتور</th>
+                            <th @click="sort('customer_name')">مبالغ دریافتی</th>
                             <th @click="sort('customer_name')">مشتری</th>
                             <th @click="sort('customer_name')">کارشناس</th>
                             <th @click="sort('delay')">زمان</th>
-                            <th>Action</th>
+                            <th></th>
                         </tr>
                         <tbody class="">
                         <tr v-for="spec in sortedSpecs">
@@ -118,9 +134,9 @@
                             <td><input type="checkbox" v-model="spec.sent" disabled></td>
                             <td><a :href="spec.url">[[ spec.reqNo ]]</a></td>
                             <td><a :href="prof.prof_url" v-for="prof in spec.profs">[[ prof.number ]]- </a></td>
-                            <td><a :href="p.pmnt_url" v-for="p in spec.payments">[[ p.number ]]- </a></td>
+                            <td><a :href="p.pmnt_url" v-for="p in spec.payments">[[ p.amount ]]<br> </a></td>
                             <td><a :href="spec.customer_url">[[ spec.customer_name ]]</a></td>
-                            <td><span v-for="c in spec.owner_colleagues">[[ c.last_name ]] - </span></td>
+                            <td><span v-for="c in spec.owner_colleagues">[[ c.last_name ]]<br></span></td>
                             {#                        <td><span>[[ spec.owner_colleagues ]]</span></td>#}
                             <td>[[ spec.delay ]]</td>
 
@@ -147,16 +163,18 @@
                         {#                            {% endfor %}#}
 
                         <tr>
-                            <td colspan="2">مجموع</td>
+                            <td>مجموع</td>
                             <td>[[ extra_info.total_qty ]]</td>
                             <td>[[ extra_info.total_kw ]]</td>
+                            <td colspan="8"></td>
+                            <td>[[ extra_info.payment_sum ]]</td>
                         </tr>
                         </tbody>
 
                     </table>
                     <p>
-                        <button @click="prevPage" class="btn btn-success">بعدی</button>
-                        <button @click="nextPage" class="btn btn-success">قبلی</button>
+                        <button @click="prevPage" class="btn btn-success">قبلی</button>
+                        <button @click="nextPage" class="btn btn-success">بعدی</button>
                     </p>
                 </div>
 

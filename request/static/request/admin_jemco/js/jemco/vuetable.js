@@ -11,6 +11,7 @@ const app = new Vue({
             extra_info: {
                 total_kw: '',
                 total_qty: '',
+                payment_sum: '',
             },
             // specs: '',
             filter: {
@@ -22,6 +23,8 @@ const app = new Vue({
                 kw_max: '',
                 customer: '',
                 rpm: '',
+                date_min: '',
+                date_max: '',
             },
             pprice: false,
             ttech: false,
@@ -96,14 +99,17 @@ const app = new Vue({
                     'kw_min': this.filter.kw_min,
                     'kw_max': this.filter.kw_max,
                     'rpm': this.filter.rpm,
+                    'date_min': this.filter.date_min,
+                    'date_max': this.filter.date_max,
                     // 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 })
                 // .then(res => res.json())
                     .then(res => {
                         this.specs = res.data.response;
-                        this.extra_info.total_kw = res.data.total_kw;
-                        this.extra_info.total_qty = res.data.total_qty;
-                        this.extra_info.rpm = res.data.rpm;
+                        this.extra_info.total_kw = numeral(res.data.total_kw).format('0,0');
+                        this.extra_info.total_qty = numeral(res.data.total_qty).format('0,0');
+                        this.extra_info.payment_sum = numeral(res.data.payment_sum).format('0,0');
+                        this.extra_info.rpm = numeral(res.data.rpm).format('0,0');
                         // this.filter.rpm = res.data.rpm;
                         console.log(res);
                         this.answerClass = 'alert alert-success';

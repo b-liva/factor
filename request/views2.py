@@ -1,9 +1,14 @@
+from django.contrib.humanize.templatetags.humanize import intcomma
+from django.db.models import Sum
 from datetime import datetime
 import json
+import json_tricks
 import jdatetime
+from django.core.serializers import serialize
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
+from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
@@ -222,6 +227,7 @@ def fsearch2(request):
     data = json.loads(request.body.decode('utf-8'))
     print(data)
     specs = ReqSpec.objects.all()
+
     if request.method == 'POST':
         form_data = {}
         form_data['price'] = data['price']
@@ -232,6 +238,8 @@ def fsearch2(request):
         form_data['kw_min'] = data['kw_min']
         form_data['kw_max'] = data['kw_max']
         form_data['rpm'] = data['rpm']
+        form_data['date_min'] = data['date_min']
+        form_data['date_max'] = data['date_max']
         # if request.POST['kw_min']:
         #     form_data['kw_min'] = (request.POST['kw_min'])
         #     specs = specs.filter(kw__gte=form_data['kw_min'])
@@ -240,18 +248,31 @@ def fsearch2(request):
         #     specs = specs.filter(kw__lte=form_data['kw_max'])
         if form_data['price']:
             specs = specs.filter(price=form_data['price'])
+            # payments = payments.filter(xpref_id__req_id__price=form_data['price'])
         if form_data['permission']:
             specs = specs.filter(permission=form_data['permission'])
+            # payments = payments.filter(xpref_id__req_id__price=form_data['permission'])
         if form_data['sent']:
             specs = specs.filter(sent=form_data['sent'])
+            # payments = payments.filter(xpref_id__req_id__price=form_data['sent'])
         if form_data['tech']:
             specs = specs.filter(tech=form_data['tech'])
+            # payments = payments.filter(xpref_id__req_id__price=form_data['tech'])
         if form_data['customer_name']:
             specs = specs.filter(req_id__customer__name__icontains=form_data['customer_name'])
+            # payments = payments.filter(xpref_id__req_id__price=form_data['customer_name'])
         if form_data['kw_min']:
             specs = specs.filter(kw__gte=form_data['kw_min'])
+            # payments = payments.filter(xpref_id__req_id__price=form_data['kw_min'])
         if form_data['kw_max']:
             specs = specs.filter(kw__lte=form_data['kw_max'])
+            # payments = payments.filter(xpref_id__req_id__price=form_data['kw_max'])
+        if form_data['date_min']:
+            specs = specs.filter(req_id__date_fa__gte=form_data['date_min'])
+            # payments = payments.filter(xpref_id__req_id__price=form_data['date_min'])
+        if form_data['date_max']:
+            specs = specs.filter(req_id__date_fa__lte=form_data['date_max'])
+            # payments = payments.filter(xpref_id__req_id__price=form_data['date_max'])
         if form_data['rpm']:
 
             # specs = specs.filter(rpm=form_data['rpm'])
@@ -268,7 +289,7 @@ def fsearch2(request):
 
             # specs = specs.filter(rpm=form_data['rpm'])
             specs = specs.filter(rpm=form_data['rpm'])
-
+            # payments = payments.filter(xpref_id__req_id__price=form_data['rpm'])
 
         # if request.POST.get('sent') == 'true':
         #     form_data['sent'] = True
@@ -301,6 +322,12 @@ def fsearch2(request):
     date_format = "%m/%d/%Y"
     total_kw = 0
     total_qty = 0
+    payment_sum = 0
+    proforma_sum = 0
+
+    if not request.user.is_superuser:
+        specs = specs.filter(req_id__owner=request.user) | specs.filter(req_id__colleagues=request.user)
+
     for spec in specs:
         diff = today - spec.req_id.date_fa
         # url = url(request_read, request_pk=spec.req_id.pk)
@@ -321,9 +348,12 @@ def fsearch2(request):
             })
             pmnts = prof.payment_set.all()
             for pay in pmnts:
+                payment_sum += pay.amount
+                amount = int(pay.amount)
                 payments.append({
-                   'number': pay.number,
-                   'pmnt_url': reverse('payment_details', kwargs={'ypayment_pk': pay.pk}),
+                    'number': pay.number,
+                    'amount': amount,
+                    'pmnt_url': reverse('payment_details', kwargs={'ypayment_pk': pay.pk}),
                 })
         owner_colleagues.append({
             'last_name': spec.req_id.owner.last_name,
@@ -332,8 +362,6 @@ def fsearch2(request):
             owner_colleagues.append({
                 'last_name': colleage.last_name,
             })
-
-
 
         response.append(
             {
@@ -355,7 +383,8 @@ def fsearch2(request):
                 'owner_colleagues': owner_colleagues,
                 'profs': profs,
                 'payments': payments,
-                # 'date_fa': spec.req_id.date_fa,
+                'date_fa': json_tricks.dumps(spec.req_id.date_fa),
+                # 'date_fa': serialize('json', spec.req_id.date_fa, cls=LazyEncoder),
                 # 'colleagues': req.colleagues.all(),
             })
 
@@ -368,6 +397,7 @@ def fsearch2(request):
         # 'search_form': search_form,
         'total_kw': total_kw,
         'total_qty': total_qty,
+        'payment_sum': payment_sum,
         'rpm': form_data['rpm'],
     }
     # return render(request, 'requests/admin_jemco/yreqspec/index.html', context)
@@ -733,3 +763,18 @@ def prof_img_del(request, img_pk):
 
 def payment_form2(request):
     return HttpResponse('hello world')
+
+
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.isoformat()
+
+        return json.JSONEncoder.default(self, o)
+
+
+class LazyEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return str(obj)
+        return super().default(obj)
