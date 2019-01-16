@@ -89,7 +89,7 @@ def req_form(request):
             print(f"autocomplete user is: {customer}")
             req_item.customer = customer
             req_item.save()
-            req_item.save_m2m()
+            form.save_m2m()
             for f in files:
                 file_instance = models.RequestFiles(image=f, req=req_item)
                 file_instance.save()
@@ -588,7 +588,7 @@ def request_delete(request, request_pk):
     elif request.method == 'POST':
         req.delete()
     # return redirect('request_index')
-    return redirect('req_search')
+    return redirect('request_index')
 
 
 @login_required
@@ -712,7 +712,7 @@ def request_edit_form(request, request_pk):
             file_instance = models.RequestFiles(image=f, req=req_item)
             file_instance.save()
         # return redirect('request_index')
-        return redirect('req_search')
+        return redirect('request_index')
 
     context = {
         'form': form,
