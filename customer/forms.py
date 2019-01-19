@@ -72,6 +72,16 @@ class CustomerForm(forms.ModelForm):
         # types = forms.ModelChoiceField(queryset=Type.objects.filter(), label='room', widget=forms.Select)
 
 
+class CustomerLimitedForm(CustomerForm):
+
+    class Meta(CustomerForm.Meta):
+        exclude = CustomerForm.Meta.exclude + ('name', 'code', 'agent', 'user', 'date2')
+
+    def __init__(self, *args, **kwargs):
+        super(CustomerForm, self).__init__(*args, **kwargs)
+        self.fields.pop('type')
+
+
 class AddressForm(forms.ModelForm):
     class Meta:
         model = models.Address
@@ -111,6 +121,16 @@ class PhoneForm(forms.ModelForm):
         }
 
 
+class CustomerCreateRequestForm(RequestFrom):
+    class Meta(RequestFrom.Meta):
+        fields = ('summary', 'colleagues')
+        exclude = ('customer', )
+
+    def __init__(self, *args, **kwargs):
+        super(CustomerCreateRequestForm, self).__init__(*args, **kwargs)
+        self.fields.pop('colleagues', 'customer')
+
+
 class CustomerRequestCreateForm(RequestFrom):
     # def __init__(self, *args, **kwargs):
     #     super(CustomerRequestCreateForm, self).__init__(*args, **kwargs)
@@ -132,3 +152,13 @@ class CustomerRequestFileCreateForm(RequestFileForm):
 
 # class CustomerReqSpecCreateForm(SpecForm):
 
+class CustomerCreateSpecForm(SpecForm):
+
+    class Meta(SpecForm.Meta):
+        exclude = ('price', 'permission', 'tech', 'sent', 'owner', 'req_id', 'type',)
+
+
+# class CustomerRequestFileForm(RequestFileForm):
+#
+#     class Meta(RequestFileForm.Meta):
+#         exclude = ('req',)

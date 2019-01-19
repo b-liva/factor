@@ -28,11 +28,12 @@
                     <th colspan="col" class="text-center">تاریخ ثبت</th>
                     <th colspan="col" class="text-center"></th>
                     <th colspan="col" class="text-center">زمان</th>
+                    <th colspan="col" class="text-center">edited</th>
                     <th colspan="col" class="text-center"></th>
                 </tr>
                 <tbody class="">
                 {% for id, request in response.items %}
-                    <tr>
+                    <tr class="{% if request.req.edited_by_customer %} edited_by_customer {% endif %}">
                         <td scope="row" class="text-center">{{ forloop.counter }}</td>
                         {#                        <td scope="row" class="text-center">{{ request.pk }}</td>#}
                         <td class="text-center">{{ request.req.customer }}</td>
@@ -44,6 +45,7 @@
                             {% endfor %}
                         </td>
                         <td class="text-center">{{ request.delay }}</td>
+                        <td class="text-center">{{ request.req.edited_by_customer }}</td>
                         <td class="text-center">
                             <a class="btn btn-primary btn-xs"
                                href="{% url 'request_details' request_pk=request.req.pk %}">

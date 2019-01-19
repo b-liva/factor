@@ -1,3 +1,5 @@
+from django.contrib import messages
+import request.templatetags.functions as funcs
 from django.shortcuts import render, render_to_response, redirect
 
 # Create your views here.
@@ -10,7 +12,6 @@ import urllib.parse
 
 
 # Create your views here.
-
 
 
 def tenders(request):
@@ -33,13 +34,10 @@ def tenders(request):
 
 def find_tenders(key=''):
     prefs = ''
-    print('02')
     scraper = TendersScraper()
     parsnamad_items = scraper.scrape(key)
-    print('03')
     aria_tender = AriaTender()
     aria_items = aria_tender.scrape(key)
-    print('04')
     return parsnamad_items, aria_items
 
 
@@ -50,14 +48,18 @@ def render_tenders(request, parsTender, ariaTender, key=''):
 
 
 def tenders_admin(request, key='', path_to_html_file=''):
+
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
+
     if 'key' in request.POST:
         key = request.POST['key']
-    print('01')
     pars_tenders, aria_tenders = find_tenders(key)
     path_to_html_file = 'requests/admin_jemco/tenders/tenders.html'
     # render_tenders(pars_tenders, aria_tenders, key)
     return render(request, 'requests/admin_jemco/tenders/tenders.html', {'tenders_items': pars_tenders, 'aria_tenders': aria_tenders, 'key': key})
-
 
 
 class TendersScraper(object):
@@ -103,8 +105,6 @@ class TendersScraper(object):
                 tenders.append(tender)
             pageno += 1
         return tenders
-
-
 
 
 class AriaTender(object):

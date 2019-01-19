@@ -1,4 +1,4 @@
-{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% extends 'page_elements/admin_base.html' %}
 {% load humanize %}
 {% load jformat %}
 {% block right_col %}
@@ -84,6 +84,7 @@
                                 {#                                <td>{{ req_id }}</td>#}
                                 <td>
                                     <a href="{% url 'customer_request_details' pk=req_id %}">{{ val.req.number }}</a>
+{#                                    <a href="{% url 'fbv_customer_request_details' req_pk=req_id %}">{{ val.req.number }}</a>#}
                                 </td>
                                 <td>
                                     {{ val.req.date_fa }}

@@ -1,0 +1,14 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+
+{% block right_col %}
+    <div class="row mt-4">
+from fbv
+        <form method="post" action="" >
+            {% csrf_token %}
+            {{ form }}
+            <a href="{% url 'fbv_customer_profile' user_pk=customer.pk %}" class="btn btn-danger btn-sm">انصراف</a>
+            <button type="submit" class="btn btn-success btn-sm">ثبت</button>
+
+        </form>
+    </div>
+{% endblock %}

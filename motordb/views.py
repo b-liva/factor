@@ -11,6 +11,7 @@ from motordb import models
 
 
 def motordb_index(request):
+
     motors = models.Motors.objects.all().order_by('pk').reverse()
 
     return render(request, 'motordb/index.html', {'motors': motors})

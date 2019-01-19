@@ -44,12 +44,15 @@ class ProjectType(models.Model):
 
 class Requests(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
-    number = models.CharField(unique=True, max_length=10)
+    # number = models.CharField(unique=True, max_length=10)
+    number = models.IntegerField(unique=True, max_length=10)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='req_owner')
     colleagues = models.ManyToManyField(User, blank=True, null=True)
     summary = models.TextField(max_length=1000, null=True, blank=True)
+    added_by_customer = models.BooleanField(default=False)
+    edited_by_customer = models.BooleanField(default=False)
 
     def __str__(self):
         return '%s' % self.number

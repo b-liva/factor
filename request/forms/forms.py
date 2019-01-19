@@ -31,7 +31,7 @@ class RequestFrom(forms.ModelForm):
     class Meta:
         model = models.Requests
         fields = '__all__'
-        exclude = ('owner', 'pub_date', 'customer')
+        exclude = ('owner', 'pub_date', 'customer', 'added_by_customer')
         widgets = {
             'customer': forms.Select(attrs={
                 'class': 'form-control',
@@ -69,7 +69,6 @@ class RequestFrom(forms.ModelForm):
 
 
 class RequestFileForm(forms.ModelForm):
-
 
     class Meta:
         model = models.RequestFiles

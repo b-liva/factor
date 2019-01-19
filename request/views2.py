@@ -11,7 +11,6 @@ from django.shortcuts import render, redirect
 from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils import timezone
-from django.contrib import messages
 # from django.utils.datetime_safe import strftime
 
 from request.views import allRequests, find_all_obj
@@ -20,6 +19,7 @@ from .models import Xpref, Payment
 from . import models
 from customer.models import Customer
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 import request.templatetags.functions as funcs
 from request.forms import forms, search
 import nested_dict as nd
@@ -219,7 +219,6 @@ def fsearch(request):
 
 
 def fsearch2(request):
-    print('vue compatible')
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
     if not can_index:
         messages.error(request, 'عدم دسترسی کافی!')
@@ -404,6 +403,11 @@ def fsearch2(request):
 
 
 def fsearch3(request):
+
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
     context = {
         'search_form': search.SpecSearchForm()
     }
@@ -483,7 +487,6 @@ def request_read(request, request_pk):
 
     req = Requests.objects.get(pk=request_pk)
     colleagues = req.colleagues.all()
-    print(f'colleagues: {colleagues}')
     colleague = False
     if request.user in colleagues:
         colleague = True
@@ -492,6 +495,10 @@ def request_read(request, request_pk):
     if not can_read:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
+
+    if not request.user.is_superuser:
+        req.edited_by_customer = False
+        req.save()
 
     reqspecs = req.reqspec_set.all()
     req_files = req.requestfiles_set.all()

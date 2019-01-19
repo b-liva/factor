@@ -1,0 +1,15 @@
+
+{% extends 'requests/base_minimal.html' %}
+{% block mainContent %}
+    <div class="row mt-4">
+        <div class="col-md-4 offset-md-4">
+        <h4 style="border-bottom: solid 1px black"> Signup here</h4>
+            <form method="POST" action="">
+                {% csrf_token %}
+                {{ form }}
+                <button name="submit" type="submit">click</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

@@ -30,7 +30,6 @@ def default_customer_code():
 
 class Type(models.Model):
     name = models.CharField(max_length=20)
-
     def __str__(self):
         return '%s' % self.name
 # types = Type.objects.all()
@@ -56,6 +55,7 @@ class Customer(models.Model):
         permissions = (
             ('read_customer', 'Can read a customer details'),
             ('index_customer', 'Can see list of customers'),
+            ('index_requests', 'customer can see list of requests'),
         )
 
     def __str__(self):

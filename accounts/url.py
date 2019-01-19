@@ -1,5 +1,6 @@
 from django.urls import path, include
 from . import views
+from accounts.viewsFolder import fbv
 from django.contrib.auth.views import (
     password_reset,
     password_reset_complete,
@@ -18,6 +19,17 @@ from accounts.viewsFolder.accountviews import (
 
 
 urlpatterns = [
+    # function based here. this will be changed to CBV later.
+
+    path('list', fbv.user_index, name='fbv_account_list'),
+    path('<int:user_pk>/', include([
+        path('', fbv.user_details, name='fbv_account_details'),
+        path('edit', fbv.user_edit, name='fbv_account_update'),
+        path('customer-profile', fbv.customer_profile, name='fbv_customer_profile'),
+        # path('customer-update', CustomerAccountUpdateView.as_view(), name='fbv_customer_account_update'),
+        path('customer-profile-update', fbv.customer_profile_update, name='fbv_customer_profile_update'),
+    ])),
+
     path('list', AccountListView.as_view(), name='account-list'),
     path('<int:pk>/', include([
         path('', AccountDetailsView.as_view(), name='account-details'),

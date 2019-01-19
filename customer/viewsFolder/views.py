@@ -1,4 +1,5 @@
 import nested_dict as nd
+from django.contrib import messages
 from django.shortcuts import redirect
 from django.views.generic import (
     ListView,
@@ -89,7 +90,7 @@ class CustomerRequestsListView(ListView):
 
 
 class CustomerRequestDetailsView(DetailView):
-    template_name = 'requests/details.html'
+    template_name = 'requests/fbv/details.html'
     model = Requests
     # context_object_name = 'request'
 
@@ -97,6 +98,7 @@ class CustomerRequestDetailsView(DetailView):
         req = self.get_object()
         # print(req.customer.user.last_name)
         if request.user != req.customer.user:
+            messages.error(request, 'مجاز نیستید.')
             return redirect('errorpage')
         return super(CustomerRequestDetailsView, self).dispatch(request, *args, **kwargs)
 
@@ -172,7 +174,7 @@ class CustomerRequestDetailsView(DetailView):
 
         kw = total_kw(request_pk)
         respone = {
-            'request': req,
+            'req': req,
             'reqspecs': reqspecs,
             'req_images': req_files,
             'total_kw': kw,
@@ -186,7 +188,7 @@ class CustomerRequestDetailsView(DetailView):
 
 
 class CustomerCreateRequestview(CreateView):
-    template_name = 'requests/req_form.html'
+    template_name = 'requests/fbv/req_form.html'
     form_class = CustomerRequestCreateForm
 
     # def form_valid(self, form):
@@ -194,6 +196,6 @@ class CustomerCreateRequestview(CreateView):
 
 
 class CustomerReqSpecCreateView(CreateView):
-    template_name = 'requests/spec_form.html'
+    template_name = 'requests/fbv/spec_form.html'
     form_class = SpecForm
 

@@ -42,7 +42,7 @@
 
                 <br/>
 
-                {% include 'requests/admin_jemco/page_elements/leftMenu.html' %}
+                {% include 'page_elements/leftMenu.html' %}
 
 
                 <!-- /menu footer buttons -->
@@ -69,8 +69,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
 {#                                <li><a href="{% url 'profile' %}"> مشخصات کاربری</a></li>#}
-{#                                <li><a href="{% url 'account-details' pk=user.pk %}"> مشخصات کاربری</a></li>#}
-                                <li><a href="{% url 'fbv_account_details' user_pk=user.pk %}"> مشخصات کاربری</a></li>
+                                <li><a href="{% url 'account-details' pk=user.pk %}"> مشخصات کاربری</a></li>
                                 {% if user.is_authenticated %}
                                     <li class="nav-item"><a class="nav-link"
                                                             href="javascript:{document.getElementById('logout').submit()}">خروج</a>

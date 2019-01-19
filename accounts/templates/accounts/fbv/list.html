@@ -1,0 +1,10 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% block right_col %}
+    <div class="row mt-4">
+        <ul>
+            {% for user in users %}
+                <li>{{ user.pk }} - <a href="{% url 'fbv_account_details' user_pk=user.pk %}">{{ user.username }} - {{ user.last_name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

@@ -1,3 +1,5 @@
+from django.contrib import messages
+import request.templatetags.functions as funcs
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 import json
@@ -8,6 +10,11 @@ from .models import MotorDB
 
 @login_required
 def pricedb_form(request):
+
+    can_index = funcs.has_perm_or_is_owner(request.user, 'pricedb.add_pricedb')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
     price_set = PriceDb()
     price_set.title = request.POST['title']
     price_set.summary = request.POST['summary']
@@ -62,6 +69,11 @@ def pricedb_form(request):
 
 @login_required
 def pricedb_insert(request):
+
+    can_index = funcs.has_perm_or_is_owner(request.user, 'pricedb.add_pricedb')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
     kv = {}
     for key in request.POST.keys():
         if key.startswith('pk_'):
@@ -79,6 +91,11 @@ def pricedb_insert(request):
 
 @login_required
 def pricedb_index(request):
+    can_index = funcs.has_perm_or_is_owner(request.user, 'pricedb.index_pricedb')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
+
     price_set = PriceDb.objects.all()
     return render(request, 'pricedb/index.html', {'price_set': price_set})
 
@@ -90,6 +107,11 @@ def pricedb_find(request):
 
 @login_required
 def pricedb_details(request, pricedb_pk):
+
+    can_index = funcs.has_perm_or_is_owner(request.user, 'pricedb.index_pricedb')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
     db_kw = [
         5.5,
         7.5,
@@ -138,6 +160,11 @@ def pricedb_details(request, pricedb_pk):
 
 @login_required
 def pricedb_delete(request, pricedb_pk):
+
+    can_index = funcs.has_perm_or_is_owner(request.user, 'pricedb.delete_pricedb')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
     price_set = PriceDb.objects.get(pk=pricedb_pk)
     price_set.delete()
     return redirect('pricedb_index')
@@ -145,12 +172,23 @@ def pricedb_delete(request, pricedb_pk):
 
 @login_required
 def pricedb_edit(request, pricedb_pk):
+
+    can_index = funcs.has_perm_or_is_owner(request.user, 'pricedb.edit_pricedb')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
     price_set = PriceDb.objects.get(pk=pricedb_pk)
     pass
 
 
 @login_required
 def pricedb_clean(request):
+
+    can_index = funcs.has_perm_or_is_owner(request.user, 'pricedb.delete_pricedb')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
+
     motors = MotorDB.objects.all()
     for motor in motors:
         tf = motor.prime_cost or motor.base_price or motor.sale_price

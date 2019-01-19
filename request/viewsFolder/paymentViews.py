@@ -97,6 +97,12 @@ def payment_insert(request):
 
 @login_required
 def payment_index(request):
+
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
+    if not can_add:
+        messages.error(request, 'Sorry, No way to access')
+        return redirect('errorpage')
+
     # payments = Payment.objects.all().order_by('date_fa').reverse()
     payments = Payment.objects.filter(owner=request.user).order_by('date_fa').reverse()
     if request.user.is_superuser:

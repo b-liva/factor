@@ -151,3 +151,7 @@ ul.quick-list {
 .customer-column {
     max-width: 90px;
 }
+
+.edited_by_customer{
+    background: #ffa09c;
+}

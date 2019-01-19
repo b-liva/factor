@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.views.generic import (ListView,
                                   DetailView,
                                   UpdateView,
@@ -6,16 +8,25 @@ from django.views.generic import (ListView,
 from accounts.models import User
 from customer.models import Customer
 from accounts.formsDir.user_edit_forms import AccountUpdateForm, CustomerProfileUpdateForm
+from braces import views as braces
 
 
-class AccountListView(ListView):
+class AccountListView(braces.PermissionRequiredMixin, ListView):
     template_name = 'accounts/cbv/list.html'
     model = User
+    permission_required = 'accounts.index_user'
+    redirect_unauthenticated_users = True
+    raise_exception = True
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AccountListView, self).get_context_data(object_list=None, **kwargs)
         # print(context)
         return context
+
+    def no_permissions_fail(self, request=None):
+        super(AccountListView, self).no_permissions_fail(request=None)
+        messages.error(request, 'عدم دستری کافی!')
+        return redirect('errorpage')
 
 
 class AccountDetailsView(DetailView):

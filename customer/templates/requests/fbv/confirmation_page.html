@@ -1,0 +1,52 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+
+{% block right_col %}
+
+
+    <div class="row mt-4">
+        <div class="col-md-4 col-md-offset-4">
+            {% if error %}
+                {{ error }}
+            {% endif %}
+            <h4 style="border-bottom: solid 1px #73879c; padding-bottom: 10px; margin-bottom: 10px;"> مطمئن هستید؟ </h4>
+            {% if fn == 'req_del' %}
+                <form action="{% url 'request_delete' request_pk=id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-primary" type="submit">بله</button>
+{#                    <a class="btn btn-sm btn-danger" href="{% url 'request_index' %}">خیر</a>#}
+                    <a class="btn btn-sm btn-danger" href="{% url 'req_search' %}">خیر</a>
+                </form>
+            {% endif %}
+            {% if fn == 'customer_del' %}
+                <form action="{% url 'customer_delete' customer_pk=id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-primary" type="submit">بله</button>
+                    <a class="btn btn-sm btn-danger" href="{% url 'customer_index' %}">خیر</a>
+                </form>
+            {% endif %}
+            {% if fn == 'prof_del' %}
+                <form action="{% url 'pref_delete' ypref_pk=id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-primary" type="submit">بله</button>
+                    <a class="btn btn-sm btn-danger" href="{% url 'pref_index' %}">خیر</a>
+                </form>
+            {% endif %}
+            {% if fn == 'payment_del' %}
+                <form action="{% url 'payment_delete' ypayment_pk=id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-primary" type="submit">بله</button>
+                    <a class="btn btn-sm btn-danger" href="{% url 'payment_index' %}">خیر</a>
+                </form>
+            {% endif %}
+            {% if fn == 'reqspec_del' %}
+                <form action="{% url 'fbv_customer_spec_delete' req_pk=req_id spec_pk=reqspec_id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-primary" type="submit">بله</button>
+                    <a class="btn btn-sm btn-danger" href="{% url 'customer_request_details' pk=req_id %}">خیر</a>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}

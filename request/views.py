@@ -445,7 +445,8 @@ def dashboard(request):
     # print(f'requests: {rq}')
     # print(f'request dict: {rq_dict}')
     if request.user.is_customer:
-        return redirect('customer_dashboard', pk=request.user.pk)
+        # return redirect('customer_dashboard', pk=request.user.pk)
+        return redirect('customer_dashboard')
     if not request.user.is_superuser:
         return redirect(sales_expert_dashboard)
     routine_kw, project_kw, services_kw, ex_kw, allKw = find_routine_kw()
