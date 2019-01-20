@@ -207,7 +207,6 @@ def fsearch(request):
             'payments': payments,
             # 'colleagues': req.colleagues.all(),
         }
-        print(payments)
     context = {
         # 'reqspecs': specs,
         'response': response,
@@ -227,6 +226,7 @@ def fsearch2(request):
     data = json.loads(request.body.decode('utf-8'))
     print(data)
     specs = ReqSpec.objects.all()
+    pmnt_total = Payment.objects.all()
 
     if request.method == 'POST':
         form_data = {}
@@ -269,9 +269,11 @@ def fsearch2(request):
             # payments = payments.filter(xpref_id__req_id__price=form_data['kw_max'])
         if form_data['date_min']:
             specs = specs.filter(req_id__date_fa__gte=form_data['date_min'])
+            pmnt_total = pmnt_total.filter(date_fa__gte=form_data['date_min'])
             # payments = payments.filter(xpref_id__req_id__price=form_data['date_min'])
         if form_data['date_max']:
             specs = specs.filter(req_id__date_fa__lte=form_data['date_max'])
+            pmnt_total = pmnt_total.filter(date_fa__lte=form_data['date_max'])
             # payments = payments.filter(xpref_id__req_id__price=form_data['date_max'])
         if form_data['rpm']:
 
@@ -328,6 +330,13 @@ def fsearch2(request):
     if not request.user.is_superuser:
         specs = specs.filter(req_id__owner=request.user) | specs.filter(req_id__colleagues=request.user)
 
+    payments_all_total = 0
+    for p in pmnt_total:
+        payments_all_total += p.amount
+
+    unverified_profs_total = 0
+    verified_profs_total = 0
+
     for spec in specs:
         diff = today - spec.req_id.date_fa
         # url = url(request_read, request_pk=spec.req_id.pk)
@@ -339,13 +348,27 @@ def fsearch2(request):
         total_qty += spec.qty
         diff = today - spec.req_id.date_fa
         proformas = spec.req_id.xpref_set.all()
-        profs = []
+        unverified_profs = []
+        verified_profs = []
         payments = []
         for prof in proformas:
-            profs.append({
+            prof_amount = 0
+            for item in prof.prefspec_set.all():
+                prof_amount += item.qty * item.price
+            prof_amount = 1.09 * prof_amount
+            temp_prof = {
                 'number': prof.number,
+                'prof_amount': prof_amount,
                 'prof_url': reverse('pref_details', kwargs={'ypref_pk': prof.pk}),
-            })
+            }
+            if prof.verified:
+                verified_profs_total += prof_amount
+                verified_profs.append(temp_prof)
+                print(f"verified {prof.req_id.number} + paid: {prof.payment_set.first()}")
+            else:
+                unverified_profs_total += prof_amount
+                unverified_profs.append(temp_prof)
+                print(f"not verified: {prof.req_id.number}")
             pmnts = prof.payment_set.all()
             for pay in pmnts:
                 payment_sum += pay.amount
@@ -381,7 +404,9 @@ def fsearch2(request):
                 'sent': spec.sent,
                 'url': url,
                 'owner_colleagues': owner_colleagues,
-                'profs': profs,
+                # 'profs': profs,
+                'unverified_profs': unverified_profs,
+                'verified_profs': verified_profs,
                 'payments': payments,
                 'date_fa': spec.req_id.date_fa.strftime("%Y-%m-%d"),
                 # 'date_fa': jdatetime.date.fromgregorian(date=spec.req_id.pub_date),
@@ -395,7 +420,11 @@ def fsearch2(request):
         # 'search_form': search_form,
         'total_kw': total_kw,
         'total_qty': total_qty,
+        'verified_profs_total': verified_profs_total,
+        'unverified_profs_total': unverified_profs_total,
+        'unv_perc': 100 * verified_profs_total / (verified_profs_total + unverified_profs_total),
         'payment_sum': payment_sum,
+        'payment_percentage': 100 * (payment_sum / payments_all_total),
         'rpm': form_data['rpm'],
     }
     # return render(request, 'requests/admin_jemco/yreqspec/index.html', context)

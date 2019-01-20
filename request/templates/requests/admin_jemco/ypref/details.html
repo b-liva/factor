@@ -92,6 +92,11 @@
                     </tr>
                 {% endfor %}
                 <tr style="border-top: 2px black solid">
+                    <td colspan="3" >مالیات ارزش افزوده</td>
+                    <td colspan="5" ></td>
+                    <td class="amount-total ">{{ vat|intcomma:0 }}</td>
+                </tr>
+                <tr style="border-top: 2px black solid">
                     <td colspan="3" class="emphsize">مجموع</td>
                     <td class="kw-total emphsize">{{ kw_total|intcomma }}</td>
                     <td colspan="4"></td>

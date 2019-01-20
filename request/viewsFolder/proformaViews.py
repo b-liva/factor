@@ -80,7 +80,8 @@ def pref_details(request, ypref_pk):
         'pref': pref,
         'prefspecs': prefspecs,
         'nested': nestes_dict,
-        'proforma_total': proforma_total,
+        'vat': proforma_total * 0.09,
+        'proforma_total': proforma_total * 1.09,
         'kw_total': kw_total,
         'prof_images': prof_images,
     }

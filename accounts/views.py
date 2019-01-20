@@ -1,3 +1,4 @@
+from allauth.account.views import PasswordResetView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm, PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
@@ -134,3 +135,10 @@ def password_reset_confirm_custome(request):
 
 def password_reset_complete_custome(request):
     password_reset_complete()
+
+
+class Some(PasswordResetView):
+    pass
+
+
+password_reset_mine = Some.as_view()

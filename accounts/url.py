@@ -1,4 +1,6 @@
 from django.urls import path, include
+
+from accounts.views import Some, password_reset_mine
 from . import views
 from accounts.viewsFolder import fbv
 from django.contrib.auth.views import (
@@ -50,5 +52,8 @@ urlpatterns = [
     path('reset-password/done', password_reset_done, name='password_reset_done'),
     path('reset-password/confirm/<uidb64>/<token>/', password_reset_confirm, name='password_reset_confirm'),
     path('reset-password/complete/', password_reset_complete, name='password_reset_complete'),
+
+# this is for test
+    path('testresetpass', password_reset_mine, name='profile'),
     # path('', include('django.contrib.auth.urls')),
 ]

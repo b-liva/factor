@@ -90,9 +90,17 @@
                             <td>سرعت</td>
                             <td>[[ extra_info.rpm ]]</td>
                         </tr>
+                        <tr v-if="extra_info.unverified_profs_total">
+                            <td>مجموع پیشفاکتورهای تأیید نشده</td>
+                            <td>[[ extra_info.unverified_profs_total ]]</td>
+                        </tr>
+                        <tr v-if="extra_info.verified_profs_total">
+                            <td>مجموع پیشفاکتورهای تأیید شده</td>
+                            <td>[[ extra_info.verified_profs_total ]] ([[ extra_info.unv_perc ]]%)</td>
+                        </tr>
                         <tr v-if="extra_info.payment_sum">
                             <td>مبلغ دریافتی</td>
-                            <td>[[ extra_info.payment_sum ]]</td>
+                            <td>[[ extra_info.payment_sum ]] ([[ extra_info.payment_percentage ]])%</td>
                         </tr>
 
                         </tbody>
@@ -114,7 +122,8 @@
                             <th @click="sort('permissoin')">مجوز</th>
                             <th @click="sort('sent')">ارسال شده</th>
                             <th @click="sort('reqNo')">شماره درخواست</th>
-                            <th @click="sort('customer_name')">شماره پیش فاکتور</th>
+                            <th @click="sort('customer_name')">شماره پیش فاکتور(ت نشده)</th>
+                            <th @click="sort('customer_name')">شماره پیش فاکتور(ت شده)</th>
                             <th @click="sort('customer_name')">مبالغ دریافتی</th>
                             <th @click="sort('customer_name')">مشتری</th>
                             <th @click="sort('customer_name')">کارشناس</th>
@@ -133,7 +142,8 @@
                             <td><input type="checkbox" v-model="spec.permission" disabled></td>
                             <td><input type="checkbox" v-model="spec.sent" disabled></td>
                             <td><a :href="spec.url">[[ spec.reqNo ]]</a></td>
-                            <td><a :href="prof.prof_url" v-for="prof in spec.profs">[[ prof.number ]]- </a></td>
+                            <td><a :href="prof.prof_url" v-for="prof in spec.unverified_profs">[[prof.prof_amount]] ([[ prof.number ]])<br></a></td>
+                            <td><a :href="vprof.prof_url" v-for="vprof in spec.verified_profs">[[vprof.prof_amount]] ([[ vprof.number ]])<br></a></td>
                             <td><a :href="p.pmnt_url" v-for="p in spec.payments">[[ p.amount ]]<br> </a></td>
                             <td><a :href="spec.customer_url">[[ spec.customer_name ]]</a></td>
                             <td><span v-for="c in spec.owner_colleagues">[[ c.last_name ]]<br></span></td>

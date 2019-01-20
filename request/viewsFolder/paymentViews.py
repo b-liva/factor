@@ -94,7 +94,6 @@ def payment_insert(request):
     })
 
 
-
 @login_required
 def payment_index(request):
 
@@ -112,9 +111,12 @@ def payment_index(request):
     debt_percent = 0
     for payment in payments:
         for spec in payment.xpref_id.prefspec_set.all():
-            pref_sum += spec.price
+            pref_sum += spec.price * spec.qty
         sum += payment.amount
+    # considering VAT
+    pref_sum *= 1.09
     debt = sum - pref_sum
+
     if pref_sum != 0:
         debt_percent = debt / pref_sum
 

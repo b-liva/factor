@@ -182,6 +182,7 @@ LOGIN_URL = reverse_lazy('account_login')
 # STATIC_ROOT = '/static'
 # EMAIL_HOST = 'localhost'
 # EMAIL_PORT = 1025
+
 ACCOUNT_FORMS = {
     'login': 'accounts.forms.CustomLoginForm',
     'signup': 'accounts.forms.CustomSignForm',
@@ -190,9 +191,29 @@ ACCOUNT_FORMS = {
     'set_password': 'accounts.forms.CustomerResetPasswordForm',
     'reset_password_from_key': 'accounts.forms.CustomResetPasswordKeyForm',
 }
+
 ACCOUNT_SESSION_REMEMBER = False
 SIGNUP_PASSWORD_ENTER_TWICE = True
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = 'accounts/login'
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = True
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.pop3.EmailBackend'
+
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True
+# EMAIL_HOST = 'mail.vbstech.ir'
+# EMAIL_PORT = 25
+# # EMAIL_PORT = 587
+# # EMAIL_PORT = 465
+# DEFAULT_FROM_EMAIL = 'sales@vbstech.ir'
+# EMAIL_HOST_USER = 'sales@vbstech.ir'
+# EMAIL_HOST_PASSWORD = 'newpassword'
+EMAIL_HOST = 'mail.vbstech.ir'
+EMAIL_PORT = 25
+DEFAULT_FROM_EMAIL = 'crm@jemcomotor.ir'
+EMAIL_HOST_USER = 'crm@jemcomotor.ir'
+EMAIL_HOST_PASSWORD = 'jcrmpasswd'
+
+SITE_NAME = DEFAULT_FROM_EMAIL
