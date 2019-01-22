@@ -54,6 +54,6 @@ urlpatterns = [
     path('reset-password/complete/', password_reset_complete, name='password_reset_complete'),
 
 # this is for test
-    path('testresetpass', password_reset_mine, name='profile'),
+#     path('testresetpass', password_reset_mine, name='profile'),
     # path('', include('django.contrib.auth.urls')),
 ]

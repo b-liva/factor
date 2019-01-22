@@ -261,6 +261,6 @@ class CustomChangePasswordForm(ChangePasswordForm):
         self.fields['password1'] = SetPasswordField(label='رمز جدید')
         self.fields['password1'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
 
-        self.fields['password2'] = PasswordField(label='تکرار رمز عبور')
+        self.fields['password2'] = PasswordField(label='تکرار رمز جدید')
         self.fields['password2'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
 

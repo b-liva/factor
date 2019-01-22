@@ -1,8 +1,6 @@
 {% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
 {% block right_col %}
     <div class="row mt-4">
-    fbv<br>
-        {{ user_p.username }}
         <form method="post" action="" >
             {% csrf_token %}
             {{ form }}

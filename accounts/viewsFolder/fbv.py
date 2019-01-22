@@ -75,14 +75,13 @@ def customer_profile(request, user_pk):
 
     user = User.objects.get(pk=user_pk)
     # user = get_object_or_404(User, pk=user_pk)
-    customer_profile = user.customer
 
     can_read = funcs.has_perm_or_is_owner(request.user, 'customer.read_customer', user)
     if not can_read:
         messages.error(request, 'متأسفانه خطایی رخ داده است.')
         return redirect('errorpage')
+    customer_profile = user.customer
 
-    print(f"this is profile of th customer: {customer_profile}")
     context = {
         'user_p': user,
         'customer': customer_profile,

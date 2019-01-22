@@ -36,6 +36,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # Application definition
 
 INSTALLED_APPS = [
+    'import_export',
     'rest_framework',
     'django_jalali',
     'django.contrib.humanize',
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'tender.apps.TenderConfig',
     'customer.apps.CustomerConfig',
     'fund.apps.FundConfig',
+    'req_track.apps.ReqTrackConfig',
     'pricedb.apps.PricedbConfig',
     'motordb.apps.MotordbConfig',
     # 'accounts.apps.AppConfig',
@@ -217,3 +219,4 @@ EMAIL_HOST_USER = 'crm@jemcomotor.ir'
 EMAIL_HOST_PASSWORD = 'jcrmpasswd'
 
 SITE_NAME = DEFAULT_FROM_EMAIL
+IMPORT_EXPORT_USE_TRANSACTIONS = True

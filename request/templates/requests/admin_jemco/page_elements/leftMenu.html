@@ -1,3 +1,4 @@
+{% load auth_extras %}
 <!-- sidebar menu -->
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
     <div class="menu_section">
@@ -5,7 +6,7 @@
             <li><a><i class="fa fa-home"></i> داشبورد <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="{% url 'dashboard' %}">داشبورد</a></li>
-{#                    <li><a href="{% url 'dashboard2' %}">داشبورد2</a></li>#}
+                    {#                    <li><a href="{% url 'dashboard2' %}">داشبورد2</a></li>#}
                 </ul>
             </li>
             {% if perms.request.index_requests %}
@@ -19,10 +20,20 @@
                         {% endif %}
 
                         <li><a href="{% url 'request_index' %}">درخواست ها</a></li>
-{#                        <li><a href="{% url 'req_search' %}">درخواست ها2</a></li>#}
+                        <li><a href="{% url 'req_form' %}">ثبت درخواست جدید</a></li>
+                        {#                        <li><a href="{% url 'req_search' %}">درخواست ها2</a></li>#}
                         <li><a href="{% url 'fsearch' %}">گزارش</a></li>
                         <li><a href="{% url 'fsearch3' %}">گزاش 2</a></li>
-{#                        <li><a href="{% url 'fsearch3' %}">search2</a></li>#}
+                        {% if perms.req_track.add_reqentered %}
+                            <li><a href="{% url 'e_req_add' %}">ثبت درخواست وارده</a></li>
+                        {% endif %}
+                        {% if request.user|has_group:"board" or request.user.is_superuser %}
+                            <li><a href="{% url 'e_req_report' %}">درخواست های وارد نشده</a></li>
+                            <li><a href="{% url 'check_orders' %}">چک درخواست ها</a></li>
+{#                            <li><a href="{% url 'ereq_del_all' %}">حذف درخواست ها</a></li>#}
+
+                        {% endif %}
+                        {#                        <li><a href="{% url 'fsearch3' %}">search2</a></li>#}
 
                         {% if perms.request.index_proforma %}
                             <li><a href="{% url 'pref_index' %}">پیش فاکتورها</a></li>
