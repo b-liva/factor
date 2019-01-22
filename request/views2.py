@@ -217,6 +217,13 @@ def fsearch(request):
     return render(request, 'requests/admin_jemco/yreqspec/index.html', context)
 
 
+def proforma_total(spset):
+    sum = 0
+    for s in spset:
+        sum += s.qty * s.price
+    return sum
+
+
 def fsearch2(request):
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
     if not can_index:
@@ -325,7 +332,6 @@ def fsearch2(request):
     total_kw = 0
     total_qty = 0
     payment_sum = 0
-    proforma_sum = 0
 
     if not request.user.is_superuser:
         specs = specs.filter(req_id__owner=request.user) | specs.filter(req_id__colleagues=request.user)
@@ -366,6 +372,7 @@ def fsearch2(request):
                 verified_profs.append(temp_prof)
                 print(f"verified {prof.req_id.number} + paid: {prof.payment_set.first()}")
             else:
+
                 unverified_profs_total += prof_amount
                 unverified_profs.append(temp_prof)
                 print(f"not verified: {prof.req_id.number}")

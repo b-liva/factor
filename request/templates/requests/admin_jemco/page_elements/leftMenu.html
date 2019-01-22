@@ -25,7 +25,7 @@
                         <li><a href="{% url 'fsearch' %}">گزارش</a></li>
                         <li><a href="{% url 'fsearch3' %}">گزاش 2</a></li>
                         {% if perms.req_track.add_reqentered %}
-                            <li><a href="{% url 'e_req_add' %}">ثبت درخواست وارده</a></li>
+{#                            <li><a href="{% url 'e_req_add' %}">ثبت درخواست وارده</a></li>#}
                         {% endif %}
                         {% if request.user|has_group:"board" or request.user.is_superuser %}
                             <li><a href="{% url 'e_req_report' %}">درخواست های وارد نشده</a></li>

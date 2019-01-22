@@ -15,6 +15,8 @@ const app = new Vue({
             verified_profs_total: 0,
             unv_perc: 0,
             payment_sum: '',
+            verified_sum: '',
+            unverified_sum: '',
         },
         // specs: '',
         filter: {
@@ -75,6 +77,13 @@ const app = new Vue({
         checkbox: function (value) {
             console.log(value);
         },
+        proforma: function (amount, no) {
+            output = numeral(amount).format('0,0') ;
+            if (no){
+                output = output+ " - " + no
+            }
+            return output
+        },
         // debounceDoSearch: function(){
         //     _.debounce(function () {
         //         this.doSearch();
@@ -114,6 +123,8 @@ const app = new Vue({
                     this.extra_info.unverified_profs_total = numeral(parseFloat(res.data.unverified_profs_total)).format('0,0');
                     this.extra_info.verified_profs_total = numeral(parseFloat(res.data.verified_profs_total)).format('0,0');
                     this.extra_info.payment_sum = numeral(res.data.payment_sum).format('0,0');
+                    this.extra_info.verified_sum = numeral(res.data.verified_sum).format('0,0');
+                    this.extra_info.unverified_sum = numeral(res.data.unverified_sum).format('0,0');
                     this.extra_info.unv_perc = numeral(res.data.unv_perc).format('0,0.00');
                     this.extra_info.payment_percentage = numeral(res.data.payment_percentage).format('0,0');
                     this.extra_info.rpm = numeral(res.data.rpm).format('0,0');

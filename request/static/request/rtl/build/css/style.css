@@ -155,3 +155,7 @@ ul.quick-list {
 .edited_by_customer{
     background: #ffa09c;
 }
+
+#req_search_table{
+    font-size: 12px;
+}
