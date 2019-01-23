@@ -138,6 +138,9 @@ def payment_find(request):
 
 @login_required
 def payment_details(request, ypayment_pk):
+    if not Payment.objects.filter(pk=ypayment_pk):
+        messages.error(request, 'صفحه مورد نظر یافت نشد')
+        return redirect('errorpage')
     payment = Payment.objects.get(pk=ypayment_pk)
     can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_payment', payment)
     if not can_read:
