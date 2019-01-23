@@ -17,6 +17,12 @@ def has_perm_or_is_owner(user_obj, permissions, instance=None, colleague=None):
         if hasattr(instance, 'customer'):
             if user_obj == instance.customer.user:
                 return True
+        elif hasattr(instance.req_id, 'customer'):
+            if user_obj == instance.req_id.customer.user:
+                return True
+        elif hasattr(instance.xpref_id.req_id, 'customer'):
+            if user_obj == instance.xpref_id.req_id.customer.user:
+                return True
         if instance.__class__.__name__ == 'User':
             return user_obj == instance
     return user_obj.has_perm(permissions)

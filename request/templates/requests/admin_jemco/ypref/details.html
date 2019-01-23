@@ -55,10 +55,11 @@
                         <i class="fa fa-pencil"></i> ویرایش قیمت</a>
                     <a class="btn btn-warning btn-sm pull-left" href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
                         <i class="fa fa-pencil"></i> ویرایش پیشفاکتور</a>
+                    <a class="btn btn-sm btn-info" href="{% url 'pref_index' %}">
+                        <i class="fa fa-list-ul" aria-hidden="true"></i>
+                        پیش فاکتورها</a>
                 {% endif %}
-                <a class="btn btn-sm btn-info" href="{% url 'pref_index' %}">
-                    <i class="fa fa-list-ul" aria-hidden="true"></i>
-                    پیش فاکتورها</a>
+
             </div>
 
 
@@ -92,8 +93,8 @@
                     </tr>
                 {% endfor %}
                 <tr style="border-top: 2px black solid">
-                    <td colspan="3" >مالیات ارزش افزوده</td>
-                    <td colspan="5" ></td>
+                    <td colspan="3">مالیات ارزش افزوده</td>
+                    <td colspan="5"></td>
                     <td class="amount-total ">{{ vat|intcomma:0 }}</td>
                 </tr>
                 <tr style="border-top: 2px black solid">
