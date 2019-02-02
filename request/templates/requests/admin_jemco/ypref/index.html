@@ -4,9 +4,9 @@
     <div class="container">
         <div class="col-md-10 col-md-offset-1">
             <h3>{{ msg }}</h3>
-{#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
+            {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
             <h1 class="page-header">
-                پیشفاکتورها</h1>
+                {{ title }}</h1>
             {% if messages %}
                 <div class="alert alert-danger">
                     {% for msg in messages %}
@@ -22,7 +22,7 @@
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
             </form>
-            {% if perms.request.add_xpref %}
+            {% if perms.request.add_xpref and showDelete%}
                 <a href="{% url 'pro_form' %}" class="btn btn-success btn-sm pull-left"><i class="fa fa-plus"></i>
                     پیشفاکتور جدید</a>
             {% endif %}
@@ -63,9 +63,11 @@
                                 {#                                   href="{% url 'pref_delete' ypref_pk=pref.pk %}">#}
                                 {#                                    <i class="fa fa-trash"></i> حذف#}
                                 {#                                </a>#}
-                                <a class="btn btn-primary btn-xs btn-danger"
-                                   href="{% url 'pref_delete' ypref_pk=pref.pk %}"><i
-                                        class="fa fa-trash"></i> حذف</a>
+                                {% if showDelete %}
+                                    <a class="btn btn-primary btn-xs btn-danger"
+                                       href="{% url 'pref_delete' ypref_pk=pref.pk %}"><i
+                                            class="fa fa-trash"></i> حذف</a>
+                                {% endif %}
 
                             {% endif %}
                         </td>

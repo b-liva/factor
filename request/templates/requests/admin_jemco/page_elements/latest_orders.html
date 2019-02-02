@@ -23,8 +23,8 @@
         <div class="x_content">
             <div class="dashboard-widget-content">
                 <ul class="quick-list">
-                    <li><b>درخواست های اخیر</b>
-                    </li>
+{#                    <li><b>درخواست های اخیر</b>#}
+{#                    </li>#}
                     {% for item in last_n_requests %}
                         <li><i class="fa fa-bars"></i>
                         <a href="{% url 'request_details' request_pk=item.pk %}">{{ item.number }}

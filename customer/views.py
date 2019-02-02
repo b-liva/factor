@@ -168,7 +168,10 @@ def customer_index(request):
         return redirect('errorpage')
 
     customers = Customer.objects.filter(agent=False)
-    context = {'customers': customers}
+    context = {
+        'customers': customers,
+        'title': 'مشتریان',
+    }
     return render(request, 'customer/index.html', context)
 
 
@@ -180,7 +183,10 @@ def repr_index(request):
         return redirect('errorpage')
 
     customers = Customer.objects.filter(agent=True)
-    context = {'customers': customers}
+    context = {
+        'customers': customers,
+        'title': 'نمایندگان',
+    }
     return render(request, 'customer/index.html', context)
 
 

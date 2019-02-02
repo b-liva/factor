@@ -17,11 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
 from pricedb import views
-import pricedb.views
+# import pricedb.views
+# from pricedb import views
+import pricedb
+from pricedb.viewsFolder import views as generic
 
 urlpatterns = [
+  path('list', generic.IndexView.as_view(), name='price_set_list'),
+  path('<int:pk>/', generic.DetailView.as_view(), name='price_set_details'),
   path('clean', pricedb.views.pricedb_clean, name='pricedb_clean'),
   path('form', pricedb.views.pricedb_form, name='pricedb_form'),
   path('insert', pricedb.views.pricedb_insert, name='pricedb_insert'),
@@ -32,6 +36,7 @@ urlpatterns = [
       path('delete', pricedb.views.pricedb_delete, name='pricedb_delete'),
       path('edit', pricedb.views.pricedb_edit, name='pricedb_edit'),
   ])),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

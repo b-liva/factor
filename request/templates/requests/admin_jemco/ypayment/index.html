@@ -4,9 +4,9 @@
     <div class="container">
         <div class="col-md-10 col-md-offset-1">
             <h3>{{ msg }}</h3>
-{#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
+            {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
             <h1 class="page-header">
-                پرداخت ها</h1>
+                {{ title }}</h1>
             <form method="POST" action="{% url 'payment_find' %}">
                 {% csrf_token %}
                 شماره پرداخت <input name="payment_no">
@@ -14,7 +14,7 @@
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
             </form>
-            {% if perms.request.add_payment %}
+            {% if perms.request.add_payment and show %}
                 <a href="{% url 'pay_form' %}" class="btn btn-success btn-sm pull-left">
                     <i class="fa fa-plus"></i> ثبت پرداخت </a>
             {% endif %}
@@ -50,9 +50,12 @@
                                        href="{% url 'payment_edit' ypayment_pk=payment.pk %}">
                                         <i class="fa fa-pencil"></i> ویرایش
                                     </a>
-                                    <a class="btn btn-primary btn-xs btn-danger"
-                                       href="{% url 'payment_delete' ypayment_pk=payment.pk %}"><i
-                                            class="fa fa-trash"></i> حذف</a>
+                                    {% if show %}
+                                        <a class="btn btn-primary btn-xs btn-danger"
+                                           href="{% url 'payment_delete' ypayment_pk=payment.pk %}"><i
+                                                class="fa fa-trash"></i> حذف</a>
+                                    {% endif %}
+
                                 {% endif %}
                             </td>
 

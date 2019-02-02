@@ -64,7 +64,7 @@ def e_req_report(request):
 def check_orders(request):
     ereqs = ReqEntered.objects.filter(is_entered=False)
     for e in ereqs:
-        if Requests.objects.filter(number=e.number_automation):
+        if Requests.objects.filter(is_active=True).filter(number=e.number_automation):
             print(f"order No: {e.number_automation}: is entered.")
             e.is_entered = True
             e.save()

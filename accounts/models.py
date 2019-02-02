@@ -23,5 +23,8 @@ class CustomerUser(User):
     is_repr = models.BooleanField(default=True)
     # customer = models.OneToOneField(Customer, on_delete=models.DO_NOTHING)
 
+    def __str__(self):
+        return '%s' % self.last_name
+
 
 

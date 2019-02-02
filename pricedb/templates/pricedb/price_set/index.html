@@ -1,0 +1,36 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% block right_col %}
+    <h1> Price sets </h1>
+    <table class="withBorder">
+        <thead>
+        <tr>
+            <th>No</th>
+            <th>title</th>
+            <th>summary</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for price in price_set %}
+            <tr>
+                <td>{{ price.pk }}</td>
+                <td>{{ price.title }}</td>
+                <td>{{ price.summary }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs" href="{% url 'pricedb_details' pricedb_pk=price.pk %}">Details</a>
+                    <a class="btn btn-danger btn-xs" href="{% url 'pricedb_delete' pricedb_pk=price.pk %}">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    <form method="POST" action="{% url 'pricedb_form' %}">
+        {% csrf_token %}
+        name: <input name="title">
+        summary: <textarea name="summary"></textarea>
+        <br>
+        <button class="btn btn-success">Add new price set</button>
+    </form>
+{% endblock %}

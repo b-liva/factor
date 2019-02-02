@@ -1,5 +1,6 @@
 import json
 from django.contrib.humanize.templatetags.humanize import intcomma
+from django.db import models
 from django.db.models import Sum
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -458,6 +459,11 @@ def dashboard(request):
     total_payments = find_total_payment()
 
     agent_data = agentjs(request)
+    tqty = ReqSpec.objects.all()
+    # hot_products = ReqSpec.objects.filter(kw__gt=0).values('kw', 'rpm').annotate(reqspec_qty=models.Sum('qty'), perc=(models.Sum('qty')/100))\
+    #     .order_by('reqspec_qty').reverse()
+    hot_products = ReqSpec.objects.filter(kw__gt=0).values('kw', 'rpm').annotate(reqspec_qty=models.Sum('qty')).order_by('reqspec_qty').reverse()
+    total_qty = hot_products.aggregate(models.Sum('reqspec_qty'))
     context = {
         # 'routine_kw': intcomma(routine_kw),
         'routine_kw': routine_kw,
@@ -469,6 +475,8 @@ def dashboard(request):
         'last_n_requests': last_n_requests,
         'total_payments': total_payments,
         'agent_data': agent_data,
+        'hot_products': hot_products,
+        'total_qty': total_qty,
         # 'rq': rq,
         # 'rq_dict': rq_dict,
     }

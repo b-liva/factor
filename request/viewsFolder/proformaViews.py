@@ -19,11 +19,32 @@ def pref_index(request):
         return redirect('errorpage')
     # prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date').reverse()
     # prefs = Xpref.objects.all().order_by('date_fa').reverse()
-    prefs = Xpref.objects.filter(owner=request.user).order_by('date_fa').reverse()
+    prefs = Xpref.objects.filter(is_active=True, owner=request.user).order_by('date_fa').reverse()
     if request.user.is_superuser:
-        prefs = Xpref.objects.all().order_by('date_fa').reverse()
+        prefs = Xpref.objects.filter(is_active=True).order_by('date_fa').reverse()
     context = {
-        'prefs': prefs
+        'prefs': prefs,
+        'title': 'پیش فاکتور',
+        'showDelete': True,
+    }
+    return render(request, 'requests/admin_jemco/ypref/index.html', context)
+
+
+@login_required
+def pref_index_deleted(request):
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_deleted_proforma')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+    # prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date').reverse()
+    # prefs = Xpref.objects.all().order_by('date_fa').reverse()
+    prefs = Xpref.objects.filter(is_active=False, owner=request.user).order_by('date_fa').reverse()
+    if request.user.is_superuser:
+        prefs = Xpref.objects.filter(is_active=False).order_by('date_fa').reverse()
+    context = {
+        'prefs': prefs,
+        'title': 'پیش فاکتور های حذف شده',
+        'showDelete': False,
     }
     return render(request, 'requests/admin_jemco/ypref/index.html', context)
 
@@ -180,7 +201,9 @@ def pref_delete(request, ypref_pk):
         }
         return render(request, 'general/confirmation_page.html', context)
     elif request.method == 'POST':
-        pref.delete()
+        # pref.delete()
+        pref.is_active = False
+        pref.save()
     return redirect('pref_index')
 
 
@@ -191,8 +214,8 @@ def pro_form(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    reqs = Requests.objects.all()
-    owners_reqs = Requests.objects.filter(owner=request.user)
+    reqs = Requests.objects.filter(is_active=True)
+    owners_reqs = Requests.objects.filter(is_active=True).filter(owner=request.user)
     imgform = proforma_forms.ProfFileForm()
 
     if request.method == 'POST':

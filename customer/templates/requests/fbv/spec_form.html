@@ -33,7 +33,6 @@
                         <th class="text-center rotate_deg">مالی</th>
                         <th class="text-center rotate_deg">مجوز ساخت</th>
                         <th class="text-center rotate_deg">ارسال شده</th>
-                        {#                        <th>PRICE</th>#}
                         <th></th>
                     </tr>
                     {% for spec in specs %}
@@ -59,15 +58,9 @@
                                         <i class="fa fa-pencil"></i> ویرایش
                                     </button>
                                 </a>
-{#                                <a href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">#}
-{#                                    <button class="btn btn-danger btn-xs">#}
-{#                                        <i class="fa fa-trash"></i> حذف#}
-{#                                    </button>#}
-{#                                </a>#}
-{#                                <div class="btn btn-primary btn-xs btn-danger deleteBtn2" id="">#}
-{#                                    </div>#}
-                                    <a class="btn btn-primary btn-xs btn-danger "
-                                       href="{% url 'fbv_customer_spec_delete' spec_pk=spec.pk req_pk=req.pk %}"><i class="fa fa-trash"></i> حذف</a>
+                                <a class="btn btn-primary btn-xs btn-danger "
+                                   href="{% url 'fbv_customer_spec_delete' spec_pk=spec.pk req_pk=req.pk %}"><i
+                                        class="fa fa-trash"></i> حذف</a>
 
                             </td>
                         </tr>
@@ -77,26 +70,13 @@
             </div>
             <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
                 <div>
-                    {#                    <form method="POST" action="{% url 'spec_form' req_pk=req_obj.pk %}" enctype="multipart/form-data">#}
                     <div class="">
                         <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form.as_p }}
-                            {#                            <input class="btn btn-primary" type="submit" value="save and add another" name="done">#}
-                            {#                            <div class="col-md-4">#}
-                            {#                                {% for visible in form.visible_fields %}#}
-                            {#                                    {% if visible.name in list %}#}
-                            {#                                        {{ visible.name }}#}
-                            {#                                        {{ visible }}#}
-                            {#                                    {% endif %}#}
-                            {#                                {% endfor %}#}
-                            {#                            </div>#}
-                            {#                            <div class="col-md-4">#}
-                            {##}
-                            {#                            </div>#}
                             <button class="btn btn-primary" type="submit">ذخیره</button>
-{#                            <a class="btn btn-success" href="{% url 'request_index' %}">لیست درخواست ها</a>#}
-                            <a class="btn btn-success" href="{% url 'req_search' %}">لیست درخواست ها</a>
+                            <a class="btn btn-success" href="{% url 'fbv_customer_request_create' %}">افزودن درخواست جدید</a>
+
                         </form>
                     </div>
 

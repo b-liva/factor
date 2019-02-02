@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'customer.apps.CustomerConfig',
     'fund.apps.FundConfig',
     'req_track.apps.ReqTrackConfig',
+    'spec_communications.apps.SpecCommunicationsConfig',
     'pricedb.apps.PricedbConfig',
     'motordb.apps.MotordbConfig',
     # 'accounts.apps.AppConfig',

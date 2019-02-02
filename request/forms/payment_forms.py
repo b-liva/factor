@@ -14,7 +14,6 @@ class PaymentFrom(forms.ModelForm):
 
         self.fields['xpref_id'].queryset = self.fields['xpref_id'].queryset.order_by('number')
 
-
     class Meta:
         model = models.Payment
         fields = '__all__'
@@ -22,6 +21,7 @@ class PaymentFrom(forms.ModelForm):
             'owner',
             'payment_date',
             'customer',
+            'is_active',
         )
         widgets = {
             'date_fa': forms.DateInput(attrs={
@@ -54,3 +54,6 @@ class PaymentFileForm(forms.ModelForm):
         fields = '__all__'
         exclude = ('pay',)
         widgets = {"image": forms.FileInput(attrs={'multiple': True})}
+        labels = {
+            'image': 'آپلود تصاویر'
+        }

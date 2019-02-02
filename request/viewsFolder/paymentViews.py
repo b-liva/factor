@@ -103,9 +103,9 @@ def payment_index(request):
         return redirect('errorpage')
 
     # payments = Payment.objects.all().order_by('date_fa').reverse()
-    payments = Payment.objects.filter(owner=request.user).order_by('date_fa').reverse()
+    payments = Payment.objects.filter(is_active=True, owner=request.user).order_by('date_fa').reverse()
     if request.user.is_superuser:
-        payments = Payment.objects.all().order_by('date_fa').reverse()
+        payments = Payment.objects.filter(is_active=True).order_by('date_fa').reverse()
     pref_sum = 0
     sum = 0
     debt_percent = 0
@@ -126,6 +126,46 @@ def payment_index(request):
         'pref_sum': pref_sum,
         'debt': debt,
         'debt_percent': debt_percent,
+        'title': 'پرداخت ها',
+        'show': True,
+    }
+    return render(request, 'requests/admin_jemco/ypayment/index.html', context)
+
+
+@login_required
+def payment_index_deleted(request):
+
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_deleted_payment')
+    if not can_add:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    # payments = Payment.objects.all().order_by('date_fa').reverse()
+    payments = Payment.objects.filter(is_active=False, owner=request.user).order_by('date_fa').reverse()
+    if request.user.is_superuser:
+        payments = Payment.objects.filter(is_active=False).order_by('date_fa').reverse()
+    pref_sum = 0
+    sum = 0
+    debt_percent = 0
+    for payment in payments:
+        for spec in payment.xpref_id.prefspec_set.all():
+            pref_sum += spec.price * spec.qty
+        sum += payment.amount
+    # considering VAT
+    pref_sum *= 1.09
+    debt = sum - pref_sum
+
+    if pref_sum != 0:
+        debt_percent = debt / pref_sum
+
+    context = {
+        'payments': payments,
+        'amount_sum': sum,
+        'pref_sum': pref_sum,
+        'debt': debt,
+        'debt_percent': debt_percent,
+        'title': 'پرداخت های حذف شده',
+        'show': False,
     }
     return render(request, 'requests/admin_jemco/ypayment/index.html', context)
 
@@ -168,7 +208,9 @@ def payment_delete(request, ypayment_pk):
         }
         return render(request, 'general/confirmation_page.html', context)
     elif request.method == 'POST':
-        payment.delete()
+        # payment.delete()
+        payment.is_active = False
+        payment.save()
     payments = Payment.objects.all()
     msg = 'payment deleted successfully...'
     # return render(request, 'requests/admin_jemco/ypayment/index.html', {'payments': payments, 'msg':msg})

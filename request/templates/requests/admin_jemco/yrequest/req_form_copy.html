@@ -1,0 +1,31 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load functions %}
+{% block right_col %}
+
+    <div class="row">
+
+        <div class="container">
+            <div class="col-md-6 col-md-offset-3">
+                <div>
+                    <h3>{{ msg }}</h3>
+                    <h3 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                        کپی درخواست</h3>
+
+                    {% if error %}
+                        {{ error }}
+                    {% endif %}
+                    {#                    <form method="POST" action="{% url 'req_form' %}" enctype="multipart/form-data">#}
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form }}
+                        <button class="btn btn-sm btn-success pull-left">کپی</button>
+{#                        <a class="btn btn-danger btn-sm pull-left" href="{% url 'request_index' %}">انصراف</a>#}
+                        <a class="btn btn-danger btn-sm pull-left" href="{% url 'dashboard' %}">انصراف</a>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

@@ -13,8 +13,11 @@ urlpatterns = [
 
     path('form', request.views2.request_form, name='request_form'),
     path('req_form', request.views2.req_form, name='req_form'),
+    path('req_form_copy', request.views2.req_form_copy, name='req_form_copy'),
     path('insert', request.views2.request_insert, name='request_insert'),
     path('index', request.views2.request_index, name='request_index'),
+    path('index-vue', request.views2.request_index_vue, name='request_index_vue'),
+    path('index-vue-deleted', request.views2.request_index_vue_deleted, name='request_index_vue_deleted'),
     path('fsearch', request.views2.fsearch, name='fsearch'),
     path('fsearch3', request.views2.fsearch3, name='fsearch3'),
     path('fsearch2', request.views2.fsearch2, name='fsearch2'),
@@ -26,6 +29,7 @@ urlpatterns = [
     path('find', request.views2.request_find, name='request_find'),
     path('<int:request_pk>/', include([
         path('', request.views2.request_read, name='request_details'),
+        path('read-vue', request.views2.read_vue, name='read_vue'),
         path('delete', request.views2.request_delete, name='request_delete'),
         path('edit', request.views2.request_edit, name='request_edit'),
         path('editForm', request.views2.request_edit_form, name='request_edit_form'),

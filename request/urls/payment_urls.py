@@ -10,6 +10,7 @@ urlpatterns = [
     path('pay_form', paymentViews.pay_form, name='pay_form'),
     # path('insert', paymentViews.payment_insert, name='payment_insert'),
     path('index', paymentViews.payment_index, name='payment_index'),
+    path('index-deleted', paymentViews.payment_index_deleted, name='payment_index_deleted'),
     path('find', paymentViews.payment_find, name='payment_find'),
     path('<int:ypayment_pk>/', include([
       path('', paymentViews.payment_details, name='payment_details'),

@@ -20,7 +20,7 @@ class CustomerForm(forms.ModelForm):
     class Meta:
         model = models.Customer
         fields = '__all__'
-        exclude = ('pub_date', 'owner', 'representator')
+        exclude = ('pub_date', 'owner', 'representator',)
         widgets = {
             'pub_date': forms.DateInput(attrs={
                 'class': 'datetime-input form-control',
@@ -33,6 +33,7 @@ class CustomerForm(forms.ModelForm):
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'نام مشتری',
+                'id': 'autocomplete',
 
             }),
             'date2': forms.DateInput(attrs={
@@ -124,11 +125,11 @@ class PhoneForm(forms.ModelForm):
 class CustomerCreateRequestForm(RequestFrom):
     class Meta(RequestFrom.Meta):
         fields = ('summary', 'colleagues')
-        exclude = ('customer', )
+        exclude = ('customer',)
 
     def __init__(self, *args, **kwargs):
         super(CustomerCreateRequestForm, self).__init__(*args, **kwargs)
-        self.fields.pop('colleagues', 'customer')
+        self.fields.pop('colleagues', 'customer',)
 
 
 class CustomerRequestCreateForm(RequestFrom):
@@ -155,7 +156,7 @@ class CustomerRequestFileCreateForm(RequestFileForm):
 class CustomerCreateSpecForm(SpecForm):
 
     class Meta(SpecForm.Meta):
-        exclude = ('price', 'permission', 'tech', 'sent', 'owner', 'req_id', 'type',)
+        exclude = ('price', 'permission', 'tech', 'sent', 'owner', 'req_id', 'type', 'summary', 'is_active')
 
 
 # class CustomerRequestFileForm(RequestFileForm):

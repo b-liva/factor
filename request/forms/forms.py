@@ -31,7 +31,7 @@ class RequestFrom(forms.ModelForm):
     class Meta:
         model = models.Requests
         fields = '__all__'
-        exclude = ('owner', 'pub_date', 'customer', 'added_by_customer')
+        exclude = ('owner', 'pub_date', 'customer', 'added_by_customer', 'parent_number', 'edited_by_customer', 'is_active')
         widgets = {
             'customer': forms.Select(attrs={
                 'class': 'form-control',
@@ -94,7 +94,7 @@ class SpecForm(forms.ModelForm):
     class Meta:
         model = models.ReqSpec
         fields = '__all__'
-        exclude = ('owner', 'req_id')
+        exclude = ('owner', 'req_id', 'is_active')
         labels = {
             'qty': ('تعداد'),
             'type': ('نوع'),
@@ -145,7 +145,7 @@ class ProformaForm(forms.ModelForm):
     class Meta:
         model = models.Xpref
         fields = '__all__'
-        exclude = ('owner', 'pub_date', )
+        exclude = ('owner', 'pub_date', 'is_active')
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
@@ -174,3 +174,6 @@ class ProfSpecForm(forms.ModelForm):
         # fields = ('qty', 'price',)
         fields = '__all__'
 
+
+class RequestCopyForm(forms.Form):
+    number = forms.IntegerField(label='شماره درخواست')

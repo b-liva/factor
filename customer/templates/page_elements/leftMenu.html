@@ -6,7 +6,6 @@
             <li><a><i class="fa fa-home"></i> داشبورد <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="{% url 'dashboard' %}">داشبورد</a></li>
-{#                    <li><a href="{% url 'dashboard2' %}">داشبورد2</a></li>#}
                 </ul>
             </li>
             {% if request.user|has_group:"customer" %}
@@ -14,82 +13,11 @@
                     <ul class="nav child_menu">
 
                         <li><a href="{% url 'fbv_customer_request_create' %}">افزودن درخواست جدید</a></li>
-
-{#                        {% if perms.request.index_proforma %}#}
-{#                            <li><a href="{% url 'pref_index' %}">پیش فاکتورها</a></li>#}
-{#                        {% endif %}#}
-{#                        {% if perms.request.index_payment %}#}
-{#                            <li><a href="{% url 'payment_index' %}">پرداخت ها</a></li>#}
-{#                        {% endif %}#}
-                    </ul>
-                </li>
-            {% endif %}
-            {% if perms.fund.index_fund %}
-                <li><a><i class="fa fa-home"></i> تنخواه <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        <li><a href="{% url 'fund_index' %}">لیست تنخواه</a></li>
-                    </ul>
-                </li>
-            {% endif %}
-            {% if user.is_superuser %}
-                <li><a><i class="fa fa-home"></i> مشتری <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        <li><a href="{% url 'fbv_account_list' %}">لیست مشتریان</a></li>
+                        <li><a href="{% url 'dashboard' %}">درخواست ها</a></li>
                     </ul>
                 </li>
             {% endif %}
             <hr>
-
-            {#            <li><a><i class="fa fa-edit"></i> Requests <span class="fa fa-chevron-down"></span></a>#}
-            {#                <ul class="nav child_menu">#}
-            {#                    <li><a href="{% url 'requestPage' %}">All requests</a></li>#}
-            {#                    <li><a href="{% url 'createpage' %}">Create request</a></li>#}
-            {#                    <li><a href="{% url 'xreq_pref_spec' %}">All Req and prefs with spec</a></li>#}
-            {#                    <li><a href="{% url 'find_xpref' %}">Find a prefactor</a></li>#}
-            {##}
-            {##}
-            {#                    </li>#}
-            {#                    {% if not user.is_authenticated %}#}
-            {#                        <li><a href="{% url 'login' %}">Login</a></li>#}
-            {#                    {% endif %}#}
-            {#                    <li><a href="#">Edit a request</a></li>#}
-            {#                </ul>#}
-            {#            </li>#}
-            {##}
-            {#            <li><a><i class="fa fa-desktop"></i> Xprefactors <span class="fa fa-chevron-down"></span></a>#}
-            {#                <ul class="nav child_menu">#}
-            {#                    <li><a href="{% url 'create_pref_spec' %}">Create prefactor with spec</a></li>#}
-            {#                    <li><a href="{% url 'xpref_ver_create' %}">Add Verification to xpref</a></li>#}
-            {#                    <li><a href="{% url 'add_payment_page' %}">Add Payment</a></li>#}
-            {#                    <li><a href="{% url 'payments' %}">Payments</a></li>#}
-            {#                </ul>#}
-            {#            </li>#}
-            {#            <li><a><i class="fa fa-table"></i> Customers <span class="fa fa-chevron-down"></span></a>#}
-            {#                <ul class="nav child_menu">#}
-            {#                    <li><a href="{% url 'customer' %}">Add a customer</a></li>#}
-            {#                    <li><a href="{% url 'customer_view' %}">View a customer</a></li>#}
-            {#                </ul>#}
-            {#            </li>#}
-            {##}
-            {#            <li><a><i class="fa fa-desktop"></i> Prefactors <span class="fa fa-chevron-down"></span></a>#}
-            {#                <ul class="nav child_menu">#}
-            {#                    <li><a href="{% url 'prefactorsPage' %}">All prefactors</a></li>#}
-            {#                    <li><a href="{% url 'find_pref' %}">Find a prefactor</a></li>#}
-            {#                    <li><a href="{% url 'createprefpage' %}">Create prefactor</a></li>#}
-            {#                </ul>#}
-            {#            </li>#}
-            {##}
-            {#            <li><a><i class="fa fa-table"></i> Prefactor Verifications <span class="fa fa-chevron-down"></span></a>#}
-            {#                <ul class="nav child_menu">#}
-            {#                    <li><a href="{% url 'prefVerificationPage' %}">All Verifications</a></li>#}
-            {#                    <li><a href="{% url 'create_verf_page' %}">Add a Verification </a></li>#}
-            {#                </ul>#}
-            {#            </li>#}
-            {#            <li><a><i class="fa fa-table"></i> Tenders <span class="fa fa-chevron-down"></span></a>#}
-            {#                <ul class="nav child_menu">#}
-            {#                    <li><a href="{% url 'tenders_admin' %}">Find Tenders </a></li>#}
-            {#                </ul>#}
-            {#            </li>#}
         </ul>
     </div>
 </div>

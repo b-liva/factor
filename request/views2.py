@@ -12,7 +12,7 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils import timezone
 # from django.utils.datetime_safe import strftime
-
+from request.forms.forms import RequestCopyForm
 from request.views import allRequests, find_all_obj
 from .models import Requests, ReqSpec
 from .models import Xpref, Payment
@@ -68,6 +68,52 @@ def request_form(request):
 
 
 @login_required
+def req_form_copy(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests', )
+    if not can_add:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    if request.method == 'POST':
+        form = RequestCopyForm(request.POST or None)
+        if form.is_valid():
+            req_no = form.cleaned_data['number']
+            if not Requests.objects.filter(number=req_no):
+                messages.error(request, 'درخواست مورد نظر یافت نشد.')
+                return redirect('errorpage')
+
+            master_req = Requests.objects.get(number=req_no)
+            print(master_req.owner)
+            print(request.user)
+            can_add = funcs.has_perm_or_is_owner(request.user, 'request.copy_requests', instance=master_req)
+            if not can_add:
+                messages.error(request, 'عدم دسترسی کافی')
+                return redirect('errorpage')
+
+            reqspec_sets = master_req.reqspec_set.all()
+            temp_number = master_req.number
+            master_req.pk = None
+            master_req.parent_number = temp_number
+            master_req.number = Requests.objects.filter(parent_number__isnull=False).order_by('number').last().number + 1
+            master_req.save()
+
+            for s in reqspec_sets:
+                s.pk = None
+                s.req_id = master_req
+                s.save()
+
+            return redirect('spec_form', req_pk=master_req.pk)
+
+    if request.method == 'GET':
+        form = RequestCopyForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'requests/admin_jemco/yrequest/req_form_copy.html', context)
+
+
+@login_required
 def req_form(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
     if not can_add:
@@ -109,7 +155,7 @@ def fsearch(request):
         messages.error(request, 'عدم دسترسی کافی!')
         return redirect('errorpage')
     form_data = {}
-    specs = ReqSpec.objects.all()
+    specs = ReqSpec.objects.filter(is_active=True)
     if request.method == 'POST':
         # specs = ReqSpec.objects
         if request.POST['date_min']:
@@ -170,7 +216,7 @@ def fsearch(request):
     else:
         form_data['price'] = 'False'
         form_data['tech'] = 'False'
-        specs = ReqSpec.objects.filter(price=form_data['price'], tech=form_data['tech'])
+        specs = ReqSpec.objects.filter(is_active=True, price=form_data['price'], tech=form_data['tech'])
         search_form = search.SpecSearchForm(form_data)
 
     today = jdatetime.date.today()
@@ -190,10 +236,10 @@ def fsearch(request):
         total_kw += spec.qty * spec.kw
         total_qty += spec.qty
         diff = today - spec.req_id.date_fa
-        proformas = spec.req_id.xpref_set.all()
+        proformas = spec.req_id.xpref_set.all().filter(is_active=True)
         payments = []
         for prof in proformas:
-            pmnts = prof.payment_set.all()
+            pmnts = prof.payment_set.all().filter(is_active=True)
             for pay in pmnts:
                 payments.append(pay)
         owner_colleagues.append(spec.req_id.owner.last_name)
@@ -232,7 +278,7 @@ def fsearch2(request):
 
     data = json.loads(request.body.decode('utf-8'))
     print(data)
-    specs = ReqSpec.objects.all()
+    specs = ReqSpec.objects.filter(is_active=True)
     pmnt_total = Payment.objects.all()
 
     if request.method == 'POST':
@@ -321,7 +367,7 @@ def fsearch2(request):
         # search_form = search.SpecSearchForm()
     # elif request.method == 'GET':
     else:
-        specs = ReqSpec.objects.all()
+        specs = ReqSpec.objects.filter(is_active=True)
         search_form = search.SpecSearchForm()
 
     today = jdatetime.date.today()
@@ -353,13 +399,13 @@ def fsearch2(request):
         total_kw += spec.qty * spec.kw
         total_qty += spec.qty
         diff = today - spec.req_id.date_fa
-        proformas = spec.req_id.xpref_set.all()
+        proformas = spec.req_id.xpref_set.filter(is_active=True)
         unverified_profs = []
         verified_profs = []
         payments = []
         for prof in proformas:
             prof_amount = 0
-            for item in prof.prefspec_set.all():
+            for item in prof.prefspec_set.filter(is_active=True):
                 prof_amount += item.qty * item.price
             prof_amount = 1.09 * prof_amount
             temp_prof = {
@@ -376,7 +422,7 @@ def fsearch2(request):
                 unverified_profs_total += prof_amount
                 unverified_profs.append(temp_prof)
                 print(f"not verified: {prof.req_id.number}")
-            pmnts = prof.payment_set.all()
+            pmnts = prof.payment_set.filter(is_active=True)
             for pay in pmnts:
                 payment_sum += pay.amount
                 amount = int(pay.amount)
@@ -484,7 +530,42 @@ def request_index(request):
     # requests = Requests.objects.all().order_by('date_fa').reverse()
     today = jdatetime.date.today()
 
-    requests = Requests.objects.all().order_by('date_fa').reverse()
+    requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
+    print(f'super user: {request.user.is_superuser}')
+    if not request.user.is_superuser:
+        requests = requests.filter(owner=request.user)
+    response = {}
+
+    date_format = "%m/%d/%Y"
+    for req in requests:
+        diff = today - req.date_fa
+        print(f'diff is: {diff.days}')
+        response[req.pk] = {
+            'req': req,
+            'delay': diff.days,
+            'colleagues': req.colleagues.all(),
+        }
+    if request.user.is_superuser:
+        requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
+    context = {
+        'all_requests': requests,
+        'response': response
+    }
+    return render(request, 'requests/admin_jemco/yrequest/index.html', context)
+
+
+@login_required
+def request_index_vue(request):
+    # requests =request_form Requests.objects.all()
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
+    # requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
+    # requests = Requests.objects.all().order_by('date_fa').reverse()
+    today = jdatetime.date.today()
+
+    requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
     print(f'super user: {request.user.is_superuser}')
     if not request.user.is_superuser:
         requests = requests.filter(owner=request.user)
@@ -501,12 +582,46 @@ def request_index(request):
         }
     print(response)
     if request.user.is_superuser:
-        requests = Requests.objects.all().order_by('date_fa').reverse()
+        requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
     context = {
         'all_requests': requests,
         'response': response
     }
-    return render(request, 'requests/admin_jemco/yrequest/index.html', context)
+    return render(request, 'requests/admin_jemco/yrequest/vue/index.html', context)
+
+
+@login_required
+def request_index_vue_deleted(request):
+    # requests =request_form Requests.objects.all()
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_deleted_requests')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
+    # requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
+    # requests = Requests.objects.all().order_by('date_fa').reverse()
+    today = jdatetime.date.today()
+
+    requests = Requests.objects.filter(is_active=False).order_by('date_fa').reverse()
+    if not request.user.is_superuser:
+        requests = requests.filter(owner=request.user)
+    response = {}
+
+    date_format = "%m/%d/%Y"
+    for req in requests:
+        diff = today - req.date_fa
+        response[req.pk] = {
+            'req': req,
+            'delay': diff.days,
+            'colleagues': req.colleagues.all(),
+        }
+    if request.user.is_superuser:
+        requests = Requests.objects.filter(is_active=False).order_by('date_fa').reverse()
+    context = {
+        'all_requests': requests,
+        'response': response
+    }
+    return render(request, 'requests/admin_jemco/yrequest/vue/index_deleted.html', context)
+
 
 
 @login_required
@@ -517,8 +632,114 @@ def request_find(request):
 
 @login_required
 def request_read(request, request_pk):
+    if not Requests.objects.filter(pk=request_pk) or not Requests.objects.get(pk=request_pk).is_active:
+        messages.error(request, 'صفحه مورد نظر یافت نشد')
+        return redirect('errorpage')
+
+    req = Requests.objects.get(pk=request_pk)
+    colleagues = req.colleagues.all()
+    colleague = False
+    if request.user in colleagues:
+        colleague = True
+
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_requests', req, colleague)
+    if not can_read:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    if not request.user.is_superuser:
+        req.edited_by_customer = False
+        req.save()
+
+    reqspecs = req.reqspec_set.filter(is_active=True)
+    req_files = req.requestfiles_set.all()
+    req_imgs = []
+    req_pdfs = []
+    req_words = []
+    req_other_files = []
+    files = {}
+    nested_files = nd.nested_dict()
+    # default_nested_files = dd.default_factory()
+
+    xfiles = {
+        'img': {},
+        'pdf': {},
+        'doc': {},
+        'other': {},
+    }
+
+    for f in req_files:
+        if str(f.image).lower().endswith('.jpg') or str(f.image).lower().endswith('.jpeg') or str(
+                f.image).lower().endswith('.png'):
+            req_imgs.append(f)
+            nested_files['ximg'][f.pk]['url'] = f.image.url
+            nested_files['ximg'][f.pk]['name'] = f.image.name.split('/')[-1]
+            # nested_files['img']['name'] = f.image.name.split('/')
+            xfiles['img'][f.pk] = {}
+            xfiles['img'][f.pk]['url'] = f.image.url
+            xfiles['img'][f.pk]['name'] = f.image.name.split('/')[-1]
+        elif str(f.image).lower().endswith('.pdf'):
+            req_pdfs.append(f)
+            nested_files['pdf']['url'] = f.image.url
+            nested_files['pdf']['name'] = f.image.name.split('/')[-1]
+            xfiles['pdf'][f.pk] = {}
+            xfiles['pdf'][f.pk]['url'] = f.image.url
+            xfiles['pdf'][f.pk]['name'] = f.image.name.split('/')[-1]
+
+        elif str(f.image).lower().endswith('.doc'):
+            req_words.append(f)
+            xfiles['doc'][f.pk] = {}
+            xfiles['doc'][f.pk]['url'] = f.image.url
+            xfiles['doc'][f.pk]['name'] = f.image.name.split('/')[-1]
+        else:
+            req_other_files.append(f)
+            xfiles['other'][f.pk] = {}
+            xfiles['other'][f.pk]['url'] = f.image.url
+            xfiles['other'][f.pk]['name'] = f.image.name.split('/')[-1]
+
+    files['req_imgs'] = req_imgs
+    files['req_pdfs'] = req_pdfs
+    files['req_words'] = req_words
+    files['req_other_files'] = req_other_files
+
+    img_names = {}
+    for r in req_files:
+        name = r.image.name
+        newname = name.split('/')
+        las = newname[-1]
+        img_names[r.pk] = las
+
+    for x, y in nested_files['ximg'].items():
+        print(f"last is: {y['name']}")
+
+    print(f'file names: {nested_files}')
+
+    kw = total_kw(request_pk)
+
+    parent_request = Requests.objects.filter(number=req.parent_number)
+    sub_requests = Requests.objects.filter(parent_number=req.number)
+    print(req)
+    print(parent_request)
+    print(sub_requests)
+    context = {
+        'request': req,
+        'sub_requests': sub_requests,
+        'parent_request': parent_request,
+        'reqspecs': reqspecs,
+        'req_images': req_files,
+        'total_kw': kw,
+        'files': files,
+        'nested_files': nested_files,
+        'xfiles': xfiles
+    }
+    return render(request, 'requests/admin_jemco/yrequest/details.html', context)
+
+
+@login_required
+def read_vue(request, request_pk):
     if not Requests.objects.filter(pk=request_pk):
-        messages.error(request, 'درخواست مورد نظر یافت نشد')
+
+        messages.error(request, 'صفحه مورد نظر یافت نشد')
         return redirect('errorpage')
 
     req = Requests.objects.get(pk=request_pk)
@@ -609,7 +830,8 @@ def request_read(request, request_pk):
         'nested_files': nested_files,
         'xfiles': xfiles
     }
-    return render(request, 'requests/admin_jemco/yrequest/details.html', context)
+    return render(request, 'requests/admin_jemco/yrequest/vue/details.html', context)
+    # return JsonResponse(context, safe=False)
 
 
 @login_required
@@ -629,7 +851,9 @@ def request_delete(request, request_pk):
         }
         return render(request, 'general/confirmation_page.html', context)
     elif request.method == 'POST':
-        req.delete()
+        # req.delete()
+        req.is_active = False
+        req.save()
     # return redirect('request_index')
     return redirect('request_index')
 
@@ -725,7 +949,6 @@ def request_edit_form(request, request_pk):
         return redirect('errorpage')
     req = Requests.objects.get(pk=request_pk)
     colleagues = req.colleagues.all()
-    print(colleagues)
     colleague = False
     if request.user in colleagues:
         colleague = True

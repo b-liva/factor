@@ -48,17 +48,37 @@
 
         <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
             <div class="row pull-left">
+                <div class="row">
 
-                {% if perms.request.sale_expert %}
-                    <a href="{% url 'spec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">
-                        <i class="fa fa-pencil"></i> ویرایش ردیف
-                    </a>
-                {% endif %}
-                {% if perms.request.sale_expert %}
-                    <a href="{% url 'request_edit_form' request_pk=request.pk %}" class="btn btn-sm btn-warning">
-                        <i class="fa fa-pencil"></i> ویرایش درخواست
-                    </a>
-                {% endif %}
+                    {% if perms.request.sale_expert %}
+                        <a href="{% url 'spec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">
+                            <i class="fa fa-pencil"></i> ویرایش ردیف
+                        </a>
+                    {% endif %}
+                    {% if perms.request.sale_expert %}
+                        <a href="{% url 'request_edit_form' request_pk=request.pk %}" class="btn btn-sm btn-warning">
+                            <i class="fa fa-pencil"></i> ویرایش درخواست
+                        </a>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    {% if sub_requests %}
+                        <div>زیر درخواست های مربوط به این درخواست</div>
+                        {% for sub_request in sub_requests %}
+                            <span class="btn btn-xs btn-link"><a href="{% url 'request_details' request_pk=sub_request.pk %}">{{ sub_request.number }}</a></span>
+                        {% endfor %}
+                    {% endif %}
+                    {% if parent_request %}
+                        <div>این درخواست از درخواست زیر کپی شده است.</div>
+                        {% for sub in parent_request %}
+                            <span><a href="{% url 'request_details' request_pk=sub.pk %}">{{ sub.number }}</a></span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+
             </div>
 
             <table class="table table-hover text-center">
@@ -113,7 +133,9 @@
                         {#                            <a class="btn btn-primary btn-xs btn-warning"#}
                         {#                               href="{% url 'customer_delete' customer_pk=customer.pk %}">Delete</a>#}
                         {#                        </td>#}
+
                     </tr>
+
                 {% endfor %}
 
                 </tbody>

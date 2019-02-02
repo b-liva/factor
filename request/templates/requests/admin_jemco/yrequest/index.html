@@ -37,7 +37,12 @@
                         <td scope="row" class="text-center">{{ forloop.counter }}</td>
                         {#                        <td scope="row" class="text-center">{{ request.pk }}</td>#}
                         <td class="text-center">{{ request.req.customer }}</td>
-                        <td class="text-center">{{ request.req.number }}</td>
+                        <td class="text-center">
+                            {{ request.req.number }}
+                            {% if request.req.parent_number %}<span style="color:red;">
+                                ({{ request.req.parent_number }})
+                            </span>{% endif %}
+                        </td>
                         <td class="text-center">{{ request.req.date_fa }}</td>
                         <td class="text-center">{{ request.req.owner.last_name }}
                             {% for colleague in request.colleagues %}

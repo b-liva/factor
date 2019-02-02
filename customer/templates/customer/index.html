@@ -7,7 +7,7 @@
             <h3>{{ msg }}</h3>
 {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
             <h1 class="page-header">
-                مشتریان</h1>
+                {{ title }}</h1>
             <form method="POST" action="{% url 'customer_find' %}">
                 {% csrf_token %}
                 کد مشتری<input name="customer_no">
@@ -29,7 +29,7 @@
                     {#            <th>Id</th>#}
                     <th class="text-center">کد مشتری</th>
                     <th class="text-center">نام</th>
-                    <th class="text-center">نوع</th>
+{#                    <th class="text-center">نوع</th>#}
                     {#            <th>Date</th>#}
                     <th class="text-center">تاریخ عضویت</th>
                     {#                    <th class="text-center"></th>#}
@@ -43,7 +43,7 @@
                         {#                        <td>{{ customer.pk }}</td>#}
                         <td>{{ customer.code }}</td>
                         <td>{{ customer.name }}</td>
-                        <td>{{ customer.type.name }}</td>
+{#                        <td>{{ customer.type.name }}</td>#}
                         <td>{{ customer.date2 }}</td>
                         <td>
                             <a class="btn btn-primary btn-xs" href="{% url 'customer_read' customer_pk=customer.pk %}">

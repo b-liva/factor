@@ -46,6 +46,7 @@ class Requests(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     # number = models.CharField(unique=True, max_length=10)
     number = models.IntegerField(unique=True)
+    parent_number = models.IntegerField(null=True, blank=True)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='req_owner')
@@ -53,6 +54,7 @@ class Requests(models.Model):
     summary = models.TextField(max_length=1000, null=True, blank=True)
     added_by_customer = models.BooleanField(default=False)
     edited_by_customer = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return '%s' % self.number
@@ -83,7 +85,7 @@ class FrameSize(models.Model):
 
 class ReqSpec(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    req_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
+    req_id = models.ForeignKey(Requests, on_delete=models.DO_NOTHING)
     qty = models.IntegerField(default=1)
     # type = models.IntegerField(choices=project_type, default=0)
     type = models.ForeignKey(ProjectType, on_delete=models.DO_NOTHING)
@@ -102,6 +104,7 @@ class ReqSpec(models.Model):
     price = models.BooleanField(default=False)
     permission = models.BooleanField(default=False)
     sent = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         permissions = (
@@ -115,7 +118,7 @@ class ReqSpec(models.Model):
 
 class Xpref(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    req_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
+    req_id = models.ForeignKey(Requests, on_delete=models.DO_NOTHING)
     number = models.IntegerField(unique=True)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
@@ -123,6 +126,7 @@ class Xpref(models.Model):
     # image = models.ImageField(upload_to=upload_location, blank=True, null=True)
     summary = models.TextField(max_length=600, null=True, blank=True)
     verified = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')
@@ -144,7 +148,7 @@ class ProfFiles(models.Model):
 
 class PrefSpec(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    xpref_id = models.ForeignKey(Xpref, on_delete=models.CASCADE)
+    xpref_id = models.ForeignKey(Xpref, on_delete=models.DO_NOTHING)
     qty = models.IntegerField(default=1)
     type = models.TextField(default=1)
     price = models.FloatField(null=True, blank=True)
@@ -155,6 +159,7 @@ class PrefSpec(models.Model):
     ic = models.IntegerField(null=True, blank=True)
     summary = models.TextField(max_length=500, blank=True, null=True)
     considerations = models.TextField(max_length=500, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return 'pk:%s | %s | %sKW - %sRPM - %sV' % (self.pk, self.qty, self.kw, self.rpm, self.voltage)
@@ -212,12 +217,13 @@ class Permission(models.Model):
 class Payment(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
-    xpref_id = models.ForeignKey(Xpref, on_delete=models.CASCADE)
+    xpref_id = models.ForeignKey(Xpref, on_delete=models.DO_NOTHING)
     number = models.IntegerField(unique=True)
     amount = models.FloatField()
     payment_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     summary = models.TextField(max_length=600, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     def pub_date_pretty(self):
         return self.payment_date.strftime('%b %e %Y')
@@ -235,3 +241,4 @@ class Payment(models.Model):
 class PaymentFiles(models.Model):
     image = models.FileField(upload_to=upload_location, null=True, blank=True)
     pay = models.ForeignKey(Payment, on_delete=models.CASCADE)
+

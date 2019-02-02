@@ -66,8 +66,8 @@ td.bad-conditions {
 }
 
 .table-hover > tbody > tr:hover {
-    background-color: #2a3f54;
-    color: white;
+    /*background-color: #2a3f54;*/
+    /*color: white;*/
 }
 
 #customerDetails {
@@ -152,10 +152,47 @@ ul.quick-list {
     max-width: 90px;
 }
 
-.edited_by_customer{
+.edited_by_customer {
     background: #ffa09c;
 }
 
-#req_search_table{
+#req_search_table {
     font-size: 12px;
+}
+
+.rtlClass {
+    direction: rtl;
+}
+
+.ltrClass {
+    direction: ltr;
+}
+
+.salesPerson {
+    background: #81bccb;
+    border-radius: 7px 0px 7px 0px;
+    -moz-border-radius: 7px 0px 7px 0px;
+    -webkit-border-radius: 7px 0px 7px 0px;
+    padding: 5px;
+    margin-left: 20px;
+    margin-top: 20px;
+    color: whitesmoke;
+}
+
+.customerPerson {
+    background: #81bccb;
+    border-radius: 0px 7px 0px 7px;
+    -moz-border-radius: 0px 7px 0px 7px;
+    -webkit-border-radius: 0px 7px 0px 7px;
+    padding: 5px;
+    margin-top: 20px;
+    margin-right: 20px;
+    color: whitesmoke;
+}
+
+.salesPersonHolder{
+
+}
+.customerPersonHolder{
+
 }

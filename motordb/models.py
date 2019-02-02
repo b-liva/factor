@@ -127,3 +127,61 @@ class Motors(models.Model):
             ('view_motordb', 'can view motor database'),
             ('index_motordb', 'can view list of motor database'),
         )
+
+
+class MotorsCode(models.Model):
+    code = models.CharField(max_length=15, unique=True)
+    kw = models.DecimalField(max_digits=7, decimal_places=1)
+    frame_size = models.CharField(max_length=6, blank=True, null=True)
+    speed = models.IntegerField()
+    voltage = models.IntegerField(null=True, blank=True)
+    ip = models.IntegerField(null=True, blank=True)
+    ic = models.IntegerField(null=True, blank=True)
+    im = models.CharField(max_length=8, null=True, blank=True)
+    yd = models.CharField(max_length=10, null=True, blank=True)
+    # ex_type = models.IntegerField(choices=ex_types, default=0, null=True, blank=True)
+    # images = models.FileField(upload_to='motordb/')
+    efficiency = models.FloatField(null=True, blank=True)
+    pf = models.FloatField(null=True, blank=True)
+    current_ln = models.FloatField(null=True, blank=True)
+    current_ls_to_ln = models.FloatField(null=True, blank=True)
+    torque_tn = models.FloatField(null=True, blank=True)
+    torque_ts_to_tn = models.FloatField(null=True, blank=True)
+    torque_tmax_to_tn = models.FloatField(null=True, blank=True)
+    torque_rotor_inertia = models.FloatField(null=True, blank=True)
+    weight = models.FloatField(null=True, blank=True)
+    freq = models.FloatField(default=50)
+    description = models.CharField(max_length=100, null=True, blank=True)
+    summary = models.TextField(max_length=700, blank=True, null=True)
+
+    def __str__(self):
+        return '%s kw - %s rpm - %s V' % (self.kw, self.speed, self.voltage)
+
+
+class MotorsPrice(models.Model):
+    code = models.CharField(max_length=15, unique=True)
+    kw = models.DecimalField(max_digits=7, decimal_places=1)
+    frame_size = models.CharField(max_length=6, blank=True, null=True)
+    speed = models.IntegerField()
+    voltage = models.IntegerField(null=True, blank=True)
+    ip = models.IntegerField(null=True, blank=True)
+    ic = models.IntegerField(null=True, blank=True)
+    im = models.CharField(max_length=8, null=True, blank=True)
+    yd = models.CharField(max_length=10, null=True, blank=True)
+    # ex_type = models.IntegerField(choices=ex_types, default=0, null=True, blank=True)
+    # images = models.FileField(upload_to='motordb/')
+    efficiency = models.FloatField(null=True, blank=True)
+    pf = models.FloatField(null=True, blank=True)
+    current_ln = models.FloatField(null=True, blank=True)
+    current_ls_to_ln = models.FloatField(null=True, blank=True)
+    torque_tn = models.FloatField(null=True, blank=True)
+    torque_ts_to_tn = models.FloatField(null=True, blank=True)
+    torque_tmax_to_tn = models.FloatField(null=True, blank=True)
+    torque_rotor_inertia = models.FloatField(null=True, blank=True)
+    weight = models.FloatField(null=True, blank=True)
+    freq = models.FloatField(default=50)
+    description = models.CharField(max_length=100, null=True, blank=True)
+    summary = models.TextField(max_length=700, blank=True, null=True)
+
+    def __str__(self):
+        return '%s kw - %s rpm - %s V' % (self.kw, self.speed, self.voltage)

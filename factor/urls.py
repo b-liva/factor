@@ -51,6 +51,7 @@ urlpatterns = [
                   path('fund/', include('fund.url')),
                   path('pricedb/', include('pricedb.url')),
                   path('fund/', include('fund.url')),
+                  path('speccm/', include('spec_communications.url')),
                   path('ereq/', include('req_track.url')),
                   path('motors/', include('motordb.url')),
                   # path('v1/request', include('request.urls.url')),
