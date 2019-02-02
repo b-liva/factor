@@ -26,13 +26,14 @@
                         {% endif %}
                         <li><a href="{% url 'req_form' %}">ثبت درخواست جدید</a></li>
                         <li><a href="{% url 'req_form_copy' %}">کپی درخواست</a></li>
+                        <li><a href="{% url 'wrong_data' %}">اطلاعات ناقص</a></li>
                         {#                        <li><a href="{% url 'req_search' %}">درخواست ها2</a></li>#}
                         <li><a href="{% url 'fsearch' %}">گزارش</a></li>
                         <li><a href="{% url 'fsearch3' %}">گزارش 2</a></li>
                         {% if perms.req_track.add_reqentered %}
                             {#                            <li><a href="{% url 'e_req_add' %}">ثبت درخواست وارده</a></li>#}
                         {% endif %}
-                        {% if request.user|has_group:"board" or request.user.is_superuser %}
+                        {% if request.user|has_group:"board" or request.user.is_superuser or 1 %}
                             <li><a href="{% url 'e_req_report' %}">درخواست های وارد نشده</a></li>
                             <li><a href="{% url 'check_orders' %}">چک درخواست ها</a></li>
                             {#                            <li><a href="{% url 'ereq_del_all' %}">حذف درخواست ها</a></li>#}

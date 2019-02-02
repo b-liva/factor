@@ -13,6 +13,7 @@ urlpatterns = [
 
     path('form', request.views2.request_form, name='request_form'),
     path('req_form', request.views2.req_form, name='req_form'),
+    path('wrong_data', request.views2.wrong_data, name='wrong_data'),
     path('req_form_copy', request.views2.req_form_copy, name='req_form_copy'),
     path('insert', request.views2.request_insert, name='request_insert'),
     path('index', request.views2.request_index, name='request_index'),

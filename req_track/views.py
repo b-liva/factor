@@ -49,16 +49,25 @@ def e_req_delete_all(request):
     return redirect('e_req_index')
 
 
-
-
 def e_req_report(request):
     reqs = ReqEntered.objects.filter(is_entered=False).filter(is_request=True)
+        # .exclude(owner_text__contains='ظریف')\
+        # .exclude(owner_text__contains='محمدی')\
+        # .exclude(owner_text__contains='علوی')
+    second = reqs
+    if not request.user.is_superuser:
+        reqs = reqs.filter(owner_text__contains=request.user.last_name)
 
+    zarif = reqs.filter(owner_text__contains='ظریف')
+    mohammadi = reqs.filter(owner_text__contains='محمدی')
+    alavi = reqs.filter(owner_text__contains='علوی')
     context = {
         'reqs': reqs,
+        'zarif': zarif.count(),
+        'mohammadi': mohammadi.count(),
+        'alavi': alavi.count(),
     }
     return render(request, 'req_track/ereq_notstarted.html', context)
-
 
 
 def check_orders(request):

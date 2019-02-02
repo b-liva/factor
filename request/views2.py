@@ -1,5 +1,5 @@
 from django.contrib.humanize.templatetags.humanize import intcomma
-from django.db.models import Sum
+from django.db.models import Q
 from datetime import datetime
 import json
 import json_tricks
@@ -147,6 +147,27 @@ def req_form(request):
         'form': form,
         'req_img': file_instance
     })
+
+
+@login_required
+def wrong_data(request):
+    # probably_wrong = ReqSpec.objects.filter(rpm__gt=1500, rpm__lt=2940)
+    # probably_wrong = probably_wrong.filter(rpm__lt=700).filter(rpm__gt=750, rpm__lte=940) \
+    #     .filter(rpm__gt=1000, rpm__lte=1450)
+
+    probably_wrong = ReqSpec.objects.filter(
+        Q(rpm__lt=700) |
+        Q(rpm__gt=750, rpm__lte=940) |
+        Q(rpm__gt=1000, rpm__lte=1450) |
+        Q(rpm__gt=1500, rpm__lt=2940) |
+        Q(kw__gt=10000) |
+        Q(kw__lt=1)
+    )
+
+    context = {
+        'reqspecs': probably_wrong,
+    }
+    return render(request, 'requests/admin_jemco/yreqspec/wrong_data.html', context)
 
 
 def fsearch(request):

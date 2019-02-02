@@ -3,6 +3,28 @@
 
 {% block right_col %}
     <div>
+        {% if request.user.is_superuser %}
+            <div id="customerDetails" class="col-md-4">
+                <h3>تعداد باقیمانده</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>ظریف</td>
+                        <td>محمدی</td>
+                        <td>علوی</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ zarif }}</td>
+                        <td>{{ mohammadi }}</td>
+                        <td>{{ alavi }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        {% endif %}
         <table class="table table-hover">
             <thead>
             <tr>
@@ -13,8 +35,8 @@
                 <td>عنوان</td>
                 <td>کارشناس</td>
                 <td>شماره وارده</td>
-{#                <td>واردشده</td>#}
-{#                <td>درخواست</td>#}
+                {#                <td>واردشده</td>#}
+                {#                <td>درخواست</td>#}
             </tr>
             </thead>
             <tbody>
@@ -28,8 +50,8 @@
                     <td>{{ r.title }}</td>
                     <td>{{ r.owner_text }}</td>
                     <td>{{ r.number_entered }}</td>
-{#                    <td>{{ r.is_entered }}</td>#}
-{#                    <td>{{ r.is_request }}</td>#}
+                    {#                    <td>{{ r.is_entered }}</td>#}
+                    {#                    <td>{{ r.is_request }}</td>#}
                 </tr>
             {% endfor %}
             </tbody>

@@ -20,7 +20,7 @@ class CustomerForm(forms.ModelForm):
     class Meta:
         model = models.Customer
         fields = '__all__'
-        exclude = ('pub_date', 'owner', 'representator',)
+        exclude = ('pub_date', 'owner', 'representator', 'user')
         widgets = {
             'pub_date': forms.DateInput(attrs={
                 'class': 'datetime-input form-control',
