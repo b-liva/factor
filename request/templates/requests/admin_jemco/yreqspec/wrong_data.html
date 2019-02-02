@@ -15,7 +15,7 @@
                     <th scope="col" class="text-center rotate_deg">کیلووات</th>
                     <th scope="col" class="text-center rotate_deg">سرعت</th>
                     <th scope="col" class="text-center rotate_deg">شماره درخواست</th>
-                    <th scope="col" class="text-center rotate_deg">کارشناس</th>
+{#                    <th scope="col" class="text-center rotate_deg">کارشناس</th>#}
                 </tr>
                 </thead>
 
@@ -26,7 +26,7 @@
                         <td>{{ reqspec.kw }}</td>
                         <td>{{ reqspec.rpm }}</td>
                         <td><a href="{% url 'request_details' request_pk=reqspec.req_id.pk%}">{{ reqspec.req_id.number }}</a></td>
-                        <td>{{ reqspec.req_id.owner.last_name }}</td>
+{#                        <td>{{ reqspec.req_id.owner.last_name }}</td>#}
                         {% if perms.request.sale_expert %}
                             <td>
                                 <a class="btn btn-xs btn-warning"
