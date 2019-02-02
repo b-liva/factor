@@ -154,8 +154,10 @@ def wrong_data(request):
     # probably_wrong = ReqSpec.objects.filter(rpm__gt=1500, rpm__lt=2940)
     # probably_wrong = probably_wrong.filter(rpm__lt=700).filter(rpm__gt=750, rpm__lte=940) \
     #     .filter(rpm__gt=1000, rpm__lte=1450)
-
-    probably_wrong = ReqSpec.objects.filter(
+    probably_wrong = ReqSpec.objects.all()
+    if not request.user.is_superuser:
+        probably_wrong = probably_wrong.filter(req_id__owner=request.user)
+    probably_wrong = probably_wrong.filter(
         Q(rpm__lt=700) |
         Q(rpm__gt=750, rpm__lte=940) |
         Q(rpm__gt=1000, rpm__lte=1450) |
