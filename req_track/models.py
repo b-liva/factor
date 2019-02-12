@@ -1,5 +1,7 @@
 from django.db import models
 from accounts.models import User
+from django.utils.timezone import now
+from django_jalali.db import models as jmodels
 
 
 # Create your models here.
@@ -8,6 +10,7 @@ from accounts.models import User
 #
 #     def __str__(self):
 #         return '%s' % self.title
+from request.models import ReqSpec
 
 
 class ReqEntered(models.Model):
@@ -23,6 +26,7 @@ class ReqEntered(models.Model):
     is_request = models.BooleanField(default=True)
     attachment = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField(max_length=600, null=True, blank=True)
+    # date_fa = jmodels.jDateField(default=now, null=True, blank=True)
 
     def __str__(self):
         return '%s' % self.number_automation

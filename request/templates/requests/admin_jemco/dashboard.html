@@ -7,6 +7,9 @@
             {% include 'requests/admin_jemco/page_elements/morischart.html' with rq=rq rq_dict=rq_dict %}
             {% include 'requests/admin_jemco/page_elements/latest_orders.html' with last_n_requests=last_n_requests %}
             {% include 'requests/admin_jemco/page_elements/most_wanted.html' with hot_products=hot_products %}
+            {% include 'requests/admin_jemco/page_elements/daily.html' with daily_kw=daily_kw %}
+            {% include 'requests/admin_jemco/page_elements/daily_proformas.html' %}
+            {% include 'requests/admin_jemco/page_elements/daily_payments.html' %}
         </div>
     </div>
     <div class="row" style="margin: 50px 0 0;">

@@ -6,7 +6,7 @@
             <h3>{{ msg }}</h3>
 {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
             <h1 class="page-header">
-                درخواست ها</h1>
+                {{ message }}</h1>
             <form method="POST" action="{% url 'request_find' %}">
                 {% csrf_token %}
                 شماره درخواست <input name="req_no">
@@ -15,7 +15,8 @@
                 </button>
             </form>
             <br>
-            {% if perms.request.add_requests %}
+            {% if perms.request.add_requests and showHide %}
+
                 <a href="{% url 'req_form' %}" class="btn btn-success btn-sm pull-left">
                     <i class="fa fa-plus"></i> درخواست جدید</a>
             {% endif %}
@@ -25,6 +26,7 @@
                     <th colspan="col" class="text-center">مشتری</th>
                     {#                    <th colspan="col" class="text-center">کد</th>#}
                     <th colspan="col" class="text-center">شماره درخواست</th>
+                    <th colspan="col" class="text-center">شماره اصلی</th>
                     <th colspan="col" class="text-center">تاریخ ثبت</th>
                     <th colspan="col" class="text-center"></th>
                     <th colspan="col" class="text-center">زمان</th>
@@ -38,6 +40,7 @@
                         {#                        <td scope="row" class="text-center">{{ request.pk }}</td>#}
                         <td class="text-center">{{ request.req.customer }}</td>
                         <td class="text-center">{{ request.req.number }}</td>
+                        <td class="text-center">{{ request.req.temp_number }}</td>
                         <td class="text-center">{{ request.req.date_fa }}</td>
                         <td class="text-center">{{ request.req.owner.last_name }}
                             {% for colleague in request.colleagues %}
@@ -52,13 +55,13 @@
                                 <i class="fa fa-eye"></i> مشاهده
                             </a>
 
-                            {% if perms.request.add_requests %}
+                            {% if perms.request.add_requests and showHide %}
                                 <a class="btn btn-warning btn-xs"
                                    href="{% url 'request_edit_form' request_pk=request.req.pk %}">
                                     <i class="fa fa-pencil"></i> ویرایش
                                 </a>
                             {% endif %}
-                            {% if perms.request.add_requests %}
+                            {% if perms.request.add_requests and showHide %}
 {#                                <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i#}
 {#                                        class="fa fa-trash"></i> حذف#}
 {#                                </div>#}

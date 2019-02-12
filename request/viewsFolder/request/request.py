@@ -18,7 +18,7 @@ class RequestList(ListView):
     def get_queryset(self):
         response = []
         # request = self.request
-        requests = Requests.objects.all().order_by('date_fa').reverse()
+        requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
 
         if not self.request.user.is_superuser:
             # requests = requests.filter(owner=self.request.user) | requests.filter(colleagues=self.request.user)

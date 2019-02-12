@@ -62,16 +62,16 @@ def customer_read(request):
     print(customers)
     x = 0
     for customer in customers:
-        reqs = Requests.objects.filter(customer=customer)
+        reqs = Requests.objects.filter(is_active=True).filter(customer=customer)
         print('customer name: ' + customer.name)
         for req in reqs:
             print('     req No. ' + str(req.number))
-            xprefs = Xpref.objects.filter(req_id=req)
+            xprefs = Xpref.objects.filter(is_active=True).filter(req_id=req)
 
             for xpref in xprefs:
                 print('         prefactor number ' + str(xpref.number))
                 specs = PrefSpec.objects.filter(xpref_id=xpref)
-                payments = Payment.objects.filter(xpref_id=xpref)
+                payments = Payment.objects.filter(is_active=True).filter(xpref_id=xpref)
                 for payment in payments:
                     print('             payment: ' + str(payment.amount))
                 x += 1

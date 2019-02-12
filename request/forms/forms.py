@@ -31,7 +31,7 @@ class RequestFrom(forms.ModelForm):
     class Meta:
         model = models.Requests
         fields = '__all__'
-        exclude = ('owner', 'pub_date', 'customer', 'added_by_customer', 'parent_number', 'edited_by_customer', 'is_active')
+        exclude = ('owner', 'pub_date', 'customer', 'added_by_customer', 'parent_number', 'edited_by_customer', 'is_active', 'temp_number')
         widgets = {
             'customer': forms.Select(attrs={
                 'class': 'form-control',
@@ -64,7 +64,7 @@ class RequestFrom(forms.ModelForm):
             'number': ('شماره درخواست'),
             'date_fa': ('تاریخ'),
             'colleagues': ('مشترک با'),
-            'summary': ('چزئیات'),
+            'summary': ('جزئیات'),
         }
 
 
@@ -118,7 +118,7 @@ class SpecAddForm(SpecForm):
 
 
 def user_choices(user):
-    reqs = models.Requests.objects.filter(owner=user)
+    reqs = models.Requests.objects.filter(is_active=True).filter(owner=user)
     return reqs
 
 
@@ -133,7 +133,8 @@ class ProformaForm(forms.ModelForm):
     def __init__(self, current_user, *args, **kwargs):
         print(f'current user is: {current_user}')
         super(ProformaForm, self).__init__(*args, **kwargs)
-        self.fields['req_id'].queryset = models.Requests.objects.filter(owner=current_user)
+        self.fields['req_id'].queryset = models.Requests.objects.filter(is_active=True).filter(owner=current_user)
+
         # this renders the items in form drop down menu
         # self.fields['req_id'].label_from_instance = lambda obj: "%s" % obj.number
 
@@ -145,7 +146,43 @@ class ProformaForm(forms.ModelForm):
     class Meta:
         model = models.Xpref
         fields = '__all__'
-        exclude = ('owner', 'pub_date', 'is_active')
+        exclude = ('owner', 'pub_date', 'is_active', 'temp_number')
+        widgets = {
+
+            'date_fa': forms.DateInput(attrs={
+                'id': 'date_fa'
+            }),
+            'exp_date_fa': forms.DateInput(attrs={
+                'id': 'exp_date_fa'
+            })
+        }
+
+        labels = {
+            'req_id': 'درخواست',
+            'number': 'شماره پیشفاکتور',
+            'date_fa': 'تاریخ صدور',
+            'exp_date_fa': 'تاریخ انقضا',
+            'summary': 'جزئیات',
+            'verified': 'تاییدیه',
+
+        }
+
+
+class ProformaEditForm(forms.ModelForm):
+
+    def __init__(self, current_user, *args, **kwargs):
+        print(f'current user is: {current_user}')
+        super(ProformaEditForm, self).__init__(*args, **kwargs)
+
+        list = ['verified', ]
+        for visible in self.visible_fields():
+            if visible.name not in list:
+                visible.field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = models.Xpref
+        fields = '__all__'
+        exclude = ('owner', 'pub_date', 'is_active', 'req_id',)
         widgets = {
 
             'date_fa': forms.DateInput(attrs={

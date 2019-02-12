@@ -16,9 +16,19 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>{{ zarif }}</td>
-                        <td>{{ mohammadi }}</td>
-                        <td>{{ alavi }}</td>
+                        <td>{{ zarif.not_entered.count }}</td>
+                        <td>{{ mohammadi.not_entered.count }}</td>
+                        <td>{{ alavi.not_entered.count }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ zarif.avg_time | floatformat:2 }} روز</td>
+                        <td>{{ mohammadi.avg_time | floatformat:2 }} روز</td>
+                        <td>{{ alavi.avg_time | floatformat:2 }} روز</td>
+                    </tr>
+                    <tr>
+                        <td>{{ zarif.count }}</td>
+                        <td>{{ mohammadi.count }}</td>
+                        <td>{{ alavi.count }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -31,6 +41,7 @@
                 <td>ردیف</td>
                 <td>شماره اتوماسیون</td>
                 <td>تاریخ</td>
+                <td>تاریخ شمسی</td>
                 <td>مشتری</td>
                 <td>عنوان</td>
                 <td>کارشناس</td>
@@ -46,6 +57,7 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{ r.number_automation }}</td>
                     <td>{{ r.date_txt }}</td>
+                    <td>{{ r.date_fa }}</td>
                     <td>{{ r.customer }}</td>
                     <td>{{ r.title }}</td>
                     <td>{{ r.owner_text }}</td>

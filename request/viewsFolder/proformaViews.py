@@ -1,3 +1,5 @@
+import random
+
 from django.contrib import messages
 from django.shortcuts import render, redirect
 
@@ -51,11 +53,16 @@ def pref_index_deleted(request):
 
 @login_required
 def pref_find(request):
-    term = request.POST['text']
+    # term = request.POST['text']
+    if not request.POST['pref_no']:
+        return redirect('pref_index')
     prof_no = request.POST['pref_no']
-    prefs = Xpref.objects.filter(number=prof_no).filter(summary__contains=term).all()
+    if not Xpref.objects.filter(number=prof_no):
+        messages.error(request, 'پیش فاکتور مورد نظر یافت نشد')
+        return redirect('pref_index')
+    prefs = Xpref.objects.filter(is_active=True).filter(number=prof_no).filter(summary__contains=term).all()
     search_items = {
-        'term': term,
+        # 'term': term,
         'proforma_no': prof_no,
     }
     if prefs is None:
@@ -111,11 +118,11 @@ def pref_details(request, ypref_pk):
 
 @login_required
 def pref_details_backup(request, ypref_pk):
-    if not Xpref.objects.filter(pk=ypref_pk):
+    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
 
-    pref = Xpref.objects.get(pk=ypref_pk)
+    pref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
 
     can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
     if not can_read:
@@ -185,10 +192,10 @@ def pref_details_backup(request, ypref_pk):
 @login_required
 def pref_delete(request, ypref_pk):
 
-    if not Xpref.objects.filter(pk=ypref_pk):
+    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
-    pref = Xpref.objects.get(pk=ypref_pk)
+    pref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
     can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_xpref', pref)
 
     if not can_del:
@@ -203,6 +210,11 @@ def pref_delete(request, ypref_pk):
     elif request.method == 'POST':
         # pref.delete()
         pref.is_active = False
+        pref.temp_number = pref.number
+        rand_num = random.randint(100000, 200000)
+        while Xpref.objects.filter(number=rand_num):
+            rand_num = random.randint(100000, 200000)
+        pref.number = rand_num
         pref.save()
     return redirect('pref_index')
 
@@ -268,7 +280,8 @@ def pro_form(request):
         'form': form,
         'reqs': reqs,
         'prof_file': imgform,
-        'owner_reqs': owners_reqs
+        'owner_reqs': owners_reqs,
+        'message': 'ثبت پیش فاکتور',
     }
     return render(request, 'requests/admin_jemco/ypref/proforma_form.html', context)
 
@@ -279,10 +292,10 @@ def pref_insert_spec_form(request, ypref_pk):
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
-    pref = Xpref.objects.get(pk=ypref_pk)
-    req = Requests.objects.get(pk=pref.req_id.pk)
-    specs = req.reqspec_set.all()
-    prefspecs = pref.prefspec_set.all()
+    pref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
+    req = Requests.objects.filter(is_active=True).get(pk=pref.req_id.pk)
+    specs = req.reqspec_set.filter(is_active=True)
+    prefspecs = pref.prefspec_set.filter(is_active=True)
 
     prices = request.POST.getlist('price')
     qty = request.POST.getlist('qty')
@@ -300,7 +313,7 @@ def pref_insert_spec_form(request, ypref_pk):
 
 @login_required
 def pref_edit(request, ypref_pk):
-    if not Xpref.objects.filter(pk=ypref_pk):
+    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
         messages.error(request, 'no Proforma')
         return redirect('errorpage')
 
@@ -309,7 +322,7 @@ def pref_edit(request, ypref_pk):
         messages.error(request, 'no access ')
         return redirect('errorpage')
 
-    xpref = Xpref.objects.get(pk=ypref_pk)
+    xpref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
     spec_prices = request.POST.getlist('price')
     prof_images = xpref.proffiles_set.all()
 
@@ -374,11 +387,11 @@ def pref_edit2(request, ypref_pk):
     # 6 - if form is valid the save request and its related images
     # 7 - render the template file
 
-    if not Xpref.objects.filter(pk=ypref_pk):
+    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
 
-    prof = Xpref.objects.get(pk=ypref_pk)
+    prof = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
 
     can_read = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', prof)
     if not can_read:
@@ -398,19 +411,20 @@ def pref_edit2(request, ypref_pk):
         prof.date_fa = prof.date_fa.togregorian()
     if prof.exp_date_fa:
         prof.exp_date_fa = prof.exp_date_fa.togregorian()
-    form = forms.ProformaForm(request.user.pk, request.POST or None, request.FILES or None, instance=prof)
-    # form.req_id = prof.req_id
+    # form = forms.ProformaForm(request.user.pk, request.POST or None, request.FILES or None, instance=prof)
+    form = forms.ProformaEditForm(request.user.pk, request.POST or None, request.FILES or None, instance=prof)
+    form.req_id = prof.req_id
     # form = forms.ProformaForm(request.POST or None, request.FILES or None)
     img_form = proforma_forms.ProfFileForm(request.POST, request.FILES)
     files = request.FILES.getlist('image')
-    fv = form.is_valid()
-    fvi = img_form.is_valid()
-    print(f'fv is: {fv}')
-    print(f'fvi is: {fvi}')
+    # fv = form.is_valid()
+    # fvi = img_form.is_valid()
+    # print(f'fv is: {fv}')
+    # print(f'fvi is: {fvi}')
     if form.is_valid() and img_form.is_valid():
         prof_item = form.save(commit=False)
-        prof_item.owner = request.user
-        prof_item.req_id = prof.req_id
+        # prof_item.owner = request.user
+        # prof_item.req_id = prof.req_id
         prof_item.number = prof.number
         prof_item.save()
         for f in files:
@@ -422,6 +436,7 @@ def pref_edit2(request, ypref_pk):
         'form': form,
         'prof_file': img_form,
         'prof_images': prof_images,
-        'img_names': img_names
+        'img_names': img_names,
+        'message': 'ویرایش پیش فاکتور',
     }
     return render(request, 'requests/admin_jemco/ypref/proforma_form.html', context)

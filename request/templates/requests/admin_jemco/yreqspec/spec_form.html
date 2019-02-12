@@ -6,8 +6,18 @@
         <div class="container">
             <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2">
                 <h3>{{ msg }}</h3>
-                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                    جزئیات درخواست</h1>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <p class="card-text">
+                            الکتروموتورهای درخواستی شرکت <a class="badge badge-light"
+                                                            href="{% url 'customer_read' customer_pk=req_obj.customer.pk %}">{{ req_obj.customer }}</a>
+                            طی درخواست شماره
+                            <a class="badge badge-light"
+                               href="{% url 'request_details' request_pk=req_obj.pk %}">{{ req_obj.number }}</a>
+                        </p>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <ul class="message">
                         {% for msg in messages %}
@@ -65,11 +75,16 @@
                                 {#                                        <i class="fa fa-trash"></i> حذف#}
                                 {#                                    </button>#}
                                 {#                                </a>#}
-                                <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i
-                                        class="fa fa-trash"></i> حذف
-                                </div>
-                                <a class="deleteBtnConfirmed"
-                                   href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}"></a>
+
+                                <a class="btn btn-xs btn-danger"
+                                   href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">
+                                    <i class="fa fa-trash"></i>حذف
+                                </a>
+                                <a class="btn btn-xs btn-success"
+                                   href="{% url 'reqspec_copy' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">
+                                    <i class="fa fa-copy"></i> کپی
+                                </a>
+
 
                             </td>
                         </tr>
@@ -98,8 +113,8 @@
                             {#                            </div>#}
                             <button class="btn btn-primary" type="submit">ذخیره</button>
                             {#                            <a class="btn btn-success" href="{% url 'request_index' %}">لیست درخواست ها</a>#}
-{#                            <a class="btn btn-success" href="{% url 'req_search' %}">لیست درخواست ها</a>#}
-                            <a class="btn btn-success" href="{% url 'fbv_customer_request_create' %}">درخواست جدید</a>
+                            {#                            <a class="btn btn-success" href="{% url 'req_search' %}">لیست درخواست ها</a>#}
+                            <a class="btn btn-success" href="{% url 'req_form' %}">درخواست جدید</a>
 
                         </form>
                     </div>

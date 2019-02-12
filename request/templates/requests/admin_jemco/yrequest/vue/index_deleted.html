@@ -5,15 +5,7 @@
         <div class="col-md-10 col-md-offset-1">
             <h3>{{ msg }}</h3>
 {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
-            <h1 class="page-header">
-                درخواست های حذف شده</h1>
-            <form method="POST" action="{% url 'request_find' %}">
-                {% csrf_token %}
-                شماره درخواست <input name="req_no">
-                <button type="submit" name="submit" class="btn btn-sm btn-primary">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </button>
-            </form>
+            <h1 class="page-header">درخواست های حذف شده</h1>
             <br>
             <table class="table table-hover">
                 <tr>

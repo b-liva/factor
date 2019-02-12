@@ -1,7 +1,13 @@
+import math
+
+import jdatetime
 from django.shortcuts import render, redirect
+
+from accounts.models import User
 from request.models import Requests
 from req_track.models import ReqEntered
 from .forms import E_Req_Form
+from django.db import models
 
 # Create your views here.
 
@@ -58,14 +64,23 @@ def e_req_report(request):
     if not request.user.is_superuser:
         reqs = reqs.filter(owner_text__contains=request.user.last_name)
 
-    zarif = reqs.filter(owner_text__contains='ظریف')
-    mohammadi = reqs.filter(owner_text__contains='محمدی')
-    alavi = reqs.filter(owner_text__contains='علوی')
+    mohammadi_account = User.objects.get(pk=2)
+    alavi_account = User.objects.get(pk=3)
+    zarif_account = User.objects.get(pk=4)
+    foroughi_account = User.objects.get(pk=5)
+    date = '1397-11-01'
+
+    zarif = users_summary('ظریف', zarif_account, date, reqs)
+    mohammadi = users_summary('محمدی', mohammadi_account, date, reqs)
+    alavi = users_summary('علوی', alavi_account, date, reqs)
+    # print(zarif['avg_time']['avg_tm'])
+    # mohammadi = reqs.filter(owner_text__contains='محمدی')
+    # alavi = reqs.filter(owner_text__contains='علوی')
     context = {
         'reqs': reqs,
-        'zarif': zarif.count(),
-        'mohammadi': mohammadi.count(),
-        'alavi': alavi.count(),
+        'zarif': zarif,
+        'mohammadi': mohammadi,
+        'alavi': alavi,
     }
     return render(request, 'req_track/ereq_notstarted.html', context)
 
@@ -81,3 +96,21 @@ def check_orders(request):
             print(f"order No: {e.number_automation}: is not entered.")
 
     return redirect('e_req_report')
+
+
+def users_summary(user_txt, user_account, date, not_entered_reqs):
+    reqs = Requests.objects.filter(is_active=True).filter(date_fa__gte=date).filter(owner=user_account)
+    result_list = []
+    for req in reqs:
+        delay_entered = jdatetime.date.fromgregorian(date=req.pub_date, locale='fa_IR') - req.date_fa
+        result_list.append(delay_entered.days)
+    if len(result_list):
+        avg_time = sum(result_list)/len(result_list)
+    else:
+        avg_time = 0
+    response = {
+        'not_entered': not_entered_reqs.filter(owner_text__contains=user_txt),
+        'avg_time': avg_time,
+        'count': reqs.count(),
+    }
+    return response

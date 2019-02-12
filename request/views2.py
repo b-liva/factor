@@ -23,7 +23,7 @@ from django.contrib import messages
 import request.templatetags.functions as funcs
 from request.forms import forms, search
 import nested_dict as nd
-
+import random
 from collections import defaultdict as dd
 
 
@@ -78,13 +78,11 @@ def req_form_copy(request):
         form = RequestCopyForm(request.POST or None)
         if form.is_valid():
             req_no = form.cleaned_data['number']
-            if not Requests.objects.filter(number=req_no):
+            if not Requests.objects.filter(is_active=True).filter(number=req_no):
                 messages.error(request, 'درخواست مورد نظر یافت نشد.')
                 return redirect('errorpage')
 
-            master_req = Requests.objects.get(number=req_no)
-            print(master_req.owner)
-            print(request.user)
+            master_req = Requests.objects.filter(is_active=True).get(number=req_no)
             can_add = funcs.has_perm_or_is_owner(request.user, 'request.copy_requests', instance=master_req)
             if not can_add:
                 messages.error(request, 'عدم دسترسی کافی')
@@ -94,14 +92,15 @@ def req_form_copy(request):
             temp_number = master_req.number
             master_req.pk = None
             master_req.parent_number = temp_number
-            master_req.number = Requests.objects.filter(parent_number__isnull=False).order_by('number').last().number + 1
+            # last_request = Requests.objects.filter(is_active=True).filter(parent_number__isnull=False).order_by('number').last()
+            master_req.number = Requests.objects.order_by('number').last().number + 1
             master_req.save()
 
             for s in reqspec_sets:
                 s.pk = None
                 s.req_id = master_req
                 s.save()
-
+            messages.error(request, f"درخواست شماره {master_req.number} از درخواست شماره {temp_number} کپی گردید.")
             return redirect('spec_form', req_pk=master_req.pk)
 
     if request.method == 'GET':
@@ -154,7 +153,7 @@ def wrong_data(request):
     # probably_wrong = ReqSpec.objects.filter(rpm__gt=1500, rpm__lt=2940)
     # probably_wrong = probably_wrong.filter(rpm__lt=700).filter(rpm__gt=750, rpm__lte=940) \
     #     .filter(rpm__gt=1000, rpm__lte=1450)
-    probably_wrong = ReqSpec.objects.all()
+    probably_wrong = ReqSpec.objects.filter(is_active=True).all()
     if not request.user.is_superuser:
         probably_wrong = probably_wrong.filter(req_id__owner=request.user)
     probably_wrong = probably_wrong.filter(
@@ -302,7 +301,7 @@ def fsearch2(request):
     data = json.loads(request.body.decode('utf-8'))
     print(data)
     specs = ReqSpec.objects.filter(is_active=True)
-    pmnt_total = Payment.objects.all()
+    pmnt_total = Payment.objects.filter(is_active=True)
 
     if request.method == 'POST':
         form_data = {}
@@ -563,8 +562,12 @@ def request_index(request):
     for req in requests:
         diff = today - req.date_fa
         print(f'diff is: {diff.days}')
+        time_entered = jdatetime.date.fromgregorian(date=req.pub_date, locale='fa_IR')
+        delay_entered = time_entered - req.date_fa
         response[req.pk] = {
             'req': req,
+            'pub_date': time_entered,
+            'delay_entered': delay_entered,
             'delay': diff.days,
             'colleagues': req.colleagues.all(),
         }
@@ -608,7 +611,9 @@ def request_index_vue(request):
         requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
     context = {
         'all_requests': requests,
-        'response': response
+        'response': response,
+        'showHide': True,
+        'message': 'درخواست ها',
     }
     return render(request, 'requests/admin_jemco/yrequest/vue/index.html', context)
 
@@ -623,12 +628,10 @@ def request_index_vue_deleted(request):
     # requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
     # requests = Requests.objects.all().order_by('date_fa').reverse()
     today = jdatetime.date.today()
-
     requests = Requests.objects.filter(is_active=False).order_by('date_fa').reverse()
-    if not request.user.is_superuser:
-        requests = requests.filter(owner=request.user)
+    # if not request.user.is_superuser:
+    #     requests = requests.filter(owner=request.user)
     response = {}
-
     date_format = "%m/%d/%Y"
     for req in requests:
         diff = today - req.date_fa
@@ -637,29 +640,35 @@ def request_index_vue_deleted(request):
             'delay': diff.days,
             'colleagues': req.colleagues.all(),
         }
-    if request.user.is_superuser:
-        requests = Requests.objects.filter(is_active=False).order_by('date_fa').reverse()
+    # if request.user.is_superuser:
+    #     requests = Requests.objects.filter(is_active=False).order_by('date_fa').reverse()
     context = {
         'all_requests': requests,
-        'response': response
+        'response': response,
+        'showHide': False,
+        'message': 'درخواست های حذف شده',
     }
-    return render(request, 'requests/admin_jemco/yrequest/vue/index_deleted.html', context)
+    return render(request, 'requests/admin_jemco/yrequest/vue/index.html', context)
 
 
 
 @login_required
 def request_find(request):
-    req = Requests.objects.get(number=request.POST['req_no'])
+    if not Requests.objects.filter(number=request.POST['req_no']):
+        messages.error(request,'درخواست مورد نظر یافت نشد.')
+        return redirect('request_index')
+    req = Requests.objects.filter(is_active=True).get(number=request.POST['req_no'])
     return redirect('request_details', request_pk=req.pk)
 
 
 @login_required
 def request_read(request, request_pk):
-    if not Requests.objects.filter(pk=request_pk) or not Requests.objects.get(pk=request_pk).is_active:
+    if not Requests.objects.filter(is_active=True).filter(pk=request_pk) and not request.user.is_superuser:
         messages.error(request, 'صفحه مورد نظر یافت نشد')
         return redirect('errorpage')
 
     req = Requests.objects.get(pk=request_pk)
+
     colleagues = req.colleagues.all()
     colleague = False
     if request.user in colleagues:
@@ -739,8 +748,8 @@ def request_read(request, request_pk):
 
     kw = total_kw(request_pk)
 
-    parent_request = Requests.objects.filter(number=req.parent_number)
-    sub_requests = Requests.objects.filter(parent_number=req.number)
+    parent_request = Requests.objects.filter(is_active=True).filter(number=req.parent_number)
+    sub_requests = Requests.objects.filter(is_active=True).filter(parent_number=req.number)
     print(req)
     print(parent_request)
     print(sub_requests)
@@ -760,8 +769,8 @@ def request_read(request, request_pk):
 
 @login_required
 def read_vue(request, request_pk):
-    if not Requests.objects.filter(pk=request_pk):
-
+    if not Requests.objects.filter(pk=request_pk) and not request.user.is_superuser:
+        print('entered')
         messages.error(request, 'صفحه مورد نظر یافت نشد')
         return redirect('errorpage')
 
@@ -859,10 +868,10 @@ def read_vue(request, request_pk):
 
 @login_required
 def request_delete(request, request_pk):
-    if not Requests.objects.filter(pk=request_pk):
+    if not Requests.objects.filter(is_active=True).filter(pk=request_pk):
         messages.error(request, 'Nothing found')
         return redirect('errorpage')
-    req = Requests.objects.get(pk=request_pk)
+    req = Requests.objects.filter(is_active=True).get(pk=request_pk)
     can_delete = funcs.has_perm_or_is_owner(request.user, 'request.delete_requests', req)
     if not can_delete:
         messages.error(request, 'No access')
@@ -876,7 +885,16 @@ def request_delete(request, request_pk):
     elif request.method == 'POST':
         # req.delete()
         req.is_active = False
+        req.temp_number = req.number
+        rand_num = random.randint(100000, 200000)
+        while Requests.objects.filter(number=rand_num):
+            rand_num = random.randint(100000, 200000)
+        req.number = rand_num
         req.save()
+        specs = req.reqspec_set.all()
+        for s in specs:
+            s.is_active = False
+            s.save()
     # return redirect('request_index')
     return redirect('request_index')
 
@@ -967,10 +985,10 @@ def request_edit_form(request, request_pk):
     # 5 - get the list of files from request
     # 6 - if form is valid the save request and its related images
     # 7 - render the template file
-    if not Requests.objects.filter(pk=request_pk):
+    if not Requests.objects.filter(is_active=True).filter(pk=request_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
-    req = Requests.objects.get(pk=request_pk)
+    req = Requests.objects.filter(is_active=True).get(pk=request_pk)
     colleagues = req.colleagues.all()
     colleague = False
     if request.user in colleagues:

@@ -11,15 +11,15 @@ from request.forms import forms
 # Create your views here.
 @login_required
 def reqspec_form(request, req_pk):
-    if not Requests.objects.filter(pk=req_pk):
+    if not Requests.objects.filter(is_active=True).filter(pk=req_pk):
         messages.error(request, 'No such Request')
         return redirect('errorpage')
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec')
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
-    req_obj = Requests.objects.get(pk=req_pk)
-    specs = req_obj.reqspec_set.all()
+    req_obj = Requests.objects.filter(is_active=True).get(pk=req_pk)
+    specs = req_obj.reqspec_set.filter(is_active=True)
     return render(request, 'requests/admin_jemco/yreqspec/form.html', {'req_obj': req_obj, 'specs': specs})
 
 
@@ -32,7 +32,7 @@ def reqspec_insert(request):
     if request.method == 'POST':
         spec = ReqSpec()
         if request.POST['updating']:
-            spec = ReqSpec.objects.get(pk=request.POST['spec_pk'])
+            spec = ReqSpec.objects.filter(is_active=True).get(pk=request.POST['spec_pk'])
 
         related_req = Requests(pk=request.POST['req_id'])
         spec.req_id = related_req
@@ -58,16 +58,16 @@ def reqspec_index(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    reqspecs = ReqSpec.objects.all()
+    reqspecs = ReqSpec.objects.filter(is_active=True).all()
     return render(request, 'requests/admin_jemco/yreqspec/index.html', {'reqspecs': reqspecs})
 
 
 @login_required
 def reqspec_details(request, yreqSpec_pk):
-    if not ReqSpec.objects.filter(pk=yreqSpec_pk):
+    if not ReqSpec.objects.filter(is_active=True).filter(pk=yreqSpec_pk):
         messages.error(request, 'No such Spec')
         return redirect('errorpage')
-    reqspec = ReqSpec.objects.get(pk=yreqSpec_pk)
+    reqspec = ReqSpec.objects.filter(is_active=True).get(pk=yreqSpec_pk)
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.read_reqspecs', reqspec)
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')
@@ -78,11 +78,11 @@ def reqspec_details(request, yreqSpec_pk):
 @login_required
 def reqspec_delete(request, yreqSpec_pk, req_pk):
     print('eeee')
-    if not ReqSpec.objects.filter(pk=yreqSpec_pk):
+    if not ReqSpec.objects.filter(is_active=True).filter(pk=yreqSpec_pk):
         messages.error(request, 'No such Spec.')
         return redirect('errorpage')
 
-    reqspec = ReqSpec.objects.get(pk=yreqSpec_pk)
+    reqspec = ReqSpec.objects.filter(is_active=True).get(pk=yreqSpec_pk)
     can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_reqspecs', reqspec)
     if not can_del:
         messages.error(request, 'عدم دسترسی کافی')
@@ -110,12 +110,12 @@ def reqspec_delete(request, yreqSpec_pk, req_pk):
 
 @login_required
 def reqspec_edit(request, yreqSpec_pk, req_pk):
-    if not Requests.objects.filter(pk=req_pk) or not ReqSpec.objects.filter(pk=yreqSpec_pk):
+    if not Requests.objects.filter(is_active=True).filter(pk=req_pk) or not ReqSpec.objects.filter(is_active=True).filter(pk=yreqSpec_pk):
         messages.error(request, 'no request or specs')
         return redirect('errorpage')
-    req = Requests.objects.get(pk=req_pk)
-    specs = ReqSpec.objects.filter(req_id=req)
-    spec = ReqSpec.objects.get(pk=yreqSpec_pk)
+    req = Requests.objects.filter(is_active=True).get(pk=req_pk)
+    specs = ReqSpec.objects.filter(is_active=True).filter(req_id=req)
+    spec = ReqSpec.objects.filter(is_active=True).get(pk=yreqSpec_pk)
     # checks the mismach for request and specs
     if spec not in specs:
         messages.error(request, 'mismatch')
@@ -138,7 +138,7 @@ def spec_form(request, req_pk):
         return redirect('errorpage')
 
     form = forms.SpecForm()
-    req = Requests.objects.get(pk=req_pk)
+    req = Requests.objects.filter(is_active=True).get(pk=req_pk)
 
     if request.method == 'POST':
         form = forms.SpecForm(request.POST)
@@ -166,11 +166,11 @@ def spec_form(request, req_pk):
 @login_required
 def reqspec_edit_form(request, yreqSpec_pk, req_pk):
 
-    if not Requests.objects.filter(pk=req_pk) or not ReqSpec.objects.filter(pk=yreqSpec_pk):
+    if not Requests.objects.filter(is_active=True).filter(pk=req_pk) or not ReqSpec.objects.filter(is_active=True).filter(pk=yreqSpec_pk):
         messages.error(request, 'no request or specs')
         return redirect('errorpage')
 
-    reqspec = ReqSpec.objects.get(pk=yreqSpec_pk)
+    reqspec = ReqSpec.objects.filter(is_active=True).get(pk=yreqSpec_pk)
     colleagues = reqspec.req_id.colleagues.all()
     colleague = False
     if request.user in colleagues:
@@ -182,9 +182,8 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
 
     req = Requests.objects.get(pk=req_pk)
     specs = req.reqspec_set.all()
-    spec = ReqSpec.objects.get(pk=yreqSpec_pk)
+    spec = ReqSpec.objects.filter(is_active=True).get(pk=yreqSpec_pk)
     form = forms.SpecForm(request.POST or None, instance=spec)
-    print(f'request is: {request.method}')
     if request.method == 'POST':
         if form.is_valid():
             print('form is valid')
@@ -199,3 +198,12 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
         'form': form
     }
     return render(request, 'requests/admin_jemco/yreqspec/spec_form.html', context)
+
+
+@login_required
+def reqspec_copy(request, yreqSpec_pk, req_pk):
+    spec = ReqSpec.objects.get(pk=yreqSpec_pk)
+    spec.pk=None
+    spec.save()
+    messages.error(request, 'ردیف با موفقیت کپی شد.')
+    return redirect('reqspec_edit_form', yreqSpec_pk=spec.pk, req_pk=spec.req_id.pk)

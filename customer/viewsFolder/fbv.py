@@ -154,8 +154,8 @@ def customer_spec_edit_form(request, req_pk, spec_pk):
     #     messages.error(request, 'درخواست مورد نظر یافت نشد')
     #     return redirect('errorpage')
     user = request.user
-    req = Requests.objects.get(pk=req_pk)
-    spec = ReqSpec.objects.get(pk=spec_pk)
+    req = Requests.objects.filter(is_active=True).get(pk=req_pk)
+    spec = ReqSpec.objects.filter(is_active=True).get(pk=spec_pk)
 
     can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_reqspec', req)
     if not can_edit:
@@ -192,10 +192,10 @@ def customer_spec_edit_form(request, req_pk, spec_pk):
 
 @login_required
 def customer_spec_delete(request, spec_pk, req_pk):
-    if not ReqSpec.objects.filter(pk=spec_pk):
+    if not ReqSpec.objects.filter(is_active=True).filter(pk=spec_pk):
         messages.error(request, 'No such Spec.')
         return redirect('errorpage')
-    reqspec = ReqSpec.objects.get(pk=spec_pk)
+    reqspec = ReqSpec.objects.filter(is_active=True).get(pk=spec_pk)
     req = reqspec.req_id
 
     can_delete = funcs.has_perm_or_is_owner(request.user, 'request.delete_reqspec', req)

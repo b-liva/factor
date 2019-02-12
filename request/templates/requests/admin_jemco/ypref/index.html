@@ -7,30 +7,43 @@
             {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
             <h1 class="page-header">
                 {{ title }}</h1>
-            {% if messages %}
-                <div class="alert alert-danger">
-                    {% for msg in messages %}
-                        <p>{{ msg }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            <form method="POST" action="{% url 'pref_find' %}">
-                {% csrf_token %}
-                شماره پیشفاکتور <input name="pref_no">
-                <input name="text">
-                <button type="submit" name="submit" class="btn btn-sm btn-primary">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </button>
-            </form>
-            {% if perms.request.add_xpref and showDelete%}
-                <a href="{% url 'pro_form' %}" class="btn btn-success btn-sm pull-left"><i class="fa fa-plus"></i>
-                    پیشفاکتور جدید</a>
-            {% endif %}
+            <div class="row">
+                {% if messages %}
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="alert alert-danger">
+                            {% for msg in messages %}
+                                <p>{{ msg }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+            <div class="row">
+                {% if showDelete %}
+                    <form method="POST" action="{% url 'pref_find' %}">
+                        {% csrf_token %}
+                        شماره پیشفاکتور <input name="pref_no">
+                        {#                    <input name="text">#}
+                        <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                {% endif %}
+
+                {% if perms.request.add_xpref and showDelete %}
+                    <a href="{% url 'pro_form' %}" class="btn btn-success btn-sm pull-left"><i class="fa fa-plus"></i>
+                        پیشفاکتور جدید</a>
+                {% endif %}
+
+            </div>
             <table class="table table-hover text-center">
                 <thead>
                 <tr>
                     <th scope="col" class="text-center">ردیف</th>
                     <th scope="col" class="text-center">شماره پیش فاکتور</th>
+                    {% if not showDelete %}
+                        <th scope="col" class="text-center">شماره پیش فاکتور اصلی</th>{% endif %}
                     <th scope="col" class="text-center">شماره درخواست</th>
                     <th scope="col" class="text-center">تاریخ</th>
                     <th scope="col" class="text-center">جزئیات</th>
@@ -44,6 +57,8 @@
                     <tr>
                         <td scope="row">{{ forloop.counter }}</td>
                         <td>{{ pref.number }}</td>
+                        {% if not showDelete %}
+                            <td>{{ pref.temp_number }}</td>{% endif %}
                         <td><a href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
                         </td>
                         <td>{{ pref.date_fa }}</td>
@@ -54,20 +69,15 @@
                                href="{% url 'pref_details' ypref_pk=pref.pk %}">
                                 <i class="fa fa-eye"></i> مشاهده
                             </a>
-                            {% if perms.request.add_xpref %}
+                            {% if perms.request.add_xpref and showDelete %}
+
                                 <a class="btn btn-primary btn-xs btn-warning"
                                    href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
                                     <i class="fa fa-pencil"></i> ویرایش
                                 </a>
-                                {#                                <a class="btn btn-primary btn-xs btn-danger"#}
-                                {#                                   href="{% url 'pref_delete' ypref_pk=pref.pk %}">#}
-                                {#                                    <i class="fa fa-trash"></i> حذف#}
-                                {#                                </a>#}
-                                {% if showDelete %}
-                                    <a class="btn btn-primary btn-xs btn-danger"
-                                       href="{% url 'pref_delete' ypref_pk=pref.pk %}"><i
-                                            class="fa fa-trash"></i> حذف</a>
-                                {% endif %}
+                                <a class="btn btn-primary btn-xs btn-danger"
+                                   href="{% url 'pref_delete' ypref_pk=pref.pk %}"><i
+                                        class="fa fa-trash"></i> حذف</a>
 
                             {% endif %}
                         </td>

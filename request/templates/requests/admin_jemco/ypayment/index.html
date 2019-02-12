@@ -7,6 +7,17 @@
             {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
             <h1 class="page-header">
                 {{ title }}</h1>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="form-group">
+                        <ul class="message">
+                            {% for msg in messages %}
+                                <li class="alert alert-error">{{ msg }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <form method="POST" action="{% url 'payment_find' %}">
                 {% csrf_token %}
                 شماره پرداخت <input name="payment_no">
@@ -14,7 +25,7 @@
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
             </form>
-            {% if perms.request.add_payment and show %}
+            {% if perms.request.add_payment and showHide %}
                 <a href="{% url 'pay_form' %}" class="btn btn-success btn-sm pull-left">
                     <i class="fa fa-plus"></i> ثبت پرداخت </a>
             {% endif %}
@@ -23,6 +34,8 @@
                     <tr>
                         <th class="text-center">ردیف</th>
                         <th class="text-center">شماره پرداخت</th>
+                        {% if not showHide %}
+                            <th class="text-center">شماره پرداخت اصلی</th>{% endif %}
                         <th class="text-center">شماره درخواست</th>
                         <th class="text-center">شماره پیشفاکتور</th>
                         <th class="text-center">مبلغ</th>
@@ -35,6 +48,8 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ payment.number }}</td>
+                            {% if not showHide %}
+                                <td>{{ payment.temp_number }}</td>{% endif %}
                             <td>{{ payment.xpref_id.req_id.number }}</td>
                             <td>{{ payment.xpref_id.number }}</td>
                             <td>{{ payment.amount|intcomma }}</td>
@@ -45,16 +60,14 @@
                                    href="{% url 'payment_details' ypayment_pk=payment.pk %}">
                                     <i class="fa fa-eye"></i> مشاهده
                                 </a>
-                                {% if perms.request.add_payment %}
+                                {% if perms.request.add_payment and showHide %}
                                     <a class="btn btn-primary btn-xs btn-warning"
                                        href="{% url 'payment_edit' ypayment_pk=payment.pk %}">
                                         <i class="fa fa-pencil"></i> ویرایش
                                     </a>
-                                    {% if show %}
-                                        <a class="btn btn-primary btn-xs btn-danger"
-                                           href="{% url 'payment_delete' ypayment_pk=payment.pk %}"><i
-                                                class="fa fa-trash"></i> حذف</a>
-                                    {% endif %}
+                                    <a class="btn btn-primary btn-xs btn-danger"
+                                       href="{% url 'payment_delete' ypayment_pk=payment.pk %}"><i
+                                            class="fa fa-trash"></i> حذف</a>
 
                                 {% endif %}
                             </td>

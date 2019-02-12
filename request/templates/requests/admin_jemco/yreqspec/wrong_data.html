@@ -5,7 +5,7 @@
     <div class="container">
         <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
             <div class="row" style="margin-bottom: 50px;">
-            <h4 class="text-center">احتمال وجود خطای در داده های زیر وجود دارد.</h4>
+            <h4 class="text-center">احتمال وجود خطا در داده های زیر وجود دارد.</h4>
             </div>
 
             <table class="table table-hover text-center">
@@ -33,9 +33,9 @@
                                    href="{% url 'reqspec_edit_form' req_pk=reqspec.req_id.pk yreqSpec_pk=reqspec.pk %}">
                                     <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
                                 </a>
-                                <a class="btn btn-primary btn-xs btn-danger"
-                                   href="{% url 'reqSpec_delete' req_pk=reqspec.req_id.pk yreqSpec_pk=reqspec.pk %}"><i
-                                        class="fa fa-trash"></i> حذف</a>
+{#                                <a class="btn btn-primary btn-xs btn-danger"#}
+{#                                   href="{% url 'reqSpec_delete' req_pk=reqspec.req_id.pk yreqSpec_pk=reqspec.pk %}"><i#}
+{#                                        class="fa fa-trash"></i> حذف</a>#}
                             </td>
                         {% endif %}
                     </tr>

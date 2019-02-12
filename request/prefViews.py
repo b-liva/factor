@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def pref_form(request):
-    Reqs = Requests.objects.all()
+    Reqs = Requests.objects.filter(is_active=True)
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')
@@ -28,9 +28,9 @@ def pref_form(request):
 
 @login_required
 def pref_form2(request):
-    req = Requests.objects.get(number=request.POST['req_no'])
+    req = Requests.objects.filter(is_active=True).get(number=request.POST['req_no'])
     a = req
-    reqspec = a.reqspec_set.all()
+    reqspec = a.reqspec_set.filter(is_active=True)
     print(reqspec.count())
     return render(request, 'requests/admin_jemco/ypref/form2.html', {
         'reqspec': reqspec,
@@ -41,17 +41,17 @@ def pref_form2(request):
 @login_required
 def pref_insert(request):
     # can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
-    reqs = Requests.objects.all()
+    reqs = Requests.objects.filter(is_active=True)
     req_no = request.POST['req_no']
     print(req_no)
     xpref_no = request.POST['xpref']
     spec_prices = request.POST.getlist('price')
     spec_ids = request.POST.getlist('spec_id')
     x = 0
-    xpref = Xpref.objects.filter(pk=xpref_no)
+    xpref = Xpref.objects.filter(is_active=True).filter(pk=xpref_no)
     xpref = Xpref()
     xpref.number = xpref_no
-    xpref.req_id = Requests.objects.get(pk=req_no)
+    xpref.req_id = Requests.objects.filter(is_active=True).get(pk=req_no)
     xpref.date_fa = request.POST['date_fa']
     xpref.exp_date_fa = request.POST['exp_date_fa']
     xpref.owner = request.user
@@ -60,7 +60,7 @@ def pref_insert(request):
         j = int(i)
         print(str(i) + ':' + str(spec_prices[x]))
         # r = PrefSpec.objects.filter(pk=spec_ids[x])
-        spec = ReqSpec.objects.get(pk=j)
+        spec = ReqSpec.objects.filter(is_active=True).get(pk=j)
 
         pref_spec = PrefSpec()
         pref_spec.type = spec.type
@@ -86,10 +86,10 @@ def pref_insert(request):
 
 @login_required
 def pref_edit_form(request, ypref_pk):
-    if not Xpref.objects.filter(pk=ypref_pk):
+    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
         messages.error(request, 'no Proforma')
         return redirect('errorpage')
-    proforma = Xpref.objects.get(pk=ypref_pk)
+    proforma = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
     can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', proforma)
     if not can_edit:
         messages.error(request, 'عدم دسترسی کافی')
@@ -104,7 +104,7 @@ def pref_edit_form(request, ypref_pk):
 
 @login_required
 def xpref_link(request, xpref_id):
-    xpref = Xpref.objects.get(pk=xpref_id)
+    xpref = Xpref.objects.filter(is_active=True).get(pk=xpref_id)
     xpref_specs = xpref.prefspec_set.all()
     return render(request, 'requests/admin_jemco/report/xpref_details.html', {
         'xpref': xpref,
@@ -114,10 +114,10 @@ def xpref_link(request, xpref_id):
 
 @login_required
 def prof_spec_form(request, ypref_pk):
-    if not Xpref.objects.filter(pk=ypref_pk):
+    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
         messages.error(request, 'no Proforma')
         return redirect('errorpage')
-    proforma = Xpref.objects.get(pk=ypref_pk)
+    proforma = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
     req = proforma.req_id
     reqspecs = req.reqspec_set.all()
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')

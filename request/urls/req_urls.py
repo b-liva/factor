@@ -45,6 +45,7 @@ urlpatterns = [
         path('delete', request.reqSpecViews.reqspec_delete, name='reqSpec_delete'),
         path('edit', request.reqSpecViews.reqspec_edit, name='reqSpec_edit'),
         path('editForm', request.reqSpecViews.reqspec_edit_form, name='reqspec_edit_form'),
+        path('copy', request.reqSpecViews.reqspec_copy, name='reqspec_copy'),
     ])),
 
 

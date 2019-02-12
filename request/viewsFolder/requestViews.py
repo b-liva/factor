@@ -114,23 +114,26 @@ def request_index(request):
     if not can_index:
         messages.error(request, 'Sorry No access...')
         return redirect('errorpage')
-    requests = Requests.objects.filter(owner=request.user)
+    requests = Requests.objects.filter(is_active=True).filter(owner=request.user)
     return render(request, 'requests/admin_jemco/yrequest/index.html', {'all_requests': requests})
 
 
 @login_required
 def request_find(request):
-    req = Requests.objects.get(number=request.POST['req_no'])
+    if not Requests.objects.filter(is_active=True, number=request.POST['req_no']):
+        messages.error(request, 'درخواست مورد نظر یافت نشد')
+        return redirect('errorpage')
+    req = Requests.objects.filter(is_active=True).get(number=request.POST['req_no'])
     return redirect('request_details', request_pk=req.pk)
 
 
 @login_required
 def request_read(request, request_pk):
-    if not Requests.objects.filter(pk=request_pk):
+    if not Requests.objects.filter(is_active=True).filter(pk=request_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
 
-    req = Requests.objects.get(pk=request_pk)
+    req = Requests.objects.filter(is_active=True).get(pk=request_pk)
     can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_requests', req)
     if not can_read:
         messages.error(request, 'No access!!!')
@@ -150,10 +153,10 @@ def request_read(request, request_pk):
 
 @login_required
 def request_delete(request, request_pk):
-    if not Requests.objects.filter(pk=request_pk):
+    if not Requests.objects.filter(is_active=True, pk=request_pk):
         messages.error(request, 'Nothing found')
         return redirect('errorpage')
-    req = Requests.objects.get(pk=request_pk)
+    req = Requests.objects.filter(is_active=True).get(pk=request_pk)
     can_delete = funcs.has_perm_or_is_owner(request.user, 'request.delete_requests', req)
     # can_delete = True
     if not can_delete:
@@ -166,7 +169,7 @@ def request_delete(request, request_pk):
 
 @login_required
 def request_edit(request, request_pk):
-    if not Requests.objects.filter(pk=request_pk):
+    if not Requests.objects.filter(is_active=True).filter(pk=request_pk):
         messages.error(request, 'Nothing found')
         return redirect('errorpage')
     return HttpResponse('request Edit' + str(request_pk))
@@ -205,7 +208,7 @@ def payment_insert(request):
         messages.error(request, 'Sorry, No way to access')
         return redirect('errorpage')
 
-    xpref = Xpref.objects.get(number=request.POST['xpref_no'])
+    xpref = Xpref.objects.filter(is_active=True).get(number=request.POST['xpref_no'])
     payment = Payment()
     payment.xpref_id = xpref
     payment.amount = request.POST['amount']
@@ -219,7 +222,7 @@ def payment_insert(request):
 
     reqs, xprefs, xpayments = find_all_obj()
 
-    payments = Payment.objects.all()
+    payments = Payment.objects.filter(is_active=True)
     return render(request, 'requests/admin_jemco/ypayment/index.html', {
         'msg': msg,
         'reqs': reqs,
@@ -252,25 +255,25 @@ def payment_index(request):
 
 @login_required
 def payment_find(request):
-    payment = Payment.objects.get(number=request.POST['payment_no'])
+    payment = Payment.objects.filter(is_active=True).get(number=request.POST['payment_no'])
     return redirect('payment_details', ypayment_pk=payment.pk)
 
 
 @login_required
 def payment_details(request, ypayment_pk):
-    payment = Payment.objects.get(pk=ypayment_pk)
+    payment = Payment.objects.filter(is_active=True).get(pk=ypayment_pk)
     return render(request, 'requests/admin_jemco/ypayment/payment_details.html', {'payment': payment})
 
 
 @login_required
 def payment_delete(request, ypayment_pk):
-    payment = Payment.objects.get(pk=ypayment_pk)
+    payment = Payment.objects.filter(is_active=True).get(pk=ypayment_pk)
     can_delete = funcs.has_perm_or_is_owner(request.user, 'request.delete_payment', payment)
     if not can_delete:
         messages.error(request, 'No access!')
         return redirect('errorpage')
     payment.delete()
-    payments = Payment.objects.all()
+    payments = Payment.objects.filter(is_active=True)
     msg = 'payment deleted successfully...'
     # return render(request, 'requests/admin_jemco/ypayment/index.html', {'payments': payments, 'msg':msg})
     return redirect('payment_index')
@@ -278,7 +281,7 @@ def payment_delete(request, ypayment_pk):
 
 @login_required
 def payment_edit(request, ypayment_pk):
-    payment = Payment.objects.get(pk=ypayment_pk)
+    payment = Payment.objects.filter(is_active=True).get(pk=ypayment_pk)
     can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_payment', payment)
     if not can_edit:
         messages.error(request, 'عدم دسترسی کافی')
@@ -338,7 +341,7 @@ def pref(request, ypref_pk):
 
 
 def total_kw(req_id):
-    req = Requests.objects.get(pk=req_id)
+    req = Requests.objects.filter(is_active=True).get(pk=req_id)
     reqspecs = req.reqspec_set.all()
     total_kw = 0
     for reqspec in reqspecs:
@@ -360,7 +363,7 @@ def pay_form(request):
     else:
         form = forms.PaymentFrom()
 
-    payments = Payment.objects.all()
+    payments = Payment.objects.filter(is_active=True)
     return render(request, 'requests/admin_jemco/ypayment/payment_form.html', {
         'form': form,
         'xpayments': payments
@@ -383,7 +386,7 @@ def request_edit_form(request, request_pk):
         messages.error(request, 'Sorry, You need some priviliges to do this.')
         return redirect('errorpage')
 
-    req = Requests.objects.get(pk=request_pk)
+    req = Requests.objects.filter(is_active=True).get(pk=request_pk)
     req_images = req.requestfiles_set.all()
     img_names = {}
     for r in req_images:

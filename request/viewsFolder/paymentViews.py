@@ -1,3 +1,5 @@
+import random
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
@@ -55,7 +57,7 @@ def pay_form(request):
     else:
         form = payment_forms.PaymentFrom()
 
-    payments = Payment.objects.all()
+    payments = Payment.objects.filter(is_active=True)
     return render(request, 'requests/admin_jemco/ypayment/payment_form.html', {
         'form': form,
         'img_form': img_form,
@@ -84,7 +86,7 @@ def payment_insert(request):
 
     reqs, xprefs, xpayments = find_all_obj()
 
-    payments = Payment.objects.all()
+    payments = Payment.objects.filter(is_active=True)
     return render(request, 'requests/admin_jemco/ypayment/index.html', {
         'msg': msg,
         'reqs': reqs,
@@ -127,14 +129,13 @@ def payment_index(request):
         'debt': debt,
         'debt_percent': debt_percent,
         'title': 'پرداخت ها',
-        'show': True,
+        'showHide': True,
     }
     return render(request, 'requests/admin_jemco/ypayment/index.html', context)
 
 
 @login_required
 def payment_index_deleted(request):
-
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_deleted_payment')
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')
@@ -165,20 +166,25 @@ def payment_index_deleted(request):
         'debt': debt,
         'debt_percent': debt_percent,
         'title': 'پرداخت های حذف شده',
-        'show': False,
+        'showHide': False,
     }
     return render(request, 'requests/admin_jemco/ypayment/index.html', context)
 
 
 @login_required
 def payment_find(request):
-    payment = Payment.objects.get(number=request.POST['payment_no'])
+    if not request.POST['payment_no']:
+        return redirect('payment_index')
+    if not Payment.objects.filter(number=request.POST['payment_no']):
+        messages.error(request, 'پرداخت مورد نظر یافت نشد')
+        return redirect('payment_index')
+    payment = Payment.objects.filter(is_active=True).get(number=request.POST['payment_no'])
     return redirect('payment_details', ypayment_pk=payment.pk)
 
 
 @login_required
 def payment_details(request, ypayment_pk):
-    if not Payment.objects.filter(pk=ypayment_pk):
+    if not Payment.objects.filter(is_active=True).filter(pk=ypayment_pk) and not request.user.is_superuser:
         messages.error(request, 'صفحه مورد نظر یافت نشد')
         return redirect('errorpage')
     payment = Payment.objects.get(pk=ypayment_pk)
@@ -189,7 +195,7 @@ def payment_details(request, ypayment_pk):
     images = models.PaymentFiles.objects.filter(pay=payment)
     context = {
         'payment': payment,
-        'images': images
+        'images': images,
     }
     return render(request, 'requests/admin_jemco/ypayment/payment_details.html', context)
 
@@ -210,8 +216,13 @@ def payment_delete(request, ypayment_pk):
     elif request.method == 'POST':
         # payment.delete()
         payment.is_active = False
+        payment.temp_number = payment.number
+        rand_num = random.randint(100000, 200000)
+        while Payment.objects.filter(number=rand_num):
+            rand_num = random.randint(100000, 200000)
+        payment.number = rand_num
         payment.save()
-    payments = Payment.objects.all()
+    payments = Payment.objects.filter(is_active=True)
     msg = 'payment deleted successfully...'
     # return render(request, 'requests/admin_jemco/ypayment/index.html', {'payments': payments, 'msg':msg})
     return redirect('payment_index')
@@ -226,7 +237,7 @@ def payment_edit(request, ypayment_pk):
     # 5 - get the list of files from request
     # 6 - if form is valid the save request and its related images
     # 7 - render the template file
-    payment = Payment.objects.get(pk=ypayment_pk)
+    payment = Payment.objects.filter(is_active=True).get(pk=ypayment_pk)
     can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_payment', payment)
     if not can_edit:
         messages.error(request, 'عدم دسترسی کافی')
@@ -248,7 +259,7 @@ def payment_edit(request, ypayment_pk):
 
 
 def testimage(request):
-    payment = models.Payment.objects.last()
+    payment = models.Payment.objects.filter(is_active=True).last()
     form = payment_forms.PaymentFileForm()
     files = False
     if request.method == 'POST':

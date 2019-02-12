@@ -106,7 +106,7 @@ class CustomerRequestDetailsView(DetailView):
         context = super(CustomerRequestDetailsView, self).get_context_data(**kwargs)
         request = self.request
         request_pk = self.kwargs.get("pk")
-        req = Requests.objects.get(pk=request_pk)
+        req = Requests.objects.filter(is_active=True).get(pk=request_pk)
         # colleagues = req.colleagues.all()
         # colleague = False
         # if request.user in colleagues:

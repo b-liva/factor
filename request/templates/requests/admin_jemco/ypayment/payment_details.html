@@ -75,6 +75,21 @@
                         </div>
                     {% endfor %}
                 </div>
+                <div class="row">
+                    <div class="panel-body">
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p class="card-text">
+                                پرداخت مربوط به پیش فاکتور شماره <a class="badge badge-light"
+                                    href="{% url 'pref_details' ypref_pk=payment.xpref_id.pk %}">{{ payment.xpref_id.number }}</a>
+                                و درخواست شماره <a class="badge badge-light"
+                                    href="{% url 'request_details' request_pk=payment.xpref_id.req_id.pk %}">{{ payment.xpref_id.req_id.number }}</a>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
 
 
             </div>

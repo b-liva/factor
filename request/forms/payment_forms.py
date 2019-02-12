@@ -22,6 +22,7 @@ class PaymentFrom(forms.ModelForm):
             'payment_date',
             'customer',
             'is_active',
+            'temp_number',
         )
         widgets = {
             'date_fa': forms.DateInput(attrs={

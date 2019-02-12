@@ -12,6 +12,7 @@ class FundCreateSerializer(ModelSerializer):
 
 class FundListSerializer(ModelSerializer):
     owner = SerializerMethodField()
+
     class Meta:
         model = Fund
         fields = [
@@ -20,7 +21,7 @@ class FundListSerializer(ModelSerializer):
             'title',
         ]
 
-    # this is doable to any of that above fields
+    # this is doable for any of that above fields
     def get_owner(self, obj):
         return str(obj.owner.username) + ' --> This is done via, SerializerMethodField'
 

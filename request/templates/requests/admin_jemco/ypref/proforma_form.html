@@ -10,7 +10,8 @@
                 <div>
                     <h3>{{ msg }}</h3>
                     <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                        ثبت پیشفاکتور</h1>
+                        {{ message }}
+                    </h1>
 
                     <form method="POST" action="" enctype="multipart/form-data">
                         {% csrf_token %}

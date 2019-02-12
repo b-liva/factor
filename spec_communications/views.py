@@ -25,7 +25,7 @@ def speccm_vueadd(request):
             speccm_item.save()
         else:
             print(f"form is not valid: {form.errors}")
-        chats = ReqSpec.objects.get(pk=form_data['spec']).speccommunications_set.all()
+        chats = ReqSpec.objects.filter(is_active=True).get(pk=form_data['spec']).speccommunications_set.all()
         for c in chats:
             all_chats.append({
                 'chat_txt': c.text,
@@ -79,7 +79,7 @@ def get_chat(request):
     data = json.loads(request.body.decode('utf-8'))
     # spec_id = request.POST.get('spec')
     spec_id = data['spec']
-    spec = ReqSpec.objects.get(pk=spec_id)
+    spec = ReqSpec.objects.filter(is_active=True).get(pk=spec_id)
     chats = spec.speccommunications_set.all()
     for c in chats:
         all_chats.append({

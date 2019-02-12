@@ -123,8 +123,8 @@ def create_spec(request, req_pk):
 
 def edit_xspec(request, spec_pk, req_pk):
     req = Requests.objects.get(pk=req_pk)
-    specs = ReqSpec.objects.filter(req_id=req)
-    spec = ReqSpec.objects.get(pk=spec_pk)
+    specs = ReqSpec.objects.filter(is_active=True).filter(req_id=req)
+    spec = ReqSpec.objects.filter(is_active=True).get(pk=spec_pk)
     updating = True
     # specs = PrefSpec.objects.all()
     return render(request, 'requests/admin_jemco/request/create_spec.html', {
@@ -284,7 +284,7 @@ def allRequests():
 
 
 def find_total_payment():
-    payments = Payment.objects.all()
+    payments = Payment.objects.filter(is_active=True)
     amount = 0
     for payment in payments:
         amount += payment.amount
@@ -308,14 +308,14 @@ def find_proformas(amount, profs):
             amount += p.price * p.qty
         print(p)
         # amount = p.objects.aggregate(Sum('amount'))
-        print(f'amount : {amount}')
+        # print(f'amount : {amount}')
         # amount += amount
     return amount
 
 
 def find_payment(pay_amnt, pmnts):
     amount = pmnts.aggregate(amount__sum=Sum('amount'))
-    print(amount)
+    # print(amount)
     if amount['amount__sum']:
         pay_amnt += amount['amount__sum']
     return pay_amnt
@@ -323,14 +323,14 @@ def find_payment(pay_amnt, pmnts):
 
 def kwjs(request, *args, **kwargs):
     days = 30
-    print(days)
+    # print(days)
     if request.method == "POST":
         days = int(request.POST['days'])
         print(f'request is post and days: {days}')
     ntoday = datetime.date.today()
     today = jdatetime.date.today()
     startDate = today + jdatetime.timedelta(-days)
-    print(f'startDate: {startDate}')
+    # print(f'startDate: {startDate}')
     tdelta = 1
     endDate = startDate + jdatetime.timedelta(tdelta)
     req_nums = []
@@ -346,7 +346,7 @@ def kwjs(request, *args, **kwargs):
     spc_kw = 0
     amnt = 0
 
-    requests_obj_temp = Requests.objects.all()
+    requests_obj_temp = Requests.objects.filter(is_active=True)
     i = 1
     for r in requests_obj_temp:
         spc = r.reqspec_set.all()
@@ -360,22 +360,18 @@ def kwjs(request, *args, **kwargs):
     while endDate <= today + jdatetime.timedelta(1):
         # requests = Requests.objects.filter(date_fa__range=(startDate, endDate)).count()
         # requests = Requests.objects.filter(date_fa__in=(startDate, endDate)).count()
-        requests = Requests.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
-        requests_obj_temp = Requests.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
-        proformas = Xpref.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
-        proformas_obj_temp = Xpref.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
-        payments = Payment.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
-        payments_obj_temp = Payment.objects.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
-
+        requests = Requests.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
+        requests_obj_temp = Requests.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
+        proformas = Xpref.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
+        proformas_obj_temp = Xpref.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
+        payments = Payment.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
+        payments_obj_temp = Payment.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
 
         spc_kw = find_kw(spc_kw, requests_obj_temp)
         amnt = find_proformas(amnt, proformas_obj_temp)
         pay_amnt = find_payment(pay_amnt, payments_obj_temp)
 
-
-        print(f'outside amount: {pay_amnt}')
-
-
+        # print(f'outside amount: {pay_amnt}')
 
         # print(spc)
         # if spc['kw__sum']:
@@ -398,13 +394,13 @@ def kwjs(request, *args, **kwargs):
         startDate = endDate
         endDate = endDate + jdatetime.timedelta(tdelta)
 
-    print(f'total kw: {spc_kw}')
+    # print(f'total kw: {spc_kw}')
     data = {
         'reqs': req_kw_dict,
         'proformas': proformas_amount_dict,
         'payments': payments_amnt_dict,
     }
-    print(f'data passed is: {data}')
+    # print(f'data passed is: {data}')
     return JsonResponse(data, safe=False)
 
 
@@ -450,20 +446,79 @@ def dashboard(request):
         return redirect('customer_dashboard')
     if not request.user.is_superuser:
         return redirect(sales_expert_dashboard)
-    routine_kw, project_kw, services_kw, ex_kw, allKw = find_routine_kw()
+    routine_kw, project_kw, services_kw, ex_kw, allKw, qtys = find_routine_kw()
     project_kw += ex_kw
     num_of_requests = no_of_requests()
     orders = Orders()
     last_n_requests = orders.last_orders()
-    print(f'order numbers: {len(last_n_requests)}')
+    # print(f'order numbers: {len(last_n_requests)}')
     total_payments = find_total_payment()
 
     agent_data = agentjs(request)
-    tqty = ReqSpec.objects.all()
-    # hot_products = ReqSpec.objects.filter(kw__gt=0).values('kw', 'rpm').annotate(reqspec_qty=models.Sum('qty'), perc=(models.Sum('qty')/100))\
+    tqty = ReqSpec.objects.filter(is_active=True).all()
+    # hot_products = ReqSpec.objects.filter(is_active=True).filter(kw__gt=0).values('kw', 'rpm').annotate(reqspec_qty=models.Sum('qty'), perc=(models.Sum('qty')/100))\
     #     .order_by('reqspec_qty').reverse()
-    hot_products = ReqSpec.objects.filter(kw__gt=0).values('kw', 'rpm').annotate(reqspec_qty=models.Sum('qty')).order_by('reqspec_qty').reverse()
+
+    """
+        hot products
+    """
+    hot_products = ReqSpec.objects.filter(is_active=True).filter(kw__gt=0).values('kw', 'rpm').annotate(
+        reqspec_qty=models.Sum('qty')).order_by('reqspec_qty').reverse()
     total_qty = hot_products.aggregate(models.Sum('reqspec_qty'))
+
+    """
+        Daily kw, proforma and proformas
+    """
+    daily_kw = ReqSpec.objects.filter(is_active=True).values('req_id__date_fa').annotate(
+        request_sum=models.Sum(models.F('kw') * models.F('qty'), output_field=models.FloatField())).order_by(
+        'req_id__date_fa').reverse()
+    daily_avg = daily_kw.aggregate(
+        request_avg=models.Avg(models.F('kw') * models.F('qty'), output_field=models.FloatField()))
+
+    # daily_proformas = Requests.objects.values('date_fa').annotate(models.Sum('xpref__'))
+    daily_proformas = Xpref.objects.filter(is_active=True).values('req_id__date_fa').annotate(count=models.Count('id')).reverse()
+    # daily_prof_amounts = PrefSpec.objects.values('xpref_id__date_fa')\
+    #     .annotate(count=models.Count('xpref_id')).reverse()
+    daily_prof_amounts = Xpref.objects.filter(is_active=True).values('date_fa') \
+        .annotate(
+        count=models.Count('id'),
+        # amount=PrefSpec.objects
+        #         .aggregate(new_amount=models.Avg(
+        #         1.09 * models.F('qty') * models.F('price'), output_field=models.IntegerField()
+        #     )
+        # )
+    ).order_by('date_fa').reverse()
+    daily_prof_amounts = daily_prof_amounts.annotate(
+        amount=models.Sum(
+                1.09 * models.F('prefspec__qty') * models.F('prefspec__price'), output_field=models.IntegerField()
+            ))
+    daily_prof2 = Xpref.objects.filter(is_active=True).values('date_fa') \
+        .aggregate(
+        sum=models.Sum(1.09 * models.F('prefspec__qty') * models.F('prefspec__price'),
+                       output_field=models.IntegerField()),
+        avg=models.Avg(1.09 * models.F('prefspec__qty') * models.F('prefspec__price'),
+                       output_field=models.IntegerField())
+    )
+
+    daily_prof = PrefSpec.objects.filter(is_active=True).values('xpref_id__date_fa').annotate(
+        count=models.Count(
+            Xpref.objects.values('date_fa').count()
+        ),
+        sum=models.Sum(1.09 * models.F('qty') * models.F('price'),
+                        output_field=models.IntegerField()),
+    ).order_by('xpref_id__date_fa').reverse()
+
+    daily_kw_avg = daily_prof.aggregate(avg=models.Avg('sum'))
+
+    daily_payments = Payment.objects.filter(is_active=True).values('date_fa').annotate(
+        amount=models.Sum(models.F('amount'))
+    ).order_by('date_fa').reverse()
+
+    daily_payments_sum = daily_payments.aggregate(models.Sum('amount'))
+
+    for d in daily_payments:
+        print(f"payments: {d}")
+
     context = {
         # 'routine_kw': intcomma(routine_kw),
         'routine_kw': routine_kw,
@@ -471,12 +526,22 @@ def dashboard(request):
         'services_kw': services_kw,
         'ex_kw': ex_kw,
         'allKw': allKw,
+        'qtys': qtys,
         'num_of_reqs': num_of_requests,
         'last_n_requests': last_n_requests,
         'total_payments': total_payments,
         'agent_data': agent_data,
         'hot_products': hot_products,
         'total_qty': total_qty,
+        'daily_kw': daily_kw,
+        'daily_avg': daily_avg,
+        'daily_proformas': daily_proformas,
+        'daily_prof_amounts': daily_prof_amounts,
+        'daily_prof': daily_prof,
+        'daily_prof2': daily_prof2,
+        'daily_kw_avg': daily_kw_avg,
+        'daily_payments': daily_payments,
+        'daily_payments_sum': daily_payments_sum,
         # 'rq': rq,
         # 'rq_dict': rq_dict,
     }
@@ -507,7 +572,7 @@ def dashboard2(request):
 
 
 def no_of_requests():
-    num_of_reqs = Requests.objects.all().count()
+    num_of_reqs = Requests.objects.filter(is_active=True).all().count()
     return num_of_reqs
 
 
@@ -515,13 +580,13 @@ def find_routine_kw():
     # ReqSpec is a class and ReqSpec() is an instance of it
     # command bellow works for clas and not working for instance
 
-    routine_specs = ReqSpec.objects.filter(type__title='روتین')
-    project_specs = ReqSpec.objects.filter(type__title='پروژه')
-    services_specs = ReqSpec.objects.filter(type__title='تعمیرات')
-    ex_specs = ReqSpec.objects.filter(type__title='ضد انفجار')
+    routine_specs = ReqSpec.objects.filter(is_active=True).filter(type__title='روتین')
+    project_specs = ReqSpec.objects.filter(is_active=True).filter(type__title='پروژه')
+    services_specs = ReqSpec.objects.filter(is_active=True).filter(type__title='تعمیرات')
+    ex_specs = ReqSpec.objects.filter(is_active=True).filter(type__title='ضد انفجار')
     # routine_specs = ReqSpec.objects.filter(kw__lte=450)
     # project_specs = ReqSpec.objects.filter(kw__gt=450)
-    allSpecs = ReqSpec.objects.all()
+    allSpecs = ReqSpec.objects.filter(is_active=True).filter(is_active=True)
     allKw = 0
     routine_kw = 0
     project_kw = 0
@@ -529,7 +594,6 @@ def find_routine_kw():
     ex_kw = 0
     for spec in routine_specs:
         routine_kw += spec.kw * spec.qty
-
     for spec in project_specs:
         project_kw += spec.kw * spec.qty
     for spec in services_specs:
@@ -539,7 +603,20 @@ def find_routine_kw():
     for spec in allSpecs:
         allKw += spec.kw * spec.qty
 
-    return routine_kw, project_kw, services_kw, ex_kw, allKw
+    routine_qty = routine_specs.aggregate(models.Sum('qty'))
+    project_qty = project_specs.aggregate(models.Sum('qty'))
+    services_qty = services_specs.aggregate(models.Sum('qty'))
+
+    all_qty = sum([routine_qty['qty__sum'], project_qty['qty__sum'], services_qty['qty__sum'] ])
+
+    qtys = {
+        'routine_qty': routine_qty,
+        'project_qty': project_qty,
+        'services_qty': services_qty,
+        'all_qty': all_qty,
+    }
+
+    return routine_kw, project_kw, services_kw, ex_kw, allKw, qtys
 
 
 def find_last_reqs():
@@ -553,7 +630,7 @@ def specs_of_orders(orders):
 class Orders:
     def last_orders(self):
         # last_n_requests = Requests.objects.filter()[:10].order_by('pub_date').reverse()
-        last_n_requests = Requests.objects.all().order_by('date_fa').reverse()
+        last_n_requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
         return last_n_requests
 
 
@@ -572,7 +649,7 @@ def create_spec_pref_findReq(request):
     # print(request.POST['req_no'])
     a = req
     reqspec = a.reqspec_set.all()
-    print(reqspec.count())
+    # print(reqspec.count())
     return render(request, 'requests/admin_jemco/prefactor/create_spec_pref02.html', {
         'reqspec': reqspec,
         'req_id': req.pk,
@@ -587,7 +664,7 @@ def save_pref_spec(request):
     spec_prices = request.POST.getlist('price')
     spec_ids = request.POST.getlist('spec_id')
     x = 0
-    xpref = Xpref.objects.filter(pk=xpref_no)
+    xpref = Xpref.objects.filter(is_active=True).filter(pk=xpref_no)
     xpref = Xpref()
     xpref.number = xpref_no
     xpref.req_id = Requests.objects.get(pk=req_no)
@@ -596,7 +673,7 @@ def save_pref_spec(request):
         j = int(i)
         print(str(i) + ':' + str(spec_prices[x]))
         # r = PrefSpec.objects.filter(pk=spec_ids[x])
-        spec = ReqSpec.objects.get(pk=j)
+        spec = ReqSpec.objects.filter(is_active=True).get(pk=j)
 
         pref_spec = PrefSpec()
         pref_spec.type = spec.type
@@ -620,7 +697,7 @@ def save_pref_spec(request):
 
 
 def xreq_pref_spec(request):
-    xprefs = Xpref.objects.all()
+    xprefs = Xpref.objects.filter(is_active=True).all()
 
     return render(request, 'requests/admin_jemco/report/report.html', {'xprefs': xprefs})
 
@@ -631,13 +708,13 @@ def find_xpref(request):
     #     xpref_no = request.POST['xpref_no']
     #     xpref_obj = Xpref.objects.get(pk=xpref_no)
 
-    xpref = Xpref.objects.get(number=request.POST['xpref_no'])
+    xpref = Xpref.objects.filter(is_active=True).get(number=request.POST['xpref_no'])
     xpref = get_object_or_404(Xpref, number=request.POST['xpref_no'])
     return render(request, 'requests/admin_jemco/prefactor/find_xpref.html', {'xpref_obj': xpref})
 
 
 def xpref_link(request, xpref_id):
-    xpref = Xpref.objects.get(pk=xpref_id)
+    xpref = Xpref.objects.filter(is_active=True).get(pk=xpref_id)
     xpref_specs = xpref.prefspec_set.all()
     return render(request, 'requests/admin_jemco/report/xpref_details.html', {
         'xpref': xpref,
@@ -646,7 +723,7 @@ def xpref_link(request, xpref_id):
 
 
 def edit_xpref(request, xpref_id):
-    xpref = Xpref.objects.get(pk=xpref_id)
+    xpref = Xpref.objects.filter(is_active=True).get(pk=xpref_id)
     spec_prices = request.POST.getlist('price')
     xspec = xpref.prefspec_set.all()
     x = 0
@@ -674,7 +751,7 @@ def add_payment_page(request):
 
 
 def add_payment(request):
-    xpref = Xpref.objects.get(pk=request.POST['xpref_no'])
+    xpref = Xpref.objects.filter(is_active=True).get(pk=request.POST['xpref_no'])
     payment = Payment()
     payment.xpref_id = xpref
     payment.amount = request.POST['amount']
@@ -694,20 +771,20 @@ def add_payment(request):
 
 
 def payments(request):
-    payments = Payment.objects.all()
+    payments = Payment.objects.filter(is_active=True)
     return render(request, 'requests/admin_jemco/prefactor/payments/payments.html', {'payments': payments})
 
 
 def find_all_obj():
-    reqs = Requests.objects.all()
-    xprefs = Xpref.objects.all()
-    xpayment = Payment.objects.all()
+    reqs = Requests.objects.filter(is_active=True)
+    xprefs = Xpref.objects.filter(is_active=True)
+    xpayment = Payment.objects.filter(is_active=True)
     return reqs, xprefs, xpayment
 
 
 @login_required
 def xpref_ver_create(request, error=''):
-    xprefs = Xpref.objects.all()
+    xprefs = Xpref.objects.filter(is_active=True)
     return render(request, 'requests/admin_jemco/prefactor/verifications/create.html', {
         'xprefs': xprefs, 'error': error
     })
@@ -717,7 +794,7 @@ def create_xverf(request):
     if request.method == 'POST':
         if request.POST['number'] and request.POST['summary']:
             print(request.POST['xpref_id'])
-            if Xpref.objects.get(pk=request.POST['xpref_id']):
+            if Xpref.objects.filter(is_active=True).get(pk=request.POST['xpref_id']):
                 try:
                     related_pref = Xpref.objects.get(pk=request.POST['xpref_id'])
                     verf = XprefVerf()
@@ -728,7 +805,7 @@ def create_xverf(request):
                     # verf.pub_date = timezone.datetime.now()
                     verf.save()
                     msg = 'verification saved successfully'
-                    xprefs = Xpref.objects.all()
+                    xprefs = Xpref.objects.filter(is_active=True)
                     # return redirect('create_verf_page')
                     return render(request, 'requests/admin_jemco/prefactor/verifications/create.html', {
                         'msg': msg,

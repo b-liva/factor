@@ -9,8 +9,9 @@
                     {#                    <li><a href="{% url 'dashboard2' %}">داشبورد2</a></li>#}
                 </ul>
             </li>
-            {% if perms.request.index_requests %}
-                <li><a><i class="fa fa-home"></i> مدیریت درخواست ها <span class="fa fa-chevron-down"></span></a>
+
+            {% if perms.fund.index_fund %}
+                <li><a><i class="fa fa-users" aria-hidden="true"></i> مشتریان <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% if perms.customer.index_customer %}
                             <li><a href="{% url 'repr_index' %}">نمایندگان</a></li>
@@ -18,14 +19,19 @@
                         {% if perms.customer.index_customer %}
                             <li><a href="{% url 'customer_index' %}">مشتریان</a></li>
                         {% endif %}
-
+                    </ul>
+                </li>
+            {% endif %}
+            {% if perms.request.index_requests %}
+                <li><a><i class="fa "></i> درخواست <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{% url 'req_form' %}">ثبت درخواست جدید</a></li>
+                        <li><a href="{% url 'req_form_copy' %}">کپی درخواست</a></li>
                         <li><a href="{% url 'request_index' %}">درخواست ها</a></li>
                         <li><a href="{% url 'request_index_vue' %}">Vue درخواست ها</a></li>
                         {% if perms.request.index_deleted_requests %}
                             <li><a href="{% url 'request_index_vue_deleted' %}">درخواست های حذف شده</a></li>
                         {% endif %}
-                        <li><a href="{% url 'req_form' %}">ثبت درخواست جدید</a></li>
-                        <li><a href="{% url 'req_form_copy' %}">کپی درخواست</a></li>
                         <li><a href="{% url 'wrong_data' %}">اطلاعات ناقص</a></li>
                         {#                        <li><a href="{% url 'req_search' %}">درخواست ها2</a></li>#}
                         <li><a href="{% url 'fsearch' %}">گزارش</a></li>
@@ -41,6 +47,23 @@
                         {% endif %}
                         {#                        <li><a href="{% url 'fsearch3' %}">search2</a></li>#}
 
+
+
+                        <li><a href="{% url 'tenders_admin' %}">مناقصات</a></li>
+                        {#                    {% if user.is_authenticated %}#}
+                        {#                        <li class="nav-item"><a class="nav-link"#}
+                        {#                                                href="javascript:{document.getElementById('logout').submit()}">خروج</a>#}
+                        {#                        <form id="logout" method="POST" action="{% url 'logout' %}">#}
+                        {#                            {% csrf_token %}#}
+                        {#                            <input type="hidden">#}
+                        {#                        </form>#}
+                        {#                    {% endif %}#}
+                    </ul>
+                </li>
+            {% endif %}
+            {% if perms.fund.index_fund %}
+                <li><a><i class="fa "></i> پیش فاکتور<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
                         {% if perms.request.index_proforma %}
                             <li><a href="{% url 'pref_index' %}">پیش فاکتورها</a></li>
                             {% if perms.request.index_deleted_proforma %}
@@ -48,12 +71,39 @@
                             {% endif %}
 
                         {% endif %}
+
+                    </ul>
+                </li>
+            {% endif %}
+            {% if perms.fund.index_fund %}
+                <li><a><i class="fa fa-money" aria-hidden="true"></i> پرداخت <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
                         {% if perms.request.index_payment %}
                             <li><a href="{% url 'payment_index' %}">پرداخت ها</a></li>
                         {% endif %}
                         {% if perms.request.index_deleted_payment %}
                             <li><a href="{% url 'payment_index_deleted' %}">پرداخت های حذف شده</a></li>
                         {% endif %}
+                    </ul>
+                </li>
+            {% endif %}
+            {% if perms.fund.index_fund %}
+                <li><a> تنخواه <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{% url 'fund_index' %}">لیست تنخواه</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+            {% if user.is_superuser %}
+                <li><a> مشتری <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{% url 'fbv_account_list' %}">لیست مشتریان</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+            {% if user.is_superuser %}
+                <li><a> سایر <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
                         {% if perms.request.index_reqspecs %}
                             <li><a href="{% url 'reqSpec_index' %}">جزئیات</a></li>
                         {% endif %}
@@ -72,29 +122,6 @@
                         {% if perms.request.view_motordb %}
                             <li><a href="{% url 'motordb_search_form' %}">جستجوی موتور</a></li>
                         {% endif %}
-                        <li><a href="{% url 'tenders_admin' %}">مناقصات</a></li>
-                        {#                    {% if user.is_authenticated %}#}
-                        {#                        <li class="nav-item"><a class="nav-link"#}
-                        {#                                                href="javascript:{document.getElementById('logout').submit()}">خروج</a>#}
-                        {#                        <form id="logout" method="POST" action="{% url 'logout' %}">#}
-                        {#                            {% csrf_token %}#}
-                        {#                            <input type="hidden">#}
-                        {#                        </form>#}
-                        {#                    {% endif %}#}
-                    </ul>
-                </li>
-            {% endif %}
-            {% if perms.fund.index_fund %}
-                <li><a><i class="fa fa-home"></i> تنخواه <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        <li><a href="{% url 'fund_index' %}">لیست تنخواه</a></li>
-                    </ul>
-                </li>
-            {% endif %}
-            {% if user.is_superuser %}
-                <li><a><i class="fa fa-home"></i> مشتری <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        <li><a href="{% url 'fbv_account_list' %}">لیست مشتریان</a></li>
                     </ul>
                 </li>
             {% endif %}
