@@ -182,7 +182,7 @@ class ProformaEditForm(forms.ModelForm):
     class Meta:
         model = models.Xpref
         fields = '__all__'
-        exclude = ('owner', 'pub_date', 'is_active', 'req_id',)
+        exclude = ('owner', 'pub_date', 'is_active', 'req_id', 'temp_number')
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
