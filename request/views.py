@@ -462,7 +462,13 @@ def dashboard(request):
     """
         hot products
     """
-    hot_products = ReqSpec.objects.filter(is_active=True).filter(kw__gt=0).values('kw', 'rpm').annotate(
+    hot_products = ReqSpec.objects\
+        .exclude(type__title='تعمیرات')\
+        .exclude(type__title='سایر')\
+        .filter(is_active=True)\
+        .filter(kw__gt=0)\
+        .values('kw', 'rpm')\
+        .annotate(
         reqspec_qty=models.Sum('qty')).order_by('reqspec_qty').reverse()
     total_qty = hot_products.aggregate(models.Sum('reqspec_qty'))
 

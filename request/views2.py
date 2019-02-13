@@ -217,7 +217,7 @@ def fsearch(request):
         if request.POST['kw_max']:
             form_data['kw_max'] = (request.POST['kw_max'])
             specs = specs.filter(kw__lte=form_data['kw_max'])
-        if request.POST['owner']:
+        if request.POST['owner'] and request.POST['owner'] != '0':
             form_data['owner'] = (request.POST['owner'])
             owner = User.objects.get(pk=form_data['owner'])
             specs = specs.filter(Q(req_id__owner=owner))
