@@ -24,7 +24,8 @@
         <div class="x_content">
             <div class="dashboard-widget-content">
                 <ul class="quick-list">
-                    <li><b>میانگین روزانه: {{ daily_kw_avg.avg | floatformat:0 | intcomma }} ریال </b>
+{#                    <li><b>میانگین روزانه: {{ daily_kw_avg.avg | floatformat:0 | intcomma }} ریال </b>#}
+                    <li><b>میانگین روزانه: {{ daily_prof2.avg_profs | floatformat:0 | intcomma }} ریال </b>
                     <li><b>مجموع: {{ daily_prof2.sum | floatformat:0 | intcomma }} ریال </b>
                     </li>
                         <table class="table table-hover">

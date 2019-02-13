@@ -24,7 +24,8 @@
         <div class="x_content">
             <div class="dashboard-widget-content">
                 <ul class="quick-list">
-                    <li><b>میانگین روزانه: {{ daily_avg.request_avg | floatformat:0 | intcomma }} کیلووات </b>
+{#                    <li><b>میانگین روزانه: {{ daily_avg.request_avg | floatformat:0 | intcomma }} کیلووات </b>#}
+                    <li><b>میانگین روزانه: {{ daily_avg | floatformat:0 | intcomma }} کیلووات </b>
                     </li>
                         <table class="table table-hover">
                             <thead >
@@ -43,8 +44,9 @@
                                 </tr>
                             {% endfor %}
                             <tr>
-                                <td colspan="3" class="text-center">جمع</td>
-                                <td>{{ total_qty.reqspec_qty__sum }}</td>
+                                <td colspan="2" class="text-center">جمع</td>
+{#                                <td>{{ total_qty.reqspec_qty__sum }}</td>#}
+                                <td>{{ daily_sum.request_sum | floatformat:0 | intcomma}}</td>
                             </tr>
                             </tbody>
                         </table>
