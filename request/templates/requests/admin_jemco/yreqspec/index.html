@@ -20,7 +20,7 @@
                             <label for="{{ search_form.customer_name.id_for_label }}">مشتری:</label>
                             {{ search_form.customer_name }}
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="fieldWrapper">
                                 {{ search_form.kw_min.errors }}
                                 <label for="{{ search_form.kw_min.id_for_label }}">کیلووات(از)</label>
@@ -28,18 +28,25 @@
                             </div>
 
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="fieldWrapper">
                                 {{ search_form.kw_max.errors }}
                                 <label for="{{ search_form.kw_max.id_for_label }}">کیلووات(تا)</label>
                                 {{ search_form.kw_max }}
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="fieldWrapper">
                                 {{ search_form.rpm.errors }}
                                 <label for="{{ search_form.rpm.id_for_label }}">سرعت</label>
                                 {{ search_form.rpm }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="fieldWrapper">
+                                {{ search_form.rpm.errors }}
+                                <label for="{{ search_form.owner.id_for_label }}">کارشناس</label>
+                                {{ search_form.owner }}
                             </div>
                         </div>
                     </div>

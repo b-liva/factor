@@ -68,6 +68,11 @@ class SpecSearchForm(forms.Form):
         ('True', 'بله',),
         ('False', 'خیر',),
     )
+    OWNER = (
+        ('2', 'محمدی',),
+        ('3', 'علوی',),
+        ('4', 'ظریف',),
+    )
     price = forms.ChoiceField(widget=forms.Select(attrs={
         'class': 'form-control',
     }), choices=CHOICES, required=False)
@@ -80,6 +85,9 @@ class SpecSearchForm(forms.Form):
     sent = forms.ChoiceField(widget=forms.Select(attrs={
         'class': 'form-control',
     }), choices=CHOICES, required=False)
+    owner = forms.ChoiceField(widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=OWNER, required=False)
 
     SORT_CHOICES = (
         ('1', 'کیلووات',),

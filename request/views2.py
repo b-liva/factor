@@ -12,6 +12,7 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils import timezone
 # from django.utils.datetime_safe import strftime
+from accounts.models import User
 from request.forms.forms import RequestCopyForm
 from request.views import allRequests, find_all_obj
 from .models import Requests, ReqSpec
@@ -171,6 +172,30 @@ def wrong_data(request):
     return render(request, 'requests/admin_jemco/yreqspec/wrong_data.html', context)
 
 
+@login_required
+def wrong_data2(request):
+    probably_wrong = ReqSpec.objects.filter(is_active=True).all()
+    if not request.user.is_superuser:
+        probably_wrong = probably_wrong.filter(req_id__owner=request.user)
+    probably_wrong = probably_wrong.filter(
+        Q(rpm__lt=700) |
+        Q(rpm__gt=750, rpm__lt=1000) |
+        Q(rpm__gt=1000, rpm__lt=1500) |
+        Q(rpm__gt=1500, rpm__lt=3000)
+    ).exclude(type__title='تعمیرات')
+
+    context = {
+        'reqspecs': probably_wrong,
+    }
+    return render(request, 'requests/admin_jemco/yreqspec/wrong_data.html', context)
+
+
+@login_required
+def req_search(request):
+    pass
+
+
+@login_required
 def fsearch(request):
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
     if not can_index:
@@ -192,6 +217,10 @@ def fsearch(request):
         if request.POST['kw_max']:
             form_data['kw_max'] = (request.POST['kw_max'])
             specs = specs.filter(kw__lte=form_data['kw_max'])
+        if request.POST['owner']:
+            form_data['owner'] = (request.POST['owner'])
+            owner = User.objects.get(pk=form_data['owner'])
+            specs = specs.filter(Q(req_id__owner=owner))
         form_data['price'] = request.POST.get('price')
         form_data['tech'] = request.POST.get('tech')
         form_data['permission'] = request.POST.get('permission')

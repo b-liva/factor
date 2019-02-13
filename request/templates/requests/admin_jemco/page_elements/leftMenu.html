@@ -34,8 +34,9 @@
                         {% endif %}
                         <li><a href="{% url 'wrong_data' %}">اطلاعات ناقص</a></li>
                         {#                        <li><a href="{% url 'req_search' %}">درخواست ها2</a></li>#}
-                        <li><a href="{% url 'fsearch' %}">گزارش</a></li>
-                        <li><a href="{% url 'fsearch3' %}">گزارش 2</a></li>
+                        <li><a href="{% url 'req_search' %}">گزارش درخواست</a></li>
+                        <li><a href="{% url 'fsearch' %}">گزارش ردیف</a></li>
+                        <li><a href="{% url 'fsearch3' %}">گزارش ردیف 2</a></li>
                         {% if perms.req_track.add_reqentered %}
                             {#                            <li><a href="{% url 'e_req_add' %}">ثبت درخواست وارده</a></li>#}
                         {% endif %}

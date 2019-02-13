@@ -12,6 +12,7 @@
                 <thead class="dark">
                 <tr>
                     <th scope="col" class="text-center rotate_deg">ردیف</th>
+                    <th scope="col" class="text-center rotate_deg">کد</th>
                     <th scope="col" class="text-center rotate_deg">کیلووات</th>
                     <th scope="col" class="text-center rotate_deg">سرعت</th>
                     <th scope="col" class="text-center rotate_deg">شماره درخواست</th>
@@ -23,6 +24,7 @@
                 {% for reqspec in reqspecs %}
                     <tr>
                         <td class="dark">{{ forloop.counter }}</td>
+                        <td>{{ reqspec.pk }}</td>
                         <td>{{ reqspec.kw }}</td>
                         <td>{{ reqspec.rpm }}</td>
                         <td><a href="{% url 'request_details' request_pk=reqspec.req_id.pk%}">{{ reqspec.req_id.number }}</a></td>
