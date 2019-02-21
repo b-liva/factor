@@ -1,6 +1,7 @@
 import math
 
 import jdatetime
+from django.db.models import Q
 from django.shortcuts import render, redirect
 
 from accounts.models import User
@@ -81,6 +82,8 @@ def e_req_report(request):
         'zarif': zarif,
         'mohammadi': mohammadi,
         'alavi': alavi,
+        'show': True,
+        'title_msg': 'درخواست های وارد نشده'
     }
     return render(request, 'req_track/ereq_notstarted.html', context)
 
@@ -114,3 +117,45 @@ def users_summary(user_txt, user_account, date, not_entered_reqs):
         'count': reqs.count(),
     }
     return response
+
+
+def e_req_report_proformas(request):
+    reqs = ReqEntered.objects.filter(is_entered=False).filter(is_request=False)
+
+    if not request.user.is_superuser:
+        reqs = reqs.filter(owner_text__contains=request.user.last_name)
+
+    reqs = reqs.filter(
+        Q(title__icontains='پیشفاکتور') |
+        Q(title__icontains='پیش فاکتور')
+    )
+    context = {
+        'reqs': reqs,
+        'show': False,
+        'title_msg': 'تایید پیش فاکتورها'
+
+    }
+    return render(request, 'req_track/ereq_notstarted.html', context)
+
+
+def e_req_report_payments(request):
+    reqs = ReqEntered.objects.filter(is_entered=False).filter(is_request=False)
+
+    if not request.user.is_superuser:
+        reqs = reqs.filter(owner_text__contains=request.user.last_name)
+
+    reqs = reqs.filter(
+        Q(title__icontains='واریز') |
+        Q(title__icontains='مبلغ') |
+        Q(title__icontains='ساتنا') |
+        Q(title__icontains='تسویه') |
+        Q(title__icontains='پیش پرداخت') |
+        Q(title__icontains='پیشپرداخت') |
+        Q(title__icontains='چک')
+    )
+    context = {
+        'reqs': reqs,
+        'show': False,
+        'title_msg': 'اعلام واریزی'
+    }
+    return render(request, 'req_track/ereq_notstarted.html', context)

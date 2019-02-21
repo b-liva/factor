@@ -26,6 +26,8 @@ urlpatterns = [
         path('del', views.e_req_delete, name='e_req_del'),
     ])),
     path('report', views.e_req_report, name='e_req_report'),
+    path('report-proformas', views.e_req_report_proformas, name='e_req_report_prof'),
+    path('report-payments', views.e_req_report_payments, name='e_req_report_payments'),
     path('check', views.check_orders, name='check_orders'),
     path('del_all', views.e_req_delete_all, name='ereq_del_all'),
 ]

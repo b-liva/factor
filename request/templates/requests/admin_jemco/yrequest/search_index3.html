@@ -1,0 +1,85 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-10 col-md-offset-1">
+            <h3>{{ msg }}</h3>
+            <h1 class="page-header">reqs</h1>
+            <form method="post" action="">
+                {% csrf_token %}
+                {{ filterset.form.as_p }}
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </form>
+            <br>
+            <table class="table table-hover">
+                <tr>
+                    <th colspan="col" class="text-center">ردیف</th>
+                    <th colspan="col" class="text-center">شماره درخواست</th>
+                    <th colspan="col" class="text-center">مشتری</th>
+                    <th colspan="col" class="text-center">تاریخ ثبت</th>
+                    <th colspan="col" class="text-center">زمان</th>
+                    <th colspan="col" class="text-center"></th>
+                </tr>
+                <tbody class="">
+                {% for r in req_list %}
+                    <tr>
+                        {% if page_obj %}
+                            <td scope="row" class="text-center">
+                                {{ forloop.counter0|add:page_obj.start_index }}
+                            </td>
+                        {% endif %}
+                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td scope="row" class="text-center">{{ r.number }}</td>
+                        <td class="text-center">{{ r.customer }}</td>
+                        <td class="text-center">{{ r.date_fa }}</td>
+                        <td class="text-center">{{ r.delay }}</td>
+                        <td class="text-center">
+                            <a class="btn btn-primary btn-xs"
+                               href="{% url 'request_details' request_pk=r.pk %}">
+                                <i class="fa fa-eye"></i> مشاهده
+                            </a>
+                            {% if perms.request.add_requests %}
+                                <a class="btn btn-warning btn-xs"
+                                   href="{% url 'request_finish' request_pk=r.pk %}">
+                                     اختتام
+                                </a>
+                            {% endif %}
+                            {% if perms.request.add_requests %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="text-center">
+                {% if is_paginated %}
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                            {% if page_obj.number == i %}
+                                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

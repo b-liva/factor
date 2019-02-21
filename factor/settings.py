@@ -38,6 +38,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # Application definition
 
 INSTALLED_APPS = [
+    'django_filters',
     'import_export',
     'rest_framework',
     'django_jalali',

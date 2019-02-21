@@ -18,6 +18,7 @@
 <body class="nav-md">
 <div class="container body">
     <div class="main_container">
+
         <div class="col-md-3 left_col">
             <div class="left_col scroll-view">
                 <div class="navbar nav_title" style="border: 0;">
@@ -52,7 +53,7 @@
             </div>
         </div>
 
-        <!-- top navigation -->
+
         <div class="top_nav">
             <div class="nav_menu">
                 <nav>
@@ -64,13 +65,15 @@
                         <li class="">
                             <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
                                aria-expanded="false">
-                                <img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="">{{ user.last_name }}
+                                <img src="{% static 'request/admin_jemco/images/img.jpg' %}"
+                                     alt="">{{ user.last_name }}
                                 <span class=" fa fa-angle-down"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
-{#                                <li><a href="{% url 'profile' %}"> مشخصات کاربری</a></li>#}
-{#                                <li><a href="{% url 'account-details' pk=user.pk %}"> مشخصات کاربری</a></li>#}
-                                <li><a href="{% url 'fbv_account_details' user_pk=user.pk %}"> مشخصات کاربری</a></li>
+                                {#                                <li><a href="{% url 'profile' %}"> مشخصات کاربری</a></li>#}
+                                {#                                <li><a href="{% url 'account-details' pk=user.pk %}"> مشخصات کاربری</a></li>#}
+                                <li><a href="{% url 'fbv_account_details' user_pk=user.pk %}"> مشخصات کاربری</a>
+                                </li>
                                 {% if user.is_authenticated %}
                                     <li class="nav-item"><a class="nav-link"
                                                             href="javascript:{document.getElementById('logout').submit()}">خروج</a>
@@ -85,19 +88,24 @@
                 </nav>
             </div>
         </div>
+
+        <!-- top navigation -->
+
         <!-- /top navigation -->
 
         <!-- page content -->
-
-
         <div class="right_col" role="main">
+            <div style="margin-top: 40px;">
 
-            {% block right_col %}
+                {% block right_col %}
 
-            {% endblock %}
+                {% endblock %}
 
+
+            </div>
 
         </div>
+
         <!-- /page content -->
 
         <!-- footer content -->

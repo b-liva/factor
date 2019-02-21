@@ -98,6 +98,7 @@
                         <th scope="col" class="text-center rotate_deg">جزئیات</th>
                         <th scope="col" class="text-center rotate_deg">فنی</th>
                         <th scope="col" class="text-center rotate_deg">مالی</th>
+                        <th scope="col" class="text-center rotate_deg">انصراف مشتری</th>
                         <th scope="col" class="text-center rotate_deg">مجوز ساخت</th>
                         <th scope="col" class="text-center rotate_deg">ارسال شده</th>
                     </tr>
@@ -114,6 +115,7 @@
                             <td class="text-right">{{ reqspec.summary }}</td>
                             <td><input type="checkbox" {% if reqspec.tech %} checked {% endif %} disabled></td>
                             <td><input type="checkbox" {% if reqspec.price %} checked {% endif %} disabled></td>
+                            <td><input type="checkbox" {% if reqspec.cancelled %} checked {% endif %} disabled></td>
                             <td><input type="checkbox" {% if reqspec.permission %} checked {% endif %} disabled></td>
                             <td><input type="checkbox" {% if reqspec.sent %} checked {% endif %} disabled></td>
 
@@ -226,13 +228,16 @@
                         <tr>
                             {% for prof in request.xpref_set.all %}
                                 <td>
-                                    <a href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof.number }}</a>
+                                    {% if prof.is_active %}
+                                        <a href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof.number }}</a>
+                                    {% endif %}
                                 </td>
                                 <td>
                                     {% for pay in prof.payment_set.all %}
-                                        <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">{{ pay.amount | floatformat:0 | intcomma }}</a>
+                                        {% if pay.is_active %}
+                                            <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">{{ pay.amount | floatformat:0 | intcomma }}</a>
+                                        {% endif %}
                                     {% endfor %}
-
                                 </td>
                             {% endfor %}
                         </tr>

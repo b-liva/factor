@@ -1,0 +1,140 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="form-group">
+                            <ul class="message">
+                                {% for msg in messages %}
+                                    <li class="alert alert-error">{{ msg }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <h1 class="page-header">درخواست ها</h1>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <form method="POST" action="{% url 'request_find' %}">
+                        {% csrf_token %}
+                        شماره درخواست <input name="req_no">
+                        <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                </div>
+                <br>
+            <div class="row">
+
+                {% if perms.request.add_requests %}
+                    <a href="{% url 'req_form' %}" class="btn btn-success btn-sm pull-left">
+                        <i class="fa fa-plus"></i> درخواست جدید</a>
+                {% endif %}
+            </div>
+                <div class="row">
+                    <div class="table-responsive">
+                    <table class="table table-hover">
+                        <tr>
+                            <th colspan="col" class="text-center">ردیف</th>
+                            <th colspan="col" class="text-center">مشتری</th>
+                            {#                    <th colspan="col" class="text-center">کد</th>#}
+                            <th colspan="col" class="text-center">شماره درخواست</th>
+                            <th colspan="col" class="text-center">تاریخ درخواست</th>
+                            <th colspan="col" class="text-center">تاریخ ثبت</th>
+                            <th colspan="col" class="text-center">تاخیر ثبت</th>
+                            <th colspan="col" class="text-center">کارشناس</th>
+                            <th colspan="col" class="text-center">زمان</th>
+                            {#                    <th colspan="col" class="text-center">edited</th>#}
+                            <th colspan="col" class="text-center"></th>
+                        </tr>
+                        <tbody class="">
+                        {% for id, request in response.items %}
+                            <tr class="{% if request.req.edited_by_customer %} edited_by_customer {% endif %}">
+                                <td scope="row" class="text-center">{{ forloop.counter }}</td>
+                                {#                        <td scope="row" class="text-center">{{ request.pk }}</td>#}
+                                <td class="text-center">{{ request.req.customer }}</td>
+                                <td class="text-center">
+                                    {{ request.req.number }}
+                                    {% if request.req.parent_number %}<span style="color:red;">
+                                ({{ request.req.parent_number }})
+                            </span>{% endif %}
+                                </td>
+                                <td class="text-center">{{ request.req.date_fa }}</td>
+                                <td class="text-center">{{ request.pub_date }}</td>
+                                <td class="text-center">{{ request.delay_entered.days }}</td>
+                                <td class="text-center">{{ request.req.owner.last_name }}
+                                    {% for colleague in request.colleagues %}
+                                        {% if colleague != request.req.owner %}
+                                        , {{ colleague.last_name }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td class="text-center">{{ request.delay }}</td>
+                                {#                        <td class="text-center">{{ request.req.edited_by_customer }}</td>#}
+                                <td class="text-center">
+                                    <a class="btn btn-primary btn-xs"
+                                       href="{% url 'request_details' request_pk=request.req.pk %}">
+                                        <i class="fa fa-eye"></i> مشاهده
+                                    </a>
+
+                                    {% if perms.request.add_requests %}
+                                        <a class="btn btn-warning btn-xs"
+                                           href="{% url 'request_edit_form' request_pk=request.req.pk %}">
+                                            <i class="fa fa-pencil"></i> ویرایش
+                                        </a>
+                                    {% endif %}
+                                    {% if perms.request.add_requests %}
+                                        {#                                <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i#}
+                                        {#                                        class="fa fa-trash"></i> حذف#}
+                                        {#                                </div>#}
+
+                                        <a class="btn btn-primary btn-xs btn-danger"
+                                           href="{% url 'request_delete' request_pk=request.req.pk %}"><i
+                                                {# class="fa fa-trash"></i> حذف</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if req_page.has_other_pages %}
+                    <ul class="pagination">
+                        {% if req_page.has_previous %}
+                            <li><a href="?page={{ req_page.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in req_page.paginator.page_range %}
+                            {% if req_page.number == i %}
+                                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if req_page.has_next %}
+                            <li><a href="?page={{ req_page.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+{% endblock %}

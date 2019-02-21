@@ -360,12 +360,18 @@ def kwjs(request, *args, **kwargs):
     while endDate <= today + jdatetime.timedelta(1):
         # requests = Requests.objects.filter(date_fa__range=(startDate, endDate)).count()
         # requests = Requests.objects.filter(date_fa__in=(startDate, endDate)).count()
-        requests = Requests.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
-        requests_obj_temp = Requests.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
-        proformas = Xpref.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
-        proformas_obj_temp = Xpref.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
-        payments = Payment.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(date_fa__lt=endDate).count()
-        payments_obj_temp = Payment.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
+        requests = Requests.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(
+            date_fa__lt=endDate).count()
+        requests_obj_temp = Requests.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(
+            date_fa__lt=endDate)
+        proformas = Xpref.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(
+            date_fa__lt=endDate).count()
+        proformas_obj_temp = Xpref.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(
+            date_fa__lt=endDate)
+        payments = Payment.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(
+            date_fa__lt=endDate).count()
+        payments_obj_temp = Payment.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(
+            date_fa__lt=endDate)
 
         spc_kw = find_kw(spc_kw, requests_obj_temp)
         amnt = find_proformas(amnt, proformas_obj_temp)
@@ -462,12 +468,12 @@ def dashboard(request):
     """
         hot products
     """
-    hot_products = ReqSpec.objects\
-        .exclude(type__title='تعمیرات')\
-        .exclude(type__title='سایر')\
-        .filter(is_active=True)\
-        .filter(kw__gt=0)\
-        .values('kw', 'rpm')\
+    hot_products = ReqSpec.objects \
+        .exclude(type__title='تعمیرات') \
+        .exclude(type__title='سایر') \
+        .filter(is_active=True) \
+        .filter(kw__gt=0) \
+        .values('kw', 'rpm') \
         .annotate(
         reqspec_qty=models.Sum('qty')).order_by('reqspec_qty').reverse()
     total_qty = hot_products.aggregate(models.Sum('reqspec_qty'))
@@ -486,7 +492,8 @@ def dashboard(request):
         request_sum=models.Sum(models.F('kw') * models.F('qty'), output_field=models.FloatField()))
     daily_avg = daily_sum['request_sum'] / daily_kw.count()
     # daily_proformas = Requests.objects.values('date_fa').annotate(models.Sum('xpref__'))
-    daily_proformas = Xpref.objects.filter(is_active=True).values('req_id__date_fa').annotate(count=models.Count('id')).reverse()
+    daily_proformas = Xpref.objects.filter(is_active=True).values('req_id__date_fa').annotate(
+        count=models.Count('id')).reverse()
     # daily_prof_amounts = PrefSpec.objects.values('xpref_id__date_fa')\
     #     .annotate(count=models.Count('xpref_id')).reverse()
     daily_prof_amounts = Xpref.objects.filter(is_active=True).values('date_fa') \
@@ -500,8 +507,8 @@ def dashboard(request):
     ).order_by('date_fa').reverse()
     daily_prof_amounts = daily_prof_amounts.annotate(
         amount=models.Sum(
-                1.09 * models.F('prefspec__qty') * models.F('prefspec__price'), output_field=models.IntegerField()
-            ))
+            1.09 * models.F('prefspec__qty') * models.F('prefspec__price'), output_field=models.IntegerField()
+        ))
     daily_prof2 = Xpref.objects.filter(is_active=True).values('date_fa') \
         .aggregate(
         sum=models.Sum(1.09 * models.F('prefspec__qty') * models.F('prefspec__price'),
@@ -515,13 +522,12 @@ def dashboard(request):
             Xpref.objects.values('date_fa').count()
         ),
         sum=models.Sum(1.09 * models.F('qty') * models.F('price'),
-                        output_field=models.IntegerField()),
+                       output_field=models.IntegerField()),
     ).order_by('xpref_id__date_fa').reverse()
 
     date_fa = daily_prof.last()['xpref_id__date_fa']
     diff = timezone.datetime.now().date() - date_fa.togregorian()
     daily_prof2['avg_profs'] = daily_prof2['sum'] / diff.days
-
 
     daily_kw_avg = daily_prof.aggregate(avg=models.Avg('sum'))
 
@@ -565,8 +571,93 @@ def dashboard(request):
 
 
 @login_required
+def dashboard2(request):
+    pass
+
+
+@login_required
 def sales_expert_dashboard(request):
-    return render(request, 'requests/admin_jemco/dashboard/dashboard.html')
+    owner = request.user
+    orders = Requests.objects.distinct().filter(reqspec__type__title='روتین', is_active=True)
+    orders_agent = orders.filter(customer__agent=True)
+    orders_customer = orders.filter(customer__agent=False)
+
+    reqsCount = Requests.objects.filter(reqspec__type__title='روتین', is_active=True).count()
+    reqsAgentCount = Requests.objects.filter(customer__agent=True, reqspec__type__title='روتین', is_active=True).count()
+    reqsCustomerCount = Requests.objects.filter(customer__agent=False, reqspec__type__title='روتین', is_active=True).count()
+
+    qty = ReqSpec.objects.filter(type__title='روتین', req_id__is_active=True).aggregate(
+        request_qty=models.Sum(models.F('qty')))
+    megaWatt = ReqSpec.objects.filter(type__title='روتین', req_id__is_active=True).aggregate(
+        request_qty=models.Sum(models.F('kw') * models.F('qty'), output_field=models.FloatField()))
+    qty_agent = ReqSpec.objects.filter(type__title='روتین', req_id__is_active=True,
+                                       req_id__customer__agent=True).aggregate(
+        request_qty=models.Sum(models.F('qty')))
+
+    megaWatt_agent = ReqSpec.objects.filter(type__title='روتین', req_id__is_active=True,
+                                            req_id__customer__agent=True).aggregate(
+        request_qty=models.Sum(models.F('kw') * models.F('qty'), output_field=models.FloatField()))
+    qty_customer = ReqSpec.objects.filter(type__title='روتین', req_id__is_active=True,
+                                          req_id__customer__agent=False).aggregate(
+        request_qty=models.Sum(models.F('qty')))
+
+    megaWatt_customer = ReqSpec.objects.filter(type__title='روتین', req_id__is_active=True,
+                                               req_id__customer__agent=False).aggregate(
+        request_qty=models.Sum(models.F('kw') * models.F('qty'), output_field=models.FloatField()))
+    context = {
+        'orders_count': orders.count(),
+        'reqsCount': reqsCount,
+        'count': {
+            'agent': {
+                'row': {
+                    'value': reqsAgentCount,
+                    'percent': 100 * reqsAgentCount / reqsCount,
+                },
+                'orders': {
+                    'value': orders_agent.count(),
+                    'percent': 100 * orders_agent.count() / orders.count(),
+                },
+            },
+            'customer': {
+                'row': {
+                    'value': reqsCustomerCount,
+                    'percent': 100 * reqsCustomerCount / reqsCount,
+                },
+                'orders': {
+                    'value': orders_customer.count(),
+                    'percent': 100 * orders_customer.count() / orders.count(),
+                },
+            },
+            'total': {
+                'orders': orders.count(),
+                'row': reqsCount,
+            },
+        },
+        'qty': {
+            'agent': {
+                'value': qty_agent['request_qty'],
+                'percent': 100 * qty_agent['request_qty'] / qty['request_qty'],
+            },
+            'customer': {
+                'value': qty_customer['request_qty'],
+                'percent': 100 * qty_customer['request_qty'] / qty['request_qty'],
+            },
+            'total': qty['request_qty'],
+        },
+        'megaWatt': {
+            'agent': {
+                'value': megaWatt_agent['request_qty'],
+                'percent': 100 * megaWatt_agent['request_qty'] / megaWatt['request_qty'],
+            },
+            'customer': {
+                'value': megaWatt_customer['request_qty'],
+                'percent': 100 * megaWatt_customer['request_qty'] / megaWatt['request_qty'],
+            },
+            'total': megaWatt['request_qty'],
+
+        },
+    }
+    return render(request, 'requests/admin_jemco/dashboard/dashboard.html', context)
 
 
 @login_required
@@ -623,7 +714,7 @@ def find_routine_kw():
     project_qty = project_specs.aggregate(models.Sum('qty'))
     services_qty = services_specs.aggregate(models.Sum('qty'))
 
-    all_qty = sum([routine_qty['qty__sum'], project_qty['qty__sum'], services_qty['qty__sum'] ])
+    all_qty = sum([routine_qty['qty__sum'], project_qty['qty__sum'], services_qty['qty__sum']])
 
     qtys = {
         'routine_qty': routine_qty,

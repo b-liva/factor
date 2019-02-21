@@ -216,12 +216,12 @@ def customer_read2(request, customer_pk):
         tempDict = {}
         tempDict['kw'] = views2.total_kw(customer_req.pk)
         kwList.append(tempDict['kw'])
-        req_profs = customer_req.xpref_set.all()
+        req_profs = customer_req.xpref_set.filter(is_active=True)
         paymentList = []
         for p in req_profs:
             proformaDict = {}
             pList.append(p)
-            payments = p.payment_set.all()
+            payments = p.payment_set.filter(is_active=True)
             print(f'payments is: {payments}')
             for pmnt in payments:
                 paymentList.append(pmnt)

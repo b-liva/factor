@@ -1,9 +1,65 @@
 {% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
 {% block right_col %}
 
     <div class="container">
-        <div class="row">
-            Sales Dashboard goes here...
+        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td>عنوان</td>
+                        <td>نماینده</td>
+                        <td>غیر نماینده</td>
+                        <td>کل</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td>تعداد درخواست</td>
+                        <td>{{ count.agent.orders.value | floatformat:0 | intcomma }}
+                            ({{ count.agent.orders.percent | floatformat:2 }}%)
+                        </td>
+                        <td>{{ count.customer.orders.value | floatformat:0 | intcomma }}
+                            ({{ count.customer.orders.percent | floatformat:2 }}%)
+                        </td>
+                        <td>{{ count.total.orders | floatformat:0 | intcomma }}</td>
+                    </tr>
+                    <tr>
+                        <td>تعداد ردیف</td>
+                        <td>{{ count.agent.row.value | floatformat:0 | intcomma }}
+                            ({{ count.agent.row.percent | floatformat:2 }}%)
+                        </td>
+                        <td>{{ count.customer.row.value | floatformat:0 | intcomma }}
+                            ({{ count.customer.row.percent | floatformat:2 }}%)
+                        </td>
+                        <td>{{ count.total.row | floatformat:0 | intcomma }}</td>
+                    </tr>
+                    <tr>
+                        <td>تعداد دستگاه</td>
+                        <td>{{ qty.agent.value | floatformat:0 | intcomma }}
+                            ({{ qty.agent.percent | floatformat:2 }}%)
+                        </td>
+                        <td>{{ qty.customer.value | floatformat:0 | intcomma }}
+                            ({{ qty.customer.percent | floatformat:2 }}%)
+                        </td>
+                        <td>{{ qty.total | floatformat:0 | intcomma }}</td>
+                    </tr>
+                    <tr>
+                        <td>کیلووات</td>
+                        <td>{{ megaWatt.agent.value | floatformat:0 | intcomma }}
+                            ({{ megaWatt.agent.percent | floatformat:2 }}%)
+                        </td>
+                        <td>{{ megaWatt.customer.value | floatformat:0 | intcomma }}
+                            ({{ megaWatt.customer.percent | floatformat:2 }}%)
+                        </td>
+                        <td>{{ megaWatt.total | floatformat:0 | intcomma }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
     <div class="row" style="margin: 50px 0 0;">

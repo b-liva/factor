@@ -50,12 +50,14 @@ class Requests(models.Model):
     parent_number = models.IntegerField(null=True, blank=True)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
+    date_finished = jmodels.jDateField(blank=True, null=True)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='req_owner')
     colleagues = models.ManyToManyField(User, blank=True, null=True)
     summary = models.TextField(max_length=1000, null=True, blank=True)
     added_by_customer = models.BooleanField(default=False)
     edited_by_customer = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    finished = models.BooleanField(default=False)
 
     def __str__(self):
         return '%s' % self.number
@@ -106,6 +108,7 @@ class ReqSpec(models.Model):
     permission = models.BooleanField(default=False)
     sent = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    cancelled = models.BooleanField(default=False)
 
     class Meta:
         permissions = (

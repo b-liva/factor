@@ -26,6 +26,7 @@
                 <ul class="quick-list">
 {#                    <li><b>میانگین روزانه: {{ daily_avg.request_avg | floatformat:0 | intcomma }} کیلووات </b>#}
                     <li><b>میانگین روزانه: {{ daily_avg | floatformat:0 | intcomma }} کیلووات </b>
+                    <li><b>مجموع: {{ daily_sum.request_sum | floatformat:0 | intcomma}} کیلووات </b>
                     </li>
                         <table class="table table-hover">
                             <thead >

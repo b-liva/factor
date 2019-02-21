@@ -29,6 +29,7 @@ urlpatterns = [
                   path('accounts/', include('allauth.urls')),
                   # path('', prefactor.views.home, name='homepage'),
                   path('', request.views.dashboard, name='dashboard'),
+                  path('dashboard2', request.views.dashboard2, name='dashboard'),
                   path('sales-dash', request.views.sales_expert_dashboard, name='dashboard'),
                   path('kwjs/', request.views.kwjs, name='kwjs'),
                   path('agentjs/', request.views.agentjs, name='agentjs'),

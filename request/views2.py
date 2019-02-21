@@ -13,7 +13,9 @@ from django.urls import reverse
 from django.utils import timezone
 # from django.utils.datetime_safe import strftime
 from accounts.models import User
+from request.filters.filters import RequestFilter
 from request.forms.forms import RequestCopyForm
+from request.forms.search import ReqSearchForm
 from request.views import allRequests, find_all_obj
 from .models import Requests, ReqSpec
 from .models import Xpref, Payment
@@ -25,6 +27,7 @@ import request.templatetags.functions as funcs
 from request.forms import forms, search
 import nested_dict as nd
 import random
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from collections import defaultdict as dd
 
 
@@ -602,11 +605,68 @@ def request_index(request):
         }
     if request.user.is_superuser:
         requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
+
+    page = request.GET.get('page', 1)
+    req_list = requests
+    paginator = Paginator(req_list, 30)
+    try:
+        req_page = paginator.page(page)
+    except PageNotAnInteger:
+        req_page = paginator.page(1)
+    except EmptyPage:
+        req_page = paginator.page(paginator.num_pages)
+    print(requests)
     context = {
+        'req_page': req_page,
         'all_requests': requests,
         'response': response
     }
     return render(request, 'requests/admin_jemco/yrequest/index.html', context)
+
+
+@login_required
+def request_index_paginate(request):
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
+    today = jdatetime.date.today()
+
+    requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
+    if not request.user.is_superuser:
+        requests = requests.filter(Q(owner=request.user) | Q(colleagues=request.user))
+
+    response = {}
+    if request.user.is_superuser:
+        requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
+
+    page = request.GET.get('page', 1)
+    req_list = requests
+    paginator = Paginator(req_list, 30)
+    try:
+        req_page = paginator.page(page)
+    except PageNotAnInteger:
+        req_page = paginator.page(1)
+    except EmptyPage:
+        req_page = paginator.page(paginator.num_pages)
+
+    for req in req_page.object_list:
+        diff = today - req.date_fa
+        time_entered = jdatetime.date.fromgregorian(date=req.pub_date, locale='fa_IR')
+        delay_entered = time_entered - req.date_fa
+        response[req.pk] = {
+            'req': req,
+            'pub_date': time_entered,
+            'delay_entered': delay_entered,
+            'delay': diff.days,
+            'colleagues': req.colleagues.all(),
+        }
+    context = {
+        'req_page': req_page,
+        'all_requests': requests,
+        'response': response
+    }
+    return render(request, 'requests/admin_jemco/yrequest/index2.html', context)
 
 
 @login_required
@@ -1113,3 +1173,66 @@ class LazyEncoder(DjangoJSONEncoder):
         if isinstance(obj, datetime):
             return str(obj)
         return super().default(obj)
+
+
+def fsearch5(request):
+    filters = {}
+    req_list = Requests.objects.all()
+    if not request.user.is_superuser:
+        # req_list = req_list.filter(owner=request.user)
+        req_list = req_list.filter(Q(owner=request.user) | Q(colleagues=request.user))
+    req_filter = RequestFilter(request.GET, queryset=req_list)
+    if not request.method == 'POST':
+        if 'search-persons-post' in request.session:
+            request.POST = request.session['search-persons-post']
+            request.method = 'POST'
+
+    if request.method == 'POST':
+        form = ReqSearchForm(request.POST or None)
+        request.session['search-persons-post'] = request.POST
+        if request.POST['customer_name']:
+            if Customer.objects.filter(name=request.POST['customer_name']):
+                customer = Customer.objects.get(name=request.POST['customer_name'])
+                req_list = req_list.filter(customer=customer)
+            else:
+                req_list = req_list.filter(customer__name__contains=request.POST['customer_name'])
+        if request.POST['owner'] and request.POST['owner'] != '0':
+            print(request.POST['owner'])
+            owner = User.objects.get(pk=request.POST['owner'])
+            req_list = req_list.distinct().filter(Q(owner=owner) | Q(colleagues=owner))
+        if request.POST['date_min']:
+            req_list = req_list.filter(date_fa__gte=request.POST['date_min'])
+        if request.POST['date_max']:
+            req_list = req_list.filter(date_fa__lte=request.POST['date_max'])
+        if request.POST['status'] and request.POST['status'] != '0':
+            print(request.POST['status'])
+            req_list = req_list.filter(finished=request.POST['status'])
+        if request.POST['sort_by']:
+            req_list = req_list.order_by(f"{request.POST['sort_by']}")
+        if request.POST['dsc_asc'] == '1':
+            req_list = req_list.reverse()
+    if request.method == 'GET':
+        form = ReqSearchForm()
+
+    page = request.GET.get('page', 1)
+    orders_list = req_list
+    paginator = Paginator(orders_list, 30)
+    try:
+        req_page = paginator.page(page)
+    except PageNotAnInteger:
+        req_page = paginator.page(1)
+    except EmptyPage:
+        req_page = paginator.page(paginator.num_pages)
+    context = {
+        'fil': req_filter,
+        'req_page': req_page,
+        'form': form,
+    }
+    return render(request, 'requests/admin_jemco/yrequest/search_index2.html', context)
+
+
+def finish(request, request_pk):
+    req = Requests.objects.get(pk=request_pk)
+    req.finished = not req.finished
+    req.save()
+    return redirect('fsearch5')

@@ -31,7 +31,8 @@ class RequestFrom(forms.ModelForm):
     class Meta:
         model = models.Requests
         fields = '__all__'
-        exclude = ('owner', 'pub_date', 'customer', 'added_by_customer', 'parent_number', 'edited_by_customer', 'is_active', 'temp_number')
+        exclude = ('owner', 'pub_date', 'customer', 'added_by_customer', 'parent_number',
+                   'edited_by_customer', 'is_active', 'temp_number', 'finished', 'date_finished')
         widgets = {
             'customer': forms.Select(attrs={
                 'class': 'form-control',
@@ -86,7 +87,7 @@ class SpecForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SpecForm, self).__init__(*args, **kwargs)
         # list = [ 'images']
-        list = ['sent', 'tech', 'price', 'permission']
+        list = ['sent', 'tech', 'price', 'permission', 'cancelled']
         for visible in self.visible_fields():
             if visible.name not in list:
                 visible.field.widget.attrs['class'] = 'form-control'
@@ -107,6 +108,7 @@ class SpecForm(forms.ModelForm):
             'tech': ('اطلاعات فنی'),
             'price': ('پیشنهاد مالی'),
             'permission': ('مجوز ساخت'),
+            'cancelled': ('انصراف مشتری'),
         }
 
 
@@ -134,6 +136,8 @@ class ProformaForm(forms.ModelForm):
         print(f'current user is: {current_user}')
         super(ProformaForm, self).__init__(*args, **kwargs)
         self.fields['req_id'].queryset = models.Requests.objects.filter(is_active=True).filter(owner=current_user)
+        if User.objects.get(pk=current_user).is_superuser:
+            self.fields['req_id'].queryset = models.Requests.objects.all()
 
         # this renders the items in form drop down menu
         # self.fields['req_id'].label_from_instance = lambda obj: "%s" % obj.number

@@ -108,3 +108,64 @@ class SpecSearchForm(forms.Form):
     dsc_asc = forms.ChoiceField(widget=forms.Select(attrs={
         'class': 'form-control',
     }), choices=sort_asc_dsc, required=False)
+
+
+class ReqSearchForm(forms.Form):
+    customer_name = forms.CharField(label='مشتری', max_length=100, required=False)
+    customer_name.widget = forms.TextInput(attrs={'class': 'form-control','id': 'autocomplete'})
+    date_min = jforms.jDateField(label='تاریخ(از)', required=False)
+    date_min.widget = jforms.jDateInput(attrs={'id': 'date_fa_start','autocomplete': 'off','class': 'form-control',})
+    date_max = jforms.jDateField(label='تاریخ(تا)', required=False)
+    date_max.widget = jforms.jDateInput(attrs={
+        'id': 'date_fa_end',
+        'autocomplete': 'off',
+        'class': 'form-control',})
+    CHOICES = (
+        ('0', '---',),
+        ('True', 'بسته',),
+        ('False', 'باز',),
+    )
+
+    status = forms.ChoiceField(
+        label='وضعیت',
+        widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=CHOICES, required=False)
+
+    SORT_CHOICES = (
+        # ('1', 'کیلووات',),
+        # ('customer', 'مشتری',),
+        ('date_fa', 'تاریخ',),
+        # ('4', 'تعداد',),
+    )
+
+    sort_asc_dsc = (
+        (1, 'نزولی',),
+        (2, 'صعودی',),
+    )
+    sort_by = forms.ChoiceField(
+        label='مرتب سازی',
+        widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=SORT_CHOICES, required=False)
+
+    dsc_asc = forms.ChoiceField(
+        label='اولویت',
+        widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=sort_asc_dsc, required=False)
+
+    owner_choices = (
+        (0, '---',),
+        (2, 'محمدی',),
+        (3, 'علوی',),
+        (4, 'ظریف',),
+    )
+
+    owner = forms.ChoiceField(
+        label='کارشناس',
+        widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=owner_choices, required=False)
+
+

@@ -5,13 +5,52 @@
         <div class="col-md-10 col-md-offset-1">
             <h3>{{ msg }}</h3>
             {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
-            <h1 class="page-header">
-                reqs</h1>
-            <form method="POST" action="{% url 'fsearch' %}">
+            <h1 class="page-header">reqs</h1>
+            {#            <form method="post" action="{% url 'req_search2' %}">#}
+            <form method="post" action="">
                 {% csrf_token %}
-                {#                    {{ req_form }}#}
-{#                                    {{ spec_form }}#}
-                {{ filter_items }}
+                {{ filter.req_search_form }}
+                {{ filterset.form.as_p }}
+                {#                {{ req_form }}#}
+                {#                {{ spec_form }}#}
+                {#                {{ filter_items }}#}
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        {{ req_search_form.customer_name.errors }}
+                        <label for="{{ req_search_form.customer_name.id_for_label }}">مشتری:</label>
+                        {{ req_search_form.customer_name }}
+                        <div class="col-md-6">
+                            {{ req_search_form.date_min.errors }}
+                            <label for="{{ req_search_form.date_min.id_for_label }}">تاریخ(از)</label>
+                            {{ req_search_form.date_min }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ req_search_form.date_max.errors }}
+                            <label for="{{ req_search_form.date_max.id_for_label }}">تاریخ(تا)</label>
+                            {{ req_search_form.date_max }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ req_search_form.status.errors }}
+                            <label for="{{ req_search_form.status.id_for_label }}">وضعیت درخواست</label>
+                            {{ req_search_form.status }}
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                {{ req_search_form.sort_by.errors }}
+                                <label for="{{ req_search_form.sort_by.id_for_label }}">مرتب سازی بر اساس</label>
+                                {{ req_search_form.sort_by }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ req_search_form.dsc_asc.errors }}
+                                <label for="{{ req_search_form.dsc_asc.id_for_label }}">ترتیب</label>
+                                {{ req_search_form.dsc_asc }}
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
                 <button type="submit" name="submit" class="btn btn-sm btn-primary">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
@@ -38,9 +77,12 @@
                 {#                {{ object_list }}#}
                 {% for r in object_list %}
                     <tr>
-                        <td scope="row" class="text-center">
-                            {{ forloop.counter0|add:page_obj.start_index }}
-                        </td>
+                        {% if page_obj %}
+                            <td scope="row" class="text-center">
+                                {{ forloop.counter0|add:page_obj.start_index }}
+                            </td>
+                        {% endif %}
+
                         <td scope="row" class="text-center">{{ r.req.number }}</td>
                         <td class="text-center">{{ r.req.customer }}</td>
                         <td class="text-center">{{ r.req.date_fa }}</td>
