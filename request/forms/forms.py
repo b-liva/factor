@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Q
 from django.utils.timezone import now
 from request import models
 from accounts.models import User
@@ -135,7 +136,8 @@ class ProformaForm(forms.ModelForm):
     def __init__(self, current_user, *args, **kwargs):
         print(f'current user is: {current_user}')
         super(ProformaForm, self).__init__(*args, **kwargs)
-        self.fields['req_id'].queryset = models.Requests.objects.filter(is_active=True).filter(owner=current_user)
+        self.fields['req_id'].queryset = models.Requests.objects.filter(is_active=True)\
+            .filter(Q(owner=current_user) | Q(colleagues=current_user))
         if User.objects.get(pk=current_user).is_superuser:
             self.fields['req_id'].queryset = models.Requests.objects.all()
 
