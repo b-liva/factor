@@ -220,13 +220,13 @@
                     <table class="table ">
                         <thead>
                         <tr>
-                            <td>پیش فاکتور</td>
-                            <td>پرداخت</td>
+                            <td>شماره پیش فاکتور</td>
+                            <td>پرداخت مبلغ</td>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            {% for prof in request.xpref_set.all %}
+                        {% for prof in request.xpref_set.all %}
+                            <tr>
                                 <td>
                                     {% if prof.is_active %}
                                         <a href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof.number }}</a>
@@ -239,8 +239,8 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
-                            {% endfor %}
-                        </tr>
+                            </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>

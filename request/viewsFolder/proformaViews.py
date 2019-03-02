@@ -297,13 +297,15 @@ def pref_insert_spec_form(request, ypref_pk):
     specs = req.reqspec_set.filter(is_active=True)
     prefspecs = pref.prefspec_set.filter(is_active=True)
 
-    prices = request.POST.getlist('price')
+    # prices = request.POST.getlist('price')
+    prices = [float(i) if i is not '' else 0 for i in request.POST.getlist('price')]
     qty = request.POST.getlist('qty')
     considerations = request.POST.getlist('considerations')
     i = 0
     for s in prefspecs:
         s.qty = qty[i]
-        s.price = prices[i]
+        s.price = float(prices[i]) if not prices[i] else 0
+        # x = 10 if a > b else 11 --> as a sample
         s.considerations = considerations[i]
         s.save()
         i += 1
@@ -323,7 +325,9 @@ def pref_edit(request, ypref_pk):
         return redirect('errorpage')
 
     xpref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
-    spec_prices = request.POST.getlist('price')
+    # spec_prices = [float(i.replace(',', '')) for i in request.POST.getlist('price')]
+    # spec_prices = request.POST.getlist('price')
+    spec_prices = [float(i) if i is not '' else 0 for i in request.POST.getlist('price')]
     spec_qty = request.POST.getlist('qty')
     prof_images = xpref.proffiles_set.all()
     xspec = xpref.prefspec_set.all()

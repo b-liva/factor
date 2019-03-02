@@ -83,17 +83,19 @@
                         </thead>
                         <tbody>
                         {% for index, object in nested.items %}
-                            <tr>
-                                <th scope="row" class="text-center">{{ forloop.counter }}</th>
-                                <td>{{ object.obj.pk }}</td>
-                                <td>{{ object.obj.qty }}</td>
-                                <td>{{ object.obj.kw }}</td>
-                                <td>{{ object.obj.rpm }}</td>
-                                <td>{{ object.obj.voltage }}</td>
-                                <td>{{ object.obj.considerations }}</td>
-                                <td>{{ object.obj.price|intcomma:0 }}</td>
-                                <td>{{ object.spec_total|intcomma:0 }}</td>
-                            </tr>
+                            {% if object.obj.price and object.obj.qty %}
+                                <tr>
+                                    <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                    <td>{{ object.obj.pk }}</td>
+                                    <td>{{ object.obj.qty }}</td>
+                                    <td>{{ object.obj.kw }}</td>
+                                    <td>{{ object.obj.rpm }}</td>
+                                    <td>{{ object.obj.voltage }}</td>
+                                    <td>{{ object.obj.considerations }}</td>
+                                    <td>{{ object.obj.price|intcomma:0 }}</td>
+                                    <td>{{ object.spec_total|intcomma:0 }}</td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                         <tr style="border-top: 2px black solid">
                             <td colspan="3">مالیات ارزش افزوده</td>
@@ -102,7 +104,7 @@
                         </tr>
                         <tr style="border-top: 2px black solid">
                             <td colspan="3" class="emphsize">مجموع</td>
-                            <td class="kw-total emphsize">{{ kw_total|intcomma }}</td>
+                            <td class="kw-total emphsize">{{ kw_total|intcomma }} کیلووات</td>
                             <td colspan="4"></td>
                             <td class="amount-total emphsize">{{ proforma_total|intcomma:0 }}</td>
                         </tr>
