@@ -1108,7 +1108,7 @@ def request_edit_form(request, request_pk):
             file_instance = models.RequestFiles(image=f, req=req_item)
             file_instance.save()
         # return redirect('request_index')
-        return redirect('request_index')
+        return redirect('request_index_paginate')
 
     context = {
         'form': form,
