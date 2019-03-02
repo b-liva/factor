@@ -324,12 +324,15 @@ def pref_edit(request, ypref_pk):
 
     xpref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
     spec_prices = request.POST.getlist('price')
+    spec_qty = request.POST.getlist('qty')
     prof_images = xpref.proffiles_set.all()
-
     xspec = xpref.prefspec_set.all()
     x = 0
     for item in xspec:
         item.price = spec_prices[x]
+        item.qty = spec_qty[x]
+        item.qty = spec_qty[x]
+        item.qty = spec_qty[x]
         item.save()
         x += 1
     prefspecs = xpref.prefspec_set.all()
@@ -359,7 +362,7 @@ def pref_edit(request, ypref_pk):
         }
         i += 1
 
-    messages.add_message(request, level=20, message='Proforma updated successfulley.')
+    messages.add_message(request, level=20, message=f"پیش فاکتور شماره {xpref.number} برزورسانی شد.")
 
     return redirect('pref_index')
 

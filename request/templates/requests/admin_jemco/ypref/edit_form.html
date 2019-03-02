@@ -5,33 +5,37 @@
             <h3>{{ msg }}</h3>
             <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
                 Edit Proforma</h1>
-            <h3>Proforma No.</h3>
-            {{ proforma.number }}
+            <h4>شماره پیش فاکتور: {{ proforma.number }}</h4>
+
             <br>{{ proforma.pub_date }}
             <br>
 
             <form action="{% url 'pref_edit' ypref_pk=proforma.id %}" method="POST">
                 {% csrf_token %}
-                <table class="withBorder">
+
+                <table class="table">
                     <thead class="dark">
                     <tr>
-                        <th>kw</th>
-                        <th>rpm</th>
-                        <th>price</th>
+                        <th>تعداد</th>
+                        <th>کیلووات</th>
+                        <th>سرعت</th>
+                        <th>قیمت</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for prof_spec in  prof_specs %}
                         <tr>
+                            <td><input type="number" name="qty" value="{{ prof_spec.qty }}" class="form-control"></td>
                             <td>{{ prof_spec.kw }}</td>
                             <td>{{ prof_spec.rpm }}</td>
-                            <td><input type="number" name="price" value="{{ prof_spec.price }}"></td>
+                            <td><input type="number" name="price" value="{{ prof_spec.price }}" class="form-control">
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
-                <button type="submit" name="edit" class="btn btn-sm btn-success">Save</button>
-                <a class="btn btn-danger btn-sm" href="{% url 'pref_index' %}">Cancel</a>
+                <button type="submit" name="edit" class="btn btn-sm btn-success">ذخیره</button>
+                <a class="btn btn-danger btn-sm" href="{% url 'pref_index' %}">انصراف</a>
             </form>
         </div>
     </div>

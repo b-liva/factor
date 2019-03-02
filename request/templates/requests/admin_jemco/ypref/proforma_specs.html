@@ -23,34 +23,35 @@
 {#                                <div>Prefactor No<br>#}
 {#                                    <input type="number" name="xpref" value="" required class="form-control"><br></div>#}
 {#                            </div>#}
-                            <div class="col-md-6 col-md-offset-3">
-                                <div class="row">
-                                    Prof. Date<input id="date_fa" name="date_fa"><br>
-                                    Exp. Date<input id="exp_date_fa" name="exp_date_fa">
-                                </div>
-                            </div>
+{#                            <div class="col-md-6 col-md-offset-3">#}
+{#                                <div class="row">#}
+{#                                    Prof. Date<input id="date_fa" name="date_fa"><br>#}
+{#                                    Exp. Date<input id="exp_date_fa" name="exp_date_fa">#}
+{#                                </div>#}
+{#                            </div>#}
 
 
-                            <table class="withBorder tableFull">
+{#                            <table class="withBorder tableFull">#}
+                            <table class="table">
                                 <tbody>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Type</th>
-                                    <th>QTY</th>
-                                    <th>KW</th>
-                                    <th>VOLTAGE</th>
-                                    <th>RPM</th>
+                                    <th>ردیف</th>
+                                    <th>نوع درخواست</th>
+                                    <th>تعداد</th>
+                                    <th>کیلووات</th>
+                                    <th>ولتاژ</th>
+                                    <th>سرعت</th>
                                     <th>IP</th>
                                     <th>IC</th>
-                                    <th>SUMMARY</th>
-                                    <th>PRICE</th>
-                                    <th>CONSIDERATIONS</th>
+                                    <th>جزئیات</th>
+                                    <th>قیمت</th>
+                                    <th>ملاحضات</th>
                                 </tr>
                                 {% for spec in reqspec %}
                                     <tr>
-                                        <td>{{ spec.id }}</td>
+                                        <td>{{ forloop.counter }}</td>
                                         <td>{{ spec.type }}</td>
-                                        <td><input name="qty" type="number" value="{{ spec.qty }}"></td>
+                                        <td><input name="qty" type="number" value="{{ spec.qty }}" class="form-control"></td>
                                         <td>{{ spec.kw }}</td>
                                         <td>{{ spec.voltage }}</td>
                                         <td>{{ spec.rpm }}</td>
@@ -58,11 +59,11 @@
                                         <td>{{ spec.ic }}</td>
                                         <td>{{ spec.summary }}</td>
                                         <td>
-                                            <input type="number" name="price" value="{{ spec.price }}">
-                                            <input type="hidden" name="spec_id" value="{{ spec.id }}">
+                                            <input type="number" name="price" value="{{ spec.price }}" class="form-control">
+                                            <input type="hidden" name="spec_id" value="{{ spec.id }}" >
                                         </td>
                                         <td>
-                                            <textarea type="number" name="considerations" value="">{{ spec.considerations }}</textarea>
+                                            <textarea type="number" name="considerations" value="" class="form-control">{{ spec.considerations }}</textarea>
                                         </td>
                                         <td>
 {#                                            <a class="btn btn-danger btn-sm" href="{% url 'del_pref_spec' spec_pk=spec.pk prof_pk=proforma.pk  %}">#}
@@ -75,8 +76,8 @@
                                 </tbody>
                             </table>
                             <input type="hidden" name="req_no" value="{{ req_id }}"><br>
-                            <input class="btn btn-primary btn-sm" type="submit" value="Save" name="done">
-                            <a class="btn btn-danger btn-sm" href="{% url 'pref_index' %}">Cancel</a>
+                            <input class="btn btn-success btn-sm" type="submit" value="ذخیره" name="done">
+                            <a class="btn btn-danger btn-sm" href="{% url 'pref_index' %}">انصراف</a>
                         </form>
                         <hr>
                     </div>

@@ -95,11 +95,12 @@ def pref_edit_form(request, ypref_pk):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     prof_specs = proforma.prefspec_set.all()
-    return render(request, 'requests/admin_jemco/ypref/edit_form.html', {
+    context = {
     # return render(request, 'requests/admin_jemco/ypref/index.html', {
         'proforma': proforma,
         'prof_specs': prof_specs
-    })
+    }
+    return render(request, 'requests/admin_jemco/ypref/edit_form.html', context)
 
 
 @login_required
