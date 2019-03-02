@@ -67,6 +67,7 @@
                            href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
                     </h4>
                     {#                Table of specs#}
+                <div class="table-responsive">
                     <table class="table table-hover text-center">
                         <thead>
                         <tr>
@@ -112,6 +113,7 @@
 
 
                     </table>
+                </div>
 
                     {#        Images#}
                     <div class="row">
@@ -129,11 +131,35 @@
                     {#        Payments#}
                     <div class="row">
                         <h4>مبالغ دریافتی بابت این پیش فاکتور:</h4>
-                        {% for pay in pref.payment_set.all %}
-                            <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
-                                {{ pay.number }} - {{ pay.amount | floatformat:0 | intcomma }}
-                            </a>
-                        {% endfor %}
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td>شماره</td>
+                                        <td>مبلغ</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for pay in pref.payment_set.all %}
+                                        <tr>
+                                            <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
+                                                {{ pay.number }}
+                                            </a>
+                                            </td>
+                                            <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
+                                                {{ pay.amount | floatformat:0 | intcomma }}
+                                            </a>
+                                            </td>
+
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
                     </div>
 
                 </div>
