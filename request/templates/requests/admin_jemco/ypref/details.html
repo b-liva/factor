@@ -107,7 +107,7 @@
                             <td colspan="3" class="emphsize">مجموع</td>
                             <td class="kw-total emphsize">{{ kw_total|intcomma }} کیلووات</td>
                             <td colspan="4"></td>
-                            <td class="amount-total emphsize">{{ proforma_total|intcomma:0 }}</td>
+                            <td class="amount-total emphsize">{{ proforma_total | floatformat:1 | intcomma }}</td>
                         </tr>
                         </tbody>
 

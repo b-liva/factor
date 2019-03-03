@@ -318,13 +318,12 @@ def pref_edit(request, ypref_pk):
     if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
         messages.error(request, 'no Proforma')
         return redirect('errorpage')
-
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref')
+    xpref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', xpref)
     if not can_edit:
         messages.error(request, 'no access ')
         return redirect('errorpage')
 
-    xpref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
     # spec_prices = [float(i.replace(',', '')) for i in request.POST.getlist('price')]
     # spec_prices = request.POST.getlist('price')
     spec_prices = [float(i) if i is not '' else 0 for i in request.POST.getlist('price')]
