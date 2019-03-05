@@ -49,14 +49,23 @@
                 <div class="row">
                     <div class="pull-left">
                         {% if perms.request.add_xpref %}
-                            <a class="btn btn-success btn-sm pull-left" type="submit" name="submit"
-                               href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
-                                <i class="fa fa-pencil"></i> ویرایش قیمت</a>
-                            <a class="btn btn-warning btn-sm pull-left" href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
-                                <i class="fa fa-pencil"></i> ویرایش پیشفاکتور</a>
-                            <a class="btn btn-sm btn-info" href="{% url 'pref_index' %}">
-                                <i class="fa fa-list-ul" aria-hidden="true"></i>
-                                پیش فاکتورها</a>
+                            <div>
+
+                                <a class="btn btn-sm btn-success" href="{% url 'pro_form' %}">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                    پیش فاکتور جدید</a>
+                                <a class="btn btn-sm btn-info" href="{% url 'pref_index' %}">
+                                    <i class="fa fa-list-ul" aria-hidden="true"></i>
+                                    پیش فاکتورها</a>
+                            </div>
+                            <div>
+                                <a class="btn btn-warning btn-sm pull-left" type="submit" name="submit"
+                                   href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
+                                    <i class="fa fa-pencil"></i> ویرایش قیمت</a>
+                                <a class="btn btn-warning btn-sm pull-left"
+                                   href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
+                                    <i class="fa fa-pencil"></i> ویرایش پیشفاکتور</a>
+                            </div>
                         {% endif %}
 
                     </div>
@@ -67,53 +76,53 @@
                            href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
                     </h4>
                     {#                Table of specs#}
-                <div class="table-responsive">
-                    <table class="table table-hover text-center">
-                        <thead>
-                        <tr>
-                            <th scope="col" class="text-center">ردیف</th>
-                            <th scope="col" class="text-center">کد</th>
-                            <th scope="col" class="text-center">تعداد</th>
-                            <th scope="col" class="text-center">کیلووات</th>
-                            <th scope="col" class="text-center">سرعت</th>
-                            <th scope="col" class="text-center">ولتاژ</th>
-                            <th scope="col" class="text-center">ملاحظات</th>
-                            <th scope="col" class="text-center">قیمت واحد</th>
-                            <th scope="col" class="text-center">مجموع قیمت</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for index, object in nested.items %}
-                            {% if object.obj.price and object.obj.qty %}
-                                <tr>
-                                    <th scope="row" class="text-center">{{ forloop.counter }}</th>
-                                    <td>{{ object.obj.pk }}</td>
-                                    <td>{{ object.obj.qty }}</td>
-                                    <td>{{ object.obj.kw }}</td>
-                                    <td>{{ object.obj.rpm }}</td>
-                                    <td>{{ object.obj.voltage }}</td>
-                                    <td>{{ object.obj.considerations }}</td>
-                                    <td>{{ object.obj.price|intcomma:0 }}</td>
-                                    <td>{{ object.spec_total|intcomma:0 }}</td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                        <tr style="border-top: 2px black solid">
-                            <td colspan="3">مالیات ارزش افزوده</td>
-                            <td colspan="5"></td>
-                            <td class="amount-total ">{{ vat | floatformat:1 | intcomma }}</td>
-                        </tr>
-                        <tr style="border-top: 2px black solid">
-                            <td colspan="3" class="emphsize">مجموع</td>
-                            <td class="kw-total emphsize">{{ kw_total|intcomma }} کیلووات</td>
-                            <td colspan="4"></td>
-                            <td class="amount-total emphsize">{{ proforma_total | floatformat:1 | intcomma }}</td>
-                        </tr>
-                        </tbody>
+                    <div class="table-responsive">
+                        <table class="table table-hover text-center">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="text-center">ردیف</th>
+                                <th scope="col" class="text-center">کد</th>
+                                <th scope="col" class="text-center">تعداد</th>
+                                <th scope="col" class="text-center">کیلووات</th>
+                                <th scope="col" class="text-center">سرعت</th>
+                                <th scope="col" class="text-center">ولتاژ</th>
+                                <th scope="col" class="text-center">ملاحظات</th>
+                                <th scope="col" class="text-center">قیمت واحد</th>
+                                <th scope="col" class="text-center">مجموع قیمت</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for index, object in nested.items %}
+                                {% if object.obj.price and object.obj.qty %}
+                                    <tr>
+                                        <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                        <td>{{ object.obj.pk }}</td>
+                                        <td>{{ object.obj.qty }}</td>
+                                        <td>{{ object.obj.kw }}</td>
+                                        <td>{{ object.obj.rpm }}</td>
+                                        <td>{{ object.obj.voltage }}</td>
+                                        <td>{{ object.obj.considerations }}</td>
+                                        <td>{{ object.obj.price|intcomma:0 }}</td>
+                                        <td>{{ object.spec_total|intcomma:0 }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            <tr style="border-top: 2px black solid">
+                                <td colspan="3">مالیات ارزش افزوده</td>
+                                <td colspan="5"></td>
+                                <td class="amount-total ">{{ vat | floatformat:1 | intcomma }}</td>
+                            </tr>
+                            <tr style="border-top: 2px black solid">
+                                <td colspan="3" class="emphsize">مجموع</td>
+                                <td class="kw-total emphsize">{{ kw_total|intcomma }} کیلووات</td>
+                                <td colspan="4"></td>
+                                <td class="amount-total emphsize">{{ proforma_total | floatformat:1 | intcomma }}</td>
+                            </tr>
+                            </tbody>
 
 
-                    </table>
-                </div>
+                        </table>
+                    </div>
 
                     {#        Images#}
                     <div class="row">
