@@ -108,6 +108,12 @@ $(document).ready(function () {
         calendarType: 'persian',
         format: 'YYYY-MM-DD',
     });
+    $("#due_date").pDatepicker({
+        autoClose: true,
+        initialValue: true,
+        calendarType: 'persian',
+        format: 'YYYY-MM-DD',
+    });
     $("#date_fa_start").pDatepicker({
         autoClose: true,
         initialValue: false,

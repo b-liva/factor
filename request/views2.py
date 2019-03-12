@@ -82,6 +82,11 @@ def req_form_copy(request):
         form = RequestCopyForm(request.POST or None)
         if form.is_valid():
             req_no = form.cleaned_data['number']
+            if form.cleaned_data['new_number']:
+                has_parent = False
+                new_numebr = form.cleaned_data['new_number']
+            else:
+                has_parent = True
             if not Requests.objects.filter(is_active=True).filter(number=req_no):
                 messages.error(request, 'درخواست مورد نظر یافت نشد.')
                 return redirect('errorpage')
@@ -95,9 +100,17 @@ def req_form_copy(request):
             reqspec_sets = master_req.reqspec_set.all()
             temp_number = master_req.number
             master_req.pk = None
-            master_req.parent_number = temp_number
-            # last_request = Requests.objects.filter(is_active=True).filter(parent_number__isnull=False).order_by('number').last()
-            master_req.number = Requests.objects.order_by('number').last().number + 1
+            if has_parent:
+                master_req.parent_number = temp_number
+                # last_request = Requests.objects.filter(is_active=True).filter(parent_number__isnull=False).order_by('number').last()
+                master_req.number = Requests.objects.order_by('number').last().number + 1
+            else:
+                if not Requests.objects.filter(number=new_numebr):
+                    master_req.number = new_numebr
+                else:
+                    messages.error(request, 'درخواست با این شماره موجود است.')
+                    return redirect('errorpage')
+
             master_req.save()
 
             for s in reqspec_sets:

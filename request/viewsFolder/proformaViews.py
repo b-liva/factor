@@ -1,12 +1,15 @@
+import datetime
 import random
 
 from django.contrib import messages
+from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationField, Value, DateField, DateTimeField
 from django.shortcuts import render, redirect
+
+from django_jalali.db import models as jmodels
 
 import request.templatetags.functions as funcs
 from request import models
-from request.models import Requests
-from request.models import Xpref
+from request.models import Requests, Xpref
 from pricedb.models import MotorDB
 
 from request.forms import proforma_forms, forms
@@ -30,6 +33,43 @@ def pref_index(request):
         'showDelete': True,
     }
     return render(request, 'requests/admin_jemco/ypref/index.html', context)
+
+
+@login_required
+def perm_index(request):
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    today_fa = jmodels.jdatetime.date.today()
+    perms = {}
+    prefs = Xpref.objects.filter(is_active=True, owner=request.user, perm=True).order_by('date_fa', 'pk').reverse()
+    if request.user.is_superuser:
+        # prefs = Xpref.objects.filter(is_active=True, perm=True)\
+        #     .annotate(remained_time=ExpressionWrapper(F('due_date') - today_fa, output_field=DurationField()))\
+        #     .order_by('date_fa', 'pk').reverse()
+
+        prefs = Xpref.objects.filter(is_active=True, perm=True).order_by('due_date', 'pk')
+
+    print(prefs)
+    res = []
+    for p in prefs:
+        diff = p.due_date - today_fa
+        perms = {
+            'perm': p,
+            'remained_time': diff.days,
+        }
+        res.append(perms)
+
+    print(perms)
+    print(res)
+    context = {
+        'perms': res,
+        'title': 'مجوز ساخت',
+        'showDelete': True,
+    }
+    return render(request, 'requests/admin_jemco/ypref/index_perms.html', context)
 
 
 @login_required
@@ -248,8 +288,8 @@ def pro_form(request):
             # make a list of specs for this proforma
             req = proforma.req_id
             specs_set = req.reqspec_set.all()
-            print(f'request is: {req}')
-            print(f'specs: {specs_set}')
+            # print(f'request is: {req}')
+            # print(f'specs: {specs_set}')
 
             for spec in specs_set:
 
@@ -417,6 +457,8 @@ def pref_edit2(request, ypref_pk):
         prof.date_fa = prof.date_fa.togregorian()
     if prof.exp_date_fa:
         prof.exp_date_fa = prof.exp_date_fa.togregorian()
+    if prof.due_date:
+        prof.due_date = prof.due_date.togregorian()
     # form = forms.ProformaForm(request.user.pk, request.POST or None, request.FILES or None, instance=prof)
     form = forms.ProformaEditForm(request.user.pk, request.POST or None, request.FILES or None, instance=prof)
     form.req_id = prof.req_id

@@ -144,7 +144,7 @@ class ProformaForm(forms.ModelForm):
         # this renders the items in form drop down menu
         # self.fields['req_id'].label_from_instance = lambda obj: "%s" % obj.number
 
-        list = ['verified', ]
+        list = ['verified']
         for visible in self.visible_fields():
             if visible.name not in list:
                 visible.field.widget.attrs['class'] = 'form-control'
@@ -152,7 +152,7 @@ class ProformaForm(forms.ModelForm):
     class Meta:
         model = models.Xpref
         fields = '__all__'
-        exclude = ('owner', 'pub_date', 'is_active', 'temp_number')
+        exclude = ('owner', 'pub_date', 'is_active', 'temp_number', 'perm', 'due_date')
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
@@ -180,7 +180,7 @@ class ProformaEditForm(forms.ModelForm):
         print(f'current user is: {current_user}')
         super(ProformaEditForm, self).__init__(*args, **kwargs)
 
-        list = ['verified', ]
+        list = ['verified', 'perm']
         for visible in self.visible_fields():
             if visible.name not in list:
                 visible.field.widget.attrs['class'] = 'form-control'
@@ -196,6 +196,9 @@ class ProformaEditForm(forms.ModelForm):
             }),
             'exp_date_fa': forms.DateInput(attrs={
                 'id': 'exp_date_fa'
+            }),
+            'due_date': forms.DateInput(attrs={
+                'id': 'due_date'
             })
         }
 
@@ -204,8 +207,10 @@ class ProformaEditForm(forms.ModelForm):
             'number': 'شماره پیشفاکتور',
             'date_fa': 'تاریخ صدور',
             'exp_date_fa': 'تاریخ انقضا',
+            'due_date': 'تاریخ تحویل',
             'summary': 'جزئیات',
             'verified': 'تاییدیه',
+            'perm': 'مجوز',
 
         }
 
@@ -220,3 +225,4 @@ class ProfSpecForm(forms.ModelForm):
 
 class RequestCopyForm(forms.Form):
     number = forms.IntegerField(label='شماره درخواست')
+    new_number = forms.IntegerField(label='شماره جدید', required=False)

@@ -9,13 +9,12 @@
             <div class="col-md-6 col-md-offset-3">
                 <div>
                     <h3>{{ msg }}</h3>
-                    <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
+                    <h3>
                         {{ message }}
-                    </h1>
+                    </h3>
 
                     <form method="POST" action="" enctype="multipart/form-data">
                         {% csrf_token %}
-
                         {{ form.as_p }}
                         {% for img in prof_images %}
                             {#                            <div ><img src="{{ img.image.url }}" width="30px" height="30px"></div><span id="{{ img.pk }}" class="imgClr">Clear</span>#}

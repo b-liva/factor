@@ -16,6 +16,7 @@ urlpatterns = [
     path('pro_form', proformaViews.pro_form, name='pro_form'),
     path('insert', request.prefViews.pref_insert, name='pref_insert'),
     path('index', proformaViews.pref_index, name='pref_index'),
+    path('index-perms', proformaViews.perm_index, name='perm_index'),
     path('index-deleted', proformaViews.pref_index_deleted, name='pref_index_deleted'),
     path('find', proformaViews.pref_find, name='pref_find'),
     path('<int:ypref_pk>/', include([

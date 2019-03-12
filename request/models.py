@@ -128,10 +128,12 @@ class Xpref(models.Model):
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     exp_date_fa = jmodels.jDateField(default=now)
+    due_date = jmodels.jDateField(null=True, blank=True)
     # image = models.ImageField(upload_to=upload_location, blank=True, null=True)
     summary = models.TextField(max_length=600, null=True, blank=True)
     verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    perm = models.BooleanField(default=False)
 
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')

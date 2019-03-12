@@ -1,0 +1,92 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-10 col-md-offset-1">
+            <h3>{{ msg }}</h3>
+            {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
+            <h1 class="page-header">
+                {{ title }}</h1>
+            <div class="row">
+                {% if messages %}
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="alert alert-danger">
+                            {% for msg in messages %}
+                                <p>{{ msg }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+            <div class="row">
+                {% if showDelete %}
+                    <form method="POST" action="{% url 'pref_find' %}">
+                        {% csrf_token %}
+                        شماره پیشفاکتور <input name="pref_no">
+                        {#                                            <input name="text">#}
+                        <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                {% endif %}
+
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="text-center">ردیف</th>
+                        <th scope="col" class="text-center">شماره پیش فاکتور</th>
+                        <th scope="col" class="text-center">شماره درخواست</th>
+                        <th scope="col" class="text-center">تاریخ تحویل</th>
+                        <th scope="col" class="text-center">باقیمانده(روز)</th>
+                        <th scope="col" class="text-center">جزئیات</th>
+                        <th scope="col" class="text-center"></th>
+                        <th scope="col" class="text-center"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="">
+                    {% for p in perms %}
+                        <tr>
+                            <td scope="row">{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url 'pref_details' ypref_pk=p.perm.pk %}">{{ p.perm.number }}</a>
+                            </td>
+                            {% if not showDelete %}
+                                <td>{{ p.perm.temp_number }}</td>{% endif %}
+                            <td>
+                                <a href="{% url 'request_details' request_pk=p.perm.req_id.pk %}">{{ p.perm.req_id.number }}</a>
+                            </td>
+                            <td>{{ p.perm.due_date }}</td>
+                            <td>{{ p.remained_time }}</td>
+                            <td>{{ p.perm.summary|truncatechars:60 }}</td>
+                            <td>{{ p.perm.owner.last_name }}</td>
+                            <td>
+                                {#                            <a class="btn btn-primary btn-xs"#}
+                                {#                               href="{% url 'pref_details' ypref_pk=p.perm.pk %}">#}
+                                {#                                <i class="fa fa-eye"></i> مشاهده#}
+                                {#                            </a>#}
+                                {% if perms.request.add_xpref and showDelete %}
+
+                                    <a class="btn btn-primary btn-xs btn-warning"
+                                       href="{% url 'pref_edit2' ypref_pk=p.perm.pk %}">
+                                        <i class="fa fa-pencil"></i> ویرایش
+                                    </a>
+                                    <a class="btn btn-primary btn-xs btn-danger"
+                                       href="{% url 'pref_delete' ypref_pk=pref.pk %}"><i
+                                            class="fa fa-trash"></i> حذف</a>
+
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            {#            <a href="{% url 'pref_form' %}" class="btn btn-success btn-sm">Add new Prefactor</a>#}
+
+        </div>
+    </div>
+{% endblock %}
