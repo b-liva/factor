@@ -1,3 +1,4 @@
+import base64
 import datetime
 import random
 
@@ -9,9 +10,12 @@ from django_jalali.db import models as jmodels
 
 import request.templatetags.functions as funcs
 from request import models
+from request.forms.forms import ProfSpecForm
+from request.forms.proforma_forms import ProfEditForm
 from request.models import Requests, Xpref
 from pricedb.models import MotorDB
 
+from django.forms import formset_factory
 from request.forms import proforma_forms, forms
 from django.contrib.auth.decorators import login_required
 
@@ -55,6 +59,8 @@ def perm_index(request):
     print(prefs)
     res = []
     for p in prefs:
+        print(p.pk)
+        print(p.due_date)
         diff = p.due_date - today_fa
         perms = {
             'perm': p,
@@ -70,6 +76,9 @@ def perm_index(request):
         'showDelete': True,
     }
     return render(request, 'requests/admin_jemco/ypref/index_perms.html', context)
+
+
+
 
 
 @login_required
@@ -100,7 +109,7 @@ def pref_find(request):
     if not Xpref.objects.filter(number=prof_no):
         messages.error(request, 'پیش فاکتور مورد نظر یافت نشد')
         return redirect('pref_index')
-    prefs = Xpref.objects.filter(is_active=True).filter(number=prof_no).filter(summary__contains=term).all()
+    prefs = Xpref.objects.filter(is_active=True).filter(number=prof_no).all()
     search_items = {
         # 'term': term,
         'proforma_no': prof_no,
@@ -287,28 +296,30 @@ def pro_form(request):
 
             # make a list of specs for this proforma
             req = proforma.req_id
-            specs_set = req.reqspec_set.all()
+            specs_set = req.reqspec_set.filter(finished=False, is_active=True)
             # print(f'request is: {req}')
             # print(f'specs: {specs_set}')
 
             for spec in specs_set:
 
                 form = forms.ProfSpecForm()
-                specItem = form.save(commit=False)
+                spec_item = form.save(commit=False)
+                spec_item.type = spec.type
+                spec_item.price = 0
+                spec_item.kw = spec.kw
+                spec_item.qty = spec.qty
+                spec_item.rpm = spec.rpm
+                spec_item.voltage = spec.voltage
+                spec_item.ip = spec.ip
+                spec_item.ic = spec.ic
+                spec_item.summary = spec.summary
+                spec_item.owner = request.user
+                spec_item.xpref_id = proforma
+                spec_item.reqspec_eq = spec
+                spec_item.save()
 
-                specItem.type = spec.type
-                specItem.price = 0
-                specItem.kw = spec.kw
-                specItem.qty = spec.qty
-                specItem.rpm = spec.rpm
-                specItem.voltage = spec.voltage
-                specItem.ip = spec.ip
-                specItem.ic = spec.ic
-                specItem.summary = spec.summary
-                specItem.owner = request.user
-
-                specItem.xpref_id = proforma
-                specItem.save()
+                spec.price = True
+                spec.save()
 
             return redirect('prof_spec_form', ypref_pk=proforma.pk)
         else:
@@ -356,25 +367,25 @@ def pref_insert_spec_form(request, ypref_pk):
 @login_required
 def pref_edit(request, ypref_pk):
     if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
-        messages.error(request, 'no Proforma')
+        messages.error(request, 'no Proforma ّFound')
         return redirect('errorpage')
     xpref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
     can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', xpref)
     if not can_edit:
-        messages.error(request, 'no access ')
+        messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     # spec_prices = [float(i.replace(',', '')) for i in request.POST.getlist('price')]
     # spec_prices = request.POST.getlist('price')
     spec_prices = [float(i) if i is not '' else 0 for i in request.POST.getlist('price')]
     spec_qty = request.POST.getlist('qty')
+    spec_sent = request.POST.getlist('sent')
     prof_images = xpref.proffiles_set.all()
     xspec = xpref.prefspec_set.all()
     x = 0
     for item in xspec:
+        item.sent = True if str(item.pk) in spec_sent and spec_prices[x] != 0 and item.xpref_id.perm else False
         item.price = spec_prices[x]
-        item.qty = spec_qty[x]
-        item.qty = spec_qty[x]
         item.qty = spec_qty[x]
         item.save()
         x += 1
@@ -475,9 +486,21 @@ def pref_edit2(request, ypref_pk):
         # prof_item.req_id = prof.req_id
         prof_item.number = prof.number
         prof_item.save()
+
         for f in files:
             file_instance = models.ProfFiles(image=f, prof=prof_item)
             file_instance.save()
+
+        perm = True if prof.perm else False
+        for prof_spec in prof.prefspec_set.all():
+            if not prof.perm and prof_spec.sent:
+                prof_spec.sent = False
+                prof_spec.save()
+
+            reqSpec = prof_spec.reqspec_eq
+            reqSpec.permission = perm
+            reqSpec.save()
+
         return redirect('pref_index')
 
     context = {

@@ -1,11 +1,11 @@
 {% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
 {% load humanize %}
+{% load request_extras %}
 {% block right_col %}
     <div class="container">
         <div class="col-md-6 col-md-offset-3">
             <h3>{{ msg }}</h3>
-            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">
-                Edit Proforma</h1>
+            <h1 class="text-center"> Edit Proforma </h1>
             <h4>شماره پیش فاکتور: {{ proforma.number }}</h4>
 
             <br>تاریخ صدور: {{ proforma.date_fa }}
@@ -22,6 +22,7 @@
                         <th class="text-center">کیلووات</th>
                         <th class="text-center">سرعت</th>
                         <th class="text-center">قیمت</th>
+                        <th class="text-center">ارسال به مشتری</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -30,7 +31,11 @@
                             <td><input type="number" name="qty" value="{{ prof_spec.qty }}" class="form-control"></td>
                             <td>{{ prof_spec.kw }}</td>
                             <td>{{ prof_spec.rpm }}</td>
-                            <td><input type="text" name="price" value="{{ prof_spec.price | floatformat:0 }}" class="form-control">
+                            <td><input type="text" name="price" value="{{ prof_spec.price | floatformat:0 }}"
+                                       class="form-control">
+{#                            <td><input name="sent" type="checkbox" {% if prof_spec.sent %} checked {% endif %} value="{{ prof_spec.pk|enc }}" ></td>#}
+                            <td class="text-center"><input name="sent" type="checkbox" {% if prof_spec.sent %} checked {% endif %} value="{{ prof_spec.pk }}" ></td>
+
                             </td>
                         </tr>
                     {% endfor %}

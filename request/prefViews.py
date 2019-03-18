@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 import request.templatetags.functions as funcs
 # from request.functions import has_perm_or_is_owner
 # from fund.views import has_perm_or_is_owner
+from request.forms.forms import ProfSpecForm
 
 from .models import Requests
 from .models import ReqSpec

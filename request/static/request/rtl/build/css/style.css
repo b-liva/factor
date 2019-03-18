@@ -196,3 +196,15 @@ ul.quick-list {
 .customerPersonHolder{
 
 }
+
+.time-danger{
+    background: #ff9b99;
+}
+
+.time-warning{
+    background: #FF5B00;
+}
+
+.time-danger {
+    background: #cb705c;
+}

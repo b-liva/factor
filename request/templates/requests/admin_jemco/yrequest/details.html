@@ -1,5 +1,6 @@
 {% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
 {% load humanize %}
+{% load request_extras %}
 {% load static %}
 {% block right_col %}
     <div class="container">
@@ -91,12 +92,20 @@
                     <table class="table table-hover text-center">
                         <thead class="dark">
                         <tr>
+                            <td colspan="10"></td>
+                            <td style="font-weight: bold; background: #ffa09c;" colspan="4">آزمایشی</td>
+                        </tr>
+                        <tr>
                             <th scope="col" class="text-center rotate_deg">شماره</th>
                             <th scope="col" class="text-center rotate_deg">تعداد</th>
                             <th scope="col" class="text-center rotate_deg">کیلووات</th>
                             <th scope="col" class="text-center rotate_deg">سرعت</th>
                             <th scope="col" class="text-center rotate_deg">جزئیات</th>
                             <th scope="col" class="text-center rotate_deg">فنی</th>
+                            <th scope="col" class="text-center rotate_deg">مالی</th>
+                            <th scope="col" class="text-center rotate_deg">انصراف مشتری</th>
+                            <th scope="col" class="text-center rotate_deg">مجوز ساخت</th>
+                            <th scope="col" class="text-center rotate_deg">ارسال شده</th>
                             <th scope="col" class="text-center rotate_deg">مالی</th>
                             <th scope="col" class="text-center rotate_deg">انصراف مشتری</th>
                             <th scope="col" class="text-center rotate_deg">مجوز ساخت</th>
@@ -113,11 +122,22 @@
                                 <td>{{ reqspec.kw }}</td>
                                 <td>{{ reqspec.rpm }}</td>
                                 <td class="text-right">{{ reqspec.summary }}</td>
+
                                 <td><input type="checkbox" {% if reqspec.tech %} checked {% endif %} disabled></td>
                                 <td><input type="checkbox" {% if reqspec.price %} checked {% endif %} disabled></td>
                                 <td><input type="checkbox" {% if reqspec.cancelled %} checked {% endif %} disabled></td>
-                                <td><input type="checkbox" {% if reqspec.permission %} checked {% endif %} disabled></td>
-                                <td><input type="checkbox" {% if reqspec.sent %} checked {% endif %} disabled></td>
+                                <td><input type="checkbox" {% if reqspec.permission %} checked {% endif %} disabled>
+                                </td>
+                                <td><input type="checkbox" {% if reqspec|is_sent %} checked {% endif %} disabled></td>
+
+                                <td style="border-right: 1px solid black;"><input type="checkbox"
+                                        {% if reqspec|has_price %} checked {% endif %} disabled></td>
+                                <td><input type="checkbox" {% if reqspec|is_cancelled %} checked {% endif %} disabled>??
+                                </td>
+                                <td><input type="checkbox" {% if reqspec|has_permission %} checked {% endif %} disabled>??
+                                </td>
+                                <td style="border-left: 1px solid black;"><input type="checkbox"{% if reqspec|is_sent %}
+                                                                                 checked {% endif %} disabled></td>
 
                                 {% if perms.request.sale_expert %}
 

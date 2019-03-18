@@ -1,5 +1,6 @@
 {% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
 {% load humanize %}
+{% load request_extras %}
 {% block right_col %}
     <div class="container">
         <div class="col-md-10 col-md-offset-1">
@@ -21,26 +22,37 @@
             </div>
             <div class="row">
                 {% if showDelete %}
-                    <form method="POST" action="{% url 'pref_find' %}">
-                        {% csrf_token %}
-                        شماره پیشفاکتور <input name="pref_no">
-                        {#                                            <input name="text">#}
-                        <button type="submit" name="submit" class="btn btn-sm btn-primary">
-                            <i class="fa fa-search" aria-hidden="true"></i>
-                        </button>
-                    </form>
+                    <div class="col-md-8">
+                        <form method="POST" action="{% url 'pref_find' %}">
+                            {% csrf_token %}
+                            شماره پیشفاکتور <input name="pref_no">
+                            {#                                            <input name="text">#}
+                            <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </form>
+
+                    </div>
                 {% endif %}
+                <div class="col-md-4 left">
+                    <span class="btn-danger">منتقضی</span>
+                    <span class="btn-warning">کمتر از یک ماه</span>
+                    <span class="btn-success">بیشتر از یک ماه</span>
+                </div>
+
 
             </div>
             <div class="table-responsive">
-                <table class="table table-hover text-center">
+                <table class="table text-center">
                     <thead>
                     <tr>
                         <th scope="col" class="text-center">ردیف</th>
                         <th scope="col" class="text-center">شماره پیش فاکتور</th>
                         <th scope="col" class="text-center">شماره درخواست</th>
+                        <th scope="col" class="text-center">مشتری</th>
                         <th scope="col" class="text-center">تاریخ تحویل</th>
                         <th scope="col" class="text-center">باقیمانده(روز)</th>
+                        <th scope="col" class="text-center">جزئیات</th>
                         <th scope="col" class="text-center">جزئیات</th>
                         <th scope="col" class="text-center"></th>
                         <th scope="col" class="text-center"></th>
@@ -48,19 +60,23 @@
                     </thead>
                     <tbody class="">
                     {% for p in perms %}
-                        <tr>
+                        <tr class="{{ p|perm_warning_class }}">
                             <td scope="row">{{ forloop.counter }}</td>
                             <td>
-                                <a href="{% url 'pref_details' ypref_pk=p.perm.pk %}">{{ p.perm.number }}</a>
+                                <a class="badge"
+                                   href="{% url 'pref_details' ypref_pk=p.perm.pk %}">{{ p.perm.number }}</a>
                             </td>
                             {% if not showDelete %}
                                 <td>{{ p.perm.temp_number }}</td>{% endif %}
                             <td>
-                                <a href="{% url 'request_details' request_pk=p.perm.req_id.pk %}">{{ p.perm.req_id.number }}</a>
+                                <a class="badge badge-light"
+                                   href="{% url 'request_details' request_pk=p.perm.req_id.pk %}">{{ p.perm.req_id.number }}</a>
                             </td>
+                            <td>{{ p.perm.req_id.customer.name }}</td>
                             <td>{{ p.perm.due_date }}</td>
-                            <td>{{ p.remained_time }}</td>
+                            <td>{{ p|days }}</td>
                             <td>{{ p.perm.summary|truncatechars:60 }}</td>
+                            <td>{{ p|perm_warning_class }}</td>
                             <td>{{ p.perm.owner.last_name }}</td>
                             <td>
                                 {#                            <a class="btn btn-primary btn-xs"#}

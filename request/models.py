@@ -87,11 +87,12 @@ class FrameSize(models.Model):
 
 
 class ReqSpec(models.Model):
+    req_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    req_id = models.ForeignKey(Requests, on_delete=models.DO_NOTHING)
+    type = models.ForeignKey(ProjectType, on_delete=models.DO_NOTHING)
+    frame_size = models.ForeignKey(FrameSize, on_delete=models.DO_NOTHING, blank=True, null=True)
     qty = models.IntegerField(default=1)
     # type = models.IntegerField(choices=project_type, default=0)
-    type = models.ForeignKey(ProjectType, on_delete=models.DO_NOTHING)
     # probably this price should be removed.
     # price = models.FloatField(null=True, blank=True)
     kw = models.FloatField()
@@ -100,7 +101,6 @@ class ReqSpec(models.Model):
     ip = models.IntegerField(null=True, blank=True)
     ic = models.IntegerField(null=True, blank=True)
     # frame_size = models.CharField(null=True, blank=True, max_length=10)
-    frame_size = models.ForeignKey(FrameSize, on_delete=models.DO_NOTHING, blank=True, null=True)
     # images = models.FileField(upload_to='specs/', blank=True, null=True)
     summary = models.TextField(max_length=500, blank=True, null=True)
     tech = models.BooleanField(default=False)
@@ -109,6 +109,7 @@ class ReqSpec(models.Model):
     sent = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     cancelled = models.BooleanField(default=False)
+    finished = models.BooleanField(default=False)
 
     class Meta:
         permissions = (
@@ -149,13 +150,14 @@ class Xpref(models.Model):
 
 
 class ProfFiles(models.Model):
-    image = models.FileField(upload_to=upload_location, null=True, blank=True)
     prof = models.ForeignKey(Xpref, on_delete=models.CASCADE)
+    image = models.FileField(upload_to=upload_location, null=True, blank=True)
 
 
 class PrefSpec(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    xpref_id = models.ForeignKey(Xpref, on_delete=models.DO_NOTHING)
+    xpref_id = models.ForeignKey(Xpref, on_delete=models.CASCADE)
+    reqspec_eq = models.ForeignKey(ReqSpec, on_delete=models.DO_NOTHING)
     qty = models.IntegerField(default=1)
     type = models.TextField(default=1)
     price = models.FloatField(null=True, blank=True)
@@ -167,6 +169,8 @@ class PrefSpec(models.Model):
     summary = models.TextField(max_length=500, blank=True, null=True)
     considerations = models.TextField(max_length=500, blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    sent = models.BooleanField(default=False)
+    finished = models.BooleanField(default=False)
 
     def __str__(self):
         return 'pk:%s | %s | %sKW - %sRPM - %sV' % (self.pk, self.qty, self.kw, self.rpm, self.voltage)
@@ -174,7 +178,6 @@ class PrefSpec(models.Model):
 
 class XprefVerf(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-
     xpref = models.ForeignKey(Xpref, on_delete=models.CASCADE)
     number = models.IntegerField(blank=True, null=True)
     pub_date = models.DateTimeField(default=now)
@@ -225,6 +228,7 @@ class Payment(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     xpref_id = models.ForeignKey(Xpref, on_delete=models.DO_NOTHING)
+
     number = models.IntegerField(unique=True)
     temp_number = models.IntegerField(unique=True, null=True, blank=True)
     amount = models.FloatField()
@@ -247,6 +251,6 @@ class Payment(models.Model):
 
 
 class PaymentFiles(models.Model):
-    image = models.FileField(upload_to=upload_location, null=True, blank=True)
     pay = models.ForeignKey(Payment, on_delete=models.CASCADE)
+    image = models.FileField(upload_to=upload_location, null=True, blank=True)
 
