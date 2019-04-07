@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 
 import base64
 import datetime
-from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationField, Value, DateField, DateTimeField
+from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationField, Value, DateField, DateTimeField, Q
 from request.forms.forms import ProfSpecForm
 from request.forms.proforma_forms import ProfEditForm
 from django.forms import formset_factory
@@ -28,9 +28,16 @@ def pref_index(request):
     if not can_index:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
+
     # prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date').reverse()
     # prefs = Xpref.objects.all().order_by('date_fa').reverse()
-    prefs = Xpref.objects.filter(is_active=True, owner=request.user).order_by('date_fa', 'pk').reverse()
+
+    prefs = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
+
+    if not request.user.is_superuser:
+        prefs = prefs.filter(Q(owner=request.user) | Q(req_id__colleagues=request.user))
+
+    # prefs = Xpref.objects.filter(is_active=True, owner=request.user).order_by('date_fa', 'pk').reverse()
     if request.user.is_superuser:
         prefs = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
     context = {
@@ -122,8 +129,8 @@ def pref_details(request, ypref_pk):
         return redirect('errorpage')
 
     pref = Xpref.objects.get(pk=ypref_pk)
-
     can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
+
     if not can_read:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')

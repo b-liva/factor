@@ -1,5 +1,6 @@
 import random
 
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
@@ -105,7 +106,11 @@ def payment_index(request):
         return redirect('errorpage')
 
     # payments = Payment.objects.all().order_by('date_fa').reverse()
-    payments = Payment.objects.filter(is_active=True, owner=request.user).order_by('date_fa').reverse()
+
+    payments = Payment.objects.filter(is_active=True).order_by('date_fa').reverse()
+    if not request.user.is_superuser:
+        payments = payments.filter(Q(owner=request.user) | Q(xpref_id__req_id__colleagues=request.user)| Q(xpref_id__req_id__owner=request.user))
+
     if request.user.is_superuser:
         payments = Payment.objects.filter(is_active=True).order_by('date_fa').reverse()
     pref_sum = 0
