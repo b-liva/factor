@@ -16,7 +16,6 @@ from customer.mixins import OwnRequestMixin
 from request.models import (
     Requests,
     Xpref,
-    Prefactor,
 )
 from request.forms.forms import SpecForm
 from customer.forms import (

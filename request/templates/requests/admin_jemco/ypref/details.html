@@ -1,5 +1,6 @@
 {% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
 {% load humanize %}
+{% load request_extras %}
 {% block right_col %}
     <div class="container">
         <div class="row">
@@ -11,17 +12,18 @@
                 <p><i class="fa fa-map-marker" aria-hidden="true"></i>
                     {{ pref.req_id.customer.address }}</p>
             </div>
-            <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
-                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div id="customerSummary" class=" col-md-6 col-sm-6 col-xs-12 ">
+                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="tile-stats">
                         <div class="icon">
                         </div>
-                        <div class="count">{{ pref.number }}</div>
+                        <span class="count">{{ pref.number }}</span>
+                        <span class="{% if pref.perm %}green{% else %}red{% endif %}">{% if pref.perm %}(مجوز شده) {% else %}(مجوز نشده){% endif %}</span>
 
                         <h3>شماره پیشفاکتور</h3>
                     </div>
                 </div>
-                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="tile-stats">
                         <div class="icon">
                         </div>
@@ -30,16 +32,25 @@
                         <h3>تاریخ انقضا</h3>
                     </div>
                 </div>
-                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="tile-stats">
                         <div class="icon col-md-6">
                             {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
                         </div>
                         <div class="count">${{ proforma_total|floatformat:0|intcomma }}</div>
 
-                        <h3>قابل پرداخت</h3>
+                        <h3>مبلغ پیش فاکتور</h3>
                     </div>
                 </div>
+                {% if pref.perm %}
+                    <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="tile-stats">
+                            <span class="count">${{ pref|perm_receivable|floatformat:0|intcomma }}</span>
+                            <span class="red">(%{{ pref|receivable_percent|floatformat:2 }})</span>
+                            <h3 class="col-xs-12">تسویه نشده</h3>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
 
@@ -146,6 +157,7 @@
                                     <thead>
                                     <tr>
                                         <td>شماره</td>
+                                        <td>تاریخ</td>
                                         <td>مبلغ</td>
                                     </tr>
                                     </thead>
@@ -154,6 +166,10 @@
                                         <tr>
                                             <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
                                                 {{ pay.number }}
+                                            </a>
+                                            </td>
+                                            <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
+                                                {{ pay.date_fa }}
                                             </a>
                                             </td>
                                             <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">

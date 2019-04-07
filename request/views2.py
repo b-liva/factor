@@ -16,7 +16,7 @@ from accounts.models import User
 from request.filters.filters import RequestFilter
 from request.forms.forms import RequestCopyForm
 from request.forms.search import ReqSearchForm
-from request.views import allRequests, find_all_obj
+from request.views import find_all_obj
 from .models import Requests, ReqSpec
 from .models import Xpref, Payment
 from . import models
@@ -32,7 +32,6 @@ from collections import defaultdict as dd
 
 
 # Create your views here.
-
 @login_required
 def project_type_form(request):
     if request.method == 'POST':
@@ -203,12 +202,7 @@ def wrong_data2(request):
     context = {
         'reqspecs': probably_wrong,
     }
-    return render(request, 'requests/admin_jemco/yreqspec/wrong_data.html', context)
-
-
-@login_required
-def req_search(request):
-    pass
+    return render(request, 'requests/admin_jemco/yreqspec/wrong_data.html', context)\
 
 
 @login_required
@@ -598,7 +592,6 @@ def request_index(request):
     today = jdatetime.date.today()
 
     requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
-    print(f'super user: {request.user.is_superuser}')
     if not request.user.is_superuser:
         requests = requests.filter(owner=request.user)
     response = {}
@@ -606,7 +599,6 @@ def request_index(request):
     date_format = "%m/%d/%Y"
     for req in requests:
         diff = today - req.date_fa
-        print(f'diff is: {diff.days}')
         time_entered = jdatetime.date.fromgregorian(date=req.pub_date, locale='fa_IR')
         delay_entered = time_entered - req.date_fa
         response[req.pk] = {
@@ -628,7 +620,6 @@ def request_index(request):
         req_page = paginator.page(1)
     except EmptyPage:
         req_page = paginator.page(paginator.num_pages)
-    print(requests)
     context = {
         'req_page': req_page,
         'all_requests': requests,
@@ -751,7 +742,6 @@ def request_index_vue_deleted(request):
         'message': 'درخواست های حذف شده',
     }
     return render(request, 'requests/admin_jemco/yrequest/vue/index.html', context)
-
 
 
 @login_required
@@ -1009,66 +999,6 @@ def request_edit(request, request_pk):
     return HttpResponse('request Edit' + str(request_pk))
 
 
-@login_required
-def pref_add(request):
-    return render(request, 'test.html', {'is_add': True})
-
-
-@login_required
-def pref_insert(request):
-    print('added to the db...')
-    return render(request, 'test.html', {'is_add': True})
-
-
-# add spec to the prefactor
-@login_required
-def pref_spec_add(request):
-    return HttpResponse('prefactor spec add')
-
-
-@login_required
-def pref_spec_details(request, ypref_spec_pk):
-    return HttpResponse('prefactor spec details')
-
-
-@login_required
-def pref_spec_del(request, ypref_spec_pk):
-    return HttpResponse('prefactor spec delete')
-
-
-@login_required
-def pref_spec_edit(request, ypref_spec_pk):
-    return HttpResponse('prefactor spec edit')
-
-
-@login_required
-def pref(request, ypref_pk):
-    if request.method == 'POST':
-        if '_METHOD' not in request.POST:
-            # Do post request
-            return HttpResponse('this is a post request')
-        else:
-            if request.POST['_METHOD'] == 'PUT':
-                # Do put request
-                return HttpResponse('this is a put request')
-            elif request.POST['_METHOD'] == 'DELETE':
-                return HttpResponse('this is a delete request')
-
-    elif request.method == 'GET':
-        list = allRequests()
-        return render(request, 'test.html', {
-            'ypref_pk': ypref_pk,
-            'is_add': False,
-        })
-        # return render(request, 'requests/admin_jemco/prefactor/create2.html', {
-        #     'list': list,
-        #     'ypref_pk': ypref_pk
-        # })
-        # return render(request, 'test.html', {'ypref_pk': ypref_pk})
-
-    # return HttpResponse('this is from a single line of code for: ' + str(ypref_ipk))
-
-
 def total_kw(req_id):
     req = Requests.objects.get(pk=req_id)
     reqspecs = req.reqspec_set.all()
@@ -1169,6 +1099,7 @@ def prof_img_del(request, img_pk):
     return redirect('pref_edit2', ypref_pk=prof.pk)
 
 
+@login_required
 def payment_form2(request):
     return HttpResponse('hello world')
 
@@ -1188,6 +1119,7 @@ class LazyEncoder(DjangoJSONEncoder):
         return super().default(obj)
 
 
+@login_required
 def fsearch5(request):
     filters = {}
     req_list = Requests.objects.all()
@@ -1244,6 +1176,7 @@ def fsearch5(request):
     return render(request, 'requests/admin_jemco/yrequest/search_index2.html', context)
 
 
+@login_required
 def finish(request, request_pk):
     req = Requests.objects.get(pk=request_pk)
     req.finished = not req.finished

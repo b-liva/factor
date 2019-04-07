@@ -1,8 +1,6 @@
 import random
 
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.utils import timezone
 from django.contrib import messages
 
 from request.views import find_all_obj
@@ -12,6 +10,8 @@ from request import models
 from django.contrib.auth.decorators import login_required
 import request.templatetags.functions as funcs
 from request.forms import payment_forms
+from django.http import HttpResponse
+from django.utils import timezone
 
 
 # add payment to the prefactor

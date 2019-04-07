@@ -1,3 +1,4 @@
+from django.db.models import Sum, F, FloatField
 from django_jalali.db import models as jmodels
 import base64
 
@@ -80,7 +81,7 @@ def enc(reqspec_pk):
 @register.filter(name='perm_warning_class')
 def perm_warning_class(perm):
     today_fa = jmodels.jdatetime.date.today()
-    diff = perm['perm'].due_date - today_fa
+    diff = perm.due_date - today_fa
     warning_class = ""
 
     if diff.days <= 0:
@@ -101,3 +102,53 @@ def days(perm):
     diff = perm['perm'].due_date - today_fa
 
     return diff.days
+
+
+@register.filter(name='perm_total')
+def perm_total(permission):
+    payments = permission.payment_set.all()
+    proforma_total = pref_total_price(permission)
+    return proforma_total
+
+
+@register.filter(name='perm_days')
+def perm_days(permission):
+    today_fa = jmodels.jdatetime.date.today()
+    diff = permission.due_date - today_fa
+    return diff.days
+
+
+@register.filter(name='perm_receivable')
+def perm_receivable(permission):
+    payments = permission.payment_set.all()
+    total_paid = payments.aggregate(Sum('amount'))
+    proforma_total = pref_total_price(permission)
+    print(proforma_total)
+    if not total_paid['amount__sum']:
+        total_paid['amount__sum'] = 0
+    receivable = proforma_total - total_paid['amount__sum']
+    return receivable
+
+
+@register.filter(name='receivable_percent')
+def perm_receivable_percent(permission):
+    payments = permission.payment_set.all()
+    total_paid = payments.aggregate(Sum('amount'))
+    proforma_total = pref_total_price(permission)
+    print(proforma_total)
+    if not total_paid['amount__sum']:
+        total_paid['amount__sum'] = 0
+    receivable = proforma_total - total_paid['amount__sum']
+    value = "Error" if proforma_total == 0 else f"{100 * receivable / proforma_total}"
+    print(value)
+    return value
+
+
+def pref_total_price(permission):
+    prefs = permission.prefspec_set.all()
+    proforma_total_before_tax = prefs.aggregate(total=Sum(F('qty') * F('price'), output_field=FloatField()))
+    if not proforma_total_before_tax['total']:
+        proforma_total_before_tax['total'] = 0
+    proforma_total_after_tax = 1.09 * proforma_total_before_tax['total']
+    return proforma_total_after_tax
+

@@ -44,14 +44,14 @@ class ProjectType(models.Model):
 
 class Requests(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
-    # number = models.CharField(unique=True, max_length=10)
+    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='req_owner')
+
     number = models.IntegerField(unique=True)
     temp_number = models.IntegerField(unique=True, null=True, blank=True)
     parent_number = models.IntegerField(null=True, blank=True)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     date_finished = jmodels.jDateField(blank=True, null=True)
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='req_owner')
     colleagues = models.ManyToManyField(User, blank=True, null=True)
     summary = models.TextField(max_length=1000, null=True, blank=True)
     added_by_customer = models.BooleanField(default=False)
@@ -75,8 +75,8 @@ class Requests(models.Model):
 
 
 class RequestFiles(models.Model):
-    image = models.FileField(upload_to=upload_location, null=True, blank=True)
     req = models.ForeignKey(Requests, on_delete=models.CASCADE)
+    image = models.FileField(upload_to=upload_location, null=True, blank=True)
 
 
 class FrameSize(models.Model):
@@ -90,18 +90,14 @@ class ReqSpec(models.Model):
     req_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     type = models.ForeignKey(ProjectType, on_delete=models.DO_NOTHING)
-    frame_size = models.ForeignKey(FrameSize, on_delete=models.DO_NOTHING, blank=True, null=True)
+
     qty = models.IntegerField(default=1)
-    # type = models.IntegerField(choices=project_type, default=0)
-    # probably this price should be removed.
-    # price = models.FloatField(null=True, blank=True)
     kw = models.FloatField()
     rpm = models.IntegerField()
     voltage = models.IntegerField(default=380)
     ip = models.IntegerField(null=True, blank=True)
     ic = models.IntegerField(null=True, blank=True)
-    # frame_size = models.CharField(null=True, blank=True, max_length=10)
-    # images = models.FileField(upload_to='specs/', blank=True, null=True)
+    frame_size = models.ForeignKey(FrameSize, on_delete=models.DO_NOTHING, blank=True, null=True)
     summary = models.TextField(max_length=500, blank=True, null=True)
     tech = models.BooleanField(default=False)
     price = models.BooleanField(default=False)
@@ -124,13 +120,13 @@ class ReqSpec(models.Model):
 class Xpref(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     req_id = models.ForeignKey(Requests, on_delete=models.DO_NOTHING)
+
     number = models.IntegerField(unique=True)
     temp_number = models.IntegerField(unique=True, null=True, blank=True)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     exp_date_fa = jmodels.jDateField(default=now)
     due_date = jmodels.jDateField(null=True, blank=True)
-    # image = models.ImageField(upload_to=upload_location, blank=True, null=True)
     summary = models.TextField(max_length=600, null=True, blank=True)
     verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -158,6 +154,7 @@ class PrefSpec(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     xpref_id = models.ForeignKey(Xpref, on_delete=models.CASCADE)
     reqspec_eq = models.ForeignKey(ReqSpec, on_delete=models.DO_NOTHING)
+
     qty = models.IntegerField(default=1)
     type = models.TextField(default=1)
     price = models.FloatField(null=True, blank=True)
@@ -174,54 +171,6 @@ class PrefSpec(models.Model):
 
     def __str__(self):
         return 'pk:%s | %s | %sKW - %sRPM - %sV' % (self.pk, self.qty, self.kw, self.rpm, self.voltage)
-
-
-class XprefVerf(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    xpref = models.ForeignKey(Xpref, on_delete=models.CASCADE)
-    number = models.IntegerField(blank=True, null=True)
-    pub_date = models.DateTimeField(default=now)
-    image = models.ImageField(upload_to='verifications/')
-    summary = models.TextField(max_length=1000)
-
-    def pub_date_pretty(self):
-        return self.pub_date.strftime('%b %e %Y')
-
-
-class Prefactor(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-
-    request_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
-    number = models.IntegerField(unique=True)
-    pub_date = models.DateTimeField(default=now)
-    image = models.ImageField(upload_to='prefactors')
-    summary = models.TextField(max_length=1000)
-
-    def pub_date_pretty(self):
-        return self.pub_date.strftime('%b %e %Y')
-
-
-class PrefactorVerification(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-
-    pref_id = models.ForeignKey(Prefactor, on_delete=models.CASCADE)
-    number = models.IntegerField()
-    pub_date = models.DateTimeField(default=now)
-    image = models.ImageField(upload_to='pref_verifications')
-    summary = models.TextField(max_length=1000)
-
-    def pub_date_pretty(self):
-        return self.pub_date.strftime('%b %e %Y')
-
-
-class Permission(models.Model):
-    proforma = models.ForeignKey(Xpref, on_delete=models.CASCADE)
-    number = models.IntegerField()
-    pub_date = models.DateTimeField(default=now)
-    summary = models.TextField(max_length=1000)
-
-    def pub_date_pretty(self):
-        return self.pub_date.strftime('%b %e %Y')
 
 
 class Payment(models.Model):

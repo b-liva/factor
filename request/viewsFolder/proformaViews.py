@@ -1,23 +1,25 @@
-import base64
-import datetime
 import random
 
 from django.contrib import messages
-from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationField, Value, DateField, DateTimeField
 from django.shortcuts import render, redirect
 
 from django_jalali.db import models as jmodels
 
 import request.templatetags.functions as funcs
 from request import models
-from request.forms.forms import ProfSpecForm
-from request.forms.proforma_forms import ProfEditForm
-from request.models import Requests, Xpref
+
+from request.models import Requests, Xpref, ReqSpec, PrefSpec
 from pricedb.models import MotorDB
 
-from django.forms import formset_factory
 from request.forms import proforma_forms, forms
 from django.contrib.auth.decorators import login_required
+
+import base64
+import datetime
+from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationField, Value, DateField, DateTimeField
+from request.forms.forms import ProfSpecForm
+from request.forms.proforma_forms import ProfEditForm
+from django.forms import formset_factory
 
 
 @login_required
@@ -46,8 +48,6 @@ def perm_index(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    today_fa = jmodels.jdatetime.date.today()
-    perms = {}
     prefs = Xpref.objects.filter(is_active=True, owner=request.user, perm=True).order_by('date_fa', 'pk').reverse()
     if request.user.is_superuser:
         # prefs = Xpref.objects.filter(is_active=True, perm=True)\
@@ -56,29 +56,21 @@ def perm_index(request):
 
         prefs = Xpref.objects.filter(is_active=True, perm=True).order_by('due_date', 'pk')
 
-    print(prefs)
     res = []
     for p in prefs:
-        print(p.pk)
-        print(p.due_date)
-        diff = p.due_date - today_fa
-        perms = {
-            'perm': p,
-            'remained_time': diff.days,
-        }
-        res.append(perms)
+        res.append(p)
 
-    print(perms)
-    print(res)
     context = {
-        'perms': res,
+        'permission': res,
         'title': 'مجوز ساخت',
         'showDelete': True,
     }
     return render(request, 'requests/admin_jemco/ypref/index_perms.html', context)
 
 
-
+@login_required
+def perm_specs(request):
+    print(request)
 
 
 @login_required
@@ -334,7 +326,7 @@ def pro_form(request):
         'owner_reqs': owners_reqs,
         'message': 'ثبت پیش فاکتور',
     }
-    return render(request, 'requests/admin_jemco/ypref/proforma_form.html', context)
+    return render(request, 'requests/admin_jemco/ypref/proforma_form.html', context)\
 
 
 @login_required
@@ -511,3 +503,105 @@ def pref_edit2(request, ypref_pk):
         'message': 'ویرایش پیش فاکتور',
     }
     return render(request, 'requests/admin_jemco/ypref/proforma_form.html', context)
+
+
+@login_required
+def pref_insert(request):
+    # can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
+    reqs = Requests.objects.filter(is_active=True)
+    req_no = request.POST['req_no']
+    print(req_no)
+    xpref_no = request.POST['xpref']
+    spec_prices = request.POST.getlist('price')
+    spec_ids = request.POST.getlist('spec_id')
+    x = 0
+    xpref = Xpref.objects.filter(is_active=True).filter(pk=xpref_no)
+    xpref = Xpref()
+    xpref.number = xpref_no
+    xpref.req_id = Requests.objects.filter(is_active=True).get(pk=req_no)
+    xpref.date_fa = request.POST['date_fa']
+    xpref.exp_date_fa = request.POST['exp_date_fa']
+    xpref.owner = request.user
+    xpref.save()
+    for i in spec_ids:
+        j = int(i)
+        print(str(i) + ':' + str(spec_prices[x]))
+        # r = PrefSpec.objects.filter(pk=spec_ids[x])
+        spec = ReqSpec.objects.filter(is_active=True).get(pk=j)
+
+        pref_spec = PrefSpec()
+        pref_spec.type = spec.type
+        pref_spec.price = 0
+        pref_spec.price = spec_prices[x]
+
+        # if spec_prices[x] == '':
+        # else:
+        pref_spec.kw = spec.kw
+        pref_spec.qty = spec.qty
+        pref_spec.rpm = spec.rpm
+        pref_spec.voltage = spec.voltage
+        pref_spec.ip = spec.ip
+        pref_spec.ic = spec.ic
+        pref_spec.summary = spec.summary
+        pref_spec.xpref_id = xpref
+        pref_spec.owner = request.user
+        pref_spec.save()
+        x += 1
+
+    return redirect('pref_form')
+
+
+@login_required
+def pref_edit_form(request, ypref_pk):
+    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
+        messages.error(request, 'no Proforma')
+        return redirect('errorpage')
+    proforma = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', proforma)
+    if not can_edit:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+    prof_specs = proforma.prefspec_set.all()
+    context = {
+        'proforma': proforma,
+        'prof_specs': prof_specs
+    }
+    return render(request, 'requests/admin_jemco/ypref/edit_form.html', context)
+
+
+@login_required
+def prof_spec_form(request, ypref_pk):
+    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
+        messages.error(request, 'no Proforma')
+        return redirect('errorpage')
+    proforma = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
+    req = proforma.req_id
+    reqspecs = req.reqspec_set.all()
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
+    if not can_add:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    if request.method == 'POST':
+        # form = forms.ProfSpecForm(request.POST, request.user)
+        form = forms.ProfSpecForm(request.POST)
+        if form.is_valid():
+            print('form is valid')
+            spec = form.save(commit=False)
+            spec.xpref_id = proforma
+            spec.save()
+            print('saved')
+            # return redirect('prof_spec_form', ypref_pk=proforma.pk)
+            return redirect('pref_insert_spec_form', ypref_pk=proforma.pk)
+        else:
+            print('form is not valid')
+    else:
+        form = forms.ProfSpecForm(request.POST)
+
+    context = {
+        'form': form,
+        'proforma': proforma,
+        'req_obj': req,
+        'reqspec': reqspecs
+    }
+    return render(request, 'requests/admin_jemco/ypref/proforma_specs.html', context)

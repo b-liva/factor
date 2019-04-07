@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-
 from .models import Requests
 from .models import ReqSpec
 from django.contrib.auth.decorators import login_required
@@ -24,34 +23,6 @@ def reqspec_form(request, req_pk):
 
 
 @login_required
-def reqspec_insert(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec')
-    if not can_add:
-        messages.error(request, 'You have not enough access')
-        return redirect('errorpage')
-    if request.method == 'POST':
-        spec = ReqSpec()
-        if request.POST['updating']:
-            spec = ReqSpec.objects.filter(is_active=True).get(pk=request.POST['spec_pk'])
-
-        related_req = Requests(pk=request.POST['req_id'])
-        spec.req_id = related_req
-        spec.qty = request.POST['qty']
-        spec.type = request.POST['type']
-        spec.kw = request.POST['kw']
-        spec.rpm = request.POST['rpm']
-        spec.voltage = request.POST['voltage']
-        spec.ic = request.POST['ic']
-        spec.ip = request.POST['ip']
-        spec.summary = request.POST['summary']
-        spec.owner = request.user
-        # if request.POST['price']:
-        #     spec.price = request.POST['price']
-        spec.save()
-        return redirect('reqSpec_form', req_pk=related_req.pk)
-
-
-@login_required
 def reqspec_index(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_reqspecs')
     if not can_add:
@@ -63,21 +34,7 @@ def reqspec_index(request):
 
 
 @login_required
-def reqspec_details(request, yreqSpec_pk):
-    if not ReqSpec.objects.filter(is_active=True).filter(pk=yreqSpec_pk):
-        messages.error(request, 'No such Spec')
-        return redirect('errorpage')
-    reqspec = ReqSpec.objects.filter(is_active=True).get(pk=yreqSpec_pk)
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.read_reqspecs', reqspec)
-    if not can_add:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-    pass
-
-
-@login_required
 def reqspec_delete(request, yreqSpec_pk, req_pk):
-    print('eeee')
     if not ReqSpec.objects.filter(is_active=True).filter(pk=yreqSpec_pk):
         messages.error(request, 'No such Spec.')
         return redirect('errorpage')
@@ -90,9 +47,7 @@ def reqspec_delete(request, yreqSpec_pk, req_pk):
 
     req = reqspec.req_id
 
-
     if request.method == 'GET':
-        print('getttttt')
         context = {
             'req_id': reqspec.req_id.pk,
             'reqspec_id': reqspec.pk,
@@ -105,7 +60,6 @@ def reqspec_delete(request, yreqSpec_pk, req_pk):
 
         reqspec.delete()
     return redirect('spec_form', req_pk=req_pk)
-    # return redirect('reqSpec_form', req_pk=req_pk)
 
 
 @login_required
@@ -121,7 +75,6 @@ def reqspec_edit(request, yreqSpec_pk, req_pk):
         messages.error(request, 'mismatch')
         return redirect('errorpage')
     updating = True
-    # specs = PrefSpec.objects.all()
     return render(request, 'requests/admin_jemco/yreqspec/form.html', {
         'spec': spec,
         'specs': specs,
@@ -203,7 +156,7 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
 @login_required
 def reqspec_copy(request, yreqSpec_pk, req_pk):
     spec = ReqSpec.objects.get(pk=yreqSpec_pk)
-    spec.pk=None
+    spec.pk = None
     spec.save()
     messages.error(request, 'ردیف با موفقیت کپی شد.')
     return redirect('reqspec_edit_form', yreqSpec_pk=spec.pk, req_pk=spec.req_id.pk)
