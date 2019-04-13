@@ -8,6 +8,7 @@ urlpatterns = [
     path('testimage', paymentViews.testimage, name='testimage'),
     path('form', paymentViews.payment_form, name='payment_form'),
     path('pay_form', paymentViews.pay_form, name='pay_form'),
+    path('pay_form_prof/<int:prof_pk>', paymentViews.pay_form_prof, name='pay_form_prof'),
     # path('insert', paymentViews.payment_insert, name='payment_insert'),
     path('index', paymentViews.payment_index, name='payment_index'),
     path('index-deleted', paymentViews.payment_index_deleted, name='payment_index_deleted'),

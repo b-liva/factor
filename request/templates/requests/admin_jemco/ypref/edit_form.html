@@ -11,7 +11,15 @@
             <br>تاریخ صدور: {{ proforma.date_fa }}
             <br>تاریخ اعتبار: {{ proforma.exp_date_fa }}
             <br>
-
+            <div class="col-md-10 col-md-offset-1">
+                <div class="form-group">
+                    <ul class="message">
+                        {% for msg in messages %}
+                            <li class="alert alert-error">{{ msg }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
             <form action="{% url 'pref_edit' ypref_pk=proforma.id %}" method="POST">
                 {% csrf_token %}
 
@@ -33,8 +41,11 @@
                             <td>{{ prof_spec.rpm }}</td>
                             <td><input type="text" name="price" value="{{ prof_spec.price | floatformat:0 }}"
                                        class="form-control">
-{#                            <td><input name="sent" type="checkbox" {% if prof_spec.sent %} checked {% endif %} value="{{ prof_spec.pk|enc }}" ></td>#}
-                            <td class="text-center"><input name="sent" type="checkbox" {% if prof_spec.sent %} checked {% endif %} value="{{ prof_spec.pk }}" ></td>
+                            <td><input type="number" name="qty_sent" value="{{ prof_spec.qty_sent }}"
+                                       class="form-control"></td>
+                            {#                            <td><input name="sent" type="checkbox" {% if prof_spec.sent %} checked {% endif %} value="{{ prof_spec.pk|enc }}" ></td>#}
+                            <td class="text-center"><input name="sent" type="checkbox" {% if prof_spec.sent %}
+                                                           checked {% endif %} value="{{ prof_spec.pk }}"></td>
 
                             </td>
                         </tr>

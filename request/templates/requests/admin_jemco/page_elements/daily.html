@@ -1,4 +1,5 @@
 {% load humanize %}
+{% load request_extras %}
 <div class="col-md-4 col-sm-4 col-xs-12">
     <div class="x_panel tile fixed_height_320">
         <div class="x_title">
@@ -24,33 +25,34 @@
         <div class="x_content">
             <div class="dashboard-widget-content">
                 <ul class="quick-list">
-{#                    <li><b>میانگین روزانه: {{ daily_avg.request_avg | floatformat:0 | intcomma }} کیلووات </b>#}
+                    {#                    <li><b>میانگین روزانه: {{ daily_avg.request_avg | floatformat:0 | intcomma }} کیلووات </b>#}
                     <li><b>میانگین روزانه: {{ daily_avg | floatformat:0 | intcomma }} کیلووات </b>
-                    <li><b>مجموع: {{ daily_sum.request_sum | floatformat:0 | intcomma}} کیلووات </b>
+                    <li><b>میانگین روزانه: {{ daily_avg|daily_kilowatt }} kw </b>
+                    <li><b>مجموع: {{ daily_sum.request_sum | floatformat:0 | intcomma }} کیلووات </b>
                     </li>
-                        <table class="table table-hover">
-                            <thead >
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <td>ردیف</td>
+                            <td>تاریخ</td>
+                            <td>توان</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in daily_kw %}
                             <tr>
-                                <td>ردیف</td>
-                                <td>تاریخ</td>
-                                <td>توان</td>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ item.req_id__date_fa }}</td>
+                                <td>{{ item.request_sum | floatformat:1 | intcomma }}</td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {% for item in daily_kw %}
-                                <tr>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ item.req_id__date_fa }}</td>
-                                    <td>{{ item.request_sum | floatformat:1 | intcomma }}</td>
-                                </tr>
-                            {% endfor %}
-                            <tr>
-                                <td colspan="2" class="text-center">جمع</td>
-{#                                <td>{{ total_qty.reqspec_qty__sum }}</td>#}
-                                <td>{{ daily_sum.request_sum | floatformat:0 | intcomma}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="2" class="text-center">جمع</td>
+                            {#                                <td>{{ total_qty.reqspec_qty__sum }}</td>#}
+                            <td>{{ daily_sum.request_sum | floatformat:0 | intcomma }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </ul>
 
 

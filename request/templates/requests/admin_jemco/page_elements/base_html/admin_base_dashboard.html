@@ -12,7 +12,19 @@
     <link rel="icon" href="{% static 'request/rtl/build/img/icons/favicon.png' %}" type="image/ico"/>
     <title>شرکت جمکو</title>
     {% include 'admin_theme/page_elements/styles.html' %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137967409-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'UA-137967409-1');
+    </script>
 </head>
 
 <body class="nav-md">
@@ -22,7 +34,7 @@
             <div class="left_col scroll-view">
                 <div class="navbar nav_title" style="border: 0;">
                     <a href="{% url 'dashboard' %}" class="site_title">
-{#                        <i class="fa fa-paw"></i>#}
+                        {#                        <i class="fa fa-paw"></i>#}
                         <span>معاونت بازرگانی</span></a>
                 </div>
                 <div class="clearfix"></div>
@@ -34,8 +46,8 @@
                              class="img-circle profile_img">
                     </div>
                     <div class="profile_info">
-{#                        <span>سلام,</span>#}
-{#                        <h2>{{ user.last_name }}</h2>#}
+                        {#                        <span>سلام,</span>#}
+                        {#                        <h2>{{ user.last_name }}</h2>#}
                     </div>
                 </div>
                 <!-- /menu profile quick info -->
@@ -171,7 +183,7 @@
         <!-- footer content -->
         <footer>
             <div class="pull-right">
-{#                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>#}
+                {#                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>#}
             </div>
             <div class="clearfix"></div>
         </footer>

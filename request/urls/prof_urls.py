@@ -7,8 +7,13 @@ from request.viewsFolder import proformaViews
 
 urlpatterns = [
     path('pro_form', proformaViews.pro_form, name='pro_form'),
+    path('pro_form_cookie/<int:req_id>', proformaViews.pro_form_cookie, name='pro_form_cookie'),
     path('index', proformaViews.pref_index, name='pref_index'),
+    path('index-search', proformaViews.pref_search, name='pref_index'),
     path('index-perms', proformaViews.perm_index, name='perm_index'),
+    path('user-perms', proformaViews.user_export, name='user_export'),
+    path('export-perms', proformaViews.perms_export, name='perm_export'),
+    path('request-perms', proformaViews.request_export, name='request_export'),
     path('perms-specs', proformaViews.perm_specs, name='perm_specs'),
     path('index-deleted', proformaViews.pref_index_deleted, name='pref_index_deleted'),
     path('find', proformaViews.pref_find, name='pref_find'),

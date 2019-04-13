@@ -1,12 +1,20 @@
+import ast
 import random
 
+import jdatetime
+import xlwt
 from django.contrib import messages
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from django_jalali.db import models as jmodels
 
 import request.templatetags.functions as funcs
+from accounts.models import User
+from customer.models import Customer
 from request import models
+from request.forms.search import ProformaSearchForm
 
 from request.models import Requests, Xpref, ReqSpec, PrefSpec
 from pricedb.models import MotorDB
@@ -16,10 +24,13 @@ from django.contrib.auth.decorators import login_required
 
 import base64
 import datetime
-from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationField, Value, DateField, DateTimeField, Q
+from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationField, Value, DateField, DateTimeField, Q, \
+    Sum
 from request.forms.forms import ProfSpecForm
 from request.forms.proforma_forms import ProfEditForm
 from django.forms import formset_factory
+
+from request.templatetags import functions, request_extras
 
 
 @login_required
@@ -49,19 +60,112 @@ def pref_index(request):
 
 
 @login_required
+def pref_search(request):
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    prof_list = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
+
+    if not request.user.is_superuser:
+        prof_list = prof_list.filter(Q(owner=request.user) | Q(req_id__colleagues=request.user))
+
+    if not request.method == 'POST':
+        if 'proforma-search-post' in request.session:
+            request.POST = request.session['proforma-search-post']
+            request.method = 'POST'
+
+    if request.method == 'POST':
+        form = ProformaSearchForm(request.POST or None)
+        request.session['proforma-search-post'] = request.POST
+        if request.POST['customer_name']:
+            if Customer.objects.filter(name=request.POST['customer_name']):
+                customer = Customer.objects.get(name=request.POST['customer_name'])
+                prof_list = prof_list.filter(req_id__customer=customer)
+            else:
+                prof_list = prof_list.filter(req_id__customer__name__contains=request.POST['customer_name'])
+        if request.POST['owner'] and request.POST['owner'] != '0':
+            print(request.POST['owner'])
+            owner = User.objects.get(pk=request.POST['owner'])
+            prof_list = prof_list.distinct().filter(Q(owner=owner) | Q(req_id__colleagues=owner))
+        if request.POST['date_min']:
+            prof_list = prof_list.filter(date_fa__gte=request.POST['date_min'])
+        if request.POST['date_max']:
+            prof_list = prof_list.filter(date_fa__lte=request.POST['date_max'])
+        if request.POST['status'] and request.POST['status'] != '0':
+            # received value is str so we need to convert it to boolean
+            # status = ast.literal_eval(request.POST['status'])
+            status = request.POST['status']
+            today = jdatetime.date.today()
+            print(f"status: {status} and type: {type(status)}")
+            if status == 'valid':
+                # prof_list = prof_list.filter(Q(exp_date_fa__gte=today) | Q(perm=True))
+                prof_list = prof_list.filter(exp_date_fa__gte=today)
+            elif status == 'perm':
+                prof_list = prof_list.filter(perm=True)
+            elif status == 'expired':
+                prof_list = prof_list.filter(exp_date_fa__lt=today, perm=False)
+
+        if request.POST['sort_by']:
+            prof_list = prof_list.order_by(f"{request.POST['sort_by']}")
+        if request.POST['dsc_asc'] == '1':
+            prof_list = prof_list.reverse()
+    if request.method == 'GET':
+        form = ProformaSearchForm()
+
+    page = request.GET.get('page', 1)
+    orders_list = prof_list
+    paginator = Paginator(orders_list, 30)
+    try:
+        req_page = paginator.page(page)
+    except PageNotAnInteger:
+        req_page = paginator.page(1)
+    except EmptyPage:
+        req_page = paginator.page(paginator.num_pages)
+    context = {
+        'req_page': req_page,
+        'prefs': prof_list,
+        'form': form,
+        'title': 'پیش فاکتور',
+        'showDelete': True,
+    }
+    return render(request, 'requests/admin_jemco/ypref/index.html', context)
+
+
+@login_required
 def perm_index(request):
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
     if not can_index:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    prefs = Xpref.objects.filter(is_active=True, owner=request.user, perm=True).order_by('date_fa', 'pk').reverse()
+    prefs = Xpref.objects.filter(is_active=True, owner=request.user, perm=True) \
+        .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0)))\
+        .annotate(total_qty_sent=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0)))\
+        .order_by('date_fa', 'pk').reverse()
+
+    prefs = Xpref.objects.filter(is_active=True, owner=request.user, perm=True) \
+        .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0))) \
+        .annotate(total_qty_sent=Sum('prefspec__qty_sent', filter=Q(prefspec__price__gt=0))) \
+        .annotate(qty_remaining=F('total_qty') - F('total_qty_sent')) \
+        .filter(qty_remaining__gt=0) \
+        .order_by('due_date', 'pk')
+
+    # new = prefs.exclude(prefspec__price=False).distinct().annotate(total=Count('prefspec'))
     if request.user.is_superuser:
         # prefs = Xpref.objects.filter(is_active=True, perm=True)\
         #     .annotate(remained_time=ExpressionWrapper(F('due_date') - today_fa, output_field=DurationField()))\
         #     .order_by('date_fa', 'pk').reverse()
 
         prefs = Xpref.objects.filter(is_active=True, perm=True).order_by('due_date', 'pk')
+
+        prefs = Xpref.objects.filter(is_active=True, perm=True) \
+            .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0))) \
+            .annotate(total_qty_sent=Sum('prefspec__qty_sent', filter=Q(prefspec__price__gt=0))) \
+            .annotate(qty_remaining=F('total_qty') - F('total_qty_sent')) \
+            .filter(qty_remaining__gt=0) \
+            .order_by('due_date', 'pk')
 
     res = []
     for p in prefs:
@@ -72,7 +176,123 @@ def perm_index(request):
         'title': 'مجوز ساخت',
         'showDelete': True,
     }
+
     return render(request, 'requests/admin_jemco/ypref/index_perms.html', context)
+
+
+@login_required
+def user_export(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="users.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Users')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['Username', 'First name', 'Last name', 'Email address', ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    rows = User.objects.all().values_list('username', 'first_name', 'last_name', 'email')
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+
+
+@login_required
+def request_export(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="requests.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Users')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['number', 'customer', 'summary', ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    rows = Requests.objects.all().values_list('number', 'customer__name', 'summary')
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+
+
+@login_required
+def perms_export(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="perms.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Users')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['شماره پیش فاکتور', 'request number', 'مشتری', 'جزئیات', 'کارشناس']
+    columns = (
+        'number',
+        'due_date',
+        'req_id__number',
+        'req_id__customer__name',
+        'summary',
+        'req_id__owner__last_name'
+    )
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+    profs = Xpref.objects.filter(perm=True).order_by('due_date')
+    profs_values = profs.values()
+    print(f"rows: {profs}")
+    print(profs)
+    final = {}
+    for perm in profs:
+        print(f"row: {perm}")
+        row_num += 1
+        a = ()
+        days = request_extras.perm_days(perm)
+        final['days'] = days
+        a = a + (days,)
+        for col_num in range(len(columns)):
+            # ws.write(row_num, col_num, row[col_num], font_style)
+            # a = a + (perm[columns[col_num]],)
+            pass
+        print(f"data: {col_num}: {a}")
+
+    wb.save(response)
+    return response
 
 
 @login_required
@@ -105,21 +325,12 @@ def pref_find(request):
     if not request.POST['pref_no']:
         return redirect('pref_index')
     prof_no = request.POST['pref_no']
+    print(prof_no)
     if not Xpref.objects.filter(number=prof_no):
         messages.error(request, 'پیش فاکتور مورد نظر یافت نشد')
         return redirect('pref_index')
-    prefs = Xpref.objects.filter(is_active=True).filter(number=prof_no).all()
-    search_items = {
-        # 'term': term,
-        'proforma_no': prof_no,
-    }
-    if prefs is None:
-        messages.error(request, 'no match found')
-        return redirect('errorpage')
-    return render(request, 'requests/admin_jemco/ypref/search_index.html', {
-        'prefs': prefs,
-        'search_items': search_items
-    })
+    pref = Xpref.objects.filter(is_active=True).get(number=prof_no)
+    return redirect('pref_details', ypref_pk=pref.pk)
 
 
 @login_required
@@ -199,7 +410,7 @@ def pref_details_backup(request, ypref_pk):
         proforma_total += prefspec.qty * prefspec.price
         if hasattr(price, 'prime_cost'):
             sales_total += prefspec.qty * price.prime_cost
-            percentage = (prefspec.price/(price.prime_cost))
+            percentage = (prefspec.price / (price.prime_cost))
             prime = price.prime_cost
         else:
             prime = 'N/A'
@@ -220,7 +431,7 @@ def pref_details_backup(request, ypref_pk):
         }
         i += 1
         if hasattr(price, 'prime_cost'):
-            total_percentage = proforma_total/sales_total
+            total_percentage = proforma_total / sales_total
     if total_percentage >= 1:
         total_percentage_class = 'good-conditions'
     else:
@@ -239,7 +450,6 @@ def pref_details_backup(request, ypref_pk):
 
 @login_required
 def pref_delete(request, ypref_pk):
-
     if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
@@ -268,6 +478,17 @@ def pref_delete(request, ypref_pk):
 
 
 @login_required
+def pro_form_cookie(request, req_id):
+    print(f"request id is: {req_id}")
+    # response = HttpResponse()
+    # response.set_cookie('request_pk', req_id)
+    # request.set_cookie('request_pk', req_id)
+    # request.COOKIES['request_pk'] = req_id
+    request.session['request_pk'] = req_id
+    return redirect(pro_form)
+
+
+@login_required
 def pro_form(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
     if not can_add:
@@ -277,7 +498,7 @@ def pro_form(request):
     reqs = Requests.objects.filter(is_active=True)
     owners_reqs = Requests.objects.filter(is_active=True).filter(owner=request.user)
     imgform = proforma_forms.ProfFileForm()
-
+    print(f"method: {request.method}")
     if request.method == 'POST':
         form = forms.ProformaForm(request.user.pk, request.POST)
         img_form = proforma_forms.ProfFileForm(request.POST, request.FILES)
@@ -300,7 +521,6 @@ def pro_form(request):
             # print(f'specs: {specs_set}')
 
             for spec in specs_set:
-
                 form = forms.ProfSpecForm()
                 spec_item = form.save(commit=False)
                 spec_item.type = spec.type
@@ -324,7 +544,16 @@ def pro_form(request):
         else:
             print('form is not Valid')
     else:
-        form = forms.ProformaForm(request.user.pk)
+        print('001')
+        if 'request_pk' in request.session:
+            print('002')
+            data = {
+                'req_id': request.session['request_pk'],
+            }
+            del request.session['request_pk']
+        else:
+            data = {}
+        form = forms.ProformaForm(request.user.pk, data)
 
     context = {
         'form': form,
@@ -333,7 +562,7 @@ def pro_form(request):
         'owner_reqs': owners_reqs,
         'message': 'ثبت پیش فاکتور',
     }
-    return render(request, 'requests/admin_jemco/ypref/proforma_form.html', context)\
+    return render(request, 'requests/admin_jemco/ypref/proforma_form.html', context)
 
 
 @login_required
@@ -378,6 +607,7 @@ def pref_edit(request, ypref_pk):
     # spec_prices = request.POST.getlist('price')
     spec_prices = [float(i) if i is not '' else 0 for i in request.POST.getlist('price')]
     spec_qty = request.POST.getlist('qty')
+    spec_qty_sent = request.POST.getlist('qty_sent')
     spec_sent = request.POST.getlist('sent')
     prof_images = xpref.proffiles_set.all()
     xspec = xpref.prefspec_set.all()
@@ -386,6 +616,10 @@ def pref_edit(request, ypref_pk):
         item.sent = True if str(item.pk) in spec_sent and spec_prices[x] != 0 and item.xpref_id.perm else False
         item.price = spec_prices[x]
         item.qty = spec_qty[x]
+        if int(spec_qty_sent[x]) > int(item.qty):
+            messages.error(request, 'تعداد ارسال شده نمی تواند از تعداد سفارش بیشتر باشد.')
+            return redirect('pref_edit_form', ypref_pk=xpref.pk)
+        item.qty_sent = spec_qty_sent[x]
         item.save()
         x += 1
     prefspecs = xpref.prefspec_set.all()
@@ -426,12 +660,12 @@ def pref_edit(request, ypref_pk):
     #     'prof_images': prof_images,
     # })
 
-
     # return render(request, 'requests/admin_jemco/ypref/details.html', {
     #     'pref': xpref,
     #     'prefspecs': xspec,
     #     'msg': msg,
     # })
+
 
 @login_required
 def pref_edit2(request, ypref_pk):

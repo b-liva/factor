@@ -103,6 +103,7 @@ def check_orders(request):
 
 def users_summary(user_txt, user_account, date, not_entered_reqs):
     reqs = Requests.objects.filter(is_active=True).filter(date_fa__gte=date).filter(owner=user_account)
+    all_reqs = Requests.objects.filter(is_active=True, owner=user_account)
     result_list = []
     for req in reqs:
         delay_entered = jdatetime.date.fromgregorian(date=req.pub_date, locale='fa_IR') - req.date_fa
@@ -114,7 +115,7 @@ def users_summary(user_txt, user_account, date, not_entered_reqs):
     response = {
         'not_entered': not_entered_reqs.filter(owner_text__contains=user_txt),
         'avg_time': avg_time,
-        'count': reqs.count(),
+        'count': all_reqs.count(),
     }
     return response
 

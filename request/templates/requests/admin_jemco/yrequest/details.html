@@ -66,6 +66,12 @@
                                 <i class="fa fa-pencil"></i> ویرایش درخواست
                             </a>
                         {% endif %}
+                        {% if perms.request.sale_expert %}
+                            <a href="{% url 'pro_form_cookie' req_id=request.pk %}"
+                               class="btn btn-sm btn-success">
+                                <i class="fa fa-plus"></i>افزودن پیش فاکتور
+                            </a>
+                        {% endif %}
                     </div>
 
                     <div class="row">

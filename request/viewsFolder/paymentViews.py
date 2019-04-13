@@ -31,6 +31,12 @@ def payment_form(request):
 
 
 @login_required
+def pay_form_prof(request, prof_pk):
+    request.session['proforma_pk'] = prof_pk
+    return redirect(pay_form)
+
+
+@login_required
 def pay_form(request):
     img_form = payment_forms.PaymentFileForm()
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
@@ -56,7 +62,14 @@ def pay_form(request):
         else:
             print('forms are not valid')
     else:
-        form = payment_forms.PaymentFrom()
+        if 'proforma_pk' in request.session:
+            data = {
+                'xpref_id': request.session['proforma_pk'],
+            }
+            del request.session['proforma_pk']
+        else:
+            data = {}
+        form = payment_forms.PaymentFrom(data)
 
     payments = Payment.objects.filter(is_active=True)
     return render(request, 'requests/admin_jemco/ypayment/payment_form.html', {

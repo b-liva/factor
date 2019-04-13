@@ -1,5 +1,6 @@
 {% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
 {% load humanize %}
+{% load request_extras %}
 {% block right_col %}
     <div class="container">
         <div class="col-md-10 col-md-offset-1">
@@ -37,56 +38,117 @@
                 {% endif %}
 
             </div>
-        <div class="table-responsive">
-            <table class="table table-hover text-center">
-                <thead>
-                <tr>
-                    <th scope="col" class="text-center">ردیف</th>
-                    <th scope="col" class="text-center">شماره پیش فاکتور</th>
-                    {% if not showDelete %}
-                        <th scope="col" class="text-center">شماره پیش فاکتور اصلی</th>{% endif %}
-                    <th scope="col" class="text-center">شماره درخواست</th>
-                    <th scope="col" class="text-center">تاریخ</th>
-                    <th scope="col" class="text-center">جزئیات</th>
-                    <th scope="col" class="text-center"></th>
-                    <th scope="col" class="text-center"></th>
-                </tr>
-                </thead>
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="col-md-4">
+                    <div class="col-md-12">
+                        {{ form.customer_name.errors }}
+                        <label for="{{ form.customer_name.id_for_label }}">{{ form.customer_name.label }}</label>
+                        {{ form.customer_name }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.date_min.errors }}
+                        <label for="{{ form.date_min.id_for_label }}">{{ form.date_min.label }}</label>
+                        {{ form.date_min }}
 
-                <tbody class="">
-                {% for pref in prefs %}
+
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.date_max.errors }}
+                        <label for="{{ form.date_max.id_for_label }}">{{ form.date_max.label }}</label>
+                        {{ form.date_max }}
+
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-6">
+                        {{ form.status.errors }}
+                        <label for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+                        {{ form.status }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.owner.errors }}
+                        <label for="{{ form.owner.id_for_label }}"> {{ form.owner.label }} </label>
+                        {{ form.owner }}
+
+
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.sort_by.errors }}
+                        <label for="{{ form.sort_by.id_for_label }}">{{ form.sort_by.label }}</label>
+                        {{ form.sort_by }}
+
+
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.dsc_asc.errors }}
+                        <label for="{{ form.dsc_asc.id_for_label }}"> {{ form.dsc_asc.label }} </label>
+                        {{ form.dsc_asc }}
+
+
+                    </div>
+
+                </div>
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </form>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover text-center">
+                    <thead>
                     <tr>
-                        <td scope="row">{{ forloop.counter }}</td>
-                        <td>{{ pref.number }}</td>
+                        <th scope="col" class="text-center">ردیف</th>
+                        <th scope="col" class="text-center">شماره پیش فاکتور</th>
                         {% if not showDelete %}
-                            <td>{{ pref.temp_number }}</td>{% endif %}
-                        <td><a href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
-                        </td>
-                        <td>{{ pref.date_fa }}</td>
-                        <td>{{ pref.summary|truncatechars:60 }}</td>
-                        <td>{{ pref.owner.last_name }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-xs"
-                               href="{% url 'pref_details' ypref_pk=pref.pk %}">
-                                <i class="fa fa-eye"></i> مشاهده
-                            </a>
-                            {% if perms.request.add_xpref and showDelete %}
-
-                                <a class="btn btn-primary btn-xs btn-warning"
-                                   href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
-                                    <i class="fa fa-pencil"></i> ویرایش
-                                </a>
-                                <a class="btn btn-primary btn-xs btn-danger"
-                                   href="{% url 'pref_delete' ypref_pk=pref.pk %}"><i
-                                        class="fa fa-trash"></i> حذف</a>
-
-                            {% endif %}
-                        </td>
+                            <th scope="col" class="text-center">شماره پیش فاکتور اصلی</th>{% endif %}
+                        <th scope="col" class="text-center">شماره درخواست</th>
+                        <th scope="col" class="text-center">مشتری</th>
+                        <th scope="col" class="text-center">تاریخ</th>
+                        <th scope="col" class="text-center">انقضا</th>
+                        <th scope="col" class="text-center"></th>
+                        <th scope="col" class="text-center"></th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+
+                    <tbody class="">
+                    {% for pref in prefs %}
+                        <tr>
+                            <td scope="row">{{ forloop.counter }}</td>
+                            <td>{{ pref.number }}</td>
+                            {% if not showDelete %}
+                                <td>{{ pref.temp_number }}</td>{% endif %}
+                            <td>
+                                <a href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
+                            </td>
+                            <td>{{ pref.req_id.customer.name }}</td>
+                            <td>{{ pref.date_fa }}</td>
+                            <td class="{{ pref|prof_expiry }}">{{ pref.exp_date_fa }}</td>
+                            <td>{{ pref.owner.last_name }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-xs"
+                                   href="{% url 'pref_details' ypref_pk=pref.pk %}">
+                                    <i class="fa fa-eye"></i> مشاهده
+                                </a>
+                                {% if perms.request.add_xpref and showDelete %}
+
+                                    <a class="btn btn-primary btn-xs btn-warning"
+                                       href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
+                                        <i class="fa fa-pencil"></i> ویرایش
+                                    </a>
+                                    <a class="btn btn-primary btn-xs btn-danger"
+                                       href="{% url 'pref_delete' ypref_pk=pref.pk %}"><i
+                                            class="fa fa-trash"></i> حذف</a>
+
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             <br>
             {#            <a href="{% url 'pref_form' %}" class="btn btn-success btn-sm">Add new Prefactor</a>#}
 

@@ -18,7 +18,8 @@
                         <div class="icon">
                         </div>
                         <span class="count">{{ pref.number }}</span>
-                        <span class="{% if pref.perm %}green{% else %}red{% endif %}">{% if pref.perm %}(مجوز شده) {% else %}(مجوز نشده){% endif %}</span>
+                        <span class="{% if pref.perm %}green{% else %}red{% endif %}">{% if pref.perm %}(مجوز
+                            شده) {% else %}(مجوز نشده){% endif %}</span>
 
                         <h3>شماره پیشفاکتور</h3>
                     </div>
@@ -68,6 +69,7 @@
                                 <a class="btn btn-sm btn-info" href="{% url 'pref_index' %}">
                                     <i class="fa fa-list-ul" aria-hidden="true"></i>
                                     پیش فاکتورها</a>
+
                             </div>
                             <div>
                                 <a class="btn btn-warning btn-sm pull-left" type="submit" name="submit"
@@ -76,6 +78,12 @@
                                 <a class="btn btn-warning btn-sm pull-left"
                                    href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
                                     <i class="fa fa-pencil"></i> ویرایش پیشفاکتور</a>
+
+                            </div>
+                            <div>
+                                <a class="btn btn-sm btn-success" href="{% url 'pay_form_prof' prof_pk=pref.pk %}">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                    ثبت پرداخت</a>
                             </div>
                         {% endif %}
 
@@ -92,8 +100,9 @@
                             <thead>
                             <tr>
                                 <th scope="col" class="text-center">ردیف</th>
-                                <th scope="col" class="text-center">کد</th>
                                 <th scope="col" class="text-center">تعداد</th>
+                                <th scope="col" class="text-center">ارسال شده</th>
+                                <th scope="col" class="text-center">مانده</th>
                                 <th scope="col" class="text-center">کیلووات</th>
                                 <th scope="col" class="text-center">سرعت</th>
                                 <th scope="col" class="text-center">ولتاژ</th>
@@ -107,8 +116,9 @@
                                 {% if object.obj.price and object.obj.qty %}
                                     <tr>
                                         <th scope="row" class="text-center">{{ forloop.counter }}</th>
-                                        <td>{{ object.obj.pk }}</td>
                                         <td>{{ object.obj.qty }}</td>
+                                        <td>{{ object.obj.qty_sent }}</td>
+                                        <td style="border: 1px dashed brown">{{ object.obj|qty_remaining }}</td>
                                         <td>{{ object.obj.kw }}</td>
                                         <td>{{ object.obj.rpm }}</td>
                                         <td>{{ object.obj.voltage }}</td>

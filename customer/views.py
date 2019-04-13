@@ -206,7 +206,8 @@ def customer_read2(request, customer_pk):
     if not can_read:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
-    customer_reqs = customer.requests_set.all().order_by('date_fa').reverse()
+    customer_reqs = customer.requests_set.filter(is_active=True).order_by('date_fa').reverse()
+    print(f"#requests = {customer_reqs.count()}")
     kwList = []
     pList = []
     totalRes = {}
@@ -217,17 +218,16 @@ def customer_read2(request, customer_pk):
         tempDict['kw'] = views2.total_kw(customer_req.pk)
         kwList.append(tempDict['kw'])
         req_profs = customer_req.xpref_set.filter(is_active=True)
+
         paymentList = []
         for p in req_profs:
             proformaDict = {}
             pList.append(p)
             payments = p.payment_set.filter(is_active=True)
-            print(f'payments is: {payments}')
+            # print(f'payments is: {payments}')
             for pmnt in payments:
                 paymentList.append(pmnt)
             proformaDict['payments'] = paymentList
-
-        print(f'***payment list is: {paymentList}')
 
         proformaDict['proformas'] = req_profs
         reqspec = customer_req.reqspec_set.all()
@@ -244,7 +244,7 @@ def customer_read2(request, customer_pk):
         #         kw->
         #         req->
     totalpaymenst = customer.payment_set.all()
-    print(f'total result: {totalRes}')
+    # print(f'total result: {totalRes}')
     payList = []
     for pay in totalpaymenst:
         payList.append(pay.amount)
@@ -252,9 +252,16 @@ def customer_read2(request, customer_pk):
     paySum = sum(payList)
     payment_list, payment_sum = customers_payment(customer.pk)
     request_count = customer.requests_set.count()
+
+    all_requests = customer.requests_set.filter(is_active=True)
+
+
+
+
     context = {
         'customer': customer,
         'customer_reqs': customer_reqs,
+        'all_requests': all_requests,
         # 'kw': kw,
         # 'some': some,
         'customer_kw_total': sum(kwList),
@@ -264,6 +271,7 @@ def customer_read2(request, customer_pk):
         'pay_sum': paySum,
         'req_count': request_count
     }
+
     return render(request, 'customer/details.html', context)
 
 

@@ -190,21 +190,32 @@ ul.quick-list {
     color: whitesmoke;
 }
 
-.salesPersonHolder{
-
-}
-.customerPersonHolder{
+.salesPersonHolder {
 
 }
 
-.time-danger{
+.customerPersonHolder {
+
+}
+
+.time-danger {
     background: #ff9b99;
 }
 
-.time-warning{
+.time-warning {
     background: #FF5B00;
 }
 
 .time-danger {
     background: #cb705c;
+}
+
+.prof_valid {
+    background: #4c808c;
+    color: whitesmoke;
+}
+
+.prof_expired {
+    color: black;
+    background: #f1afa1;
 }

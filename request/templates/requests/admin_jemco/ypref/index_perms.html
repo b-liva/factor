@@ -35,13 +35,16 @@
                     </div>
                 {% endif %}
                 <div class="col-md-4 left">
-                    <span class="btn-danger">منتقضی</span>
+                    <span class="btn-danger">تاخیر تحویل</span>
                     <span class="btn-warning">کمتر از یک ماه</span>
                     <span class="btn-success">بیشتر از یک ماه</span>
                 </div>
 
 
             </div>
+{#            <div class="row"><a href="{% url 'user_export' %}">اکسل کاربران</a></div>#}
+{#            <div class="row"><a href="{% url 'request_export' %}">اکسل درخواست</a></div>#}
+{#            <div class="row"><a href="{% url 'perm_export' %}">اکسل مجوز</a></div>#}
             <div class="table-responsive">
                 <table class="table text-center">
                     <thead>
@@ -51,6 +54,9 @@
                         <th scope="col" class="text-center">شماره درخواست</th>
                         <th scope="col" class="text-center">مشتری</th>
                         <th scope="col" class="text-center">تاریخ تحویل</th>
+                        <th scope="col" class="text-center">تعداد کل</th>
+                        <th scope="col" class="text-center">تعداد ارسال شده</th>
+                        <th scope="col" class="text-center">تعداد باقیمانده</th>
                         <th scope="col" class="text-center">باقیمانده(روز)</th>
                         <th scope="col" class="text-center">کل(مبلغ)</th>
                         <th scope="col" class="text-center">تسویه نشده(مبلغ)</th>
@@ -71,8 +77,11 @@
                                 <a class="badge badge-light"
                                    href="{% url 'request_details' request_pk=p.req_id.pk %}">{{ p.req_id.number }}</a>
                             </td>
-                            <td>{{ p.req_id.customer.name }}</td>
+                            <td><a href="{% url 'customer_read' customer_pk=p.req_id.customer.pk %}">{{ p.req_id.customer.name }}</a></td>
                             <td>{{ p.due_date }}</td>
+                            <td>{{ p.total_qty }}</td>
+                            <td>{{ p.total_qty_sent }}</td>
+                            <td>{{ p.qty_remaining }}</td>
 {#                            <td>{{ p|days }}</td>#}
                             <td class="{{ p|perm_warning_class }}">{{ p|perm_days }}</td>
                             <td>{{ p|perm_total|floatformat:0 | intcomma }}</td>
