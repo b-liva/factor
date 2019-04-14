@@ -93,6 +93,7 @@
                         {% if perms.request.index_payment %}
                             <li><a href="{% url 'req_track:payment_index' %}">رسید اسناد</a></li>
                             <li><a href="{% url 'req_track:payment_check' %}">چک</a></li>
+                            <li><a href="{% url 'req_track:payment_assign' %}">assign</a></li>
                         {% endif %}
                         {% if perms.request.index_deleted_payment %}
                             <li><a href="{% url 'payment_index_deleted' %}">پرداخت های حذف شده</a></li>

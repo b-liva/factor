@@ -31,8 +31,9 @@ urlpatterns = [
     path('report-payments', views.e_req_report_payments, name='e_req_report_payments'),
     path('check', views.check_orders, name='check_orders'),
     path('del_all', views.e_req_delete_all, name='ereq_del_all'),
-    path('payments-check', views.payment_check, name='payment_check'),
     path('payments-list', views.payment_index, name='payment_index'),
+    path('payments-check', views.payment_check, name='payment_check'),
+    path('assign-payments', views.payment_assign, name='payment_assign'),
 
 ]
 

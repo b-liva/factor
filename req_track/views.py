@@ -176,15 +176,25 @@ def e_req_report_payments(request):
 
 @login_required
 def payment_check(request):
-    payments = Payments.objects.all()
-    for p in payments:
-        prof_number = p.prof_number
+    payments_not_flaged = Payments.objects.filter(red_flag=False)
+
+    for p in payments_not_flaged:
+        if Request_payment.objects.filter(number=p.number):
+            p.is_entered = True
         try:
-            Xpref.objects.filter(number=prof_number).count()
+            Xpref.objects.get(number=p.prof_number)
         except:
             p.red_flag = True
-        if prof_number.find('-') >= 0:
-            p.red_flag = True
+
+        p.date_txt = p.date_txt.replace('/', '-')
+        date = p.date_txt.split('-')
+        for key, value in enumerate(date):
+            if len(value) == 2 and int(value) > 40:
+                date[key] = str(int(value) + 1300)
+            else:
+                date[key] = value
+        s = '-'
+        p.date = s.join(date)
         p.save()
     return redirect('req_track:payment_index')
 
@@ -196,3 +206,27 @@ def payment_index(request):
         'payments': payments,
     }
     return render(request, 'payments/paymets_index.html', context)
+
+
+@login_required
+def payment_assign(request):
+    payments = Payments.objects.filter(red_flag=False, is_entered=False)
+
+    for payment in payments:
+        # if not Request_payment.objects.filter(number=payment.number):
+        proforma = Xpref.objects.get(number=payment.prof_number)
+        pay = Request_payment()
+        pay.number = payment.number
+        pay.date_fa = payment.date
+        pay.xpref_id = proforma
+        pay.amount = payment.amount
+        pay.customer = proforma.req_id.customer
+        pay.owner = request.user
+        pay.save()
+        payment.is_entered = True
+        payment.save()
+
+    return redirect('payment_index')
+
+
+

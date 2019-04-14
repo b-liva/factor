@@ -203,6 +203,8 @@ def total_receiveable(req):
 
 @register.filter(name='qty_remaining')
 def qty_remaining(permspec):
+    if permspec.qty_sent is None:
+        permspec.qty_sent = 0
     qty = permspec.qty - permspec.qty_sent
     return qty
 
