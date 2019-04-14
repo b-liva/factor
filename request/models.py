@@ -126,12 +126,13 @@ class Xpref(models.Model):
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     exp_date_fa = jmodels.jDateField(default=now)
+    perm_number = models.CharField(max_length=10, null=True, blank=True)
+    perm_date = jmodels.jDateField(null=True, blank=True)
     due_date = jmodels.jDateField(null=True, blank=True)
     summary = models.TextField(max_length=600, null=True, blank=True)
     verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     perm = models.BooleanField(default=False)
-    perm_number = models.CharField(max_length=10, null=True, blank=True)
 
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')

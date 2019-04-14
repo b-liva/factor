@@ -152,7 +152,7 @@ class ProformaForm(forms.ModelForm):
     class Meta:
         model = models.Xpref
         fields = '__all__'
-        exclude = ('owner', 'pub_date', 'is_active', 'temp_number', 'perm', 'due_date')
+        exclude = ('owner', 'pub_date', 'is_active', 'temp_number', 'perm', 'due_date', 'perm_number', 'perm_date')
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
@@ -199,6 +199,9 @@ class ProformaEditForm(forms.ModelForm):
             }),
             'due_date': forms.DateInput(attrs={
                 'id': 'due_date'
+            }),
+            'perm_date': forms.DateInput(attrs={
+                'id': 'perm_date'
             })
         }
 
@@ -211,6 +214,8 @@ class ProformaEditForm(forms.ModelForm):
             'summary': 'جزئیات',
             'verified': 'تاییدیه',
             'perm': 'مجوز',
+            'perm_date': 'تاریخ مجوز',
+            'perm_number': 'شماره مجوز',
 
         }
 
