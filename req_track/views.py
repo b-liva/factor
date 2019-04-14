@@ -1,18 +1,21 @@
 import math
 
 import jdatetime
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, redirect
 
 from accounts.models import User
-from request.models import Requests
-from req_track.models import ReqEntered
+from request.models import Requests, Xpref
+from request.models import Payment as Request_payment
+from req_track.models import ReqEntered, Payments
 from .forms import E_Req_Form
 from django.db import models
 
 # Create your views here.
 
 
+@login_required
 def e_req_add(request):
 
     if request.method == 'POST':
@@ -32,6 +35,7 @@ def e_req_add(request):
     return render(request, 'req_track/add_form.html', context)
 
 
+@login_required
 def e_req_index(request):
     reqs = ReqEntered.objects.all()
     context = {
@@ -40,14 +44,17 @@ def e_req_index(request):
     return render(request, 'req_track/ereq_notstarted.html', context)
 
 
+@login_required
 def e_req_read(request):
     pass
 
 
+@login_required
 def e_req_delete(request):
     pass
 
 
+@login_required
 def e_req_delete_all(request):
     ereq_all = ReqEntered.objects.all()
     for e in ereq_all:
@@ -56,6 +63,7 @@ def e_req_delete_all(request):
     return redirect('e_req_index')
 
 
+@login_required
 def e_req_report(request):
     reqs = ReqEntered.objects.filter(is_entered=False).filter(is_request=True)
         # .exclude(owner_text__contains='ظریف')\
@@ -88,6 +96,7 @@ def e_req_report(request):
     return render(request, 'req_track/ereq_notstarted.html', context)
 
 
+@login_required
 def check_orders(request):
     ereqs = ReqEntered.objects.filter(is_entered=False)
     for e in ereqs:
@@ -101,6 +110,7 @@ def check_orders(request):
     return redirect('e_req_report')
 
 
+@login_required
 def users_summary(user_txt, user_account, date, not_entered_reqs):
     reqs = Requests.objects.filter(is_active=True).filter(date_fa__gte=date).filter(owner=user_account)
     all_reqs = Requests.objects.filter(is_active=True, owner=user_account)
@@ -120,6 +130,7 @@ def users_summary(user_txt, user_account, date, not_entered_reqs):
     return response
 
 
+@login_required
 def e_req_report_proformas(request):
     reqs = ReqEntered.objects.filter(is_entered=False).filter(is_request=False)
 
@@ -139,6 +150,7 @@ def e_req_report_proformas(request):
     return render(request, 'req_track/ereq_notstarted.html', context)
 
 
+@login_required
 def e_req_report_payments(request):
     reqs = ReqEntered.objects.filter(is_entered=False).filter(is_request=False)
 
@@ -160,3 +172,27 @@ def e_req_report_payments(request):
         'title_msg': 'اعلام واریزی'
     }
     return render(request, 'req_track/ereq_notstarted.html', context)
+
+
+@login_required
+def payment_check(request):
+    payments = Payments.objects.all()
+    for p in payments:
+        prof_number = p.prof_number
+        try:
+            Xpref.objects.filter(number=prof_number).count()
+        except:
+            p.red_flag = True
+        if prof_number.find('-') >= 0:
+            p.red_flag = True
+        p.save()
+    return redirect('req_track:payment_index')
+
+
+@login_required
+def payment_index(request):
+    payments = Payments.objects.all()
+    context = {
+        'payments': payments,
+    }
+    return render(request, 'payments/paymets_index.html', context)

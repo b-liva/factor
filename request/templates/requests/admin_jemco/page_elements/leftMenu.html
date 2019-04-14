@@ -46,10 +46,10 @@
                             {#                            <li><a href="{% url 'e_req_add' %}">ثبت درخواست وارده</a></li>#}
                         {% endif %}
                         {% if request.user|has_group:"board" or request.user.is_superuser or 1 %}
-                            <li><a href="{% url 'e_req_report' %}">درخواست های وارد نشده</a></li>
-                            <li><a href="{% url 'e_req_report_prof' %}">تاییدیه های پیش فاکتور دریافتی</a></li>
-                            <li><a href="{% url 'e_req_report_payments' %}">مبالغ دریافتی</a></li>
-                            <li><a href="{% url 'check_orders' %}">چک درخواست ها</a></li>
+                            <li><a href="{% url 'req_track:e_req_report' %}">درخواست های وارد نشده</a></li>
+                            <li><a href="{% url 'req_track:e_req_report_prof' %}">تاییدیه های پیش فاکتور دریافتی</a></li>
+                            <li><a href="{% url 'req_track:e_req_report_payments' %}">مبالغ دریافتی</a></li>
+                            <li><a href="{% url 'req_track:check_orders' %}">چک درخواست ها</a></li>
                             {#                            <li><a href="{% url 'ereq_del_all' %}">حذف درخواست ها</a></li>#}
 
                         {% endif %}
@@ -89,6 +89,10 @@
                     <ul class="nav child_menu">
                         {% if perms.request.index_payment %}
                             <li><a href="{% url 'payment_index' %}">پرداخت ها</a></li>
+                        {% endif %}
+                        {% if perms.request.index_payment %}
+                            <li><a href="{% url 'req_track:payment_index' %}">رسید اسناد</a></li>
+                            <li><a href="{% url 'req_track:payment_check' %}">چک</a></li>
                         {% endif %}
                         {% if perms.request.index_deleted_payment %}
                             <li><a href="{% url 'payment_index_deleted' %}">پرداخت های حذف شده</a></li>

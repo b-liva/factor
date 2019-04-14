@@ -31,3 +31,15 @@ class ReqEntered(models.Model):
     def __str__(self):
         return '%s' % self.number_automation
 
+
+class Payments(models.Model):
+    number = models.CharField(max_length=20)
+    prof_number = models.CharField(max_length=40)
+    date_txt = models.CharField(max_length=12, null=True, blank=True)
+    amount = models.FloatField()
+    type = models.CharField(max_length=10)
+    is_entered = models.BooleanField(default=False)
+    red_flag = models.BooleanField(default=False)
+
+    def __str__(self):
+        return '#%s - $%s' % (self.number, self.amount)

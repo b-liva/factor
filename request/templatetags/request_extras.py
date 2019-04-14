@@ -233,3 +233,10 @@ def daily_kilowatt(t):
         request_avg=Avg(F('kw') * F('qty'), output_field=FloatField()))
     # print(f"daily_kilowatt: {daily_kwatt['request_sum']}")
     return daily_avg['request_avg']
+
+
+@register.filter(name='flag')
+def flag(payment):
+    flag_value = 'red_flag' if payment.red_flag else ''
+    return flag_value
+

@@ -18,6 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from . import views
+app_name = 'req_track'
 urlpatterns = [
     path('add', views.e_req_add, name='e_req_add'),
     path('index', views.e_req_index, name='e_req_index'),
@@ -30,5 +31,8 @@ urlpatterns = [
     path('report-payments', views.e_req_report_payments, name='e_req_report_payments'),
     path('check', views.check_orders, name='check_orders'),
     path('del_all', views.e_req_delete_all, name='ereq_del_all'),
+    path('payments-check', views.payment_check, name='payment_check'),
+    path('payments-list', views.payment_index, name='payment_index'),
+
 ]
 

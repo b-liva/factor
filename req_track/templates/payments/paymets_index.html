@@ -1,0 +1,48 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+
+{% block right_col %}
+    <div>
+        <h3 class="text-center col-xs-12">
+            {{ title_msg }}
+        </h3>
+
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td>ردیف</td>
+                        <td>شماره</td>
+                        <td>شماره پیش فاکتور</td>
+                        <td>مبلغ</td>
+                        <td>تاریخ</td>
+                        <td>نوع</td>
+                        <td>وارد شده</td>
+                        <td>خطا</td>
+                        {#                <td>واردشده</td>#}
+                        {#                <td>درخواست</td>#}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for payment in payments %}
+
+                        <tr class="{{ payment|flag }}">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ payment.number }}</td>
+                            <td>{{ payment.prof_number }}</td>
+                            <td>{{ payment.amount }}</td>
+                            <td>{{ payment.date_txt }}</td>
+                            <td>{{ payment.type }}</td>
+                            <td>{{ payment.is_entered }}</td>
+                            <td>{{ payment.red_flag }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
