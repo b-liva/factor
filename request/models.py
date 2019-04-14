@@ -169,7 +169,7 @@ class PrefSpec(models.Model):
     considerations = models.TextField(max_length=500, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     sent = models.BooleanField(default=False)
-    qty_sent = models.IntegerField(null=True, blank=True)
+    qty_sent = models.IntegerField(default=0, null=True, blank=True)
     finished = models.BooleanField(default=False)
 
     def __str__(self):
