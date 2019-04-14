@@ -73,7 +73,8 @@
                                    href="{% url 'pref_details' ypref_pk=p.pk %}">{{ p|perm_number }}</a>
                             </td>
                             <td>
-                                {{ p.number }}
+                                <a class="badge badge-light"
+                                   href="{% url 'pref_details' ypref_pk=p.pk %}">{{ p.number }}</a>
                             </td>
                             {% if not showDelete %}
                                 <td>{{ p.temp_number }}</td>{% endif %}
