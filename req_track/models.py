@@ -32,6 +32,18 @@ class ReqEntered(models.Model):
         return '%s' % self.number_automation
 
 
+class Track_xpref(models.Model):
+    req_number = models.CharField(max_length=40)
+
+    number = models.IntegerField(unique=True)
+    date_fa = models.CharField(max_length=15)
+    exp_date_fa = models.CharField(max_length=15, null=True, blank=True)
+    perm_number = models.CharField(max_length=10, null=True, blank=True)
+
+    def __str__(self):
+        return '%s' % self.number
+
+
 class Payments(models.Model):
     number = models.CharField(max_length=20)
     prof_number = models.CharField(max_length=40)

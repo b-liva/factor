@@ -65,6 +65,10 @@
                                class="btn btn-sm btn-warning">
                                 <i class="fa fa-pencil"></i> ویرایش درخواست
                             </a>
+                            <a href="{% url 'request_delete' request_pk=request.pk %}"
+                               class="btn btn-sm btn-danger">
+                                <i class="fa fa-trash"></i>حذف درخواست
+                            </a>
                         {% endif %}
                         {% if perms.request.sale_expert %}
                             <a href="{% url 'pro_form_cookie' req_id=request.pk %}"
