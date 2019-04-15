@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from accounts.models import User
 from request.models import Requests, Xpref
 from request.models import Payment as Request_payment
-from req_track.models import ReqEntered, Payments
+from req_track.models import ReqEntered, Payments, TrackItemsCode, TrackXpref
 from .forms import E_Req_Form
 from django.db import models
 
@@ -227,4 +227,11 @@ def payment_assign(request):
     return redirect('payment_index')
 
 
+def motor_codes_index(request):
+    all_codes = TrackItemsCode.objects.all()
+    context = {
+        'all_codes': all_codes,
+    }
+
+    return render(request, 'codes/codes.html', context)
 

@@ -1,0 +1,38 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+
+{% block right_col %}
+    <div>
+        <h3 class="text-center col-xs-12">
+            {{ title_msg }}
+        </h3>
+
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td>ردیف</td>
+                        <td>کد</td>
+                        <td>شرح</td>
+                        {#                <td>واردشده</td>#}
+                        {#                <td>درخواست</td>#}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for code in all_codes %}
+
+                        <tr class="{{ payment|flag }}">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ code.code }}</td>
+                            <td>{{ code.details }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

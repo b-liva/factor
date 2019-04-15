@@ -34,6 +34,7 @@ urlpatterns = [
     path('payments-list', views.payment_index, name='payment_index'),
     path('payments-check', views.payment_check, name='payment_check'),
     path('assign-payments', views.payment_assign, name='payment_assign'),
+    path('motor_codes_index', views.motor_codes_index, name='motor_codes_index'),
 
 ]
 

@@ -135,6 +135,7 @@
                         {% endif %}
                         {% if perms.request.view_motordb %}
                             <li><a href="{% url 'motordb_search_form' %}">جستجوی موتور</a></li>
+                            <li><a href="{% url 'req_track:motor_codes_index' %}">کد کالا</a></li>
                         {% endif %}
                     </ul>
                 </li>
