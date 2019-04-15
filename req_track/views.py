@@ -2,7 +2,7 @@ import math
 
 import jdatetime
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Sum, F, FloatField
 from django.shortcuts import render, redirect
 
 from accounts.models import User
@@ -228,10 +228,63 @@ def payment_assign(request):
 
 
 def motor_codes_index(request):
-    all_codes = TrackItemsCode.objects.all()
+    all_codes = TrackItemsCode.objects.filter(green_flag=True)
+    print(all_codes.count())
     context = {
         'all_codes': all_codes,
     }
 
     return render(request, 'codes/codes.html', context)
 
+
+
+def proformas(request):
+    all_proformas = TrackXpref.objects.filter(red_flag=True).order_by('date_fa')
+    count = all_proformas.values('number').distinct().count()
+
+    context = {
+        'all_proformas': all_proformas,
+        'count': count,
+    }
+
+    return render(request, 'proformas/proformas.html', context)
+
+
+def proformas_uncomplete(request):
+    all_proformas = TrackXpref.objects.filter(is_entered=False, red_flag=False)
+    count = all_proformas.values('number').distinct().count()
+
+    context = {
+        'all_proformas': all_proformas,
+        'count': count,
+    }
+
+    return render(request, 'proformas/proformas.html', context)
+
+
+def track_prof_count(track_prof):
+    count = TrackXpref.objects.filter(number=track_prof.number).aggregate(Sum('qty'))
+    return count
+
+
+def prof_count(prof):
+    count = prof.prefspec_set.filter(price__gt=0).aggregate(Sum('qty'))
+    return count
+
+
+def check_proforma(request):
+    allproformas = TrackXpref.objects.filter(is_entered=False)
+    not_red = TrackXpref.objects.filter(red_flag=False, is_entered=False)
+    for track_prof in allproformas:
+        try:
+            print(track_prof.number)
+            prof = Xpref.objects.get(number=track_prof.number)
+            print(True)
+            if prof.prefspec_set.filter(price__gt=0).count() == TrackXpref.objects.filter(number=track_prof.number).count() and \
+                    prof_count(prof) == track_prof_count(track_prof):
+                track_prof.complete = True
+        except:
+            track_prof.red_flag = True
+
+        track_prof.save()
+    return redirect('req_track:proformas')

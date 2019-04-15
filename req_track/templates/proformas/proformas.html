@@ -1,0 +1,48 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+
+{% block right_col %}
+    <div>
+        <h3 class="text-center col-xs-12">
+            {{ count }}
+        </h3>
+
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td>ردیف</td>
+                        <td>ش پ</td>
+                        <td>تاریخ</td>
+                        <td>کد کالا</td>
+                        <td>تعداد</td>
+                        <td>قیمت واحد</td>
+                        <td>وارد شده</td>
+                        <td>اشکال</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for prof in all_proformas %}
+
+{#                        <tr class="{{ prof|highlight_class }}">#}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ prof.number }}</td>
+                            <td>{{ prof.code }}</td>
+                            <td>{{ prof.date_fa }}</td>
+                            <td>{{ prof.qty }}</td>
+                            <td>{{ prof.price|intcomma }}</td>
+                            <td>{{ prof.is_entered }}</td>
+                            <td>{{ prof.red_flag }}</td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

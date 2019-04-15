@@ -136,6 +136,9 @@
                         {% if perms.request.view_motordb %}
                             <li><a href="{% url 'motordb_search_form' %}">جستجوی موتور</a></li>
                             <li><a href="{% url 'req_track:motor_codes_index' %}">کد کالا</a></li>
+                            <li><a href="{% url 'req_track:proformas' %}">پ ف وارد نشده</a></li>
+                            <li><a href="{% url 'req_track:proformas_uncomplete' %}">پ ف (خطا)</a></li>
+                            <li><a href="{% url 'req_track:check_proforma' %}">چک پ ف</a></li>
                         {% endif %}
                     </ul>
                 </li>

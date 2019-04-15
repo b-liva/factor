@@ -242,3 +242,13 @@ def flag(payment):
     flag_value = 'red_flag' if payment.red_flag else ''
     return flag_value
 
+
+@register.filter(name='highlight_class')
+def highlight_class(proforma):
+    flag_value = ''
+    if proforma.is_entered:
+        flag_value = 'green_flag'
+    elif proforma.red_flag:
+        flag_value = 'red_flag'
+    return flag_value
+

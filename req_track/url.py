@@ -35,6 +35,9 @@ urlpatterns = [
     path('payments-check', views.payment_check, name='payment_check'),
     path('assign-payments', views.payment_assign, name='payment_assign'),
     path('motor_codes_index', views.motor_codes_index, name='motor_codes_index'),
+    path('proformas', views.proformas, name='proformas'),
+    path('proformas_uncomplete', views.proformas_uncomplete, name='proformas_uncomplete'),
+    path('check_proforma', views.check_proforma, name='check_proforma'),
 
 ]
 

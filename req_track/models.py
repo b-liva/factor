@@ -33,19 +33,30 @@ class ReqEntered(models.Model):
 
 
 class TrackXpref(models.Model):
-    code = models.CharField(max_length=40)
-    number = models.IntegerField(unique=True)
-    req_number = models.CharField(max_length=40)
-    qty = models.IntegerField()
-    price = models.FloatField()
+    number = models.BigIntegerField()
+    customer_code = models.BigIntegerField(null=True, blank=True)
+    customer_name = models.CharField(max_length=60, null=True, blank=True)
     date_fa = models.CharField(max_length=15)
     exp_date_fa = models.CharField(max_length=15, null=True, blank=True)
+    code = models.CharField(max_length=40)
+    details = models.CharField(max_length=100, null=True, blank=True)
+    req_number = models.CharField(max_length=200, null=True, blank=True)
+    qty = models.IntegerField(null=True, blank=True)
+    price = models.FloatField(null=True, blank=True)
+    price_reduction = models.FloatField(null=True, blank=True)
     perm_number = models.CharField(max_length=10, null=True, blank=True)
+    receivable = models.FloatField(null=True, blank=True)
     red_flag = models.BooleanField(default=False)
+    complete = models.BooleanField(default=False)
     is_entered = models.BooleanField(default=False)
 
     def __str__(self):
-        return '%s' % self.number
+        return '%s - #items: %s' % (self.number, self.items())
+
+    def items(self):
+        count = TrackXpref.objects.filter(number=self.number).count()
+        print(count)
+        return count
 
 
 class Payments(models.Model):
@@ -85,3 +96,6 @@ class TrackItemsCode(models.Model):
     weight = models.FloatField(null=True, blank=True)
     freq = models.FloatField(default=50)
     details = models.TextField()
+    red_flag = models.BooleanField(default=False)
+    green_flag = models.BooleanField(default=False)
+    is_entered = models.BooleanField(default=False)
