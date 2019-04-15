@@ -703,6 +703,8 @@ def pref_edit2(request, ypref_pk):
         prof.exp_date_fa = prof.exp_date_fa.togregorian()
     if prof.due_date:
         prof.due_date = prof.due_date.togregorian()
+    if prof.perm_date:
+        prof.perm_date = prof.perm_date.togregorian()
     # form = forms.ProformaForm(request.user.pk, request.POST or None, request.FILES or None, instance=prof)
     form = forms.ProformaEditForm(request.user.pk, request.POST or None, request.FILES or None, instance=prof)
     form.req_id = prof.req_id

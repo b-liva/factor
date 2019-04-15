@@ -25,7 +25,7 @@ def e_req_add(request):
             # if Requests.objects.get(number=request.POST['number']):
             #     ereq_item.started = True
             ereq_item.save()
-            return redirect('e_req_index')
+            return redirect('req_track:e_req_index')
     if request.method == 'GET':
         form = E_Req_Form()
 
@@ -60,10 +60,9 @@ def e_req_delete_all(request):
     for e in ereq_all:
         e.delete()
 
-    return redirect('e_req_index')
+    return redirect('req_track:e_req_index')
 
 
-@login_required
 def e_req_report(request):
     reqs = ReqEntered.objects.filter(is_entered=False).filter(is_request=True)
         # .exclude(owner_text__contains='ظریف')\
@@ -107,10 +106,9 @@ def check_orders(request):
         else:
             print(f"order No: {e.number_automation}: is not entered.")
 
-    return redirect('e_req_report')
+    return redirect('req_track:e_req_report')
 
 
-@login_required
 def users_summary(user_txt, user_account, date, not_entered_reqs):
     reqs = Requests.objects.filter(is_active=True).filter(date_fa__gte=date).filter(owner=user_account)
     all_reqs = Requests.objects.filter(is_active=True, owner=user_account)
