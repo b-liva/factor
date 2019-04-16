@@ -16,6 +16,11 @@
                         <td>ردیف</td>
                         <td>کد</td>
                         <td>شرح</td>
+                        <td>kw</td>
+                        <td>rpm</td>
+                        <td>ip</td>
+                        <td>ic</td>
+                        <td>شرح موقت</td>
                         {#                <td>واردشده</td>#}
                         {#                <td>درخواست</td>#}
                     </tr>
@@ -27,6 +32,11 @@
                             <td>{{ forloop.counter }}</td>
                             <td>{{ code.code }}</td>
                             <td>{{ code.details }}</td>
+                            <td>{{ code.kw }}</td>
+                            <td>{{ code.speed }}</td>
+                            <td>{{ code.ip }}</td>
+                            <td>{{ code.ic }}</td>
+                            <td>{{ code.temp_str }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

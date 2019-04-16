@@ -228,7 +228,7 @@ def payment_assign(request):
 
 
 def motor_codes_index(request):
-    all_codes = TrackItemsCode.objects.filter(green_flag=True)
+    all_codes = TrackItemsCode.objects.filter(green_flag=True, code__gt=1000000)
     print(all_codes.count())
     context = {
         'all_codes': all_codes,
@@ -236,6 +236,62 @@ def motor_codes_index(request):
 
     return render(request, 'codes/codes.html', context)
 
+
+def motor_codes_check(request):
+    all_codes = TrackItemsCode.objects.all()
+    print(all_codes.count())
+    keywords = ['وات', 'موتور', 'kw', 'rpm']
+    for code in all_codes:
+        if any(keyword in code.details for keyword in keywords):
+            code.green_flag = True
+            code.save()
+
+    return redirect('req_track:motor_codes_index')
+
+
+def motor_codes_process(request):
+
+    green_codes = TrackItemsCode.objects.filter(green_flag=True)[0:150]
+    for code in green_codes:
+        a = code.details.split('.')
+        for key, x in enumerate(a):
+            print(x)
+            y = x.split(' ')
+            if len(y) > 1:
+                print(y)
+                del (a[key])
+                for i in y:
+                    a.append(i)
+            y = x.split('-')
+            if len(y) > 1:
+                print(y)
+                del (a[key])
+                for i in y:
+                    a.append(i)
+        separator = "*%&"
+        code.temp_str = separator.join(a)
+        for value in a:
+            if value.find('kw') >= 0:
+                kw = value.replace('kw', '')
+                code.kw = kw
+            if value.find('کیلووات') >= 0:
+                kw = value.replace('کیلووات', '')
+                code.kw = kw
+            if value.find('rpm') >= 0:
+                rpm = value.replace('rpm', '')
+                code.speed = rpm
+            if value.find('دور') >= 0:
+                rpm = value.replace('دور', '')
+                code.speed = rpm
+            if value.find('ip') >= 0:
+                ip = value.replace('ip', '')
+                code.ip = ip
+            if value.find('ic') >= 0:
+                ic = value.replace('ic', '')
+                code.ic = ic
+        code.save()
+
+    return redirect('req_track:motor_codes_index')
 
 
 def proformas(request):

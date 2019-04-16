@@ -26,7 +26,7 @@ SECRET_KEY = 'wf$gn46*y4((^9gsj8_4j=%i=40v2dpuyypf56xww72aj40b5='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '192.168.1.4', '192.168.56.102', '127.0.0.1', 'jemco.pythonanywhere.com']
+ALLOWED_HOSTS = ['localhost', '192.168.1.4', 'testserver', '192.168.56.102', '127.0.0.1', 'jemco.pythonanywhere.com']
 # ALLOWED_HOSTS = ['crm.jemcomotor.ir']
 # ALLOWED_HOSTS = ['vbstech.ir']
 
