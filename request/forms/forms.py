@@ -137,9 +137,9 @@ class ProformaForm(forms.ModelForm):
         print(f'current user is: {current_user}')
         super(ProformaForm, self).__init__(*args, **kwargs)
         self.fields['req_id'].queryset = models.Requests.objects.filter(is_active=True)\
-            .filter(Q(owner=current_user) | Q(colleagues=current_user))
+            .filter(Q(owner=current_user) | Q(colleagues=current_user)).distinct()
         if User.objects.get(pk=current_user).is_superuser:
-            self.fields['req_id'].queryset = models.Requests.objects.all()
+            self.fields['req_id'].queryset = models.Requests.objects.filter(is_active=True)
 
         # this renders the items in form drop down menu
         # self.fields['req_id'].label_from_instance = lambda obj: "%s" % obj.number

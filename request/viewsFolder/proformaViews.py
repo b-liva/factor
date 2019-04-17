@@ -69,7 +69,7 @@ def pref_search(request):
     prof_list = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
 
     if not request.user.is_superuser:
-        prof_list = prof_list.filter(Q(owner=request.user) | Q(req_id__colleagues=request.user))
+        prof_list = prof_list.filter(Q(owner=request.user) | Q(req_id__colleagues=request.user)).distinct()
 
     if not request.method == 'POST':
         if 'proforma-search-post' in request.session:
