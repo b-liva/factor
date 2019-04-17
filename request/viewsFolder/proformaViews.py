@@ -16,7 +16,7 @@ from customer.models import Customer
 from request import models
 from request.forms.search import ProformaSearchForm
 
-from request.models import Requests, Xpref, ReqSpec, PrefSpec
+from request.models import Requests, Xpref, ReqSpec, PrefSpec, IPType, ICType
 from pricedb.models import MotorDB
 
 from request.forms import proforma_forms, forms
@@ -524,6 +524,7 @@ def pro_form(request):
                 form = forms.ProfSpecForm()
                 spec_item = form.save(commit=False)
                 spec_item.type = spec.type
+                spec_item.code = spec.code
                 spec_item.price = 0
                 spec_item.kw = spec.kw
                 spec_item.qty = spec.qty

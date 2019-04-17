@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Requests
-from .models import ReqSpec
+from .models import Requests, ReqSpec
+from motordb.models import MotorsCode
 from django.contrib.auth.decorators import login_required
 import request.templatetags.functions as funcs
 from django.contrib import messages
@@ -97,6 +97,8 @@ def spec_form(request, req_pk):
         form = forms.SpecForm(request.POST)
         if form.is_valid():
             spec = form.save(commit=False)
+            # if MotorsCode.objects.filter(kw=request.POST['kw'], speed=request.POST['speed']):
+            #     spec.code =
             spec.req_id = req
             spec.owner = request.user
             spec.save()

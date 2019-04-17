@@ -106,7 +106,8 @@
                             <td style="font-weight: bold; background: #ffa09c;" colspan="4">آزمایشی</td>
                         </tr>
                         <tr>
-                            <th scope="col" class="text-center rotate_deg">شماره</th>
+                            <th scope="col" class="text-center rotate_deg">ردیف</th>
+                            <th scope="col" class="text-center rotate_deg">کد کالا</th>
                             <th scope="col" class="text-center rotate_deg">تعداد</th>
                             <th scope="col" class="text-center rotate_deg">کیلووات</th>
                             <th scope="col" class="text-center rotate_deg">سرعت</th>
@@ -128,6 +129,7 @@
                             <tr>
                                 <td class="dark">{{ forloop.counter }}</td>
                                 {#                <td>{{ customer.pk }}</td>#}
+                                <td>{{ reqspec.code }}</td>
                                 <td>{{ reqspec.qty }}</td>
                                 <td>{{ reqspec.kw }}</td>
                                 <td>{{ reqspec.rpm }}</td>

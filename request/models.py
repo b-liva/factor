@@ -42,6 +42,27 @@ class ProjectType(models.Model):
         return '%s' % self.title
 
 
+class IPType(models.Model):
+    title = models.CharField(max_length=20)
+
+    def __str__(self):
+        return '%s' % self.title
+
+
+class ICType(models.Model):
+    title = models.CharField(max_length=20)
+
+    def __str__(self):
+        return '%s' % self.title
+
+
+class IMType(models.Model):
+    title = models.CharField(max_length=20)
+
+    def __str__(self):
+        return '%s' % self.title
+
+
 class Requests(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='req_owner')
@@ -87,6 +108,7 @@ class FrameSize(models.Model):
 
 
 class ReqSpec(models.Model):
+    code = models.BigIntegerField(default=99009900)
     req_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     type = models.ForeignKey(ProjectType, on_delete=models.DO_NOTHING)
@@ -95,8 +117,11 @@ class ReqSpec(models.Model):
     kw = models.FloatField()
     rpm = models.IntegerField()
     voltage = models.IntegerField(default=380)
-    ip = models.IntegerField(null=True, blank=True)
-    ic = models.IntegerField(null=True, blank=True)
+    ip_type = models.IntegerField(null=True, blank=True)
+    ic_type = models.IntegerField(null=True, blank=True)
+    im = models.ForeignKey(IMType, on_delete=models.DO_NOTHING, blank=True, null=True)
+    ip = models.ForeignKey(IPType, on_delete=models.DO_NOTHING, blank=True, null=True)
+    ic = models.ForeignKey(ICType, on_delete=models.DO_NOTHING, blank=True, null=True)
     frame_size = models.ForeignKey(FrameSize, on_delete=models.DO_NOTHING, blank=True, null=True)
     summary = models.TextField(max_length=500, blank=True, null=True)
     tech = models.BooleanField(default=False)
@@ -153,6 +178,7 @@ class ProfFiles(models.Model):
 
 
 class PrefSpec(models.Model):
+    code = models.BigIntegerField(default=99009900)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     xpref_id = models.ForeignKey(Xpref, on_delete=models.CASCADE)
     reqspec_eq = models.ForeignKey(ReqSpec, on_delete=models.DO_NOTHING)
@@ -163,8 +189,11 @@ class PrefSpec(models.Model):
     kw = models.FloatField()
     rpm = models.IntegerField()
     voltage = models.IntegerField(default=380)
-    ip = models.IntegerField(null=True, blank=True)
-    ic = models.IntegerField(null=True, blank=True)
+    ip_type = models.IntegerField(null=True, blank=True)
+    ic_type = models.IntegerField(null=True, blank=True)
+    im = models.ForeignKey(IMType, on_delete=models.DO_NOTHING, blank=True, null=True)
+    ip = models.ForeignKey(IPType, on_delete=models.DO_NOTHING, blank=True, null=True)
+    ic = models.ForeignKey(ICType, on_delete=models.DO_NOTHING, blank=True, null=True)
     summary = models.TextField(max_length=500, blank=True, null=True)
     considerations = models.TextField(max_length=500, blank=True, null=True)
     is_active = models.BooleanField(default=True)

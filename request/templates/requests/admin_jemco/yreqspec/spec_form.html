@@ -37,6 +37,7 @@
                         <th class="text-center rotate_deg">کیلووات</th>
                         <th class="text-center rotate_deg">ولتاژ</th>
                         <th class="text-center rotate_deg">سرعت</th>
+                        <th class="text-center rotate_deg">IM</th>
                         <th class="text-center rotate_deg">IP</th>
                         <th class="text-center rotate_deg">IC</th>
                         <th class="text-center rotate_deg">جزئیات</th>
@@ -55,6 +56,7 @@
                             <td>{{ spec.kw | floatformat:0 | intcomma }}</td>
                             <td>{{ spec.voltage | floatformat:0 | intcomma }}</td>
                             <td>{{ spec.rpm }}</td>
+                            <td>{{ spec.im }}</td>
                             <td>{{ spec.ip }}</td>
                             <td>{{ spec.ic }}</td>
                             <td class="text-right">{{ spec.summary }}</td>
