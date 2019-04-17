@@ -46,7 +46,7 @@ def pref_index(request):
     prefs = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
 
     if not request.user.is_superuser:
-        prefs = prefs.filter(Q(owner=request.user) | Q(req_id__colleagues=request.user))
+        prefs = prefs.filter(Q(owner=request.user) | Q(req_id__colleagues=request.user)).distinct()
 
     # prefs = Xpref.objects.filter(is_active=True, owner=request.user).order_by('date_fa', 'pk').reverse()
     if request.user.is_superuser:
@@ -547,8 +547,10 @@ def pro_form(request):
         print('001')
         if 'request_pk' in request.session:
             print('002')
+            reqq = Requests.objects.filter(pk=request.session['request_pk'])
+            print(reqq)
             data = {
-                'req_id': request.session['request_pk'],
+                'req_id': Requests.objects.get(pk=request.session['request_pk']),
             }
             del request.session['request_pk']
         else:

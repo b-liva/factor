@@ -1122,7 +1122,7 @@ class LazyEncoder(DjangoJSONEncoder):
 @login_required
 def fsearch5(request):
     filters = {}
-    req_list = Requests.objects.all()
+    req_list = Requests.objects.filter(is_active=True)
     if not request.user.is_superuser:
         # req_list = req_list.filter(owner=request.user)
         req_list = req_list.filter(Q(owner=request.user) | Q(colleagues=request.user))
