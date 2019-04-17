@@ -16,7 +16,7 @@ from customer.models import Customer
 from request import models
 from request.forms.search import ProformaSearchForm
 
-from request.models import Requests, Xpref, ReqSpec, PrefSpec, IPType, ICType
+from request.models import Requests, Xpref, ReqSpec, PrefSpec
 from pricedb.models import MotorDB
 
 from request.forms import proforma_forms, forms
