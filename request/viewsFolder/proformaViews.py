@@ -46,7 +46,7 @@ def pref_index(request):
     prefs = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
 
     if not request.user.is_superuser:
-        prefs = prefs.filter(Q(owner=request.user) | Q(req_id__colleagues=request.user)).distinct()
+        prefs = prefs.filter(Q(owner=request.user) | Q(req_id__colleagues=request.user) | Q(req_id__owner=request.user)).distinct()
 
     # prefs = Xpref.objects.filter(is_active=True, owner=request.user).order_by('date_fa', 'pk').reverse()
     if request.user.is_superuser:
@@ -69,7 +69,9 @@ def pref_search(request):
     prof_list = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
 
     if not request.user.is_superuser:
-        prof_list = prof_list.filter(Q(owner=request.user) | Q(req_id__colleagues=request.user)).distinct()
+        prof_list = prof_list.filter(
+            Q(owner=request.user) | Q(req_id__colleagues=request.user) | Q(req_id__owner=request.user)
+        ).distinct()
 
     if not request.method == 'POST':
         if 'proforma-search-post' in request.session:
@@ -832,11 +834,9 @@ def prof_spec_form(request, ypref_pk):
         # form = forms.ProfSpecForm(request.POST, request.user)
         form = forms.ProfSpecForm(request.POST)
         if form.is_valid():
-            print('form is valid')
             spec = form.save(commit=False)
             spec.xpref_id = proforma
             spec.save()
-            print('saved')
             # return redirect('prof_spec_form', ypref_pk=proforma.pk)
             return redirect('pref_insert_spec_form', ypref_pk=proforma.pk)
         else:
