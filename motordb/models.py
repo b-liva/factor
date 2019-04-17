@@ -135,7 +135,7 @@ class MotorsCode(models.Model):
     frame_size = models.CharField(max_length=6, blank=True, null=True)
     speed = models.IntegerField()
     voltage = models.IntegerField(null=True, blank=True)
-    ip = models.IntegerField(null=True, blank=True)
+    ip = models.CharField(max_length=10, null=True, blank=True)
     ic = models.IntegerField(null=True, blank=True)
     im = models.CharField(max_length=8, null=True, blank=True)
     yd = models.CharField(max_length=10, null=True, blank=True)

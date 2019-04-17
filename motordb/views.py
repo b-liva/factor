@@ -12,9 +12,10 @@ from motordb import models
 
 def motordb_index(request):
 
-    motors = models.Motors.objects.all().order_by('pk').reverse()
+    motors = models.Motors.objects.all()
+    motors = models.MotorsCode.objects.all()
 
-    return render(request, 'motordb/index.html', {'motors': motors})
+    return render(request, 'motordb/index_motor_code.html', {'motors': motors})
 
 
 def motor_view(request):

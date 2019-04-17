@@ -1,0 +1,51 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+            <a class="btn btn-sm btn-success" href="{% url 'test_view2' %}">click here</a>
+            <table class="tableFull withBorder">
+                <thead>
+                    <tr>
+                        <th>TYPE</th>
+                        <th>کد</th>
+                        <th>شرح</th>
+                        <th>کیلووات</th>
+                        <th>سرعت</th>
+                        <th>فریم سایز</th>
+                        <th>ولتاژ</th>
+                        <th>IM</th>
+                        <th>IP</th>
+                        <th>IC</th>
+                        <th>بازدهی</th>
+                        <th>ضریب توان</th>
+                        <th>current</th>
+                        <th>torque</th>
+                        <th>weight</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for motor in motors %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ motor.code }}</td>
+                        <td>{{ motor.description }}</td>
+                        <td>{{ motor.kw }}</td>
+                        <td>{{ motor.speed }}</td>
+                        <td></td>
+                        <td></td>
+                        <td>{{ motor.im }}</td>
+                        <td>{{ motor.ip }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" href="{% url 'motordb_edit_form' motordb_pk=motor.pk %}">Edit</a>
+                            <a class="btn btn-sm btn-danger" href="{% url 'motordb_delete' motordb_pk=motor.pk %}">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
