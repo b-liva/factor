@@ -53,13 +53,19 @@
                     <div class="col-md-4">
                         <div class="col-md-12">
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                {{ search_form.type.errors }}
+                                <label for="{{ search_form.type.id_for_label }}">نوع</label>
+                                {{ search_form.type }}
+
+                            </div>
+                            <div class="col-md-4">
                                 {{ search_form.price.errors }}
                                 <label for="{{ search_form.price.id_for_label }}">مالی</label>
                                 {{ search_form.price }}
 
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 {{ search_form.tech.errors }}
                                 <label for="{{ search_form.tech.id_for_label }}">فنی</label>
                                 {{ search_form.tech }}
@@ -131,6 +137,7 @@
                     <th>KW</th>
                     <th>RPM</th>
                     <th>Voltage</th>
+                    <th>نوع پروژه</th>
                     <th>فنی</th>
                     <th>مالی</th>
                     <th>مجوز</th>
@@ -153,6 +160,7 @@
                         <td>{{ reqspec.spec.qty }}</td>
                         <td>{{ reqspec.spec.kw }}</td>
                         <td>{{ reqspec.spec.rpm }}</td>
+                        <td>{{ reqspec.spec.type }}</td>
                         <td>{{ reqspec.spec.voltage }}</td>
 
                         <td><input type="checkbox" {% if reqspec.spec.tech %} checked {% endif %} disabled></td>

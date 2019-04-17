@@ -63,6 +63,13 @@ class SpecSearchForm(forms.Form):
         ('True', 'بله',),
         ('False', 'خیر',),
     )
+    TYPE_CHOICES = (
+        ('0', '---',),
+        ('روتین', 'روتین',),
+        ('پروژه', 'پروژه',),
+        ('تعمیرات', 'تعمیرات',),
+        ('ضد انفجار', 'ضد انفجار',),
+    )
     CHOICES = (
         ('0', '---',),
         ('True', 'بله',),
@@ -89,6 +96,9 @@ class SpecSearchForm(forms.Form):
     owner = forms.ChoiceField(widget=forms.Select(attrs={
         'class': 'form-control',
     }), choices=OWNER, required=False)
+    type = forms.ChoiceField(widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=TYPE_CHOICES, required=False)
 
     SORT_CHOICES = (
         ('1', 'کیلووات',),

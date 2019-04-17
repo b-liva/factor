@@ -233,12 +233,15 @@ def fsearch(request):
             specs = specs.filter(Q(req_id__owner=owner))
         form_data['price'] = request.POST.get('price')
         form_data['tech'] = request.POST.get('tech')
+        form_data['type'] = request.POST.get('type')
         form_data['permission'] = request.POST.get('permission')
         form_data['sent'] = request.POST.get('sent')
         if form_data['price'] != '0':
             specs = specs.filter(price=form_data['price'])
         if form_data['tech'] != '0':
             specs = specs.filter(tech=form_data['tech'])
+        if form_data['type'] != '0':
+            specs = specs.filter(type__title=form_data['type'])
         if form_data['permission'] != '0':
             specs = specs.filter(permission=form_data['permission'])
         if form_data['sent'] != '0':
