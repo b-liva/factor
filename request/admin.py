@@ -9,7 +9,7 @@ from .models import (
     Payment,
     ProjectType,
     FrameSize,
-    IPType, ICType, IMType)
+    IPType, ICType, IMType, IEType)
 
 admin.site.register(Requests)
 admin.site.register(ReqSpec)
@@ -20,4 +20,5 @@ admin.site.register(ProjectType)
 admin.site.register(IPType)
 admin.site.register(ICType)
 admin.site.register(IMType)
+admin.site.register(IEType)
 admin.site.register(FrameSize)

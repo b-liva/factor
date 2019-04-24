@@ -1,15 +1,16 @@
 {% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
 {% load humanize %}
+{% load request_extras %}
 {% block right_col %}
     <div class="container">
         <div class="col-md-12">
             <h3>{{ msg }}</h3>
             {#                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Request Specs</h1>#}
-            <h2 class="page-header">ردیف های درخواستی</h2>
+            {#            <h2 class="page-header">ردیف های درخواستی</h2>#}
 
             <div id="example-table"></div>
             <div class="searchApp">
-                <form method="POST" action="{% url 'fsearch' %}">
+                <form method="POST" action="{% url 'new_fsearch' %}">
                     {% csrf_token %}
                     {#                    {{ search_form }}#}
 
@@ -122,11 +123,15 @@
                             <button type="submit" name="submit" class="btn btn-sm btn-primary">
                                 <i class="fa fa-search" aria-hidden="true"></i>
                             </button>
-                            <a href="{% url 'fsearch' %}" class="btn btn-sm btn-danger">حذف فیلترها</a>
+                            <a href="{% url 'new_fsearch' %}" class="btn btn-sm btn-danger">حذف فیلترها</a>
+                            <a class="btn btn-sm btn-success" href="{% url 'spec_export' %}">
+                                <i class="fa fa-download" aria-hidden="true"></i>    اکسل
+                            </a>
                         </div>
 
                     </div>
                 </form>
+
             </div>
 
             <table id="req_search_table" class="table table-hover">
@@ -152,35 +157,60 @@
                 </tr>
                 <tbody class="request-table-body">
                 {#                            {% for reqspec in reqspecs %}#}
-                {% for i, reqspec in response.items %}
-                    <tr>
+                {% for reqspec in reqspecs %}
+                    <tr style="border-top: 2px solid black">
                         <td>{{ forloop.counter }}</td>
                         <td class="customer-column">
-                            <a href="{% url 'customer_read' customer_pk=reqspec.spec.req_id.customer.pk %}">{{ reqspec.spec.req_id.customer.name }}</a>
+                            <a href="{% url 'customer_read' customer_pk=reqspec.req_id.customer.pk %}">{{ reqspec.req_id.customer.name }}</a>
                         </td>
-                        <td>{{ reqspec.spec.qty }}</td>
-                        <td>{{ reqspec.spec.kw }}</td>
-                        <td>{{ reqspec.spec.rpm }}</td>
-                        <td>{{ reqspec.spec.type }}</td>
-                        <td>{{ reqspec.spec.voltage }}</td>
+                        <td>{{ reqspec.qty }}</td>
+                        <td>{{ reqspec.kw }}</td>
+                        <td>{{ reqspec.rpm }}</td>
+                        <td>{{ reqspec.type }}</td>
+                        <td>{{ reqspec.voltage }}</td>
 
-                        <td><input type="checkbox" {% if reqspec.spec.tech %} checked {% endif %} disabled></td>
-                        <td><input type="checkbox" {% if reqspec.spec.price %} checked {% endif %} disabled></td>
-                        <td><input type="checkbox" {% if reqspec.spec.permission %} checked {% endif %} disabled></td>
-                        <td><input type="checkbox" {% if reqspec.spec.sent %} checked {% endif %} disabled></td>
+                        <td><input type="checkbox" {% if reqspec.tech %} checked {% endif %} disabled></td>
+                        <td><input type="checkbox" {% if reqspec.price %} checked {% endif %} disabled></td>
+                        <td><input type="checkbox" {% if reqspec.permission %} checked {% endif %} disabled></td>
+                        <td><input type="checkbox" {% if reqspec.sent %} checked {% endif %} disabled></td>
                         <td>{{ reqspec.spec.summary }}</td>
                         <td>
-                            {% for colleague in reqspec.owner_colleagues %}
-                                {{ colleague }} -
+                            {{ reqspec.req_id.owner.last_name }}
+                            {% for colleague in reqspec.req_id.colleagues.all %}
+                                - {{ colleague }}
                             {% endfor %}
                         </td>
                         <td>
-                            <a href="{% url 'request_details' request_pk=reqspec.spec.req_id.pk %}">{{ reqspec.spec.req_id.number }}</a>
+                            <a href="{% url 'request_details' request_pk=reqspec.req_id.pk %}">{{ reqspec.req_id.number }}</a>
                         </td>
                         <td>
-                            {% for prof in reqspec.proformas %}
-                                <a href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof }}</a> -
-                            {% endfor %}
+                            <table class="col-xs-12 text-center">
+                                <tbody>
+                                {% for prof in reqspec.req_id|proformas %}
+                                    <tr style="border-bottom: 1px dashed brown">
+                                        <td class="col-xs-6 text-center"><a
+                                                href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof }}</a>
+                                        </td>
+                                        <td class="col-xs-6">
+                                            <table>
+                                                <tbody>
+                                                {% for pay in prof|payments %}
+                                                    <tr>
+                                                        <td>
+                                                            <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
+                                                                ${{ pay.amount|floatformat:0|intcomma }}</a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {#                            {{ reqspec|reqspec_proforma }}#}
                         </td>
                         <td>
                             {% for payment in reqspec.payments %}
@@ -188,10 +218,10 @@
                             {% endfor %}
                         </td>
 
-                        <td>{{ reqspec.spec.req_id.date_fa }} ({{ reqspec.delay }})</td>
+                        <td>{{ reqspec.req_id.date_fa }} ({{ reqspec.req_id.date_fa|date_diff }})</td>
                         <td>
                             <a class="btn btn-primary btn-xs"
-                               href="{% url 'request_details' request_pk=reqspec.spec.req_id.pk %}">
+                               href="{% url 'request_details' request_pk=reqspec.req_id.pk %}">
                                 <i class="fa fa-eye"></i> مشاهده
                             </a>
                         </td>
@@ -199,6 +229,11 @@
 
                     </tr>
 
+                    {% if reqspec.summary %}
+                        <tr>
+                            <td colspan="18">{{ reqspec.summary }}</td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
                 <tr style="font-size: large; font-weight: bold">
                     <td colspan="2">مجموع</td>

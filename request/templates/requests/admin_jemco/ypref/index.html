@@ -21,21 +21,37 @@
 
             </div>
             <div class="row">
-                {% if showDelete %}
-                    <form method="POST" action="{% url 'pref_find' %}">
-                        {% csrf_token %}
-                        شماره پیشفاکتور <input name="pref_no">
-                        {#                    <input name="text">#}
-                        <button type="submit" name="submit" class="btn btn-sm btn-primary">
-                            <i class="fa fa-search" aria-hidden="true"></i>
-                        </button>
-                    </form>
-                {% endif %}
+                <div class="col-xs-6 col-md-4">
+                    {% if showDelete %}
+                        <form method="POST" action="{% url 'pref_find' %}">
+                            {% csrf_token %}
+                            شماره پیشفاکتور <input name="pref_no">
+                            {#                    <input name="text">#}
+                            <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="col-xs-6 col-md-8 pull-left">
+                    <div class="pull-left">
+                        {% if perms.request.add_xpref and showDelete %}
+                            <a href="{% url 'pro_form' %}" class="btn btn-success btn-sm "><i
+                                    class="fa fa-plus"></i>
+                                پیش فاکتور جدید</a>
+                        {% endif %}
+                        <form action="{% url 'prof_export' %}" method="post">
+                            {% csrf_token %}
+                            <input name="prefs" type="hidden" value="{{ prefs }}">
+                            <button class="btn-success btn btn-sm " type="submit">
+                                <i class="fa fa-download" aria-hidden="true"></i>    اکسل
+                            </button>
 
-                {% if perms.request.add_xpref and showDelete %}
-                    <a href="{% url 'pro_form' %}" class="btn btn-success btn-sm pull-left"><i class="fa fa-plus"></i>
-                        پیشفاکتور جدید</a>
-                {% endif %}
+                        </form>
+                    </div>
+
+                </div>
+
 
             </div>
             <form method="post" action="">
@@ -95,6 +111,7 @@
                 </button>
             </form>
 
+
             <div class="table-responsive">
 
                 <table class="table table-hover text-center">
@@ -102,6 +119,7 @@
                     <tr>
                         <th scope="col" class="text-center">ردیف</th>
                         <th scope="col" class="text-center">شماره پیش فاکتور</th>
+                        <th scope="col" class="text-center">شماره مجوز</th>
                         {% if not showDelete %}
                             <th scope="col" class="text-center">شماره پیش فاکتور اصلی</th>{% endif %}
                         <th scope="col" class="text-center">شماره درخواست</th>
@@ -118,6 +136,14 @@
                         <tr>
                             <td scope="row">{{ forloop.counter }}</td>
                             <td>{{ pref.number }}</td>
+
+                            <td>
+                                {% if pref.perm_number %}
+                                    <a href="{% url 'pref_details' ypref_pk=pref.pk %}">{{ pref.perm_number }}</a>
+                                {% endif %}
+                            </td>
+
+
                             {% if not showDelete %}
                                 <td>{{ pref.temp_number }}</td>{% endif %}
                             <td>

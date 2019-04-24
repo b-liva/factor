@@ -23,17 +23,21 @@
             <div class="row">
                 {% if showDelete %}
                     <div class="col-md-8">
-                        <form method="POST" action="{% url 'pref_find' %}">
+                        <form class="" method="POST" action="{% url 'pref_find' %}">
                             {% csrf_token %}
                             شماره پیشفاکتور <input name="pref_no">
                             {#                                            <input name="text">#}
                             <button type="submit" name="submit" class="btn btn-sm btn-primary">
                                 <i class="fa fa-search" aria-hidden="true"></i>
                             </button>
+                            <a class="btn-success btn-sm" href="{% url 'perm_export' %}">
+                                <i class="fa fa-download" aria-hidden="true"></i>    اکسل
+                            </a>
                         </form>
-
                     </div>
                 {% endif %}
+
+
                 <div class="col-md-4 left">
                     <span class="btn-danger">تاخیر تحویل</span>
                     <span class="btn-warning">کمتر از یک ماه</span>
@@ -42,9 +46,6 @@
 
 
             </div>
-{#            <div class="row"><a href="{% url 'user_export' %}">اکسل کاربران</a></div>#}
-{#            <div class="row"><a href="{% url 'request_export' %}">اکسل درخواست</a></div>#}
-{#            <div class="row"><a href="{% url 'perm_export' %}">اکسل مجوز</a></div>#}
             <div class="table-responsive">
                 <table class="table text-center">
                     <thead>
@@ -82,17 +83,19 @@
                                 <a class="badge badge-light"
                                    href="{% url 'request_details' request_pk=p.req_id.pk %}">{{ p.req_id.number }}</a>
                             </td>
-                            <td><a href="{% url 'customer_read' customer_pk=p.req_id.customer.pk %}">{{ p.req_id.customer.name }}</a></td>
+                            <td>
+                                <a href="{% url 'customer_read' customer_pk=p.req_id.customer.pk %}">{{ p.req_id.customer.name }}</a>
+                            </td>
                             <td>{{ p.due_date }}</td>
                             <td>{{ p.total_qty }}</td>
                             <td>{{ p.total_qty_sent }}</td>
                             <td>{{ p.qty_remaining }}</td>
-{#                            <td>{{ p|days }}</td>#}
+                            {#                            <td>{{ p|days }}</td>#}
                             <td class="{{ p|perm_warning_class }}">{{ p|perm_days }}</td>
                             <td>{{ p|perm_total|floatformat:0 | intcomma }}</td>
                             <td>{{ p|perm_receivable|floatformat:0 | intcomma }}</td>
                             <td>{{ p|receivable_percent|floatformat:2 }}</td>
-{#                            <td>{{ p.perm.summary|truncatechars:60 }}</td>#}
+                            {#                            <td>{{ p.perm.summary|truncatechars:60 }}</td>#}
                             <td>{{ p.owner.last_name }}</td>
                             <td>
                                 {#                            <a class="btn btn-primary btn-xs"#}

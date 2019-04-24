@@ -11,6 +11,7 @@ urlpatterns = [
     path('pay_form_prof/<int:prof_pk>', paymentViews.pay_form_prof, name='pay_form_prof'),
     # path('insert', paymentViews.payment_insert, name='payment_insert'),
     path('index', paymentViews.payment_index, name='payment_index'),
+    path('payments-export', paymentViews.payments_export, name='payments_export'),
     path('index-deleted', paymentViews.payment_index_deleted, name='payment_index_deleted'),
     path('find', paymentViews.payment_find, name='payment_find'),
     path('<int:ypayment_pk>/', include([

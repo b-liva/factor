@@ -24,7 +24,11 @@
                 <button type="submit" name="submit" class="btn btn-sm btn-primary">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
+                <a class="btn btn-sm btn-success" href="{% url 'payments_export' %}">
+                    <i class="fa fa-download" aria-hidden="true"></i> اکسل
+                </a>
             </form>
+
             {% if perms.request.add_payment and showHide %}
                 <a href="{% url 'pay_form' %}" class="btn btn-success btn-sm pull-left">
                     <i class="fa fa-plus"></i> ثبت پرداخت </a>
@@ -35,13 +39,14 @@
                         <tr>
                             <th class="text-center">ردیف</th>
                             <th class="text-center">شماره پرداخت</th>
+                            <th class="text-center">مشتری</th>
+
                             {% if not showHide %}
                                 <th class="text-center">شماره پرداخت اصلی</th>{% endif %}
-                            <th class="text-center">شماره درخواست</th>
                             <th class="text-center">شماره پیشفاکتور</th>
+                            <th class="text-center">شماره درخواست</th>
                             <th class="text-center">مبلغ</th>
                             <th class="text-center">تاریخ پرداخت</th>
-                            <th class="text-center">مشتری</th>
                             <th class="text-center"></th>
                         </tr>
                         <tbody class="">
@@ -49,13 +54,13 @@
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td>{{ payment.number }}</td>
+                                <td>{{ payment.customer.name }}</td>
+                                <td>{{ payment.xpref_id.number }}</td>
+                                <td>{{ payment.xpref_id.req_id.number }}</td>
                                 {% if not showHide %}
                                     <td>{{ payment.temp_number }}</td>{% endif %}
-                                <td>{{ payment.xpref_id.req_id.number }}</td>
-                                <td>{{ payment.xpref_id.number }}</td>
                                 <td>{{ payment.amount|intcomma }}</td>
                                 <td>{{ payment.date_fa }}</td>
-                                <td>{{ payment.customer.name }}</td>
                                 <td>
                                     <a class="btn btn-primary btn-xs"
                                        href="{% url 'payment_details' ypayment_pk=payment.pk %}">

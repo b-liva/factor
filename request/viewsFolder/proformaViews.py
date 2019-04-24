@@ -1,4 +1,4 @@
-import ast
+from django.core.cache import cache
 import random
 
 import jdatetime
@@ -22,13 +22,8 @@ from pricedb.models import MotorDB
 from request.forms import proforma_forms, forms
 from django.contrib.auth.decorators import login_required
 
-import base64
-import datetime
 from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationField, Value, DateField, DateTimeField, Q, \
     Sum
-from request.forms.forms import ProfSpecForm
-from request.forms.proforma_forms import ProfEditForm
-from django.forms import formset_factory
 
 from request.templatetags import functions, request_extras
 
@@ -125,14 +120,79 @@ def pref_search(request):
         req_page = paginator.page(1)
     except EmptyPage:
         req_page = paginator.page(paginator.num_pages)
+
     context = {
-        'req_page': req_page,
         'prefs': prof_list,
+    }
+    cache.set('profs_in_sessions', context, 300)
+    context.update({
+        'req_page': req_page,
         'form': form,
         'title': 'پیش فاکتور',
         'showDelete': True,
-    }
+    })
     return render(request, 'requests/admin_jemco/ypref/index.html', context)
+
+
+@login_required
+def prof_export(request):
+
+    try:
+        context = cache.get('profs_in_sessions')
+        profs = context['prefs']
+    except:
+        profs = Xpref.objects.filter(is_active=True)
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="proformas.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('پیش فاکتور')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = (
+        'ردیف',
+        'پیش فاکتور',
+        'مجوز',
+        'شماره درخواست',
+        'مشتری',
+        'کارشناس',
+        'تاریخ',
+        'انقضا',
+    )
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    # if request.user.is_superuser:
+    #     pass
+    for prof in profs:
+        row_num += 1
+
+        exportables = []
+        exportables.append(row_num)
+        exportables.append(prof.number)
+        exportables.append(prof.perm_number)
+        exportables.append(prof.req_id.number)
+        exportables.append(prof.req_id.customer.name)
+        exportables.append(prof.req_id.owner.last_name)
+        exportables.append(str(prof.date_fa))
+        exportables.append(str(prof.exp_date_fa))
+
+        for col_num in range(len(exportables)):
+            ws.write(row_num, col_num, exportables[col_num], font_style)
+
+    ws.cols_right_to_left = True
+    wb.save(response)
+    return response
 
 
 @login_required
@@ -252,7 +312,7 @@ def perms_export(request):
     response['Content-Disposition'] = 'attachment; filename="perms.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Users')
+    ws = wb.add_sheet('مجوز')
 
     # Sheet header, first row
     row_num = 0
@@ -260,14 +320,20 @@ def perms_export(request):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
 
-    columns = ['شماره پیش فاکتور', 'request number', 'مشتری', 'جزئیات', 'کارشناس']
     columns = (
-        'number',
-        'due_date',
-        'req_id__number',
-        'req_id__customer__name',
-        'summary',
-        'req_id__owner__last_name'
+        'ردیف',
+        'شماره مجوز',
+        'شماره پیش فاکتور',
+        'شماره درخواست',
+        'تاریخ مجوز',
+        'زمان تحویل',
+        'مشتری',
+        'زمان باقیمانده(روز)',
+        'کل مبلغ',
+        'تسویه نشده',
+        'درصد تسویه نشده',
+        'جزئیات',
+        'کارشناس'
     )
 
     for col_num in range(len(columns)):
@@ -276,23 +342,57 @@ def perms_export(request):
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
     profs = Xpref.objects.filter(perm=True).order_by('due_date')
+    print(profs.count())
+    profs = Xpref.objects.filter(is_active=True, owner=request.user, perm=True) \
+        .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0))) \
+        .annotate(total_qty_sent=Sum('prefspec__qty_sent', filter=Q(prefspec__price__gt=0))) \
+        .annotate(qty_remaining=F('total_qty') - F('total_qty_sent')) \
+        .filter(qty_remaining__gt=0) \
+        .order_by('due_date', 'pk')
+
+    # new = prefs.exclude(prefspec__price=False).distinct().annotate(total=Count('prefspec'))
+    if request.user.is_superuser:
+        profs = Xpref.objects.filter(is_active=True, perm=True) \
+            .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0))) \
+            .annotate(total_qty_sent=Sum('prefspec__qty_sent', filter=Q(prefspec__price__gt=0))) \
+            .annotate(qty_remaining=F('total_qty') - F('total_qty_sent')) \
+            .filter(qty_remaining__gt=0) \
+            .order_by('due_date', 'pk')
+
+    print(profs.count())
+
+
     profs_values = profs.values()
-    print(f"rows: {profs}")
-    print(profs)
     final = {}
     for perm in profs:
-        print(f"row: {perm}")
         row_num += 1
         a = ()
         days = request_extras.perm_days(perm)
+        if days < 0:
+            cell_style = 'pattern: pattern solid, fore_colour blue;'
+        total_receiveable = request_extras.perm_total(perm)
+        perm_receivable = request_extras.perm_receivable(perm)
+        perm_receivable_percent = request_extras.perm_receivable_percent(perm)
         final['days'] = days
-        a = a + (days,)
-        for col_num in range(len(columns)):
-            # ws.write(row_num, col_num, row[col_num], font_style)
-            # a = a + (perm[columns[col_num]],)
-            pass
-        print(f"data: {col_num}: {a}")
 
+        exportables = []
+        exportables.append(row_num)
+        exportables.append(perm.perm_number)
+        exportables.append(perm.number)
+        exportables.append(perm.req_id.number)
+        exportables.append(str(perm.perm_date))
+        exportables.append(str(perm.due_date))
+        exportables.append(perm.req_id.customer.name)
+        exportables.append(days)
+        exportables.append(total_receiveable)
+        exportables.append(perm_receivable)
+        exportables.append(perm_receivable_percent)
+        exportables.append(perm.req_id.owner.last_name)
+
+        for col_num in range(len(exportables)):
+            ws.write(row_num, col_num, exportables[col_num], font_style)
+
+    ws.cols_right_to_left = True
     wb.save(response)
     return response
 
@@ -476,6 +576,24 @@ def pref_delete(request, ypref_pk):
             rand_num = random.randint(100000, 200000)
         pref.number = rand_num
         pref.save()
+    return redirect('pref_index')
+
+
+@login_required
+def delete_proforma_no_prefspec(request, ypref_pk):
+    try:
+        print('h01')
+        prof = Xpref.objects.get(pk=ypref_pk)
+        print(prof)
+        prefspecs = prof.prefspec_set.filter(price__gt=0)
+        print(prefspecs.values('price'))
+        if prefspecs.count() == 0:
+            print('h02')
+            prof.delete()
+    except:
+        print('h03')
+
+        return redirect('pref_index')
     return redirect('pref_index')
 
 
@@ -814,6 +932,7 @@ def pref_edit_form(request, ypref_pk):
         'proforma': proforma,
         'prof_specs': prof_specs
     }
+
     return render(request, 'requests/admin_jemco/ypref/edit_form.html', context)
 
 
@@ -826,14 +945,17 @@ def prof_spec_form(request, ypref_pk):
     req = proforma.req_id
     reqspecs = req.reqspec_set.all()
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
+
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     if request.method == 'POST':
+        print('01')
         # form = forms.ProfSpecForm(request.POST, request.user)
         form = forms.ProfSpecForm(request.POST)
         if form.is_valid():
+            print('02')
             spec = form.save(commit=False)
             spec.xpref_id = proforma
             spec.save()
@@ -842,6 +964,8 @@ def prof_spec_form(request, ypref_pk):
         else:
             print('form is not valid')
     else:
+        print('03')
+        print(proforma.prefspec_set.all())
         form = forms.ProfSpecForm(request.POST)
 
     context = {

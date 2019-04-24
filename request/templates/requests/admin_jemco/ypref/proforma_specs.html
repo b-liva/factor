@@ -77,7 +77,8 @@
                             </table>
                             <input type="hidden" name="req_no" value="{{ req_id }}"><br>
                             <input class="btn btn-success btn-sm" type="submit" value="ذخیره" name="done">
-                            <a class="btn btn-danger btn-sm" href="{% url 'pref_index' %}">انصراف</a>
+{#                            <a class="btn btn-danger btn-sm" href="{% url 'pref_index' %}">انصراف</a>#}
+                            <a class="btn btn-danger btn-sm" href="{% url 'delete_proforma_no_prefspec' ypref_pk=proforma.pk %}">انصراف</a>
                         </form>
                         <hr>
                     </div>

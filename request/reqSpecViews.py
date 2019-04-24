@@ -1,4 +1,7 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect
+
+from accounts.models import User
 from .models import Requests, ReqSpec
 from motordb.models import MotorsCode
 from django.contrib.auth.decorators import login_required
@@ -31,6 +34,106 @@ def reqspec_index(request):
 
     reqspecs = ReqSpec.objects.filter(is_active=True).all()
     return render(request, 'requests/admin_jemco/yreqspec/index.html', {'reqspecs': reqspecs})
+
+
+@login_required
+def reqspec_index_no_summary(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_reqspecs')
+    if not can_add:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='', type__title='روتین')
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='').exclude(code=99009900)
+
+    context = {
+        'motors': reqspecs
+    }
+    return render(request, 'requests/admin_jemco/yreqspec/index_motor_code.html', context)
+
+
+@login_required
+def reqspec_index_no_summary_no_routine(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_reqspecs')
+    if not can_add:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='', type__title='روتین')
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), code=99009900, summary='')
+
+    context = {
+        'motors': reqspecs
+    }
+    return render(request, 'requests/admin_jemco/yreqspec/index_motor_code.html', context)
+
+
+@login_required
+def reqspec_index_with_summary(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_reqspecs')
+    if not can_add:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='', type__title='روتین')
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), code=99009900).exclude(summary='')
+    # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='فلنجدارعمودنصب روبه پایین')
+    # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='فلنجی')
+    # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='فلنج دار')
+    # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='با پایه وفلنج')
+    # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4)).filter(Q(summary='فلنجی') | Q(summary='فلنج دار') | Q(summary='با پایه وفلنج'))
+    print(reqspecs.count())
+
+    context = {
+        'motors': reqspecs
+    }
+    return render(request, 'requests/admin_jemco/yreqspec/index_motor_code.html', context)
+
+
+@login_required
+def reqspec_index_IE(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_reqspecs')
+    if not can_add:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='', type__title='روتین')
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary__contains='IE')
+
+    context = {
+        'motors': reqspecs
+    }
+    return render(request, 'requests/admin_jemco/yreqspec/index_motor_code.html', context)
+
+
+@login_required
+def assign_code_to_motor(request):
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='',
+                                      type__title='روتین')
+    for req in reqspecs:
+        try:
+            print(f"kw: {req.kw} - rpm: {req.rpm}")
+            code = MotorsCode.objects.get(kw=req.kw, speed=req.rpm, im='B3', ip='IP55')
+            req.code = code.code
+            req.save()
+            print(f"code: {code.code}")
+        except:
+            print('Nothing Found')
+
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4))\
+        .filter(Q(summary='فلنجی') | Q(summary='فلنج دار') | Q(summary='با پایه وفلنج'))
+
+    for req in reqspecs:
+        try:
+            print(f"kw: {req.kw} - rpm: {req.rpm}")
+            code = MotorsCode.objects.get(kw=req.kw, speed=req.rpm, im='B35', ip='IP55')
+            req.code = code.code
+            req.save()
+            print(f"code: {code.code}")
+        except:
+            print('Nothing Found')
+
+    return redirect('reqspec_index_no_summary')
 
 
 @login_required

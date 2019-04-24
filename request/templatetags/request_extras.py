@@ -118,12 +118,12 @@ def perm_days(permission):
     return diff.days
 
 
-@register.filter(name='perm_days2')
-def perm_days2(due_date):
+@register.filter(name='date_diff')
+def date_diff(date):
     today_fa = jmodels.jdatetime.date.today()
-    # diff = due_date - today_fa
+    diff = date - today_fa
     # return diff.days
-    return True
+    return diff.days
 
 
 @register.filter(name='perm_receivable')

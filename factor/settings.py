@@ -43,14 +43,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_jalali',
     'django.contrib.humanize',
-    'request.apps.RequestConfig',
-    'tender.apps.TenderConfig',
-    'customer.apps.CustomerConfig',
-    'fund.apps.FundConfig',
-    'req_track.apps.ReqTrackConfig',
-    'spec_communications.apps.SpecCommunicationsConfig',
-    'pricedb.apps.PricedbConfig',
-    'motordb.apps.MotordbConfig',
     # 'accounts.apps.AppConfig',
     'django_cleanup.apps.CleanupConfig',
     'accounts.apps.AccountsConfig',
@@ -65,6 +57,16 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'pytest_django',
+    'debug_toolbar',
+    'request.apps.RequestConfig',
+    'tender.apps.TenderConfig',
+    'customer.apps.CustomerConfig',
+    'fund.apps.FundConfig',
+    'req_track.apps.ReqTrackConfig',
+    'spec_communications.apps.SpecCommunicationsConfig',
+    'pricedb.apps.PricedbConfig',
+    'motordb.apps.MotordbConfig',
 ]
 SITE_ID = 1
 
@@ -76,6 +78,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
 ]
 
 ROOT_URLCONF = 'factor.urls'
@@ -224,3 +228,7 @@ EMAIL_HOST_PASSWORD = 'jcrmpasswd'
 
 SITE_NAME = DEFAULT_FROM_EMAIL
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda x: False,
+}

@@ -138,6 +138,7 @@ class MotorsCode(models.Model):
     ip = models.CharField(max_length=10, null=True, blank=True)
     ic = models.IntegerField(null=True, blank=True)
     im = models.CharField(max_length=8, null=True, blank=True)
+    ie = models.CharField(max_length=8, null=True, blank=True)
     yd = models.CharField(max_length=10, null=True, blank=True)
     # ex_type = models.IntegerField(choices=ex_types, default=0, null=True, blank=True)
     # images = models.FileField(upload_to='motordb/')

@@ -1,5 +1,7 @@
+from django.core.cache import cache
+import xlwt
 from django.contrib.humanize.templatetags.humanize import intcomma
-from django.db.models import Q
+from django.db.models import Q, Sum, F, FloatField
 from datetime import datetime
 import json
 import json_tricks
@@ -325,6 +327,253 @@ def fsearch(request):
         'total_qty': total_qty,
     }
     return render(request, 'requests/admin_jemco/yreqspec/index.html', context)
+
+
+def function_define(request, specs):
+    form_data = {}
+    if request['date_min']:
+        form_data['date_min'] = (request['date_min'])
+        specs = specs.filter(req_id__date_fa__gte=form_data['date_min'])
+    if request['date_max']:
+        form_data['date_max'] = (request['date_max'])
+        specs = specs.filter(req_id__date_fa__lte=form_data['date_max'])
+    if request['kw_min']:
+        form_data['kw_min'] = (request['kw_min'])
+        specs = specs.filter(kw__gte=form_data['kw_min'])
+    if request['kw_max']:
+        form_data['kw_max'] = (request['kw_max'])
+        specs = specs.filter(kw__lte=form_data['kw_max'])
+    if request['owner'] and request['owner'] != '0':
+        form_data['owner'] = (request['owner'])
+        owner = User.objects.get(pk=form_data['owner'])
+        specs = specs.filter(Q(req_id__owner=owner))
+    form_data['price'] = request.get('price')
+    form_data['tech'] = request.get('tech')
+    form_data['type'] = request.get('type')
+    form_data['permission'] = request.get('permission')
+    form_data['sent'] = request.get('sent')
+    if form_data['price'] != '0':
+        specs = specs.filter(price=form_data['price'])
+    if form_data['tech'] != '0':
+        specs = specs.filter(tech=form_data['tech'])
+    if form_data['type'] != '0':
+        specs = specs.filter(type__title=form_data['type'])
+    if form_data['permission'] != '0':
+        specs = specs.filter(permission=form_data['permission'])
+    if form_data['sent'] != '0':
+        specs = specs.filter(sent=form_data['sent'])
+
+    if request['rpm']:
+        rpm = form_data['rpm'] = int(request['rpm'])
+
+        specs = specs.filter(rpm=rpm)
+    if request['customer_name']:
+        form_data['customer_name'] = request['customer_name']
+        specs = specs.filter(req_id__customer__name__icontains=form_data['customer_name'])
+    if request['sort_by']:
+        form_data['sort_by'] = request['sort_by']
+        if form_data['sort_by'] == '1':
+            specs = specs.order_by('kw')
+        # if form_data['sort_by'] == '2':
+        #     specs = specs.order_by('req_id__customer__name')
+        if form_data['sort_by'] == '3':
+            specs = specs.order_by('req_id__date_fa')
+        if form_data['sort_by'] == '4':
+            specs = specs.order_by('qty')
+    if request['dsc_asc'] == '2':
+        form_data['dsc_asc'] = request['dsc_asc']
+        specs = specs.reverse()
+    # if request.POST['date_min']:
+    #     form_data['date_min'] = (request.POST['date_min'])
+    #     specs = specs.filter(req_id__date_fa__gte=form_data['date_min'])
+    # if request.POST['date_max']:
+    #     form_data['date_max'] = (request.POST['date_max'])
+    #     specs = specs.filter(req_id__date_fa__lte=form_data['date_max'])
+    # if request.POST['kw_min']:
+    #     form_data['kw_min'] = (request.POST['kw_min'])
+    #     specs = specs.filter(kw__gte=form_data['kw_min'])
+    # if request.POST['kw_max']:
+    #     form_data['kw_max'] = (request.POST['kw_max'])
+    #     specs = specs.filter(kw__lte=form_data['kw_max'])
+    # if request.POST['owner'] and request.POST['owner'] != '0':
+    #     form_data['owner'] = (request.POST['owner'])
+    #     owner = User.objects.get(pk=form_data['owner'])
+    #     specs = specs.filter(Q(req_id__owner=owner))
+    # form_data['price'] = request.POST.get('price')
+    # form_data['tech'] = request.POST.get('tech')
+    # form_data['type'] = request.POST.get('type')
+    # form_data['permission'] = request.POST.get('permission')
+    # form_data['sent'] = request.POST.get('sent')
+    # if form_data['price'] != '0':
+    #     specs = specs.filter(price=form_data['price'])
+    # if form_data['tech'] != '0':
+    #     specs = specs.filter(tech=form_data['tech'])
+    # if form_data['type'] != '0':
+    #     specs = specs.filter(type__title=form_data['type'])
+    # if form_data['permission'] != '0':
+    #     specs = specs.filter(permission=form_data['permission'])
+    # if form_data['sent'] != '0':
+    #     specs = specs.filter(sent=form_data['sent'])
+    #
+    # if request.POST['rpm']:
+    #     rpm = form_data['rpm'] = int(request.POST['rpm'])
+    #
+    #     specs = specs.filter(rpm=rpm)
+    # if request.POST['customer_name']:
+    #     form_data['customer_name'] = request.POST['customer_name']
+    #     specs = specs.filter(req_id__customer__name__icontains=form_data['customer_name'])
+    # if request.POST['sort_by']:
+    #     form_data['sort_by'] = request.POST['sort_by']
+    #     if form_data['sort_by'] == '1':
+    #         specs = specs.order_by('kw')
+    #     # if form_data['sort_by'] == '2':
+    #     #     specs = specs.order_by('req_id__customer__name')
+    #     if form_data['sort_by'] == '3':
+    #         specs = specs.order_by('req_id__date_fa')
+    #     if form_data['sort_by'] == '4':
+    #         specs = specs.order_by('qty')
+    # if request.POST['dsc_asc'] == '2':
+    #     form_data['dsc_asc'] = request.POST['dsc_asc']
+    #     specs = specs.reverse()
+    return form_data, specs
+
+
+@login_required
+def new_fsearch(request):
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
+    form_data = {}
+    # specs = ReqSpec.objects.filter(is_active=True)
+    request.session['temp_request_in_session'] = request.POST
+
+    specs = ReqSpec.objects.filter(is_active=True).prefetch_related('req_id', 'req_id__owner', 'req_id__customer', 'req_id__colleagues', 'type', 'req_id__xpref_set', 'req_id__xpref_set__payment_set')
+    if request.method == 'POST':
+        # specs = ReqSpec.objects
+        (form_data, specs,) = function_define(request.POST, specs)
+        print(form_data)
+        search_form = search.SpecSearchForm(form_data)
+
+    else:
+        form_data['price'] = 'False'
+        form_data['tech'] = 'False'
+        specs = ReqSpec.objects.filter(is_active=True, price=form_data['price'], tech=form_data['tech'])\
+            .prefetch_related('req_id', 'req_id__owner', 'req_id__customer', 'req_id__colleagues', 'type', 'req_id__xpref_set', 'req_id__xpref_set__payment_set')
+        search_form = search.SpecSearchForm(form_data)
+
+    today = jdatetime.date.today()
+
+    date_format = "%m/%d/%Y"
+    if not request.user.is_superuser:
+        specs = specs.filter(req_id__owner=request.user) | specs.filter(req_id__colleagues=request.user)
+    qty = specs.aggregate(sum=Sum('qty'))
+    kw = specs.aggregate(sum=Sum(F('kw') * F('qty'), output_field=FloatField()))
+
+    context = {
+        'reqspecs': specs,
+        'total_kw': kw['sum'],
+        'total_qty': qty['sum'],
+    }
+
+    cache.set('spec_in_sessions', context, 300)
+
+    context.update({
+        'search_form': search_form,
+    })
+    return render(request, 'requests/admin_jemco/yreqspec/index_opt.html', context)
+
+
+@login_required
+def spec_export(request):
+    print('here..')
+    try:
+        # specs = request.session['spec_in_sessions']
+        context = cache.get('spec_in_sessions')
+        print(context['reqspecs'])
+        specs = context['reqspecs']
+        total_kw = context['total_kw']
+        total_qty = context['total_qty']
+    except:
+        specs = ReqSpec.objects.filter(is_active=True)
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="specs.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('الکتروموتور')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = (
+        'ردیف',
+        'شماره درخواست',
+        'مشتری',
+        'کیلووات',
+        'سرعت',
+        'ولتاژ',
+        'تعداد',
+        'نوع پروژه',
+        'کارشناس',
+        'پیش فاکتور',
+        'پرداخت',
+        'زمان',
+    )
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+    temp_request = {}
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    # if request.user.is_superuser:
+    #     pass
+    for spec in specs:
+        row_num += 1
+
+        exportables = []
+        exportables.append(row_num)
+        exportables.append(spec.req_id.number)
+        exportables.append(spec.req_id.customer.name)
+        exportables.append(spec.kw)
+        exportables.append(spec.rpm)
+        exportables.append(spec.voltage)
+        exportables.append(spec.qty)
+        exportables.append(spec.type.title)
+        exportables.append(spec.req_id.owner.last_name)
+
+        prof_str = ''
+        pay_str = ''
+        profs = spec.req_id.xpref_set.all()
+        for x in profs:
+            prof_str += f"{str(x.number)} - "
+            payments = x.payment_set.all()
+            if payments.count() > 0:
+                for y in payments:
+                    pay_str += f"{str(y.amount)} - "
+        exportables.append(prof_str)
+        exportables.append(pay_str)
+        for col_num in range(len(exportables)):
+            ws.write(row_num, col_num, exportables[col_num], font_style)
+
+    row_num += 2
+
+    ws.write(row_num, 0, 'مجموع ', font_style)
+    ws.write(row_num, 1, 'کیلووات ', font_style)
+    ws.write(row_num, 2, 'توان ', font_style)
+
+    row_num += 1
+    ws.write(row_num, 0, '', font_style)
+    ws.write(row_num, 1, total_qty, font_style)
+    ws.write(row_num, 2, total_kw, font_style)
+
+    ws.cols_right_to_left = True
+    wb.save(response)
+    return response
 
 
 def proforma_total(spset):
@@ -712,6 +961,7 @@ def request_index_vue(request):
         'message': 'درخواست ها',
     }
     return render(request, 'requests/admin_jemco/yrequest/vue/index.html', context)
+
 
 
 @login_required

@@ -41,6 +41,7 @@
 {#                        <li><a href="{% url 'req_search2' %}">گزارش درخواست</a></li>#}
 {#                        <li><a href="{% url 'search_req' %}"> گزارش درخواست 2</a></li>#}
                         <li><a href="{% url 'fsearch' %}">گزارش ردیف</a></li>
+                        <li><a href="{% url 'new_fsearch' %}">opt گزارش ردیف</a></li>
                         <li><a href="{% url 'fsearch3' %}">گزارش ردیف vue</a></li>
                         {% if perms.req_track.add_reqentered %}
                             {#                            <li><a href="{% url 'e_req_add' %}">ثبت درخواست وارده</a></li>#}
@@ -126,6 +127,21 @@
                         {% endif %}
                         {% if perms.request.index_motordb %}
                             <li><a href="{% url 'motordb_index' %}">موتورها</a></li>
+                        {% endif %}
+                        {% if perms.request.index_motordb %}
+                            <li><a href="{% url 'reqspec_index_no_summary' %}">موتورهای روتین</a></li>
+                        {% endif %}
+                        {% if perms.request.index_motordb %}
+                            <li><a href="{% url 'reqspec_index_no_summary_no_routine' %}">موتور بدون شرح</a></li>
+                        {% endif %}
+                        {% if perms.request.index_motordb %}
+                            <li><a href="{% url 'reqspec_index_with_summary' %}">موتور بدون کد با شرح</a></li>
+                        {% endif %}
+                        {% if perms.request.index_motordb %}
+                            <li><a href="{% url 'reqspec_index_IE' %}">موتور IE</a></li>
+                        {% endif %}
+                        {% if perms.request.index_motordb %}
+                            <li><a href="{% url 'assign_code_to_motor' %}">assign code to motor</a></li>
                         {% endif %}
                         {% if perms.request.add_pricedb %}
                             <li><a href="{% url 'pricedb_index' %}">لیست قیمت</a></li>

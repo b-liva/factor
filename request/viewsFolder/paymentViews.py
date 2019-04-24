@@ -1,3 +1,5 @@
+import xlwt
+from django.core.cache import cache
 import random
 
 from django.db.models import Q
@@ -139,17 +141,81 @@ def payment_index(request):
 
     if pref_sum != 0:
         debt_percent = debt / pref_sum
-
     context = {
         'payments': payments,
         'amount_sum': sum,
         'pref_sum': pref_sum,
         'debt': debt,
         'debt_percent': debt_percent,
+    }
+    cache.set('payments_in_sessions', context, 300)
+    context.update({
         'title': 'پرداخت ها',
         'showHide': True,
-    }
+    })
     return render(request, 'requests/admin_jemco/ypayment/index.html', context)
+
+
+@login_required
+def payments_export(request):
+    try:
+        context = cache.get('profs_in_sessions')
+        payments = context['payments']
+        amount_sum = context['amount_sum']
+        pref_sum = context['pref_sum']
+        debt = context['debt']
+        debt_percent = context['debt_percent']
+    except:
+        payments = Payment.objects.filter(is_active=True)
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="payments.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('مبالغ دریافتی')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = (
+        'ردیف',
+        'شماره پرداخت',
+        'مشتری',
+        'شماره پیش فاکتور',
+        'شماره درخواست',
+        'مبلغ',
+        'تاریخ پرداخت',
+    )
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    # if request.user.is_superuser:
+    #     pass
+    for payment in payments:
+        row_num += 1
+
+        exportables = []
+        exportables.append(row_num)
+        exportables.append(payment.number)
+        exportables.append(payment.xpref_id.req_id.customer.name)
+        exportables.append(payment.xpref_id.req_id.number)
+        exportables.append(payment.xpref_id.number)
+        exportables.append(payment.amount)
+        exportables.append(str(payment.date_fa))
+
+        for col_num in range(len(exportables)):
+            ws.write(row_num, col_num, exportables[col_num], font_style)
+
+    ws.cols_right_to_left = True
+    wb.save(response)
+    return response
 
 
 @login_required

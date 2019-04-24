@@ -63,6 +63,13 @@ class IMType(models.Model):
         return '%s' % self.title
 
 
+class IEType(models.Model):
+    title = models.CharField(max_length=20)
+
+    def __str__(self):
+        return '%s' % self.title
+
+
 class Requests(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='req_owner')
@@ -122,6 +129,7 @@ class ReqSpec(models.Model):
     im = models.ForeignKey(IMType, on_delete=models.DO_NOTHING, blank=True, null=True)
     ip = models.ForeignKey(IPType, on_delete=models.DO_NOTHING, blank=True, null=True)
     ic = models.ForeignKey(ICType, on_delete=models.DO_NOTHING, blank=True, null=True)
+    ie = models.ForeignKey(IEType, on_delete=models.DO_NOTHING, blank=True, null=True)
     frame_size = models.ForeignKey(FrameSize, on_delete=models.DO_NOTHING, blank=True, null=True)
     summary = models.TextField(max_length=500, blank=True, null=True)
     tech = models.BooleanField(default=False)
@@ -147,7 +155,7 @@ class Xpref(models.Model):
     req_id = models.ForeignKey(Requests, on_delete=models.DO_NOTHING)
 
     number = models.IntegerField(unique=True)
-    temp_number = models.IntegerField(unique=True, null=True, blank=True)
+    temp_number = models.IntegerField(null=True, blank=True)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     exp_date_fa = jmodels.jDateField(default=now)

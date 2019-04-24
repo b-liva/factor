@@ -10,9 +10,11 @@
                         <th>ردیف</th>
                         <th>pk</th>
                         <th>کد</th>
-                        <th>شرح</th>
+                        <th>شماره درخواست</th>
                         <th>کیلووات</th>
                         <th>سرعت</th>
+                        <th></th>
+                        <th>شرح</th>
                         <th>فریم سایز</th>
                         <th>ولتاژ</th>
                         <th>IM</th>
@@ -32,6 +34,7 @@
                         <td>{{ forloop.counter }}</td>
                         <td>{{ motor.pk }}</td>
                         <td>{{ motor.code }}</td>
+                        <td><a href="{% url 'request_details' request_pk=motor.req_id.pk %}">{{ motor.req_id.number }}</a></td>
                         <td>{{ motor.description }}</td>
                         <td>{{ motor.kw }}</td>
                         <td>{{ motor.speed }}{{ motor.rpm }}</td>
@@ -41,8 +44,8 @@
                         <td>{{ motor.im }}</td>
                         <td>{{ motor.ip }}</td>
                         <td>
-                            <a class="btn btn-sm btn-primary" href="{% url 'motordb_edit_form' motordb_pk=motor.pk %}">Edit</a>
-                            <a class="btn btn-sm btn-danger" href="{% url 'motordb_delete' motordb_pk=motor.pk %}">Delete</a>
+                            <a class="btn btn-sm btn-primary" href="{% url 'reqspec_edit_form' req_pk=motor.req_id.pk yreqSpec_pk=motor.pk %}">Edit</a>
+                            <a class="btn btn-sm btn-danger" href="{% url 'reqSpec_delete' req_pk=motor.req_id.pk yreqSpec_pk=motor.pk %}">Delete</a>
                         </td>
                     </tr>
                 {% endfor %}
