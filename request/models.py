@@ -70,6 +70,11 @@ class IEType(models.Model):
         return '%s' % self.title
 
 
+class ActiveRequestManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_active=True)
+
+
 class Requests(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='req_owner')
@@ -86,6 +91,9 @@ class Requests(models.Model):
     edited_by_customer = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     finished = models.BooleanField(default=False)
+
+    objects = models.Manager()
+    actives = ActiveRequestManager()
 
     def __str__(self):
         return '%s' % self.number
