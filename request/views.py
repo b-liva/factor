@@ -186,16 +186,12 @@ def dashboard(request):
     """
         Daily kw, proforma and proformas
     """
-    daily_kw = ReqSpec.objects.exclude(type__title='تعمیرات').filter(is_active=True).values('req_id__date_fa').annotate(
-        request_sum=models.Sum(models.F('kw') * models.F('qty'), output_field=models.FloatField())).order_by(
+    daily_kw = ReqSpec.objects.filter(req_id__is_active=True).exclude(type__title='تعمیرات').values('req_id__date_fa')\
+        .annotate(request_sum=models.Sum(models.F('kw') * models.F('qty'), output_field=models.FloatField())).order_by(
         'req_id__date_fa').reverse()
-    daily_avg = daily_kw.aggregate(
-        request_avg=models.Avg(models.F('kw') * models.F('qty'), output_field=models.FloatField()))
-
-    daily_sum = ReqSpec.objects.exclude(type__title='تعمیرات').filter(is_active=True).values(
-        'req_id__date_fa').aggregate(
-        request_sum=models.Sum(models.F('kw') * models.F('qty'), output_field=models.FloatField()))
-    daily_avg = daily_sum['request_sum'] / daily_kw.count()
+    daily_avg = daily_kw.aggregate(request_avg=models.Avg('request_sum'))
+    daily_sum = daily_kw.aggregate(request_total=models.Sum('request_sum'))
+    
     # daily_proformas = Requests.objects.values('date_fa').annotate(models.Sum('xpref__'))
     daily_proformas = Xpref.objects.filter(is_active=True).values('req_id__date_fa').annotate(
         count=models.Count('id')).reverse()
@@ -252,6 +248,7 @@ def dashboard(request):
         'total_qty': total_qty,
         'daily_kw': daily_kw,
         'daily_avg': daily_avg,
+        'daily_sum': daily_sum,
         'daily_proformas': daily_proformas,
         'daily_prof_amounts': daily_prof_amounts,
         'daily_prof': daily_prof,
@@ -259,7 +256,6 @@ def dashboard(request):
         'daily_kw_avg': daily_kw_avg,
         'daily_payments': daily_payments,
         'daily_payments_sum': daily_payments_sum,
-        'daily_sum': daily_sum,
     }
     return render(request, 'requests/admin_jemco/dashboard.html', context)
 
