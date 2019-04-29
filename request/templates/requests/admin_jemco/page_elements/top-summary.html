@@ -1,34 +1,49 @@
 {% load humanize %}
+{% load request_extras %}
 <!-- top tiles -->
 <div class="row tile_count">
 
     <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-hashtag"></i> تعداد درخواست ها</span>
-        <div class="count">{{ num_of_reqs }}</div>
+        <div class="count">{%  active_request as active_reqs %} {{ active_reqs.active_reqs_count }}</div>
+        <span class="count_top">{{ active_reqs.active_specs_kw|floatformat:0|intcomma }} کیلووات</span>
+        <br>
+{#        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  نسبت به ماه گذشته</span>#}
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-hashtag"></i> تعداد درخواست ها</span>
+        <div class="count">{% reqeust_of_type 'all' as projectkw%} {{ projectkw.count|floatformat:0|intcomma }}</div>
+        <span class="count_top">{{ active_reqs.active_specs_kw|floatformat:0|intcomma }} کیلووات</span>
         <br>
 {#        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  نسبت به ماه گذشته</span>#}
     </div>
     <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-user"></i> روتین (KW)</span>
-        <div class="count">{{ r_kw|floatformat:0|intcomma }}</div>
-        <span class="count_top">{{ qtys.routine_qty.qty__sum }} دستگاه </span>
+        <div class="count">{% reqeust_of_type 'روتین' as projectkw%} {{ projectkw.sum_kw|floatformat:0|intcomma }}</div>
+        <span class="count_top">{{ projectkw.sum_qty|floatformat:0|intcomma }} دستگاه </span>
         {#        <span class="count_bottom"><i class="green">4% </i>  نسبت به ماه گذشته</span>#}
     </div>
     <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-calendar"></i> پروژه (KW)</span>
-        <div class="count">{{ project_kw|floatformat:0|intcomma }}</div>
-        <span class="count_top">{{ qtys.project_qty.qty__sum }} دستگاه </span>
+        <div class="count">{% reqeust_of_type 'پروژه' as projectkw%} {{ projectkw.sum_kw|floatformat:0|intcomma }}</div>
+        <span class="count_top">{{ projectkw.sum_qty|floatformat:0|intcomma }} دستگاه </span>
+{#        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i>  نسبت به ماه گذشته</span>#}
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-calendar"></i> ضدانفجار (KW)</span>
+        <div class="count">{% reqeust_of_type 'ضد انفجار' as projectkw%} {{ projectkw.sum_kw|floatformat:0|intcomma }}</div>
+        <span class="count_top">{{ projectkw.sum_qty|floatformat:0|intcomma }} دستگاه </span>
 {#        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i>  نسبت به ماه گذشته</span>#}
     </div>
     <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-cogs"></i> تعمیرات (KW)</span>
-        <div class="count ">{{ services_kw|floatformat:0|intcomma }}</div>
-        <span class="count_top">{{ qtys.services_qty.qty__sum }} دستگاه </span>
+        <div class="count">{% reqeust_of_type 'تعمیرات' as projectkw%} {{ projectkw.sum_kw|floatformat:0|intcomma }}</div>
+        <span class="count_top">{{ projectkw.sum_qty|floatformat:0|intcomma }} دستگاه </span>
 {#        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  نسبت به ماه گذشته</span>#}
     </div>
     <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-plus"></i> مجموع (KW)</span>
-        <div class="count" >{{ allKw|floatformat:0|intcomma }}</div>
+        <div class="count">{{ active_reqs.active_specs_kw|floatformat:0|intcomma}}</div>
         <span class="count_top">{{ qtys.all_qty }} دستگاه </span>
 {#        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  نسبت به ماه گذشته</span>#}
     </div>

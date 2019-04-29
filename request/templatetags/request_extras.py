@@ -1,4 +1,4 @@
-from django.db.models import Sum, F, FloatField, Avg
+from django.db.models import Sum, F, FloatField, Avg, Count
 from django_jalali.db import models as jmodels
 import base64
 
@@ -6,6 +6,39 @@ from django import template
 from request.models import Requests, Xpref, ReqSpec, PrefSpec, Payment
 
 register = template.Library()
+
+
+@register.simple_tag()
+def reqeust_of_type(type):
+    count = {}
+    count['count'] = None
+    if type !='all':
+        reqspecs = ReqSpec.objects.filter(req_id__is_active=True, type__title=type)
+    else:
+        reqspecs = ReqSpec.objects.filter(req_id__is_active=True)
+        count = reqspecs.values('req_id').distinct().aggregate(count=Count('req_id'))
+    kw = reqspecs.aggregate(sum=Sum(F('qty') * F('kw'), output_field=FloatField()))
+    qty = reqspecs.aggregate(sum=Sum('qty'))
+
+
+    context = {
+        'sum_kw': kw['sum'],
+        'sum_qty': qty['sum'],
+        'count': count['count'],
+    }
+    return context
+
+
+@register.simple_tag()
+def active_request():
+    active_request = Requests.actives.all()
+    active_specs = ReqSpec.objects.filter(req_id__is_active=True).aggregate(sum=Sum(F('kw') * F('qty'), output_field=FloatField()))
+    context = {
+        'active_specs_kw': active_specs['sum'],
+        'active_reqs': active_request,
+        'active_reqs_count': active_request.count(),
+    }
+    return context
 
 
 @register.filter(name='is_sent')
@@ -251,4 +284,3 @@ def highlight_class(proforma):
     elif proforma.red_flag:
         flag_value = 'red_flag'
     return flag_value
-

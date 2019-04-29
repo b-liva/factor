@@ -189,9 +189,6 @@ def dashboard(request):
     total_payments = find_total_payment()
 
     agent_data = agentjs(request)
-    tqty = ReqSpec.objects.filter(is_active=True).all()
-    # hot_products = ReqSpec.objects.filter(is_active=True).filter(kw__gt=0).values('kw', 'rpm').annotate(reqspec_qty=models.Sum('qty'), perc=(models.Sum('qty')/100))\
-    #     .order_by('reqspec_qty').reverse()
 
     """
         hot products
@@ -457,7 +454,7 @@ def find_routine_kw():
 class Orders:
     def last_orders(self):
         # last_n_requests = Requests.objects.filter()[:10].order_by('pub_date').reverse()
-        last_n_requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
+        last_n_requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()[0:100]
         return last_n_requests
 
 

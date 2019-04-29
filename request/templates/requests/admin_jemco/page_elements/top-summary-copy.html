@@ -1,0 +1,43 @@
+{% load humanize %}
+<!-- top tiles -->
+<div class="row tile_count">
+
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-hashtag"></i> تعداد درخواست ها</span>
+        <div class="count">{{ num_of_reqs }}</div>
+        <br>
+{#        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  نسبت به ماه گذشته</span>#}
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-user"></i> روتین (KW)</span>
+        <div class="count">{{ r_kw|floatformat:0|intcomma }}</div>
+        <span class="count_top">{{ qtys.routine_qty.qty__sum }} دستگاه </span>
+        {#        <span class="count_bottom"><i class="green">4% </i>  نسبت به ماه گذشته</span>#}
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-calendar"></i> پروژه (KW)</span>
+        <div class="count">{{ project_kw|floatformat:0|intcomma }}</div>
+        <span class="count_top">{{ qtys.project_qty.qty__sum }} دستگاه </span>
+{#        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i>  نسبت به ماه گذشته</span>#}
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-cogs"></i> تعمیرات (KW)</span>
+        <div class="count ">{{ services_kw|floatformat:0|intcomma }}</div>
+        <span class="count_top">{{ qtys.services_qty.qty__sum }} دستگاه </span>
+{#        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  نسبت به ماه گذشته</span>#}
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-plus"></i> مجموع (KW)</span>
+        <div class="count" >{{ allKw|floatformat:0|intcomma }}</div>
+        <span class="count_top">{{ qtys.all_qty }} دستگاه </span>
+{#        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  نسبت به ماه گذشته</span>#}
+    </div>
+
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-dollar"></i> مجموع پرداخت</span>
+        <div class="count" style="font-size: 25px;">{{ total_payments|floatformat:0|intcomma }}</div>
+        <br>
+{#        <span class="count_bottom"><i class="green">4% </i> نسبت به ماه گذشته</span>#}
+    </div>
+</div>
+<!-- /top tiles -->
