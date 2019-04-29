@@ -24,33 +24,30 @@
         <div class="x_content">
             <div class="dashboard-widget-content">
                 <ul class="quick-list">
-{#                    <li><b>میانگین روزانه: {{ daily_kw_avg.avg | floatformat:0 | intcomma }} ریال </b>#}
-                    <li><b>میانگین روزانه: {{ daily_prof2.avg_profs | floatformat:0 | intcomma }} ریال </b>
-                    <li><b>مجموع: {{ daily_prof2.sum | floatformat:0 | intcomma }} ریال </b>
+                    <li><b>میانگین روزانه: {{ daily_prof.avg.avg | floatformat:0 | intcomma }} ریال </b>
+                    <li><b>مجموع: {{ daily_prof.sum.sum | floatformat:0 | intcomma }} ریال </b>
                     </li>
-                        <table class="table table-hover">
-                            <thead >
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <td>ردیف</td>
+                            <td>تاریخ</td>
+                            <td>تعداد دستگاه</td>
+                            <td>مجموع مبالغ</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in daily_prof.list %}
                             <tr>
-                                <td>ردیف</td>
-                                <td>تاریخ</td>
-                                <td>تعداد دستگاه</td>
-                                <td>مجموع مبالغ</td>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ item.date_fa }}</td>
+                                <td>{{ item.count }}</td>
+                                <td>{{ item.amount | intcomma }}</td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {% for item in daily_prof %}
-                                <tr>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ item.xpref_id__date_fa }}</td>
-                                    <td>{{ item.count }}</td>
-                                    <td>{{ item.sum | intcomma }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </ul>
-
-
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@ from django.utils.timezone import now
 import request.templatetags.functions as funcs
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.db import models
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, Avg
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -166,7 +166,6 @@ def agentjs(request):
 
 @login_required
 def dashboard(request):
-
     if request.user.is_customer:
         # return redirect('customer_dashboard', pk=request.user.pk)
         return redirect('customer_dashboard')
@@ -179,59 +178,40 @@ def dashboard(request):
         hot products
     """
     hot_products = ReqSpec.objects.exclude(Q(type__title='تعمیرات') | Q(type__title='سایر')) \
-        .filter(req_id__is_active=True, kw__gt=0).values('kw', 'rpm')\
+        .filter(req_id__is_active=True, kw__gt=0).values('kw', 'rpm') \
         .annotate(reqspec_qty=models.Sum('qty')).order_by('reqspec_qty').reverse()
     total_qty = hot_products.aggregate(Sum('reqspec_qty'))
 
     """
-        Daily kw, proforma and proformas
+        Daily kw
     """
-    daily_kw = ReqSpec.objects.filter(req_id__is_active=True).exclude(type__title='تعمیرات').values('req_id__date_fa')\
+    daily_kw = ReqSpec.objects.filter(req_id__is_active=True).exclude(type__title='تعمیرات').values('req_id__date_fa') \
         .annotate(request_sum=models.Sum(models.F('kw') * models.F('qty'), output_field=models.FloatField())).order_by(
         'req_id__date_fa').reverse()
     daily_avg = daily_kw.aggregate(request_avg=models.Avg('request_sum'))
     daily_sum = daily_kw.aggregate(request_total=models.Sum('request_sum'))
-    
-    # daily_proformas = Requests.objects.values('date_fa').annotate(models.Sum('xpref__'))
-    daily_proformas = Xpref.objects.filter(is_active=True).values('req_id__date_fa').annotate(
-        count=models.Count('id')).reverse()
-    # daily_prof_amounts = PrefSpec.objects.values('xpref_id__date_fa')\
-    #     .annotate(count=models.Count('xpref_id')).reverse()
-    daily_prof_amounts = Xpref.objects.filter(is_active=True).values('date_fa') \
+
+    """
+        Daily proformas
+    """
+    daily_prof_list = Xpref.objects.filter(is_active=True).values('date_fa') \
         .annotate(
-        count=models.Count('id'),
-        # amount=PrefSpec.objects
-        #         .aggregate(new_amount=models.Avg(
-        #         1.09 * models.F('qty') * models.F('price'), output_field=models.IntegerField()
-        #     )
-        # )
-    ).order_by('date_fa').reverse()
-    daily_prof_amounts = daily_prof_amounts.annotate(
         amount=models.Sum(
             1.09 * models.F('prefspec__qty') * models.F('prefspec__price'), output_field=models.IntegerField()
-        ))
-    daily_prof2 = Xpref.objects.filter(is_active=True).values('date_fa') \
-        .aggregate(
-        sum=models.Sum(1.09 * models.F('prefspec__qty') * models.F('prefspec__price'),
-                       output_field=models.IntegerField()),
-        avg=models.Avg(1.09 * models.F('prefspec__qty') * models.F('prefspec__price'),
-                       output_field=models.IntegerField())
-    )
+        )) \
+        .annotate(
+        count=models.Count('id'),
+    ).order_by('date_fa').reverse()
 
-    daily_prof = PrefSpec.objects.filter(is_active=True).values('xpref_id__date_fa').annotate(
-        count=models.Count(
-            Xpref.objects.values('date_fa').count()
-        ),
-        sum=models.Sum(1.09 * models.F('qty') * models.F('price'),
-                       output_field=models.IntegerField()),
-    ).order_by('xpref_id__date_fa').reverse()
+    daily_prof = {
+        'list': daily_prof_list,
+        'sum': daily_prof_list.aggregate(sum=Sum('amount')),
+        'avg': daily_prof_list.aggregate(avg=Avg('amount')),
+    }
 
-    date_fa = daily_prof.last()['xpref_id__date_fa']
-    diff = timezone.datetime.now().date() - date_fa.togregorian()
-    daily_prof2['avg_profs'] = daily_prof2['sum'] / diff.days
-
-    daily_kw_avg = daily_prof.aggregate(avg=models.Avg('sum'))
-
+    """
+        Daily Payments
+    """
     daily_payments = Payment.objects.filter(is_active=True).values('date_fa').annotate(
         amount=models.Sum(models.F('amount'))
     ).order_by('date_fa').reverse()
@@ -246,14 +226,10 @@ def dashboard(request):
         'last_n_requests': Requests.actives.order_by('id').reverse()[0:50],
         'hot_products': hot_products,
         'total_qty': total_qty,
-        'daily_kw': daily_kw,
+        'daily_kw': daily_kw,  # todo: rearrange this similar to proforma daily stats
         'daily_avg': daily_avg,
         'daily_sum': daily_sum,
-        'daily_proformas': daily_proformas,
-        'daily_prof_amounts': daily_prof_amounts,
         'daily_prof': daily_prof,
-        'daily_prof2': daily_prof2,
-        'daily_kw_avg': daily_kw_avg,
         'daily_payments': daily_payments,
         'daily_payments_sum': daily_payments_sum,
     }
@@ -274,7 +250,8 @@ def sales_expert_dashboard(request):
 
     reqsCount = Requests.objects.filter(reqspec__type__title='روتین', is_active=True).count()
     reqsAgentCount = Requests.objects.filter(customer__agent=True, reqspec__type__title='روتین', is_active=True).count()
-    reqsCustomerCount = Requests.objects.filter(customer__agent=False, reqspec__type__title='روتین', is_active=True).count()
+    reqsCustomerCount = Requests.objects.filter(customer__agent=False, reqspec__type__title='روتین',
+                                                is_active=True).count()
 
     qty = ReqSpec.objects.filter(type__title='روتین', req_id__is_active=True).aggregate(
         request_qty=models.Sum(models.F('qty')))

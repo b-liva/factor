@@ -1,4 +1,4 @@
-from django.db.models import Sum, F, FloatField, Avg, Count, Q
+from django.db.models import Sum, F, FloatField, Avg, Count, Q, IntegerField
 from django import template
 from request.models import Requests, Xpref, ReqSpec, PrefSpec, Payment
 
@@ -18,3 +18,22 @@ def active_request():
         'active_reqs_count': active_request.count(),
     }
     return context
+
+
+def test():
+
+    # Daily proformas based on request id dates.
+    daily_proformas = Xpref.objects.filter(is_active=True).values('req_id__date_fa').annotate(
+        count=Count('id')).reverse()
+
+
+
+
+    daily_prof = PrefSpec.objects.filter(is_active=True).values('xpref_id__date_fa').annotate(
+        count=Count(
+            Xpref.objects.values('date_fa').count()
+        ),
+        sum=Sum(1.09 * F('qty') * F('price'), output_field=IntegerField()),
+    ).order_by('xpref_id__date_fa').reverse()
+
+
