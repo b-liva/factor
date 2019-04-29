@@ -3,7 +3,7 @@ from django.utils.timezone import now
 import request.templatetags.functions as funcs
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -178,15 +178,10 @@ def dashboard(request):
     """
         hot products
     """
-    hot_products = ReqSpec.objects \
-        .exclude(type__title='تعمیرات') \
-        .exclude(type__title='سایر') \
-        .filter(is_active=True) \
-        .filter(kw__gt=0) \
-        .values('kw', 'rpm') \
-        .annotate(
-        reqspec_qty=models.Sum('qty')).order_by('reqspec_qty').reverse()
-    total_qty = hot_products.aggregate(models.Sum('reqspec_qty'))
+    hot_products = ReqSpec.objects.exclude(Q(type__title='تعمیرات') | Q(type__title='سایر')) \
+        .filter(req_id__is_active=True, kw__gt=0).values('kw', 'rpm')\
+        .annotate(reqspec_qty=models.Sum('qty')).order_by('reqspec_qty').reverse()
+    total_qty = hot_products.aggregate(Sum('reqspec_qty'))
 
     """
         Daily kw, proforma and proformas
