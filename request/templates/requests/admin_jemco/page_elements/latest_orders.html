@@ -28,7 +28,7 @@
                     {% for item in last_n_requests %}
                         <li><i class="fa fa-bars"></i>
                         <a href="{% url 'request_details' request_pk=item.pk %}">{{ item.number }}
-                            - {{ item.customer.name }} - {{ item.date_fa }}</a>
+                            - {{ item.customer.name }} - {{ item.date_fa }} - {{ item.owner.last_name }}</a>
                     {% endfor %}
                 </ul>
 

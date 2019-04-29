@@ -252,6 +252,7 @@ def dashboard(request):
 
     context = {
         'agent_data': agent_data,
+        'last_n_requests': Requests.actives.order_by('id').reverse()[0:50],
         'hot_products': hot_products,
         'total_qty': total_qty,
         'daily_kw': daily_kw,
