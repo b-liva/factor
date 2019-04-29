@@ -33,14 +33,6 @@ def request_details(request, request_id):
     # return render(request, 'requests/req_details.html', {'request': req, 'specs': specs})
 
 
-def find_total_payment():
-    payments = Payment.objects.filter(is_active=True)
-    amount = 0
-    for payment in payments:
-        amount += payment.amount
-    return amount
-
-
 def find_kw(spc_kw, rqs):
     for r in rqs:
         spc = r.reqspec_set.all()
@@ -180,13 +172,6 @@ def dashboard(request):
         return redirect('customer_dashboard')
     if not request.user.is_superuser:
         return redirect(sales_expert_dashboard)
-    routine_kw, project_kw, services_kw, ex_kw, allKw, qtys = find_routine_kw()
-    project_kw += ex_kw
-    num_of_requests = no_of_requests()
-    orders = Orders()
-    last_n_requests = orders.last_orders()
-    # print(f'order numbers: {len(last_n_requests)}')
-    total_payments = find_total_payment()
 
     agent_data = agentjs(request)
 
@@ -266,16 +251,6 @@ def dashboard(request):
         print(f"payments: {d}")
 
     context = {
-        # 'routine_kw': intcomma(routine_kw),
-        'routine_kw': routine_kw,
-        'project_kw': project_kw,
-        'services_kw': services_kw,
-        'ex_kw': ex_kw,
-        'allKw': allKw,
-        'qtys': qtys,
-        'num_of_reqs': num_of_requests,
-        'last_n_requests': last_n_requests,
-        'total_payments': total_payments,
         'agent_data': agent_data,
         'hot_products': hot_products,
         'total_qty': total_qty,
@@ -289,8 +264,6 @@ def dashboard(request):
         'daily_payments': daily_payments,
         'daily_payments_sum': daily_payments_sum,
         'daily_sum': daily_sum,
-        # 'rq': rq,
-        # 'rq_dict': rq_dict,
     }
     return render(request, 'requests/admin_jemco/dashboard.html', context)
 
@@ -401,61 +374,6 @@ def dashboard2(request):
         'total_payments': total_payments
     }
     return render(request, 'requests/admin_jemco/dashboard2.html', context)
-
-
-def no_of_requests():
-    num_of_reqs = Requests.objects.filter(is_active=True).all().count()
-    return num_of_reqs
-
-
-def find_routine_kw():
-    # ReqSpec is a class and ReqSpec() is an instance of it
-    # command bellow works for clas and not working for instance
-
-    routine_specs = ReqSpec.objects.filter(is_active=True).filter(type__title='روتین')
-    project_specs = ReqSpec.objects.filter(is_active=True).filter(type__title='پروژه')
-    services_specs = ReqSpec.objects.filter(is_active=True).filter(type__title='تعمیرات')
-    ex_specs = ReqSpec.objects.filter(is_active=True).filter(type__title='ضد انفجار')
-    # routine_specs = ReqSpec.objects.filter(kw__lte=450)
-    # project_specs = ReqSpec.objects.filter(kw__gt=450)
-    allSpecs = ReqSpec.objects.filter(is_active=True).filter(is_active=True)
-    allKw = 0
-    routine_kw = 0
-    project_kw = 0
-    services_kw = 0
-    ex_kw = 0
-    for spec in routine_specs:
-        routine_kw += spec.kw * spec.qty
-    for spec in project_specs:
-        project_kw += spec.kw * spec.qty
-    for spec in services_specs:
-        services_kw += spec.kw * spec.qty
-    for spec in ex_specs:
-        ex_kw += spec.kw * spec.qty
-    for spec in allSpecs:
-        allKw += spec.kw * spec.qty
-
-    routine_qty = routine_specs.aggregate(models.Sum('qty'))
-    project_qty = project_specs.aggregate(models.Sum('qty'))
-    services_qty = services_specs.aggregate(models.Sum('qty'))
-
-    all_qty = sum([routine_qty['qty__sum'], project_qty['qty__sum'], services_qty['qty__sum']])
-
-    qtys = {
-        'routine_qty': routine_qty,
-        'project_qty': project_qty,
-        'services_qty': services_qty,
-        'all_qty': all_qty,
-    }
-
-    return routine_kw, project_kw, services_kw, ex_kw, allKw, qtys
-
-
-class Orders:
-    def last_orders(self):
-        # last_n_requests = Requests.objects.filter()[:10].order_by('pub_date').reverse()
-        last_n_requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()[0:100]
-        return last_n_requests
 
 
 def find_all_obj():
