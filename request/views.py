@@ -212,14 +212,16 @@ def dashboard(request):
     """
         Daily Payments
     """
-    daily_payments = Payment.objects.filter(is_active=True).values('date_fa').annotate(
+    daily_payments_list = Payment.objects.filter(is_active=True).values('date_fa').annotate(
         amount=models.Sum(models.F('amount'))
     ).order_by('date_fa').reverse()
 
-    daily_payments_sum = daily_payments.aggregate(models.Sum('amount'))
 
-    for d in daily_payments:
-        print(f"payments: {d}")
+
+    daily_payments = {
+        'list': daily_payments_list,
+        'sum': daily_payments_list.aggregate(sum=models.Sum('amount')),
+    }
 
     context = {
         'agent_data': agent_data,
@@ -231,7 +233,6 @@ def dashboard(request):
         'daily_sum': daily_sum,
         'daily_prof': daily_prof,
         'daily_payments': daily_payments,
-        'daily_payments_sum': daily_payments_sum,
     }
     return render(request, 'requests/admin_jemco/dashboard.html', context)
 

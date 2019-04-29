@@ -1,4 +1,6 @@
 {% extends 'requests/admin_jemco/page_elements/base_html/admin_base_dashboard.html' %}
+{% load request_extras %}
+
 {% block right_col %}
     {% include 'requests/admin_jemco/page_elements/top-summary.html' with r_kw=routine_kw  project_kw=project_kw services_kw=services_kw ex_kw=ex_kw allKw=allKw num_of_reqs=num_of_reqs %}
 

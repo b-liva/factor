@@ -35,7 +35,7 @@ def reqeust_of_type(project_type):
 
 @register.simple_tag()
 def total_received():
-    received_amount = Payment.objects.aggregate(sum=Sum('amount'))
+    received_amount = Payment.objects.filter(is_active=True).aggregate(sum=Sum('amount'))
     return received_amount['sum']
 
 
