@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'pytest_django',
-    'debug_toolbar',
+    # 'debug_toolbar',
     'request.apps.RequestConfig',
     'tender.apps.TenderConfig',
     'customer.apps.CustomerConfig',
@@ -78,7 +78,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 
 ]
 
@@ -233,6 +233,6 @@ EMAIL_HOST_PASSWORD = 'jcrmpasswd'
 SITE_NAME = DEFAULT_FROM_EMAIL
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda x: False,
-}
+# DEBUG_TOOLBAR_CONFIG = {
+#     'SHOW_TOOLBAR_CALLBACK': lambda x: False,
+# }
