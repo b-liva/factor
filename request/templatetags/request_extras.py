@@ -33,6 +33,12 @@ def reqeust_of_type(project_type):
     return context
 
 
+@register.simple_tag()
+def total_received():
+    received_amount = Payment.objects.aggregate(sum=Sum('amount'))
+    return received_amount['sum']
+
+
 @register.filter(name='is_sent')
 def is_sent(reqspec):
     sent = False

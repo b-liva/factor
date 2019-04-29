@@ -42,7 +42,7 @@
 
     <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-dollar"></i> مجموع پرداخت</span>
-        <div class="count" style="font-size: 25px;">{{ total_payments|floatformat:0|intcomma }}</div>
+        <div class="count" style="font-size: 25px;">{% total_received as total_amount %}{{ total_amount|floatformat:0|intcomma }}</div>
         <br>
 {#        <span class="count_bottom"><i class="green">4% </i> نسبت به ماه گذشته</span>#}
     </div>
