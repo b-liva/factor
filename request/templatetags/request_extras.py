@@ -1,4 +1,4 @@
-from django.db.models import Sum, F, FloatField, Avg, Count
+from django.db.models import Sum, F, FloatField, Avg, Count, Q
 from django_jalali.db import models as jmodels
 import base64
 
@@ -9,34 +9,26 @@ register = template.Library()
 
 
 @register.simple_tag()
-def reqeust_of_type(type):
-    count = {}
-    count['count'] = None
-    if type !='all':
-        reqspecs = ReqSpec.objects.filter(req_id__is_active=True, type__title=type)
+def reqeust_of_type(project_type):
+    count = {
+        'count': None
+    }
+    if project_type != 'all':
+        reqspecs = ReqSpec.objects.filter(req_id__is_active=True, type__title=project_type)
     else:
-        reqspecs = ReqSpec.objects.filter(req_id__is_active=True)
+        # TODO: handle 'سایر' later
+        reqspecs = ReqSpec.objects.filter(req_id__is_active=True).exclude(type__title__contains='سایر')
+
+        # These two lines are identical
+        Requests.actives.filter(reqspec__isnull=False).distinct()
         count = reqspecs.values('req_id').distinct().aggregate(count=Count('req_id'))
     kw = reqspecs.aggregate(sum=Sum(F('qty') * F('kw'), output_field=FloatField()))
-    qty = reqspecs.aggregate(sum=Sum('qty'))
-
+    qty = reqspecs.distinct().aggregate(sum=Sum('qty'))
 
     context = {
         'sum_kw': kw['sum'],
         'sum_qty': qty['sum'],
         'count': count['count'],
-    }
-    return context
-
-
-@register.simple_tag()
-def active_request():
-    active_request = Requests.actives.all()
-    active_specs = ReqSpec.objects.filter(req_id__is_active=True).aggregate(sum=Sum(F('kw') * F('qty'), output_field=FloatField()))
-    context = {
-        'active_specs_kw': active_specs['sum'],
-        'active_reqs': active_request,
-        'active_reqs_count': active_request.count(),
     }
     return context
 
