@@ -3,7 +3,7 @@ from django.utils.timezone import now
 import request.templatetags.functions as funcs
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.db import models
-from django.db.models import Sum, Q, Avg
+from django.db.models import Sum, Q, Avg, FloatField, F
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -140,27 +140,22 @@ def agentjs(request):
     days = 30
     if request.method == "POST":
         days = int(request.POST['days'])
-        print(f'request is post and days: {days}')
     today = jdatetime.date.today()
     startDate = today + jdatetime.timedelta(-days)
     endDate = today + jdatetime.timedelta(1)
 
-    agents = Customer.objects.filter(agent=True)
-    agent_data = {}
-    kw_total = 0
-    temp = {}
-    for a in agents:
-        temp = {}
-        spc_kw = 0
-        reqs = a.requests_set.filter(date_fa__gte=startDate).filter(date_fa__lt=endDate)
-        spc_kw = find_kw(spc_kw, reqs)
-        temp['kw'] = spc_kw
-        js = serializers.serialize('json', [a, ])
-        temp['customer_name'] = a.name
-        temp['customer'] = js
+    agents_total_kw = ReqSpec.objects.values('req_id__customer', 'req_id__customer__name').filter(
+        req_id__customer__agent=True).filter(req_id__date_fa__gte=startDate, req_id__date_fa__lt=endDate).distinct().annotate(
+        sum=Sum(F('qty') * F('kw'), output_field=FloatField()))
 
-        agent_data[a.pk] = temp
-
+    agenst_status_list = [{
+        'customer_name': a['req_id__customer__name'],
+        'customer': a['req_id__customer'],
+        'kw': a['sum'],
+    } for a in agents_total_kw]
+    agent_data = {
+        a['customer']: a for a in agenst_status_list
+    }
     return JsonResponse(agent_data, safe=False)
 
 
@@ -215,8 +210,6 @@ def dashboard(request):
     daily_payments_list = Payment.objects.filter(is_active=True).values('date_fa').annotate(
         amount=models.Sum(models.F('amount'))
     ).order_by('date_fa').reverse()
-
-
 
     daily_payments = {
         'list': daily_payments_list,
