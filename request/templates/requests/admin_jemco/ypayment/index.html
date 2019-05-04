@@ -63,17 +63,17 @@
                                 <td>{{ payment.date_fa }}</td>
                                 <td>
                                     <a class="btn btn-primary btn-xs"
-                                       href="{% url 'payment_details' ypayment_pk=payment.pk %}">
-                                        <i class="fa fa-eye"></i> مشاهده
+                                       href="{% url 'payment_details' ypayment_pk=payment.pk %}" data-toggle="tooltip" title="مشاهده">
+                                        <i class="fa fa-eye"></i>
                                     </a>
                                     {% if perms.request.add_payment and showHide %}
                                         <a class="btn btn-primary btn-xs btn-warning"
-                                           href="{% url 'payment_edit' ypayment_pk=payment.pk %}">
-                                            <i class="fa fa-pencil"></i> ویرایش
+                                           href="{% url 'payment_edit' ypayment_pk=payment.pk %}" data-toggle="tooltip" title="ویرایش">
+                                            <i class="fa fa-pencil"></i>
                                         </a>
                                         <a class="btn btn-primary btn-xs btn-danger"
-                                           href="{% url 'payment_delete' ypayment_pk=payment.pk %}"><i
-                                                class="fa fa-trash"></i> حذف</a>
+                                           href="{% url 'payment_delete' ypayment_pk=payment.pk %}" data-toggle="tooltip" title="حذف"><i
+                                                class="fa fa-trash"></i> </a>
 
                                     {% endif %}
                                 </td>

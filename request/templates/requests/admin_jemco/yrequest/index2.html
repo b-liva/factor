@@ -82,14 +82,14 @@
                                 {#                        <td class="text-center">{{ request.req.edited_by_customer }}</td>#}
                                 <td class="text-center">
                                     <a class="btn btn-primary btn-xs"
-                                       href="{% url 'request_details' request_pk=request.req.pk %}">
-                                        <i class="fa fa-eye"></i> مشاهده
+                                       href="{% url 'request_details' request_pk=request.req.pk %}" data-toggle="tooltip" title="مشاهده جزئیات درخواست">
+                                        <i class="fa fa-eye"></i>
                                     </a>
 
                                     {% if perms.request.add_requests %}
                                         <a class="btn btn-warning btn-xs"
-                                           href="{% url 'request_edit_form' request_pk=request.req.pk %}">
-                                            <i class="fa fa-pencil"></i> ویرایش
+                                           href="{% url 'request_edit_form' request_pk=request.req.pk %}" data-toggle="tooltip" title="ویرایش جزئیات درخواست">
+                                            <i class="fa fa-pencil"></i>
                                         </a>
                                     {% endif %}
                                     {% if perms.request.add_requests %}
@@ -98,8 +98,8 @@
                                         {#                                </div>#}
 
                                         <a class="btn btn-primary btn-xs btn-danger"
-                                           href="{% url 'request_delete' request_pk=request.req.pk %}"><i
-                                                {# class="fa fa-trash"></i> حذف</a>
+                                           href="{% url 'request_delete' request_pk=request.req.pk %}" data-toggle="tooltip" title="حذف درخواست"><i
+                                                {# class="fa fa-trash"></i> </a>
                                     {% endif %}
                                 </td>
                             </tr>

@@ -97,20 +97,26 @@
 
                         <td class="text-center">
                             <a class="btn btn-primary btn-xs"
-                               href="{% url 'request_details' request_pk=r.pk %}">
-                                <i class="fa fa-eye"></i> مشاهده
+                               href="{% url 'request_details' request_pk=r.pk %}" data-toggle="tooltip" title="مشاهده">
+                                <i class="fa fa-eye"></i>
                             </a>
                             {% if perms.request.add_requests %}
                                 <a class="btn btn-warning btn-xs"
-                                   href="{% url 'request_finish' request_pk=r.pk %}">
-                                    {% if r.finished %}
-                                        لغو اختتام
-                                    {% endif %}
-                                    {% if not r.finished %}
-                                        اختتام
-                                    {% endif %}
+                                   href="{% url 'request_finish' request_pk=r.pk %}"
+                                {% if r.finished %}
+                                    data-toggle="tooltip" title="لغو اختتام"
+                                {% else %}
+                                    data-toggle="tooltip" title="اختتام"
+                                {% endif %}
+                                >
+                                {% if r.finished %}
+                                    <i class="fa fa-close"></i>
+                                {% endif %}
+                                {% if not r.finished %}
+                                    <i class="fa fa-check-square"></i> 
+                                {% endif %}
 
-                                    {#                                    {{ finish_text }}#}
+                                {#                                    {{ finish_text }}#}
                                 </a>
                             {% endif %}
                             {% if perms.request.add_requests %}

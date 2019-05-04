@@ -156,18 +156,18 @@
                             <td>{{ pref.owner.last_name }}</td>
                             <td>
                                 <a class="btn btn-primary btn-xs"
-                                   href="{% url 'pref_details' ypref_pk=pref.pk %}">
-                                    <i class="fa fa-eye"></i> مشاهده
+                                   href="{% url 'pref_details' ypref_pk=pref.pk %}" data-toggle="tooltip" title="مشاهده">
+                                    <i class="fa fa-eye"></i>
                                 </a>
                                 {% if perms.request.add_xpref and showDelete %}
 
                                     <a class="btn btn-primary btn-xs btn-warning"
-                                       href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
-                                        <i class="fa fa-pencil"></i> ویرایش
+                                       href="{% url 'pref_edit2' ypref_pk=pref.pk %}" data-toggle="tooltip" title="ویرایش">
+                                        <i class="fa fa-pencil"></i>
                                     </a>
                                     <a class="btn btn-primary btn-xs btn-danger"
-                                       href="{% url 'pref_delete' ypref_pk=pref.pk %}"><i
-                                            class="fa fa-trash"></i> حذف</a>
+                                       href="{% url 'pref_delete' ypref_pk=pref.pk %}" data-toggle="tooltip" title="حذف"><i
+                                            class="fa fa-trash"></i> </a>
 
                                 {% endif %}
                             </td>

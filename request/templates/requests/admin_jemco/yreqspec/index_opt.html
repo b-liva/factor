@@ -227,8 +227,8 @@
                         <td>{{ reqspec.req_id.date_fa }} ({{ reqspec.req_id.date_fa|date_diff }})</td>
                         <td>
                             <a class="btn btn-primary btn-xs"
-                               href="{% url 'request_details' request_pk=reqspec.req_id.pk %}">
-                                <i class="fa fa-eye"></i> مشاهده
+                               href="{% url 'request_details' request_pk=reqspec.req_id.pk %}" data-toggle="tooltip" title="مشاهده">
+                                <i class="fa fa-eye"></i> 
                             </a>
                         </td>
 
