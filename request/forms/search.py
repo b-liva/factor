@@ -202,6 +202,10 @@ class ProformaSearchForm(forms.Form):
         ('valid', 'معتبر',),
         ('perm', 'مجوز',),
     )
+    ITEM_PER_PAGE = (
+        ('50', '50',),
+        ('100', '100',),
+    )
 
     status = forms.ChoiceField(
         label='وضعیت',
@@ -244,3 +248,9 @@ class ProformaSearchForm(forms.Form):
         widget=forms.Select(attrs={
             'class': 'form-control',
         }), choices=owner_choices, required=False)
+
+    item_per_page = forms.ChoiceField(
+        label='تعداد',
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        }), choices=ITEM_PER_PAGE, required=False)

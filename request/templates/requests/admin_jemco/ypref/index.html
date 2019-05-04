@@ -44,7 +44,7 @@
                             {% csrf_token %}
                             <input name="prefs" type="hidden" value="{{ prefs }}">
                             <button class="btn-success btn btn-sm " type="submit">
-                                <i class="fa fa-download" aria-hidden="true"></i>    اکسل
+                                <i class="fa fa-download" aria-hidden="true"></i> اکسل
                             </button>
 
                         </form>
@@ -90,19 +90,20 @@
 
 
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         {{ form.sort_by.errors }}
                         <label for="{{ form.sort_by.id_for_label }}">{{ form.sort_by.label }}</label>
                         {{ form.sort_by }}
-
-
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         {{ form.dsc_asc.errors }}
                         <label for="{{ form.dsc_asc.id_for_label }}"> {{ form.dsc_asc.label }} </label>
                         {{ form.dsc_asc }}
-
-
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.item_per_page.errors }}
+                        <label for="{{ form.item_per_page.id_for_label }}"> {{ form.item_per_page.label }} </label>
+                        {{ form.item_per_page }}
                     </div>
 
                 </div>
@@ -177,6 +178,30 @@
             </div>
             <br>
             {#            <a href="{% url 'pref_form' %}" class="btn btn-success btn-sm">Add new Prefactor</a>#}
+
+
+            {% if prefs.has_other_pages %}
+                <ul class="pagination">
+                    {% if prefs.has_previous %}
+                        <li><a href="?page={{ prefs.previous_page_number }}">&laquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                    {% endif %}
+                    {% for i in prefs.paginator.page_range %}
+                        {% if prefs.number == i %}
+                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                            <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if prefs.has_next %}
+                        <li><a href="?page={{ prefs.next_page_number }}">&raquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+
 
         </div>
     </div>

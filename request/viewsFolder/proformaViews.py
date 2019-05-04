@@ -73,7 +73,10 @@ def pref_search(request):
             request.POST = request.session['proforma-search-post']
             request.method = 'POST'
 
+    form = ProformaSearchForm()
+    item_per_page = 50
     if request.method == 'POST':
+        item_per_page = request.POST['item_per_page']
         form = ProformaSearchForm(request.POST or None)
         request.session['proforma-search-post'] = request.POST
         if request.POST['customer_name']:
@@ -83,7 +86,7 @@ def pref_search(request):
             else:
                 prof_list = prof_list.filter(req_id__customer__name__contains=request.POST['customer_name'])
         if request.POST['owner'] and request.POST['owner'] != '0':
-            print(request.POST['owner'])
+
             owner = User.objects.get(pk=request.POST['owner'])
             prof_list = prof_list.distinct().filter(Q(owner=owner) | Q(req_id__colleagues=owner))
         if request.POST['date_min']:
@@ -91,11 +94,9 @@ def pref_search(request):
         if request.POST['date_max']:
             prof_list = prof_list.filter(date_fa__lte=request.POST['date_max'])
         if request.POST['status'] and request.POST['status'] != '0':
-            # received value is str so we need to convert it to boolean
-            # status = ast.literal_eval(request.POST['status'])
             status = request.POST['status']
             today = jdatetime.date.today()
-            print(f"status: {status} and type: {type(status)}")
+
             if status == 'valid':
                 # prof_list = prof_list.filter(Q(exp_date_fa__gte=today) | Q(perm=True))
                 prof_list = prof_list.filter(exp_date_fa__gte=today)
@@ -111,22 +112,20 @@ def pref_search(request):
     if request.method == 'GET':
         form = ProformaSearchForm()
 
-    page = request.GET.get('page', 1)
-    orders_list = prof_list
-    paginator = Paginator(orders_list, 30)
+    page = request.GET.get('page')
+    paginator = Paginator(prof_list, item_per_page)
     try:
-        req_page = paginator.page(page)
+        pref_page = paginator.page(page)
     except PageNotAnInteger:
-        req_page = paginator.page(1)
+        pref_page = paginator.page(1)
     except EmptyPage:
-        req_page = paginator.page(paginator.num_pages)
+        pref_page = paginator.page(paginator.num_pages)
 
     context = {
-        'prefs': prof_list,
+        'prefs': pref_page,
     }
     cache.set('profs_in_sessions', context, 300)
     context.update({
-        'req_page': req_page,
         'form': form,
         'title': 'پیش فاکتور',
         'showDelete': True,
