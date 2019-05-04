@@ -6,7 +6,7 @@
         <div class="col-md-12">
             <h3>{{ msg }}</h3>
             {#                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Request Specs</h1>#}
-                        <h2 class="page-header">ردیف های درخواستی</h2>
+            <h2 class="page-header">ردیف های درخواستی</h2>
 
             <div id="example-table"></div>
             <div class="searchApp">
@@ -164,8 +164,12 @@
                 <tbody class="request-table-body">
                 {#                            {% for reqspec in reqspecs %}#}
                 {% for reqspec in reqspecs %}
-                    <tr style="border-top: 2px solid black">
-                        <td>{{ forloop.counter }}</td>
+                    <tr>
+                        <td data-toggle="tooltip" title="{% if reqspec.summary %} {{ reqspec.summary }} {% endif %}">
+                            {% if reqspec.summary %}
+                                <strong style="color: darkred">*</strong>
+                            {% endif %}
+                            {{ forloop.counter }}</td>
                         <td class="customer-column">
                             <a href="{% url 'customer_read' customer_pk=reqspec.req_id.customer.pk %}">{{ reqspec.req_id.customer.name }}</a>
                         </td>
@@ -227,19 +231,20 @@
                         <td>{{ reqspec.req_id.date_fa }} ({{ reqspec.req_id.date_fa|date_diff }})</td>
                         <td>
                             <a class="btn btn-primary btn-xs"
-                               href="{% url 'request_details' request_pk=reqspec.req_id.pk %}" data-toggle="tooltip" title="مشاهده">
-                                <i class="fa fa-eye"></i> 
+                               href="{% url 'request_details' request_pk=reqspec.req_id.pk %}" data-toggle="tooltip"
+                               title="مشاهده">
+                                <i class="fa fa-eye"></i>
                             </a>
                         </td>
 
 
                     </tr>
 
-                    {% if reqspec.summary %}
-                        <tr>
-                            <td colspan="18">{{ reqspec.summary }}</td>
-                        </tr>
-                    {% endif %}
+{#                    {% if reqspec.summary %}#}
+{#                        <tr>#}
+{#                            <td colspan="18">{{ reqspec.summary }}</td>#}
+{#                        </tr>#}
+{#                    {% endif %}#}
                 {% endfor %}
                 <tr style="font-size: large; font-weight: bold">
                     <td colspan="2">مجموع</td>
