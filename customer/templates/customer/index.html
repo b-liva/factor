@@ -1,4 +1,4 @@
-{% extends 'requests/admin_jemco/page_elements/base_html/admin_base_internal.html' %}
+{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
 {% load jformat %}
 {% block right_col %}
     <div class="container">
@@ -46,21 +46,21 @@
 {#                        <td>{{ customer.type.name }}</td>#}
                         <td>{{ customer.date2 }}</td>
                         <td>
-                            <a class="btn btn-primary btn-xs" href="{% url 'customer_read' customer_pk=customer.pk %}">
-                                <i class="fa fa-eye" aria-hidden="true"></i> مشاهده
+                            <a class="btn btn-primary btn-xs" href="{% url 'customer_read' customer_pk=customer.pk %}" data-toggle="tooltip" title="مشاهده">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
                             </a>
                             {% if perms.customer.add_customer %}
                                 <a class="btn btn-warning btn-xs"
-                                   href="{% url 'customer_edit_form' customer_pk=customer.pk %}">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
+                                   href="{% url 'customer_edit_form' customer_pk=customer.pk %}" data-toggle="tooltip" title="مشاهده">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
                                 </a>
 {#                                <a class="btn btn-danger btn-xs "#}
 {#                                   href="">#}
 {#                                    <i class="fa fa-trash" aria-hidden="true"></i> حذف#}
 {#                                </a>#}
                                     <a class="btn btn-xs btn-danger "
-                                       href="{% url 'customer_delete' customer_pk=customer.pk %}"><i
-                                            class="fa fa-trash"></i> حذف</a>
+                                       href="{% url 'customer_delete' customer_pk=customer.pk %}" data-toggle="tooltip" title="مشاهده"><i
+                                            class="fa fa-trash"></i></a>
                             {% endif %}
                         </td>
 

@@ -145,33 +145,7 @@ $(document).ready(function () {
         format: 'YYYY-MM-DD',
 
     });
-    // $('#pub_datePicker').val(15654);
-    // $('.pub_date2').pDatepicker("setDate", new Date());
-    // $('.pub_date2').pDatepicker("setDate", new Date);
 
-
-    $('.deleteBtn').click(function (e) {
-        // e.preventDefault();
-        bootbox.confirm("آیا مطمئن هستید؟", function (result) {
-            // Example.show("Confirm result: " + result);
-            if (result === true) {
-                // alert("Confirm result: " + result);
-                // $('a#deleteBtnConfirmed').click();
-                // var element = $('.deleteBtnConfirmed');
-                var element = $(this).find('.deleteBtnConfirmed');
-                // var element = $('.deleteBtnConfirmed', this);
-                // element.mousedown();
-                console.log(element);
-                console.log(element.attr('href'));
-                // window.location.href = element.attr('href');
-            }
-
-        });
-    });
-
-    // $('#autocomplete').onKeyUp(function (e) {
-    //     console.log(e)
-    // });
     var arr = ['first', 'secon', 'third'];
 
     $('#autocomplete').autocomplete({

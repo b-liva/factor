@@ -168,9 +168,6 @@ def req_form(request):
 
 @login_required
 def wrong_data(request):
-    # probably_wrong = ReqSpec.objects.filter(rpm__gt=1500, rpm__lt=2940)
-    # probably_wrong = probably_wrong.filter(rpm__lt=700).filter(rpm__gt=750, rpm__lte=940) \
-    #     .filter(rpm__gt=1000, rpm__lte=1450)
     probably_wrong = ReqSpec.objects.filter(is_active=True).all()
     if not request.user.is_superuser:
         probably_wrong = probably_wrong.filter(req_id__owner=request.user)
@@ -1207,7 +1204,7 @@ class LazyEncoder(DjangoJSONEncoder):
 
 
 @login_required
-def fsearch5(request):
+def req_report(request):
     filters = {}
     req_list = Requests.objects.filter(is_active=True)
     if not request.user.is_superuser:
@@ -1268,4 +1265,4 @@ def finish(request, request_pk):
     req = Requests.objects.get(pk=request_pk)
     req.finished = not req.finished
     req.save()
-    return redirect('fsearch5')
+    return redirect('req_report')

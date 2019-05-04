@@ -35,32 +35,6 @@ def pref_index(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    # prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date').reverse()
-    # prefs = Xpref.objects.all().order_by('date_fa').reverse()
-
-    prefs = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
-
-    if not request.user.is_superuser:
-        prefs = prefs.filter(Q(owner=request.user) | Q(req_id__colleagues=request.user) | Q(req_id__owner=request.user)).distinct()
-
-    # prefs = Xpref.objects.filter(is_active=True, owner=request.user).order_by('date_fa', 'pk').reverse()
-    if request.user.is_superuser:
-        prefs = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
-    context = {
-        'prefs': prefs,
-        'title': 'پیش فاکتور',
-        'showDelete': True,
-    }
-    return render(request, 'requests/admin_jemco/ypref/index.html', context)
-
-
-@login_required
-def pref_search(request):
-    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
-    if not can_index:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
     prof_list = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
 
     if not request.user.is_superuser:

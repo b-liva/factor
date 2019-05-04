@@ -24,7 +24,7 @@ urlpatterns = [
     path('fsearch3', request.views2.fsearch3, name='fsearch3'),
     path('fsearch2', request.views2.fsearch2, name='fsearch2'),
     path('search', RequestList.as_view(), name='req_search2'),
-    path('fsearch5', request.views2.fsearch5, name='fsearch5'),
+    path('request-report', request.views2.req_report, name='req_report'),
     path('search-req2', RequestFilterView.as_view(), name='search_req'),
 
     path('find', request.views2.request_find, name='request_find'),

@@ -1,4 +1,4 @@
-{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
 {% load humanize %}
 {% load static %}
 {% block right_col %}
@@ -28,22 +28,16 @@
                         <td>{{ reqspec.kw }}</td>
                         <td>{{ reqspec.rpm }}</td>
                         <td><a href="{% url 'request_details' request_pk=reqspec.req_id.pk%}">{{ reqspec.req_id.number }}</a></td>
-{#                        <td>{{ reqspec.req_id.owner.last_name }}</td>#}
                         {% if perms.request.sale_expert %}
                             <td>
                                 <a class="btn btn-xs btn-warning"
-                                   href="{% url 'reqspec_edit_form' req_pk=reqspec.req_id.pk yreqSpec_pk=reqspec.pk %}">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
+                                   href="{% url 'reqspec_edit_form' req_pk=reqspec.req_id.pk yreqSpec_pk=reqspec.pk %}" data-toggle="tooltip" title="ویرایش">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
                                 </a>
-{#                                <a class="btn btn-primary btn-xs btn-danger"#}
-{#                                   href="{% url 'reqSpec_delete' req_pk=reqspec.req_id.pk yreqSpec_pk=reqspec.pk %}"><i#}
-{#                                        class="fa fa-trash"></i> حذف</a>#}
                             </td>
                         {% endif %}
                     </tr>
-
                 {% endfor %}
-
                 </tbody>
             </table>
             <br>

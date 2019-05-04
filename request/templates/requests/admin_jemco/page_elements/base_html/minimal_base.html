@@ -1,0 +1,141 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="fontiran.com:license" content="Y68A9">
+    <link rel="icon" href="{% static 'request/rtl/build/img/icons/favicon.png' %}" type="image/ico"/>
+    <title>شرکت جمکو</title>
+    {% include 'admin_theme/page_elements/dashboard_styles.html' %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137967409-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'UA-137967409-1');
+    </script>
+</head>
+
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col">
+            <div class="left_col scroll-view">
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="{% url 'dashboard' %}" class="site_title">
+                        {#                        <i class="fa fa-paw"></i>#}
+                        <span>معاونت بازرگانی مینیمال </span></a>
+                </div>
+                <div class="clearfix"></div>
+
+                <!-- menu profile quick info -->
+                <div class="profile clearfix">
+                    <div class="profile_pic">
+                        <img src="{% static 'request/admin_jemco/images/crm_logo.jpg' %}" alt="..."
+                             class="img-circle profile_img">
+                    </div>
+                    <div class="profile_info">
+                        {#                        <span>سلام,</span>#}
+                        {#                        <h2>{{ user.last_name }}</h2>#}
+                    </div>
+                </div>
+                <!-- /menu profile quick info -->
+
+                <br/>
+
+                {% include 'requests/admin_jemco/page_elements/leftMenu.html' %}
+
+
+                <!-- /menu footer buttons -->
+                {#                {% include 'requests/admin_jemco/page_elements/footer_menu.html' %}#}
+
+                <!-- /menu footer buttons -->
+            </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+            <div class="nav_menu">
+                <nav>
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="">
+                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                               aria-expanded="false">
+                                <img src="{% static 'request/admin_jemco/images/img.jpg' %}" alt="">{{ user.last_name }}
+                                <span class=" fa fa-angle-down"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                <li><a href="{% url 'profile' %}"> مشخصات کاربری</a></li>
+                                {% if user.is_authenticated %}
+                                    <li class="nav-item"><a class="nav-link"
+                                                            href="javascript:{document.getElementById('logout').submit()}">خروج</a>
+                                    <form id="logout" method="POST" action="{% url 'logout' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden">
+                                    </form>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+
+
+        <div class="right_col" role="main">
+
+            {% block right_col %}
+
+            {% endblock %}
+
+
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+            <div class="pull-right">
+                {#                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>#}
+            </div>
+            <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="{% static 'request/admin_jemco/js/jquery.min.js' %}"></script>
+<!-- Bootstrap -->
+<script src="{% static 'request/admin_jemco/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'request/admin_jemco/js/jquery.autocomplete.js' %}"></script>
+<script src="{% static 'request/rtl/vendors/chosen/chosen.jquery.js' %}"></script>
+
+<!-- FastClick -->
+<script src="{% static 'request/admin_jemco/js/fastclick.js' %}"></script>
+<!-- NProgress -->
+<script src="{% static 'request/admin_jemco/js/nprogress.js' %}"></script>
+
+<script src="{% static 'request/admin_jemco/js/custom.min.js' %}"></script>
+
+<script src="{% static 'request/admin_jemco/js/jemco/base.js' %}"></script>
+{#<script src="{% static 'request/admin_jemco/js/index.js' %}"></script>#}
+</body>
+</html>

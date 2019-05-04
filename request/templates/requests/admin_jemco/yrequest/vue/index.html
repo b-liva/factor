@@ -1,10 +1,10 @@
-{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
+
 {% load humanize %}
 {% block right_col %}
     <div class="container">
         <div class="col-md-10 col-md-offset-1">
             <h3>{{ msg }}</h3>
-            {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
             <h1 class="page-header">
                 {{ message }}</h1>
             <form method="POST" action="{% url 'request_find' %}">
@@ -24,20 +24,17 @@
                 <tr>
                     <th colspan="col" class="text-center">ردیف</th>
                     <th colspan="col" class="text-center">مشتری</th>
-                    {#                    <th colspan="col" class="text-center">کد</th>#}
                     <th colspan="col" class="text-center">شماره درخواست</th>
                     <th colspan="col" class="text-center">شماره اصلی</th>
                     <th colspan="col" class="text-center">تاریخ ثبت</th>
                     <th colspan="col" class="text-center"></th>
                     <th colspan="col" class="text-center">زمان</th>
-                    {#                    <th colspan="col" class="text-center">edited</th>#}
                     <th colspan="col" class="text-center"></th>
                 </tr>
                 <tbody class="">
                 {% for id, request in response.items %}
                     <tr class="{% if request.req.edited_by_customer %} edited_by_customer {% endif %}">
                         <td scope="row" class="text-center">{{ forloop.counter }}</td>
-                        {#                        <td scope="row" class="text-center">{{ request.pk }}</td>#}
                         <td class="text-center">{{ request.req.customer }}</td>
                         <td class="text-center">{{ request.req.number }}</td>
                         <td class="text-center">{{ request.req.temp_number }}</td>
@@ -50,42 +47,28 @@
                             {% endfor %}
                         </td>
                         <td class="text-center">{{ request.delay }}</td>
-                        {#                        <td class="text-center">{{ request.req.edited_by_customer }}</td>#}
                         <td class="text-center">
                             <a class="btn btn-primary btn-xs"
-                               href="{% url 'read_vue' request_pk=request.req.pk %}">
-                                <i class="fa fa-eye"></i> مشاهده
+                               href="{% url 'read_vue' request_pk=request.req.pk %}" data-toggle="tooltip" title="مشاهده">
+                                <i class="fa fa-eye"></i>
                             </a>
 
                             {% if perms.request.add_requests and showHide %}
                                 <a class="btn btn-warning btn-xs"
-                                   href="{% url 'request_edit_form' request_pk=request.req.pk %}">
-                                    <i class="fa fa-pencil"></i> ویرایش
+                                   href="{% url 'request_edit_form' request_pk=request.req.pk %}" data-toggle="tooltip" title="ویرایش">
+                                    <i class="fa fa-pencil"></i>
                                 </a>
                             {% endif %}
                             {% if perms.request.add_requests and showHide %}
-                                {#                                <div class="btn btn-primary btn-xs btn-danger deleteBtn" id=""><i#}
-                                {#                                        class="fa fa-trash"></i> حذف#}
-                                {#                                </div>#}
-
                                 <a class="btn btn-primary btn-xs btn-danger"
-                                   href="{% url 'request_delete' request_pk=request.req.pk %}"><i
-                                        {# class="fa fa-trash"></i> حذف</a>
+                                   href="{% url 'request_delete' request_pk=request.req.pk %}" data-toggle="tooltip" title="حذف"><i
+                                        {# class="fa fa-trash"></i> </a>
                             {% endif %}
                         </td>
-
-
                     </tr>
-
                 {% endfor %}
-
                 </tbody>
             </table>
-
         </div>
     </div>
-
-
-
-
 {% endblock %}
