@@ -20,7 +20,6 @@ urlpatterns = [
     path('spec_export', request.views2.spec_export, name='spec_export'),
     path('index-vue', request.views2.request_index_vue, name='request_index_vue'),
     path('index-vue-deleted', request.views2.request_index_vue_deleted, name='request_index_vue_deleted'),
-    path('fsearch', request.views2.fsearch, name='fsearch'),
     path('spec-search', request.views2.reqspec_search, name='reqspec_search'),
     path('fsearch3', request.views2.fsearch3, name='fsearch3'),
     path('fsearch2', request.views2.fsearch2, name='fsearch2'),
