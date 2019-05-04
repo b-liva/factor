@@ -57,76 +57,37 @@ def find_payment(pay_amnt, pmnts):
     return pay_amnt
 
 
-def kwjs(request, *args, **kwargs):
+def kwjs(request):
     days = 30
     if request.method == "POST":
         days = int(request.POST['days'])
         print(f'request is post and days: {days}')
-    ntoday = datetime.date.today()
     today = jdatetime.date.today()
     startDate = today + jdatetime.timedelta(-days)
 
-    tdelta = 1
-    endDate = startDate + jdatetime.timedelta(tdelta)
-    req_nums = []
-    req_nums_dict = {}
-    req_kw_dict = {}
-    proformas_nums_dict = {}
-    proformas_amount_dict = {}
-    payments_nums_dict = {}
-    payments_amnt_dict = {}
-    temp = 0
-    temp_proforma = 0
-    temp_payment = 0
-    spc_kw = 0
-    amnt = 0
+    requests = ReqSpec.objects\
+        .filter(req_id__is_active=True, req_id__date_fa__gte=startDate, req_id__date_fa__lt=today)\
+        .values('req_id__date_fa').annotate(sum=Sum(F('kw') * F('qty'), output_field=FloatField()))
 
-    requests_obj_temp = Requests.objects.filter(is_active=True)
-    i = 1
-    for r in requests_obj_temp:
-        spc = r.reqspec_set.all()
-        for s in spc:
-            spc_kw += s.kw * s.qty
-        # print(f'#{i} - {r} - {spc_kw}')
-        i += 1
-    spc_kw = 0
-    amnt = 0
-    pay_amnt = 0
-    while endDate <= today + jdatetime.timedelta(1):
+    req_kw_dict = {
+        str(x['req_id__date_fa']): x['sum'] for x in requests
+    }
 
-        requests = Requests.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(
-            date_fa__lt=endDate).count()
-        requests_obj_temp = Requests.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(
-            date_fa__lt=endDate)
-        proformas = Xpref.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(
-            date_fa__lt=endDate).count()
-        proformas_obj_temp = Xpref.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(
-            date_fa__lt=endDate)
-        payments = Payment.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(
-            date_fa__lt=endDate).count()
-        payments_obj_temp = Payment.objects.filter(is_active=True).filter(date_fa__gte=startDate).filter(
-            date_fa__lt=endDate)
+    proformas = PrefSpec.objects.filter(xpref_id__is_active=True, xpref_id__date_fa__gte=startDate, xpref_id__date_fa__lt=today)\
+        .values('xpref_id__date_fa').annotate(sum=Sum(F('price') * F('qty') * 1.09, output_field=FloatField()))\
+        .order_by('xpref_id__date_fa')
 
-        spc_kw = find_kw(spc_kw, requests_obj_temp)
-        amnt = find_proformas(amnt, proformas_obj_temp)
-        pay_amnt = find_payment(pay_amnt, payments_obj_temp)
+    proformas_amount_dict = {
+        str(x['xpref_id__date_fa']): x['sum'] for x in proformas
+    }
 
-        if len(req_nums):
-            req_nums.append(req_nums[-1] + requests)
-        else:
-            req_nums.append(requests)
-        temp += requests
-        temp_proforma += proformas
-        temp_payment += payments
-        req_nums_dict[str(startDate)] = temp
-        req_kw_dict[str(startDate)] = spc_kw
-        proformas_nums_dict[str(startDate)] = temp_proforma
-        proformas_amount_dict[str(startDate)] = amnt
-        payments_nums_dict[str(startDate)] = temp_payment
-        payments_amnt_dict[str(startDate)] = pay_amnt
+    payments = Payment.objects.filter(is_active=True, date_fa__gte=startDate, date_fa__lt=today)\
+        .values('date_fa').annotate(sum=Sum('amount'))\
+        .order_by('date_fa')
 
-        startDate = endDate
-        endDate = endDate + jdatetime.timedelta(tdelta)
+    payments_amnt_dict = {
+        str(x['date_fa']): x['sum'] for x in payments
+    }
 
     data = {
         'reqs': req_kw_dict,
@@ -319,24 +280,6 @@ def sales_expert_dashboard(request):
         },
     }
     return render(request, 'requests/admin_jemco/dashboard/dashboard.html', context)
-
-
-@login_required
-def dashboard2(request):
-    routine_kw, project_kw, allKw = find_routine_kw()
-    num_of_requests = no_of_requests()
-    orders = Orders()
-    last_n_requests = orders.last_orders()
-    total_payments = find_total_payment()
-    context = {
-        'routine_kw': intcomma(routine_kw),
-        'project_kw': intcomma(project_kw),
-        'allKw': intcomma(allKw),
-        'num_of_reqs': num_of_requests,
-        'last_n_requests': last_n_requests,
-        'total_payments': total_payments
-    }
-    return render(request, 'requests/admin_jemco/dashboard2.html', context)
 
 
 def find_all_obj():
