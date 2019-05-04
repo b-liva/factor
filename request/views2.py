@@ -352,6 +352,7 @@ def function_define(request, specs):
     form_data['type'] = request.get('type')
     form_data['permission'] = request.get('permission')
     form_data['sent'] = request.get('sent')
+    form_data['item_per_page'] = request.get('item_per_page')
     if form_data['price'] != '0':
         specs = specs.filter(price=form_data['price'])
     if form_data['tech'] != '0':
@@ -383,63 +384,11 @@ def function_define(request, specs):
     if request['dsc_asc'] == '2':
         form_data['dsc_asc'] = request['dsc_asc']
         specs = specs.reverse()
-    # if request.POST['date_min']:
-    #     form_data['date_min'] = (request.POST['date_min'])
-    #     specs = specs.filter(req_id__date_fa__gte=form_data['date_min'])
-    # if request.POST['date_max']:
-    #     form_data['date_max'] = (request.POST['date_max'])
-    #     specs = specs.filter(req_id__date_fa__lte=form_data['date_max'])
-    # if request.POST['kw_min']:
-    #     form_data['kw_min'] = (request.POST['kw_min'])
-    #     specs = specs.filter(kw__gte=form_data['kw_min'])
-    # if request.POST['kw_max']:
-    #     form_data['kw_max'] = (request.POST['kw_max'])
-    #     specs = specs.filter(kw__lte=form_data['kw_max'])
-    # if request.POST['owner'] and request.POST['owner'] != '0':
-    #     form_data['owner'] = (request.POST['owner'])
-    #     owner = User.objects.get(pk=form_data['owner'])
-    #     specs = specs.filter(Q(req_id__owner=owner))
-    # form_data['price'] = request.POST.get('price')
-    # form_data['tech'] = request.POST.get('tech')
-    # form_data['type'] = request.POST.get('type')
-    # form_data['permission'] = request.POST.get('permission')
-    # form_data['sent'] = request.POST.get('sent')
-    # if form_data['price'] != '0':
-    #     specs = specs.filter(price=form_data['price'])
-    # if form_data['tech'] != '0':
-    #     specs = specs.filter(tech=form_data['tech'])
-    # if form_data['type'] != '0':
-    #     specs = specs.filter(type__title=form_data['type'])
-    # if form_data['permission'] != '0':
-    #     specs = specs.filter(permission=form_data['permission'])
-    # if form_data['sent'] != '0':
-    #     specs = specs.filter(sent=form_data['sent'])
-    #
-    # if request.POST['rpm']:
-    #     rpm = form_data['rpm'] = int(request.POST['rpm'])
-    #
-    #     specs = specs.filter(rpm=rpm)
-    # if request.POST['customer_name']:
-    #     form_data['customer_name'] = request.POST['customer_name']
-    #     specs = specs.filter(req_id__customer__name__icontains=form_data['customer_name'])
-    # if request.POST['sort_by']:
-    #     form_data['sort_by'] = request.POST['sort_by']
-    #     if form_data['sort_by'] == '1':
-    #         specs = specs.order_by('kw')
-    #     # if form_data['sort_by'] == '2':
-    #     #     specs = specs.order_by('req_id__customer__name')
-    #     if form_data['sort_by'] == '3':
-    #         specs = specs.order_by('req_id__date_fa')
-    #     if form_data['sort_by'] == '4':
-    #         specs = specs.order_by('qty')
-    # if request.POST['dsc_asc'] == '2':
-    #     form_data['dsc_asc'] = request.POST['dsc_asc']
-    #     specs = specs.reverse()
     return form_data, specs
 
 
 @login_required
-def new_fsearch(request):
+def reqspec_search(request):
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
     if not can_index:
         messages.error(request, 'عدم دسترسی کافی!')
@@ -448,17 +397,19 @@ def new_fsearch(request):
     # specs = ReqSpec.objects.filter(is_active=True)
     request.session['temp_request_in_session'] = request.POST
 
-    specs = ReqSpec.objects.filter(is_active=True).prefetch_related('req_id', 'req_id__owner', 'req_id__customer', 'req_id__colleagues', 'type', 'req_id__xpref_set', 'req_id__xpref_set__payment_set')
+    specs = ReqSpec.objects.filter(req_id__is_active=True).prefetch_related('req_id', 'req_id__owner', 'req_id__customer', 'req_id__colleagues', 'type', 'req_id__xpref_set', 'req_id__xpref_set__payment_set')
     if request.method == 'POST':
         # specs = ReqSpec.objects
         (form_data, specs,) = function_define(request.POST, specs)
         print(form_data)
         search_form = search.SpecSearchForm(form_data)
+        item_per_page = form_data['item_per_page']
 
     else:
         form_data['price'] = 'False'
         form_data['tech'] = 'False'
-        specs = ReqSpec.objects.filter(is_active=True, price=form_data['price'], tech=form_data['tech'])\
+        item_per_page = 50
+        specs = ReqSpec.objects.filter(req_id__is_active=True, price=form_data['price'], tech=form_data['tech'])\
             .prefetch_related('req_id', 'req_id__owner', 'req_id__customer', 'req_id__colleagues', 'type', 'req_id__xpref_set', 'req_id__xpref_set__payment_set')
         search_form = search.SpecSearchForm(form_data)
 
@@ -467,11 +418,16 @@ def new_fsearch(request):
     date_format = "%m/%d/%Y"
     if not request.user.is_superuser:
         specs = specs.filter(req_id__owner=request.user) | specs.filter(req_id__colleagues=request.user)
+
+    paginator = Paginator(specs, item_per_page)
+    page = request.GET.get('page')
+    specs_to_render = paginator.get_page(page)
+
     qty = specs.aggregate(sum=Sum('qty'))
     kw = specs.aggregate(sum=Sum(F('kw') * F('qty'), output_field=FloatField()))
 
     context = {
-        'reqspecs': specs,
+        'reqspecs': specs_to_render,
         'total_kw': kw['sum'],
         'total_qty': qty['sum'],
     }

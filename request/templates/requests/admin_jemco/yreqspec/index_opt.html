@@ -6,11 +6,11 @@
         <div class="col-md-12">
             <h3>{{ msg }}</h3>
             {#                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Request Specs</h1>#}
-            {#            <h2 class="page-header">ردیف های درخواستی</h2>#}
+                        <h2 class="page-header">ردیف های درخواستی</h2>
 
             <div id="example-table"></div>
             <div class="searchApp">
-                <form method="POST" action="{% url 'new_fsearch' %}">
+                <form method="POST" action="{% url 'reqspec_search' %}">
                     {% csrf_token %}
                     {#                    {{ search_form }}#}
 
@@ -101,17 +101,23 @@
                             {{ search_form.date_max }}
                         </div>
                         <div class="col-md-12">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 {{ search_form.sort_by.errors }}
-                                <label for="{{ search_form.sort_by.id_for_label }}">مرتب سازی بر اساس</label>
+                                <label for="{{ search_form.sort_by.id_for_label }}">مرتب سازی</label>
                                 {{ search_form.sort_by }}
 
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
 
                                 {{ search_form.dsc_asc.errors }}
                                 <label for="{{ search_form.dsc_asc.id_for_label }}">ترتیب</label>
                                 {{ search_form.dsc_asc }}
+                            </div>
+
+                            <div class="col-md-4">
+                                {{ search_form.sent.errors }}
+                                <label for="{{ search_form.item_per_page.id_for_label }}">هرصفحه</label>
+                                {{ search_form.item_per_page }}
                             </div>
 
                         </div>
@@ -123,9 +129,9 @@
                             <button type="submit" name="submit" class="btn btn-sm btn-primary">
                                 <i class="fa fa-search" aria-hidden="true"></i>
                             </button>
-                            <a href="{% url 'new_fsearch' %}" class="btn btn-sm btn-danger">حذف فیلترها</a>
+                            <a href="{% url 'reqspec_search' %}" class="btn btn-sm btn-danger">حذف فیلترها</a>
                             <a class="btn btn-sm btn-success" href="{% url 'spec_export' %}">
-                                <i class="fa fa-download" aria-hidden="true"></i>    اکسل
+                                <i class="fa fa-download" aria-hidden="true"></i> اکسل
                             </a>
                         </div>
 
@@ -244,5 +250,26 @@
             </table>
         </div>
     </div>
+    {% if reqspecs.has_other_pages %}
+        <ul class="pagination">
+            {% if reqspecs.has_previous %}
+                <li><a href="?page={{ reqspecs.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+                <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in reqspecs.paginator.page_range %}
+                {% if reqspecs.number == i %}
+                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if reqspecs.has_next %}
+                <li><a href="?page={{ reqspecs.next_page_number }}">&raquo;</a></li>
+            {% else %}
+                <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+    {% endif %}
 
 {% endblock %}

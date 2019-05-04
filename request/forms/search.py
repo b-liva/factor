@@ -81,6 +81,10 @@ class SpecSearchForm(forms.Form):
         ('3', 'علوی',),
         ('4', 'ظریف',),
     )
+    ITEM_PER_PAGE = (
+        ('50', '50',),
+        ('100', '100',),
+    )
     price = forms.ChoiceField(widget=forms.Select(attrs={
         'class': 'form-control',
     }), choices=CHOICES, required=False)
@@ -99,6 +103,9 @@ class SpecSearchForm(forms.Form):
     type = forms.ChoiceField(widget=forms.Select(attrs={
         'class': 'form-control',
     }), choices=TYPE_CHOICES, required=False)
+    item_per_page = forms.ChoiceField(widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), choices=ITEM_PER_PAGE, required=False)
 
     SORT_CHOICES = (
         ('1', 'کیلووات',),
