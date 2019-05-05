@@ -1067,11 +1067,8 @@ def request_delete(request, request_pk):
             rand_num = random.randint(100000, 200000)
         req.number = rand_num
         req.save()
-        specs = req.reqspec_set.all()
-        for s in specs:
-            s.is_active = False
-            s.save()
-    # return redirect('request_index')
+        req.reqspec_set.update(is_active=False)
+
     return redirect('request_index')
 
 

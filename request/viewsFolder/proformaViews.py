@@ -549,6 +549,7 @@ def pref_delete(request, ypref_pk):
             rand_num = random.randint(100000, 200000)
         pref.number = rand_num
         pref.save()
+        pref.prefspec_set.update(is_active=False)
     return redirect('pref_index')
 
 
