@@ -6,25 +6,25 @@
             <a class="btn btn-sm btn-success" href="{% url 'test_view2' %}">click here</a>
             <table class="tableFull withBorder">
                 <thead>
-                    <tr>
-                        <th>ردیف</th>
-                        <th>pk</th>
-                        <th>کد</th>
-                        <th>شرح</th>
-                        <th>کیلووات</th>
-                        <th>سرعت</th>
-                        <th>فریم سایز</th>
-                        <th>ولتاژ</th>
-                        <th>IM</th>
-                        <th>IP</th>
-                        <th>IC</th>
-                        <th>بازدهی</th>
-                        <th>ضریب توان</th>
-                        <th>current</th>
-                        <th>torque</th>
-                        <th>weight</th>
-                        <th></th>
-                    </tr>
+                <tr>
+                    <th>ردیف</th>
+                    <th>pk</th>
+                    <th>کد</th>
+                    <th>کیلووات</th>
+                    <th>سرعت</th>
+                    <th>ولتاژ</th>
+                    <th>فریم سایز</th>
+                    <th>IM</th>
+                    <th>IP</th>
+                    <th>IC</th>
+                    <th>شرح</th>
+                    <th>بازدهی</th>
+                    <th>ضریب توان</th>
+                    <th>current</th>
+                    <th>torque</th>
+                    <th>weight</th>
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody>
                 {% for motor in motors %}
@@ -32,14 +32,14 @@
                         <td>{{ forloop.counter }}</td>
                         <td>{{ motor.pk }}</td>
                         <td>{{ motor.code }}</td>
-                        <td>{{ motor.description }}</td>
                         <td>{{ motor.kw }}</td>
                         <td>{{ motor.speed }}{{ motor.rpm }}</td>
-                        <td>{{ motor.summary }}</td>
-                        <td>{{ motor.req_id.owner.last_name }}</td>
-                        <td></td>
+                        <td>{{ motor.voltage }}</td>
+                        <td>{{ motor.frame_size }}</td>
                         <td>{{ motor.im }}</td>
                         <td>{{ motor.ip }}</td>
+                        <td>{{ motor.ic }}</td>
+                        <td>{{ motor.summary }}</td>
                         <td>
                             <a class="btn btn-sm btn-primary" href="{% url 'motordb_edit_form' motordb_pk=motor.pk %}">Edit</a>
                             <a class="btn btn-sm btn-danger" href="{% url 'motordb_delete' motordb_pk=motor.pk %}">Delete</a>
