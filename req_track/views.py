@@ -306,8 +306,20 @@ def proformas(request):
     return render(request, 'proformas/proformas.html', context)
 
 
+def proformas_complete(request):
+    all_proformas = TrackXpref.objects.filter(complete=True, red_flag=False)
+    count = all_proformas.values('number').distinct().count()
+
+    context = {
+        'all_proformas': all_proformas,
+        'count': count,
+    }
+
+    return render(request, 'proformas/proformas.html', context)
+
+
 def proformas_uncomplete(request):
-    all_proformas = TrackXpref.objects.filter(is_entered=False, red_flag=False)
+    all_proformas = TrackXpref.objects.filter(complete=False, red_flag=False)
     count = all_proformas.values('number').distinct().count()
 
     context = {
