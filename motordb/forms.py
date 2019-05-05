@@ -42,7 +42,8 @@ class FormTest(forms.Form):
 
 class MotorsForm(forms.ModelForm):
     class Meta:
-        model = models.Motors
+        # model = models.Motors
+        model = models.MotorsCode
         fields = '__all__'
 
 

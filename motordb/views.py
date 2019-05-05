@@ -92,8 +92,9 @@ def motordb_delete(request, motordb_pk):
 def motordb_edit_form(request, motordb_pk):
     # edit = input('do you want to edit this ? (Y/N)')
     # if edit == 'Y':
-    motor = models.Motors.objects.get(pk=motordb_pk)
-    print(motor.get_kw_display())
+    # motor = models.Motors.objects.get(pk=motordb_pk)
+    motor = models.MotorsCode.objects.get(pk=motordb_pk)
+    # print(motor.get_kw_display())
     form = forms.MotorsForm(instance=motor)
     return render(request, 'motordb/form_page_edit.html', {
         'form': form,
