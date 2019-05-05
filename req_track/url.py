@@ -38,6 +38,7 @@ urlpatterns = [
     path('motor_codes_check', views.motor_codes_check, name='motor_codes_check'),
     path('motor_codes_process', views.motor_codes_process, name='motor_codes_process'),
     path('proformas', views.proformas, name='proformas'),
+    path('proformas_complete', views.proformas_complete, name='proformas_complete'),
     path('proformas_uncomplete', views.proformas_uncomplete, name='proformas_uncomplete'),
     path('check_proforma', views.check_proforma, name='check_proforma'),
 

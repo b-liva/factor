@@ -15,12 +15,13 @@
                     <tr>
                         <td>ردیف</td>
                         <td>ش پ</td>
-                        <td>تاریخ</td>
                         <td>کد کالا</td>
+                        <td>تاریخ</td>
                         <td>تعداد</td>
                         <td>قیمت واحد</td>
-                        <td>وارد شده</td>
-                        <td>اشکال</td>
+                        <td>complete</td>
+                        <td>is_entered</td>
+                        <td>red_flag</td>
                     </tr>
                     </thead>
                     <tbody>
@@ -34,6 +35,7 @@
                             <td>{{ prof.date_fa }}</td>
                             <td>{{ prof.qty }}</td>
                             <td>{{ prof.price|intcomma }}</td>
+                            <td>{{ prof.complete }}</td>
                             <td>{{ prof.is_entered }}</td>
                             <td>{{ prof.red_flag }}</td>
 
