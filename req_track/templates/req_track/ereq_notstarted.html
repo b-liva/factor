@@ -1,6 +1,6 @@
 {% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
 {% load humanize %}
-
+{% load request_extras %}
 {% block right_col %}
     <div>
         <h3 class="text-center col-xs-12">
@@ -8,34 +8,45 @@
         </h3>
         {% if request.user.is_superuser and show %}
             <div id="customerDetails" class="col-xs-6 col-sm-4">
-                <h3>تعداد باقیمانده</h3>
+                <h3>وضعیت درخواست ها </h3>
                 <div class="table-responsive">
                     <table class="table">
-                    <thead>
-                    <tr>
-                        <td>ظریف</td>
-                        <td>محمدی</td>
-                        <td>علوی</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>{{ zarif.not_entered.count }}</td>
-                        <td>{{ mohammadi.not_entered.count }}</td>
-                        <td>{{ alavi.not_entered.count }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ zarif.avg_time | floatformat:2 }} روز</td>
-                        <td>{{ mohammadi.avg_time | floatformat:2 }} روز</td>
-                        <td>{{ alavi.avg_time | floatformat:2 }} روز</td>
-                    </tr>
-                    <tr>
-                        <td>{{ zarif.count }}</td>
-                        <td>{{ mohammadi.count }}</td>
-                        <td>{{ alavi.count }}</td>
-                    </tr>
-                    </tbody>
-                </table>
+                        <thead>
+                        <tr>
+                            <td></td>
+                            <td>ظریف</td>
+                            <td>محمدی</td>
+                            <td>علوی</td>
+                            <td>فروغی</td>
+                            <td>جمع</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>باقیمانده</td>
+                            <td>{{ expert.zarif|expert_remaining_reqs_not_entered }}</td>
+                            <td>{{ expert.mohammadi|expert_remaining_reqs_not_entered }}</td>
+                            <td>{{ expert.alavi|expert_remaining_reqs_not_entered }}</td>
+                            <td>{{ expert.foroughi|expert_remaining_reqs_not_entered }}</td>
+                            <td>{% total_orders_not_remaining %}</td>
+                        </tr>
+                        <tr>
+                            <td>وارد شده</td>
+                            <td>{{ expert.zarif|all_expert_reqs }}</td>
+                            <td>{{ expert.mohammadi|all_expert_reqs }}</td>
+                            <td>{{ expert.alavi|all_expert_reqs }}</td>
+                            <td>{{ expert.foroughi|all_expert_reqs }}</td>
+                            <td>{% total_orders_entered %}</td>
+                        </tr>
+                        <tr>
+                            <td>درصد وارد شده</td>
+                            <td>{{ expert.zarif|expert_reqs_percent|floatformat:1 }}</td>
+                            <td>{{ expert.mohammadi|expert_reqs_percent|floatformat:1 }}</td>
+                            <td>{{ expert.alavi|expert_reqs_percent|floatformat:1 }}</td>
+                            <td>{{ expert.foroughi|expert_reqs_percent|floatformat:1 }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
 
             </div>

@@ -3,6 +3,8 @@ from django_jalali.db import models as jmodels
 import base64
 
 from django import template
+
+from req_track.models import ReqEntered
 from request.models import Requests, Xpref, ReqSpec, PrefSpec, Payment
 
 register = template.Library()
@@ -282,3 +284,43 @@ def highlight_class(proforma):
     elif proforma.red_flag:
         flag_value = 'red_flag'
     return flag_value
+
+
+@register.filter(name='expert_remaining_reqs_not_entered')
+def expert_remaining_reqs_not_entered(account):
+    reqs = ReqEntered.objects.filter(owner_text__contains=account.last_name, is_request=True, is_entered=False)
+    if account.last_name=='فروغی':
+        reqs = reqs.exclude(owner_text__contains='ظریف')
+
+    return reqs.count()
+
+
+@register.filter(name='expert_reqs_entered')
+def expert_reqs_entered(account):
+    reqs = ReqEntered.objects.filter(owner_text__contains=account.last_name, is_request=True, is_entered=True)
+    return reqs.count()
+
+
+@register.filter(name='all_expert_reqs')
+def all_expert_reqs(account):
+    reqs = Requests.objects.filter(is_active=True, owner=account)
+    return reqs.count()
+
+
+@register.filter(name='expert_reqs_percent')
+def expert_reqs_percent(account):
+    reqs = Requests.objects.filter(is_active=True, owner=account)
+    all_reqs = Requests.objects.filter(is_active=True)
+    return 100 * reqs.count() / all_reqs.count()
+
+
+@register.simple_tag()
+def total_orders_not_remaining():
+    reqs = ReqEntered.objects.filter(is_request=True, is_entered=False)
+    return reqs.count()
+
+
+@register.simple_tag()
+def total_orders_entered():
+    reqs = Requests.objects.filter(is_active=True)
+    return reqs.count()

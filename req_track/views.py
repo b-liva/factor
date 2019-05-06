@@ -6,7 +6,7 @@ from django.db.models import Q, Sum, F, FloatField
 from django.shortcuts import render, redirect
 
 from accounts.models import User
-from request.models import Requests, Xpref
+from request.models import Requests, Xpref, PrefSpec, ReqSpec
 from request.models import Payment as Request_payment
 from req_track.models import ReqEntered, Payments, TrackItemsCode, TrackXpref
 from .forms import E_Req_Form
@@ -64,7 +64,7 @@ def e_req_delete_all(request):
 
 
 def e_req_report(request):
-    reqs = ReqEntered.objects.filter(is_entered=False).filter(is_request=True)
+    reqs = ReqEntered.objects.filter(is_entered=False, is_request=True)
         # .exclude(owner_text__contains='ظریف')\
         # .exclude(owner_text__contains='محمدی')\
         # .exclude(owner_text__contains='علوی')
@@ -85,6 +85,12 @@ def e_req_report(request):
     # mohammadi = reqs.filter(owner_text__contains='محمدی')
     # alavi = reqs.filter(owner_text__contains='علوی')
     context = {
+        'expert': {
+            'zarif': zarif_account,
+            'mohammadi': mohammadi_account,
+            'alavi': alavi_account,
+            'foroughi': foroughi_account,
+        },
         'reqs': reqs,
         'zarif': zarif,
         'mohammadi': mohammadi,
@@ -110,7 +116,7 @@ def check_orders(request):
 
 
 def users_summary(user_txt, user_account, date, not_entered_reqs):
-    reqs = Requests.objects.filter(is_active=True).filter(date_fa__gte=date).filter(owner=user_account)
+    reqs = Requests.objects.filter(is_active=True, date_fa__gte=date, owner=user_account)
     all_reqs = Requests.objects.filter(is_active=True, owner=user_account)
     result_list = []
     for req in reqs:
