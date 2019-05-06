@@ -8,6 +8,8 @@ from motordb import models
 
 
 # Create your views here.
+from motordb.models import MotorsCode
+from req_track.models import TrackXpref
 
 
 def motordb_index(request):
@@ -16,6 +18,18 @@ def motordb_index(request):
     motors = models.MotorsCode.objects.all()
 
     return render(request, 'motordb/index_motor_code.html', {'motors': motors})
+
+
+def codes_not_entered(request):
+    codes = TrackXpref.objects.values('code')\
+        .exclude(code__in=[a['code'] for a in MotorsCode.objects.values('code').distinct()])\
+        .distinct().values('code', 'details')
+
+    context = {
+        'codes': codes
+    }
+
+    return render(request, 'motordb/codes_not_entered.html', context)
 
 
 def motor_view(request):

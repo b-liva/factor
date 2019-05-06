@@ -30,6 +30,7 @@ urlpatterns = [
   path('delall', motordb.views.del_all_motors, name='del_all_motors'),
   path('insert', motordb.views.motordb_insert, name='motordb_insert'),
   path('index', motordb.views.motordb_index, name='motordb_index'),
+  path('codes_not_entered', motordb.views.codes_not_entered, name='codes_not_entered'),
   path('find', motordb.views.motordb_find, name='motordb_find'),
   path('search_form', motordb.views.motordb_search_form, name='motordb_search_form'),
   path('search', motordb.views.motordb_search, name='motordb_search'),

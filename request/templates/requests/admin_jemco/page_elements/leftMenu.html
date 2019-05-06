@@ -109,6 +109,7 @@
                         {% endif %}
                         {% if perms.request.index_motordb %}
                             <li><a href="{% url 'motordb_index' %}">موتورها</a></li>
+                            <li><a href="{% url 'codes_not_entered' %}">کدهای وارد نشده</a></li>
                         {% endif %}
                         {% if perms.request.index_motordb %}
                             <li><a href="{% url 'reqspec_index_no_summary' %}">موتورهای روتین</a></li>
@@ -140,6 +141,7 @@
                             <li><a href="{% url 'req_track:proformas_complete' %}">پ ف (واردشده)</a></li>
                             <li><a href="{% url 'req_track:proformas_uncomplete' %}">پ ف (خطا)</a></li>
                             <li><a href="{% url 'req_track:check_proforma' %}">چک پ ف</a></li>
+                            <li><a href="{% url 'req_track:create_proforma' %}">ثبت پ ف</a></li>
                         {% endif %}
                     </ul>
                 </li>
