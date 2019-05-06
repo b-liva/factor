@@ -41,6 +41,8 @@ urlpatterns = [
     path('proformas_complete', views.proformas_complete, name='proformas_complete'),
     path('proformas_uncomplete', views.proformas_uncomplete, name='proformas_uncomplete'),
     path('check_proforma', views.check_proforma, name='check_proforma'),
+    path('create_proforma', views.create_proforma, name='create_proforma'),
+    path('clear-flags', views.clear_flags, name='clear_flags'),
 
 ]
 

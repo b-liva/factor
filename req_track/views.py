@@ -12,12 +12,12 @@ from req_track.models import ReqEntered, Payments, TrackItemsCode, TrackXpref
 from .forms import E_Req_Form
 from django.db import models
 
+
 # Create your views here.
 
 
 @login_required
 def e_req_add(request):
-
     if request.method == 'POST':
         form = E_Req_Form(request.POST or None)
         if form.is_valid():
@@ -65,9 +65,9 @@ def e_req_delete_all(request):
 
 def e_req_report(request):
     reqs = ReqEntered.objects.filter(is_entered=False, is_request=True)
-        # .exclude(owner_text__contains='ظریف')\
-        # .exclude(owner_text__contains='محمدی')\
-        # .exclude(owner_text__contains='علوی')
+    # .exclude(owner_text__contains='ظریف')\
+    # .exclude(owner_text__contains='محمدی')\
+    # .exclude(owner_text__contains='علوی')
     second = reqs
     if not request.user.is_superuser:
         reqs = reqs.filter(owner_text__contains=request.user.last_name)
@@ -123,7 +123,7 @@ def users_summary(user_txt, user_account, date, not_entered_reqs):
         delay_entered = jdatetime.date.fromgregorian(date=req.pub_date, locale='fa_IR') - req.date_fa
         result_list.append(delay_entered.days)
     if len(result_list):
-        avg_time = sum(result_list)/len(result_list)
+        avg_time = sum(result_list) / len(result_list)
     else:
         avg_time = 0
     response = {
@@ -256,7 +256,6 @@ def motor_codes_check(request):
 
 
 def motor_codes_process(request):
-
     green_codes = TrackItemsCode.objects.filter(green_flag=True)[0:150]
     for code in green_codes:
         a = code.details.split('.')
@@ -301,35 +300,38 @@ def motor_codes_process(request):
 
 
 def proformas(request):
-    all_proformas = TrackXpref.objects.filter(red_flag=True).order_by('date_fa')
+    all_proformas = TrackXpref.objects.filter(red_flag=False, is_entered=False).order_by('date_fa')
     count = all_proformas.values('number').distinct().count()
 
     context = {
         'all_proformas': all_proformas,
         'count': count,
+        'title': 'وارد نشده',
     }
 
     return render(request, 'proformas/proformas.html', context)
 
 
 def proformas_complete(request):
-    all_proformas = TrackXpref.objects.filter(complete=True, red_flag=False)
+    all_proformas = TrackXpref.objects.filter(is_entered=True, red_flag=False)
     count = all_proformas.values('number').distinct().count()
 
     context = {
         'all_proformas': all_proformas,
         'count': count,
+        'title': 'وارد شده',
     }
 
     return render(request, 'proformas/proformas.html', context)
 
 
 def proformas_uncomplete(request):
-    all_proformas = TrackXpref.objects.filter(complete=False, red_flag=False)
+    all_proformas = TrackXpref.objects.filter(red_flag=True, is_entered=True)
     count = all_proformas.values('number').distinct().count()
 
     context = {
         'all_proformas': all_proformas,
+        'title': 'خطا',
         'count': count,
     }
 
@@ -347,18 +349,80 @@ def prof_count(prof):
 
 
 def check_proforma(request):
-    allproformas = TrackXpref.objects.filter(is_entered=False)
-    not_red = TrackXpref.objects.filter(red_flag=False, is_entered=False)
+    allproformas = TrackXpref.objects.all()
     for track_prof in allproformas:
         try:
-            print(track_prof.number)
             prof = Xpref.objects.get(number=track_prof.number)
-            print(True)
-            if prof.prefspec_set.filter(price__gt=0).count() == TrackXpref.objects.filter(number=track_prof.number).count() and \
+            if prof.prefspec_set.filter(price__gt=0).count() == TrackXpref.objects.filter(
+                    number=track_prof.number).count() and \
                     prof_count(prof) == track_prof_count(track_prof):
-                track_prof.complete = True
+                # entered with no error -> Complete
+                track_prof.is_entered = True
+                track_prof.red_flag = False
+            else:
+                # there is some error with this item
+                track_prof.is_entered = True
+                track_prof.red_flag = True
         except:
-            track_prof.red_flag = True
+            # it is not entered.
+            track_prof.is_entered = False
+            track_prof.red_flag = False
 
         track_prof.save()
     return redirect('req_track:proformas')
+
+
+def create_proforma(request):
+    """
+    Creates Proformas from imported proformas. Works with proformas that are not entered before.
+    :param request:
+    :return: None
+    """
+    proformas = TrackXpref.objects.exclude(is_entered=True, req_number__isnull=True)
+    for proforma in proformas:
+        try:
+            req = Requests.objects.get(number=proforma.req_number)
+            if Xpref.objects.filter(number=proforma.number):
+                prof = Xpref.objects.get(number=proforma.number)
+            else:
+                prof = Xpref()
+                prof.number = proforma.number
+                prof.owner = req.owner
+                prof.req_id = req
+                prof.date_fa = proforma.date_fa.replace('/', '-')
+                prof.summary = 'added automatically'
+                prof.save()
+                for r in req.reqspec_set.filter(is_active=True):
+                    ps = PrefSpec()
+                    ps.code = r.code
+                    ps.type = r.type
+                    ps.code = r.code
+                    ps.price = 0
+                    ps.kw = r.kw
+                    ps.qty = r.qty
+                    ps.rpm = r.rpm
+                    ps.voltage = r.voltage
+                    ps.ip = r.ip
+                    ps.ic = r.ic
+                    ps.summary = r.summary
+                    ps.owner = request.user
+                    ps.xpref_id = prof
+                    ps.reqspec_eq = r
+                    ps.summary = 'added automatically'
+                    ps.save()
+            if req.reqspec_set.filter(code=proforma.code):
+                ps = prof.prefspec_set.get(code=proforma.code)
+                ps.price = proforma.price
+                ps.save()
+            else:
+                prof.delete()
+        except:
+            pass
+
+    return redirect('req_track:check_proforma')
+
+
+def clear_flags(request):
+    profs = TrackXpref.objects.all()
+    profs.update(is_entered=False, red_flag=False)
+    return redirect('req_track:proformas_uncomplete')
