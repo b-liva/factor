@@ -29,6 +29,8 @@
                     {#            <th>Id</th>#}
                     <th class="text-center">کد مشتری</th>
                     <th class="text-center">نام</th>
+                    <th class="text-center">تلفن</th>
+                    <th class="text-center">owner</th>
 {#                    <th class="text-center">نوع</th>#}
                     {#            <th>Date</th>#}
                     <th class="text-center">تاریخ عضویت</th>
@@ -43,6 +45,8 @@
                         {#                        <td>{{ customer.pk }}</td>#}
                         <td>{{ customer.code }}</td>
                         <td>{{ customer.name }}</td>
+                        <td>{% if customer.phone %}{{ customer.phone }}{% endif %}</td>
+                        <td>{{ customer.owner.last_name }}</td>
 {#                        <td>{{ customer.type.name }}</td>#}
                         <td>{{ customer.date2 }}</td>
                         <td>
