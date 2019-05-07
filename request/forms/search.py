@@ -254,3 +254,39 @@ class ProformaSearchForm(forms.Form):
         widget=forms.Select(attrs={
             'class': 'form-control',
         }), choices=ITEM_PER_PAGE, required=False)
+
+
+class PermSearchForm(ProformaSearchForm):
+
+    SORT_CHOICES = (
+        ('due_date', 'تاخیر',),
+        ('qty_remaining', 'مانده مجوز',),
+    )
+    sort_asc_dsc = (
+        (1, 'صعودی',),
+        (2, 'نزولی',),
+    )
+    sort_by = forms.ChoiceField(
+        label='مرتب سازی',
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        }), choices=SORT_CHOICES, required=False)
+    dsc_asc = forms.ChoiceField(
+        label='اولویت',
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        }), choices=sort_asc_dsc, required=False)
+    CHOICES = (
+        ('0', '---',),
+        ('complete', 'تحویل شده',),
+        ('not_complete', 'مانده',),
+
+    )
+    status = forms.ChoiceField(
+        label='وضعیت',
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        }), choices=CHOICES, required=False)
+
+
+

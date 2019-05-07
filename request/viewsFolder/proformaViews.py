@@ -14,7 +14,7 @@ import request.templatetags.functions as funcs
 from accounts.models import User
 from customer.models import Customer
 from request import models
-from request.forms.search import ProformaSearchForm
+from request.forms.search import ProformaSearchForm, PermSearchForm
 
 from request.models import Requests, Xpref, ReqSpec, PrefSpec
 from pricedb.models import MotorDB
@@ -175,39 +175,55 @@ def perm_index(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    prefs = Xpref.objects.filter(is_active=True, owner=request.user, perm=True) \
-        .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0)))\
-        .annotate(total_qty_sent=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0)))\
-        .order_by('date_fa', 'pk').reverse()
-
-    prefs = Xpref.objects.filter(is_active=True, owner=request.user, perm=True) \
+    prof_list = Xpref.objects.filter(is_active=True, perm=True) \
         .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0))) \
         .annotate(total_qty_sent=Sum('prefspec__qty_sent', filter=Q(prefspec__price__gt=0))) \
-        .annotate(qty_remaining=F('total_qty') - F('total_qty_sent')) \
-        .filter(qty_remaining__gt=0) \
-        .order_by('due_date', 'pk')
+        .annotate(qty_remaining=F('total_qty') - F('total_qty_sent')).order_by('due_date').prefetch_related('owner')
 
-    # new = prefs.exclude(prefspec__price=False).distinct().annotate(total=Count('prefspec'))
-    if request.user.is_superuser:
-        # prefs = Xpref.objects.filter(is_active=True, perm=True)\
-        #     .annotate(remained_time=ExpressionWrapper(F('due_date') - today_fa, output_field=DurationField()))\
-        #     .order_by('date_fa', 'pk').reverse()
+    if not request.user.is_superuser:
+        prof_list = prof_list.filter(owner=request.user)
 
-        prefs = Xpref.objects.filter(is_active=True, perm=True).order_by('due_date', 'pk')
+    form = PermSearchForm()
 
-        prefs = Xpref.objects.filter(is_active=True, perm=True) \
-            .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0))) \
-            .annotate(total_qty_sent=Sum('prefspec__qty_sent', filter=Q(prefspec__price__gt=0))) \
-            .annotate(qty_remaining=F('total_qty') - F('total_qty_sent')) \
-            .filter(qty_remaining__gt=0) \
-            .order_by('due_date', 'pk')
+    if request.method == 'POST':
+        form = PermSearchForm(request.POST or None)
+        if request.POST['customer_name']:
+            if Customer.objects.filter(name=request.POST['customer_name']):
+                customer = Customer.objects.get(name=request.POST['customer_name'])
+                prof_list = prof_list.filter(req_id__customer=customer)
+            else:
+                prof_list = prof_list.filter(req_id__customer__name__contains=request.POST['customer_name'])
+        if request.POST['owner'] and request.POST['owner'] != '0':
+
+            owner = User.objects.get(pk=request.POST['owner'])
+            prof_list = prof_list.distinct().filter(Q(owner=owner) | Q(req_id__colleagues=owner))
+        if request.POST['date_min']:
+            prof_list = prof_list.filter(date_fa__gte=request.POST['date_min'])
+        if request.POST['date_max']:
+            prof_list = prof_list.filter(date_fa__lte=request.POST['date_max'])
+        if request.POST['status'] and request.POST['status'] != '0':
+            status = request.POST['status']
+
+            if status == 'not_complete':
+                prof_list = prof_list.filter(qty_remaining__gt=0)
+            elif status == 'complete':
+                prof_list = prof_list.filter(qty_remaining=0)
+
+        if request.POST['sort_by']:
+            sort_by = request.POST['sort_by']
+            prof_list = prof_list.order_by(f"{request.POST['sort_by']}")
+            if sort_by == 'due_date':
+                prof_list = prof_list.reverse()
+        if request.POST['dsc_asc'] == '2':
+            prof_list = prof_list.reverse()
 
     res = []
-    for p in prefs:
+    for p in prof_list:
         res.append(p)
 
     context = {
         'permission': res,
+        'form': form,
         'title': 'مجوز ساخت',
         'showDelete': True,
     }

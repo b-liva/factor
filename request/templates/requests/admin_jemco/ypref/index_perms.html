@@ -31,13 +31,72 @@
                                 <i class="fa fa-search" aria-hidden="true"></i>
                             </button>
                             <a class="btn-success btn-sm" href="{% url 'perm_export' %}">
-                                <i class="fa fa-download" aria-hidden="true"></i>    اکسل
+                                <i class="fa fa-download" aria-hidden="true"></i> اکسل
                             </a>
                         </form>
                     </div>
                 {% endif %}
 
+                <div class="col-md-12">
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="col-md-4">
+                            <div class="col-md-12">
+                                {{ form.customer_name.errors }}
+                                <label for="{{ form.customer_name.id_for_label }}">{{ form.customer_name.label }}</label>
+                                {{ form.customer_name }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.date_min.errors }}
+                                <label for="{{ form.date_min.id_for_label }}">{{ form.date_min.label }}</label>
+                                {{ form.date_min }}
 
+
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.date_max.errors }}
+                                <label for="{{ form.date_max.id_for_label }}">{{ form.date_max.label }}</label>
+                                {{ form.date_max }}
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="col-md-6">
+                                {{ form.status.errors }}
+                                <label for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+                                {{ form.status }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.owner.errors }}
+                                <label for="{{ form.owner.id_for_label }}"> {{ form.owner.label }} </label>
+                                {{ form.owner }}
+
+
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.sort_by.errors }}
+                                <label for="{{ form.sort_by.id_for_label }}">{{ form.sort_by.label }}</label>
+                                {{ form.sort_by }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.dsc_asc.errors }}
+                                <label for="{{ form.dsc_asc.id_for_label }}"> {{ form.dsc_asc.label }} </label>
+                                {{ form.dsc_asc }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.item_per_page.errors }}
+                                <label for="{{ form.item_per_page.id_for_label }}"> {{ form.item_per_page.label }} </label>
+                                {{ form.item_per_page }}
+                            </div>
+
+                        </div>
+                        <button type="submit" name="submit" class="btn btn-primary">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                        <a class="btn btn-danger" href="{% url 'perm_index' %}" data-toggle="tooltip" title="حذف فیلتر ها"><i class="fa fa-close" aria-hidden="true"></i></a>
+                    </form>
+                </div>
                 <div class="col-md-4 left">
                     <span class="btn-danger">تاخیر تحویل</span>
                     <span class="btn-warning">کمتر از یک ماه</span>
