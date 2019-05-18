@@ -270,11 +270,19 @@ def reqspec_search(request):
         return redirect('errorpage')
     form_data = {}
     # specs = ReqSpec.objects.filter(is_active=True)
+
+    if not request.method == 'POST':
+        if 'reqspec-search-post' in request.session:
+            request.POST = request.session['reqspec-search-post']
+            request.method = 'POST'
+
     request.session['temp_request_in_session'] = request.POST
 
     specs = ReqSpec.objects.filter(req_id__is_active=True).prefetch_related('req_id', 'req_id__owner', 'req_id__customer', 'req_id__colleagues', 'type', 'req_id__xpref_set', 'req_id__xpref_set__payment_set')
     if request.method == 'POST':
         # specs = ReqSpec.objects
+        request.session['reqspec-search-post'] = request.POST
+
         (form_data, specs,) = function_define(request.POST, specs)
         print(form_data)
         search_form = search.SpecSearchForm(form_data)
