@@ -257,7 +257,6 @@ class ProformaSearchForm(forms.Form):
 
 
 class PermSearchForm(ProformaSearchForm):
-
     SORT_CHOICES = (
         ('due_date', 'تاخیر',),
         ('qty_remaining', 'مانده مجوز',),
@@ -288,5 +287,30 @@ class PermSearchForm(ProformaSearchForm):
             'class': 'form-control',
         }), choices=CHOICES, required=False)
 
+
+class PrefSpecSearchForm(PermSearchForm):
+    SORT_CHOICES = (
+        ('xpref_id__date_fa', 'تاریخ',),
+        ('kw', 'کیلووات',),
+        ('qty_remaining', 'مانده',),
+    )
+    sort_by = forms.ChoiceField(
+        label='مرتب سازی',
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        }), choices=SORT_CHOICES, required=False)
+
+    kw_min = forms.FloatField(label='کیلووات(از)', max_value=10000, required=False)
+    kw_min.widget = forms.TextInput(attrs={
+        'class': 'form-control',
+    })
+    kw_max = forms.FloatField(label='کیلووات(تا)', max_value=10000, required=False)
+    kw_max.widget = forms.TextInput(attrs={
+        'class': 'form-control',
+    })
+    rpm = forms.IntegerField(label='سرعت', max_value=3001, required=False)
+    rpm.widget = forms.TextInput(attrs={
+        'class': 'form-control'
+    })
 
 

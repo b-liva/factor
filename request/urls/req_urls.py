@@ -21,10 +21,12 @@ urlpatterns = [
     path('index-vue', request.views2.request_index_vue, name='request_index_vue'),
     path('index-vue-deleted', request.views2.request_index_vue_deleted, name='request_index_vue_deleted'),
     path('spec-search', request.views2.reqspec_search, name='reqspec_search'),
+    path('reqspec_clear_cache', request.views2.reqspec_clear_cache, name='reqspec_clear_cache'),
     path('fsearch3', request.views2.fsearch3, name='fsearch3'),
     path('fsearch2', request.views2.fsearch2, name='fsearch2'),
     path('search', RequestList.as_view(), name='req_search2'),
     path('request-report', request.views2.req_report, name='req_report'),
+    path('request_report_cc', request.views2.request_report_cc, name='request_report_cc'),
     path('search-req2', RequestFilterView.as_view(), name='search_req'),
 
     path('find', request.views2.request_find, name='request_find'),

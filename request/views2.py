@@ -325,7 +325,8 @@ def reqspec_search(request):
 
 @login_required
 def reqspec_clear_cache(request):
-    request.session.pop('reqspec-search-post')
+    if 'reqspec-search-post' in request.session:
+        request.session.pop('reqspec-search-post')
     return redirect('reqspec_search')
 
 
@@ -1273,7 +1274,8 @@ def req_report(request):
 
 @login_required
 def request_report_cc(request):
-    request.session.pop('search-persons-post')
+    if 'search-persons-post' in request.session:
+        request.session.pop('search-persons-post')
     return redirect('req_report')
 
 

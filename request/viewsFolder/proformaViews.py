@@ -14,7 +14,7 @@ import request.templatetags.functions as funcs
 from accounts.models import User
 from customer.models import Customer
 from request import models
-from request.forms.search import ProformaSearchForm, PermSearchForm
+from request.forms.search import ProformaSearchForm, PermSearchForm, PrefSpecSearchForm
 
 from request.models import Requests, Xpref, ReqSpec, PrefSpec
 from pricedb.models import MotorDB
@@ -108,6 +108,13 @@ def pref_index(request):
 
 
 @login_required
+def pref_index_cc(request):
+    if 'proforma-search-post' in request.session:
+        request.session.pop('proforma-search-post')
+    return redirect('pref_index')
+
+
+@login_required
 def prof_export(request):
 
     try:
@@ -166,6 +173,83 @@ def prof_export(request):
     ws.cols_right_to_left = True
     wb.save(response)
     return response
+
+
+@login_required
+def prefspec_index(request):
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    spec_list = PrefSpec.objects.filter(xpref_id__is_active=True, xpref_id__perm=True)\
+        .annotate(qty_remaining=F('qty') - F('qty_sent'))
+
+    if not request.method == 'POST':
+        if 'prefspec-search-post' in request.session:
+            request.POST = request.session['prefspec-search-post']
+            request.method = 'POST'
+
+    form = PrefSpecSearchForm()
+    item_per_page = 50
+
+    if request.method == 'POST':
+        item_per_page = request.POST['item_per_page']
+        form = PrefSpecSearchForm(request.POST or None)
+        request.session['prefspec-search-post'] = request.POST
+        if request.POST['customer_name']:
+            if Customer.objects.filter(name=request.POST['customer_name']):
+                customer = Customer.objects.get(name=request.POST['customer_name'])
+                spec_list = spec_list.filter(xpref_id__req_id__customer=customer)
+            else:
+                spec_list = spec_list.filter(xpref_id__req_id__customer__name__contains=request.POST['customer_name'])
+        if request.POST['owner'] and request.POST['owner'] != '0':
+
+            owner = User.objects.get(pk=request.POST['owner'])
+            spec_list = spec_list.distinct().filter(Q(xpref_id__owner=owner) | Q(xpref_id__req_id__colleagues=owner))
+        if request.POST['date_min']:
+            spec_list = spec_list.filter(xpref_id__date_fa__gte=request.POST['date_min'])
+        if request.POST['date_max']:
+            spec_list = spec_list.filter(xpref_id__date_fa__lte=request.POST['date_max'])
+        if request.POST['kw_max']:
+            spec_list = spec_list.filter(kw__lte=request.POST['kw_max'])
+        if request.POST['kw_min']:
+            spec_list = spec_list.filter(kw__gte=request.POST['kw_min'])
+        if request.POST['rpm']:
+            spec_list = spec_list.filter(rpm=request.POST['rpm'])
+        if request.POST['status'] and request.POST['status'] != '0':
+            status = request.POST['status']
+
+            if status == 'not_complete':
+                spec_list = spec_list.filter(qty_remaining__gt=0)
+            elif status == 'complete':
+                spec_list = spec_list.filter(qty_remaining=0)
+
+        if request.POST['sort_by']:
+            spec_list = spec_list.order_by(f"{request.POST['sort_by']}")
+        if request.POST['dsc_asc'] == '2':
+            spec_list = spec_list.reverse()
+
+    page = request.GET.get('page')
+    paginator = Paginator(spec_list, item_per_page)
+    try:
+        prefspec_page = paginator.page(page)
+    except PageNotAnInteger:
+        prefspec_page = paginator.page(1)
+    except EmptyPage:
+        prefspec_page = paginator.page(paginator.num_pages)
+    context = {
+        'pref_specs': prefspec_page,
+        'form': form,
+    }
+    return render(request, 'requests/admin_jemco/ypref/prefspec_index.html', context)
+
+
+@login_required
+def prefspec_clear_cache(request):
+    if 'prefspec-search-post' in request.session:
+        request.session.pop('prefspec-search-post')
+    return redirect('prefspec_index')
 
 
 @login_required
