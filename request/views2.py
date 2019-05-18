@@ -1272,6 +1272,12 @@ def req_report(request):
 
 
 @login_required
+def request_report_cc(request):
+    request.session.pop('search-persons-post')
+    return redirect('req_report')
+
+
+@login_required
 def finish(request, request_pk):
     req = Requests.objects.get(pk=request_pk)
     req.finished = not req.finished
