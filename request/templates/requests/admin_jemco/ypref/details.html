@@ -57,149 +57,159 @@
 
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
-                {#                    Edit Buttons#}
-                <div class="row">
-                    <div class="pull-left">
+                <div class="row" style="margin-top: 75px">
+                    <div class="col-xs-8">
+                        {% if pref.summary %}
+                            <h4 style="color: #26b99a;">شرح پیگیری</h4>
+                            {{ pref.summary }}
+                        {% endif %}
+                    </div>
+                    <div class="col-xs-4">
                         {% if perms.request.add_xpref %}
                             <div>
-
-                                <a class="btn btn-sm btn-success" href="{% url 'pro_form' %}">
+                                <a class="btn btn-sm btn-success" href="{% url 'pro_form' %}" data-toggle="tooltip"
+                                   title="ثبت پیش فاکتور جدید">
                                     <i class="fa fa-plus" aria-hidden="true"></i>
-                                    پیش فاکتور جدید</a>
+                                    پیش فاکتور</a>
                                 <a class="btn btn-sm btn-info" href="{% url 'pref_index' %}">
                                     <i class="fa fa-list-ul" aria-hidden="true"></i>
                                     پیش فاکتورها</a>
 
-                            </div>
-                            <div>
                                 <a class="btn btn-warning btn-sm pull-left" type="submit" name="submit"
+                                   data-toggle="tooltip" title="ویرایش قیمت"
                                    href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
-                                    <i class="fa fa-pencil"></i> ویرایش قیمت</a>
-                                <a class="btn btn-warning btn-sm pull-left"
+                                    <i class="fa fa-pencil"></i> قیمت</a>
+                                <a class="btn btn-warning btn-sm pull-left" data-toggle="tooltip"
+                                   title="ویرایش پیش فاکتور"
                                    href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
-                                    <i class="fa fa-pencil"></i> ویرایش پیشفاکتور</a>
+                                    <i class="fa fa-pencil"></i> پیشفاکتور</a>
 
-                            </div>
-                            <div>
-                                <a class="btn btn-sm btn-success" href="{% url 'pay_form_prof' prof_pk=pref.pk %}">
+                                <a class="btn btn-sm btn-success" href="{% url 'pay_form_prof' prof_pk=pref.pk %}"
+                                   data-toggle="tooltip" title="ثبت پرداخت">
                                     <i class="fa fa-plus" aria-hidden="true"></i>
-                                    ثبت پرداخت</a>
+                                    پرداخت</a>
                             </div>
                         {% endif %}
 
                     </div>
                 </div>
-                <div style="margin-top: 150px">
-                    <h4>جزئیات پیشفاکتور شماره {{ pref.number }} مربوط به درخواست شماره
-                        <a class="badge badge-light"
-                           href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
-                    </h4>
-                    {#                Table of specs#}
-                    <div class="table-responsive">
-                        <table class="table table-hover text-center">
-                            <thead>
-                            <tr>
-                                <th scope="col" class="text-center">ردیف</th>
-                                <th scope="col" class="text-center">کد کالا</th>
-                                <th scope="col" class="text-center">تعداد</th>
-                                <th scope="col" class="text-center">ارسال شده</th>
-                                <th scope="col" class="text-center">مانده</th>
-                                <th scope="col" class="text-center">کیلووات</th>
-                                <th scope="col" class="text-center">سرعت</th>
-                                <th scope="col" class="text-center">ولتاژ</th>
-                                <th scope="col" class="text-center">ملاحظات</th>
-                                <th scope="col" class="text-center">قیمت واحد</th>
-                                <th scope="col" class="text-center">مجموع قیمت</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for index, object in nested.items %}
-                                {% if object.obj.price and object.obj.qty %}
-                                    <tr>
-                                        <th scope="row" class="text-center">{{ forloop.counter }}</th>
-                                        <td>{{ object.obj.code }}</td>
-                                        <td>{{ object.obj.qty }}</td>
-                                        <td>{{ object.obj.qty_sent }}</td>
-                                        <td style="border: 1px dashed brown">{{ object.obj|qty_remaining }}</td>
-                                        <td>{{ object.obj.kw }}</td>
-                                        <td>{{ object.obj.rpm }}</td>
-                                        <td>{{ object.obj.voltage }}</td>
-                                        <td>{{ object.obj.considerations }}</td>
-                                        <td>{{ object.obj.price|intcomma:0 }}</td>
-                                        <td>{{ object.spec_total|intcomma:0 }}</td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                            <tr style="border-top: 2px black solid">
-                                <td colspan="3">مالیات ارزش افزوده</td>
-                                <td colspan="5"></td>
-                                <td class="amount-total ">{{ vat | floatformat:1 | intcomma }}</td>
-                            </tr>
-                            <tr style="border-top: 2px black solid">
-                                <td colspan="3" class="emphsize">مجموع</td>
-                                <td class="kw-total emphsize">{{ kw_total|intcomma }} کیلووات</td>
-                                <td colspan="4"></td>
-                                <td class="amount-total emphsize">{{ proforma_total | floatformat:1 | intcomma }}</td>
-                            </tr>
-                            </tbody>
+
+                <h4 style="margin-top: 75px; color: #26b99a;">جزئیات پیشفاکتور شماره {{ pref.number }} مربوط به درخواست
+                    شماره
+                    <a class="badge badge-light"
+                       href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
+                </h4>
+                {#                Table of specs#}
+                <div class="table-responsive">
+                    <table class="table table-hover text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="text-center">ردیف</th>
+                            <th scope="col" class="text-center">کد کالا</th>
+                            <th scope="col" class="text-center">تعداد</th>
+                            <th scope="col" class="text-center">ارسال شده</th>
+                            <th scope="col" class="text-center">مانده</th>
+                            <th scope="col" class="text-center">کیلووات</th>
+                            <th scope="col" class="text-center">سرعت</th>
+                            <th scope="col" class="text-center">ولتاژ</th>
+                            <th scope="col" class="text-center">ملاحظات</th>
+                            <th scope="col" class="text-center">قیمت واحد</th>
+                            <th scope="col" class="text-center">مجموع قیمت</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for index, object in nested.items %}
+                            {% if object.obj.price and object.obj.qty %}
+                                <tr>
+                                    <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                    <td>{{ object.obj.code }}</td>
+                                    <td>{{ object.obj.qty }}</td>
+                                    <td>{{ object.obj.qty_sent }}</td>
+                                    <td style="border: 1px dashed brown">{{ object.obj|qty_remaining }}</td>
+                                    <td>{{ object.obj.kw }}</td>
+                                    <td>{{ object.obj.rpm }}</td>
+                                    <td>{{ object.obj.voltage }}</td>
+                                    <td>{{ object.obj.considerations }}</td>
+                                    <td>{{ object.obj.price|intcomma:0 }}</td>
+                                    <td>{{ object.spec_total|intcomma:0 }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        <tr style="border-top: 2px black solid">
+                            <td colspan="3">مالیات ارزش افزوده</td>
+                            <td colspan="5"></td>
+                            <td class="amount-total ">{{ vat | floatformat:1 | intcomma }}</td>
+                        </tr>
+                        <tr style="border-top: 2px black solid">
+                            <td colspan="3" class="emphsize">مجموع</td>
+                            <td class="kw-total emphsize">{{ kw_total|intcomma }} کیلووات</td>
+                            <td colspan="4"></td>
+                            <td class="amount-total emphsize">{{ proforma_total | floatformat:1 | intcomma }}</td>
+                        </tr>
+                        </tbody>
 
 
-                        </table>
+                    </table>
+                </div>
+                {#        Images#}
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        {% for img in prof_images %}
+                            <a href="{{ img.image.url }}" target="_blank">
+                                <img class="img-responsive img-thumbnail col-md-3"
+                                     src="{{ img.image.url }}" style="">
+                            </a>
+                        {% endfor %}
                     </div>
 
-                    {#        Images#}
-                    <div class="row">
-                        <div class="col-md-10 col-md-offset-1">
-                            {% for img in prof_images %}
-                                <a href="{{ img.image.url }}" target="_blank">
-                                    <img class="img-responsive img-thumbnail col-md-3"
-                                         src="{{ img.image.url }}" style="">
-                                </a>
-                            {% endfor %}
-                        </div>
-
-
-                    </div>
-                    {#        Payments#}
-                    <div class="row">
-                        <h4>مبالغ دریافتی بابت این پیش فاکتور:</h4>
-                        <div class="col-xs-12 col-sm-6 col-md-4">
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <td>شماره</td>
-                                        <td>تاریخ</td>
-                                        <td>مبلغ</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for pay in pref.payment_set.all %}
-                                        <tr>
-                                            <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
-                                                {{ pay.number }}
-                                            </a>
-                                            </td>
-                                            <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
-                                                {{ pay.date_fa }}
-                                            </a>
-                                            </td>
-                                            <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
-                                                {{ pay.amount | floatformat:0 | intcomma }}
-                                            </a>
-                                            </td>
-
-                                        </tr>
-                                    {% endfor %}
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-                    </div>
 
                 </div>
+                {#        Payments#}
+                {% if pref.payment_set.all.count %}
+                    <div class="row">
+                        <div style="margin-top: 100px">
+                            <h4 style="color: #26b99a;">مبالغ دریافتی بابت این پیش فاکتور:</h4>
+                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <td>شماره</td>
+                                            <td>تاریخ</td>
+                                            <td>مبلغ</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for pay in pref.payment_set.all %}
+
+                                            <tr>
+                                                <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
+                                                    {{ pay.number }}
+                                                </a>
+                                                </td>
+                                                <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
+                                                    {{ pay.date_fa }}
+                                                </a>
+                                                </td>
+                                                <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
+                                                    {{ pay.amount | floatformat:0 | intcomma }}
+                                                </a>
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                {% endif %}
+
+
             </div>
 
         </div>

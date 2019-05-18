@@ -135,7 +135,7 @@
 
                     <tbody class="">
                     {% for pref in prefs %}
-                        <tr>
+                        <tr data-toggle="tooltip" title="{{ pref.summary }}">
                             <td scope="row">{{ forloop.counter }}</td>
                             <td>{{ pref.number }}</td>
 
