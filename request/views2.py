@@ -276,7 +276,7 @@ def reqspec_search(request):
             request.POST = request.session['reqspec-search-post']
             request.method = 'POST'
 
-    request.session['temp_request_in_session'] = request.POST
+    # request.session['temp_request_in_session'] = request.POST
 
     specs = ReqSpec.objects.filter(req_id__is_active=True).prefetch_related('req_id', 'req_id__owner', 'req_id__customer', 'req_id__colleagues', 'type', 'req_id__xpref_set', 'req_id__xpref_set__payment_set')
     if request.method == 'POST':
@@ -321,6 +321,12 @@ def reqspec_search(request):
         'search_form': search_form,
     })
     return render(request, 'requests/admin_jemco/yreqspec/index_opt.html', context)
+
+
+@login_required
+def reqspec_clear_cache(request):
+    request.session.pop('reqspec-search-post')
+    return redirect('reqspec_search')
 
 
 @login_required
