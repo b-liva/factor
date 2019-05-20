@@ -67,7 +67,7 @@ def kwjs(request):
 
     requests = ReqSpec.objects\
         .filter(req_id__is_active=True, req_id__date_fa__gte=startDate, req_id__date_fa__lt=today)\
-        .values('req_id__date_fa').annotate(sum=Sum(F('kw') * F('qty'), output_field=FloatField()))
+        .values('req_id__date_fa').annotate(sum=Sum(F('kw') * F('qty'), output_field=FloatField())).order_by('req_id__date_fa')
 
     req_kw_dict = {
         str(x['req_id__date_fa']): x['sum'] for x in requests
