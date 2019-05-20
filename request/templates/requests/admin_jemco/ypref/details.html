@@ -60,7 +60,7 @@
                 <div class="row" style="margin-top: 75px">
                     <div class="col-xs-8">
                         {% if pref.summary %}
-                            <h4 style="color: #26b99a;">شرح پیگیری</h4>
+                            <h4 class="greenBtn">شرح پیگیری</h4>
                             {{ pref.summary }}
                         {% endif %}
                     </div>
@@ -94,7 +94,7 @@
                     </div>
                 </div>
 
-                <h4 style="margin-top: 75px; color: #26b99a;">جزئیات پیشفاکتور شماره {{ pref.number }} مربوط به درخواست
+                <h4 style="margin-top: 75px;" class="greenBtn">جزئیات پیشفاکتور شماره {{ pref.number }} مربوط به درخواست
                     شماره
                     <a class="badge badge-light"
                        href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
@@ -168,7 +168,7 @@
                 {% if pref.payment_set.all.count %}
                     <div class="row">
                         <div style="margin-top: 100px">
-                            <h4 style="color: #26b99a;">مبالغ دریافتی بابت این پیش فاکتور:</h4>
+                            <h4 class="greenBtn">مبالغ دریافتی بابت این پیش فاکتور:</h4>
                             <div class="col-xs-12 col-sm-6 col-md-4">
                                 <div class="table-responsive">
                                     <table class="table">
@@ -181,7 +181,6 @@
                                         </thead>
                                         <tbody>
                                         {% for pay in pref.payment_set.all %}
-
                                             <tr>
                                                 <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
                                                     {{ pay.number }}
@@ -195,25 +194,16 @@
                                                     {{ pay.amount | floatformat:0 | intcomma }}
                                                 </a>
                                                 </td>
-
                                             </tr>
                                         {% endfor %}
-
                                         </tbody>
                                     </table>
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
                 {% endif %}
-
-
             </div>
-
         </div>
-
     </div>
-
 {% endblock %}
