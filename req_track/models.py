@@ -10,7 +10,7 @@ from django_jalali.db import models as jmodels
 #
 #     def __str__(self):
 #         return '%s' % self.title
-from request.models import ReqSpec
+from request.models import ReqSpec, Xpref
 
 
 class ReqEntered(models.Model):
@@ -100,3 +100,22 @@ class TrackItemsCode(models.Model):
     green_flag = models.BooleanField(default=False)
     is_entered = models.BooleanField(default=False)
     temp_str = models.TextField(max_length=1000, null=True, blank=True)
+
+
+class ProformaFollowUp(models.Model):
+    owner = models.CharField(max_length=15)
+    date = models.CharField(max_length=15)
+    number = models.CharField(max_length=15)
+    details = models.TextField(blank=True, null=True)
+    customer = models.CharField(max_length=50, blank=True, null=True)
+    result = models.TextField()
+
+    def __str__(self):
+        return "%s - %s" % (self.number, self.owner)
+
+    def has_proforma(self):
+        try:
+            p = Xpref.objects.get(number=self.number)
+            return True
+        except:
+            return False

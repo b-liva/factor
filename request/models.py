@@ -2,6 +2,8 @@ import os.path
 from os.path import split
 
 # from django.contrib.auth.models import User
+from django.db.models import Sum, F
+
 from accounts.models import User
 from django.db import models
 import datetime
@@ -161,7 +163,6 @@ class ReqSpec(models.Model):
 class Xpref(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     req_id = models.ForeignKey(Requests, on_delete=models.DO_NOTHING)
-
     number = models.IntegerField(unique=True)
     temp_number = models.IntegerField(null=True, blank=True)
     pub_date = models.DateTimeField(default=now)
@@ -174,12 +175,22 @@ class Xpref(models.Model):
     verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     perm = models.BooleanField(default=False)
+    follow_up = models.TextField(blank=True, null=True)
 
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')
 
     def __str__(self):
         return '%s' % self.number
+
+    def proforma_details(self):
+        total_qty = self.prefspec_set.aggregate(Sum('qty'))
+        kws = self.prefspec_set.values('kw')
+        x = ''
+        for i in list(kws):
+            x += f"{i['kw']}, "
+
+        return "%s دستگاه  %s کیلووات" % (total_qty['qty__sum'], x)
 
     class Meta:
         permissions = (

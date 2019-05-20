@@ -189,7 +189,7 @@ class ProformaEditForm(forms.ModelForm):
     class Meta:
         model = models.Xpref
         fields = '__all__'
-        exclude = ('owner', 'pub_date', 'is_active', 'req_id', 'temp_number')
+        exclude = ('owner', 'pub_date', 'is_active', 'req_id', 'temp_number', 'follow_up')
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
@@ -217,7 +217,6 @@ class ProformaEditForm(forms.ModelForm):
             'perm': 'مجوز',
             'perm_date': 'تاریخ مجوز',
             'perm_number': 'شماره مجوز',
-
         }
 
 

@@ -23,3 +23,20 @@ class ProfEditForm(forms.ModelForm):
         fields = '__all__'
         exclude = ('req_id', 'owner', 'pub_date')
         widgets = {"image": forms.FileInput(attrs={'multiple': True})}
+
+
+class ProfFollowUpForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+
+        super(ProfFollowUpForm, self).__init__(*args, **kwargs)
+
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = models.Xpref
+        fields = ('follow_up',)
+
+        labels = {
+            'follow_up': 'شرح پیگیری',
+        }

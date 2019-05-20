@@ -1,6 +1,6 @@
 from import_export.admin import ImportExportModelAdmin
 from django.contrib import admin
-from .models import ReqEntered, Payments, TrackItemsCode, TrackXpref
+from .models import ReqEntered, Payments, TrackItemsCode, TrackXpref, ProformaFollowUp
 from import_export import resources
 
 # Register your models here.
@@ -9,6 +9,7 @@ from import_export import resources
 @admin.register(TrackItemsCode)
 @admin.register(TrackXpref)
 @admin.register(Payments)
+@admin.register(ProformaFollowUp)
 
 # class ReqResource(resources.ModelResource):
 #

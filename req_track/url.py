@@ -43,6 +43,9 @@ urlpatterns = [
     path('check_proforma', views.check_proforma, name='check_proforma'),
     path('create_proforma', views.create_proforma, name='create_proforma'),
     path('clear-flags', views.clear_flags, name='clear_flags'),
+    path('prof_followup_list', views.prof_followup_list, name='prof_followup_list'),
+    path('prof_followup_find', views.prof_followup_find, name='prof_followup_find'),
+    path('prof_followup_form/<int:prof>', views.prof_followup_form, name='prof_followup_form'),
 
 ]
 

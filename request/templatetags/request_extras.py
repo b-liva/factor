@@ -324,3 +324,21 @@ def total_orders_not_remaining():
 def total_orders_entered():
     reqs = Requests.objects.filter(is_active=True)
     return reqs.count()
+
+
+@register.filter(name='proforma_details')
+def proforma_details(prof_follow):
+    try:
+        prof = Xpref.objects.get(number=prof_follow.number)
+        return prof.proforma_details()
+    except:
+        return 'پیش فاکتور وارد نشده'
+
+
+@register.filter(name='proforma_customer')
+def proforma_customer(prof_follow):
+    try:
+        prof = Xpref.objects.get(number=prof_follow.number)
+        return prof.req_id.customer.name
+    except:
+        return ''

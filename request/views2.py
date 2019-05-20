@@ -809,7 +809,6 @@ def request_index_vue(request):
     return render(request, 'requests/admin_jemco/yrequest/vue/index.html', context)
 
 
-
 @login_required
 def request_index_vue_deleted(request):
     # requests =request_form Requests.objects.all()

@@ -6,9 +6,10 @@ from django.db.models import Q, Sum, F, FloatField
 from django.shortcuts import render, redirect
 
 from accounts.models import User
+from request.forms.proforma_forms import ProfFollowUpForm
 from request.models import Requests, Xpref, PrefSpec, ReqSpec
 from request.models import Payment as Request_payment
-from req_track.models import ReqEntered, Payments, TrackItemsCode, TrackXpref
+from req_track.models import ReqEntered, Payments, TrackItemsCode, TrackXpref, ProformaFollowUp
 from .forms import E_Req_Form
 from django.db import models
 
@@ -426,3 +427,40 @@ def clear_flags(request):
     profs = TrackXpref.objects.all()
     profs.update(is_entered=False, red_flag=False)
     return redirect('req_track:proformas_uncomplete')
+
+
+def prof_followup_list(request):
+    profs = ProformaFollowUp.objects.all()
+
+    context = {
+        'profs': profs,
+        'title': 'پیگیری پیش فاکتور',
+    }
+
+    return render(request, 'proformas/followup/index.html', context)
+
+
+def prof_followup_find(request):
+    print('01')
+    if request.method == 'POST':
+        number = request.POST['prof_number']
+        print(number)
+        if Xpref.objects.get(number=int(number)):
+            prof = Xpref.objects.get(number=int(number))
+            print('Ok')
+            redirect('req_track:prof_followup_form', prof=prof)
+        else:
+            print('Not Ok')
+
+    return render(request, 'proformas/followup/find.html')
+
+
+def prof_followup_form(request, prof):
+    print('01something')
+    form = ProfFollowUpForm(request.POST or None, instance=prof)
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'proformas/followup/form.html', context)
