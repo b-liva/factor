@@ -88,7 +88,7 @@ class SpecForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SpecForm, self).__init__(*args, **kwargs)
         # list = [ 'images']
-        list = ['sent', 'tech', 'price', 'permission', 'cancelled']
+        list = ['sent', 'tech', 'price', 'permission', 'cancelled', 'finished']
         for visible in self.visible_fields():
             if visible.name not in list:
                 visible.field.widget.attrs['class'] = 'form-control'
@@ -96,7 +96,7 @@ class SpecForm(forms.ModelForm):
     class Meta:
         model = models.ReqSpec
         fields = '__all__'
-        exclude = ('owner', 'req_id', 'is_active')
+        exclude = ('owner', 'req_id', 'is_active', 'ip_type', 'ic_type', 'price', 'permission', 'sent')
         labels = {
             'qty': ('تعداد'),
             'type': ('نوع'),
@@ -110,6 +110,7 @@ class SpecForm(forms.ModelForm):
             'price': ('پیشنهاد مالی'),
             'permission': ('مجوز ساخت'),
             'cancelled': ('انصراف مشتری'),
+            'finished': ('اختتام'),
         }
 
 
