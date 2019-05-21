@@ -31,9 +31,7 @@ class RequestFrom(forms.ModelForm):
 
     class Meta:
         model = models.Requests
-        fields = '__all__'
-        exclude = ('owner', 'pub_date', 'customer', 'added_by_customer', 'parent_number',
-                   'edited_by_customer', 'is_active', 'temp_number', 'finished', 'date_finished')
+        fields = ('number', 'colleagues', 'date_fa', 'summary')
         widgets = {
             'customer': forms.Select(attrs={
                 'class': 'form-control',
