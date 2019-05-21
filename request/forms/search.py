@@ -201,6 +201,7 @@ class ProformaSearchForm(forms.Form):
         ('expired', 'منقضی',),
         ('valid', 'معتبر',),
         ('perm', 'مجوز',),
+        ('to_follow', 'اولویت پیگیری',),
     )
     ITEM_PER_PAGE = (
         ('50', '50',),

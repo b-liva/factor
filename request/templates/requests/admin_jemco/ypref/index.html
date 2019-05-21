@@ -110,7 +110,8 @@
                 <button type="submit" name="submit" class="btn btn-sm btn-primary">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
-                <a class="btn btn-danger btn-sm" href="{% url 'pref_index_cc' %}" data-toggle="tooltip" title="حذف فیلترها"><i class="fa fa-close"></i></a>
+                <a class="btn btn-danger btn-sm" href="{% url 'pref_index_cc' %}" data-toggle="tooltip"
+                   title="حذف فیلترها"><i class="fa fa-close"></i></a>
             </form>
 
 
@@ -135,7 +136,8 @@
 
                     <tbody class="">
                     {% for pref in prefs %}
-                        <tr data-toggle="tooltip" title="{{ pref.summary }}">
+                        <tr class="largTooltip" data-toggle="tooltip" data-placement="auto"
+                            title="{{ pref.pretty_follow_up }}">
                             <td scope="row">{{ forloop.counter }}</td>
                             <td>{{ pref.number }}</td>
 
@@ -157,17 +159,29 @@
                             <td>{{ pref.owner.last_name }}</td>
                             <td>
                                 <a class="btn btn-primary btn-xs"
-                                   href="{% url 'pref_details' ypref_pk=pref.pk %}" data-toggle="tooltip" title="مشاهده">
+                                   href="{% url 'pref_details' ypref_pk=pref.pk %}" data-toggle="tooltip"
+                                   title="مشاهده">
                                     <i class="fa fa-eye"></i>
                                 </a>
+                                {% if user.is_superuser %}
+                                    <a class="btn btn-primary btn-xs" href="{% url 'to_follow' ypref_pk=pref.pk %}">
+                                        {% if pref.to_follow %}
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        {% else %}
+                                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                                        {% endif %}
+                                    </a>
+                                {% endif %}
                                 {% if perms.request.add_xpref and showDelete %}
 
                                     <a class="btn btn-primary btn-xs btn-warning"
-                                       href="{% url 'pref_edit2' ypref_pk=pref.pk %}" data-toggle="tooltip" title="ویرایش">
+                                       href="{% url 'pref_edit2' ypref_pk=pref.pk %}" data-toggle="tooltip"
+                                       title="ویرایش">
                                         <i class="fa fa-pencil"></i>
                                     </a>
                                     <a class="btn btn-primary btn-xs btn-danger"
-                                       href="{% url 'pref_delete' ypref_pk=pref.pk %}" data-toggle="tooltip" title="حذف"><i
+                                       href="{% url 'pref_delete' ypref_pk=pref.pk %}" data-toggle="tooltip"
+                                       title="حذف"><i
                                             class="fa fa-trash"></i> </a>
 
                                 {% endif %}

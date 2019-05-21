@@ -78,6 +78,8 @@ def pref_index(request):
                 prof_list = prof_list.filter(perm=True)
             elif status == 'expired':
                 prof_list = prof_list.filter(exp_date_fa__lt=today, perm=False)
+            elif status == 'to_follow':
+                prof_list = prof_list.filter(to_follow=True)
 
         if request.POST['sort_by']:
             prof_list = prof_list.order_by(f"{request.POST['sort_by']}")
@@ -104,6 +106,18 @@ def pref_index(request):
         'title': 'پیش فاکتور',
         'showDelete': True,
     })
+    return render(request, 'requests/admin_jemco/ypref/index.html', context)
+
+
+@login_required
+def prof_list_to_follow(request):
+
+    profs = Xpref.objects.filter(is_active=True, to_follow=True)
+
+    context = {
+        'prefs': profs,
+        'title': 'پیش فاکتورهای قابل پیگیری',
+    }
     return render(request, 'requests/admin_jemco/ypref/index.html', context)
 
 
@@ -943,6 +957,15 @@ def pref_edit2(request, ypref_pk):
         'message': 'ویرایش پیش فاکتور',
     }
     return render(request, 'requests/admin_jemco/ypref/proforma_form.html', context)
+
+
+@login_required
+def to_follow(request, ypref_pk):
+    prof = Xpref.objects.get(pk=ypref_pk)
+    prof.to_follow = not prof.to_follow
+    prof.on = prof.to_follow
+    prof.save()
+    return redirect('pref_index')
 
 
 @login_required

@@ -6,11 +6,14 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6 col-sm-offset-3">
+                <h4>شرح پیگیری مربوط به پیش فاکتور شماره  {{ prof.number }} <span class="red">({{ prof.req_id.customer.name }})</span></h4>
+                <p>{{ prof.proforma_details }}</p>
+
                 <form method="post">
                     {% csrf_token %}
                     {{ form }}
                     <button class="btn btn-sm btn-success">ذخیره</button>
-                    <a class="btn btn-sm btn-success" href="">انصراف</a>
+                    <a class="btn btn-sm btn-success" href="{% url 'req_track:prof_followup_find' %}">انصراف</a>
                 </form>
             </div>
         </div>

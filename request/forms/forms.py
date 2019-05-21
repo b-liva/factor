@@ -135,7 +135,6 @@ class ProformaForm(forms.ModelForm):
     #     self.fields['req_id'] = forms.ChoiceField(choices=user_choices(self.user))
 
     def __init__(self, current_user, *args, **kwargs):
-        print(f'current user is: {current_user}')
         super(ProformaForm, self).__init__(*args, **kwargs)
         self.fields['req_id'].queryset = models.Requests.objects.filter(is_active=True)\
             .filter(Q(owner=current_user) | Q(colleagues=current_user)).distinct()
@@ -153,7 +152,9 @@ class ProformaForm(forms.ModelForm):
     class Meta:
         model = models.Xpref
         fields = '__all__'
-        exclude = ('owner', 'pub_date', 'is_active', 'temp_number', 'perm', 'due_date', 'perm_number', 'perm_date')
+        exclude = (
+            'owner', 'pub_date', 'is_active', 'temp_number',
+            'perm', 'due_date', 'perm_number', 'perm_date', 'to_follow', 'follow_up')
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
@@ -189,7 +190,7 @@ class ProformaEditForm(forms.ModelForm):
     class Meta:
         model = models.Xpref
         fields = '__all__'
-        exclude = ('owner', 'pub_date', 'is_active', 'req_id', 'temp_number', 'follow_up')
+        exclude = ('owner', 'pub_date', 'is_active', 'req_id', 'temp_number', 'follow_up', 'to_follow')
         widgets = {
 
             'date_fa': forms.DateInput(attrs={

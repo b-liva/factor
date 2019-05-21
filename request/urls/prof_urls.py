@@ -9,6 +9,7 @@ urlpatterns = [
     path('pro_form', proformaViews.pro_form, name='pro_form'),
     path('pro_form_cookie/<int:req_id>', proformaViews.pro_form_cookie, name='pro_form_cookie'),
     path('index', proformaViews.pref_index, name='pref_index'),
+    path('prof_list_to_follow', proformaViews.prof_list_to_follow, name='prof_list_to_follow'),
     path('pref_index_cc', proformaViews.pref_index_cc, name='pref_index_cc'),
     path('prefspec-index', proformaViews.prefspec_index, name='prefspec_index'),
     path('prefspec-prefspec_clear_cache', proformaViews.prefspec_clear_cache, name='prefspec_clear_cache'),
@@ -28,6 +29,7 @@ urlpatterns = [
       path('form', request.viewsFolder.proformaViews.pref_edit_form, name='pref_edit_form'),
       path('edit', proformaViews.pref_edit, name='pref_edit'),
       path('edit2', proformaViews.pref_edit2, name='pref_edit2'),
+      path('to-follow', proformaViews.to_follow, name='to_follow'),
       path('prof_spec_form', request.viewsFolder.proformaViews.prof_spec_form, name='prof_spec_form'),
     ])),
 

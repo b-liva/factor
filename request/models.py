@@ -167,6 +167,7 @@ class Xpref(models.Model):
     temp_number = models.IntegerField(null=True, blank=True)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
+    date_modified = models.DateTimeField(null=True, blank=True)
     exp_date_fa = jmodels.jDateField(default=now)
     perm_number = models.CharField(max_length=10, null=True, blank=True)
     perm_date = jmodels.jDateField(null=True, blank=True)
@@ -176,6 +177,8 @@ class Xpref(models.Model):
     is_active = models.BooleanField(default=True)
     perm = models.BooleanField(default=False)
     follow_up = models.TextField(blank=True, null=True)
+    to_follow = models.BooleanField(default=False)
+    on = models.BooleanField(default=False)
 
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')
@@ -191,6 +194,12 @@ class Xpref(models.Model):
             x += f"{i['kw']}, "
 
         return "%s دستگاه  %s کیلووات" % (total_qty['qty__sum'], x)
+
+    def pretty_follow_up(self):
+        return self.follow_up if self.follow_up is not None else ""
+
+    def pretty_date_modified(self):
+        return self.date_modified if self.date_modified is not None else ""
 
     class Meta:
         permissions = (

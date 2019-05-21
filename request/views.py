@@ -198,6 +198,12 @@ def dashboard2(request):
 
 @login_required
 def sales_expert_dashboard(request):
+
+    profs_to_follow_on = Xpref.objects.filter(req_id__owner=request.user, is_active=True, to_follow=True, on=True)\
+        .order_by('date_modified').reverse()
+    profs_to_follow_off = Xpref.objects.filter(req_id__owner=request.user, is_active=True, to_follow=True, on=False)\
+        .order_by('date_modified').reverse()
+
     owner = request.user
     orders = Requests.objects.distinct().filter(reqspec__type__title='روتین', is_active=True)
     orders_agent = orders.filter(customer__agent=True)
@@ -227,6 +233,8 @@ def sales_expert_dashboard(request):
                                                req_id__customer__agent=False).aggregate(
         request_qty=models.Sum(models.F('kw') * models.F('qty'), output_field=models.FloatField()))
     context = {
+        'profs_to_follow_on': profs_to_follow_on,
+        'profs_to_follow_off': profs_to_follow_off,
         'orders_count': orders.count(),
         'reqsCount': reqsCount,
         'count': {

@@ -1,3 +1,4 @@
+import datetime
 import math
 
 import jdatetime
@@ -440,26 +441,49 @@ def prof_followup_list(request):
     return render(request, 'proformas/followup/index.html', context)
 
 
+def prof_followup_list2(request):
+    # profs = Xpref.objects.filter(is_active=True)
+    profs = Xpref.objects.all()
+
+    context = {
+        'profs': profs,
+        'title': 'پیگیری پیش فاکتور',
+    }
+
+    return render(request, 'proformas/followup/index2.html', context)
+
+
 def prof_followup_find(request):
     print('01')
+    print(request.method)
     if request.method == 'POST':
         number = request.POST['prof_number']
         print(number)
         if Xpref.objects.get(number=int(number)):
             prof = Xpref.objects.get(number=int(number))
             print('Ok')
-            redirect('req_track:prof_followup_form', prof=prof)
+            return redirect('req_track:prof_followup_form', prof_pk=prof.pk)
         else:
             print('Not Ok')
 
     return render(request, 'proformas/followup/find.html')
 
 
-def prof_followup_form(request, prof):
-    print('01something')
-    form = ProfFollowUpForm(request.POST or None, instance=prof)
+def prof_followup_form(request, prof_pk):
+    prof = Xpref.objects.get(pk=prof_pk)
+    form = ProfFollowUpForm(instance=prof)
+    if request.method == 'POST':
+        form = ProfFollowUpForm(request.POST or None, instance=prof)
+        if form.is_valid():
+            proforma = form.save(commit=False)
+            proforma.on = False
+            # print(jdatetime.datetime.now())
+            proforma.date_modified = datetime.datetime.now()
+            proforma.save()
+            return redirect('req_track:prof_followup_find')
 
     context = {
+        'prof': prof,
         'form': form
     }
 

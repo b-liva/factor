@@ -1,0 +1,40 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+
+{% block right_col %}
+    <div>
+    <h3 class="text-center">{{ title }}</h3>
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td>ردیف</td>
+                        <td>شخص</td>
+                        <td>شماره</td>
+                        <td>شرح</td>
+                        <td>تاریخ</td>
+                        <td>مشتری</td>
+                        <td>نتیجه</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for prof in profs %}
+{#                        <tr class="{{ prof|highlight_class }}">#}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ prof.owner }}</td>
+                            <td>{{ prof.number }}</td>
+                            <td>{{ prof.proforma_details }}</td>
+                            <td>{{ prof.date_fa }}</td>
+                            <td>{{ prof.req_id.customer.name }}</td>
+                            <td>{{ prof.pretty_follow_up }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
