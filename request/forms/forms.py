@@ -151,10 +151,7 @@ class ProformaForm(forms.ModelForm):
 
     class Meta:
         model = models.Xpref
-        fields = '__all__'
-        exclude = (
-            'owner', 'pub_date', 'is_active', 'temp_number',
-            'perm', 'due_date', 'perm_number', 'perm_date', 'to_follow', 'follow_up')
+        fields = ('req_id', 'number', 'date_fa', 'exp_date_fa', 'summary',)
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
@@ -189,8 +186,7 @@ class ProformaEditForm(forms.ModelForm):
 
     class Meta:
         model = models.Xpref
-        fields = '__all__'
-        exclude = ('owner', 'pub_date', 'is_active', 'req_id', 'temp_number', 'follow_up', 'to_follow')
+        fields = ('number', 'date_fa', 'exp_date_fa', 'perm_number', 'perm_date', 'due_date', 'summary', 'perm')
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
