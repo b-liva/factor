@@ -342,3 +342,4 @@ def proforma_customer(prof_follow):
         return prof.req_id.customer.name
     except:
         return ''
+

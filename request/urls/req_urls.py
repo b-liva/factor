@@ -37,6 +37,7 @@ urlpatterns = [
         path('edit', request.views2.request_edit, name='request_edit'),
         path('editForm', request.views2.request_edit_form, name='request_edit_form'),
         path('finish', request.views2.finish, name='request_finish'),
+        path('req-to-follow', request.views2.req_to_follow, name='req_to_follow'),
     ])),
 
     path('<int:req_pk>/reqSpec/form', reqSpecViews.reqspec_form, name='reqSpec_form'),

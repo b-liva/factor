@@ -110,18 +110,6 @@ def pref_index(request):
 
 
 @login_required
-def prof_list_to_follow(request):
-
-    profs = Xpref.objects.filter(is_active=True, to_follow=True)
-
-    context = {
-        'prefs': profs,
-        'title': 'پیش فاکتورهای قابل پیگیری',
-    }
-    return render(request, 'requests/admin_jemco/ypref/index.html', context)
-
-
-@login_required
 def pref_index_cc(request):
     if 'proforma-search-post' in request.session:
         request.session.pop('proforma-search-post')

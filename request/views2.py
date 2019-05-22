@@ -772,6 +772,15 @@ def request_index_paginate(request):
 
 
 @login_required
+def req_to_follow(request, request_pk):
+    req = Requests.objects.get(pk=request_pk)
+    req.to_follow = not req.to_follow
+    req.on = req.to_follow
+    req.save()
+    return redirect('req_report')
+
+
+@login_required
 def request_index_vue(request):
     # requests =request_form Requests.objects.all()
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
@@ -1246,7 +1255,14 @@ def req_report(request):
             req_list = req_list.filter(date_fa__lte=request.POST['date_max'])
         if request.POST['status'] and request.POST['status'] != '0':
             print(request.POST['status'])
-            req_list = req_list.filter(finished=request.POST['status'])
+            status = request.POST['status']
+            if status == 'close':
+                req_list = req_list.filter(finished=True)
+            elif status == 'open':
+                req_list = req_list.filter(finished=False)
+            elif status == 'to_follow':
+                req_list = req_list.filter(to_follow=True)
+
         if request.POST['sort_by']:
             req_list = req_list.order_by(f"{request.POST['sort_by']}")
         if request.POST['dsc_asc'] == '1':

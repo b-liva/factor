@@ -47,6 +47,7 @@ urlpatterns = [
     path('prof_followup_list2', views.prof_followup_list2, name='prof_followup_list2'),
     path('prof_followup_find', views.prof_followup_find, name='prof_followup_find'),
     path('prof_followup_form/<int:prof_pk>', views.prof_followup_form, name='prof_followup_form'),
+    path('req_followup_form/<int:req_pk>', views.req_followup_form, name='req_followup_form'),
 
 ]
 

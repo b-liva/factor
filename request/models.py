@@ -3,6 +3,7 @@ from os.path import split
 
 # from django.contrib.auth.models import User
 from django.db.models import Sum, F
+from django.utils import timezone
 
 from accounts.models import User
 from django.db import models
@@ -94,11 +95,25 @@ class Requests(models.Model):
     is_active = models.BooleanField(default=True)
     finished = models.BooleanField(default=False)
 
+    date_modified = models.DateTimeField(null=True, blank=True)
+    follow_up = models.TextField(blank=True, null=True)
+    to_follow = models.BooleanField(default=False)
+    on = models.BooleanField(default=False)
+
     objects = models.Manager()
     actives = ActiveRequestManager()
 
     def __str__(self):
         return '%s' % self.number
+
+    def request_details(self):
+        total_qty = self.reqspec_set.aggregate(Sum('qty'))
+        kws = self.reqspec_set.values('kw')
+        x = ''
+        for i in list(kws):
+            x += f"{i['kw']}, "
+
+        return "%s دستگاه  %s کیلووات" % (total_qty['qty__sum'], x)
 
     class Meta:
         permissions = (
@@ -110,6 +125,11 @@ class Requests(models.Model):
 
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.date_modified = timezone.now()
+        super(Requests, self).save()
 
 
 class RequestFiles(models.Model):
@@ -200,6 +220,11 @@ class Xpref(models.Model):
 
     def pretty_date_modified(self):
         return self.date_modified if self.date_modified is not None else ""
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.date_modified = timezone.now()
+        super(Xpref, self).save()
 
     class Meta:
         permissions = (

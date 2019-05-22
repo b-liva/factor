@@ -226,3 +226,20 @@ class ProfSpecForm(forms.ModelForm):
 class RequestCopyForm(forms.Form):
     number = forms.IntegerField(label='شماره درخواست')
     new_number = forms.IntegerField(label='شماره جدید', required=False)
+
+
+class ReqFollowUpForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+
+        super(ReqFollowUpForm, self).__init__(*args, **kwargs)
+
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = models.Requests
+        fields = ('follow_up',)
+
+        labels = {
+            'follow_up': 'شرح پیگیری',
+        }

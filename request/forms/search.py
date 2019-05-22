@@ -139,8 +139,9 @@ class ReqSearchForm(forms.Form):
         'class': 'form-control',})
     CHOICES = (
         ('0', '---',),
-        ('True', 'بسته',),
-        ('False', 'باز',),
+        ('close', 'بسته',),
+        ('open', 'باز',),
+        ('to_follow', 'اولویت پیگیری',),
     )
 
     status = forms.ChoiceField(

@@ -60,7 +60,8 @@
                 <button type="submit" name="submit" class="btn btn-sm btn-primary">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
-                <a class="btn btn-danger btn-sm" href="{% url 'request_report_cc' %}" data-toggle="tooltip" title="حذف فیلترها"><i class="fa fa-close"></i></a>
+                <a class="btn btn-danger btn-sm" href="{% url 'request_report_cc' %}" data-toggle="tooltip"
+                   title="حذف فیلترها"><i class="fa fa-close"></i></a>
             </form>
             <br>
 
@@ -101,6 +102,17 @@
                                href="{% url 'request_details' request_pk=r.pk %}" data-toggle="tooltip" title="مشاهده">
                                 <i class="fa fa-eye"></i>
                             </a>
+                            {% if user.is_superuser %}
+                                <a class="btn btn-primary btn-xs"
+                                   href="{% url 'req_to_follow' request_pk=r.pk %}"
+                                   data-toggle="tooltip" title="نشان جهت پیگیری">
+                                    {% if r.to_follow %}
+                                        <i class="fa fa-star"></i>
+                                    {% else %}
+                                        <i class="fa fa-star-o"></i>
+                                    {% endif %}
+                                </a>
+                            {% endif %}
                             {% if perms.request.add_requests %}
                                 <a class="btn btn-warning btn-xs"
                                    href="{% url 'request_finish' request_pk=r.pk %}"

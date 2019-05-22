@@ -56,7 +56,6 @@
                     <ul class="nav child_menu">
                         {% if perms.request.index_proforma %}
                             <li><a href="{% url 'pref_index' %}">پیش فاکتورها</a></li>
-                            <li><a href="{% url 'prof_list_to_follow' %}">پیش فاکتورهای قابل پیگیری</a></li>
                             <li><a href="{% url 'prefspec_index' %}">ردیف - مجوز</a></li>
                             <li><a href="{% url 'perm_index' %}">مجوزها</a></li>
                             {% if perms.request.index_deleted_proforma %}

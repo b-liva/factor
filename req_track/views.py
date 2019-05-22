@@ -7,6 +7,7 @@ from django.db.models import Q, Sum, F, FloatField
 from django.shortcuts import render, redirect
 
 from accounts.models import User
+from request.forms.forms import ReqFollowUpForm
 from request.forms.proforma_forms import ProfFollowUpForm
 from request.models import Requests, Xpref, PrefSpec, ReqSpec
 from request.models import Payment as Request_payment
@@ -454,8 +455,6 @@ def prof_followup_list2(request):
 
 
 def prof_followup_find(request):
-    print('01')
-    print(request.method)
     if request.method == 'POST':
         number = request.POST['prof_number']
         print(number)
@@ -465,8 +464,10 @@ def prof_followup_find(request):
             return redirect('req_track:prof_followup_form', prof_pk=prof.pk)
         else:
             print('Not Ok')
-
-    return render(request, 'proformas/followup/find.html')
+    context = {
+        'title': 'پیش فاکتور'
+    }
+    return render(request, 'proformas/followup/find.html', context)
 
 
 def prof_followup_form(request, prof_pk):
@@ -477,13 +478,30 @@ def prof_followup_form(request, prof_pk):
         if form.is_valid():
             proforma = form.save(commit=False)
             proforma.on = False
-            # print(jdatetime.datetime.now())
-            proforma.date_modified = datetime.datetime.now()
             proforma.save()
             return redirect('req_track:prof_followup_find')
 
     context = {
         'prof': prof,
+        'form': form
+    }
+
+    return render(request, 'proformas/followup/form.html', context)
+
+
+def req_followup_form(request, req_pk):
+    req = Requests.objects.get(pk=req_pk)
+    form = ReqFollowUpForm(instance=req)
+    if request.method == 'POST':
+        form = ReqFollowUpForm(request.POST or None, instance=req)
+        if form.is_valid():
+            req = form.save(commit=False)
+            req.on = False
+            req.save()
+            return redirect('req_track:prof_followup_find')
+
+    context = {
+        'item': req,
         'form': form
     }
 
