@@ -27,6 +27,10 @@
                     <form method="POST" action="{% url 'request_find' %}">
                         {% csrf_token %}
                         شماره درخواست <input name="req_no">
+                        <select name="year">
+                            <option value="97">97</option>
+                            <option value="98" selected>98</option>
+                        </select>
                         <button type="submit" name="submit" class="btn btn-sm btn-primary">
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </button>

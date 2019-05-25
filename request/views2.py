@@ -151,7 +151,11 @@ def req_form(request):
             req_item.owner = request.user
             print(f"autocomplete user is: {customer}")
             req_item.customer = customer
+            # year = jdatetime.date.today().year
+            year = req_item.date_fa.year
+            req_item.number = str(int(str(year)[2:4]) * 10000 + int(request.POST['number']))
             req_item.save()
+
             form.save_m2m()
             for f in files:
                 file_instance = models.RequestFiles(image=f, req=req_item)
@@ -853,10 +857,11 @@ def request_index_vue_deleted(request):
 
 @login_required
 def request_find(request):
-    if not Requests.objects.filter(number=request.POST['req_no']):
-        messages.error(request,'درخواست مورد نظر یافت نشد.')
+    req_no = str(int(request.POST['year']) * 10000 + int(request.POST['req_no']))
+    if not Requests.objects.filter(number=req_no):
+        messages.error(request, 'درخواست مورد نظر یافت نشد.')
         return redirect('request_index')
-    req = Requests.objects.filter(is_active=True).get(number=request.POST['req_no'])
+    req = Requests.objects.filter(is_active=True).get(number=req_no)
     return redirect('request_details', request_pk=req.pk)
 
 
