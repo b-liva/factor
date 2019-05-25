@@ -4,6 +4,7 @@ import base64
 
 from django import template
 
+from accounts.models import User
 from req_track.models import ReqEntered
 from request.models import Requests, Xpref, ReqSpec, PrefSpec, Payment
 
@@ -295,6 +296,17 @@ def expert_remaining_reqs_not_entered(account):
     return reqs.count()
 
 
+@register.simple_tag()
+def expert_remaining_reqs_not_entered_new(pk):
+    account = User.objects.get(pk=pk)
+    print(account)
+    reqs = ReqEntered.objects.filter(owner_text__contains=account.last_name, is_request=True, is_entered=False)
+    if account.last_name=='فروغی':
+        reqs = reqs.exclude(owner_text__contains='ظریف')
+
+    return reqs.count()
+
+
 @register.filter(name='expert_reqs_entered')
 def expert_reqs_entered(account):
     reqs = ReqEntered.objects.filter(owner_text__contains=account.last_name, is_request=True, is_entered=True)
@@ -307,8 +319,21 @@ def all_expert_reqs(account):
     return reqs.count()
 
 
+@register.simple_tag()
+def all_expert_reqs_new(account):
+    reqs = Requests.objects.filter(is_active=True, owner=account)
+    return reqs.count()
+
+
 @register.filter(name='expert_reqs_percent')
 def expert_reqs_percent(account):
+    reqs = Requests.objects.filter(is_active=True, owner=account)
+    all_reqs = Requests.objects.filter(is_active=True)
+    return 100 * reqs.count() / all_reqs.count()
+
+
+@register.simple_tag()
+def expert_reqs_percent_new(account):
     reqs = Requests.objects.filter(is_active=True, owner=account)
     all_reqs = Requests.objects.filter(is_active=True)
     return 100 * reqs.count() / all_reqs.count()
