@@ -189,7 +189,7 @@ class Xpref(models.Model):
     date_fa = jmodels.jDateField(default=now)
     date_modified = models.DateTimeField(null=True, blank=True)
     exp_date_fa = jmodels.jDateField(default=now)
-    perm_number = models.CharField(max_length=10, null=True, blank=True)
+    perm_number = models.IntegerField(max_length=10, null=True, blank=True)
     perm_date = jmodels.jDateField(null=True, blank=True)
     due_date = jmodels.jDateField(null=True, blank=True)
     summary = models.TextField(max_length=600, null=True, blank=True)

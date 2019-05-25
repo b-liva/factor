@@ -152,8 +152,8 @@ class ReqSearchForm(forms.Form):
 
     SORT_CHOICES = (
         # ('1', 'کیلووات',),
-        # ('customer', 'مشتری',),
         ('date_fa', 'تاریخ',),
+        ('number', 'شماره درخواست',),
         # ('4', 'تعداد',),
     )
 
@@ -219,6 +219,7 @@ class ProformaSearchForm(forms.Form):
         # ('1', 'کیلووات',),
         # ('customer', 'مشتری',),
         ('date_fa', 'تاریخ',),
+        ('number', 'شماره',),
         # ('4', 'تعداد',),
     )
 
@@ -262,6 +263,8 @@ class PermSearchForm(ProformaSearchForm):
     SORT_CHOICES = (
         ('due_date', 'تاخیر',),
         ('qty_remaining', 'مانده مجوز',),
+        ('number', 'شماره پیش فاکتور',),
+        ('perm_number', 'شماره مجوز',),
     )
     sort_asc_dsc = (
         (1, 'صعودی',),
@@ -295,6 +298,9 @@ class PrefSpecSearchForm(PermSearchForm):
         ('xpref_id__date_fa', 'تاریخ',),
         ('kw', 'کیلووات',),
         ('qty_remaining', 'مانده',),
+        ('xpref_id__req_id__number', 'شماره درخواست',),
+        ('xpref_id__number', 'شماره پیش فاکتور',),
+        ('xpref_id__perm_number', 'شماره مجوز',),
     )
     sort_by = forms.ChoiceField(
         label='مرتب سازی',

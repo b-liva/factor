@@ -83,7 +83,7 @@ def pref_index(request):
 
         if request.POST['sort_by']:
             prof_list = prof_list.order_by(f"{request.POST['sort_by']}")
-        if request.POST['dsc_asc'] == '1':
+        if request.POST['dsc_asc'] == '2':
             prof_list = prof_list.reverse()
     if request.method == 'GET':
         form = ProformaSearchForm()
