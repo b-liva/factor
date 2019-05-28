@@ -36,6 +36,20 @@
                     <a href="{% url 'dashboard' %}" class="site_title">
                         {#                        <i class="fa fa-paw"></i>#}
                         <span>معاونت بازرگانی</span></a>
+
+                    <div class="row">
+                        {% if messages %}
+                            <div class="col-md-10 col-md-offset-1">
+                                <div class="alert alert-success">
+                                    {% for msg in messages %}
+                                        <p>{{ msg }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    </div>
+
                 </div>
                 <div class="clearfix"></div>
 
@@ -92,75 +106,75 @@
                             </ul>
                         </li>
 
-{#                                                <li role="presentation" class="dropdown">#}
-{#                                                    <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown"#}
-{#                                                       aria-expanded="false">#}
-{#                                                        <i class="fa fa-envelope-o"></i>#}
-{#                                                        <span class="badge bg-green">6</span>#}
-{#                                                    </a>#}
-{#                                                    <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">#}
-{#                                                        <li>#}
-{#                                                            <a>#}
-{#                                                                <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}"#}
-{#                                                                                         alt="Profile Image"/></span>#}
-{#                                                                <span>#}
-{#                                                  <span>User 01</span>#}
-{#                                                  <span class="time">3 mins ago</span>#}
-{#                                                </span>#}
-{#                                                                <span class="message">#}
-{#                                                  Film festivals used to be do-or-die moments for movie makers. They were where...#}
-{#                                                </span>#}
-{#                                                            </a>#}
-{#                                                        </li>#}
-{#                                                        <li>#}
-{#                                                            <a>#}
-{#                                                                <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}"#}
-{#                                                                                         alt="Profile Image"/></span>#}
-{#                                                                <span>#}
-{#                                                  <span>{{ user }}</span>#}
-{#                                                  <span class="time">3 mins ago</span>#}
-{#                                                </span>#}
-{#                                                                <span class="message">#}
-{#                                                  Film festivals used to be do-or-die moments for movie makers. They were where...#}
-{#                                                </span>#}
-{#                                                            </a>#}
-{#                                                        </li>#}
-{#                                                        <li>#}
-{#                                                            <a>#}
-{#                                                                <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}"#}
-{#                                                                                         alt="Profile Image"/></span>#}
-{#                                                                <span>#}
-{#                                                  <span>User 01</span>#}
-{#                                                  <span class="time">3 mins ago</span>#}
-{#                                                </span>#}
-{#                                                                <span class="message">#}
-{#                                                  Film festivals used to be do-or-die moments for movie makers. They were where...#}
-{#                                                </span>#}
-{#                                                            </a>#}
-{#                                                        </li>#}
-{#                                                        <li>#}
-{#                                                            <a>#}
-{#                                                                <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}"#}
-{#                                                                                         alt="Profile Image"/></span>#}
-{#                                                                <span>#}
-{#                                                  <span>{{ user }}</span>#}
-{#                                                  <span class="time">3 mins ago</span>#}
-{#                                                </span>#}
-{#                                                                <span class="message">#}
-{#                                                  Film festivals used to be do-or-die moments for movie makers. They were where...#}
-{#                                                </span>#}
-{#                                                            </a>#}
-{#                                                        </li>#}
-{#                                                        <li>#}
-{#                                                            <div class="text-center">#}
-{#                                                                <a>#}
-{#                                                                    <strong>See All Alerts</strong>#}
-{#                                                                    <i class="fa fa-angle-right"></i>#}
-{#                                                                </a>#}
-{#                                                            </div>#}
-{#                                                        </li>#}
-{#                                                    </ul>#}
-{#                                                </li>#}
+                        {#                                                <li role="presentation" class="dropdown">#}
+                        {#                                                    <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown"#}
+                        {#                                                       aria-expanded="false">#}
+                        {#                                                        <i class="fa fa-envelope-o"></i>#}
+                        {#                                                        <span class="badge bg-green">6</span>#}
+                        {#                                                    </a>#}
+                        {#                                                    <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">#}
+                        {#                                                        <li>#}
+                        {#                                                            <a>#}
+                        {#                                                                <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}"#}
+                        {#                                                                                         alt="Profile Image"/></span>#}
+                        {#                                                                <span>#}
+                        {#                                                  <span>User 01</span>#}
+                        {#                                                  <span class="time">3 mins ago</span>#}
+                        {#                                                </span>#}
+                        {#                                                                <span class="message">#}
+                        {#                                                  Film festivals used to be do-or-die moments for movie makers. They were where...#}
+                        {#                                                </span>#}
+                        {#                                                            </a>#}
+                        {#                                                        </li>#}
+                        {#                                                        <li>#}
+                        {#                                                            <a>#}
+                        {#                                                                <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}"#}
+                        {#                                                                                         alt="Profile Image"/></span>#}
+                        {#                                                                <span>#}
+                        {#                                                  <span>{{ user }}</span>#}
+                        {#                                                  <span class="time">3 mins ago</span>#}
+                        {#                                                </span>#}
+                        {#                                                                <span class="message">#}
+                        {#                                                  Film festivals used to be do-or-die moments for movie makers. They were where...#}
+                        {#                                                </span>#}
+                        {#                                                            </a>#}
+                        {#                                                        </li>#}
+                        {#                                                        <li>#}
+                        {#                                                            <a>#}
+                        {#                                                                <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}"#}
+                        {#                                                                                         alt="Profile Image"/></span>#}
+                        {#                                                                <span>#}
+                        {#                                                  <span>User 01</span>#}
+                        {#                                                  <span class="time">3 mins ago</span>#}
+                        {#                                                </span>#}
+                        {#                                                                <span class="message">#}
+                        {#                                                  Film festivals used to be do-or-die moments for movie makers. They were where...#}
+                        {#                                                </span>#}
+                        {#                                                            </a>#}
+                        {#                                                        </li>#}
+                        {#                                                        <li>#}
+                        {#                                                            <a>#}
+                        {#                                                                <span class="image"><img src="{% static 'request/admin_jemco/images/img.jpg' %}"#}
+                        {#                                                                                         alt="Profile Image"/></span>#}
+                        {#                                                                <span>#}
+                        {#                                                  <span>{{ user }}</span>#}
+                        {#                                                  <span class="time">3 mins ago</span>#}
+                        {#                                                </span>#}
+                        {#                                                                <span class="message">#}
+                        {#                                                  Film festivals used to be do-or-die moments for movie makers. They were where...#}
+                        {#                                                </span>#}
+                        {#                                                            </a>#}
+                        {#                                                        </li>#}
+                        {#                                                        <li>#}
+                        {#                                                            <div class="text-center">#}
+                        {#                                                                <a>#}
+                        {#                                                                    <strong>See All Alerts</strong>#}
+                        {#                                                                    <i class="fa fa-angle-right"></i>#}
+                        {#                                                                </a>#}
+                        {#                                                            </div>#}
+                        {#                                                        </li>#}
+                        {#                                                    </ul>#}
+                        {#                                                </li>#}
                     </ul>
                 </nav>
             </div>
