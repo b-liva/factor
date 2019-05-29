@@ -2,6 +2,8 @@ import os.path
 from os.path import split
 
 # from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Sum, F
 from django.utils import timezone
 
@@ -35,6 +37,20 @@ project_type = (
     (2, 'Services'),
     (3, 'Ex'),
 )
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_fa = jmodels.jDateField(default=now)
+    pub_date = models.DateTimeField(default=now)
+    body = models.TextField(blank=True)
+    is_read = models.BooleanField(default=False)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
+
+    def __str__(self):
+        return "%s: %s" % (self.author, self.body,)
 
 
 class ProjectType(models.Model):
@@ -200,6 +216,8 @@ class Xpref(models.Model):
     to_follow = models.BooleanField(default=False)
     on = models.BooleanField(default=False)
 
+    comments = GenericRelation('Comment')
+
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')
 
@@ -295,4 +313,3 @@ class Payment(models.Model):
 class PaymentFiles(models.Model):
     pay = models.ForeignKey(Payment, on_delete=models.CASCADE)
     image = models.FileField(upload_to=upload_location, null=True, blank=True)
-

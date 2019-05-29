@@ -9,13 +9,14 @@ from .models import (
     Payment,
     ProjectType,
     FrameSize,
-    IPType, ICType, IMType, IEType)
+    IPType, ICType, IMType, IEType, Comment)
 
 admin.site.register(Requests)
 admin.site.register(ReqSpec)
 admin.site.register(Xpref)
 admin.site.register(PrefSpec)
 admin.site.register(Payment)
+admin.site.register(Comment)
 admin.site.register(ProjectType)
 admin.site.register(IPType)
 admin.site.register(ICType)

@@ -1,6 +1,7 @@
 {% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
 {% load humanize %}
 {% load request_extras %}
+{% load sales_ex_dashboard %}
 {% block right_col %}
     <div class="container">
         <div class="row">
@@ -203,6 +204,38 @@
                         </div>
                     </div>
                 {% endif %}
+
+                <div class="row">
+                    <div style="margin-top: 100px">
+                        <h4 class="greenBtn">پیگیری:</h4>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            {% for a in pref.comments.all %}
+                                <div class="row">
+                                {% if user != a.author %}
+                                    <p class="pull-left">
+                                        <span>{{ a.body }}</span>
+                                        <span>: {{ a.author }}</span>
+                                    </p>
+                                {% else %}
+                                    <p class="">
+                                        <span>{{ a.author }}: </span>
+                                        <span>{{ a.body }}</span>
+                                    </p>
+                                {% endif %}
+
+                                </div>
+                            {% endfor %}
+
+                            <div class="row">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    {{ comment_form }}
+                                    <button class="btn-sm btn-success">ثبت</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

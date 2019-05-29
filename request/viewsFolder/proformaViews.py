@@ -14,6 +14,7 @@ import request.templatetags.functions as funcs
 from accounts.models import User
 from customer.models import Customer
 from request import models
+from request.forms.forms import CommentForm
 from request.forms.search import ProformaSearchForm, PermSearchForm, PrefSpecSearchForm
 
 from request.models import Requests, Xpref, ReqSpec, PrefSpec
@@ -502,7 +503,6 @@ def pref_find(request):
     if not request.POST['pref_no']:
         return redirect('pref_index')
     prof_no = request.POST['pref_no']
-    print(prof_no)
     if not Xpref.objects.filter(number=prof_no):
         messages.error(request, 'پیش فاکتور مورد نظر یافت نشد')
         return redirect('pref_index')
@@ -540,6 +540,12 @@ def pref_details(request, ypref_pk):
         }
         i += 1
 
+    if request.method == 'POST':
+        comment = pref.comments.create(author=request.user, body=request.POST['body'])
+        pref.comments.all().update(is_read=True)
+        comment.is_read = False
+        comment.save()
+
     context = {
         'pref': pref,
         'prefspecs': prefspecs,
@@ -548,6 +554,7 @@ def pref_details(request, ypref_pk):
         'proforma_total': proforma_total * 1.09,
         'kw_total': kw_total,
         'prof_images': prof_images,
+        'comment_form': CommentForm(),
     }
     return render(request, 'requests/admin_jemco/ypref/details.html', context)
 
