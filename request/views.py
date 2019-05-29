@@ -193,7 +193,10 @@ def dashboard(request):
 
 @login_required
 def dashboard2(request):
-    pass
+    context = {
+
+    }
+    return render(request, 'requests/admin_jemco/dashboard/dashboard3.html', context)
 
 
 @login_required

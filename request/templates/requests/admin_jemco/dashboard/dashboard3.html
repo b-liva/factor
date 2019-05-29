@@ -66,38 +66,49 @@
                 {% endif %}
             </div>
         </div>
+
         <div id="customerDetails" class="col-xs-6 col-sm-4">
             <h3>وضعیت درخواست ها </h3>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                     <tr>
-                        <td>وضعیت</td>
-                        <td>مهندس {{ user.last_name }}</td>
+                        <td></td>
+                        <td>ظریف</td>
+                        <td>محمدی</td>
+                        <td>علوی</td>
+                        <td>فروغی</td>
                         <td>جمع</td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>باقیمانده</td>
-                        <td>
-                            {% expert_remaining_reqs_not_entered_new user.pk as my_not_entered %}{{ my_not_entered }}</td>
-                        <td></td>
+                        <td>{% expert_remaining_reqs_not_entered 4 as reqs %}{{ reqs }}</td>
+                        <td>{% expert_remaining_reqs_not_entered 2 as reqs %}{{ reqs }}</td>
+                        <td>{% expert_remaining_reqs_not_entered 3 as reqs %}{{ reqs }}</td>
+                        <td>{% expert_remaining_reqs_not_entered 5 as reqs %}{{ reqs }}</td>
+                        <td>{% total_orders_not_remaining %}</td>
                     </tr>
                     <tr>
                         <td>وارد شده</td>
-                        <td>{% all_expert_reqs_new user.pk as my_all_reqs %}{{ my_all_reqs }}</td>
+                        <td>{% all_expert_reqs 4 as reqs %}{{ reqs }}</td>
+                        <td>{% all_expert_reqs 2 as reqs %}{{ reqs }}</td>
+                        <td>{% all_expert_reqs 3 as reqs %}{{ reqs }}</td>
+                        <td>{% all_expert_reqs 5 as reqs %}{{ reqs }}</td>
                         <td>{% total_orders_entered %}</td>
                     </tr>
                     <tr>
                         <td>درصد وارد شده</td>
-                        <td>{% expert_reqs_percent_new user.pk as my_percent %}{{ my_percent | floatformat:2 }} %
-                        </td>
-                        <td></td>
+                        <td>{% expert_reqs_percent 4 as reqs %}{{ reqs|floatformat:1 }}</td>
+                        <td>{% expert_reqs_percent 2 as reqs %}{{ reqs|floatformat:1 }}</td>
+                        <td>{% expert_reqs_percent 3 as reqs %}{{ reqs|floatformat:1 }}</td>
+                        <td>{% expert_reqs_percent 5 as reqs %}{{ reqs|floatformat:1 }}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+
         </div>
         <div class="col-md-8">
             <div class="col-xs-12">
@@ -194,9 +205,11 @@
                                 {% for comment in comments %}
                                     <div>
                                         <strong>{{ comment.author }}: </strong>
-                                        <a href="{% url 'pref_details' ypref_pk=comment.content_object.pk %}">{{ comment.body }}</a> -
+                                        <a href="{% url 'pref_details' ypref_pk=comment.content_object.pk %}">{{ comment.body }}</a>
+                                        -
                                         <span>{{ comment.content_object }}</span>
-                                        {% if not comment.is_read %}<span style="color: red; font-size: 20px;">*</span>{% endif %}
+                                        {% if not comment.is_read %}
+                                            <span style="color: red; font-size: 20px;">*</span>{% endif %}
                                     </div>
                                 {% endfor %}
                             </ul>
@@ -234,9 +247,11 @@
                                 {% for comment in comments %}
                                     <div>
                                         <strong>{{ comment.author }}: </strong>
-                                        <a href="{% url 'pref_details' ypref_pk=comment.content_object.pk %}">{{ comment.body }}</a> -
+                                        <a href="{% url 'pref_details' ypref_pk=comment.content_object.pk %}">{{ comment.body }}</a>
+                                        -
                                         <span>{{ comment.content_object }}</span>
-                                        {% if not comment.is_read %}<span style="color: red; font-size: 20px;">*</span>{% endif %}
+                                        {% if not comment.is_read %}
+                                            <span style="color: red; font-size: 20px;">*</span>{% endif %}
                                     </div>
                                 {% endfor %}
                             </ul>
@@ -245,192 +260,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-12">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel tile fixed_height_320">
-                    <div class="x_title">
-                        <h2>درخواست</h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                   aria-expanded="false"><i
-                                        class="fa fa-wrench"></i></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Settings 1</a>
-                                    </li>
-                                    <li><a href="#">Settings 2</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        <div class="dashboard-widget-content">
-                            <ul class="quick-list">
-                                {% reqs_to_follow request True as reqs %}
-                                {% for req in reqs %}
-                                    <div data-toggle="tooltip" title="{{ req.follow_up }}">
-                                        <a class="badge badge-light"
-                                           href="{% url 'request_details' request_pk=req.pk %}">{{ req.number }}</a>
-                                        <span>{{ req.request_details }}</span> - <span>{{ req.customer.name }}</span>
-                                        <span style="color: red; font-size: 20px;">*</span>
-                                        <a class="btn btn-success btn-xs"
-                                           href="{% url 'req_track:req_followup_form' req_pk=req.pk %}">
-                                            <i class="fa fa-plus"></i>
-                                        </a>
-                                    </div>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel tile fixed_height_320">
-                    <div class="x_title">
-                        <h2>پیش فاکتور</h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                   aria-expanded="false"><i
-                                        class="fa fa-wrench"></i></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Settings 1</a>
-                                    </li>
-                                    <li><a href="#">Settings 2</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        <div class="dashboard-widget-content">
-                            <ul class="quick-list">
-                                {% for prof in profs_to_follow_on %}
-                                    <div>
-                                        <div data-toggle="tooltip" title="{{ prof.pretty_follow_up }}">
-                                            <a class="badge badge-light"
-                                               href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof }}</a>
-                                            <span>{{ prof.proforma_details }}</span> -
-                                            <span>{{ prof.req_id.customer.name }}</span>
-                                            <span style="color: red; font-size: 20px;">*</span>
-                                            <span>{{ prof.pretty_date_modified }}</span>
-                                            <a class="btn btn-success btn-xs"
-                                               href="{% url 'req_track:prof_followup_form' prof_pk=prof.pk %}">
-                                                <i class="fa fa-plus"></i>
-                                            </a>
-                                        </div>
-
-                                    </div>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel tile fixed_height_320">
-                    <div class="x_title">
-                        <h2>درخواست</h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                   aria-expanded="false"><i
-                                        class="fa fa-wrench"></i></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Settings 1</a>
-                                    </li>
-                                    <li><a href="#">Settings 2</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        <div class="dashboard-widget-content">
-                            <ul class="quick-list">
-                                {% reqs_to_follow request False as reqs %}
-                                {% for req in reqs %}
-                                    <div data-toggle="tooltip" title="{{ req.follow_up }}">
-                                        <a class="badge badge-light"
-                                           href="{% url 'request_details' request_pk=req.pk %}">{{ req.number }}</a>
-                                        <span>{{ req.request_details }}</span> - <span>{{ req.customer.name }}</span>
-                                        <a class="btn btn-success btn-xs"
-                                           href="{% url 'req_track:req_followup_form' req_pk=req.pk %}">
-                                            <i class="fa fa-plus"></i>
-                                        </a>
-                                    </div>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel tile fixed_height_320">
-                    <div class="x_title">
-                        <h2>پیش فاکتور</h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                   aria-expanded="false"><i
-                                        class="fa fa-wrench"></i></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Settings 1</a>
-                                    </li>
-                                    <li><a href="#">Settings 2</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        <div class="dashboard-widget-content">
-                            <ul class="quick-list">
-                                {% for prof in profs_to_follow_off %}
-                                    <div>
-                                        <div data-toggle="tooltip" title="{{ prof.pretty_follow_up }}">
-                                            <a class="badge badge-light"
-                                               href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof }}</a>
-                                            <span>{{ prof.proforma_details }}</span> -
-                                            <span>{{ prof.req_id.customer.name }}</span>
-                                            <a class="btn btn-success btn-xs"
-                                               href="{% url 'req_track:prof_followup_form' prof_pk=prof.pk %}">
-                                                <i class="fa fa-plus"></i>
-                                            </a>
-                                        </div>
-
-                                    </div>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12">
 
         </div>
     </div>

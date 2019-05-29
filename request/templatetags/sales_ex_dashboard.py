@@ -18,9 +18,10 @@ def reqs_to_follow(request, on):
 
 
 @register.simple_tag()
-def reqs_to_entered(pk):
-    user = User.objects.get(pk=pk)
-    reqs = ReqEntered.objects.filter(is_entered=False, is_request=True, owner_text__contains=user)
+def reqs_to_entered(user):
+    reqs = ReqEntered.objects.filter(is_entered=False, is_request=True)
+    if not user.is_superuser:
+        reqs = reqs.filter(owner_text__contains=user)
     return reqs
 
 
@@ -28,3 +29,28 @@ def reqs_to_entered(pk):
 def unread_comments(status, user):
     comments = Comment.objects.filter(is_read=status).exclude(author=user).order_by('pub_date').reverse()
     return comments
+
+
+@register.simple_tag()
+def expert_remaining_reqs_not_entered(pk):
+    account = User.objects.get(pk=pk)
+    print(account)
+    reqs = ReqEntered.objects.filter(owner_text__contains=account.last_name, is_request=True, is_entered=False)
+    if account.last_name=='فروغی':
+        reqs = reqs.exclude(owner_text__contains='ظریف')
+    print(reqs.count())
+    return reqs.count()
+
+
+@register.simple_tag()
+def all_expert_reqs(pk):
+    account = User.objects.get(pk=pk)
+    reqs = Requests.objects.filter(is_active=True, owner=account)
+    return reqs.count()
+
+
+@register.simple_tag()
+def expert_reqs_percent(account):
+    reqs = Requests.objects.filter(is_active=True, owner=account)
+    all_reqs = Requests.objects.filter(is_active=True)
+    return 100 * reqs.count() / all_reqs.count()
