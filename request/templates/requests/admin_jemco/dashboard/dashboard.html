@@ -194,9 +194,15 @@
                                 {% for comment in comments %}
                                     <div>
                                         <strong>{{ comment.author }}: </strong>
-                                        <a href="{% url 'pref_details' ypref_pk=comment.content_object.pk %}">{{ comment.body }}</a> -
+                                        {% if comment.content_type.name == 'xpref' %}
+                                            <a href="{% url 'pref_details' ypref_pk=comment.content_object.pk %}">{{ comment.body }}</a>
+                                        {% elif comment.content_type.name == 'requests' %}
+                                            <a href="{% url 'request_details' request_pk=comment.content_object.pk %}">{{ comment.body }}</a>
+                                        {% endif %}
+                                        -
                                         <span>{{ comment.content_object }}</span>
-                                        {% if not comment.is_read %}<span style="color: red; font-size: 20px;">*</span>{% endif %}
+                                        {% if not comment.is_read %}
+                                            <span style="color: red; font-size: 20px;">*</span>{% endif %}
                                     </div>
                                 {% endfor %}
                             </ul>
@@ -230,13 +236,19 @@
                     <div class="x_content">
                         <div class="dashboard-widget-content">
                             <ul class="quick-list">
-                                {% unread_comments True user as comments %}
+                                {% unread_comments False user as comments %}
                                 {% for comment in comments %}
                                     <div>
                                         <strong>{{ comment.author }}: </strong>
-                                        <a href="{% url 'pref_details' ypref_pk=comment.content_object.pk %}">{{ comment.body }}</a> -
+                                        {% if comment.content_type.name == 'xpref' %}
+                                            <a href="{% url 'pref_details' ypref_pk=comment.content_object.pk %}">{{ comment.body }}</a>
+                                        {% elif comment.content_type.name == 'requests' %}
+                                            <a href="{% url 'request_details' request_pk=comment.content_object.pk %}">{{ comment.body }}</a>
+                                        {% endif %}
+                                        -
                                         <span>{{ comment.content_object }}</span>
-                                        {% if not comment.is_read %}<span style="color: red; font-size: 20px;">*</span>{% endif %}
+                                        {% if not comment.is_read %}
+                                            <span style="color: red; font-size: 20px;">*</span>{% endif %}
                                     </div>
                                 {% endfor %}
                             </ul>

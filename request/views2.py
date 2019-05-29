@@ -16,7 +16,7 @@ from django.utils import timezone
 # from django.utils.datetime_safe import strftime
 from accounts.models import User
 from request.filters.filters import RequestFilter
-from request.forms.forms import RequestCopyForm
+from request.forms.forms import RequestCopyForm, CommentForm
 from request.forms.search import ReqSearchForm
 from request.views import find_all_obj
 from .models import Requests, ReqSpec
@@ -957,6 +957,13 @@ def request_read(request, request_pk):
     print(req)
     print(parent_request)
     print(sub_requests)
+
+    if request.method == 'POST':
+        comment = req.comments.create(author=request.user, body=request.POST['body'])
+        req.comments.all().update(is_read=True)
+        comment.is_read = False
+        comment.save()
+
     context = {
         'request': req,
         'sub_requests': sub_requests,
@@ -966,7 +973,8 @@ def request_read(request, request_pk):
         'total_kw': kw,
         'files': files,
         'nested_files': nested_files,
-        'xfiles': xfiles
+        'xfiles': xfiles,
+        'comment_form': CommentForm(),
     }
     return render(request, 'requests/admin_jemco/yrequest/details.html', context)
 

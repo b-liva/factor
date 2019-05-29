@@ -95,11 +95,11 @@
                     </div>
                 </div>
 
-                <h4 style="margin-top: 75px;" class="greenBtn">جزئیات پیشفاکتور شماره {{ pref.number }} مربوط به درخواست
+                <h3 style="margin-top: 75px;" class="greenBtn">جزئیات پیشفاکتور شماره {{ pref.number }} مربوط به درخواست
                     شماره
                     <a class="badge badge-light"
                        href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
-                </h4>
+                </h3>
                 {#                Table of specs#}
                 <div class="table-responsive">
                     <table class="table table-hover text-center">

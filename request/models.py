@@ -115,6 +115,7 @@ class Requests(models.Model):
     follow_up = models.TextField(blank=True, null=True)
     to_follow = models.BooleanField(default=False)
     on = models.BooleanField(default=False)
+    comments = GenericRelation('Comment')
 
     objects = models.Manager()
     actives = ActiveRequestManager()
