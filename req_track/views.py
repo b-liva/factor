@@ -66,44 +66,6 @@ def e_req_delete_all(request):
     return redirect('req_track:e_req_index')
 
 
-def e_req_report(request):
-    reqs = ReqEntered.objects.filter(is_entered=False, is_request=True)
-    # .exclude(owner_text__contains='ظریف')\
-    # .exclude(owner_text__contains='محمدی')\
-    # .exclude(owner_text__contains='علوی')
-    second = reqs
-    if not request.user.is_superuser:
-        reqs = reqs.filter(owner_text__contains=request.user.last_name)
-
-    mohammadi_account = User.objects.get(pk=2)
-    alavi_account = User.objects.get(pk=3)
-    zarif_account = User.objects.get(pk=4)
-    foroughi_account = User.objects.get(pk=5)
-    date = '1397-11-01'
-
-    zarif = users_summary('ظریف', zarif_account, date, reqs)
-    mohammadi = users_summary('محمدی', mohammadi_account, date, reqs)
-    alavi = users_summary('علوی', alavi_account, date, reqs)
-    # print(zarif['avg_time']['avg_tm'])
-    # mohammadi = reqs.filter(owner_text__contains='محمدی')
-    # alavi = reqs.filter(owner_text__contains='علوی')
-    context = {
-        'expert': {
-            'zarif': zarif_account,
-            'mohammadi': mohammadi_account,
-            'alavi': alavi_account,
-            'foroughi': foroughi_account,
-        },
-        'reqs': reqs,
-        'zarif': zarif,
-        'mohammadi': mohammadi,
-        'alavi': alavi,
-        'show': True,
-        'title_msg': 'درخواست های وارد نشده'
-    }
-    return render(request, 'req_track/ereq_notstarted.html', context)
-
-
 @login_required
 def check_orders(request):
     ereqs = ReqEntered.objects.filter(is_entered=False)
