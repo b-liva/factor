@@ -860,7 +860,7 @@ def request_find(request):
     req_no = str(int(request.POST['year']) * 10000 + int(request.POST['req_no']))
     if not Requests.objects.filter(number=req_no):
         messages.error(request, 'درخواست مورد نظر یافت نشد.')
-        return redirect('request_index')
+        return redirect('request_index_paginate')
     req = Requests.objects.filter(is_active=True).get(number=req_no)
     return redirect('request_details', request_pk=req.pk)
 

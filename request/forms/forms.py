@@ -44,7 +44,7 @@ class RequestFrom(forms.ModelForm):
             }),
             'number': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'شماره درخواست',
+                'placeholder': 'لطفا شماره درخواست را بدون در نظر گرفتن سال وارد نمایید.',
 
             }),
             'date_fa': forms.DateInput(attrs={
@@ -242,4 +242,21 @@ class ReqFollowUpForm(forms.ModelForm):
 
         labels = {
             'follow_up': 'شرح پیگیری',
+        }
+
+
+class CommentForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+
+        super(CommentForm, self).__init__(*args, **kwargs)
+
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = models.Comment
+        fields = ('body',)
+
+        labels = {
+            'body': 'شرح',
         }
