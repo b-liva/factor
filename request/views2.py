@@ -777,10 +777,22 @@ def request_index_paginate(request):
 
 @login_required
 def req_to_follow(request, request_pk):
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی!')
+        return redirect('errorpage')
+
     req = Requests.objects.get(pk=request_pk)
     req.to_follow = not req.to_follow
     req.on = req.to_follow
     req.save()
+
+    if req.to_follow:
+        print(req.to_follow)
+        comment = req.comments.create(author=request.user, body='وضعیت درخواست؟')
+        comment.is_read = False
+        comment.save()
+
     return redirect('req_report')
 
 
@@ -954,9 +966,6 @@ def request_read(request, request_pk):
 
     parent_request = Requests.objects.filter(is_active=True).filter(number=req.parent_number)
     sub_requests = Requests.objects.filter(is_active=True).filter(parent_number=req.number)
-    print(req)
-    print(parent_request)
-    print(sub_requests)
 
     if request.method == 'POST':
         comment = req.comments.create(author=request.user, body=request.POST['body'])

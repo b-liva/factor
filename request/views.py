@@ -1,4 +1,5 @@
 import json
+
 from django.utils.timezone import now
 import request.templatetags.functions as funcs
 from django.contrib.humanize.templatetags.humanize import intcomma

@@ -115,7 +115,7 @@ class Requests(models.Model):
     follow_up = models.TextField(blank=True, null=True)
     to_follow = models.BooleanField(default=False)
     on = models.BooleanField(default=False)
-    comments = GenericRelation('Comment')
+    comments = GenericRelation('Comment', related_query_name='req_comment')
 
     objects = models.Manager()
     actives = ActiveRequestManager()
@@ -217,7 +217,7 @@ class Xpref(models.Model):
     to_follow = models.BooleanField(default=False)
     on = models.BooleanField(default=False)
 
-    comments = GenericRelation('Comment')
+    comments = GenericRelation('Comment', related_query_name='xpref_comment')
 
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')
