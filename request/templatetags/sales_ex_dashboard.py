@@ -12,8 +12,9 @@ register = template.Library()
 
 
 @register.simple_tag()
-def reqs_to_follow(request, on):
-    req = Requests.objects.filter(is_active=True, to_follow=True, on=on).order_by('date_modified').reverse()
+def reqs_to_follow(user, on):
+    # req = Requests.objects.filter(is_active=True, owner=user, to_follow=True, on=on).order_by('date_modified').reverse()
+    req = Requests.objects.filter(is_active=True, owner=user, to_follow=True).order_by('date_modified').reverse()
     return req
 
 
@@ -31,7 +32,7 @@ def unread_comments(status, user):
                    Q(req_comment__colleagues=user, req_comment__is_active=True) | \
                    Q(xpref_comment__owner=user, xpref_comment__is_active=True)
 
-    comments = Comment.objects.filter(is_read=status).filter(filter_query).exclude(author=user).order_by('pub_date').reverse()
+    comments = Comment.objects.filter(is_read=status).filter(filter_query).exclude(author=user).distinct().order_by('pub_date').reverse()
     return comments
 
 
