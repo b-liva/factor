@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 
 from accounts.models import User
-from .models import Requests, ReqSpec
+from .models import Requests, ReqSpec, IMType, IPType, ICType, IEType
 from motordb.models import MotorsCode
 from django.contrib.auth.decorators import login_required
 import request.templatetags.functions as funcs
@@ -108,28 +108,39 @@ def reqspec_index_IE(request):
 
 @login_required
 def assign_code_to_motor(request):
-    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='',
+    print('hhhhhhh')
+    imb3 = IMType.objects.get(title='IMB3')
+    imb35 = IMType.objects.get(title='IMB35')
+    ip55 = IPType.objects.get(title="IP55")
+    ic411 = ICType.objects.get(title='IC411')
+    ie1 = IEType.objects.get(title='IE1')
+    reqspecs = ReqSpec.objects.filter(is_active=True, code=99009900, req_id__owner=User.objects.get(pk=4), summary='',
                                       type__title='روتین')
+    print(reqspecs.count())
     for req in reqspecs:
         try:
-            print(f"kw: {req.kw} - rpm: {req.rpm}")
             code = MotorsCode.objects.get(kw=req.kw, speed=req.rpm, im='B3', ip='IP55')
             req.code = code.code
+            req.im = imb3
+            req.ic = ic411
+            req.ip = ip55
+            req.ie = ie1
             req.save()
-            print(f"code: {code.code}")
         except:
             print('Nothing Found')
 
-    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4))\
+    reqspecs = ReqSpec.objects.filter(is_active=True, code=99009900, req_id__owner=User.objects.get(pk=4))\
         .filter(Q(summary='فلنجی') | Q(summary='فلنج دار') | Q(summary='با پایه وفلنج'))
 
     for req in reqspecs:
         try:
-            print(f"kw: {req.kw} - rpm: {req.rpm}")
             code = MotorsCode.objects.get(kw=req.kw, speed=req.rpm, im='B35', ip='IP55')
             req.code = code.code
+            req.im = imb35
+            req.ic = ic411
+            req.ip = ip55
+            req.ie = ie1
             req.save()
-            print(f"code: {code.code}")
         except:
             print('Nothing Found')
 

@@ -11,6 +11,9 @@
             <br>تاریخ صدور: {{ proforma.date_fa }}
             <br>تاریخ اعتبار: {{ proforma.exp_date_fa }}
             <br>
+            <p>مبلغ پیش فاکتور: {{ proforma.total_proforma_price|intcomma }}</p>
+            <p>دریافتی پیش فاکتور: {{ proforma.total_proforma_received|intcomma }}</p>
+            <p>مانده پیش فاکتور: {{ proforma.total_prof_remaining|intcomma }}</p>
             <div class="col-md-10 col-md-offset-1">
                 <div class="form-group">
                     <ul class="message">
@@ -31,6 +34,8 @@
                         <th class="text-center">سرعت</th>
                         <th class="text-center">قیمت</th>
                         <th class="text-center">ارسال به مشتری</th>
+                        <th class="text-center">دریافتی</th>
+                        <th class="text-center">مانده</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -44,6 +49,10 @@
                             <td><input type="number" name="qty_sent" value="{{ prof_spec.qty_sent }}"
                                        class="form-control"></td>
                             {#                            <td><input name="sent" type="checkbox" {% if prof_spec.sent %} checked {% endif %} value="{{ prof_spec.pk|enc }}" ></td>#}
+                            <td>{{ prof_spec.received }}</td>
+                            <td>{{ prof_spec.remaining }}</td>
+
+
                             <td class="text-center"><input name="sent" type="checkbox" {% if prof_spec.sent %}
                                                            checked {% endif %} value="{{ prof_spec.pk }}"></td>
 

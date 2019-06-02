@@ -1,5 +1,7 @@
 import requests
 import json
+
+from django.db.models import FloatField, F, Sum
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from .models import (Customer,
@@ -207,7 +209,6 @@ def customer_read2(request, customer_pk):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     customer_reqs = customer.requests_set.filter(is_active=True).order_by('date_fa').reverse()
-    print(f"#requests = {customer_reqs.count()}")
     kwList = []
     pList = []
     totalRes = {}
@@ -254,22 +255,17 @@ def customer_read2(request, customer_pk):
     request_count = customer.requests_set.count()
 
     all_requests = customer.requests_set.filter(is_active=True)
-
-
-
-
+    total_pref_sent_value = PrefSpec.objects.filter(xpref_id__req_id__customer=customer, qty_sent__gt=0).aggregate(sum=Sum(F('price') * F('qty'), output_field=FloatField()))
     context = {
         'customer': customer,
         'customer_reqs': customer_reqs,
         'all_requests': all_requests,
-        # 'kw': kw,
-        # 'some': some,
         'customer_kw_total': sum(kwList),
         'payment_list': payment_list,
         'payment_sum': payment_sum,
         'totalRes': totalRes,
         'pay_sum': paySum,
-        'req_count': request_count
+        'req_count': request_count,
     }
 
     return render(request, 'customer/details.html', context)

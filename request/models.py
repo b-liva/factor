@@ -4,7 +4,7 @@ from os.path import split
 # from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Sum, F
+from django.db.models import Sum, F, FloatField
 from django.utils import timezone
 
 from accounts.models import User
@@ -245,6 +245,17 @@ class Xpref(models.Model):
         self.date_modified = timezone.now()
         super(Xpref, self).save()
 
+    def total_proforma_price(self):
+        value = self.prefspec_set.aggregate(sum=Sum(F('qty') * F('price'), output_field=FloatField()))
+        return value['sum']
+
+    def total_proforma_received(self):
+        value = self.payment_set.aggregate(sum=Sum('amount'))
+        return value['sum']
+
+    def total_prof_remaining(self):
+        return self.total_proforma_price() - self.total_proforma_received()
+
     class Meta:
         permissions = (
             ('index_proforma', 'Can index Proforma'),
@@ -281,8 +292,21 @@ class PrefSpec(models.Model):
     qty_sent = models.IntegerField(default=0, null=True, blank=True)
     finished = models.BooleanField(default=False)
 
+    received = models.FloatField(null=True, blank=True, default=0)
+
     def __str__(self):
         return 'pk:%s | %s | %sKW - %sRPM - %sV' % (self.pk, self.qty, self.kw, self.rpm, self.voltage)
+
+    def receivable(self):
+        return self.qty * self.price - self.received
+
+    def total_received_prof(self):
+        total_amount = self.xpref_id.payment_set.aggregate(sum=Sum('amount'))
+        total_amount['sum'] = 0 if total_amount['sum'] is None else total_amount['sum']
+        return total_amount['sum']
+
+    def remaining(self):
+        return self.receivable() - self.received
 
 
 class Payment(models.Model):

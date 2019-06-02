@@ -368,3 +368,21 @@ def proforma_customer(prof_follow):
     except:
         return ''
 
+
+@register.simple_tag()
+def customer_ballance(customer):
+
+    payment = Payment.objects.filter(xpref_id__req_id__customer=customer).aggregate(Sum('amount'))
+    total_pref_sent_value = PrefSpec.objects.filter(xpref_id__req_id__customer=customer, qty_sent__gt=0).aggregate(sum=Sum(F('price') * F('qty'), output_field=FloatField()))
+
+    payment['amount__sum'] = payment['amount__sum'] if payment['amount__sum'] is not None else 0
+    total_pref_sent_value['sum'] = total_pref_sent_value['sum'] if total_pref_sent_value['sum'] is not None else 0
+    diff = payment['amount__sum'] - total_pref_sent_value['sum']
+    context = {
+        'payment': payment['amount__sum'],
+        'total_pref_sent_value': total_pref_sent_value['sum'],
+        'diff': diff,
+        'ballance_indicator': 'plus' if diff >= 0 else 'minus',
+    }
+
+    return context
