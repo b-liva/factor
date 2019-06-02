@@ -1,10 +1,12 @@
 # from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import Sum, F, FloatField
 from django.urls import reverse
 from django.utils.timezone import now
 from django_jalali.db import models as jmodels
 # from django.contrib.auth.models import User
+
 from accounts.models import User, CustomerUser
 
 
@@ -46,10 +48,13 @@ class Customer(models.Model):
     date2 = jmodels.jDateField(default=now)
     phone = models.CharField(max_length=25, blank=True, null=True)
     fax = models.CharField(max_length=15, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    website = models.URLField(max_length=250, blank=True, null=True)
     postal_code = models.CharField(max_length=15, blank=True, null=True)
     addr = models.TextField(max_length=600, blank=True, null=True)
     agent = models.BooleanField(default=False)
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING, blank=True, null=True)
+
 
     class Meta:
         permissions = (
