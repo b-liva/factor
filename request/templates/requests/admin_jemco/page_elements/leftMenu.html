@@ -9,6 +9,7 @@
                     {% if user.is_superuser %}
                         <li><a href="{% url 'dashboard2' %}">پیگیری</a></li>
                     {% endif %}
+                    <li><a href="{% url 'tenders_admin' %}">مناقصات</a></li>
                 </ul>
             </li>
 
@@ -30,26 +31,19 @@
                     <ul class="nav child_menu">
                         <li><a href="{% url 'req_form' %}">ثبت درخواست جدید</a></li>
                         <li><a href="{% url 'req_form_copy' %}">کپی درخواست</a></li>
-                        <li><a href="{% url 'request_index_paginate' %}">درخواست ها</a></li>
-                        <li><a href="{% url 'request_index_vue' %}">Vue درخواست ها</a></li>
+                        {#                        <li><a href="{% url 'request_index_paginate' %}">درخواست ها</a></li>#}
+                        <li><a href="{% url 'req_report' %}">گزارش درخواست</a></li>
+                        <li><a href="{% url 'reqspec_search' %}"> گزارش ردیف</a></li>
+                        {#                        <li><a href="{% url 'request_index_vue' %}">Vue درخواست ها</a></li>#}
+
+                        {#                        <li><a href="{% url 'fsearch3' %}">گزارش ردیف vue</a></li>#}
+                        {% if request.user|has_group:"board" or request.user.is_superuser or 1 %}
+                            <li><a href="{% url 'req_track:check_orders' %}">چک درخواست ها</a></li>
+                        {% endif %}
+                        <li><a href="{% url 'wrong_data' %}">اطلاعات ناقص</a></li>
                         {% if perms.request.index_deleted_requests %}
                             <li><a href="{% url 'request_index_vue_deleted' %}">درخواست های حذف شده</a></li>
                         {% endif %}
-                        <li><a href="{% url 'wrong_data' %}">اطلاعات ناقص</a></li>
-                        <li><a href="{% url 'req_report' %}">گزارش درخواست</a></li>
-                        <li><a href="{% url 'reqspec_search' %}"> گزارش ردیف</a></li>
-                        <li><a href="{% url 'fsearch3' %}">گزارش ردیف vue</a></li>
-                        {% if perms.req_track.add_reqentered %}
-                            {#                            <li><a href="{% url 'e_req_add' %}">ثبت درخواست وارده</a></li>#}
-                        {% endif %}
-                        {% if request.user|has_group:"board" or request.user.is_superuser or 1 %}
-                            <li><a href="{% url 'req_track:e_req_report_prof' %}">تاییدیه های پیش فاکتور دریافتی</a>
-                            </li>
-                            <li><a href="{% url 'req_track:e_req_report_payments' %}">مبالغ دریافتی</a></li>
-                            <li><a href="{% url 'req_track:check_orders' %}">چک درخواست ها</a></li>
-                        {% endif %}
-
-                        <li><a href="{% url 'tenders_admin' %}">مناقصات</a></li>
                     </ul>
                 </li>
             {% endif %}
@@ -78,19 +72,10 @@
                         {% endif %}
                         {% if perms.request.index_payment %}
                             <li><a href="{% url 'req_track:payment_index' %}">رسید اسناد</a></li>
-                            <li><a href="{% url 'req_track:payment_check' %}">چک</a></li>
-                            <li><a href="{% url 'req_track:payment_assign' %}">assign</a></li>
                         {% endif %}
                         {% if perms.request.index_deleted_payment %}
                             <li><a href="{% url 'payment_index_deleted' %}">پرداخت های حذف شده</a></li>
                         {% endif %}
-                    </ul>
-                </li>
-            {% endif %}
-            {% if perms.fund.index_fund %}
-                <li><a> تنخواه <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        <li><a href="{% url 'fund_index' %}">لیست تنخواه</a></li>
                     </ul>
                 </li>
             {% endif %}

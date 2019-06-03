@@ -9,6 +9,10 @@
         </h3>
 
         <div class="col-xs-12">
+            <div>
+                <a class="btn btn-primary" href="{% url 'req_track:payment_check' %}">بروز رسانی وضعیت دریافتی ها</a>
+                <a class="btn btn-primary" href="{% url 'req_track:payment_assign' %}">تخصیص دریافتی ها به پیش فاکتور ها (مجوزها)</a>
+            </div>
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
@@ -18,27 +22,36 @@
                         <td>شماره پیش فاکتور</td>
                         <td>مبلغ</td>
                         <td>تاریخ</td>
-                        <td>تاریخ*</td>
+                        {#                        <td>تاریخ*</td>#}
                         <td>نوع</td>
                         <td>وارد شده</td>
-                        <td>خطا</td>
-                        {#                <td>واردشده</td>#}
-                        {#                <td>درخواست</td>#}
+                        <td></td>
                     </tr>
                     </thead>
                     <tbody>
                     {% for payment in payments %}
-
                         <tr class="{{ payment|flag }}">
                             <td>{{ forloop.counter }}</td>
                             <td>{{ payment.number }}</td>
                             <td>{{ payment.prof_number }}</td>
-                            <td>{{ payment.amount }}</td>
+                            <td>{{ payment.amount|intcomma }}</td>
                             <td>{{ payment.date_txt }}</td>
-                            <td>{{ payment.date }}</td>
+                            {#                            <td>{{ payment.date }}</td>#}
                             <td>{{ payment.type }}</td>
-                            <td>{{ payment.is_entered }}</td>
-                            <td>{{ payment.red_flag }}</td>
+                            <td>
+                                {% if payment.is_entered %}
+                                    <i class="fa fa-check greenBtn" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa fa-close"></i>
+                                {% endif %}
+                            </td>
+                            {#                            <td>{{ payment.red_flag }}</td>#}
+                            <td>{% if payment.red_flag %}
+                                <a class="btn btn-sm" href="{% url 'req_track:e_req_edit' req_pk=payment.pk %}"
+                                   data-toggle="tooltip" title="ویرایش">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            {% endif %}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

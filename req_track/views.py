@@ -12,7 +12,7 @@ from request.forms.proforma_forms import ProfFollowUpForm
 from request.models import Requests, Xpref, PrefSpec, ReqSpec
 from request.models import Payment as Request_payment
 from req_track.models import ReqEntered, Payments, TrackItemsCode, TrackXpref, ProformaFollowUp
-from .forms import E_Req_Form
+from .forms import E_Req_Form, E_Req_Edit_Form
 from django.db import models
 
 
@@ -39,6 +39,29 @@ def e_req_add(request):
 
 
 @login_required
+def e_req_edit(request, req_pk):
+
+    payment = Payments.objects.get(pk=req_pk)
+    if not payment.red_flag:
+        return redirect('req_track:payment_index')
+    form = E_Req_Edit_Form(instance=payment)
+
+    if request.method == 'POST':
+        form = E_Req_Edit_Form(request.POST or None, instance=payment)
+        if form.is_valid():
+            ereq_item = form.save(commit=False)
+            ereq_item.red_flag = False
+            ereq_item.is_entered = False
+            ereq_item.save()
+            return redirect('req_track:payment_index')
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'req_track/add_form.html', context)
+
+
+@login_required
 def e_req_index(request):
     reqs = ReqEntered.objects.all()
     context = {
@@ -48,7 +71,7 @@ def e_req_index(request):
 
 
 @login_required
-def e_req_read(request):
+def e_req_read(request, req_pk):
     pass
 
 
@@ -100,51 +123,7 @@ def users_summary(user_txt, user_account, date, not_entered_reqs):
 
 
 @login_required
-def e_req_report_proformas(request):
-    reqs = ReqEntered.objects.filter(is_entered=False).filter(is_request=False)
-
-    if not request.user.is_superuser:
-        reqs = reqs.filter(owner_text__contains=request.user.last_name)
-
-    reqs = reqs.filter(
-        Q(title__icontains='پیشفاکتور') |
-        Q(title__icontains='پیش فاکتور')
-    )
-    context = {
-        'reqs': reqs,
-        'show': False,
-        'title_msg': 'تایید پیش فاکتورها'
-
-    }
-    return render(request, 'req_track/ereq_notstarted.html', context)
-
-
-@login_required
-def e_req_report_payments(request):
-    reqs = ReqEntered.objects.filter(is_entered=False).filter(is_request=False)
-
-    if not request.user.is_superuser:
-        reqs = reqs.filter(owner_text__contains=request.user.last_name)
-
-    reqs = reqs.filter(
-        Q(title__icontains='واریز') |
-        Q(title__icontains='مبلغ') |
-        Q(title__icontains='ساتنا') |
-        Q(title__icontains='تسویه') |
-        Q(title__icontains='پیش پرداخت') |
-        Q(title__icontains='پیشپرداخت') |
-        Q(title__icontains='چک')
-    )
-    context = {
-        'reqs': reqs,
-        'show': False,
-        'title_msg': 'اعلام واریزی'
-    }
-    return render(request, 'req_track/ereq_notstarted.html', context)
-
-
-@login_required
-def payment_check(request):
+def check_payment(request):
     payments_not_flaged = Payments.objects.filter(red_flag=False)
 
     for p in payments_not_flaged:
@@ -165,6 +144,18 @@ def payment_check(request):
         s = '-'
         p.date = s.join(date)
         p.save()
+
+    return True
+
+
+@login_required
+def payment_check(request):
+    """
+    checks and redirect payments to index page
+    :param request:
+    :return:
+    """
+    check_payment(request)
     return redirect('req_track:payment_index')
 
 
@@ -179,10 +170,12 @@ def payment_index(request):
 
 @login_required
 def payment_assign(request):
+    check_payment(request)
     payments = Payments.objects.filter(red_flag=False, is_entered=False)
 
     for payment in payments:
         # if not Request_payment.objects.filter(number=payment.number):
+
         proforma = Xpref.objects.get(number=payment.prof_number)
         pay = Request_payment()
         pay.number = payment.number

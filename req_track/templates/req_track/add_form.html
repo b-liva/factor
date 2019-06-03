@@ -2,9 +2,16 @@
 {% load humanize %}
 {% block right_col %}
 
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit">submit</button>
-    </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <button class="btn btn-success btn-sm" type="submit">ارسال</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
