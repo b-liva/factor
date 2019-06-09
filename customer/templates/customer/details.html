@@ -14,13 +14,15 @@
             <div id="customerDetails" class="col-md-3 col-sm-3 col-xs-12 col-xs-offset-0">
                 <div>
                     <h3>{{ customer.name }}</h3>
-                    <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ customer.date2 }}</p>
-                    <p><i class="fa fa-phone" aria-hidden="true"></i> {{ customer.phone }}</p>
-                    <p><i class="fa fa-fax" aria-hidden="true"></i> {{ customer.fax }}</p>
-                    <p><i class="fa fa-envelope" aria-hidden="true"></i> {{ customer.email }}</p>
-                    <p><i class="fa fa-globe" aria-hidden="true"></i><a style="color: yellow;" href="{{ customer.website }}"> {{ customer.website }}</a></p>
-                    <p><i class="fa fa-map-marker" aria-hidden="true"></i>
-                        {{ customer.addr }}</p>
+                    {% if customer.date2 %}<p><i class="fa fa-calendar" aria-hidden="true"></i> {{ customer.date2 }}</p>{% endif %}
+                    {% if customer.phone %}<p><i class="fa fa-phone" aria-hidden="true"></i> {{ customer.phone }}</p>{% endif %}
+                    {% if customer.fax %}<p><i class="fa fa-fax" aria-hidden="true"></i> {{ customer.fax }}</p>{% endif %}
+                    {% if customer.email %}<p><i class="fa fa-envelope" aria-hidden="true"></i> {{ customer.email }}</p>{% endif %}
+                    {% if customer.website %}<p><i class="fa fa-globe" aria-hidden="true"></i>
+                        <a style="color: yellow;" href="{{ customer.website }}"> {{ customer.website }}</a>
+                    </p>{% endif %}
+                    {% if customer.addr %}<p><i class="fa fa-map-marker" aria-hidden="true"></i>
+                        {{ customer.addr }}</p>{% endif %}
                 </div>
                 <div>
                     <a href="{% url 'addr-list' customer_pk=customer.pk %}" class="btn btn-link btn-xs"
