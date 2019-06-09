@@ -238,15 +238,8 @@ def customer_read2(request, customer_pk):
         tempDict['req'] = customer_req
         totalRes[customer_req.pk] = tempDict
 
-        # reqId->
-        #         profs->
-        #                 payments->
-        #         specs->
-        #         kw->
-        #         req->
-    totalpaymenst = customer.payment_set.all()
-    # print(f'total result: {totalRes}')
     payList = []
+    totalpaymenst = Payment.objects.filter(xpref_id__req_id__customer=customer, is_active=True)
     for pay in totalpaymenst:
         payList.append(pay.amount)
 
@@ -387,7 +380,7 @@ def customer_edit_form(request, customer_pk):
 
 def customers_payment(customer_pk):
     customer = Customer.objects.get(pk=customer_pk)
-    payments = customer.payment_set.all()
+    payments = Payment.objects.filter(xpref_id__req_id__customer=customer, is_active=True)
     priceList = []
     for p in payments:
         priceList.append(p.amount)

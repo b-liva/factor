@@ -14,6 +14,7 @@ from django import forms
 
 
 # Create your models here.
+from request.models import Payment
 
 
 def default_customer_code():
@@ -68,6 +69,15 @@ class Customer(models.Model):
 
     def get_absolute_url(self):
         return reverse('customer_read', args=[self.pk])
+
+    def total_paid(self):
+        payments = Payment.objects.filter(xpref_id__req_id__customer=self.id, is_active=True)
+        amount = payments.aggregate(sum=Sum('amount'))
+        context = {
+            'payments': payments,
+            'amount': amount
+        }
+        return context
 
 
 class Address(models.Model):

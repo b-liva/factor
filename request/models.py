@@ -11,7 +11,6 @@ from accounts.models import User
 from django.db import models
 import datetime
 from django.utils.timezone import now
-from customer.models import Customer
 from django_jalali.db import models as jmodels
 
 
@@ -95,7 +94,7 @@ class ActiveRequestManager(models.Manager):
 
 
 class Requests(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
+    customer = models.ForeignKey('customer.Customer', on_delete=models.DO_NOTHING)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='req_owner')
 
     number = models.IntegerField(unique=True)
@@ -313,7 +312,6 @@ class PrefSpec(models.Model):
 
 class Payment(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     xpref_id = models.ForeignKey(Xpref, on_delete=models.DO_NOTHING)
 
     number = models.IntegerField(unique=True)
