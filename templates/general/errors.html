@@ -1,0 +1,10 @@
+<div class="col-md-10 col-md-offset-1">
+    <div class="form-group">
+        <ul class="message">
+            {% for message in messages %}
+                <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}
+                    - {{ message.tags }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
