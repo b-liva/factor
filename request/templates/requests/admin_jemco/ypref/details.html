@@ -51,7 +51,7 @@
                     <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
                         <div class="tile-stats">
                             <div>
-                                <span class="count">${{ pref.total_proforma_received.remaining|intcomma }}</span>
+                                <span class="count">${{ pref.total_proforma_received.remaining|floatformat:0|intcomma }}</span>
                                 <span class="red">(%{{ pref.total_proforma_received.remaining_percent|floatformat:2 }})</span>
                             </div>
                             <h3 class="col-xs-12">تسویه نشده</h3>

@@ -12,14 +12,14 @@
             <br>تاریخ صدور: {{ proforma.date_fa }}
             <br>تاریخ اعتبار: {{ proforma.exp_date_fa }}
             <hr>
-            <p>مبلغ کالا: {{ proforma.total_proforma_price_vat.no_vat|intcomma }}</p>
-            <p>ارزش افزوده: {{ proforma.total_proforma_price_vat.vat|intcomma }}</p>
-            <p>مبلغ کل مجوز: {{ proforma.total_proforma_price_vat.price_vat|intcomma }}</p>
+            <p>مبلغ کالا: {{ proforma.total_proforma_price_vat.no_vat|floatformat:0|intcomma }}</p>
+            <p>ارزش افزوده: {{ proforma.total_proforma_price_vat.vat|floatformat:0|intcomma }}</p>
+            <p>مبلغ کل مجوز: {{ proforma.total_proforma_price_vat.price_vat|floatformat:0|intcomma }}</p>
             <hr>
             <p>دریافتی بابت
-                مجوز: {{ proforma.total_proforma_received.received|intcomma }}({{ proforma.total_proforma_received.received_percent|floatformat:2 }}%)</p>
+                مجوز: {{ proforma.total_proforma_received.received|floatformat:0|intcomma }}({{ proforma.total_proforma_received.received_percent|floatformat:2 }}%)</p>
             <p>مانده
-                مجوز: {{ proforma.total_proforma_received.remaining|intcomma }}({{ proforma.total_proforma_received.remaining_percent|floatformat:2 }}%)</p>
+                مجوز: {{ proforma.total_proforma_received.remaining|floatformat:0|intcomma }}({{ proforma.total_proforma_received.remaining_percent|floatformat:2 }}%)</p>
             <h2>{{ proforma.total_proforma_received.status }}</h2>
 
             <form action="{% url 'pref_edit' ypref_pk=proforma.id %}" method="POST">
