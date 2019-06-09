@@ -138,13 +138,6 @@ def days(perm):
     return diff.days
 
 
-@register.filter(name='perm_total')
-def perm_total(permission):
-    payments = permission.payment_set.all()
-    proforma_total = pref_total_price(permission)
-    return proforma_total
-
-
 @register.filter(name='perm_days')
 def perm_days(permission):
     today_fa = jmodels.jdatetime.date.today()
@@ -221,15 +214,6 @@ def qty_remaining(permspec):
 def perm_number(perm):
     p_number = perm.perm_number if perm.perm_number is not None else ''
     return p_number
-
-
-def pref_total_price(permission):
-    prefs = permission.prefspec_set.all()
-    proforma_total_before_tax = prefs.aggregate(total=Sum(F('qty') * F('price'), output_field=FloatField()))
-    if not proforma_total_before_tax['total']:
-        proforma_total_before_tax['total'] = 0
-    proforma_total_after_tax = 1.09 * proforma_total_before_tax['total']
-    return proforma_total_after_tax
 
 
 @register.filter

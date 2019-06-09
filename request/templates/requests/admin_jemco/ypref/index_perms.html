@@ -151,7 +151,7 @@
                             <td>{{ p.qty_remaining }}</td>
                             {#                            <td>{{ p|days }}</td>#}
                             <td class="{{ p|perm_warning_class }}">{{ p|perm_days }}</td>
-                            <td>{{ p|perm_total|floatformat:0 | intcomma }}</td>
+                            <td>{{ p.total_proforma_price_vat.price_vat|floatformat:0 | intcomma }}</td>
                             <td>{{ p.total_proforma_received.remaining|floatformat:0 | intcomma }}</td>
                             <td>{{ p.total_proforma_received.remaining_percent|floatformat:2 }}</td>
                             {#                            <td>{{ p.perm.summary|truncatechars:60 }}</td>#}

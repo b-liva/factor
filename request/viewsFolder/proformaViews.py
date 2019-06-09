@@ -446,7 +446,7 @@ def perms_export(request):
         days = request_extras.perm_days(perm)
         if days < 0:
             cell_style = 'pattern: pattern solid, fore_colour blue;'
-        total_receiveable = request_extras.perm_total(perm)
+        total_receiveable = perm.total_proforma_price_vat()['price_vat']
         perm_receivable = perm.total_proforma_received()['remaining']
         perm_receivable_percent = perm.total_proforma_received()['remaining_percent']
         final['days'] = days
