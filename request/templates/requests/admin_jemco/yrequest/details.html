@@ -27,7 +27,7 @@
                     <div class="tile-stats">
                         <div class="icon">
                         </div>
-                        <div class="count">{{ total_kw|floatformat:1|intcomma }}</div>
+                        <div class="count">{{ request.total_kw|floatformat:1|intcomma }}</div>
 
                         <h3>مجموع کیلووات</h3>
                     </div>
@@ -39,7 +39,7 @@
                         <div class="icon col-md-6">
                             {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
                         </div>
-                        <div class="count">${{ pay_sum|floatformat:0|intcomma }}</div>
+                        <div class="count">${{ request.total_received|floatformat:0|intcomma }}</div>
 
                         <h3>پرداخت ها</h3>
                     </div>
@@ -158,22 +158,12 @@
                                            href="{% url 'reqspec_edit_form' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
                                             <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
                                         </a>
-                                        {#                                <a class="btn btn-xs btn-danger"#}
-                                        {#                                   href="">#}
-                                        {#                                    <i class="fa fa-trash" aria-hidden="true"></i> حذف#}
-                                        {#                                </a>#}
 
                                         <a class="btn btn-primary btn-xs btn-danger"
                                            href="{% url 'reqSpec_delete' req_pk=request.pk yreqSpec_pk=reqspec.pk %}"><i
                                                 class="fa fa-trash"></i> حذف</a>
                                     </td>
                                 {% endif %}
-
-                                {#                        <td>#}
-                                {#                            <a class="btn btn-primary btn-xs" href="{% url 'reqSpec_edit' req_pk=customer.pk %}">Details</a>#}
-                                {#                            <a class="btn btn-primary btn-xs btn-warning"#}
-                                {#                               href="{% url 'customer_delete' customer_pk=customer.pk %}">Delete</a>#}
-                                {#                        </td>#}
 
                             </tr>
 
@@ -183,21 +173,9 @@
                     </table>
                 </div>
                 <br>
-                <div>
-                    {#                <a href="{% url 'reqSpec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">Edit Specs</a>#}
-                    {#                <a href="{% url 'spec_form' req_pk=request.pk %}" class="btn btn-sm btn-warning">#}
-                    {#                    <i class="fa fa-pencil"></i> Specs</a>#}
-                    {#                <a href="{% url 'request_edit_form' request_pk=request.pk %}" class="btn btn-sm btn-warning">#}
-                    {#                    <i class="fa fa-pencil"></i> Request</a>#}
-                </div>
+
 
             </div>
-            {#        <div class="col-md-10 col-lg-offset-1">#}
-            {#            {% for img in req_images %}#}
-            {#                <a href="{{ img.image.url }}" target="_blank"><img class="img-responsive img-thumbnail col-md-4"#}
-            {#                                                                   src="{{ img.image.url }}" style="max-height: 150px;"></a>#}
-            {#            {% endfor %}#}
-            {#        </div>#}
 
             {#Images#}
             <div class="col-md-10 col-lg-offset-1">

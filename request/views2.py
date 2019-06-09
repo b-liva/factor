@@ -962,8 +962,6 @@ def request_read(request, request_pk):
 
     print(f'file names: {nested_files}')
 
-    kw = total_kw(request_pk)
-
     parent_request = Requests.objects.filter(is_active=True).filter(number=req.parent_number)
     sub_requests = Requests.objects.filter(is_active=True).filter(parent_number=req.number)
 
@@ -979,7 +977,6 @@ def request_read(request, request_pk):
         'parent_request': parent_request,
         'reqspecs': reqspecs,
         'req_images': req_files,
-        'total_kw': kw,
         'files': files,
         'nested_files': nested_files,
         'xfiles': xfiles,
@@ -1123,15 +1120,6 @@ def request_edit(request, request_pk):
         messages.error(request, 'Nothing found')
         return redirect('errorpage')
     return HttpResponse('request Edit' + str(request_pk))
-
-
-def total_kw(req_id):
-    req = Requests.objects.get(pk=req_id)
-    reqspecs = req.reqspec_set.all()
-    total_kw = 0
-    for reqspec in reqspecs:
-        total_kw += reqspec.kw * reqspec.qty
-    return total_kw
 
 
 @login_required

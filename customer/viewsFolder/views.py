@@ -11,7 +11,6 @@ from django.views.generic import (
 
 from customer.models import Customer
 from customer.views import customers_payment
-from request.views2 import total_kw
 from customer.mixins import OwnRequestMixin
 from request.models import (
     Requests,
@@ -39,7 +38,7 @@ class CustomerRequestsListView(ListView):
         proformaDict = {}
         for customer_req in customer_reqs:
             tempDict = {}
-            tempDict['kw'] = total_kw(customer_req.pk)
+
             kwList.append(tempDict['kw'])
             req_profs = customer_req.xpref_set.all()
             paymentList = []
@@ -171,12 +170,11 @@ class CustomerRequestDetailsView(DetailView):
         # for x, y in nested_files['ximg'].items():
         #     print(f"last is: {y['name']}")
 
-        kw = total_kw(request_pk)
+
         respone = {
             'req': req,
             'reqspecs': reqspecs,
             'req_images': req_files,
-            'total_kw': kw,
             'files': files,
             'nested_files': nested_files,
             'xfiles': xfiles
