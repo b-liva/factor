@@ -208,57 +208,11 @@ def customer_read2(request, customer_pk):
     if not can_read:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
-    customer_reqs = customer.requests_set.filter(is_active=True).order_by('date_fa').reverse()
-    kwList = []
-    pList = []
-    totalRes = {}
-    tempDict = {}
-    proformaDict = {}
-    for customer_req in customer_reqs:
-        tempDict = {}
-        tempDict['kw'] = views2.total_kw(customer_req.pk)
-        kwList.append(tempDict['kw'])
-        req_profs = customer_req.xpref_set.filter(is_active=True)
-
-        paymentList = []
-        for p in req_profs:
-            proformaDict = {}
-            pList.append(p)
-            payments = p.payment_set.filter(is_active=True)
-            # print(f'payments is: {payments}')
-            for pmnt in payments:
-                paymentList.append(pmnt)
-            proformaDict['payments'] = paymentList
-
-        proformaDict['proformas'] = req_profs
-        reqspec = customer_req.reqspec_set.all()
-        tempDict['profs'] = req_profs
-        tempDict['profs2'] = proformaDict
-        tempDict['specs'] = reqspec
-        tempDict['req'] = customer_req
-        totalRes[customer_req.pk] = tempDict
-
-    payList = []
-    totalpaymenst = Payment.objects.filter(xpref_id__req_id__customer=customer, is_active=True)
-    for pay in totalpaymenst:
-        payList.append(pay.amount)
-
-    paySum = sum(payList)
-    payment_list, payment_sum = customers_payment(customer.pk)
-    request_count = customer.requests_set.count()
 
     all_requests = customer.requests_set.filter(is_active=True)
-    total_pref_sent_value = PrefSpec.objects.filter(xpref_id__req_id__customer=customer, qty_sent__gt=0).aggregate(sum=Sum(F('price') * F('qty'), output_field=FloatField()))
     context = {
         'customer': customer,
-        'customer_reqs': customer_reqs,
         'all_requests': all_requests,
-        'customer_kw_total': sum(kwList),
-        'payment_list': payment_list,
-        'payment_sum': payment_sum,
-        'totalRes': totalRes,
-        'pay_sum': paySum,
-        'req_count': request_count,
     }
 
     return render(request, 'customer/details.html', context)

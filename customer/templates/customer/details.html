@@ -42,7 +42,7 @@
                     <div class="tile-stats">
                         <div class="icon">
                         </div>
-                        <div class="count">{{ req_count }}</div>
+                        <div class="count">{{ customer.total_kw.count }}</div>
 
                         <h3>درخواست ها</h3>
                     </div>
@@ -51,7 +51,7 @@
                     <div class="tile-stats">
                         <div class="icon">
                         </div>
-                        <div class="count">{{ customer_kw_total|floatformat:0|intcomma }}</div>
+                        <div class="count">{{ customer.total_kw.amount|floatformat:0|intcomma }}</div>
 
                         <h3>کیلووات</h3>
                     </div>
@@ -63,7 +63,7 @@
                         <div class="icon col-md-6">
                             {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
                         </div>
-                        <div class="count">${{ pay_sum|floatformat:0|intcomma }}</div>
+                        <div class="count">${{ customer.total_received.amount|floatformat:0|intcomma }}</div>
 
                         <h3>پرداخت ها</h3>
                     </div>
@@ -71,10 +71,11 @@
             </div>
         </div>
         <div>
-            {% customer_ballance customer as ballance %}
-            <p>دریافتی از مشتری: {{ ballance.payment|intcomma }}</p>
-            <p>معادل کالای ارسالی به مشتری: {{ ballance.total_pref_sent_value|intcomma }}</p>
-            <p>تراز حساب مشتری: {{ ballance.diff|intcomma }}</p>
+            <p>دریافتی از مشتری: {{ customer.total_received.amount|floatformat:0|intcomma }}</p>
+            <p>معادل کالای ارسالی به مشتری: {{ customer.pref_sent.sent_value|floatformat:0|intcomma }}
+                <span>({{ customer.pref_sent.sent_count|floatformat:0|intcomma }})</span>
+            </p>
+            <p>تراز حساب مشتری: {{ customer.ballance|floatformat:0|intcomma }}</p>
         </div>
 
         <div class="row customerTable">
@@ -123,7 +124,7 @@
                                 <td>
                                     {{ req.date_fa }}
                                 </td>
-                                <td>{{ req|total_kw|floatformat:1|intcomma }}</td>
+                                <td>{{ req.total_kw|floatformat:1|intcomma }}</td>
                                 <td class="text-center ">
                                     <table class="col-xs-12 text-center">
                                         <tbody>
@@ -152,91 +153,22 @@
                                         </tbody>
                                     </table>
                                 </td>
-                                <td>{{ req|total_received|intcomma }}</td>
-                                <td>{{ req|total_receiveable|intcomma }}</td>
+                                <td>{{ req.total_received|intcomma }}</td>
+                                <td>{{ req.total_receivable|floatformat:0|intcomma }}</td>
                             </tr>
                         {% endfor %}
                         <tr style="border-top: 3px solid black;">
                             <td colspan="3">مجموع</td>
-                            <td class="emphsize"><b>{{ customer_kw_total|floatformat:0|intcomma }}</b></td>
+                            <td class="emphsize"><b>{{ customer.total_kw.amount|floatformat:0|intcomma }}</b></td>
                             <td></td>
-                            <td class="emphsize"><b>{{ pay_sum|floatformat:0|intcomma }}</b></td>
+                            <td class="emphsize"><b>{{ customer.total_received.amount|floatformat:0|intcomma }}</b></td>
                             <td></td>
                         </tr>
                         </tbody>
                     </table>
-
-
-                    {#                    <table class="table table-hover text-center">#}
-                    {#                        <thead>#}
-                    {#                        <tr>#}
-                    {#                            <th class="text-center">کد</th>#}
-                    {#                            <th class="text-center">یونیکد</th>#}
-                    {#                            <th class="text-center">شماره درخواست</th>#}
-                    {#                            <th class="text-center">تاریخ</th>#}
-                    {#                            <th class="text-center">جمع کیلووات</th>#}
-                    {#                            <th class="text-center">پیشفاکتورها</th>#}
-                    {#                            <th class="text-center">پرداخت ها</th>#}
-                    {#                        </tr>#}
-                    {#                        </thead>#}
-                    {#                        <tbody>#}
-                    {#                        {% for req_id, val in totalRes.items %}#}
-                    {#                            <tr>#}
-                    {#                                <th scope="row" class="text-center">{{ forloop.counter }}</th>#}
-                    {#                                <td>{{ req_id }}</td>#}
-                    {#                                <td>#}
-                    {#                                    <a href="{% url 'request_details' request_pk=req_id %}">{{ val.req.number }}</a>#}
-                    {#                                </td>#}
-                    {#                                <td>#}
-                    {#                                    {{ val.req.date_fa }}#}
-                    {#                                </td>#}
-                    {#                                <td>{{ val.kw|intcomma }}</td>#}
-                    {#                                <td style="margin: 0px; padding: 0px;">#}
-                    {#                                    <table class="col-md-4 col-md-offset-4 text-center">#}
-                    {#                                        <tbody>#}
-                    {#                                        {% for prof in val.profs2.proformas %}#}
-                    {#                                            <tr style="border-bottom: 1px solid black">#}
-                    {#                                                <td class="text-center"><a#}
-                    {#                                                        href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof }}</a>#}
-                    {#                                                </td>#}
-                    {#                                            </tr>#}
-                    {#                                        {% endfor %}#}
-                    {#                                        </tbody>#}
-                    {#                                    </table>#}
-                    {#                                </td>#}
-                    {#                                <td>#}
-                    {#                                    <table>#}
-                    {#                                        <tbody>#}
-                    {#                                        {% for pay in val.profs2.payments %}#}
-                    {#                                            <tr>#}
-                    {#                                                <td>#}
-                    {#                                                    <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">#{{ pay.xpref_id.number }}#}
-                    {#                                                        - ${{ pay.amount|floatformat:0|intcomma }}</a></td>#}
-                    {#                                            </tr>#}
-                    {#                                        {% endfor %}#}
-                    {#                                        </tbody>#}
-                    {#                                    </table>#}
-                    {#                                </td>#}
-                    {##}
-                    {##}
-                    {#                            </tr>#}
-                    {#                        {% endfor %}#}
-                    {#                        <tr style="border-top: 3px solid black;">#}
-                    {#                            <td colspan="3">مجموع</td>#}
-                    {#                            <td class="emphsize"><b>{{ customer_kw_total|floatformat:0|intcomma }}</b></td>#}
-                    {#                            <td></td>#}
-                    {#                            <td class="emphsize"><b>{{ pay_sum|floatformat:0|intcomma }}</b></td>#}
-                    {#                        </tr>#}
-                    {#                        </tbody>#}
-                    {#                    </table>#}
-
-
                 </div>
-
-
             </div>
         </div>
     </div>
-
 
 {% endblock %}

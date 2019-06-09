@@ -1,7 +1,7 @@
 # from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import Sum, F, FloatField
+from django.db.models import Sum, F, FloatField, Count
 from django.urls import reverse
 from django.utils.timezone import now
 from django_jalali.db import models as jmodels
@@ -14,7 +14,7 @@ from django import forms
 
 
 # Create your models here.
-from request.models import Payment
+from request.models import Payment, Requests, ReqSpec, PrefSpec
 
 
 def default_customer_code():
@@ -70,12 +70,44 @@ class Customer(models.Model):
     def get_absolute_url(self):
         return reverse('customer_read', args=[self.pk])
 
-    def total_paid(self):
+    def total_received(self):
         payments = Payment.objects.filter(xpref_id__req_id__customer=self.id, is_active=True)
         amount = payments.aggregate(sum=Sum('amount'))
+        amount = amount['sum'] if amount['sum'] else 0
         context = {
             'payments': payments,
             'amount': amount
+        }
+        return context
+
+    def pref_sent(self):
+        sent = PrefSpec.objects.filter(xpref_id__req_id__customer=self, qty_sent__gt=0)
+        sent_value = sent.aggregate(sum=Sum(F('price') * F('qty'), output_field=FloatField()))
+        sent_value = 1.09 * sent_value['sum'] if sent_value['sum'] else 0
+        sent_count = sent.aggregate(count=Sum('qty_sent'))
+        sent_count = sent_count['count'] if sent_count['count'] else 0
+
+        context = {
+            'sent_count': sent_count,
+            'sent_value': sent_value,
+
+        }
+        return context
+
+    def ballance(self):
+        print(f"rec: {self.total_received()['amount']}")
+        print(f"sent: {self.pref_sent()}")
+        value = self.total_received()['amount'] - self.pref_sent()['sent_value']
+        value = value if value else 0
+        return value
+
+    def total_kw(self):
+        reqs = Requests.actives.filter(customer=self.id)
+        count = reqs.count()
+        amount = ReqSpec.objects.filter(req_id__is_active=True, req_id__customer=self).aggregate(sum=Sum(F('qty') * F('kw'), output_field=FloatField()))
+        context = {
+            'count': count,
+            'amount': amount['sum'],
         }
         return context
 

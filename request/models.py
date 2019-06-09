@@ -147,6 +147,21 @@ class Requests(models.Model):
         self.date_modified = timezone.now()
         super(Requests, self).save()
 
+    def total_kw(self):
+        kw = self.reqspec_set.aggregate(sum=Sum(F('qty') * F('kw'), output_field=FloatField()))
+        return kw['sum']
+
+    def total_received(self):
+        amount = Payment.objects.filter(is_active=True, xpref_id__req_id=self).aggregate(sum=Sum('amount'))
+        sum = amount['sum'] if amount['sum'] else 0
+        return sum
+
+    def total_receivable(self):
+        amount = PrefSpec.objects.filter(xpref_id__is_active=True, xpref_id__req_id=self)\
+            .aggregate(sum=Sum(F('qty') * F('price'), output_field=FloatField()))
+        sum = amount['sum'] if amount['sum'] else 0
+        return 1.09 * sum - self.total_received()
+
 
 class RequestFiles(models.Model):
     req = models.ForeignKey(Requests, on_delete=models.CASCADE)

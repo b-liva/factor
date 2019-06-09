@@ -174,34 +174,6 @@ def payments(proforma):
     return all_payments
 
 
-@register.filter(name='total_kw')
-def total_kw(req):
-    kw = ReqSpec.objects.filter(req_id=req, is_active=True).aggregate(total=Sum(F('qty') * F('kw'), output_field=FloatField()))
-    return kw['total']
-
-
-@register.filter(name='total_received')
-def total_received(req):
-    sum = Payment.objects.filter(xpref_id__req_id=req).aggregate(Sum('amount'))
-    if sum['amount__sum'] is None:
-        sum['amount__sum'] = ''
-    return sum['amount__sum']
-
-
-@register.filter(name='total_receiveable')
-def total_receiveable(req):
-    total = PrefSpec.objects.filter(xpref_id__req_id=req, xpref_id__perm=True).aggregate(total_sum=Sum(F('qty') * F('price'), output_field=FloatField()))
-    sum = Payment.objects.filter(xpref_id__req_id=req).aggregate(Sum('amount'))
-    print(type(total['total_sum']))
-    print(type(sum['amount__sum']))
-    if sum['amount__sum'] is None:
-        sum['amount__sum'] = 0
-    if total['total_sum'] is None:
-        total['total_sum'] = 0
-    receiveable = 1.09 * total['total_sum'] - sum['amount__sum']
-    return receiveable
-
-
 @register.filter(name='qty_remaining')
 def qty_remaining(permspec):
     if permspec.qty_sent is None:
@@ -325,22 +297,3 @@ def proforma_customer(prof_follow):
         return prof.req_id.customer.name
     except:
         return ''
-
-
-@register.simple_tag()
-def customer_ballance(customer):
-
-    payment = Payment.objects.filter(xpref_id__req_id__customer=customer).aggregate(Sum('amount'))
-    total_pref_sent_value = PrefSpec.objects.filter(xpref_id__req_id__customer=customer, qty_sent__gt=0).aggregate(sum=Sum(F('price') * F('qty'), output_field=FloatField()))
-
-    payment['amount__sum'] = payment['amount__sum'] if payment['amount__sum'] is not None else 0
-    total_pref_sent_value['sum'] = total_pref_sent_value['sum'] if total_pref_sent_value['sum'] is not None else 0
-    diff = payment['amount__sum'] - total_pref_sent_value['sum']
-    context = {
-        'payment': payment['amount__sum'],
-        'total_pref_sent_value': total_pref_sent_value['sum'],
-        'diff': diff,
-        'ballance_indicator': 'plus' if diff >= 0 else 'minus',
-    }
-
-    return context
