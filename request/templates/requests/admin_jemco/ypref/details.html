@@ -5,6 +5,9 @@
 {% block right_col %}
     <div class="container">
         <div class="row">
+            {% if messages %}
+                {% include 'general/errors.html' %}
+            {% endif %}
             <div id="customerDetails" class="col-md-3 col-sm-3 col-xs-12 col-xs-offset-0">
                 <h3>{{ pref.req_id.customer }}</h3>
                 <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ pref.date_fa }}</p>
@@ -47,8 +50,10 @@
                 {% if pref.perm %}
                     <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
                         <div class="tile-stats">
-                            <span class="count">${{ pref|perm_receivable|floatformat:0|intcomma }}</span>
-                            <span class="red">(%{{ pref|receivable_percent|floatformat:2 }})</span>
+                            <div>
+                                <span class="count">${{ pref.total_proforma_received.remaining|intcomma }}</span>
+                                <span class="red">(%{{ pref.total_proforma_received.remaining_percent|floatformat:2 }})</span>
+                            </div>
                             <h3 class="col-xs-12">تسویه نشده</h3>
                         </div>
                     </div>
@@ -211,17 +216,17 @@
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             {% for a in pref.comments.all %}
                                 <div class="row">
-                                {% if user != a.author %}
-                                    <p class="pull-left">
-                                        <span>{{ a.body }}</span>
-                                        <span>: {{ a.author }}</span>
-                                    </p>
-                                {% else %}
-                                    <p class="">
-                                        <span>{{ a.author }}: </span>
-                                        <span>{{ a.body }}</span>
-                                    </p>
-                                {% endif %}
+                                    {% if user != a.author %}
+                                        <p class="pull-left">
+                                            <span>{{ a.body }}</span>
+                                            <span>: {{ a.author }}</span>
+                                        </p>
+                                    {% else %}
+                                        <p class="">
+                                            <span>{{ a.author }}: </span>
+                                            <span>{{ a.body }}</span>
+                                        </p>
+                                    {% endif %}
 
                                 </div>
                             {% endfor %}

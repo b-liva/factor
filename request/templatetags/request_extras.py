@@ -160,32 +160,6 @@ def date_diff(date):
     return diff.days
 
 
-@register.filter(name='perm_receivable')
-def perm_receivable(permission):
-    payments = permission.payment_set.all()
-    total_paid = payments.aggregate(Sum('amount'))
-    proforma_total = pref_total_price(permission)
-    print(proforma_total)
-    if not total_paid['amount__sum']:
-        total_paid['amount__sum'] = 0
-    receivable = proforma_total - total_paid['amount__sum']
-    return receivable
-
-
-@register.filter(name='receivable_percent')
-def perm_receivable_percent(permission):
-    payments = permission.payment_set.all()
-    total_paid = payments.aggregate(Sum('amount'))
-    proforma_total = pref_total_price(permission)
-    print(proforma_total)
-    if not total_paid['amount__sum']:
-        total_paid['amount__sum'] = 0
-    receivable = proforma_total - total_paid['amount__sum']
-    value = "Error" if proforma_total == 0 else f"{100 * receivable / proforma_total}"
-    print(value)
-    return value
-
-
 @register.filter(name='prof_expiry')
 def prof_expiry(prof):
     prof_valid = 'prof_valid'

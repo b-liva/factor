@@ -447,8 +447,8 @@ def perms_export(request):
         if days < 0:
             cell_style = 'pattern: pattern solid, fore_colour blue;'
         total_receiveable = request_extras.perm_total(perm)
-        perm_receivable = request_extras.perm_receivable(perm)
-        perm_receivable_percent = request_extras.perm_receivable_percent(perm)
+        perm_receivable = perm.total_proforma_received()['remaining']
+        perm_receivable_percent = perm.total_proforma_received()['remaining_percent']
         final['days'] = days
 
         exportables = []
@@ -825,6 +825,7 @@ def pref_edit(request, ypref_pk):
         if int(spec_qty_sent[x]) > int(item.qty):
             messages.error(request, 'تعداد ارسال شده نمی تواند از تعداد سفارش بیشتر باشد.')
             return redirect('pref_edit_form', ypref_pk=xpref.pk)
+
         item.qty_sent = spec_qty_sent[x]
         item.save()
         x += 1
@@ -855,9 +856,10 @@ def pref_edit(request, ypref_pk):
         }
         i += 1
 
-    messages.add_message(request, level=20, message=f"پیش فاکتور شماره {xpref.number} برزورسانی شد.")
+    # messages.add_message(request, level=20, message=f"پیش فاکتور شماره {xpref.number} برزورسانی شد.")
+    messages.add_message(request, messages.SUCCESS, message=f"پیش فاکتور شماره {xpref.number} برزورسانی شد.")
 
-    return redirect('pref_index')
+    return redirect('pref_details', ypref_pk=xpref.pk)
 
     # return render(request, 'requests/admin_jemco/ypref/index.html', {
     #     'pref': xpref,

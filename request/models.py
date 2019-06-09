@@ -216,7 +216,6 @@ class Xpref(models.Model):
     follow_up = models.TextField(blank=True, null=True)
     to_follow = models.BooleanField(default=False)
     on = models.BooleanField(default=False)
-
     comments = GenericRelation('Comment', related_query_name='xpref_comment')
 
     def pub_date_pretty(self):
@@ -245,16 +244,32 @@ class Xpref(models.Model):
         self.date_modified = timezone.now()
         super(Xpref, self).save()
 
-    def total_proforma_price(self):
-        value = self.prefspec_set.aggregate(sum=Sum(F('qty') * F('price'), output_field=FloatField()))
-        return value['sum']
+    def total_proforma_price_vat(self):
+        no_vat = self.prefspec_set.aggregate(sum=Sum(F('qty') * F('price'), output_field=FloatField()))
+        no_vat = no_vat['sum']
+        vat = .09 * no_vat
+        price_vat = no_vat + vat
+        # return float(format(value, '.12g'))
+        return {
+            'no_vat': no_vat,
+            'vat': vat,
+            'price_vat': price_vat
+        }
 
     def total_proforma_received(self):
-        value = self.payment_set.aggregate(sum=Sum('amount'))
-        return value['sum']
-
-    def total_prof_remaining(self):
-        return self.total_proforma_price() - self.total_proforma_received()
+        value = self.payment_set.filter(is_active=True).aggregate(sum=Sum('amount'))
+        received = 0 if value['sum'] is None else value['sum']
+        remaining = self.total_proforma_price_vat()['price_vat'] - received
+        received_percent = 100 * received / self.total_proforma_price_vat()['price_vat']
+        remaining_percent = 100 * remaining / self.total_proforma_price_vat()['price_vat']
+        status = True if remaining ==0 else False
+        return {
+            'received': received,
+            'received_percent': received_percent,
+            'remaining': remaining,
+            'remaining_percent': remaining_percent,
+            'status': status
+        }
 
     class Meta:
         permissions = (
@@ -292,21 +307,8 @@ class PrefSpec(models.Model):
     qty_sent = models.IntegerField(default=0, null=True, blank=True)
     finished = models.BooleanField(default=False)
 
-    received = models.FloatField(null=True, blank=True, default=0)
-
     def __str__(self):
         return 'pk:%s | %s | %sKW - %sRPM - %sV' % (self.pk, self.qty, self.kw, self.rpm, self.voltage)
-
-    def receivable(self):
-        return self.qty * self.price - self.received
-
-    def total_received_prof(self):
-        total_amount = self.xpref_id.payment_set.aggregate(sum=Sum('amount'))
-        total_amount['sum'] = 0 if total_amount['sum'] is None else total_amount['sum']
-        return total_amount['sum']
-
-    def remaining(self):
-        return self.receivable() - self.received
 
 
 class Payment(models.Model):
