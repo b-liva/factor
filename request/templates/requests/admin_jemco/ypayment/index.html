@@ -54,9 +54,9 @@
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td>{{ payment.number }}</td>
-                                <td>{{ payment.customer.name }}</td>
-                                <td>{{ payment.xpref_id.number }}</td>
-                                <td>{{ payment.xpref_id.req_id.number }}</td>
+                                <td><a href="{% url 'customer_read' customer_pk=payment.xpref_id.req_id.customer.pk %}">{{ payment.xpref_id.req_id.customer.name }}</a></td>
+                                <td><a href="{% url 'pref_details' ypref_pk=payment.xpref_id.pk %}">{{ payment.xpref_id.number }}</a></td>
+                                <td><a href="{% url 'request_details' request_pk=payment.xpref_id.req_id.pk %}">{{ payment.xpref_id.req_id.number }}</a></td>
                                 {% if not showHide %}
                                     <td>{{ payment.temp_number }}</td>{% endif %}
                                 <td>{{ payment.amount|intcomma }}</td>
