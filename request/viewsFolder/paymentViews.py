@@ -54,7 +54,6 @@ def pay_form(request):
             print('forms are valid')
             payment = form.save(commit=False)
             payment.owner = request.user
-            payment.customer = payment.xpref_id.req_id.customer
             payment.save()
             print(f'payment id is: {payment.pk}')
             for f in files:

@@ -70,6 +70,12 @@ class Customer(models.Model):
     def get_absolute_url(self):
         return reverse('customer_read', args=[self.pk])
 
+    def total_receivable(self):
+        items = self.spec_perms()['items']
+        receivable = items.aggregate(sum=Sum(F('qty') * F('price'), output_field=FloatField()))
+        receivable = 1.09 * receivable['sum'] if receivable['sum'] else 0
+        return receivable
+
     def total_received(self):
         payments = Payment.objects.filter(xpref_id__req_id__customer=self.id, is_active=True)
         amount = payments.aggregate(sum=Sum('amount'))
@@ -95,11 +101,15 @@ class Customer(models.Model):
         return context
 
     def ballance(self):
-        print(f"rec: {self.total_received()['amount']}")
-        print(f"sent: {self.pref_sent()}")
-        value = self.total_received()['amount'] - self.pref_sent()['sent_value']
-        value = value if value else 0
-        return value
+        ballance_sent = self.total_received()['amount'] - self.pref_sent()['sent_value']
+        ballance_total = self.total_received()['amount'] - self.total_receivable()
+        ballance_sent = ballance_sent if ballance_sent else 0
+        ballance_total = ballance_total if ballance_total else 0
+        context = {
+            'ballance_sent': ballance_sent,
+            'ballance_total': ballance_total,
+        }
+        return context
 
     def total_kw(self):
         reqs = Requests.actives.filter(customer=self.id)
@@ -108,6 +118,16 @@ class Customer(models.Model):
         context = {
             'count': count,
             'amount': amount['sum'],
+        }
+        return context
+
+    def spec_perms(self):
+        items = PrefSpec.objects.filter(xpref_id__req_id__customer=self, xpref_id__perm=True)
+        qty = items.aggregate(sum=Sum('qty'))
+        qty = qty['sum'] if qty['sum'] else 0
+        context = {
+            'items': items,
+            'qty': qty
         }
         return context
 
