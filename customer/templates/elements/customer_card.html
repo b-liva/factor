@@ -1,0 +1,10 @@
+<div id="customerDetails" class="col-md-3 col-sm-3 col-xs-12 col-xs-offset-0">
+    <h3><a class="btn btn-warning" href="{% url 'customer_read' customer_pk=customer.pk %}">{{ customer }}</a></h3>
+    {% if customer.date2 %}<p><i class="fa fa-calendar" aria-hidden="true"></i> {{ customer.date2 }}</p>{% endif %}
+    {% if customer.phone %}<p><i class="fa fa-phone" aria-hidden="true"></i> {{ customer.phone }}</p>{% endif %}
+    {% if customer.fax %}<p><i class="fa fa-fax" aria-hidden="true"></i> {{ customer.fax }}</p>{% endif %}
+    {% if customer.email %}<p><i class="fa fa-envelope" aria-hidden="true"></i> {{ customer.email }}</p>{% endif %}
+    {% if customer.website %}<p><i class="fa fa-globe" aria-hidden="true"></i>
+        <a style="color: yellow;" href="{{ customer.website }}"> {{ customer.website }}</a>
+    </p>{% endif %}
+</div>

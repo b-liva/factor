@@ -8,14 +8,7 @@
             {% if messages %}
                 {% include 'general/errors.html' %}
             {% endif %}
-            <div id="customerDetails" class="col-md-3 col-sm-3 col-xs-12 col-xs-offset-0">
-                <h3>{{ pref.req_id.customer }}</h3>
-                <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ pref.date_fa }}</p>
-                <p><i class="fa fa-phone" aria-hidden="true"></i> {{ pref.req_id.customer.phone }}</p>
-                <p><i class="fa fa-fax" aria-hidden="true"></i> {{ pref.req_id.customer.fax }}</p>
-                <p><i class="fa fa-map-marker" aria-hidden="true"></i>
-                    {{ pref.req_id.customer.address }}</p>
-            </div>
+            {% include 'elements/customer_card.html' with customer=pref.req_id.customer %}
             <div id="customerSummary" class=" col-md-6 col-sm-6 col-xs-12 ">
                 <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="tile-stats">

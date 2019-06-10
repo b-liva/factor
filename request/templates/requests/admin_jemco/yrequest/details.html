@@ -5,14 +5,7 @@
 {% block right_col %}
     <div class="container">
         <div class="row">
-            <div id="customerDetails" class="col-md-3 col-sm-3 col-xs-12 col-xs-offset-0">
-                <h3>{{ request.customer }}</h3>
-                <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ request.date_fa }}</p>
-                <p><i class="fa fa-phone" aria-hidden="true"></i> {{ request.customer.phone }}</p>
-                <p><i class="fa fa-fax" aria-hidden="true"></i> {{ request.customer.fax }}</p>
-                <p><i class="fa fa-map-marker" aria-hidden="true"></i>
-                    {{ request.customer.address }}</p>
-            </div>
+            {% include 'elements/customer_card.html' with customer=request.customer %}
             <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
                 <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
                     <div class="tile-stats">
