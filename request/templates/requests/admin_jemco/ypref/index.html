@@ -127,6 +127,7 @@
                             <th scope="col" class="text-center">شماره پیش فاکتور اصلی</th>{% endif %}
                         <th scope="col" class="text-center">شماره درخواست</th>
                         <th scope="col" class="text-center">مشتری</th>
+                        <th scope="col" class="text-center">مبلغ کل</th>
                         <th scope="col" class="text-center">تاریخ</th>
                         <th scope="col" class="text-center">انقضا</th>
                         <th scope="col" class="text-center"></th>
@@ -154,6 +155,7 @@
                                 <a href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
                             </td>
                             <td>{{ pref.req_id.customer.name }}</td>
+                            <td>{{ pref.total_proforma_price_vat.price_vat|floatformat:0|intcomma }}</td>
                             <td>{{ pref.date_fa }}</td>
                             <td class="{{ pref|prof_expiry }}">{{ pref.exp_date_fa }}</td>
                             <td>{{ pref.owner.last_name }}</td>
