@@ -1,0 +1,10 @@
+{% if files %}
+    <div class="col-md-10 col-lg-offset-1">
+        <h2>پیوست ها</h2>
+        <ul>
+            {% for file in files %}
+                <li><a href="{{ file.image.url }}" target="_blank"> {{ file.pretty_name }} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

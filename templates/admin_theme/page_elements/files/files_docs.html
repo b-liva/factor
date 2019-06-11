@@ -1,0 +1,25 @@
+{% load static %}
+<div class="col-md-10 col-lg-offset-1">
+    {% for file in pdfs %}
+        <div class="">
+            <a href="{{ file.image.url }}" target="_blank">
+                <div class="col-md-1"><img class="img-responsive img-thumbnail "
+                                           src="{% static 'request/rtl/build/img/pdf.png' %}">
+                </div>
+                <div class="col-md-11">{{ file.pretty_name }}</div>
+            </a>
+        </div>
+    {% endfor %}
+    <hr>
+    {% for file in docs %}
+        <div class="" style=" ">
+            <a href="{{ file.image.url }}" target="_blank">
+                <div class="col-md-1" style=" "><img
+                        class="img-responsive img-thumbnail "
+                        src="{% static 'request/rtl/build/img/doc.png' %}">
+                </div>
+                <div class="col-md-11">{{ file.pretty_name }}</div>
+            </a>
+        </div>
+    {% endfor %}
+</div>

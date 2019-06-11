@@ -1,0 +1,5 @@
+<div class="col-md-10 col-lg-offset-1">
+    {% for file in files %}
+        <a href="{{ file.image.url }}" target="_blank"> {{ file.pretty_name }} </a>
+    {% endfor %}
+</div>

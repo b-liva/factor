@@ -1,0 +1,53 @@
+{% load humanize %}
+
+<div class="col-md-10 col-lg-offset-1">
+    <h3 class="greenBtn">وضعیت مالی</h3>
+    <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
+        {% if profs %}
+            <table class="table ">
+                <thead>
+                <tr>
+                    <td>شماره پیش فاکتور</td>
+                    <td>پرداخت مبلغ</td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for prof in profs %}
+                    <tr>
+                        <td>
+                            {% if prof.is_active %}
+                                <a href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof.number }}</a>
+                            {% endif %}
+                        </td>
+                        <td class="">
+                            {% if prof.payment_set.all %}
+                                <table>
+
+                                    <tbody>
+
+                                    {% for pay in prof.payment_set.all %}
+                                        <tr>
+                                            {% if pay.is_active %}
+                                                <td>
+                                                    <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">{{ pay.amount | floatformat:0 | intcomma }}</a>
+                                                </td>
+
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p>دریافتی ثبت نشده است.</p>
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>پیش فاکتوری برای این درخواست ثبت نشده است.</p>
+        {% endif %}
+    </div>
+</div>

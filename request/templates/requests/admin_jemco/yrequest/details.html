@@ -167,123 +167,31 @@
                 </div>
                 <br>
 
+            </div>
+
+            <div class="row">
+                {#Images#}
+                {#                    {% include 'admin_theme/page_elements/files/files_img.html' with images=request.files_by_type.images %}#}
+                {#Other files#}
+                {#                    {% include 'admin_theme/page_elements/files/files_docs.html' with pdfs=request.files_by_type.pdfs docs=request.files_by_type.docs %}#}
+
+                {#Other files#}
+                {#                    {% include 'admin_theme/page_elements/files/files_docs.html' with files=request.files_by_type.other %}#}
+
+
+                {% include 'admin_theme/page_elements/files/files_list.html' with files=request.files %}
 
             </div>
 
-            {#Images#}
-            <div class="col-md-10 col-lg-offset-1">
-                {% for index, img in xfiles.img.items %}
-                    <div class="col-md-3 col-sm-4 col-xs-6" style="height: 150px;">
-                        <a href="{{ img.url }}" target="_blank">
-                            <div style="height: 125px;" class="text-center"><img class="img-responsive img-thumbnail "
-                                                                                 src="{{ img.url }}"
-                                                                                 style="max-height: 125px;">
-                            </div>
-                            <div class="text-center">{{ img.name }}</div>
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-            {#Other files#}
-            <div class="col-md-10 col-lg-offset-1">
-                {% for index, file in xfiles.pdf.items %}
-                    <div class="">
-                        <a href="{{ file.url }}" target="_blank">
-                            <div class="col-md-1"><img class="img-responsive img-thumbnail "
-                                                       src="{% static 'request/rtl/build/img/pdf.png' %}">
-                            </div>
-                            <div class="col-md-11">{{ file.name }}</div>
-                        </a>
-                    </div>
-                {% endfor %}
-                <hr>
-                {% for index, file in xfiles.doc.items %}
-                    <div class="" style=" ">
-                        <a href="{{ file.url }}" target="_blank">
-                            <div class="col-md-1" style=" "><img
-                                    class="img-responsive img-thumbnail "
-                                    src="{% static 'request/rtl/build/img/doc.png' %}">
-                            </div>
-                            <div class="col-md-11">{{ file.name }}</div>
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-            {#Other files#}
-            <div class="col-md-10 col-lg-offset-1">
-                {% for img in nested_files.pdf %}
-                    <a href="{{ img.url }}" target="_blank"> {{ img.name }} </a>
-                {% endfor %}
-            </div>
+
         </div>
 
         <div class="row">
-            <div class="col-md-10 col-lg-offset-1">
-                <h3 class="greenBtn">وضعیت مالی</h3>
-                <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12">
-                    <table class="table ">
-                        <thead>
-                        <tr>
-                            <td>شماره پیش فاکتور</td>
-                            <td>پرداخت مبلغ</td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for prof in request|proformas %}
-                            <tr>
-                                <td>
-                                    {% if prof.is_active %}
-                                        <a href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof.number }}</a>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% for pay in prof.payment_set.all %}
-                                        {% if pay.is_active %}
-                                            <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">{{ pay.amount | floatformat:0 | intcomma }}</a>
-                                        {% endif %}
-                                    {% endfor %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
+            {% include 'requests/page_elements/request_prof_payment_status.html' with profs=request.proformas %}
         </div>
 
         <div class="row">
-            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
-                <div style="margin-top: 100px">
-                    <h3 class="greenBtn">پیگیری:</h3>
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        {% for comment in request.comments.all %}
-                            <div class="row">
-                                {% if user != comment.author %}
-                                    <p class="pull-left">
-                                        <span>{{ comment.body }}</span>
-                                        <span>: {{ comment.author }}</span>
-                                    </p>
-                                {% else %}
-                                    <p class="">
-                                        <span>{{ comment.author }}: </span>
-                                        <span>{{ comment.body }}</span>
-                                    </p>
-                                {% endif %}
-
-                            </div>
-                        {% endfor %}
-
-                        <div class="row">
-                            <form method="post">
-                                {% csrf_token %}
-                                {{ comment_form }}
-                                <button class="btn-sm btn-success">ثبت</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include 'requests/page_elements/comments.html' with comments=request.comments.all %}
         </div>
     </div>
 {% endblock %}
