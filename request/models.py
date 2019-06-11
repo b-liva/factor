@@ -151,21 +151,66 @@ class Requests(models.Model):
         kw = self.reqspec_set.aggregate(sum=Sum(F('qty') * F('kw'), output_field=FloatField()))
         return kw['sum']
 
+    def proformas(self):
+        all_proformas = self.xpref_set.filter(is_active=True)
+        return all_proformas
+
     def total_received(self):
         amount = Payment.objects.filter(is_active=True, xpref_id__req_id=self).aggregate(sum=Sum('amount'))
         sum = amount['sum'] if amount['sum'] else 0
         return sum
 
     def total_receivable(self):
-        amount = PrefSpec.objects.filter(xpref_id__is_active=True, xpref_id__req_id=self)\
+        amount = PrefSpec.objects.filter(xpref_id__is_active=True, xpref_id__req_id=self) \
             .aggregate(sum=Sum(F('qty') * F('price'), output_field=FloatField()))
         sum = amount['sum'] if amount['sum'] else 0
         return 1.09 * sum - self.total_received()
+
+    def files(self):
+        files = self.requestfiles_set.all()
+        return files
+
+    def files_by_type(self):
+        files = self.files()
+        images_suffix = ['jpg', 'jpeg', 'png', 'tiff']
+        pdfs_suffix = ['pdf']
+        docs_suffix = ['doc', 'docx', 'xls']
+        images = []
+        pdfs = []
+        docs = []
+        other = []
+        for f in files:
+            filename = str(f.image)
+            filename = filename.split('.')[-1]
+            # if str(f.image).lower().endswith('.jpg') or str(f.image).lower().endswith('.jpeg') or str(
+            if filename in images_suffix:
+                images.append(f)
+            # elif str(f.image).lower().endswith('.pdf'):
+            elif filename in pdfs_suffix:
+                pdfs.append(f)
+
+            # elif str(f.image).lower().endswith('.doc'):
+            elif filename in docs_suffix:
+                docs.append(f)
+            else:
+                other.append(f)
+        context = {
+            'images': images,
+            'pdfs': pdfs,
+            'docs': docs,
+            'other': other
+        }
+
+        return context
 
 
 class RequestFiles(models.Model):
     req = models.ForeignKey(Requests, on_delete=models.CASCADE)
     image = models.FileField(upload_to=upload_location, null=True, blank=True)
+
+    def pretty_name(self):
+        name = self.image.name.split('/')[-1]
+        return name
 
 
 class FrameSize(models.Model):
@@ -276,7 +321,7 @@ class Xpref(models.Model):
         remaining = self.total_proforma_price_vat()['price_vat'] - received
         received_percent = 100 * received / self.total_proforma_price_vat()['price_vat']
         remaining_percent = 100 * remaining / self.total_proforma_price_vat()['price_vat']
-        status = True if remaining ==0 else False
+        status = True if remaining == 0 else False
         return {
             'received': received,
             'received_percent': received_percent,

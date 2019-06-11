@@ -131,7 +131,7 @@
                                 <td class="text-center ">
                                     <table class="col-xs-12 text-center">
                                         <tbody>
-                                        {% for prof in req|proformas %}
+                                        {% for prof in req.proformas %}
                                             <tr style="border-bottom: 1px dashed brown">
                                                 <td class="col-xs-6 text-center"><a
                                                         href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof }}</a>

@@ -162,12 +162,6 @@ def prof_expiry(prof):
     return prof_valid
 
 
-@register.filter(name='proformas')
-def proformas(req):
-    all_proformas = req.xpref_set.filter(is_active=True)
-    return all_proformas
-
-
 @register.filter(name='payments')
 def payments(proforma):
     all_payments = proforma.payment_set.filter(is_active=True)
