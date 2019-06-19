@@ -8,6 +8,7 @@
                     <li><a href="{% url 'dashboard' %}">داشبورد</a></li>
                     {% if user.is_superuser %}
                         <li><a href="{% url 'dashboard2' %}">پیگیری</a></li>
+                        <li><a href="{% url 'sales_comparison' %}">dash</a></li>
                     {% endif %}
                     <li><a href="{% url 'tenders_admin' %}">مناقصات</a></li>
                 </ul>
