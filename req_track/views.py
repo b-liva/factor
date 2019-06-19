@@ -6,12 +6,24 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Sum, F, FloatField
 from django.shortcuts import render, redirect
 
+from django.http import JsonResponse
+import json
+
 from accounts.models import User
+from customer.models import Customer
 from request.forms.forms import ReqFollowUpForm
 from request.forms.proforma_forms import ProfFollowUpForm
 from request.models import Requests, Xpref, PrefSpec, ReqSpec
 from request.models import Payment as Request_payment
-from req_track.models import ReqEntered, Payments, TrackItemsCode, TrackXpref, ProformaFollowUp
+from req_track.models import (
+    ReqEntered,
+    Payments,
+    TrackItemsCode,
+    TrackXpref,
+    ProformaFollowUp,
+    Customer as Customer_temp,
+    CustomerResolver
+)
 from .forms import E_Req_Form, E_Req_Edit_Form
 from django.db import models
 
@@ -461,3 +473,69 @@ def req_followup_form(request, req_pk):
     }
 
     return render(request, 'proformas/followup/form.html', context)
+
+
+def similar(a, b):
+    from difflib import SequenceMatcher
+    return SequenceMatcher(None, a, b).ratio()
+
+
+def customer_compare(request):
+    cs = Customer.objects.all()
+    c_temp = Customer_temp.objects.all()
+
+    i = 0
+    total = cs.count() * c_temp.count()
+    for c in cs:
+        for t in c_temp:
+            sim = similar(c.name, t.name)
+            if sim > .5:
+                resolver = CustomerResolver()
+                resolver.code1 = c.code
+                resolver.code2 = t.code
+                resolver.similarity = sim
+                resolver.save()
+                print(f"{i}({100 * i / total}%)")
+                i += 1
+
+
+def customer_compare_list(request):
+    # resolvers = CustomerResolver.objects.filter(resolved=True)
+    # resolvers = CustomerResolver.objects.filter(resolved=True)[:500]
+    resolvers = CustomerResolver.objects.filter(resolved=False)
+    context = {
+        'resolvers': resolvers
+    }
+    return render(request, 'customer/customer_compare_list.html', context)
+
+
+def customer_compare_entered(request):
+    resolvers = CustomerResolver.objects.filter(resolved=True, cleared=False)
+    context = {
+        'resolvers': resolvers
+    }
+    return render(request, 'customer/customer_compare_list.html', context)
+
+
+def customer_status_update(request):
+    data = json.loads(request.body.decode('utf-8'))
+    item = CustomerResolver.objects.get(pk=data['id'])
+    resolved = data['status']
+    cleared = not resolved
+    item.resolved = resolved
+    item.save()
+    CustomerResolver.objects.filter(code1=item.code1).exclude(pk=item.pk).update(resolved=resolved, cleared=resolved)
+
+    context = {
+        'resolved': item.resolved,
+    }
+    return JsonResponse(context, safe=False)
+
+
+def customer_entered(request):
+    customers = CustomerResolver.objects.filter(resolved=True, cleared=False)
+    c = [c.code1 for c in customers]
+    context = {
+        'customers': c,
+    }
+    return JsonResponse(context, safe=False)

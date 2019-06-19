@@ -1,0 +1,64 @@
+{% load humanize %}
+{% load static %}
+<link href="{% static 'request/rtl/vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'request/rtl/vendors/bootstrap-rtl/dist/css/bootstrap-rtl.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'request/rtl/build/css/style.css' %}">
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
+            <div class="">
+                <table class="">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="text-center">ردیف</th>
+                        <th scope="col" class="text-center">کد کالا</th>
+                        <th scope="col" class="text-center">تعداد</th>
+                        <th scope="col" class="text-center">ارسال شده</th>
+                        <th scope="col" class="text-center">مانده</th>
+                        <th scope="col" class="text-center">کیلووات</th>
+                        <th scope="col" class="text-center">سرعت</th>
+                        <th scope="col" class="text-center">ولتاژ</th>
+                        <th scope="col" class="text-center">ملاحظات</th>
+                        <th scope="col" class="text-center">قیمت واحد</th>
+                        <th scope="col" class="text-center">مجموع قیمت</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for spec in specs %}
+                        {% if spec.price and spec.qty %}
+                            <tr>
+                                <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                <td>{{ spec.code }}</td>
+                                <td>{{ spec.qty }}</td>
+                                <td>{{ spec.qty_sent }}</td>
+                                <td>{{ spec.kw }}</td>
+                                <td>{{ spec.rpm }}</td>
+                                <td>{{ spec.voltage }}</td>
+                                <td>{{ spec.considerations }}</td>
+                                <td>{{ spec.price|intcomma:0 }}</td>
+                                <td>{{ spec_total|intcomma:0 }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    <tr style="border-top: 2px black solid">
+                        <td colspan="3">مالیات ارزش افزوده</td>
+                        <td colspan="5"></td>
+                        <td class="amount-total ">{{ vat | floatformat:1 | intcomma }}</td>
+                    </tr>
+                    <tr style="border-top: 2px black solid">
+                        <td colspan="3" class="emphsize">مجموع</td>
+                        <td class="kw-total emphsize">{{ kw_total|intcomma }} کیلووات</td>
+                        <td colspan="4"></td>
+                        <td class="amount-total emphsize">{{ proforma_total | floatformat:1 | intcomma }}</td>
+                    </tr>
+                    </tbody>
+
+
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>

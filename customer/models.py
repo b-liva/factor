@@ -33,6 +33,7 @@ def default_customer_code():
 
 class Type(models.Model):
     name = models.CharField(max_length=20)
+
     def __str__(self):
         return '%s' % self.name
 # types = Type.objects.all()
@@ -41,13 +42,14 @@ class Type(models.Model):
 class Customer(models.Model):
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='owner')
     code = models.IntegerField(unique=True, default=default_customer_code, blank=True)
-    name = models.CharField(max_length=50)
+    code_temp = models.IntegerField(blank=True, null=True)
+    name = models.CharField(max_length=100)
     type = models.ForeignKey(Type, on_delete=models.DO_NOTHING)
     # type = models.(choices=types)
     pub_date = models.DateTimeField(default=now)
     # date2 = jmodels.jDateTimeField(default=now)
     date2 = jmodels.jDateField(default=now)
-    phone = models.CharField(max_length=25, blank=True, null=True)
+    phone = models.CharField(max_length=100, blank=True, null=True)
     fax = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     website = models.URLField(max_length=250, blank=True, null=True)
@@ -55,6 +57,7 @@ class Customer(models.Model):
     addr = models.TextField(max_length=600, blank=True, null=True)
     agent = models.BooleanField(default=False)
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING, blank=True, null=True)
+    imported = models.BooleanField(default=False)
 
 
     class Meta:

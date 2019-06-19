@@ -1,4 +1,6 @@
 from django.urls import path, include
+from django.views.generic import TemplateView
+
 from . import views
 from .viewsFolder import fbv
 from .viewsFolder.views import (
@@ -6,6 +8,8 @@ from .viewsFolder.views import (
     CustomerRequestDetailsView,
     CustomerCreateRequestview,
 )
+from .routers import router
+
 urlpatterns = [
     # FBV PATHS
     # path('request/create', fbv.custome_create_request2, name='fbv_customer_request_create'),
@@ -37,6 +41,11 @@ urlpatterns = [
     path('insert', views.customer_insert, name='customer_insert'),
     path('repr/index', views.repr_index, name='repr_index'),
     path('index', views.customer_index, name='customer_index'),
+    path('index-vue', views.customer_index_vue, name='customer_index_vue'),
+    path('index-vue-refresh', views.customer_index_vue_refresh, name='customer_index_vue_refresh'),
+    path('list', views.customer_index_vue_refresh, name='customer_index_vue_refresh'),
+    path('customer-details-vue', views.customer_details_vue, name='customer_details_vue'),
+    path('customer-search-vue', views.customer_search_vue, name='customer_search_vue'),
     path('find', views.customer_find, name='customer_find'),
     path('<int:customer_pk>/', include([
         path('', views.customer_read2, name='customer_read'),
@@ -64,6 +73,6 @@ urlpatterns = [
 
     ])),
     path('autocomplete', views.autocomplete, name='autocomplete'),
+    path('api/', include(router.urls)),
+    # path('ccustomers', TemplateView.as_view(template_name='api/customer.html')),
 ]
-
-

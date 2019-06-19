@@ -28,6 +28,7 @@
                     {#                    <th class="text-center">pk</th>#}
                     {#            <th>Id</th>#}
                     <th class="text-center">کد مشتری</th>
+                    <th class="text-center">کد تدوین</th>
                     <th class="text-center">نام</th>
                     <th class="text-center">تلفن</th>
                     <th class="text-center">owner</th>
@@ -44,6 +45,7 @@
                         <td>{{ forloop.counter }}</td>
                         {#                        <td>{{ customer.pk }}</td>#}
                         <td>{{ customer.code }}</td>
+                        <td>{% if customer.code_temp %}{{ customer.code_temp }}{% endif %}</td>
                         <td>{{ customer.name }}</td>
                         <td>{% if customer.phone %}{{ customer.phone }}{% endif %}</td>
                         <td>{{ customer.owner.last_name }}</td>

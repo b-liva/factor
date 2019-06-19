@@ -31,6 +31,7 @@ urlpatterns = [
                   path('', include('request.urls.req_urls')),
                   path('pref/', include('request.urls.prof_urls')),
                   path('payment/', include('request.urls.payment_urls')),
+                  path('fetch-sales-data', request.views2.fetch_sales_data, name='fetch_sales_data'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

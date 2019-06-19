@@ -23,6 +23,7 @@
                         {% endif %}
                         {% if perms.customer.index_customer %}
                             <li><a href="{% url 'customer_index' %}">مشتریان</a></li>
+                            <li><a href="{% url 'customer_index_vue' %}">مشتریان vue</a></li>
                         {% endif %}
                     </ul>
                 </li>
@@ -35,9 +36,9 @@
                         {#                        <li><a href="{% url 'request_index_paginate' %}">درخواست ها</a></li>#}
                         <li><a href="{% url 'req_report' %}">گزارش درخواست</a></li>
                         <li><a href="{% url 'reqspec_search' %}"> گزارش ردیف</a></li>
-                        {#                        <li><a href="{% url 'request_index_vue' %}">Vue درخواست ها</a></li>#}
+{#                                                <li><a href="{% url 'request_index_vue' %}">Vue درخواست ها</a></li>#}
 
-                        {#                        <li><a href="{% url 'fsearch3' %}">گزارش ردیف vue</a></li>#}
+                                                <li><a href="{% url 'fsearch3' %}">گزارش ردیف vue</a></li>
                         {% if request.user|has_group:"board" or request.user.is_superuser or 1 %}
                             <li><a href="{% url 'req_track:check_orders' %}">چک درخواست ها</a></li>
                         {% endif %}
@@ -134,6 +135,8 @@
                             <li><a href="{% url 'req_track:prof_followup_list' %}">پیگیری پیش فاکتور</a></li>
                             <li><a href="{% url 'req_track:prof_followup_list2' %}">2پیگیری پیش فاکتور</a></li>
                             <li><a href="{% url 'req_track:prof_followup_find' %}">پیگیری پیش فاکتور ? </a></li>
+                            <li><a href="{% url 'req_track:customer_compare_list' %}">customer compare list</a></li>
+                            <li><a href="{% url 'req_track:customer_compare_entered' %}">customer compare entered</a></li>
 
                         {% endif %}
                     </ul>

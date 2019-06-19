@@ -1,0 +1,14 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load jformat %}
+{% block right_col %}
+    <div id="customerindex" class="container">
+        <div class="col-md-10 col-md-offset-1">
+
+            <h3>{{ msg }}</h3>
+            <customer_index></customer_index>
+
+        </div>
+
+    </div>
+
+{% endblock %}

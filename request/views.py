@@ -27,13 +27,6 @@ def errorpage(request):
     return render(request, 'fund/error.html')
 
 
-def request_details(request, request_id):
-    req = get_object_or_404(Requests, pk=request_id)
-    specs = req.reqspec_set.all()
-    return render(request, 'requests/admin_jemco/request/req_details.html', {'request': req, 'specs': specs})
-    # return render(request, 'requests/req_details.html', {'request': req, 'specs': specs})
-
-
 def find_kw(spc_kw, rqs):
     for r in rqs:
         spc = r.reqspec_set.all()
@@ -198,6 +191,14 @@ def dashboard2(request):
 
     }
     return render(request, 'requests/admin_jemco/dashboard/dashboard3.html', context)
+
+
+@login_required
+def sales_comparison(request):
+    context = {
+
+    }
+    return render(request, 'requests/admin_jemco/dashboard/sales_comparison.html', context)
 
 
 @login_required

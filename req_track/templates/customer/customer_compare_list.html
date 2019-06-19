@@ -1,0 +1,64 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+
+{% block right_col %}
+    <div id="customerResolver">
+        <hr>
+        {#        <table>#}
+        {#            <thead>#}
+        {#            <tr>#}
+        {#                <td>#</td>#}
+        {#                <td>مشتری1</td>#}
+        {#                <td>مشتری م</td>#}
+        {#                <td>similarity</td>#}
+        {#            </tr>#}
+        {#            </thead>#}
+        {#            <tbody>{% for r in resolvers %}#}
+        {#                <tr>#}
+        {#                    <td>{{ forloop.counter }}</td>#}
+        {#                    <td>{{ r.customer1 }}</td>#}
+        {#                    <td>{{ r.customer2 }}</td>#}
+        {#                    <td>{{ r.similarity|floatformat:2 }}</td>#}
+        {#                    <td><input customer_id="{{ r.customer1.pk }}" type="checkbox" v-model="{{ r.resolved }}">#}
+        {#                        <p>[[customer.id]]: [[customer_status]]</p>#}
+        {#                    </td>#}
+        {#                    <td @click="submitStatus({{ r.customer1.pk }})">click</td>#}
+        {#                </tr>#}
+        {#            {% endfor %}#}
+        {#            </tbody>#}
+        {#        </table>#}
+    <div class="col-md-8">
+        table
+        <table>
+            <thead>
+            <tr>
+                <td>#</td>
+                <td>مشتری1</td>
+                <td>مشتری م</td>
+                <td>similarity</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for r in resolvers %}
+                <customer_resolver
+                        customer_id="{{ r.pk }}"
+                        customer_c1="{{ r.customer1.name }}"
+                        customer_c2="{{ r.customer2 }}"
+                        customer_sim="{{ r.similarity }}"
+                        :customer-resolved="{{ r.resolved|lower }}"
+                        customer-cleared="{{ r.cleared|lower }}"
+                ></customer_resolver>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+        value
+        <customer_entered></customer_entered>
+    </div>
+
+    </div>
+
+
+{% endblock %}

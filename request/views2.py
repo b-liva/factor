@@ -1,7 +1,7 @@
 from django.core.cache import cache
 import xlwt
 from django.contrib.humanize.templatetags.humanize import intcomma
-from django.db.models import Q, Sum, F, FloatField
+from django.db.models import Q, Sum, F, FloatField, Count
 from datetime import datetime
 import json
 import json_tricks
@@ -19,7 +19,7 @@ from request.filters.filters import RequestFilter
 from request.forms.forms import RequestCopyForm, CommentForm
 from request.forms.search import ReqSearchForm
 from request.views import find_all_obj
-from .models import Requests, ReqSpec
+from .models import Requests, ReqSpec, PrefSpec
 from .models import Xpref, Payment
 from . import models
 from customer.models import Customer
@@ -1310,3 +1310,33 @@ def finish(request, request_pk):
     req.finished = not req.finished
     req.save()
     return redirect('req_report')
+
+
+@login_required
+def fetch_sales_data(request):
+    data = json.loads(request.body.decode('utf-8'))
+    date_min = data['date_min']
+    date_max = data['date_max']
+    res = []
+    sales_queryset = User.objects.filter(sales_exp=True)
+    for exp in sales_queryset:
+        id = exp.pk
+        name = exp.last_name
+        perms_queryset = exp.perms(date_min=date_min, date_max=date_max)
+        count = perms_queryset['count']
+        perms = perms_queryset['perms']
+        price = exp.perms_price_total(date_min=date_min, date_max=date_max)['price']['sum']
+        kw = exp.perms_price_total(date_min=date_min, date_max=date_max)['kw']['sum']
+        res.append({
+            'id': id,
+            'name': name,
+            'perms': [a.number for a in perms],
+            'count': count,
+            'price': price,
+            'kw': kw,
+        })
+    context = {
+        'response': res,
+    }
+    print(context['response'][0]['perms'])
+    return JsonResponse(context, safe=False)

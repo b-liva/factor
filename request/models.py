@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Sum, F, FloatField
 from django.utils import timezone
 
-from accounts.models import User
+
 from django.db import models
 import datetime
 from django.utils.timezone import now
@@ -39,7 +39,7 @@ project_type = (
 
 
 class Comment(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
     date_fa = jmodels.jDateField(default=now)
     pub_date = models.DateTimeField(default=now)
     body = models.TextField(blank=True)
@@ -95,7 +95,8 @@ class ActiveRequestManager(models.Manager):
 
 class Requests(models.Model):
     customer = models.ForeignKey('customer.Customer', on_delete=models.DO_NOTHING)
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='req_owner')
+    # owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='req_owner')
+    owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING, related_name='req_owner')
 
     number = models.IntegerField(unique=True)
     temp_number = models.IntegerField(unique=True, null=True, blank=True)
@@ -103,7 +104,7 @@ class Requests(models.Model):
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     date_finished = jmodels.jDateField(blank=True, null=True)
-    colleagues = models.ManyToManyField(User, blank=True, null=True)
+    colleagues = models.ManyToManyField('accounts.User', blank=True, null=True)
     summary = models.TextField(max_length=1000, null=True, blank=True)
     added_by_customer = models.BooleanField(default=False)
     edited_by_customer = models.BooleanField(default=False)
@@ -118,6 +119,8 @@ class Requests(models.Model):
 
     objects = models.Manager()
     actives = ActiveRequestManager()
+
+    lookup_fields = ['customer_name__icontains', 'owner_last_name__icontains', 'number']
 
     def __str__(self):
         return '%s' % self.number
@@ -149,7 +152,8 @@ class Requests(models.Model):
 
     def total_kw(self):
         kw = self.reqspec_set.aggregate(sum=Sum(F('qty') * F('kw'), output_field=FloatField()))
-        return kw['sum']
+        kw = kw['sum'] if kw['sum'] else 0
+        return kw
 
     def proformas(self):
         all_proformas = self.xpref_set.filter(is_active=True)
@@ -223,7 +227,7 @@ class FrameSize(models.Model):
 class ReqSpec(models.Model):
     code = models.BigIntegerField(default=99009900)
     req_id = models.ForeignKey(Requests, on_delete=models.CASCADE)
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
     type = models.ForeignKey(ProjectType, on_delete=models.DO_NOTHING)
 
     qty = models.IntegerField(default=1)
@@ -257,7 +261,7 @@ class ReqSpec(models.Model):
 
 
 class Xpref(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
     req_id = models.ForeignKey(Requests, on_delete=models.DO_NOTHING)
     number = models.IntegerField(unique=True)
     temp_number = models.IntegerField(null=True, blank=True)
@@ -265,7 +269,7 @@ class Xpref(models.Model):
     date_fa = jmodels.jDateField(default=now)
     date_modified = models.DateTimeField(null=True, blank=True)
     exp_date_fa = jmodels.jDateField(default=now)
-    perm_number = models.IntegerField(max_length=10, null=True, blank=True)
+    perm_number = models.IntegerField(null=True, blank=True)
     perm_date = jmodels.jDateField(null=True, blank=True)
     due_date = jmodels.jDateField(null=True, blank=True)
     summary = models.TextField(max_length=600, null=True, blank=True)
@@ -344,7 +348,7 @@ class ProfFiles(models.Model):
 
 class PrefSpec(models.Model):
     code = models.BigIntegerField(default=99009900)
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
     xpref_id = models.ForeignKey(Xpref, on_delete=models.CASCADE)
     reqspec_eq = models.ForeignKey(ReqSpec, on_delete=models.DO_NOTHING)
 
@@ -371,7 +375,8 @@ class PrefSpec(models.Model):
 
 
 class Payment(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
+    # xpref_id = models.ForeignKey(Xpref, on_delete=models.DO_NOTHING, related_name='payments')
     xpref_id = models.ForeignKey(Xpref, on_delete=models.DO_NOTHING)
 
     number = models.IntegerField(unique=True)

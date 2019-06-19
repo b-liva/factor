@@ -78,9 +78,9 @@ const app = new Vue({
             console.log(value);
         },
         proforma: function (amount, no) {
-            output = numeral(amount).format('0,0') ;
-            if (no){
-                output = output+ " - " + no
+            output = numeral(amount).format('0,0');
+            if (no) {
+                output = output + " - " + no
             }
             return output
         },
@@ -193,7 +193,7 @@ const app = new Vue({
         unv_percentage: function () {
             var total = (this.extra_info.unverified_profs_total + this.extra_info.verified_profs_total);
             console.log('total' + total);
-            return this.extra_info.verified_profs_total / 2 ;
+            return this.extra_info.verified_profs_total / 2;
         },
     }
 });

@@ -178,6 +178,85 @@ def customer_index(request):
 
 
 @login_required
+def customer_index_vue(request):
+    context = {}
+    return render(request, 'customer/index_vue.html', context)
+
+
+@login_required
+def customer_index_vue_refresh(request):
+    print('inside view')
+    # data = json.loads(request.body.decode('utf-8'))
+    customers = Customer.objects.all()
+    response = [{
+        'id': a.id,
+        'name': a.name,
+        'details': False,
+        'total_receivable': a.total_receivable(),
+    } for a in customers]
+    context = {
+        'response': response,
+    }
+    return JsonResponse(context, safe=False)
+
+
+@login_required
+def customer_details_vue(request):
+    err = False
+    response = {}
+    data = json.loads(request.body.decode('utf-8'))
+    id = data['id']
+    try:
+        customer = Customer.objects.get(pk=id)
+        total_received = customer.total_received()
+        pref_sent = customer.pref_sent()
+        spec_perms = customer.spec_perms()
+
+        response = {
+            'name': customer.name,
+            'total_receivable': customer.total_receivable(),
+            'total_received': total_received['amount'],
+            'pref_sent': {
+                'count': pref_sent['sent_count'],
+                'sent_value': pref_sent['sent_value'],
+            },
+            'spec_perms': spec_perms['qty'],
+        }
+    except:
+        response['err'] = 'مشتری مورد نظر یافت نشد.'
+
+    context = {
+        'response': response,
+    }
+    return JsonResponse(context, safe=False)
+
+
+@login_required
+def customer_search_vue(request):
+    err = False
+    response = {}
+    data = json.loads(request.body.decode('utf-8'))
+    name = data['name']
+    print(name)
+    try:
+        customers = Customer.objects.filter(name__contains=name)
+        print('count: ', customers.count())
+        response = [{
+            'id': a.id,
+            'name': a.name,
+            'details': False,
+            'total_receivable': a.total_receivable(),
+        } for a in customers]
+    except:
+        response['err'] = 'مشتری مورد نظر یافت نشد.'
+
+    context = {
+        'response': response,
+    }
+    return JsonResponse(context, safe=False)
+
+
+@login_required
 def repr_index(request):
     can_index = funcs.has_perm_or_is_owner(request.user, 'customer.index_customer')
     if not can_index:

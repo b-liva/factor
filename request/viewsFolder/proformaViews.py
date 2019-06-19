@@ -1,3 +1,5 @@
+import datetime
+
 from django.core.cache import cache
 import random
 
@@ -7,6 +9,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.template.loader import get_template
 
 from django_jalali.db import models as jmodels
 
@@ -27,6 +30,13 @@ from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationFi
     Sum
 
 from request.templatetags import functions, request_extras
+
+from django.http import HttpResponse
+from django.views.generic import View
+from ..utils import render_to_pdf
+
+from django.template.loader import get_template
+from django.template import Context
 
 
 @login_required
@@ -1069,3 +1079,73 @@ def prof_spec_form(request, ypref_pk):
         'reqspec': reqspecs
     }
     return render(request, 'requests/admin_jemco/ypref/proforma_specs.html', context)
+
+
+def rpdf(request, ypref_pk):
+    print('entered pdf/rpfd')
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    specs = proforma.prefspec_set.all()
+
+    template = get_template('requests/admin_jemco/ypref/test.html')
+
+    context = {
+        'pref': proforma,
+        'specs': specs,
+    }
+    # return render(request, 'requests/admin_jemco/ypref/test.html', context)
+    html = template.render(context)
+    print(html)
+    pdf = render_to_pdf('requests/admin_jemco/ypref/test.html', context)
+    if pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = 'Invoice_%s.pdf' % ('12341231',)
+        content = "inline; filename=%s" % (filename,)
+        download = request.GET.get("download")
+        if download:
+            content = "attachment; filename='%s'" %(filename)
+        response['Content-Disposition'] = content
+        return response
+
+    return HttpResponse("Not found")
+
+
+class GeneratePdf(View):
+    def get(self, request, *args, **kwargs):
+        data = {
+             'today': datetime.date.today(),
+             'amount': 39.99,
+            'customer_name': 'Cooper Mann',
+            'order_id': 1233434,
+            'signature': 'request/rtl/build/img/signature/sig.png'
+        }
+        pdf = render_to_pdf('requests/admin_jemco/ypref/test.html', data)
+        return HttpResponse(pdf, content_type='application/pdf')
+
+
+class GeneratePDF(View):
+    def get(self, request, *args, **kwargs):
+        template = get_template('requests/admin_jemco/ypref/test.html')
+        context = {
+            "invoice_id": 123,
+            "customer_name": "John Cooper",
+            "amount": 1399.99,
+            "today": "Today",
+            "filename": '/static/request/rtl/build/img/signature/sig.jpg',
+        }
+        # return render(request, 'requests/admin_jemco/ypref/test.html', context)
+        html = template.render(context)
+        pdf = render_to_pdf('requests/admin_jemco/ypref/test.html', context)
+        if pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = 'Invoice_%s.pdf' % ('12341231',)
+            content = "inline; filename=%s" % (filename,)
+            download = request.GET.get("download")
+            if download:
+                content = "attachment; filename='%s'" %(filename)
+            response['Content-Disposition'] = content
+            return response
+
+        return HttpResponse("Not found")
+
+
+

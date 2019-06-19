@@ -11,6 +11,7 @@ from django_jalali.db import models as jmodels
 #     def __str__(self):
 #         return '%s' % self.title
 from request.models import ReqSpec, Xpref
+from customer.models import Customer as CustomerUser
 
 
 class ReqEntered(models.Model):
@@ -119,3 +120,40 @@ class ProformaFollowUp(models.Model):
             return True
         except:
             return False
+
+
+class Customer(models.Model):
+    code = models.CharField(max_length=12)
+    name = models.CharField(max_length=100)
+    tel = models.CharField(max_length=60, null=True, blank=True)
+    addr = models.TextField(null=True, blank=True)
+    entered = models.BooleanField(default=False)
+    exported = models.BooleanField(default=False)
+    temp_code = models.CharField(max_length=12, default=None)
+
+    def __str__(self):
+        return '%s: %s' % (self.code, self.name)
+
+
+class CustomerResolver(models.Model):
+    code1 = models.CharField(max_length=12)
+    code2 = models.CharField(max_length=12)
+    similarity = models.FloatField()
+    resolved = models.BooleanField(default=False)
+    cleared = models.BooleanField(default=False)
+
+    def __str__(self):
+        customer = self.customer1()
+        customer_temp = self.customer2()
+        # return '%s: %s' % (self.code1, self.code2)
+        return '%s: %s: %s' % (customer, customer_temp, self.similarity)
+
+    def customer1(self):
+        customer = CustomerUser.objects.get(code=self.code1)
+        return customer
+
+    def customer2(self):
+        customer = Customer.objects.get(code=self.code2)
+        return customer
+
+
