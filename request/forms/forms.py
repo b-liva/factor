@@ -184,7 +184,7 @@ class ProformaEditForm(forms.ModelForm):
 
     class Meta:
         model = models.Xpref
-        fields = ('number', 'date_fa', 'exp_date_fa', 'perm_number', 'perm_date', 'due_date', 'summary', 'perm')
+        fields = ('number', 'date_fa', 'exp_date_fa', 'perm_number', 'perm_date', 'due_date', 'summary', 'perm', 'issue_type')
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
@@ -212,6 +212,7 @@ class ProformaEditForm(forms.ModelForm):
             'perm': 'مجوز',
             'perm_date': 'تاریخ مجوز',
             'perm_number': 'شماره مجوز',
+            'issue_type': 'دلیل تأخیر',
         }
 
 

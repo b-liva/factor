@@ -9,6 +9,7 @@ from .models import (
     Payment,
     ProjectType,
     FrameSize,
+    IssueType,
     IPType, ICType, IMType, IEType, Comment)
 
 admin.site.register(Requests)
@@ -23,3 +24,4 @@ admin.site.register(ICType)
 admin.site.register(IMType)
 admin.site.register(IEType)
 admin.site.register(FrameSize)
+admin.site.register(IssueType)

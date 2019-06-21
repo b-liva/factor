@@ -260,6 +260,14 @@ class ReqSpec(models.Model):
         return '%s - %skw' % (self.qty, self.kw)
 
 
+class IssueType(models.Model):
+    title = models.CharField(max_length=60)
+    summary = models.TextField(max_length=600, null=True, blank=True)
+
+    def __str__(self):
+        return '%s' % self.title
+
+
 class Xpref(models.Model):
     owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
     req_id = models.ForeignKey(Requests, on_delete=models.DO_NOTHING)
@@ -280,6 +288,7 @@ class Xpref(models.Model):
     to_follow = models.BooleanField(default=False)
     on = models.BooleanField(default=False)
     comments = GenericRelation('Comment', related_query_name='xpref_comment')
+    issue_type = models.ForeignKey(IssueType, blank=True, null=True, on_delete=models.DO_NOTHING)
 
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')

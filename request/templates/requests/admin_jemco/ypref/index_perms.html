@@ -94,7 +94,9 @@
                         <button type="submit" name="submit" class="btn btn-primary">
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </button>
-                        <a class="btn btn-danger" href="{% url 'perm_index' %}" data-toggle="tooltip" title="حذف فیلتر ها"><i class="fa fa-close" aria-hidden="true"></i></a>
+
+                        <a class="btn btn-danger" href="{% url 'perm_clear_session' %}" data-toggle="tooltip"
+                           title="حذف فیلتر ها"><i class="fa fa-close" aria-hidden="true"></i></a>
                     </form>
                 </div>
                 <div class="col-md-4 left">
@@ -119,6 +121,7 @@
                         <th scope="col" class="text-center">تعداد ارسال شده</th>
                         <th scope="col" class="text-center">تعداد باقیمانده</th>
                         <th scope="col" class="text-center">باقیمانده(روز)</th>
+                        <th scope="col" class="text-center">دلیل تأخیر</th>
                         <th scope="col" class="text-center">کل(مبلغ)</th>
                         <th scope="col" class="text-center">تسویه نشده(مبلغ)</th>
                         <th scope="col" class="text-center">تسویه نشده(درصد)</th>
@@ -151,6 +154,7 @@
                             <td>{{ p.qty_remaining }}</td>
                             {#                            <td>{{ p|days }}</td>#}
                             <td class="{{ p|perm_warning_class }}">{{ p|perm_days }}</td>
+                            <td>{% if p.issue_type %}{{ p.issue_type }}{% else %}{% endif %}</td>
                             <td>{{ p.total_proforma_price_vat.price_vat|floatformat:0 | intcomma }}</td>
                             <td>{{ p.total_proforma_received.remaining|floatformat:0 | intcomma }}</td>
                             <td>{{ p.total_proforma_received.remaining_percent|floatformat:2 }}</td>

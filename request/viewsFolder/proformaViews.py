@@ -128,6 +128,13 @@ def pref_index_cc(request):
 
 
 @login_required
+def perm_clear_session(request):
+    if 'perm-search' in request.session:
+        request.session.pop('perm-search')
+    return redirect('perm_index')
+
+
+@login_required
 def prof_export(request):
 
     try:
@@ -280,10 +287,18 @@ def perm_index(request):
     if not request.user.is_superuser:
         prof_list = prof_list.filter(owner=request.user)
 
+    if not request.method == 'POST':
+
+        if 'perm-search' in request.session:
+            request.POST = request.session['perm-search']
+            request.method = 'POST'
+
     form = PermSearchForm()
 
     if request.method == 'POST':
         form = PermSearchForm(request.POST or None)
+        request.session['perm-search'] = request.POST
+
         if request.POST['customer_name']:
             if Customer.objects.filter(name=request.POST['customer_name']):
                 customer = Customer.objects.get(name=request.POST['customer_name'])
@@ -1092,9 +1107,7 @@ def rpdf(request, ypref_pk):
         'pref': proforma,
         'specs': specs,
     }
-    # return render(request, 'requests/admin_jemco/ypref/test.html', context)
-    html = template.render(context)
-    print(html)
+    return render(request, 'requests/admin_jemco/ypref/test.html', context)
     pdf = render_to_pdf('requests/admin_jemco/ypref/test.html', context)
     if pdf:
         response = HttpResponse(pdf, content_type='application/pdf')

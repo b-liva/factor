@@ -12,6 +12,7 @@ urlpatterns = [
                   path('pro_form_cookie/<int:req_id>', proformaViews.pro_form_cookie, name='pro_form_cookie'),
                   path('index', proformaViews.pref_index, name='pref_index'),
                   path('pref_index_cc', proformaViews.pref_index_cc, name='pref_index_cc'),
+                  path('perm_clear_session', proformaViews.perm_clear_session, name='perm_clear_session'),
                   path('prefspec-index', proformaViews.prefspec_index, name='prefspec_index'),
                   path('prefspec-prefspec_clear_cache', proformaViews.prefspec_clear_cache,
                        name='prefspec_clear_cache'),
