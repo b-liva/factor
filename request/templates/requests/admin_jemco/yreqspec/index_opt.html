@@ -196,7 +196,7 @@
                         <td>
                             <table class="col-xs-12 text-center">
                                 <tbody>
-                                {% for prof in reqspec.req_id|proformas %}
+                                {% for prof in reqspec.req_id.proformas %}
                                     <tr style="border-bottom: 1px dashed brown">
                                         <td class="col-xs-6 text-center"><a
                                                 href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof }}</a>
