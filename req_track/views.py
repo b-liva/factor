@@ -112,7 +112,11 @@ def check_orders(request):
         else:
             print(f"order No: {e.number_automation}: is not entered.")
 
-    return redirect('req_track:e_req_report')
+    if request.user.is_superuser:
+        return redirect('dashboard2')
+
+    else:
+        return redirect('dashboard')
 
 
 def users_summary(user_txt, user_account, date, not_entered_reqs):
