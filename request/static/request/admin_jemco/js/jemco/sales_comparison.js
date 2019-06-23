@@ -6,6 +6,7 @@ Vue.component('sales_comparison', {
             show: true,
             loading: '',
             response: '',
+            project_base: '',
             date_min: '',
             date_max: '',
             val: '',
@@ -22,6 +23,7 @@ Vue.component('sales_comparison', {
         "</div>" +
         "<div v-if='details'>details</div>" +
         "<div v-if='response' class='col-md-10 col-md-offset-1'>" +
+        "<h3>کارشناس</h3>" +
         "<table class='table table-hover text-center'>" +
         "<thead>" +
         "<tr>" +
@@ -56,6 +58,33 @@ Vue.component('sales_comparison', {
         "</tr>" +
         "</tbody>" +
         "</table>" +
+        "<h3>وضعیت فروش براساس نوع پروژه</h3>" +
+        "<table class='table table-hover text-center'>" +
+        "<thead>" +
+        "<tr>" +
+        "<td>نوع پروژه</td>" +
+        "<td>تعداد دستگاه</td>" +
+        "<td>کیلووات</td>" +
+        "<td>قیمت</td>" +
+        "<td>درصد از فروش</td>" +
+        "<td>قیمت هر کیلووات</td>" +
+        "</tr>" +
+        "</thead>" +
+        "<tbody>" +
+        "<tr v-for='type in project_base'>" +
+        "<td>{{type.type}}</td>" +
+        "<td>{{pretty(type.count)}}</td>" +
+        "<td>{{pretty(type.kw)}}</td>" +
+        "<td>{{pretty(type.price)}}</td>" +
+        "<td>{{pretty(100*type.price / total('price'), '0,0.00')}}%</td>" +
+        "<td>{{pretty(type.price / type.kw)}}</td>" +
+        "</tr>" +
+        "<td>جمع</td>" +
+        "<td>{{pretty(total('count'))}}</td>" +
+        "<td>{{pretty(total('kw'))}}</td>" +
+        "<td>{{pretty(total('price'))}}</td>" +
+        "</tbody>" +
+        "</table>" +
         "</div>" +
 
         "</div>",
@@ -78,10 +107,15 @@ Vue.component('sales_comparison', {
     },
     methods: {
         total_fn: function(element){
-            console.log(element);
             let sum = 0;
           this.response.forEach(function (e) {
-             console.log(e[element]);
+             sum += e[element];
+          });
+          return sum;
+        },
+        total: function(element){
+            let sum = 0;
+          this.project_base.forEach(function (e) {
              sum += e[element];
           });
           return sum;
@@ -107,6 +141,7 @@ Vue.component('sales_comparison', {
                 .then((result) => {
                     console.log(result);
                     this.response = result.data.response;
+                    this.project_base = result.data.project_base;
                     this.loading = '';
 
                 }, (error) => {

@@ -1349,7 +1349,23 @@ def fetch_sales_data(request):
             'kw': kw,
             'perms_total_received': perms_total_received,
         })
+
+    prefs = PrefSpec.objects.filter(xpref_id__perm_date__gte=date_min, xpref_id__perm_date__lte=date_max)
+    prefs = PrefSpec.objects.filter(xpref_id__perm=True, xpref_id__perm_date__gte=date_min, xpref_id__perm_date__lte=date_max).values(
+        'xpref_id', 'qty', 'price', 'kw', 'reqspec_eq__type__title')
+    p = prefs.values('reqspec_eq__type__title').distinct()
+    q = p.annotate(count=Sum('qty'))\
+        .annotate(kw=Sum(F('qty') * F('kw'), output_field=FloatField()))\
+        .annotate(price=Sum(F('qty') * F('price'), output_field=FloatField()))
+    project_base = [{
+        'type': a['reqspec_eq__type__title'],
+        'kw': a['kw'],
+        'count': a['count'],
+        'price': a['price'],
+    } for a in q]
+    print(project_base)
     context = {
         'response': res,
+        'project_base': project_base,
     }
     return JsonResponse(context, safe=False)
