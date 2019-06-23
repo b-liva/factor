@@ -15,8 +15,9 @@
                         <div class="icon">
                         </div>
                         <span class="count">{{ pref.number }}</span>
-                        <span class="{% if pref.perm %}green{% else %}red{% endif %}">{% if pref.perm %}(مجوز
-                            شده) {% else %}(مجوز نشده){% endif %}</span>
+                        <span class="{% if pref.perm %}green{% else %}red{% endif %}">
+                            {% if pref.perm %}(مجوز
+                             شده <span class="ltrClass">{{ pref.perm_date }}</span>)  {% else %}(مجوز نشده){% endif %}</span>
 
                         <h3>شماره پیشفاکتور</h3>
                     </div>

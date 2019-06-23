@@ -1315,8 +1315,20 @@ def finish(request, request_pk):
 @login_required
 def fetch_sales_data(request):
     data = json.loads(request.body.decode('utf-8'))
-    date_min = data['date_min']
-    date_max = data['date_max']
+    if request.user.is_superuser:
+        date_min = data['date_min']
+        date_max = data['date_max']
+        # date_min = '1398-03-01'
+        # date_min_date = jdatetime.datetime.strptime(date_min, "%Y-%m-%d").date()
+        # date_max_date = jdatetime.datetime.strptime(date_max, "%Y-%m-%d").date()
+        # print('timediff', date_max_date - date_min_date)
+    else:
+        days = 30
+        today = jdatetime.date.today()
+        startDate = today + jdatetime.timedelta(-days)
+        date_min = startDate
+        date_max = today
+
     res = []
     sales_queryset = User.objects.filter(sales_exp=True)
     for exp in sales_queryset:
@@ -1327,6 +1339,7 @@ def fetch_sales_data(request):
         perms = perms_queryset['perms']
         price = exp.perms_price_total(date_min=date_min, date_max=date_max)['price']['sum']
         kw = exp.perms_price_total(date_min=date_min, date_max=date_max)['kw']['sum']
+        perms_total_received = exp.perms_total_received(date_min=date_min, date_max=date_max)
         res.append({
             'id': id,
             'name': name,
@@ -1334,9 +1347,9 @@ def fetch_sales_data(request):
             'count': count,
             'price': price,
             'kw': kw,
+            'perms_total_received': perms_total_received,
         })
     context = {
         'response': res,
     }
-    print(context['response'][0]['perms'])
     return JsonResponse(context, safe=False)

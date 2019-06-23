@@ -6,7 +6,11 @@
     <div id="sales_comparison">
         <div class="container">
             <div class="row">
-            <sales_comparison></sales_comparison></div>
+                {% if user.is_superuser %}{% else %}
+                    <h3>وضعیت مجوز 30 روز اخیر</h3>
+                {% endif %}
+                <sales_comparison :user_data='{{ user.is_superuser|lower }}'></sales_comparison>
+            </div>
         </div>
     </div>
 {% endblock %}

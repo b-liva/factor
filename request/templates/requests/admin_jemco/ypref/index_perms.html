@@ -116,6 +116,7 @@
                         <th scope="col" class="text-center">شماره پیش فاکتور</th>
                         <th scope="col" class="text-center">شماره درخواست</th>
                         <th scope="col" class="text-center">مشتری</th>
+                        <th scope="col" class="text-center">تاریخ مجوز</th>
                         <th scope="col" class="text-center">تاریخ تحویل</th>
                         <th scope="col" class="text-center">تعداد کل</th>
                         <th scope="col" class="text-center">تعداد ارسال شده</th>
@@ -148,6 +149,7 @@
                             <td>
                                 <a href="{% url 'customer_read' customer_pk=p.req_id.customer.pk %}">{{ p.req_id.customer.name }}</a>
                             </td>
+                            <td>{{ p.perm_date }}</td>
                             <td>{{ p.due_date }}</td>
                             <td>{{ p.total_qty }}</td>
                             <td>{{ p.total_qty_sent }}</td>
@@ -159,7 +161,7 @@
                             <td>{{ p.total_proforma_received.remaining|floatformat:0 | intcomma }}</td>
                             <td>{{ p.total_proforma_received.remaining_percent|floatformat:2 }}</td>
                             {#                            <td>{{ p.perm.summary|truncatechars:60 }}</td>#}
-                            <td>{{ p.owner.last_name }}</td>
+                            <td>{{ p.owner.last_name }} ({{ p.req_id.owner.last_name }})</td>
                             <td>
                                 {#                            <a class="btn btn-primary btn-xs"#}
                                 {#                               href="{% url 'pref_details' ypref_pk=p.perm.pk %}">#}

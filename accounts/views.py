@@ -2,10 +2,7 @@ from allauth.account.views import PasswordResetView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm, PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
-from django.core.exceptions import ValidationError
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
-# from django.contrib.auth.models import User
 from accounts.models import User
 from django.contrib import auth, messages
 from django.template.response import TemplateResponse

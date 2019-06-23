@@ -279,13 +279,14 @@ def perm_index(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    prof_list = Xpref.objects.filter(is_active=True, perm=True) \
+    prof_list = Xpref.objects.filter(is_active=True, req_id__is_active=True, perm=True) \
         .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0))) \
         .annotate(total_qty_sent=Sum('prefspec__qty_sent', filter=Q(prefspec__price__gt=0))) \
         .annotate(qty_remaining=F('total_qty') - F('total_qty_sent')).order_by('due_date').prefetch_related('owner')
 
     if not request.user.is_superuser:
         prof_list = prof_list.filter(owner=request.user)
+        # prof_list = prof_list.filter(req_id__owner=request.user)
 
     if not request.method == 'POST':
 
@@ -298,7 +299,6 @@ def perm_index(request):
     if request.method == 'POST':
         form = PermSearchForm(request.POST or None)
         request.session['perm-search'] = request.POST
-
         if request.POST['customer_name']:
             if Customer.objects.filter(name=request.POST['customer_name']):
                 customer = Customer.objects.get(name=request.POST['customer_name'])
@@ -308,11 +308,11 @@ def perm_index(request):
         if request.POST['owner'] and request.POST['owner'] != '0':
 
             owner = User.objects.get(pk=request.POST['owner'])
-            prof_list = prof_list.distinct().filter(Q(owner=owner) | Q(req_id__colleagues=owner))
+            prof_list = prof_list.distinct().filter(Q(owner=owner) | Q(req_id__colleagues=owner) | Q(req_id__owner=owner))
         if request.POST['date_min']:
-            prof_list = prof_list.filter(date_fa__gte=request.POST['date_min'])
+            prof_list = prof_list.filter(perm_date__gte=request.POST['date_min'])
         if request.POST['date_max']:
-            prof_list = prof_list.filter(date_fa__lte=request.POST['date_max'])
+            prof_list = prof_list.filter(perm_date__lte=request.POST['date_max'])
         if request.POST['status'] and request.POST['status'] != '0':
             status = request.POST['status']
 
@@ -531,8 +531,14 @@ def pref_find(request):
     if not Xpref.objects.filter(number=prof_no):
         messages.error(request, 'پیش فاکتور مورد نظر یافت نشد')
         return redirect('pref_index')
-    pref = Xpref.objects.filter(is_active=True).get(number=prof_no)
-    return redirect('pref_details', ypref_pk=pref.pk)
+    try:
+        pref = Xpref.objects.filter(is_active=True).get(number=prof_no)
+        return redirect('pref_details', ypref_pk=pref.pk)
+    except:
+        messages.error(request, 'پیشفاکتور یافت نشد.')
+        return redirect('errorpage')
+
+
 
 
 @login_required
