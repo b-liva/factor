@@ -7,19 +7,25 @@ Vue.component('sales_comparison', {
             loading: '',
             response: '',
             project_base: '',
+            perms_count: '',
             date_min: '',
             date_max: '',
             val: '',
             details: '',
             total_received: '',
             total_receivable: '',
+            by_date: true,
+            days: 30,
+            date_picker: $('#date_fa').persianDatepicker(),
         }
     },
     template: "<div>" +
-        "<div v-if='user_data'>" +
-        "<input id='date_fa' class='' type='text' :value='date_min' name='date_min'>{{date_min}}" +
+        "<div v-if=''>" +
+        // "<input id='date_fa' class='' type='text' :value='date_min' name='date_min'>{{date_min}}" +
+        "<input id='date_fa' class='' type='text' name='date_min'>{{date_min}}" +
         "<input id='exp_date_fa' class='' type='text' name='date_max'>{{date_max}}" +
         "<button @click='getPerms'>بروزرسانی</button>" +
+        "<input id='dayes' class='' type='text' name='days' v-model='days'>{{days}}({{by_date}})<br>{{msg}}" +
         "</div>" +
         "<div v-if='details'>details</div>" +
         "<div v-if='response' class='col-md-10 col-md-offset-1'>" +
@@ -29,6 +35,8 @@ Vue.component('sales_comparison', {
         "<tr>" +
         "<td>نام</td>" +
         "<td>تعداد</td>" +
+        "<td>تعداد2</td>" +
+        "<td>دستگاه</td>" +
         "<td>کیلووات</td>" +
         "<td>مبلغ</td>" +
         "<td>دریافتی</td>" +
@@ -39,6 +47,8 @@ Vue.component('sales_comparison', {
         "<tr v-for='res in response' @click='expData(res.id)'>" +
         "<td>{{res.name}}</td>" +
         "<td>{{res.count}}</td>" +
+        "<td>{{res.ps_count}}</td>" +
+        "<td>{{res.ps_qty}}</td>" +
         "<td>{{pretty(res.kw)}}" +
         " ({{pretty(100*res.kw/total_fn('kw'), '0,0.00')}}%)</td>" +
         "<td>{{pretty(res.price)}}" +
@@ -49,6 +59,8 @@ Vue.component('sales_comparison', {
         "<tr>" +
         "<td>جمع</td>" +
         "<td>{{total_fn('count')}}</td>" +
+        "<td>{{total_fn('ps_count')}}</td>" +
+        "<td>{{total_fn('ps_qty')}}</td>" +
         "<td>{{pretty(total_fn('kw'))}}</td>" +
         "<td>{{pretty(total_fn('price'))}} ({{pretty(total_fn('price') / total_fn('kw'))}} بر kw)</td>" +
         "<td>{{pretty(total_fn('perms_total_received'))}}" +
@@ -94,6 +106,7 @@ Vue.component('sales_comparison', {
     },
     created() {
         this.debouncedGetData = _.debounce(this.getPerms, 700);
+        this.getPerms();
     },
     beforeCreate() {},
     beforeMount() {},
@@ -104,6 +117,11 @@ Vue.component('sales_comparison', {
         //     this.msg = 'در حال ورود اطلاعات';
         //     this.debouncedGetData();
         // }
+        days: function () {
+            this.msg = 'در حال ورود اطلاعات';
+            this.by_date = false;
+            this.debouncedGetData();
+        }
     },
     methods: {
         total_fn: function(element){
@@ -129,12 +147,18 @@ Vue.component('sales_comparison', {
         },
         getPerms: function () {
             this.loading = 'loading';
-            this.date_min = $("input[name=date_min]").val();
-            this.date_max = $("input[name=date_max]").val();
+            this.msg = '';
+            if (this.by_date){
+                this.date_min = $("input[name=date_min]").val();
+                this.date_max = $("input[name=date_max]").val();
+            }
+
             url = 'request/fetch-sales-data';
             params = {
                 'date_min': this.date_min,
                 'date_max': this.date_max,
+                'days': this.days,
+                'by_date': this.by_date,
             };
             console.log(params);
             axios.post(url, params)
@@ -142,10 +166,21 @@ Vue.component('sales_comparison', {
                     console.log(result);
                     this.response = result.data.response;
                     this.project_base = result.data.project_base;
+                    this.perms_count = result.data.perms_count;
+                    this.date_min = result.data.date_min;
+                    this.date_max = result.data.date_max;
+                    $("input[name=date_min]").val(this.date_min);
+                    $("input[name=date_max]").val(this.date_max);
+                    var pd = $('#date_min').pDatepicker();
+                    pd.toggle();
+                    console.log('state: ');
+                    console.log(pd.getState());
                     this.loading = '';
+                    this.by_date = true;
 
                 }, (error) => {
                     console.log(error);
+                    this.by_date = true;
                 })
         },
         printData: function () {

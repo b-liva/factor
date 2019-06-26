@@ -1315,19 +1315,27 @@ def finish(request, request_pk):
 @login_required
 def fetch_sales_data(request):
     data = json.loads(request.body.decode('utf-8'))
-    if request.user.is_superuser:
+    by_date = data['by_date']
+    days = int(data['days'])
+    print(by_date, days)
+    today = jdatetime.date.today()
+    if by_date:
         date_min = data['date_min']
         date_max = data['date_max']
-        # date_min = '1398-03-01'
-        # date_min_date = jdatetime.datetime.strptime(date_min, "%Y-%m-%d").date()
-        # date_max_date = jdatetime.datetime.strptime(date_max, "%Y-%m-%d").date()
-        # print('timediff', date_max_date - date_min_date)
     else:
-        days = 30
-        today = jdatetime.date.today()
-        startDate = today + jdatetime.timedelta(-days)
-        date_min = startDate
+        date_min = today + jdatetime.timedelta(-days)
         date_max = today
+        print(date_min, date_max)
+
+    # if request.user.is_superuser:
+    #     date_min = data['date_min']
+    #     date_max = data['date_max']
+    # else:
+    #     days = 30
+    #     today = jdatetime.date.today()
+    #     startDate = today + jdatetime.timedelta(-days)
+    #     date_min = startDate
+    #     date_max = today
 
     res = []
     sales_queryset = User.objects.filter(sales_exp=True)
@@ -1335,6 +1343,9 @@ def fetch_sales_data(request):
         id = exp.pk
         name = exp.last_name
         perms_queryset = exp.perms(date_min=date_min, date_max=date_max)
+        ps_qty = exp.perms(date_min=date_min, date_max=date_max)['ps_qty']['sum']
+        ps_count = exp.perms(date_min=date_min, date_max=date_max)['ps_count']['count']
+        print('count: ', ps_count)
         count = perms_queryset['count']
         perms = perms_queryset['perms']
         price = exp.perms_price_total(date_min=date_min, date_max=date_max)['price']['sum']
@@ -1347,25 +1358,42 @@ def fetch_sales_data(request):
             'count': count,
             'price': price,
             'kw': kw,
+            'ps_qty': ps_qty,
+            'ps_count': ps_count,
             'perms_total_received': perms_total_received,
         })
 
-    prefs = PrefSpec.objects.filter(xpref_id__perm_date__gte=date_min, xpref_id__perm_date__lte=date_max)
-    prefs = PrefSpec.objects.filter(xpref_id__perm=True, xpref_id__perm_date__gte=date_min, xpref_id__perm_date__lte=date_max).values(
-        'xpref_id', 'qty', 'price', 'kw', 'reqspec_eq__type__title')
+    # prefs = PrefSpec.objects.filter(xpref_id__perm_date__gte=date_min, xpref_id__perm_date__lte=date_max)
+    prefs = PrefSpec.objects.filter(is_active=True, xpref_id__is_active=True,
+                                    xpref_id__perm=True, price__gt=0, qty__gt=0,
+                                    xpref_id__perm_date__gte=date_min, xpref_id__perm_date__lte=date_max)
+
+    # if not by_date:
+    #     prefs = prefs.filter(xpref_id__perm_date__gte=date_min, xpref_id__perm_date__lte=date_max)
+    # elif by_date:
+    #     prefs = prefs.filter(xpref_id__perm_date__gte=date_min)
+
+    prefs = prefs.values('xpref_id', 'qty', 'price', 'kw', 'reqspec_eq__type__title', 'id')
     p = prefs.values('reqspec_eq__type__title').distinct()
     q = p.annotate(count=Sum('qty'))\
         .annotate(kw=Sum(F('qty') * F('kw'), output_field=FloatField()))\
-        .annotate(price=Sum(F('qty') * F('price'), output_field=FloatField()))
+        .annotate(price=Sum(1.09 * F('qty') * F('price'), output_field=FloatField()))
+
+    perms_count = prefs.values('xpref_id').distinct().aggregate(count=Count('xpref_id'))
     project_base = [{
         'type': a['reqspec_eq__type__title'],
         'kw': a['kw'],
         'count': a['count'],
         'price': a['price'],
     } for a in q]
+
     print(project_base)
     context = {
         'response': res,
         'project_base': project_base,
+        'perms_count': perms_count,
+        'date_min': str(date_min),
+        'date_max': str(date_max),
+        # 'date_max': str(date_max),
     }
     return JsonResponse(context, safe=False)

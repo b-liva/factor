@@ -1,4 +1,4 @@
-from django.db.models import Sum, F, FloatField
+from django.db.models import Sum, F, FloatField, Count
 from django.urls import reverse
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -21,22 +21,39 @@ class User(AbstractUser):
 
     def perms(self, *args, **kwargs):
         perms = Xpref.objects.filter(is_active=True, req_id__is_active=True, perm=True, req_id__owner=self)
-        if 'date_min' in kwargs:
+        ps = PrefSpec.objects.filter(is_active=True, xpref_id__is_active=True, xpref_id__req_id__is_active=True,
+                                     xpref_id__perm=True, price__gt=0, qty__gt=0, xpref_id__req_id__owner=self)
+
+        # if 'date_min' in kwargs:
+        if 'date_min' in kwargs and kwargs['date_min'] != '':
             perms = perms.filter(perm_date__gte=kwargs['date_min'])
-        if 'date_max' in kwargs:
+            ps = ps.filter(xpref_id__perm_date__gte=kwargs['date_min'])
+        if 'date_max' in kwargs and kwargs['date_max'] != '':
             perms = perms.filter(perm_date__lte=kwargs['date_max'])
+            ps = ps.filter(xpref_id__perm_date__lte=kwargs['date_max'])
         count = perms.count()
+        ps_count = ps.values('xpref_id').distinct().aggregate(count=Count('xpref_id'))
+        ps_qty = ps.aggregate(sum=Sum('qty'))
+        print(self, ps_qty['sum'])
+        print(self, ps_count)
+
         return {
             'perms': perms,
             'count': count,
+            'ps_qty': ps_qty,
+            'ps_count': ps_count,
         }
 
     def perms_price_total(self, *args, **kwargs):
+        # prefs = PrefSpec.objects.filter(
+        #     xpref_id__req_id__is_active=True,
+        #     xpref_id__is_active=True,
+        #     xpref_id__perm=True,
+        #     xpref_id__req_id__owner=self
+        # )
         prefs = PrefSpec.objects.filter(
-            xpref_id__req_id__is_active=True,
-            xpref_id__is_active=True,
-            xpref_id__perm=True,
-            xpref_id__req_id__owner=self
+            is_active=True, xpref_id__is_active=True, xpref_id__req_id__is_active=True,
+            xpref_id__perm=True, price__gt=0, qty__gt=0, xpref_id__req_id__owner=self
         )
         if kwargs['date_min']:
             # prefs = prefs.filter(xpref_id__req_id__date_fa__gte=kwargs['date_min'])
