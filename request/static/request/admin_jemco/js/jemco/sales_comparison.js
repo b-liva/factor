@@ -4,7 +4,7 @@ Vue.component('sales_comparison', {
             msg: '',
             name: 'some name',
             show: true,
-            loading: '',
+            loading: false,
             response: '',
             project_base: '',
             perms_count: '',
@@ -20,7 +20,7 @@ Vue.component('sales_comparison', {
         }
     },
     template: "<div>" +
-        "<div v-if=''>" +
+        "<div v-if=''><div v-if='loading' class='loading'>Loading&#8230;</div>" +
         // "<input id='date_fa' class='' type='text' :value='date_min' name='date_min'>{{date_min}}" +
         "<input id='date_fa' class='' type='text' name='date_min'>{{date_min}}" +
         "<input id='exp_date_fa' class='' type='text' name='date_max'>{{date_max}}" +
@@ -108,9 +108,12 @@ Vue.component('sales_comparison', {
         this.debouncedGetData = _.debounce(this.getPerms, 700);
         this.getPerms();
     },
-    beforeCreate() {},
-    beforeMount() {},
-    mounted() {},
+    beforeCreate() {
+    },
+    beforeMount() {
+    },
+    mounted() {
+    },
     computed: {},
     watch: {
         // date_min: function () {
@@ -124,19 +127,19 @@ Vue.component('sales_comparison', {
         }
     },
     methods: {
-        total_fn: function(element){
+        total_fn: function (element) {
             let sum = 0;
-          this.response.forEach(function (e) {
-             sum += e[element];
-          });
-          return sum;
+            this.response.forEach(function (e) {
+                sum += e[element];
+            });
+            return sum;
         },
-        total: function(element){
+        total: function (element) {
             let sum = 0;
-          this.project_base.forEach(function (e) {
-             sum += e[element];
-          });
-          return sum;
+            this.project_base.forEach(function (e) {
+                sum += e[element];
+            });
+            return sum;
         },
         pretty: function (value, format) {
             return numeral(value).format(format)
@@ -146,9 +149,9 @@ Vue.component('sales_comparison', {
             console.log(value);
         },
         getPerms: function () {
-            this.loading = 'loading';
+            this.loading = true;
             this.msg = '';
-            if (this.by_date){
+            if (this.by_date) {
                 this.date_min = $("input[name=date_min]").val();
                 this.date_max = $("input[name=date_max]").val();
             }
@@ -171,11 +174,9 @@ Vue.component('sales_comparison', {
                     this.date_max = result.data.date_max;
                     $("input[name=date_min]").val(this.date_min);
                     $("input[name=date_max]").val(this.date_max);
-                    var pd = $('#date_min').pDatepicker();
-                    pd.toggle();
-                    console.log('state: ');
-                    console.log(pd.getState());
-                    this.loading = '';
+                    // this.days = result.data.diff_days;
+                    this.loading = false;
+                    this.days.stop = result.data.diff_days;
                     this.by_date = true;
 
                 }, (error) => {

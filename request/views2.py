@@ -1312,20 +1312,36 @@ def finish(request, request_pk):
     return redirect('req_report')
 
 
+def change_date_string(date):
+    b = date.split('-')
+    d = [int(i) for i in b]
+    d[0] = str(d[0])
+    for i in [1, 2]:
+        d[i] = str(d[i]) if d[i] > 9 else '0' + str(d[i])
+    date = '-'.join(d)
+    print('date: ', date)
+    return date
+
+
 @login_required
 def fetch_sales_data(request):
     data = json.loads(request.body.decode('utf-8'))
     by_date = data['by_date']
-    days = int(data['days'])
-    print(by_date, days)
+
     today = jdatetime.date.today()
     if by_date:
         date_min = data['date_min']
         date_max = data['date_max']
+        date_min = change_date_string(date_min)
+        date_max = change_date_string(date_max)
+        date_min = jdatetime.datetime.strptime(date_min, "%Y-%m-%d").date()
+        date_max = jdatetime.datetime.strptime(date_max, "%Y-%m-%d").date()
+        diff = date_max - date_min
+        days = diff.days
     else:
+        days = int(data['days'])
         date_min = today + jdatetime.timedelta(-days)
         date_max = today
-        print(date_min, date_max)
 
     # if request.user.is_superuser:
     #     date_min = data['date_min']
@@ -1394,6 +1410,7 @@ def fetch_sales_data(request):
         'perms_count': perms_count,
         'date_min': str(date_min),
         'date_max': str(date_max),
+        'diff_days': days,
         # 'date_max': str(date_max),
     }
     return JsonResponse(context, safe=False)
