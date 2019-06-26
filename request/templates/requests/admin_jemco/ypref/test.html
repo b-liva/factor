@@ -1,18 +1,90 @@
 {% load humanize %}
 {% load static %}
-<link href="{% static 'request/rtl/vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
-<link href="{% static 'request/rtl/vendors/bootstrap-rtl/dist/css/bootstrap-rtl.css' %}" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'request/rtl/build/css/style.css' %}">
-<div class="container">
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <title>شرکت جمکو</title>
+    <style>
+        @page {
+            size: a4 portrait;
 
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
+        @font-face {
+            font-family: B_Nazanin;
+            {#src: url('../ypref/B_nazanin.ttf');#}
+            src: url('D:/Dropbox/Dev/projects/jemco/jCrm/B_nazanin.ttf');
+            {#src: url("D:/Dropbox/Dev/projects/jemco/jCrm/request/admin_jemco/ypref/B_nazanin.ttf");#}
+            {#src: url("D:/Dropbox/Dev/projects/jemco/jCrm/request/admin_jemco/ypref/B_nazanin.ttf");#}
+        }
+
+        frame content_frame {
+            left: 50pt;
+            width: 512pt;
+            top: 50pt;
+            height: 692pt;
+            -pdf-frame-border: 1;
+        }
+
+        html {
+            font-family: 'B_Nazanin', Fallback, sans-serif;
+        }
+
+        }
+    </style>
+{#    <meta charset="UTF-8">#}
+
+</head>
+سلام برشما
+<br>
+<div style="font-family: 'Tw Cen MT Condensed Extra Bold', Fallback, sans-serif">Tw Cen MT Condensed Extra Bold</div>
+<div style="font-family: 'B_Nazanin', Fallback, sans-serif">الان خوب موقعی که .....</div>
+<div style="font-family: 'B_Nazanin', Fallback, sans-serif">{{ sum }}</div>
+<div style="font-family: 'B_Nazanin', Fallback, sans-serif">{{ sum2 }}</div>
+
+<body class="">
+
+<!-- Content for Static Frame 'header_frame' -->
+<div id="header_content">
+    <div class="">
+        <div class="">
+
             <div class="">
+                <div class="">
+                    <div class="" style="border: 0;">
+                        <a href="{% url 'dashboard' %}" class="site_title">
+                            {#                        <i class="fa fa-paw"></i>#}
+                            <span>معاونت بازرگانی</span>
+                            <span>معاونت بازرگانی</span>
+                            <span>معاونت بازرگانی</span>
+                        </a>
+                    </div>
+
+                    <!-- menu profile quick info -->
+                    <div class="">
+                        <div class="">
+                            <img src="{% static 'request/admin_jemco/images/crm_logo.jpg' %}" alt="..."
+                                 class="img-circle profile_img">
+                        </div>
+
+                    </div>
+                    <!-- /menu profile quick info -->
+
+                    <br/>
+                </div>
+            </div>
+
+            <div class="">
+                <div style="color: red;">
+                    {% for spec in specs %}
+                        {% if spec.price and spec.qty %}
+                            {{ spec.code }} -{{ spec.kw }} - {{ spec.qty }} - {{ spec.qty_sent }}<br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
                 <table class="">
                     <thead>
                     <tr>
-                        <th scope="col" class="text-center">ردیف</th>
-                        <th scope="col" class="text-center">کد کالا</th>
+                        <th scope="col" class="text-center">row</th>
+                        <th scope="col" class="text-center"></th>
                         <th scope="col" class="text-center">تعداد</th>
                         <th scope="col" class="text-center">ارسال شده</th>
                         <th scope="col" class="text-center">مانده</th>
@@ -24,7 +96,7 @@
                         <th scope="col" class="text-center">مجموع قیمت</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="float: right">
                     {% for spec in specs %}
                         {% if spec.price and spec.qty %}
                             <tr>
@@ -38,6 +110,7 @@
                                 <td>{{ spec.considerations }}</td>
                                 <td>{{ spec.price|intcomma:0 }}</td>
                                 <td>{{ spec_total|intcomma:0 }}</td>
+                                <td>{{ spec.xpref_id.summary }}</td>
                             </tr>
                         {% endif %}
                     {% endfor %}
@@ -56,9 +129,19 @@
 
 
                 </table>
+
             </div>
 
 
         </div>
+        <!-- /page content -->
+
     </div>
 </div>
+</div>
+
+<!-- Content for Static Frame 'footer_frame' -->
+
+
+</body>
+</html>

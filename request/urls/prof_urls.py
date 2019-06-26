@@ -36,6 +36,7 @@ urlpatterns = [
                       path('to-follow', proformaViews.to_follow, name='to_follow'),
                       path('prof_spec_form', request.viewsFolder.proformaViews.prof_spec_form, name='prof_spec_form'),
                       path('pdf', request.viewsFolder.proformaViews.rpdf, name='rpdf'),
+                      path('pdf2', request.viewsFolder.proformaViews.rpdf2, name='rpdf2'),
                   ])),
                   path('api/', include(router.urls)),
                   path('pdf/', GeneratePDF.as_view(), name='proforma_pdf'),

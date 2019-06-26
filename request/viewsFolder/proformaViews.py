@@ -1,4 +1,6 @@
 import datetime
+import os
+from base64 import encode
 
 from django.core.cache import cache
 import random
@@ -12,10 +14,12 @@ from django.shortcuts import render, redirect
 from django.template.loader import get_template
 
 from django_jalali.db import models as jmodels
+from xhtml2pdf import pisa
 
 import request.templatetags.functions as funcs
 from accounts.models import User
 from customer.models import Customer
+from factor import settings
 from request import models
 from request.forms.forms import CommentForm
 from request.forms.search import ProformaSearchForm, PermSearchForm, PrefSpecSearchForm
@@ -33,7 +37,7 @@ from request.templatetags import functions, request_extras
 
 from django.http import HttpResponse
 from django.views.generic import View
-from ..utils import render_to_pdf
+from ..utils import render_to_pdf, link_callback
 
 from django.template.loader import get_template
 from django.template import Context
@@ -1113,7 +1117,7 @@ def rpdf(request, ypref_pk):
         'pref': proforma,
         'specs': specs,
     }
-    return render(request, 'requests/admin_jemco/ypref/test.html', context)
+    # return render(request, 'requests/admin_jemco/ypref/test.html', context)
     pdf = render_to_pdf('requests/admin_jemco/ypref/test.html', context)
     if pdf:
         response = HttpResponse(pdf, content_type='application/pdf')
@@ -1126,6 +1130,37 @@ def rpdf(request, ypref_pk):
         return response
 
     return HttpResponse("Not found")
+
+
+def rpdf2(request, ypref_pk):
+    template_path = 'requests/admin_jemco/ypref/test.html'
+    proforma = Xpref.objects.get(pk=ypref_pk)
+
+    specs = proforma.prefspec_set.all()
+
+    context = {
+        'pref': proforma,
+        'specs': specs,
+        'sum': proforma.summary,
+        'sum2': 'فایل'.encode('utf-8'),
+    }
+    # Create a Django response object, and specify content_type as pdf
+    # return render(request, template_path, context)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    # html = template.render(Context(context))
+    html = template.render(context)
+
+    # create a pdf
+    print('getcwd: ', os.getcwd())
+    pisaStatus = pisa.CreatePDF(
+        html, path='.', dest=response, link_callback=link_callback)
+    # if error then show some funy view
+    if pisaStatus.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
 
 
 class GeneratePdf(View):

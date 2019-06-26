@@ -188,6 +188,7 @@ class ReqSearchForm(forms.Form):
 
 
 class ProformaSearchForm(forms.Form):
+
     customer_name = forms.CharField(label='مشتری', max_length=100, required=False)
     customer_name.widget = forms.TextInput(attrs={'class': 'form-control', 'id': 'autocomplete'})
     date_min = jforms.jDateField(label='تاریخ(از)', required=False)
@@ -296,6 +297,7 @@ class PermSearchForm(ProformaSearchForm):
 class PrefSpecSearchForm(PermSearchForm):
     SORT_CHOICES = (
         ('xpref_id__date_fa', 'تاریخ',),
+        # ('xpref_id__perm_date', 'تاریخ',),
         ('kw', 'کیلووات',),
         ('qty_remaining', 'مانده',),
         ('xpref_id__req_id__number', 'شماره درخواست',),
