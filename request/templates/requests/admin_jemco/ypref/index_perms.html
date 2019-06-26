@@ -117,7 +117,6 @@
                         <th scope="col" class="text-center">شماره درخواست</th>
                         <th scope="col" class="text-center">مشتری</th>
                         <th scope="col" class="text-center">تاریخ مجوز</th>
-                        <th scope="col" class="text-center">تاریخ تحویل</th>
                         <th scope="col" class="text-center">تعداد کل</th>
                         <th scope="col" class="text-center">تعداد ارسال شده</th>
                         <th scope="col" class="text-center">تعداد باقیمانده</th>
@@ -150,7 +149,6 @@
                                 <a href="{% url 'customer_read' customer_pk=p.req_id.customer.pk %}">{{ p.req_id.customer.name }}</a>
                             </td>
                             <td>{{ p.perm_date }}</td>
-                            <td>{{ p.due_date }}</td>
                             <td>{{ p.total_qty }}</td>
                             <td>{{ p.total_qty_sent }}</td>
                             <td>{{ p.qty_remaining }}</td>
