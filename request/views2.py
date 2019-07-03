@@ -1369,8 +1369,14 @@ def fetch_sales_data(request):
         perms_total_received = exp.perms_total_received(date_min=date_min, date_max=date_max)
         res.append({
             'id': id,
+            'show_details': False,
             'name': name,
-            'perms': [a.number for a in perms],
+            'perms': [{
+                'perm_number': a.number,
+                'url': request.build_absolute_uri(reverse('pref_details', kwargs={'ypref_pk': a.pk})),
+                'customer': a.req_id.customer.name,
+                'customer_url': request.build_absolute_uri(reverse('customer_read', kwargs={'customer_pk': a.req_id.customer.pk})),
+            } for a in perms],
             'count': count,
             'price': price,
             'kw': kw,
@@ -1391,6 +1397,7 @@ def fetch_sales_data(request):
 
     prefs = prefs.values('xpref_id', 'qty', 'price', 'kw', 'reqspec_eq__type__title', 'id')
     p = prefs.values('reqspec_eq__type__title').distinct()
+    p2 = prefs.values('reqspec_eq__type__title').distinct().values('xpref_id', 'xpref_id__number')
     q = p.annotate(count=Sum('qty'))\
         .annotate(kw=Sum(F('qty') * F('kw'), output_field=FloatField()))\
         .annotate(price=Sum(1.09 * F('qty') * F('price'), output_field=FloatField()))
@@ -1401,6 +1408,10 @@ def fetch_sales_data(request):
         'kw': a['kw'],
         'count': a['count'],
         'price': a['price'],
+        'pr_perms': [{
+            'number': i['xpref_id__number'],
+            'url': request.build_absolute_uri(reverse('pref_details', kwargs={'ypref_pk': i['xpref_id']})),
+        } for i in p2.filter(reqspec_eq__type__title=a['reqspec_eq__type__title'])],
     } for a in q]
 
     print(project_base)
