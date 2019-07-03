@@ -1,6 +1,8 @@
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+
 import request.views
 from request import views2
 from request.filters.filters import RequestFilter
@@ -54,5 +56,6 @@ urlpatterns = [
         path('editForm', request.reqSpecViews.reqspec_edit_form, name='reqspec_edit_form'),
         path('copy', request.reqSpecViews.reqspec_copy, name='reqspec_copy'),
     ])),
+    path("vue", TemplateView.as_view(template_name="requests/admin_jemco/yrequest/vue/index_test.html"), name="req_app", ),
 
 ]

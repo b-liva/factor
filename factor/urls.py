@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+
 from accounts.viewsFolder.views import LoginAfterPasswordChangeView
 import tender.views
 import request.views
@@ -30,6 +32,7 @@ urlpatterns = [
                   path('accounts/', include('allauth.urls')),
                   # path('', prefactor.views.home, name='homepage'),
                   path('', request.views.dashboard, name='dashboard'),
+                  path("vue", TemplateView.as_view(template_name="application.html"), name="app",),
                   path('dashboard2', request.views.dashboard2, name='dashboard2'),
                   path('sales_comparison', request.views.sales_comparison, name='sales_comparison'),
                   path('sales-dash', request.views.sales_expert_dashboard, name='dashboard'),
