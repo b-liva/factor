@@ -1,0 +1,25 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/pdf_base.html' %}
+{% block right_col %}
+    hello
+    {{ contents.name }} - {{ contents.value }} <br>
+    <span style="direction: rtl">{{ contents.per }}</span>
+
+    <table class="tableFull">
+        <thead>
+        <tr>
+            <td>first</td>
+            <td>second</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>item01</td>
+            <td>item02</td>
+        </tr>
+        <tr>
+            <td>item02</td>
+            <td>items04</td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

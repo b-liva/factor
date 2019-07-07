@@ -6,6 +6,7 @@ import request.views
 from request.routers import router
 from request.viewsFolder import proformaViews
 from request.viewsFolder.proformaViews import GeneratePDF
+from django_pdfkit import PDFView
 
 urlpatterns = [
                   path('pro_form', proformaViews.pro_form, name='pro_form'),
@@ -37,6 +38,8 @@ urlpatterns = [
                       path('prof_spec_form', request.viewsFolder.proformaViews.prof_spec_form, name='prof_spec_form'),
                       path('pdf', request.viewsFolder.proformaViews.rpdf, name='rpdf'),
                       path('pdf2', request.viewsFolder.proformaViews.rpdf2, name='rpdf2'),
+                      path('mypdf', request.viewsFolder.proformaViews.my_pdf, name='mypdf'),
+                      path('my-pdf', PDFView.as_view(template_name='test2.html'), name='my-pdf'),
                   ])),
                   path('api/', include(router.urls)),
                   path('pdf/', GeneratePDF.as_view(), name='proforma_pdf'),

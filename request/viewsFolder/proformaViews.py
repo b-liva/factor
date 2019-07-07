@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.template.loader import get_template
+from django.template.loader import get_template, render_to_string
 
 from django_jalali.db import models as jmodels
 from xhtml2pdf import pisa
@@ -41,6 +41,7 @@ from ..utils import render_to_pdf, link_callback
 
 from django.template.loader import get_template
 from django.template import Context
+import pdfkit
 
 
 @login_required
@@ -1137,8 +1138,9 @@ def rpdf2(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
 
     specs = proforma.prefspec_set.all()
-
+    textValue = 'الان خوب وقتیه که ....'
     context = {
+        'textValue': textValue,
         'pref': proforma,
         'specs': specs,
         'sum': proforma.summary,
@@ -1161,6 +1163,87 @@ def rpdf2(request, ypref_pk):
     if pisaStatus.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+
+def my_pdf(request, ypref_pk):
+    import os
+    from django.conf import settings
+    print('path', settings.STATIC_ROOT)
+    css = os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'style.css')
+    print('css', css)
+
+    options = {
+        'page-size': 'A4',
+        'margin-top': '0.55in',
+        'margin-right': '0.55in',
+        'margin-bottom': '0.55in',
+        'margin-left': '0.55in',
+        'encoding': "UTF-8"
+    }
+
+    data = {
+        'name': 'name01',
+        'value': 'value01',
+        'per': 'مقدار فارسی به انضمام english value آماده است؟',
+        'user': request.user
+    }
+
+    content = render_to_string(
+        'test2.html', {
+            'contents': data
+        }
+    )
+
+    pdf = pdfkit.PDFKit(content, "string", options=options, css=css).to_pdf()
+
+    response = HttpResponse(pdf)
+    response['Content-Type'] = 'application/pdf'
+
+    # response['Content-disposition'] = 'attachment;filename={}.pdf'.format(your_filename)
+    response['Content-disposition'] = 'inline;filename={}.pdf'.format('output')
+
+    return response
+
+
+def my_pdf2(request, ypref_pk):
+
+    print('my_pdf enterd..')
+    # template = get_template("requests/admin_jemco/ypref/test2.html")
+    template = get_template("test2.html")
+    print(template)
+
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    print(proforma)
+
+    specs = proforma.prefspec_set.all()
+    print(specs.count())
+    textValue = 'الان خوب وقتیه که ....'
+    # data = {
+    #     'textValue': textValue,
+    #     'pref': proforma,
+    #     'specs': specs,
+    #     'sum': proforma.summary,
+    #     'sum2': 'فایل'.encode('utf-8'),
+    # }
+    # print(data)
+    data = {
+        'name': 'name01',
+        'value': 'value01',
+    }
+    # context = Context({"data": data})  # data is the context data that is sent to the html file to render the output.
+    # print(context)
+    html = template.render(data)  # Renders the template with the context data.
+    print('html', html)
+    pdfkit.from_string(html, 'out.pdf')
+    # pdfkit.from_file(html, 'out.pdf')
+    # pdfkit.from_string(html, False)
+    # pdf = open("out.pdf", encoding='utf-8')
+    pdf = open("out.pdf", errors='ignore')
+    response = HttpResponse(pdf.read(), content_type='application/pdf')  # Generates the response as pdf response.
+    response['Content-Disposition'] = 'attachment; filename=output.pdf'
+    pdf.close()
+    os.remove("out.pdf")  # remove the locally created pdf file.
+    return response  # returns the response.
 
 
 class GeneratePdf(View):
@@ -1200,6 +1283,3 @@ class GeneratePDF(View):
             return response
 
         return HttpResponse("Not found")
-
-
-
