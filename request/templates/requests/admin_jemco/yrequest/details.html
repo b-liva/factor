@@ -43,32 +43,52 @@
 
             {#Buttons#}
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
-                <div class="row pull-left">
+                <div class="row">
                     <div class="row">
                         {% if user.is_superuser %}
-                            <h4 class="text-left">مهندس {{ request.owner.last_name }}</h4>
+                            <h4 class="text-right">مهندس {{ request.owner.last_name }}</h4>
                         {% endif %}
-                        {% if perms.request.sale_expert %}
-                            <a href="{% url 'spec_form' req_pk=request.pk %}" class="btn btn-sm btn-success">
-                                <i class="fa fa-plus"></i> افزودن ردیف
-                            </a>
-                        {% endif %}
-                        {% if perms.request.sale_expert %}
-                            <a href="{% url 'request_edit_form' request_pk=request.pk %}"
-                               class="btn btn-sm btn-warning">
-                                <i class="fa fa-pencil"></i> ویرایش درخواست
-                            </a>
-                            <a href="{% url 'request_delete' request_pk=request.pk %}"
-                               class="btn btn-sm btn-danger">
-                                <i class="fa fa-trash"></i>حذف درخواست
-                            </a>
-                        {% endif %}
-                        {% if perms.request.sale_expert %}
-                            <a href="{% url 'pro_form_cookie' req_id=request.pk %}"
-                               class="btn btn-sm btn-success">
-                                <i class="fa fa-plus"></i>افزودن پیش فاکتور
-                            </a>
-                        {% endif %}
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle"
+                                    data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <button type="button" class="btn btn-default">
+                                {% if perms.request.sale_expert %}
+                                    <a href="{% url 'request_edit_form' request_pk=request.pk %}">
+                                         ویرایش درخواست</a>
+                                {% endif %}
+                            </button>
+
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    {% if perms.request.sale_expert %}
+                                        <a href="{% url 'spec_form' req_pk=request.pk %}">
+                                            <i class="fa fa-plus green"></i> افزودن ردیف
+                                        </a>
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {% if perms.request.sale_expert %}
+                                        <a href="{% url 'request_delete' request_pk=request.pk %}">
+                                            <i class="fa fa-trash red"></i>حذف درخواست
+                                        </a>
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {% if perms.request.sale_expert %}
+                                        <a href="{% url 'pro_form_cookie' req_id=request.pk %}">
+                                            <i class="fa fa-plus green"></i> افزودن پیش فاکتور
+                                        </a>
+
+                                    {% endif %}
+                                </li>
+
+                            </ul>
+                        </div>
+
+
                     </div>
 
                     <div class="row">
@@ -171,7 +191,7 @@
 
             <div class="row">
                 {#Images#}
-{#                                    {% include 'admin_theme/page_elements/files/files_img.html' with images=request.files_by_type.images %}#}
+                {#                                    {% include 'admin_theme/page_elements/files/files_img.html' with images=request.files_by_type.images %}#}
                 {#Other files#}
                 {#                    {% include 'admin_theme/page_elements/files/files_docs.html' with pdfs=request.files_by_type.pdfs docs=request.files_by_type.docs %}#}
 

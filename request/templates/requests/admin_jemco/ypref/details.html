@@ -9,15 +9,19 @@
                 {% include 'general/errors.html' %}
             {% endif %}
             {% include 'elements/customer_card.html' with customer=pref.req_id.customer %}
-            <div id="customerSummary" class=" col-md-6 col-sm-6 col-xs-12 ">
+            <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
                 <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="tile-stats">
                         <div class="icon">
                         </div>
                         <span class="count">{{ pref.number }}</span>
                         <span class="{% if pref.perm %}green{% else %}red{% endif %}">
-                            {% if pref.perm %}(مجوز
-                             شده <span class="ltrClass">{{ pref.perm_date }}</span>)  {% else %}(مجوز نشده){% endif %}</span>
+                            {% if pref.perm %}
+                                <i class="fa fa-check-circle" style="font-size: 1.2em" data-toggle="tooltip" title="مجوز شده است"></i>
+                                (<span class="ltrClass" data-toggle="tooltip" title="تاریخ مجوز">{{ pref.perm_date }}</span>)
+                            {% else %}<i class="fa fa-times-circle-o" style="font-size: 1.5em" data-toggle="tooltip" title="مجوز نشده"></i>
+                            {% endif %}
+                        </span>
 
                         <h3>شماره پیشفاکتور</h3>
                     </div>
@@ -58,44 +62,50 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
                 <div class="row" style="margin-top: 75px">
+                    <div class="col-xs-4">
+                        {% if perms.request.add_xpref %}
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle"
+                                        data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <button type="button" class="btn btn-default">
+                                    <a href="{% url 'pref_index' %}">
+                                        <i class="fa fa-list-ul" aria-hidden="true"></i>
+                                        پیش فاکتورها</a>
+                                </button>
+
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{% url 'pro_form' %}">
+                                        <i class="fa fa-plus green" aria-hidden="true"></i>
+                                        پیش فاکتور جدید</a></li>
+                                    <li><a data-toggle="tooltip"
+                                           title="ویرایش پیش فاکتور"
+                                           href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
+                                        <i class="fa fa-pencil btn-warning"></i> ویرایش پیش فاکتور</a></li>
+                                    <li><a type="submit" name="submit"
+                                           data-toggle="tooltip" title="ویرایش قیمت"
+                                           href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
+                                        <i class="fa fa-pencil btn-warning"></i> ویرایش قیمت</a></li>
+                                    <li><a href="{% url 'pay_form_prof' prof_pk=pref.pk %}"
+                                           data-toggle="tooltip" title="ثبت پرداخت">
+                                        <i class="fa fa-plus green" aria-hidden="true"></i>
+                                        ثبت دریافتی</a></li>
+                                    <li><a href="{% url 'proforma_pdf' ypref_pk=pref.pk %}">
+                                        <i class="fa fa-file-pdf-o red" aria-hidden="true"></i> ذخیره پیش فاکتور</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                    </div>
                     <div class="col-xs-8">
                         {% if pref.summary %}
                             <h4 class="greenBtn">شرح پیگیری</h4>
                             {{ pref.summary }}
                         {% endif %}
                     </div>
-                    <div class="col-xs-4">
-                        {% if perms.request.add_xpref %}
-                            <div>
-                                <a class="btn btn-sm btn-success" href="{% url 'pro_form' %}" data-toggle="tooltip"
-                                   title="ثبت پیش فاکتور جدید">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                    پیش فاکتور</a>
-                                <a class="btn btn-sm btn-info" href="{% url 'pref_index' %}">
-                                    <i class="fa fa-list-ul" aria-hidden="true"></i>
-                                    پیش فاکتورها</a>
 
-                                <a class="btn btn-warning btn-sm pull-left" type="submit" name="submit"
-                                   data-toggle="tooltip" title="ویرایش قیمت"
-                                   href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
-                                    <i class="fa fa-pencil"></i> قیمت</a>
-                                <a class="btn btn-warning btn-sm pull-left" data-toggle="tooltip"
-                                   title="ویرایش پیش فاکتور"
-                                   href="{% url 'pref_edit2' ypref_pk=pref.pk %}">
-                                    <i class="fa fa-pencil"></i> پیشفاکتور</a>
-
-                                <a class="btn btn-sm btn-success" href="{% url 'pay_form_prof' prof_pk=pref.pk %}"
-                                   data-toggle="tooltip" title="ثبت پرداخت">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                    پرداخت</a>
-                                <a class="btn btn-sm btn-success" href="{% url 'mypdf' ypref_pk=pref.pk %}"
-                                   data-toggle="tooltip" title="ثبت پرداخت">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                    PDF</a>
-                            </div>
-                        {% endif %}
-
-                    </div>
                 </div>
 
                 <h3 style="margin-top: 75px;" class="greenBtn">جزئیات پیشفاکتور شماره {{ pref.number }} مربوط به درخواست
