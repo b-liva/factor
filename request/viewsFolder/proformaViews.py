@@ -1166,30 +1166,82 @@ def rpdf2(request, ypref_pk):
 
 
 def my_pdf(request, ypref_pk):
+    header = False
+    footer = False
+
+    if not Xpref.objects.filter(pk=ypref_pk):
+        messages.error(request, 'Nothin found')
+        return redirect('errorpage')
+
+    pref = Xpref.objects.get(pk=ypref_pk)
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
+
+    if not can_read:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
     import os
     from django.conf import settings
     print('path', settings.STATIC_ROOT)
-    css = os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'style.css')
+    css = [
+        os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'style.css'),
+        os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'custom.min.css'),
+        os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap', 'dist', 'css', 'bootstrap.min.css')
+    ]
     print('css', css)
 
     options = {
         'page-size': 'A4',
-        'margin-top': '0.55in',
+        'margin-top': '2.3622in',
         'margin-right': '0.55in',
-        'margin-bottom': '0.55in',
+        'margin-bottom': '1.5748in',
         'margin-left': '0.55in',
-        'encoding': "UTF-8"
+        'encoding': "UTF-8",
     }
+    if header:
+        options['margin-top'] = '0.5in'
+    if footer:
+        options['margin-bottom'] = '0.5in'
+    print(options['margin-top'], options['margin-bottom'])
+    nestes_dict = {}
+    proforma_total = 0
+    kw_total = 0
+
+    prof_images = pref.proffiles_set.all()
+    prefspecs = pref.prefspec_set.all()
+    i = 0
+    for prefspec in prefspecs:
+        kw = prefspec.kw
+        speed = prefspec.rpm
+        proforma_total += prefspec.qty * prefspec.price
+        kw_total += prefspec.qty * prefspec.kw
+        nestes_dict[i] = {
+            'obj': prefspec,
+            'spec_total': prefspec.qty * prefspec.price
+        }
+        i += 1
+
+    if request.method == 'POST':
+        comment = pref.comments.create(author=request.user, body=request.POST['body'])
+        pref.comments.all().update(is_read=True)
+        comment.is_read = False
+        comment.save()
 
     data = {
-        'name': 'name01',
-        'value': 'value01',
-        'per': 'مقدار فارسی به انضمام english value آماده است؟',
-        'user': request.user
+        'pref': pref,
+        'prefspecs': prefspecs,
+        'nested': nestes_dict,
+        'vat': proforma_total * 0.09,
+        'proforma_total': proforma_total * 1.09,
+        'kw_total': kw_total,
+        'prof_images': prof_images,
+        'comment_form': CommentForm(),
+        'header': header,
+        'footer': footer
     }
 
     content = render_to_string(
-        'test2.html', {
+        'requests/admin_jemco/ypref/details_pdf.html', {
             'contents': data
         }
     )
@@ -1200,7 +1252,8 @@ def my_pdf(request, ypref_pk):
     response['Content-Type'] = 'application/pdf'
 
     # response['Content-disposition'] = 'attachment;filename={}.pdf'.format(your_filename)
-    response['Content-disposition'] = 'inline;filename={}.pdf'.format('output')
+    # response['Content-disposition'] = 'inline;filename={}.pdf'.format('output')
+    response['Content-disposition'] = 'inline;filename={}{}.pdf'.format('PF_', pref.number)
 
     return response
 

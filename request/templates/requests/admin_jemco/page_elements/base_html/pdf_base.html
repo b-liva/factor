@@ -12,11 +12,6 @@
 
         <div class="col-md-3 left_col">
             <div class="left_col scroll-view">
-                <div class="navbar nav_title" style="border: 0;">
-                    <a href="{% url 'dashboard' %}" class="site_title">
-                        {#                        <i class="fa fa-paw"></i>#}
-                        <span>معاونت بازرگانی</span></a>
-                </div>
                 <div class="clearfix"></div>
 
                 <!-- menu profile quick info -->
@@ -26,40 +21,14 @@
                              class="img-circle profile_img">
                     </div>
                     <div class="profile_info">
-                        {#                        <span>سلام,</span>#}
-                        {#                        <h2>{{ user.last_name }}</h2>#}
                     </div>
                 </div>
-                <!-- /menu profile quick info -->
 
                 <br/>
             </div>
         </div>
 
-
-        <div class="top_nav">
-            <div class="nav_menu">
-                <nav>
-                    <div class="nav toggle">
-                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                    </div>
-
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="">
-                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
-                               aria-expanded="false">
-                                <img src="{% static 'request/admin_jemco/images/img.jpg' %}"
-                                     alt="">{{ user.last_name }}
-                                <span class=" fa fa-angle-down"></span>
-                            </a>
-
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-
-        <div class="right_col" role="main">
+        <div class="right_col" role="main" style="background-color: white">
             <div style="margin-top: 40px;">
 
                 {% block right_col %}

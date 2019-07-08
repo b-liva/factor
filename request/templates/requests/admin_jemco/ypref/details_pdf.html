@@ -1,0 +1,182 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/pdf_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+{% load sales_ex_dashboard %}
+{% block right_col %}
+    <div class="container" style="color: #000;">
+        {% if contents.header %}
+            <div class="sticky-top">
+                <div class="col-xs-12 text-center">
+                    <div class="col-xs-4">Logo goes here...</div>
+                    <div class="col-xs-4">text</div>
+                    <div class="col-xs-4">date and number</div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-md-12 col-md-offset-1 col-sm-12 col-sm-offset-1 col-xs-12">
+                {#                <div class="table-responsive">#}
+                <div class="col-xs-12">
+                    {#                    <table class="table table-hover text-center">#}
+                    <table class="tableFull table-bordered">
+                        <tbody>
+                        <tr>
+                            <td>فروشنده</td>
+                            <td colspan="10">
+                                <div>
+                                    <span>نام فروشنده:</span>
+                                    <span>صنایع ماشین های الکتریکی جوین(جمکو) شماره ثبت: 2045</span>
+                                    <span class="left">شماره اقتصادی: 5877-9368-4111</span>
+                                </div>
+                                <div>
+                                    <span>سبزوار کیلومتر 45 جاده اسفراین - کد پستی: 9618836697</span>
+                                    <span class="left">تاریخ پیش فاکتور: <span
+                                            style="direction: rtl">{{ contents.pref.date_fa }}</span></span>
+                                </div>
+                                <div>
+                                    <span>تلفن: </span><span>77532401-77531993-021</span>
+                                    <span class="left">شماره پیش فاکتور: <span>{{ contents.pref.number }}</span></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>خریدار</td>
+                            <td colspan="10">
+                                <div><span>نام خریدار:</span><span>{{ contents.pref.req_id.customer.name }}</span></div>
+                                <div>
+                                    <span>کد خریدار: {{ contents.pref.req_id.customer.code_temp }}</span>
+                                    {% if contents.pref.req_id.customer.phone %}
+                                        <span class="left">تلفن:
+                                            {{ contents.pref.req_id.customer.phone }}
+                                        </span>
+                                    {% else %}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <span>نشانی: {{ contents.pref.req_id.customer.addr }}</span>
+                                    {% if contents.pref.req_id.customer.fax %}
+                                        <span class="left">فکس:
+                                            {{ contents.pref.req_id.customer.fax }}
+                                        </span>
+                                    {% else %}
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="col" class="text-center">ردیف</th>
+                            <th scope="col" class="text-center">کد کالا</th>
+                            <th scope="col" class="text-center">تعداد</th>
+                            <th scope="col" class="text-center">ارسال شده</th>
+                            <th scope="col" class="text-center">مانده</th>
+                            <th scope="col" class="text-center">کیلووات</th>
+                            <th scope="col" class="text-center">سرعت</th>
+                            <th scope="col" class="text-center">ولتاژ</th>
+                            <th scope="col" class="text-center">قیمت واحد</th>
+                            <th scope="col" class="text-center">مجموع قیمت</th>
+                        </tr>
+                        {% for index, object in contents.nested.items %}
+                            {% if object.obj.price and object.obj.qty %}
+                                <tr>
+                                    <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                    <td scope="col" class="text-center">{{ object.obj.code }}</td>
+                                    <td scope="col" class="text-center">{{ object.obj.qty }}</td>
+                                    <td scope="col" class="text-center">{{ object.obj.qty_sent }}</td>
+                                    <td scope="col" class="text-center">{{ object.obj|qty_remaining }}</td>
+                                    <td scope="col" class="text-center">{{ object.obj.kw }}</td>
+                                    <td scope="col" class="text-center">{{ object.obj.rpm }}</td>
+                                    <td scope="col" class="text-center">{{ object.obj.voltage }}</td>
+                                    <td scope="col" class="text-center">{{ object.obj.price|intcomma:0 }}</td>
+                                    <td scope="col" class="text-center">{{ object.spec_total|intcomma:0 }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        <tr>
+                            <td colspan="8">
+                                <div>نحوه پرداخت:</div>
+                                <div><span>مدت اعتبار:</span><span>{{ contents.pref.exp_date_fa }}</span></div>
+                                <div>زمان تحویل:</div>
+                                <div>محل تحویل:</div>
+                                <div>مدت گارانتی:</div>
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td>جمع</td>
+                                    </tr>
+                                    <tr>
+                                        <td>تخفیف</td>
+                                    </tr>
+                                    <tr>
+                                        <td>نصب و راه اندازی</td>
+                                    </tr>
+                                    <tr>
+                                        <td>بسته بندی</td>
+                                    </tr>
+                                    <tr>
+                                        <td>قانون مالیات بر ارزش افزوده</td>
+                                    </tr>
+                                    <tr>
+                                        <td>قابل پرداخت</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ contents.vat | floatformat:1 | intcomma }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ contents.proforma_total | floatformat:1 | intcomma }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+
+                            </td>
+
+                        </tr>
+                        <tr style="border-top: 2px black solid">
+                            <td colspan="9">مالیات ارزش افزوده</td>
+                            <td class="amount-total ">{{ contents.vat | floatformat:1 | intcomma }}</td>
+                        </tr>
+                        <tr style="border-top: 2px black solid">
+                            <td colspan="5">مجموع</td>
+                            <td>{{ contents.kw_total|intcomma }} کیلووات</td>
+                            <td colspan="3"></td>
+                            <td class="amount-total emphsize">{{ contents.proforma_total | floatformat:1 | intcomma }}</td>
+                        </tr>
+                        </tbody>
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% if contents.footer %}
+            <div class="footer">
+                <div class="col-xs-12 text-center">
+                    <div class="col-xs-6">address</div>
+                    <div class="col-xs-3">tel</div>
+                    <div class="col-xs-3">fax</div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
