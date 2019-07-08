@@ -1107,65 +1107,7 @@ def prof_spec_form(request, ypref_pk):
     return render(request, 'requests/admin_jemco/ypref/proforma_specs.html', context)
 
 
-def rpdf(request, ypref_pk):
-    print('entered pdf/rpfd')
-    proforma = Xpref.objects.get(pk=ypref_pk)
-    specs = proforma.prefspec_set.all()
-
-    template = get_template('requests/admin_jemco/ypref/test.html')
-
-    context = {
-        'pref': proforma,
-        'specs': specs,
-    }
-    # return render(request, 'requests/admin_jemco/ypref/test.html', context)
-    pdf = render_to_pdf('requests/admin_jemco/ypref/test.html', context)
-    if pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        filename = 'Invoice_%s.pdf' % ('12341231',)
-        content = "inline; filename=%s" % (filename,)
-        download = request.GET.get("download")
-        if download:
-            content = "attachment; filename='%s'" %(filename)
-        response['Content-Disposition'] = content
-        return response
-
-    return HttpResponse("Not found")
-
-
-def rpdf2(request, ypref_pk):
-    template_path = 'requests/admin_jemco/ypref/test.html'
-    proforma = Xpref.objects.get(pk=ypref_pk)
-
-    specs = proforma.prefspec_set.all()
-    textValue = 'الان خوب وقتیه که ....'
-    context = {
-        'textValue': textValue,
-        'pref': proforma,
-        'specs': specs,
-        'sum': proforma.summary,
-        'sum2': 'فایل'.encode('utf-8'),
-    }
-    # Create a Django response object, and specify content_type as pdf
-    # return render(request, template_path, context)
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-    # find the template and render it.
-    template = get_template(template_path)
-    # html = template.render(Context(context))
-    html = template.render(context)
-
-    # create a pdf
-    print('getcwd: ', os.getcwd())
-    pisaStatus = pisa.CreatePDF(
-        html, path='.', dest=response, link_callback=link_callback)
-    # if error then show some funy view
-    if pisaStatus.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-
-def my_pdf(request, ypref_pk):
+def proforma_pdf(request, ypref_pk):
     header = False
     footer = False
 
@@ -1182,13 +1124,11 @@ def my_pdf(request, ypref_pk):
 
     import os
     from django.conf import settings
-    print('path', settings.STATIC_ROOT)
     css = [
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'style.css'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'custom.min.css'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap', 'dist', 'css', 'bootstrap.min.css')
     ]
-    print('css', css)
 
     options = {
         'page-size': 'A4',
@@ -1202,7 +1142,6 @@ def my_pdf(request, ypref_pk):
         options['margin-top'] = '0.5in'
     if footer:
         options['margin-bottom'] = '0.5in'
-    print(options['margin-top'], options['margin-bottom'])
     nestes_dict = {}
     proforma_total = 0
     kw_total = 0
@@ -1211,8 +1150,6 @@ def my_pdf(request, ypref_pk):
     prefspecs = pref.prefspec_set.all()
     i = 0
     for prefspec in prefspecs:
-        kw = prefspec.kw
-        speed = prefspec.rpm
         proforma_total += prefspec.qty * prefspec.price
         kw_total += prefspec.qty * prefspec.kw
         nestes_dict[i] = {
@@ -1256,83 +1193,3 @@ def my_pdf(request, ypref_pk):
     response['Content-disposition'] = 'inline;filename={}{}.pdf'.format('PF_', pref.number)
 
     return response
-
-
-def my_pdf2(request, ypref_pk):
-
-    print('my_pdf enterd..')
-    # template = get_template("requests/admin_jemco/ypref/test2.html")
-    template = get_template("test2.html")
-    print(template)
-
-    proforma = Xpref.objects.get(pk=ypref_pk)
-    print(proforma)
-
-    specs = proforma.prefspec_set.all()
-    print(specs.count())
-    textValue = 'الان خوب وقتیه که ....'
-    # data = {
-    #     'textValue': textValue,
-    #     'pref': proforma,
-    #     'specs': specs,
-    #     'sum': proforma.summary,
-    #     'sum2': 'فایل'.encode('utf-8'),
-    # }
-    # print(data)
-    data = {
-        'name': 'name01',
-        'value': 'value01',
-    }
-    # context = Context({"data": data})  # data is the context data that is sent to the html file to render the output.
-    # print(context)
-    html = template.render(data)  # Renders the template with the context data.
-    print('html', html)
-    pdfkit.from_string(html, 'out.pdf')
-    # pdfkit.from_file(html, 'out.pdf')
-    # pdfkit.from_string(html, False)
-    # pdf = open("out.pdf", encoding='utf-8')
-    pdf = open("out.pdf", errors='ignore')
-    response = HttpResponse(pdf.read(), content_type='application/pdf')  # Generates the response as pdf response.
-    response['Content-Disposition'] = 'attachment; filename=output.pdf'
-    pdf.close()
-    os.remove("out.pdf")  # remove the locally created pdf file.
-    return response  # returns the response.
-
-
-class GeneratePdf(View):
-    def get(self, request, *args, **kwargs):
-        data = {
-             'today': datetime.date.today(),
-             'amount': 39.99,
-            'customer_name': 'Cooper Mann',
-            'order_id': 1233434,
-            'signature': 'request/rtl/build/img/signature/sig.png'
-        }
-        pdf = render_to_pdf('requests/admin_jemco/ypref/test.html', data)
-        return HttpResponse(pdf, content_type='application/pdf')
-
-
-class GeneratePDF(View):
-    def get(self, request, *args, **kwargs):
-        template = get_template('requests/admin_jemco/ypref/test.html')
-        context = {
-            "invoice_id": 123,
-            "customer_name": "John Cooper",
-            "amount": 1399.99,
-            "today": "Today",
-            "filename": '/static/request/rtl/build/img/signature/sig.jpg',
-        }
-        # return render(request, 'requests/admin_jemco/ypref/test.html', context)
-        html = template.render(context)
-        pdf = render_to_pdf('requests/admin_jemco/ypref/test.html', context)
-        if pdf:
-            response = HttpResponse(pdf, content_type='application/pdf')
-            filename = 'Invoice_%s.pdf' % ('12341231',)
-            content = "inline; filename=%s" % (filename,)
-            download = request.GET.get("download")
-            if download:
-                content = "attachment; filename='%s'" %(filename)
-            response['Content-Disposition'] = content
-            return response
-
-        return HttpResponse("Not found")
