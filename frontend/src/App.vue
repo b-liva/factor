@@ -2,9 +2,12 @@
     <v-app class="grey lighten-4">
         <Navbar/>
         <v-content>
-            <router-link to="/home"><btn class="indigo">Go to home</btn></router-link>
-            <router-link to="/about">Go to about</router-link>
-            <router-link to="/sales">Go to Sales</router-link>
+            <router-link to="/home"><btn class="indigo">Dashboard</btn></router-link>
+            <router-link to="/sales">sales page</router-link>
+            <router-link to="/about">about</router-link>
+            <router-link to="/requests">requests</router-link>
+            <router-link to="/proformas">proformas</router-link>
+            <router-link to="/payments">payments</router-link>
             <router-view></router-view>
             <!--<SalesDash/>-->
         </v-content>

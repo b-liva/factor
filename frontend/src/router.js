@@ -23,6 +23,30 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     },
     {
+      path: '/requests',
+      name: 'requests',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ './views/Requests.vue')
+    },
+    {
+      path: '/proformas',
+      name: 'proformas',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ './views/Proformas.vue')
+    },
+    {
+      path: '/payments',
+      name: 'payments',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ './views/Payments.vue')
+    },
+    {
       path: '/sales',
       name: 'sales',
       // route level code-splitting
