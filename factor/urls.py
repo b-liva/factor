@@ -44,6 +44,7 @@ urlpatterns = [
                   path('errorpage/', request.views.errorpage, name="errorpage"),
                   path('account/', include('accounts.url')),
                   path('request/', include('request.urls.url')),
+                  # path('api/request/', include('request.urls.url')),
                   path('customer/', include('customer.url')),
                   path('fund/', include('fund.url')),
                   path('pricedb/', include('pricedb.url')),
@@ -54,6 +55,7 @@ urlpatterns = [
                   # path('v1/request', include('request.urls.url')),
                   path('api/v1/fund/', include('fund.api.urls'), name='post-api'),
                   path('comming-soon', general_views.comming_soon, name='comming_soon'),
+                  path('api/', include('api.url')),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)
