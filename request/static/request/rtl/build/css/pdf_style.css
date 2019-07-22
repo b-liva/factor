@@ -1,0 +1,15 @@
+@font-face {
+    font-family: IRANSans;
+    src: url(../fonts/eot/IRANSansWeb_Black.eot?1532072864);
+    src: url(../fonts/eot/IRANSansWeb_Black.eot?&1532072864#iefix) format('embedded-opentype'), url(../fonts/woff2/IRANSansWeb_Black.woff2?1532072864) format('woff2'), url(../fonts/woff/IRANSansWeb_Black.woff?1532072864) format('woff'), url(../fonts/ttf/IRANSansWeb_Black.ttf?1532072864) format('truetype');
+    font-weight: 900;
+    font-style: normal
+}
+.body{
+    font-family: IRANSans, Helvetica Neue, Roboto, Arial, Droid Sans, sans-serif;
+    color: red;
+}
+
+.aziz{
+    color: red;
+}

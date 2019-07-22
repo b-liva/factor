@@ -22,5 +22,6 @@ from api.request.views import reqs_views
 urlpatterns = [
                   path('index', reqs_views.request_index, name='request_index'),
                   path('specs', reqs_views.request_specs, name='request_specs'),
+                  path('spec-item-types', reqs_views.im_types, name='im_types'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

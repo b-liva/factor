@@ -3,7 +3,7 @@
 {% load request_extras %}
 {% load sales_ex_dashboard %}
 {% block right_col %}
-    <div class="container" style="color: #000;">
+    <div class="container-fluid" style="color: #000;">
         {% if contents.header %}
             <div class="sticky-top">
                 <div class="col-xs-12 text-center">
@@ -15,15 +15,15 @@
         {% endif %}
 
         <div class="row">
-            <div class="col-md-12 col-md-offset-1 col-sm-12 col-sm-offset-1 col-xs-12">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 {#                <div class="table-responsive">#}
                 <div class="col-xs-12">
                     {#                    <table class="table table-hover text-center">#}
-                    <table class="tableFull table-bordered">
+                    <table class="tableFull table-bordered" style="border: 1px solid black;">
                         <tbody>
                         <tr>
                             <td>فروشنده</td>
-                            <td colspan="10">
+                            <td colspan="5">
                                 <div>
                                     <span>نام فروشنده:</span>
                                     <span>صنایع ماشین های الکتریکی جوین(جمکو) شماره ثبت: 2045</span>
@@ -31,8 +31,10 @@
                                 </div>
                                 <div>
                                     <span>سبزوار کیلومتر 45 جاده اسفراین - کد پستی: 9618836697</span>
-                                    <span class="left">تاریخ پیش فاکتور: <span
-                                            style="direction: rtl">{{ contents.pref.date_fa }}</span></span>
+                                    <div class="left">
+                                        <span style="float: right;">تاریخ پیش فاکتور:</span>
+                                        <span style="float: right;">{{ contents.pref.date_fa }}</span>
+                                    </div>
                                 </div>
                                 <div>
                                     <span>تلفن: </span><span>77532401-77531993-021</span>
@@ -42,63 +44,75 @@
                         </tr>
                         <tr>
                             <td>خریدار</td>
-                            <td colspan="10">
+                            <td colspan="5">
                                 <div><span>نام خریدار:</span><span>{{ contents.pref.req_id.customer.name }}</span></div>
                                 <div>
                                     <span>کد خریدار: {{ contents.pref.req_id.customer.code_temp }}</span>
                                     {% if contents.pref.req_id.customer.phone %}
-                                        <span class="left">تلفن:
-                                            {{ contents.pref.req_id.customer.phone }}
-                                        </span>
+                                        <div class="left">
+                                            <span style="float: right;">تلفن:</span>
+                                            <span style="float: right;">{{ contents.pref.req_id.customer.phone }}</span>
+                                        </div>
                                     {% else %}
                                     {% endif %}
                                 </div>
                                 <div>
                                     <span>نشانی: {{ contents.pref.req_id.customer.addr }}</span>
                                     {% if contents.pref.req_id.customer.fax %}
-                                        <span class="left">فکس:
-                                            {{ contents.pref.req_id.customer.fax }}
-                                        </span>
+                                        <div class="left">
+                                            <span style="float: right;">فکس:</span>
+                                            <span style="float: right;">{{ contents.pref.req_id.customer.fax }}</span>
+                                        </div>
                                     {% else %}
                                     {% endif %}
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="col" class="text-center">ردیف</th>
-                            <th scope="col" class="text-center">کد کالا</th>
-                            <th scope="col" class="text-center">تعداد</th>
-                            <th scope="col" class="text-center">ارسال شده</th>
-                            <th scope="col" class="text-center">مانده</th>
-                            <th scope="col" class="text-center">کیلووات</th>
-                            <th scope="col" class="text-center">سرعت</th>
-                            <th scope="col" class="text-center">ولتاژ</th>
-                            <th scope="col" class="text-center">قیمت واحد</th>
-                            <th scope="col" class="text-center">مجموع قیمت</th>
+                        <tr class="col-md-12">
+                            <th class="text-center"></th>
+                            <th class="text-center">کد کالا</th>
+                            {#                            <th class="text-center">کیلووات</th>#}
+                            {#                            <th class="text-center">سرعت</th>#}
+                            {#                            <th class="text-center">ولتاژ</th>#}
+                            <th class="text-center">شرح کالا</th>
+                            <th class="text-center">تعداد</th>
+                            <th class="text-center">قیمت واحد</th>
+                            <th class="text-center">قیمت کل</th>
                         </tr>
                         {% for index, object in contents.nested.items %}
                             {% if object.obj.price and object.obj.qty %}
                                 <tr>
-                                    <th scope="row" class="text-center">{{ forloop.counter }}</th>
-                                    <td scope="col" class="text-center">{{ object.obj.code }}</td>
-                                    <td scope="col" class="text-center">{{ object.obj.qty }}</td>
-                                    <td scope="col" class="text-center">{{ object.obj.qty_sent }}</td>
-                                    <td scope="col" class="text-center">{{ object.obj|qty_remaining }}</td>
-                                    <td scope="col" class="text-center">{{ object.obj.kw }}</td>
-                                    <td scope="col" class="text-center">{{ object.obj.rpm }}</td>
-                                    <td scope="col" class="text-center">{{ object.obj.voltage }}</td>
-                                    <td scope="col" class="text-center">{{ object.obj.price|intcomma:0 }}</td>
-                                    <td scope="col" class="text-center">{{ object.spec_total|intcomma:0 }}</td>
+                                    <td class="text-center">{{ forloop.counter }}</td>
+                                    <td class="text-center">{{ object.obj.code }}</td>
+                                    {#                                    <td class="text-center">{{ object.obj.kw }}</td>#}
+                                    {#                                    <td class="text-center">{{ object.obj.rpm }}</td>#}
+                                    {#                                    <td class="text-center">{{ object.obj.voltage }}</td>#}
+                                    <td class="text-center">
+                                        <span>{{ object.obj.kw }}kw</span>
+                                        <span>{{ object.obj.rpm }}rpm</span>
+                                        <span>{{ object.obj.voltage }}V</span>
+                                        {% if object.obj.ip %}<span>{{ object.obj.ip }} IP</span>{% endif %}
+                                        {% if object.obj.ic %}<span>{{ object.obj.ic }} IC</span>{% endif %}
+                                        {% if object.obj.im %}<span>{{ object.obj.im }} IM</span>{% endif %}
+                                    </td>
+                                    <td class="text-center">{{ object.obj.qty }}</td>
+                                    <td class="text-center">{{ object.obj.price|intcomma:0 }}</td>
+                                    <td class="text-center">{{ object.spec_total|intcomma:0 }}</td>
                                 </tr>
                             {% endif %}
                         {% endfor %}
                         <tr>
-                            <td colspan="8">
-                                <div>نحوه پرداخت:</div>
-                                <div><span>مدت اعتبار:</span><span>{{ contents.pref.exp_date_fa }}</span></div>
-                                <div>زمان تحویل:</div>
-                                <div>محل تحویل:</div>
-                                <div>مدت گارانتی:</div>
+                            <td colspan="4">
+                                <div>
+                                    <div class="">نحوه پرداخت:</div>
+                                    <div class="clearfix">
+                                        <span style="float: right;">مدت اعتبار:</span>
+                                        <span style="float: right;">{{ contents.pref.exp_date_fa }}</span>
+                                    </div>
+                                    <div class="clearfix">زمان تحویل:</div>
+                                    <div class="clearfix">محل تحویل:</div>
+                                    <div class="clearfix">مدت گارانتی:</div>
+                                </div>
                             </td>
                             <td>
                                 <table>
@@ -120,51 +134,26 @@
                                     </tr>
                                     <tr>
                                         <td>قابل پرداخت</td>
+                                        <td></td>
                                     </tr>
                                     </tbody>
+
                                 </table>
                             </td>
                             <td>
-                                <table>
+                                <table class="tableFull text-center">
                                     <tbody>
-                                    <tr>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ contents.vat | floatformat:1 | intcomma }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ contents.proforma_total | floatformat:1 | intcomma }}</td>
-                                    </tr>
+                                        <tr><td>{{ contents.no_total | floatformat:1 | intcomma }}</td></tr>
+                                        <tr><td style="color: white;">.</td></tr>
+                                        <tr><td style="color: white;">.</td></tr>
+                                        <tr><td style="color: white;">.</td></tr>
+                                        <tr><td>{{ contents.vat | floatformat:1 | intcomma }}</td></tr>
+                                        <tr><td>{{ contents.proforma_total | floatformat:1 | intcomma }}</td></tr>
                                     </tbody>
                                 </table>
-
-
                             </td>
-
-                        </tr>
-                        <tr style="border-top: 2px black solid">
-                            <td colspan="9">مالیات ارزش افزوده</td>
-                            <td class="amount-total ">{{ contents.vat | floatformat:1 | intcomma }}</td>
-                        </tr>
-                        <tr style="border-top: 2px black solid">
-                            <td colspan="5">مجموع</td>
-                            <td>{{ contents.kw_total|intcomma }} کیلووات</td>
-                            <td colspan="3"></td>
-                            <td class="amount-total emphsize">{{ contents.proforma_total | floatformat:1 | intcomma }}</td>
                         </tr>
                         </tbody>
-
-
                     </table>
                 </div>
             </div>

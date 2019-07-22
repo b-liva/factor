@@ -5,9 +5,9 @@
             <v-btn flat color="white">بستن</v-btn>
         </v-snackbar>
         <h1 class="subheading grey--text">سفارشات فروش</h1>
-        <popup @request_added="reqadd"></popup>
-        <v-container class="my-5">
 
+        <popup @request_added="reqadd"></popup>
+        <v-container fluid class="my-5">
             <v-layout
                     text-xs-center
                     wrap
@@ -98,7 +98,7 @@
     import $ from 'jquery';
     import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
     import numeral from 'numeral';
-    import Popup from '../views/Popup'
+    import Popup from './Popup'
 
     export default {
         data() {
@@ -166,7 +166,7 @@
             }
         },
         methods: {
-            reqadd: function(v){
+            reqadd: function (v) {
                 console.log('value');
                 this.snackbar = true;
                 this.msg = v.msg;
@@ -183,6 +183,7 @@
                 return numeral(value).format(format)
             },
             expData: function (value) {
+                console.log(value);
                 this.details = true;
             },
             getRequests: function () {
@@ -211,6 +212,7 @@
                         this.flags.requestsLoading = false;
 
                     }, (error) => {
+                        console.log(error);
                         this.by_date = true;
                         this.flags.requestsLoading = false;
                     })
@@ -226,6 +228,7 @@
                     this.specs = response.data.specs;
                     this.flags.specsLoading = false;
                 }, (error) => {
+                    console.log(error);
                     this.flags.specsLoading = false;
                 })
 

@@ -1127,6 +1127,7 @@ def proforma_pdf(request, ypref_pk):
     css = [
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'style.css'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'custom.min.css'),
+        # os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'pdf_style.css'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap', 'dist', 'css', 'bootstrap.min.css')
     ]
 
@@ -1169,6 +1170,7 @@ def proforma_pdf(request, ypref_pk):
         'prefspecs': prefspecs,
         'nested': nestes_dict,
         'vat': proforma_total * 0.09,
+        'no_total': proforma_total,
         'proforma_total': proforma_total * 1.09,
         'kw_total': kw_total,
         'prof_images': prof_images,
@@ -1192,4 +1194,12 @@ def proforma_pdf(request, ypref_pk):
     # response['Content-disposition'] = 'inline;filename={}.pdf'.format('output')
     response['Content-disposition'] = 'inline;filename={}{}.pdf'.format('PF_', pref.number)
 
-    return response
+    pdf_render = True
+    if pdf_render:
+        return response
+    if not pdf_render:
+        context = {
+            'contents': data,
+        }
+        print(context['contents']['pref'].date_fa)
+        return render(request, 'requests/admin_jemco/ypref/details_pdf.html', context)

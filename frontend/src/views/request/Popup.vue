@@ -26,7 +26,6 @@
                     <reqSpecPopup></reqSpecPopup>
                 </v-flex>
             </v-layout>
-
         </v-card>
     </v-dialog>
 
@@ -34,7 +33,7 @@
 
 <script>
     import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
-    import reqSpecPopup from '../views/ReqSpecPopup'
+    import reqSpecPopup from './ReqSpecPopup'
 
     export default {
         data() {
