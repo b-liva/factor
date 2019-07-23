@@ -20,7 +20,7 @@ Vue.component('sales_comparison', {
         }
     },
     template: "<div>" +
-        "<div v-if=''><div v-if='loading' class='loading'>Loading&#8230;</div>" +
+        "<div v-if=''>" +
         // "<input id='date_fa' class='' type='text' :value='date_min' name='date_min'>{{date_min}}" +
         "<input id='date_fa' class='' type='text' name='date_min'>{{date_min}}" +
         "<input id='exp_date_fa' class='' type='text' name='date_max'>{{date_max}}" +
@@ -34,8 +34,8 @@ Vue.component('sales_comparison', {
         "<thead>" +
         "<tr>" +
         "<td>نام</td>" +
-        "<td>تعداد مجوز</td>" +
-        "<td>تعداد مجوز2</td>" +
+        "<td>تعداد</td>" +
+        "<td>تعداد2</td>" +
         "<td>دستگاه</td>" +
         "<td>کیلووات</td>" +
         "<td>مبلغ</td>" +
@@ -45,7 +45,7 @@ Vue.component('sales_comparison', {
         "</thead>" +
         "<tbody>" +
         "<tr v-for='res in response' @click='expData(res.id)'>" +
-        "<tr><td>{{res.name}}</td>" +
+        "<td>{{res.name}}</td>" +
         "<td>{{res.count}}</td>" +
         "<td>{{res.ps_count}}</td>" +
         "<td>{{res.ps_qty}}</td>" +
@@ -56,7 +56,8 @@ Vue.component('sales_comparison', {
         "<td>{{pretty(res.perms_total_received)}} ({{pretty(100*res.perms_total_received/res.price, '0,0.00')}}%)</td>" +
         "<td>{{pretty(res.price - res.perms_total_received)}} ({{pretty(100*(res.price - res.perms_total_received)/res.price, '0,0.00')}}%)</td>" +
         "</tr>" +
-
+        "<tr>" +
+        "<td>جمع</td>" +
         "<td>{{total_fn('count')}}</td>" +
         "<td>{{total_fn('ps_count')}}</td>" +
         "<td>{{total_fn('ps_qty')}}</td>" +
@@ -74,7 +75,6 @@ Vue.component('sales_comparison', {
         "<thead>" +
         "<tr>" +
         "<td>نوع پروژه</td>" +
-        "<td>تعداد مجوز</td>" +
         "<td>تعداد دستگاه</td>" +
         "<td>کیلووات</td>" +
         "<td>قیمت</td>" +
@@ -85,7 +85,6 @@ Vue.component('sales_comparison', {
         "<tbody>" +
         "<tr v-for='type in project_base'>" +
         "<td>{{type.type}}</td>" +
-        "<td></td>" +
         "<td>{{pretty(type.count)}}</td>" +
         "<td>{{pretty(type.kw)}}</td>" +
         "<td>{{pretty(type.price)}}</td>" +
@@ -93,7 +92,6 @@ Vue.component('sales_comparison', {
         "<td>{{pretty(type.price / type.kw)}}</td>" +
         "</tr>" +
         "<td>جمع</td>" +
-        "<td></td>" +
         "<td>{{pretty(total('count'))}}</td>" +
         "<td>{{pretty(total('kw'))}}</td>" +
         "<td>{{pretty(total('price'))}}</td>" +
@@ -165,10 +163,8 @@ Vue.component('sales_comparison', {
                 'days': this.days,
                 'by_date': this.by_date,
             };
-            console.log(params);
             axios.post(url, params)
                 .then((result) => {
-                    console.log(result);
                     this.response = result.data.response;
                     this.project_base = result.data.project_base;
                     this.perms_count = result.data.perms_count;

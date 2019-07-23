@@ -2,8 +2,8 @@ const BundleTracker = require("webpack-bundle-tracker");
 
 module.exports = {
     // publicPath: "http://0.0.0.0:8080/",
-    // publicPath: "http://localhost:8080/",
-    publicPath: "http://vbstech.ir/",
+    publicPath: "http://localhost:8080/",
+    // publicPath: "http://vbstech.ir/",
     outputDir: './dist/',
 
     chainWebpack: config => {
