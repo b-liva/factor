@@ -272,6 +272,8 @@ class Xpref(models.Model):
     owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
     req_id = models.ForeignKey(Requests, on_delete=models.DO_NOTHING)
     number = models.IntegerField(unique=True)
+    number_auto = models.IntegerField(unique=True)
+    number_td = models.IntegerField(null=True, blank=True)
     temp_number = models.IntegerField(null=True, blank=True)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)

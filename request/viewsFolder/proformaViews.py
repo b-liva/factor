@@ -746,6 +746,11 @@ def pro_form(request):
             # Save Proforma
             proforma = form.save(commit=False)
             proforma.owner = request.user
+            last = Xpref.objects.last()
+
+            proforma.number_auto = last.number_auto + 1
+            proforma.number = proforma.number_auto
+            # proforma.number_auto =
             proforma.save()
 
             # Save files

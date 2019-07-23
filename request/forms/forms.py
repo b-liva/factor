@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.utils.timezone import now
 from request import models
 from accounts.models import User
+from request.models import Xpref
 
 
 class ProjectTypeForm(forms.ModelForm):
@@ -149,7 +150,7 @@ class ProformaForm(forms.ModelForm):
 
     class Meta:
         model = models.Xpref
-        fields = ('req_id', 'number', 'date_fa', 'exp_date_fa', 'summary',)
+        fields = ('req_id', 'number_td', 'date_fa', 'exp_date_fa', 'summary',)
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
@@ -163,6 +164,7 @@ class ProformaForm(forms.ModelForm):
         labels = {
             'req_id': 'درخواست',
             'number': 'شماره پیشفاکتور',
+            'number_td': 'شماره تدوین',
             'date_fa': 'تاریخ صدور',
             'exp_date_fa': 'تاریخ انقضا',
             'summary': 'جزئیات',
@@ -184,7 +186,7 @@ class ProformaEditForm(forms.ModelForm):
 
     class Meta:
         model = models.Xpref
-        fields = ('number', 'date_fa', 'exp_date_fa', 'perm_number', 'perm_date', 'due_date', 'summary', 'perm', 'issue_type')
+        fields = ('number_td', 'date_fa', 'exp_date_fa', 'perm_number', 'perm_date', 'due_date', 'summary', 'perm', 'issue_type')
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
@@ -204,6 +206,7 @@ class ProformaEditForm(forms.ModelForm):
         labels = {
             'req_id': 'درخواست',
             'number': 'شماره پیشفاکتور',
+            'number_td': 'شماره تدوین',
             'date_fa': 'تاریخ صدور',
             'exp_date_fa': 'تاریخ انقضا',
             'due_date': 'تاریخ تحویل',
