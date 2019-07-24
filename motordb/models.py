@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import Q
-
+# todo: these can be base for requests. specs can be deleted entirely.
 from django.utils.timezone import now
 
 # Create your models here.
@@ -160,6 +160,7 @@ class MotorsCode(models.Model):
 
 
 class MotorsPrice(models.Model):
+    """todo: probably should be modified completely. it can be only a price field with a Foreign Key"""
     code = models.CharField(max_length=15, unique=True)
     kw = models.DecimalField(max_digits=7, decimal_places=1)
     frame_size = models.CharField(max_length=6, blank=True, null=True)
