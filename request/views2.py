@@ -19,7 +19,7 @@ from request.filters.filters import RequestFilter
 from request.forms.forms import RequestCopyForm, CommentForm
 from request.forms.search import ReqSearchForm
 from request.views import find_all_obj
-from .models import Requests, ReqSpec, PrefSpec
+from .models import Requests, ReqSpec, PrefSpec, IMType
 from .models import Xpref, Payment
 from . import models
 from customer.models import Customer
@@ -141,6 +141,7 @@ def req_form(request):
     if request.method == 'POST':
         c_cookie = request.COOKIES.get('customer')
         print(f"coockie: {c_cookie}")
+
         form = forms.RequestFrom(request.POST or None, request.FILES or None)
         img_form = forms.RequestFileForm(request.POST, request.FILES)
         files = request.FILES.getlist('image')

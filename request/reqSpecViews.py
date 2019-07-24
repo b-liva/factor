@@ -211,10 +211,19 @@ def spec_form(request, req_pk):
         form = forms.SpecForm(request.POST)
         if form.is_valid():
             spec = form.save(commit=False)
-            # if MotorsCode.objects.filter(kw=request.POST['kw'], speed=request.POST['speed']):
-            #     spec.code =
             spec.req_id = req
             spec.owner = request.user
+            code = MotorsCode.objects.filter(
+                kw=spec.kw,
+                speed=spec.rpm_new.rpm,
+                voltage=spec.voltage,
+                im=spec.im.title,
+                ic=spec.ic.title,
+                ip=spec.ip.title,
+            )
+            if code.count() == 1:
+                spec.code = code.first().code
+
             spec.save()
             messages.add_message(request, level=20, message=f'یک ردیف به درخواست شماره {req.number} اضافه شد.')
             return redirect('spec_form', req_pk=req_pk)
@@ -255,8 +264,20 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
     form = forms.SpecForm(request.POST or None, instance=spec)
     if request.method == 'POST':
         if form.is_valid():
-            print('form is valid')
-            form.save()
+            spec = form.save(commit=False)
+            code = MotorsCode.objects.filter(
+                kw=spec.kw,
+                speed=spec.rpm_new.rpm,
+                voltage=spec.voltage,
+                im=spec.im.title,
+                ic=spec.ic.title,
+                ip=spec.ip.title,
+            )
+            if code.count() == 1:
+                spec.code = code.first().code
+            else:
+                spec.code = 99009900
+            spec.save()
             # form = forms.SpecForm()
             messages.add_message(request, level=20,  message='جزئیات درخواست اصلاح شد')
             return redirect('spec_form', req_pk=req.pk)
