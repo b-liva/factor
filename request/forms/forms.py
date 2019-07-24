@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.utils.timezone import now
 from request import models
 from accounts.models import User
-from request.models import Xpref
+from request.models import Xpref, ProjectType, IMType, ICType, IEType, IPType
 
 
 class ProjectTypeForm(forms.ModelForm):
@@ -86,6 +86,11 @@ class SpecForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(SpecForm, self).__init__(*args, **kwargs)
+        self.fields['type'].initial = ProjectType.objects.get(title='روتین')
+        self.fields['im'].initial = IMType.objects.get(title='IMB3')
+        self.fields['ip'].initial = IPType.objects.get(title='IP55')
+        self.fields['ic'].initial = ICType.objects.get(title='IC411')
+        self.fields['ie'].initial = IEType.objects.get(title='IE1')
         # list = [ 'images']
         list = ['sent', 'tech', 'price', 'permission', 'cancelled', 'finished']
         for visible in self.visible_fields():
