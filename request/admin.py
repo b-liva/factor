@@ -10,7 +10,7 @@ from .models import (
     ProjectType,
     FrameSize,
     IssueType,
-    IPType, ICType, IMType, IEType, Comment)
+    RpmType, IPType, ICType, IMType, IEType, Comment)
 
 admin.site.register(Requests)
 admin.site.register(ReqSpec)
@@ -19,6 +19,7 @@ admin.site.register(PrefSpec)
 admin.site.register(Payment)
 admin.site.register(Comment)
 admin.site.register(ProjectType)
+admin.site.register(RpmType)
 admin.site.register(IPType)
 admin.site.register(ICType)
 admin.site.register(IMType)

@@ -60,6 +60,14 @@ class ProjectType(models.Model):
         return '%s' % self.title
 
 
+class RpmType(models.Model):
+    rpm = models.IntegerField()
+    pole = models.IntegerField()
+
+    def __str__(self):
+        return '%s قطب %s دور' % (self.pole, self.rpm)
+
+
 class IPType(models.Model):
     title = models.CharField(max_length=20)
 
@@ -233,6 +241,7 @@ class ReqSpec(models.Model):
     qty = models.IntegerField(default=1)
     kw = models.FloatField()
     rpm = models.IntegerField()
+    rpm_new = models.ForeignKey(RpmType, on_delete=models.DO_NOTHING)
     voltage = models.IntegerField(default=380)
     ip_type = models.IntegerField(null=True, blank=True)
     ic_type = models.IntegerField(null=True, blank=True)
