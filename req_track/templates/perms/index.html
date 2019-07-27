@@ -1,0 +1,73 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+
+{% block right_col %}
+    <h2 style="margin-top: 70px;">مجوز به تفکیک ماه<span style="font-size: 12px; color: red;">(خروجی تدوین)</span></h2>
+    <ol>
+        <li>شماره مجوز 1000 تا 1999: محصولات</li>
+        <li>شماره مجوز 2000 تا 2999: قطعات</li>
+        <li>شماره مجوز 3000 تا 3999: تعمیرات</li>
+    </ol>
+    <p>جدول زیر مربوط به محصولات و با شماره کمتر از 2000 است.</p>
+
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <table class="table-bordered tableFull ">
+                <thead>
+                <tr>
+                    <td>ماه</td>
+                    <td>کیلووات مجوز</td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for key, value in monthly.items %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>{{ value.sum|intcomma }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+    <h2 style="margin-top: 70px;">مجوزهای وارد نشده<span style="font-size: 12px; color: red;">(خروجی تدوین)</span></h2>
+    <p>مجوز محصولات از شروع سال مالی 98 (شماره مجوز کمتر از 2000)</p>
+    <div class="row">
+        <div class="col-md-6">
+            {% for i in diff %}
+                <span>{{ i }} -</span>
+            {% endfor %}
+        </div>
+    </div>
+    <h2 style="margin-top: 70px;">ردیف مجوز های مربوط به سال مالی 98<span style="font-size: 12px; color: red;">(خروجی تدوین)</span></h2>
+    <p>تمام ردیف های مجوز شده در سال مالی 98 شامل محصولات، قطعات، تعمیرات، ...</p>
+    <table class="tableFull table-bordered">
+        <thead>
+        <tr>
+            <td>ردیف</td>
+            <td>شماره مجوز</td>
+            <td>شماره پیش فاکتور</td>
+            <td>تاریخ</td>
+            <td>تعداد</td>
+            <td>توان</td>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for perm in perms %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ perm.perm_number }}</td>
+                <td>{{ perm.prof_number }}</td>
+                <td>{{ perm.perm_date }}</td>
+                <td>{{ perm.qty }}</td>
+                <td>{{ perm.kw }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -157,3 +157,21 @@ class CustomerResolver(models.Model):
         return customer
 
 
+class Perm(models.Model):
+    prof_number = models.IntegerField()
+    perm_number = models.IntegerField()
+    perm_date = models.CharField(max_length=12)
+    customer_code = models.IntegerField()
+    customer_name = models.CharField(max_length=100)
+    product_code = models.IntegerField()
+    product_details = models.TextField(null=True)
+    summary = models.TextField(null=True)
+    qty = models.IntegerField()
+    unit_price = models.FloatField()
+    total_price = models.FloatField()
+    extra = models.FloatField(null=True)
+    payable = models.FloatField(null=True)
+    kw = models.CharField(max_length=20, null=True)
+
+    def __str__(self):
+        return "perm: %s, Proforma: %s, qty: %s kw: %s" % (self.perm_number, self.prof_number, self.qty, self.kw)

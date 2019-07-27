@@ -51,6 +51,9 @@ urlpatterns = [
     path('customer-compare-entered', views.customer_compare_entered, name='customer_compare_entered'),
     path('customer-status-update', views.customer_status_update, name='customer_compare_update'),
     path('customer-entered', views.customer_entered, name='customer_entered'),
+    path('perms-index', views.perms_index, name='perms_index'),
+    path('modify-perms', views.modify_perm, name='modify_perm'),
+    path('perms-not-entered', views.perms_not_entered, name='perms_not_entered'),
 
 ]
 

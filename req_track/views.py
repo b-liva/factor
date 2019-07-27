@@ -22,7 +22,8 @@ from req_track.models import (
     TrackXpref,
     ProformaFollowUp,
     Customer as Customer_temp,
-    CustomerResolver
+    CustomerResolver,
+    Perm
 )
 from .forms import E_Req_Form, E_Req_Edit_Form
 from django.db import models
@@ -52,7 +53,6 @@ def e_req_add(request):
 
 @login_required
 def e_req_edit(request, req_pk):
-
     payment = Payments.objects.get(pk=req_pk)
     if not payment.red_flag:
         return redirect('req_track:payment_index')
@@ -543,3 +543,64 @@ def customer_entered(request):
         'customers': c,
     }
     return JsonResponse(context, safe=False)
+
+
+def perms_index(request):
+    perms = Perm.objects.all()
+    productions = perms.filter(perm_number__lt=2000)
+    far = '1398/01/01'
+    ord = '1398/02/01'
+    kh = '1398/03/01'
+    tir = '1398/04/01'
+    mor = '1398/05/01'
+    farkw = productions.filter(perm_date__gte=far, perm_date__lt=ord).aggregate(
+        sum=Sum(F('qty') * F('kw'), output_field=FloatField()))
+    ordkw = productions.filter(perm_date__gte=ord, perm_date__lt=kh).aggregate(
+        sum=Sum(F('qty') * F('kw'), output_field=FloatField()))
+    khkw = productions.filter(perm_date__gte=kh, perm_date__lt=tir).aggregate(
+        sum=Sum(F('qty') * F('kw'), output_field=FloatField()))
+    tirkw = productions.filter(perm_date__gte=tir, perm_date__lt=mor).aggregate(
+        sum=Sum(F('qty') * F('kw'), output_field=FloatField()))
+
+    perms_uploaded_list = [perm['perm_number'] for perm in productions.values('perm_number').distinct()]
+    perms_ok = Xpref.objects.filter(perm=True, is_active=True)
+    perms_ok_list = [perm.perm_number for perm in perms_ok]
+    s = set(perms_ok_list)
+    diff = [x for x in perms_uploaded_list if x not in s]
+    diff.sort()
+    context = {
+        'diff': diff,
+        'perms': perms.order_by('perm_number'),
+        'monthly': {
+            'فروردین': farkw,
+            'اردیبهشت': ordkw,
+            'خرداد': khkw,
+            'تیر': tirkw,
+        }
+    }
+    return render(request, 'perms/index.html', context)
+
+
+def modify_perm(request):
+    perms = Perm.objects.all()
+    for perm in perms:
+        if perm.kw is not None:
+            perm_list = perm.kw.split('\xa0')
+            if len(perm_list) > 1:
+                perm.kw = perm_list[0]
+                perm.save()
+    return redirect('req_track:perms_index')
+
+
+def perms_not_entered(request):
+    perms = Perm.objects.all()
+    productions = perms.filter(perm_number__lt=2000)
+    perms_uploaded_list = [perm['perm_number'] for perm in productions.values('perm_number').distinct()]
+    perms_ok = Xpref.objects.filter(perm=True, is_active=True)
+    perms_ok_list = [perm.perm_number for perm in perms_ok]
+    s = set(perms_ok_list)
+    diff = [x for x in perms_uploaded_list if x not in s].sort()
+    context = {
+       'diff': diff,
+    }
+    return render(request, 'perms/index.html', context)
