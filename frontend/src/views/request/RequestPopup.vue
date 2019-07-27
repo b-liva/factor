@@ -5,7 +5,9 @@
 
         <v-card>
             <v-toolbar dark color="primary">
-                <v-btn icon dark @click="dialog = false"><v-icon>close</v-icon></v-btn>
+                <v-btn icon dark @click="dialog = false">
+                    <v-icon>close</v-icon>
+                </v-btn>
                 <v-card-title><h2>ثبت سفارش فروش جدید</h2></v-card-title>
             </v-toolbar>
             <v-layout row wrap>
@@ -22,9 +24,20 @@
                         </v-form>
                     </v-card-text>
                 </v-flex>
-                <v-flex v-if="reqData.show" md8>
-                    <reqSpecPopup></reqSpecPopup>
+                <v-flex v-if="reqData.show || true" md8>
+                    <reqSpec
+                            @rowsSaved="finilize"
+                    ></reqSpec>
                 </v-flex>
+                <v-layout row wrap>
+                    <h1>درخواست</h1>
+                    <div>{{reqData}}</div>
+                </v-layout>
+                <v-layout row wrap>
+                    <h1>ردیف ها</h1>
+                    <div v-for="spec in specs">{{spec}}</div>
+                </v-layout>
+
             </v-layout>
         </v-card>
     </v-dialog>
@@ -33,7 +46,7 @@
 
 <script>
     import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
-    import reqSpecPopup from './ReqSpecPopup'
+    import reqSpec from './ReqSpec'
 
     export default {
         data() {
@@ -46,6 +59,7 @@
                     submitting: false,
                     show: false,
                 },
+                specs: [],
                 titleRules: [
                     v => v.length >= 3 || 'حداقل 5 حرف لازم است.'
                 ],
@@ -64,11 +78,16 @@
                     });
                     this.reqData.show = true;
                 }
-            }
+            },
+            finilize(e) {
+                console.log('finilize');
+                console.log(e);
+                this.specs = e;
+            },
         },
         components: {
             datePicker: VuePersianDatetimePicker,
-            reqSpecPopup: reqSpecPopup,
+            reqSpec: reqSpec,
         },
     }
 </script>

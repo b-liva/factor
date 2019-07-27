@@ -106,9 +106,7 @@
                                 <v-flex md3 v-if="!row.editable">
                                     <v-icon v-on:click="edit">edit</v-icon>
                                 </v-flex>
-                                <v-flex md3>
-                                    <v-icon v-on:click="remove">close</v-icon>
-                                </v-flex>
+
                                 <v-flex md3 v-if="row.editable">
                                     <v-layout row justify-center>
                                         <v-dialog v-model="dialog" max-width="600px">
@@ -134,7 +132,12 @@
 
                                     </v-layout>
                                 </v-flex>
-
+                                <v-flex md3>
+                                    <v-icon v-on:click="copy">file_copy</v-icon>
+                                </v-flex>
+                                <v-flex md3>
+                                    <v-icon v-on:click="remove">close</v-icon>
+                                </v-flex>
                             </v-layout>
 
                         </v-flex>
@@ -160,6 +163,7 @@
 
             return {
                 msg: '',
+                dialog: '',
                 popUPNow: '',
                 types: [],
                 specs: this.row,
@@ -180,6 +184,9 @@
         methods: {
             submit: function () {
                 this.specs.push(this.row);
+            },
+            copy: function () {
+                this.$emit('copy')
             },
             remove: function () {
                 this.$emit('remove')

@@ -6,7 +6,7 @@
         </v-snackbar>
         <h1 class="subheading grey--text">سفارشات فروش</h1>
 
-        <popup @request_added="reqadd"></popup>
+        <RequestPopup @request_added="reqadd"></RequestPopup>
         <v-container fluid class="my-5">
             <v-layout
                     text-xs-center
@@ -98,7 +98,7 @@
     import $ from 'jquery';
     import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
     import numeral from 'numeral';
-    import Popup from './Popup'
+    import RequestPopup from './RequestPopup'
 
     export default {
         data() {
@@ -156,7 +156,7 @@
         computed: {},
         components: {
             datePicker: VuePersianDatetimePicker,
-            Popup: Popup,
+            RequestPopup: RequestPopup,
         },
         watch: {
             days: function () {
