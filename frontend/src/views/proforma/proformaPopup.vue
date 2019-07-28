@@ -24,7 +24,7 @@
                 </v-flex>
                 <v-flex v-if="reqData.show" md8>
                     <div v-for="(rspec, index) in reqData.specs" v-if="rspec.show">
-                        {{index}}: {{rspec.qty}} - {{rspec.kw}} - {{rspec.rpm}} <v-icon @click="addToProforma(rspec)">close</v-icon><br/>
+                        {{index}}: {{rspec.qty}} - {{rspec.kw}} - {{rspec.rpm}} <v-icon @click="addToProforma(rspec)">add</v-icon><br/>
                     </div>
                     <v-btn @click="addAllToProforma">all<v-icon>add</v-icon></v-btn>
                     <ProformaSpecRow
@@ -32,6 +32,11 @@
                             :row="profData"
                             @specRemoved="showReqSpec"
                     ></ProformaSpecRow>
+
+                    <h2>profData</h2>
+                    {{profData}}
+                    <h2>reqData</h2>
+                    {{reqData}}
                 </v-flex>
             </v-layout>
         </v-card>
@@ -76,7 +81,11 @@
             submit() {
                 if (this.$refs.form.validate()) {
                     this.profData.submitting = true;
-                    console.log(this.profData);
+                    let paramData = {
+                        'request': this.reqData,
+                        'prof': this.profData,
+                    };
+                    console.log('Data to serve: ', paramData);
                     this.profData.submitting = false;
                     this.$emit('proforma_added', {
                         'msg': 'پیش فاکتور با موفقیت ثبت گردید.',
@@ -96,10 +105,14 @@
             addAllToProforma: function () {
                 let list = [];
                 this.profData.show = true;
-                this.reqData.specs.forEach(function (e) {
+                this.reqData.specs.forEach((e) => {
                     list.push(e);
                     e.show = false;
                 });
+                // this.reqData.specs.forEach(function (e) {
+                //     list.push(e);
+                //     e.show = false;
+                // });
                 this.profData.specs = list;
             },
             addToProforma(reqSpec){

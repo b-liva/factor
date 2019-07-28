@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>this is rows...</h1>
+        <h1>this is rows...!</h1>
         <div v-for="(r, index) in specs.specs">{{r}}<v-icon @click="removeSpec(r.id, index)">close</v-icon></div>
 
     </div>
