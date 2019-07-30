@@ -17,14 +17,9 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-import request.views
-from request import views2
-
+from api.customer.views import customer_views
+app_name = 'customer'
 urlpatterns = [
-                  path('request/', include('api.request.url.reqs')),
-                  path('proformas/', include('api.request.url.profs')),
-                  path('customer/', include('api.customer.url.custoemr')),
-                  path('fetch-sales-data', request.views2.fetch_sales_data, name='fetch_sales_data'),
-
+                  path('index', customer_views.customer_index, name='customer_index'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

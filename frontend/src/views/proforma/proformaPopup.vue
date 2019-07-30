@@ -13,18 +13,30 @@
                     <v-card-text>
                         <v-form ref="form">
                             <v-text-field label="شماره درخواست" type="number" v-model="reqData.number"></v-text-field>
-                            {{profData.number}}
-                            {{reqData.number}}
                             <date-picker v-model="profData.date"></date-picker>
                             <v-textarea label="جزئیات" prepend-icon="edit" v-model="profData.details"></v-textarea>
-                            <v-btn class="success mx-0 mt-3" @click="submit" :loading="profData.submitting">ذخیره
-                            </v-btn>
+                            <v-checkbox
+                                    v-model="profData.perm.status"
+                                    label="مجوز"
+                                    @change="profData.perm.number = profData.perm.date = profData.perm.due_date = '' "
+                            >
+                            </v-checkbox>
+                            <template v-if="profData.perm.status">
+                                <v-text-field
+                                        v-model="profData.perm.number"
+                                        label="شماره مجوز"
+                                ></v-text-field>
+                                <date-picker v-model="profData.perm.date"></date-picker>
+                                <date-picker v-model="profData.perm.due_date"></date-picker>
+
+                            </template>
+                            <v-btn class="success mx-0 mt-3" @click="submit" :loading="profData.submitting">ذخیره</v-btn>
                         </v-form>
                     </v-card-text>
                 </v-flex>
                 <v-flex v-if="reqData.show" md8>
                     <div v-for="(rspec, index) in reqData.specs" v-if="rspec.show">
-                        {{index}}: {{rspec.qty}} - {{rspec.kw}} - {{rspec.rpm}} <v-icon @click="addToProforma(rspec)">add</v-icon><br/>
+                        {{index}}: {{rspec.qty}} - {{rspec.kw}} - {{rspec.rpm}} - {{rspec.price}} - {{rspec.modified}}<v-icon @click="addToProforma(rspec)">add</v-icon><br/>
                     </div>
                     <v-btn @click="addAllToProforma">all<v-icon>add</v-icon></v-btn>
                     <ProformaSpecRow
@@ -60,15 +72,21 @@
                     submitting: false,
                     show: false,
                     specs: [],
+                    perm: {
+                        status: false,
+                        number: '',
+                        date: '',
+                        due_date: '',
+                    }
                 },
                 reqData: {
                     show: false,
                     number: '',
                     specs: [
-                        {'id': 10, 'qty': 2, 'kw': 132, 'rpm': 1500, 'voltage': 400, 'show': true},
-                        {'id': 11, 'qty': 1, 'kw': 160, 'rpm': 1000, 'voltage': 380, 'show': true},
-                        {'id': 12, 'qty': 3, 'kw': 315, 'rpm': 3000, 'voltage': 400, 'show': true},
-                        {'id': 13, 'qty': 2, 'kw': 75, 'rpm': 1500, 'voltage': 380, 'show': true},
+                        {'id': 10, 'qty': 2, 'kw': 132, 'rpm': 1500, 'voltage': 400, 'show': true, 'price': 1000000,'sentQty': 0, 'modified': false},
+                        {'id': 11, 'qty': 1, 'kw': 160, 'rpm': 1000, 'voltage': 380, 'show': true, 'price': 1500000,'sentQty': 0, 'modified': false},
+                        {'id': 12, 'qty': 3, 'kw': 315, 'rpm': 3000, 'voltage': 400, 'show': true, 'price': 2000000,'sentQty': 0, 'modified': false},
+                        {'id': 13, 'qty': 2, 'kw': 75, 'rpm': 1500, 'voltage': 380, 'show': true, 'price': 3000000,'sentQty': 0, 'modified': false},
                     ],
                 },
                 titleRules: [
@@ -137,7 +155,7 @@
             this.debouncedGetReqData = _.debounce(this.getReqData, 700);
         },
         watch: {
-            'reqData.number': function (val) {
+            'reqData.number': function () {
                 this.debouncedGetReqData();
             }
         },

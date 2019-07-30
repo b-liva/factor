@@ -22,38 +22,54 @@
                     </v-card-text>
                 </v-flex>
                 <v-flex v-if="incomeData.show" md8>
-                    <div>
-                        <div>قیمت کل: {{profData.totalPrice_no_vat}}</div>
-                        <div>ارزش افزوده: {{profData.totalPrice_vat}}</div>
-                        <div>قابل پرداخت: {{profData.totalPrice}}</div>
-                    </div>
-                    <div v-for="(income, index) in profData.specs" v-if="income.show">
-                        {{index}}: {{income.qty}} - {{income.kw}} - {{income.rpm}} - {{income.price}}
-                        <!--<v-icon @click="addToProforma(income)">add</v-icon><br/>-->
-                    </div>
+                    <v-layout row>
+                        <v-flex md6>
+                            <div>قیمت کل: {{profData.totalPrice_no_vat}}</div>
+                            <div>ارزش افزوده: {{profData.totalPrice_vat}}</div>
+                            <div>قابل پرداخت: {{profData.totalPrice}}</div>
+                            <div v-for="(spec, index) in profData.specs" v-if="spec.show">
+                                {{index}}: {{spec.qty}} - {{spec.kw}} - {{spec.rpm}} - {{spec.price}}
+                                <!--<v-icon @click="addToProforma(income)">add</v-icon><br/>-->
+                            </div>
+                        </v-flex>
+                        <v-flex md6>
+                            <div v-for="(income, index) in profData.incomes">
+                                <span>پرداخت مبلغ {{income.amount}} ریال با شماره پرداخت {{income.number}} در تاریخ {{income.date}} به صورت {{income.type}}
+                                </span>
+                                <span><v-icon @click="editIncome(index)">edit</v-icon></span>
+                                <span><v-icon @click="removeIncome(index)">delete</v-icon></span>
+                            </div>
+                        </v-flex>
+                    </v-layout>
+
+
                     <v-layout>
                         <v-flex md2>
                             <v-text-field
-                                    md6
+                                    label="شماره دریافتی"
+                                    v-model="incomeData.number"
+                            ></v-text-field>
+                        </v-flex>
+                        <v-flex md3>
+                            <date-picker
+                                    label="تاریخ"
+                                    v-model="incomeData.date"
+                            ></date-picker>
+                        </v-flex>
+                        <v-flex md2>
+                            <v-text-field
                                     label="مبلغ"
                                     v-model="incomeData.amount"
                             ></v-text-field>
                         </v-flex>
-                        <v-flex md2>
+                        <v-flex md1>
                             <v-text-field
-                                    md6
-                                    label="شماره دریافت"
-                                    v-model="incomeData.number"
+                                    label="نوع"
+                                    v-model="incomeData.type"
                             ></v-text-field>
-
                         </v-flex>
-
                     </v-layout>
-
-
                     {{incomeData}}
-
-
                 </v-flex>
             </v-layout>
         </v-card>
@@ -83,13 +99,19 @@
                         {'id': 12, 'qty': 3, 'kw': 315, 'rpm': 3000, 'price': 5000, 'voltage': 400, 'show': true},
                         {'id': 13, 'qty': 2, 'kw': 75, 'rpm': 1500, 'price': 6000, 'voltage': 380, 'show': true},
                     ],
+                    incomes: [
+                        {'id': 5, 'number': 20000, 'amount': 33453, 'date': '1398/02/03', 'type': 'نقد'},
+                        {'id': 6, 'number': 200, 'amount': 65451, 'date': '1398/02/03', 'type': 'نقد'}
+                    ],
                 },
-                incomeData: {
+                incomeDataTemplate: {
                     show: false,
+                    editing: false,
                     number: '',
                     amount: '',
                     details: '',
                     date: '',
+                    type: '',
 
                 },
                 titleRules: [
@@ -113,6 +135,13 @@
                         'color': 'success',
                     });
                     this.profData.show = true;
+                    if ('id' in this.incomeData) {
+                        this.incomeData = this.incomeDataTemplate;
+                        this.incomeData.show = true;
+                    }else {
+                        this.profData.incomes.push({...this.incomeData})
+                    }
+                    this.incomeData = {...this.incomeDataTemplate};
                 }
             },
             getProfData() {
@@ -130,11 +159,26 @@
                 this.profData.show = true;
                 reqSpec.show = false;
             },
+            editIncome(index) {
+                console.log('editing');
+                console.log(this.profData.incomes[index].amount);
+
+                this.incomeData.editing = true;
+                this.incomeData = this.profData.incomes[index];
+                this.incomeData.show = true;
+            },
+            removeIncome(index) {
+                console.log('remove icon: ', index);
+                this.profData.incomes.splice(index, 1);
+                //    todo: delete call to the server and before that confirm via a popup.
+                console.log('send remove signal to server.');
+            }
         },
         components: {
             datePicker: VuePersianDatetimePicker,
         },
         created() {
+            this.incomeData = this.incomeDataTemplate;
             this.debouncedGetProfData = _.debounce(this.getProfData, 700);
         },
         watch: {

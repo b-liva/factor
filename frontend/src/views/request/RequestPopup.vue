@@ -17,11 +17,18 @@
                         <v-form ref="form">
                             <v-text-field label="شماره" type="number" v-model="reqData.number"></v-text-field>
                             <date-picker v-model="reqData.date"></date-picker>
-                            <v-text-field :id="reqData.customer.id" label="مشتری" prepend-icon="people" v-model="reqData.customer.name"
-                                          :rules="titleRules"></v-text-field>
+                            <v-autocomplete
+                                    v-model="reqData.customer.id"
+                                    label="مشتری"
+                                    :items="customersListDropDown"
+                                    item-value="id"
+                                    item-text="name"
+                            ></v-autocomplete>
                             <v-textarea label="جزئیات" prepend-icon="edit" v-model="reqData.details"></v-textarea>
                             <v-btn class="success mx-0 mt-3" @click="submit" :loading="reqData.submitting">ذخیره</v-btn>
-                            <v-btn class="success mx-0 mt-3" @click="clearForm" :loading="reqData.submitting">پاکسازی فرم</v-btn>
+                            <v-btn class="success mx-0 mt-3" @click="clearForm" :loading="reqData.submitting">پاکسازی
+                                فرم
+                            </v-btn>
                         </v-form>
                     </v-card-text>
                 </v-flex>
@@ -31,12 +38,6 @@
                             ret="reqSpecComponent"
                             @rowsSaved="finilize"
                     ></reqSpec>
-
-                    <div>
-                        <ol>
-                            <li v-for="customer in customersListDropDown">{{customer}}</li>
-                        </ol>
-                    </div>
                 </v-flex>
             </v-layout>
             <v-layout row wrap>
@@ -61,7 +62,7 @@
     export default {
         data() {
             return {
-                reqTemplate: {
+                reqData: {
                     number: '',
                     date: '',
                     customer: {
@@ -72,7 +73,6 @@
                     submitting: false,
                     show: false,
                 },
-                reqData: '',
                 specs: [],
                 customersListSimulate: [
                     {id: 1, name: 'هوایار'},
@@ -108,25 +108,25 @@
                     this.reqData.show = true;
                 }
             },
-            clearForm(){
-                console.log(this.$parent.$refs.reqSpecComponentt);
-                this.customersListDropDown = [];
-                this.reqData = {...this.reqTemplate};
-                this.specs = [];
+            clearForm() {
             },
             finilize(e) {
                 console.log('finilize');
                 console.log(e);
                 this.specs = e;
             },
-            getCustomer(){
+            getCustomer() {
                 this.customersListDropDown = [];
-                console.log('Customer: ', this.reqData.customer);
-                this.customersListSimulate.forEach((e) => {
-                    if (this.reqData.customer.name.indexOf(e.name) >= 0){
-                        this.customersListDropDown.push(e);
-                    }
-                })
+                const url = 'api/customer/index';
+                let params = {
+                    'name': this.reqData.customer.name,
+                };
+                axios.post(url, params).then((respons) => {
+                    console.log(respons);
+                    this.customersListDropDown = respons.data.customers;
+                }, (error) => {
+                    console.log(error);
+                });
             },
 
         },
@@ -134,26 +134,25 @@
             datePicker: VuePersianDatetimePicker,
             reqSpec: reqSpec,
         },
-        beforeCreate(){
+        beforeCreate() {
             console.log('before create');
         },
-        created(){
-            this.reqData = {...this.reqTemplate};
-            console.log(this.reqData);
+        created() {
             this.debouncedGetCustomer = _.debounce(this.getCustomer, 700);
+            this.getCustomer();
             console.log('Created.');
         },
-        beforeMount(){
+        beforeMount() {
             console.log('before mount');
         },
-        mounted(){
+        mounted() {
             console.log('moundte.');
         },
-        watch:{
-            'reqData.customer.name': function (e) {
-                console.log(e);
-                this.debouncedGetCustomer();
-            }
-        },
+        // watch: {
+        //     'reqData.customer.name': function () {
+        //         console.log(this.reqData.customer.name);
+        //         this.debouncedGetCustomer();
+        //     }
+        // },
     }
 </script>
