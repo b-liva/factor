@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import action, detail_route
 from api.v1.customer.serializers import CustomerSerializer, AddressSerializers
@@ -21,6 +21,11 @@ class CustomerViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class AddressViewSet(viewsets.ModelViewSet):
+class AddressViewSet(mixins.CreateModelMixin,
+                     mixins.RetrieveModelMixin,
+                     mixins.UpdateModelMixin,
+                     mixins.DestroyModelMixin,
+                     viewsets.GenericViewSet):
+    
     queryset = Address.objects.all()
     serializer_class = AddressSerializers
