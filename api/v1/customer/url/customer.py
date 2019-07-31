@@ -13,13 +13,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path, include
+from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from api.customer.views import customer_views
+from api.v1.customer.views import customer_views
+from api.v1.customer.classbased import classbased
+from api.v1.customer import drfViews
+
 app_name = 'customer'
 urlpatterns = [
-                  path('index', customer_views.customer_index, name='customer_index'),
+                  path('index/', customer_views.customer_index, name='customer_index'),
+                  path('home/', classbased.Homeview.as_view(), name='home'),
+                  path('list/', classbased.CustomerListView.as_view(), name='list'),
+                  path('details/<int:pk>', classbased.CustomerDetailsView.as_view(), name='details'),
+                  path('create/', classbased.CustomerCreateView.as_view(), name='create'),
+                  path('update/<int:pk>', classbased.CustomerUpdateView.as_view(), name='update'),
+                  path('hello/', classbased.HelloWorldVie.as_view(), name='hello'),
+
+                  path('listcustomer/', drfViews.ListCustomers.as_view(), name='listcustomer'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

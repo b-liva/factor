@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page_title }}</title>
+</head>
+<body>
+<p>this is customer list page: </p>
+{{ customer_details }}
+<hr>
+
+<div>user: {{ user }}</div>
+<div>owner: {{ customer_details.owner }} </div>
+{% if user == customer_details.owner %}
+    <div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">save</button>
+        </form>
+    </div>
+{% endif %}
+</body>
+</html>

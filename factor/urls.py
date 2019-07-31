@@ -56,6 +56,7 @@ urlpatterns = [
                   path('api/v1/fund/', include('fund.api.urls'), name='post-api'),
                   path('comming-soon', general_views.comming_soon, name='comming_soon'),
                   path('api/', include('api.url')),
+                  path('api-auth/', include('rest_framework.urls'), name='rest_framework'),  # login route with rest_framework
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

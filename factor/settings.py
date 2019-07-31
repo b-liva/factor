@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'pytest_django',
     # 'debug_toolbar',
     'request.apps.RequestConfig',
+    'api.v1.apps.ApiConfig',
     'tender.apps.TenderConfig',
     'customer.apps.CustomerConfig',
     'fund.apps.FundConfig',
@@ -94,6 +95,7 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR, 'request/templates'),
             os.path.join(BASE_DIR, 'reportbugs/templates'),
+            os.path.join(BASE_DIR, 'api/v1/templates'),
             os.path.join(BASE_DIR, 'templates')
         ],
         'APP_DIRS': True,
@@ -177,8 +179,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     )
 }
 

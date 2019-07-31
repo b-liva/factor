@@ -17,11 +17,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from api.request.views import reqs_views
+import request.views
+from request import views2
 
 urlpatterns = [
-                  path('index', reqs_views.request_index, name='request_index'),
-                  path('specs', reqs_views.request_specs, name='request_specs'),
-                  path('spec-item-types', reqs_views.im_types, name='im_types'),
+                  path('request/', include('api.v1.request.url.reqs')),
+                  path('proformas/', include('api.v1.request.url.profs')),
+                  path('customer/', include('api.v1.customer.url.customer')),
+                  path('fetch-sales-data', request.views2.fetch_sales_data, name='fetch_sales_data'),
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

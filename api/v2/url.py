@@ -21,8 +21,6 @@ import request.views
 from request import views2
 
 urlpatterns = [
-                  path('v1/', include('api.v1.url')),
-                  path('v2/', include('api.v2.url')),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)
