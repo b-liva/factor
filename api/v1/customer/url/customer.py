@@ -31,7 +31,10 @@ urlpatterns = [
                   path('update/<int:pk>', classbased.CustomerUpdateView.as_view(), name='update'),
                   path('hello/', classbased.HelloWorldVie.as_view(), name='hello'),
 
-                  path('list-create-customer/', drfViews.ListCreateCustomer.as_view(), name='list-create-customer'),
-                  path('rud-customer/<int:pk>', drfViews.RetrieveUpdateDestroyCustomer.as_view(), name='rud-customer'),
+                  path('lc-customer/', drfViews.ListCreateCustomer.as_view(), name='list-create-customer'),
+                  path('rud-customer/<int:customer_pk>', drfViews.RetrieveUpdateDestroyCustomer.as_view(), name='rud-customer'),
+                  path('rud-customer/<int:customer_pk>/lc-address', drfViews.ListCreateAddress.as_view(), name='lc-address'),
+                  path('rud-customer/<int:customer_pk>/rud-address/<int:address_pk>', drfViews.RetrieveUpdateDestroyAddress.as_view(), name='rud-address')
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)
