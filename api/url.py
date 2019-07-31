@@ -22,6 +22,7 @@ from api.v2.customer import viewsets
 router = routers.SimpleRouter()
 router.register('customers', viewsets.CustomerViewSet)
 router.register('addresses', viewsets.AddressViewSet)
+router.register('phones', viewsets.PhoneViewSet)
 app_name = 'apivs'
 urlpatterns = [
                   path('v1/', include('api.v1.url')),
