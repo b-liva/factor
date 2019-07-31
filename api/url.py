@@ -16,13 +16,16 @@ Including another URLconf
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework import routers
+from api.v2.customer import viewsets
 
-import request.views
-from request import views2
-
+router = routers.SimpleRouter()
+router.register('customers', viewsets.CustomerViewSet)
+router.register('addresses', viewsets.AddressViewSet)
+app_name = 'apivs'
 urlpatterns = [
                   path('v1/', include('api.v1.url')),
-                  path('v2/', include('api.v2.url')),
+                  path('v2/', include(router.urls)),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

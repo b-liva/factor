@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 
 import request.views
 from request import views2
-
+app_name = 'apiv1'
 urlpatterns = [
                   path('request/', include('api.v1.request.url.reqs')),
                   path('proformas/', include('api.v1.request.url.profs')),

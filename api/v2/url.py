@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 
 import request.views
 from request import views2
-
+app_name = 'apiv2'
 urlpatterns = [
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
