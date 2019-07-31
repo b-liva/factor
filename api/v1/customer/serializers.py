@@ -17,7 +17,7 @@ class AddressSerializers(serializers.ModelSerializer):
 
 
 class CustomerSerializer(serializers.ModelSerializer):
-    address_set = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='apivs:address-detail')
+    address_set = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Customer
