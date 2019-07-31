@@ -12,11 +12,17 @@ class CustomerViewSet(viewsets.ModelViewSet):
     # @detail_route(methods=['get'])
     @action(detail=True, methods=['get'])
     def addresses(self, request, pk=None):
-        print('entered addrs')
-        customer = self.get_object()
-        print(customer)
-        addresses = customer.address_set.all()
-        print(addresses)
+        self.pagination_class.page_size = 2
+        # customer = self.get_object()
+        # addresses = customer.address_set.all()
+        addresses = Address.objects.filter(customer_id=pk)
+
+        page = self.paginate_queryset(addresses)
+
+        if page is not None:
+            serializer = AddressSerializers(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
         serializer = AddressSerializers(addresses, many=True)
         return Response(serializer.data)
 
