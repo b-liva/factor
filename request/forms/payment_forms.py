@@ -28,13 +28,18 @@ class PaymentFrom(forms.ModelForm):
         widgets = {
             'date_fa': forms.DateInput(attrs={
                 'id': 'date_fa'
+            }),
+            'due_date': forms.DateInput(attrs={
+                'id': 'exp_date_fa'
             })
         }
 
         labels = {
             'xpref_id': 'شماره پیشفاکتور',
             'number': 'شماره پرداخت',
+            'type': 'نحوه پرداخت',
             'date_fa': 'تاریخ پرداخت',
+            'due_date': 'تاریخ سررسید',
             'amount': 'مبلغ',
             'summary': 'شرح',
         }

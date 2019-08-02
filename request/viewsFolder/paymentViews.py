@@ -222,12 +222,14 @@ def payments_export(request):
     columns = (
         'ردیف',
         'شماره پرداخت',
+        'تاریخ پرداخت',
+        'تاریخ سررسید',
+        'مبلغ',
+        'نوع سند',
         'مشتری',
         'شماره مجوز',
         'شماره پیش فاکتور',
         'شماره درخواست',
-        'مبلغ',
-        'تاریخ پرداخت',
     )
 
     for col_num in range(len(columns)):
@@ -240,16 +242,20 @@ def payments_export(request):
     #     pass
     for payment in payments:
         row_num += 1
-
+        print(payment.type)
+        type = payment.type.title if payment.type is not None else None
+        due_date = str(payment.due_date) if payment.due_date is not None else None
         exportables = [
             row_num,
             payment.number,
+            str(payment.date_fa),
+            due_date,
+            payment.amount,
+            type,
             payment.xpref_id.req_id.customer.name,
             payment.xpref_id.perm_number,
             payment.xpref_id.number,
             payment.xpref_id.req_id.number,
-            payment.amount,
-            str(payment.date_fa),
         ]
         # exportables.append(row_num)
         # exportables.append(payment.number)
@@ -261,7 +267,7 @@ def payments_export(request):
 
         for col_num in range(len(exportables)):
             ws.write(row_num, col_num, exportables[col_num], font_style)
-    ws.write(len(payments) + 2, 5, amount_sum)
+    ws.write(len(payments) + 2, 4, amount_sum)
     ws.cols_right_to_left = True
     wb.save(response)
     return response

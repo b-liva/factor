@@ -81,6 +81,11 @@
                         <tr>
                             <th class="text-center">ردیف</th>
                             <th class="text-center">شماره پرداخت</th>
+                            <th class="text-center">تاریخ پرداخت</th>
+                            <th class="text-center">تاریخ سررسید</th>
+                            <th class="text-center">مبلغ</th>
+                            <th class="text-center">نوع سند</th>
+
                             <th class="text-center">مشتری</th>
 
                             {% if not showHide %}
@@ -88,8 +93,7 @@
                             <th class="text-center">شماره مجوز</th>
                             <th class="text-center">شماره پیشفاکتور</th>
                             <th class="text-center">شماره درخواست</th>
-                            <th class="text-center">مبلغ</th>
-                            <th class="text-center">تاریخ پرداخت</th>
+
                             <th class="text-center"></th>
                         </tr>
                         <tbody class="">
@@ -97,6 +101,10 @@
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td>{{ payment.number }}</td>
+                                <td>{{ payment.date_fa }}</td>
+                                <td>{{ payment.due_date }}</td>
+                                <td>{{ payment.amount|intcomma }}</td>
+                                <td>{{ payment.type.title }}</td>
                                 <td>
                                     <a href="{% url 'customer_read' customer_pk=payment.xpref_id.req_id.customer.pk %}">{{ payment.xpref_id.req_id.customer.name }}</a>
                                 </td>
@@ -111,8 +119,7 @@
                                 </td>
                                 {% if not showHide %}
                                     <td>{{ payment.temp_number }}</td>{% endif %}
-                                <td>{{ payment.amount|intcomma }}</td>
-                                <td>{{ payment.date_fa }}</td>
+
                                 <td>
                                     <a class="btn btn-primary btn-xs"
                                        href="{% url 'payment_details' ypayment_pk=payment.pk %}" data-toggle="tooltip"

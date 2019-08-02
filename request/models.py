@@ -398,16 +398,25 @@ class PrefSpec(models.Model):
         return 'pk:%s | %s | %sKW - %sRPM - %sV' % (self.pk, self.qty, self.kw, self.rpm, self.voltage)
 
 
+class PaymentType(models.Model):
+    title = models.CharField(max_length=25)
+
+    def __str__(self):
+        return '%s' % self.title
+
+
 class Payment(models.Model):
     owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
     # xpref_id = models.ForeignKey(Xpref, on_delete=models.DO_NOTHING, related_name='payments')
     xpref_id = models.ForeignKey(Xpref, on_delete=models.DO_NOTHING)
 
     number = models.IntegerField(unique=True)
+    type = models.ForeignKey(PaymentType, on_delete=models.DO_NOTHING, blank=True, null=True)
     temp_number = models.IntegerField(unique=True, null=True, blank=True)
     amount = models.FloatField()
     payment_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
+    due_date = jmodels.jDateField(blank=True, null=True)
     summary = models.TextField(max_length=600, blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
