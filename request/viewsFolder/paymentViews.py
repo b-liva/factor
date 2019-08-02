@@ -383,6 +383,8 @@ def payment_edit(request, ypayment_pk):
         return redirect('errorpage')
     if payment.date_fa:
         payment.date_fa = payment.date_fa.togregorian()
+    if payment.due_date:
+        payment.due_date = payment.due_date.togregorian()
     form = payment_forms.PaymentFrom(request.POST or None, instance=payment)
     if form.is_valid():
         print('form is valid')
