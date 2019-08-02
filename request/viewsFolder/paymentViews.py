@@ -6,6 +6,8 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
+from customer.models import Customer
+from request.forms.payment_forms import PaymentSearchForm
 from request.views import find_all_obj
 from request.models import Xpref
 from request.models import Payment
@@ -113,24 +115,53 @@ def payment_insert(request):
 
 @login_required
 def payment_index(request):
-
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
     if not can_add:
         messages.error(request, 'Sorry, No way to access')
         return redirect('errorpage')
 
-    # payments = Payment.objects.all().order_by('date_fa').reverse()
+    payment_list = Payment.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
 
-    payments = Payment.objects.filter(is_active=True).order_by('date_fa').reverse()
-    if not request.user.is_superuser:
-        payments = payments.filter(Q(owner=request.user) | Q(xpref_id__req_id__colleagues=request.user)| Q(xpref_id__req_id__owner=request.user))
+    if not request.method == 'POST':
+        if 'payment-search-post' in request.session:
+            request.POST = request.session['payment-search-post']
+            request.method = 'POST'
 
-    if request.user.is_superuser:
-        payments = Payment.objects.filter(is_active=True).order_by('date_fa').reverse()
+    form = PaymentSearchForm()
+
+    if request.method == 'POST':
+        form = PaymentSearchForm(request.POST or None)
+        request.session['payment-search-post'] = request.POST
+        if request.POST['customer']:
+            if Customer.objects.filter(name=request.POST['customer']):
+                customer = Customer.objects.get(name=request.POST['customer'])
+                payment_list = payment_list.filter(xpref_id__req_id__customer=customer)
+            else:
+                payment_list = payment_list.filter(xpref_id__req_id__customer__name__contains=request.POST['customer'])
+        if request.POST['date_min']:
+            payment_list = payment_list.filter(date_fa__gte=request.POST['date_min'])
+        if request.POST['date_max']:
+            payment_list = payment_list.filter(date_fa__lte=request.POST['date_max'])
+
+        if request.POST['sort_by']:
+            payment_list = payment_list.order_by(f"{request.POST['sort_by']}")
+        if request.POST['dsc_asc'] == '2':
+            payment_list = payment_list.reverse()
+
+    elif request.method == 'GET':
+        form = PaymentSearchForm()
+
+    # payments = Payment.objects.filter(is_active=True).order_by('date_fa').reverse()
+    # if not request.user.is_superuser:
+    #     payments = payments.filter(Q(owner=request.user) | Q(xpref_id__req_id__colleagues=request.user) | Q(
+    #         xpref_id__req_id__owner=request.user))
+    #
+    # if request.user.is_superuser:
+    #     payments = Payment.objects.filter(is_active=True).order_by('date_fa').reverse()
     pref_sum = 0
     sum = 0
     debt_percent = 0
-    for payment in payments:
+    for payment in payment_list:
         for spec in payment.xpref_id.prefspec_set.all():
             pref_sum += spec.price * spec.qty
         sum += payment.amount
@@ -141,7 +172,7 @@ def payment_index(request):
     if pref_sum != 0:
         debt_percent = debt / pref_sum
     context = {
-        'payments': payments,
+        'payments': payment_list,
         'amount_sum': sum,
         'pref_sum': pref_sum,
         'debt': debt,
@@ -151,14 +182,23 @@ def payment_index(request):
     context.update({
         'title': 'پرداخت ها',
         'showHide': True,
+        'form': form,
     })
     return render(request, 'requests/admin_jemco/ypayment/index.html', context)
 
 
 @login_required
+def payment_index_cc(request):
+    if 'payment-search-post' in request.session:
+        request.session.pop('payment-search-post')
+    return redirect('payment_index')
+
+
+@login_required
 def payments_export(request):
+    amount_sum = ''
     try:
-        context = cache.get('profs_in_sessions')
+        context = cache.get('payments_in_sessions')
         payments = context['payments']
         amount_sum = context['amount_sum']
         pref_sum = context['pref_sum']
@@ -183,6 +223,7 @@ def payments_export(request):
         'ردیف',
         'شماره پرداخت',
         'مشتری',
+        'شماره مجوز',
         'شماره پیش فاکتور',
         'شماره درخواست',
         'مبلغ',
@@ -200,18 +241,27 @@ def payments_export(request):
     for payment in payments:
         row_num += 1
 
-        exportables = []
-        exportables.append(row_num)
-        exportables.append(payment.number)
-        exportables.append(payment.xpref_id.req_id.customer.name)
-        exportables.append(payment.xpref_id.req_id.number)
-        exportables.append(payment.xpref_id.number)
-        exportables.append(payment.amount)
-        exportables.append(str(payment.date_fa))
+        exportables = [
+            row_num,
+            payment.number,
+            payment.xpref_id.req_id.customer.name,
+            payment.xpref_id.perm_number,
+            payment.xpref_id.number,
+            payment.xpref_id.req_id.number,
+            payment.amount,
+            str(payment.date_fa),
+        ]
+        # exportables.append(row_num)
+        # exportables.append(payment.number)
+        # exportables.append(payment.xpref_id.req_id.customer.name)
+        # exportables.append(payment.xpref_id.req_id.number)
+        # exportables.append(payment.xpref_id.number)
+        # exportables.append(payment.amount)
+        # exportables.append(str(payment.date_fa))
 
         for col_num in range(len(exportables)):
             ws.write(row_num, col_num, exportables[col_num], font_style)
-
+    ws.write(len(payments) + 2, 5, amount_sum)
     ws.cols_right_to_left = True
     wb.save(response)
     return response

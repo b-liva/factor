@@ -28,6 +28,48 @@
                     <i class="fa fa-download" aria-hidden="true"></i> اکسل
                 </a>
             </form>
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="col-md-4">
+                    <div class="col-md-12">
+                        {{ form.customer.errors }}
+                        <label for="{{ form.customer.id_for_label }}">{{ form.customer.label }}</label>
+                        {{ form.customer }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.date_min.errors }}
+                        <label for="{{ form.date_min.id_for_label }}">{{ form.date_min.label }}</label>
+                        {{ form.date_min }}
+
+
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.date_max.errors }}
+                        <label for="{{ form.date_max.id_for_label }}">{{ form.date_max.label }}</label>
+                        {{ form.date_max }}
+
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-4">
+                        {{ form.sort_by.errors }}
+                        <label for="{{ form.sort_by.id_for_label }}">{{ form.sort_by.label }}</label>
+                        {{ form.sort_by }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.dsc_asc.errors }}
+                        <label for="{{ form.dsc_asc.id_for_label }}"> {{ form.dsc_asc.label }} </label>
+                        {{ form.dsc_asc }}
+                    </div>
+
+                </div>
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+                <a class="btn btn-danger btn-sm" href="{% url 'payment_index_cc' %}" data-toggle="tooltip"
+                   title="حذف فیلترها"><i class="fa fa-close"></i></a>
+            </form>
 
             {% if perms.request.add_payment and showHide %}
                 <a href="{% url 'pay_form' %}" class="btn btn-success btn-sm pull-left">
@@ -43,6 +85,7 @@
 
                             {% if not showHide %}
                                 <th class="text-center">شماره پرداخت اصلی</th>{% endif %}
+                            <th class="text-center">شماره مجوز</th>
                             <th class="text-center">شماره پیشفاکتور</th>
                             <th class="text-center">شماره درخواست</th>
                             <th class="text-center">مبلغ</th>
@@ -54,25 +97,37 @@
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td>{{ payment.number }}</td>
-                                <td><a href="{% url 'customer_read' customer_pk=payment.xpref_id.req_id.customer.pk %}">{{ payment.xpref_id.req_id.customer.name }}</a></td>
-                                <td><a href="{% url 'pref_details' ypref_pk=payment.xpref_id.pk %}">{{ payment.xpref_id.number }}</a></td>
-                                <td><a href="{% url 'request_details' request_pk=payment.xpref_id.req_id.pk %}">{{ payment.xpref_id.req_id.number }}</a></td>
+                                <td>
+                                    <a href="{% url 'customer_read' customer_pk=payment.xpref_id.req_id.customer.pk %}">{{ payment.xpref_id.req_id.customer.name }}</a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'pref_details' ypref_pk=payment.xpref_id.pk %}">{{ payment.xpref_id.perm_number }}</a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'pref_details' ypref_pk=payment.xpref_id.pk %}">{{ payment.xpref_id.number }}</a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'request_details' request_pk=payment.xpref_id.req_id.pk %}">{{ payment.xpref_id.req_id.number }}</a>
+                                </td>
                                 {% if not showHide %}
                                     <td>{{ payment.temp_number }}</td>{% endif %}
                                 <td>{{ payment.amount|intcomma }}</td>
                                 <td>{{ payment.date_fa }}</td>
                                 <td>
                                     <a class="btn btn-primary btn-xs"
-                                       href="{% url 'payment_details' ypayment_pk=payment.pk %}" data-toggle="tooltip" title="مشاهده">
+                                       href="{% url 'payment_details' ypayment_pk=payment.pk %}" data-toggle="tooltip"
+                                       title="مشاهده">
                                         <i class="fa fa-eye"></i>
                                     </a>
                                     {% if perms.request.add_payment and showHide %}
                                         <a class="btn btn-primary btn-xs btn-warning"
-                                           href="{% url 'payment_edit' ypayment_pk=payment.pk %}" data-toggle="tooltip" title="ویرایش">
+                                           href="{% url 'payment_edit' ypayment_pk=payment.pk %}" data-toggle="tooltip"
+                                           title="ویرایش">
                                             <i class="fa fa-pencil"></i>
                                         </a>
                                         <a class="btn btn-primary btn-xs btn-danger"
-                                           href="{% url 'payment_delete' ypayment_pk=payment.pk %}" data-toggle="tooltip" title="حذف"><i
+                                           href="{% url 'payment_delete' ypayment_pk=payment.pk %}"
+                                           data-toggle="tooltip" title="حذف"><i
                                                 class="fa fa-trash"></i> </a>
 
                                     {% endif %}
