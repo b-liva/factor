@@ -18,8 +18,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
 from api.v2.customer import viewsets
+from api.v2.request import viewsets as requestViewSets
 
 router = routers.SimpleRouter()
+router.register('requests', requestViewSets.RequestViewSets)
+router.register('reqspecs', requestViewSets.ReqSpecViewSets)
+router.register('proformas', requestViewSets.XprefViewSets)
+router.register('prefspecs', requestViewSets.PrefSpecViewSets)
+router.register('incomes', requestViewSets.IncomeViewSets)
 router.register('customers', viewsets.CustomerViewSet)
 router.register('addresses', viewsets.AddressViewSet)
 router.register('phones', viewsets.PhoneViewSet)
