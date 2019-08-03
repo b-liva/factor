@@ -3,6 +3,8 @@ from request.models import Requests, ReqSpec, Xpref, PrefSpec, Payment
 
 
 class RequestSerializers(serializers.ModelSerializer):
+    reqspec_set = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
     class Meta:
         model = Requests
         fields = "__all__"
@@ -15,6 +17,8 @@ class ReqSpecSerializers(serializers.ModelSerializer):
 
 
 class XprefSerializers(serializers.ModelSerializer):
+    prefspec_set = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
     class Meta:
         model = Xpref
         fields = "__all__"

@@ -18,6 +18,7 @@ class AddressSerializers(serializers.ModelSerializer):
 
 class CustomerSerializer(serializers.ModelSerializer):
     address_set = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    requests_set = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Customer
