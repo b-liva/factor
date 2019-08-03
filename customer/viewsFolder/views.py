@@ -4,22 +4,18 @@ from django.shortcuts import redirect
 from django.views.generic import (
     ListView,
     DetailView,
-    CreateView,
-    UpdateView
+    CreateView
 )
 
 
 from customer.models import Customer
 from customer.views import customers_payment
-from customer.mixins import OwnRequestMixin
 from request.models import (
     Requests,
-    Xpref,
 )
 from request.forms.forms import SpecForm
 from customer.forms import (
     CustomerRequestCreateForm,
-    CustomerRequestFileCreateForm,
 )
 
 

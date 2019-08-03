@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 import request.views
-from request.routers import router
+from z_mine.request.routers import router
 from request.viewsFolder import proformaViews
 
 urlpatterns = [

@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from ..models import Requests, Xpref, Payment
-from ..serializers import PaymentSerializer, XprefSerializer
+from ..models import Xpref, Payment
+from z_mine.request.serializers import PaymentSerializer, XprefSerializer
 
 
 class XprefViewSet(viewsets.ModelViewSet):
