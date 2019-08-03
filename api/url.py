@@ -19,8 +19,10 @@ from django.conf.urls.static import static
 from rest_framework import routers
 from api.v2.customer import viewsets
 from api.v2.request import viewsets as requestViewSets
+from api.v2.account import viewsets as accountViewSets
 
 router = routers.SimpleRouter()
+router.register('users', accountViewSets.UserViewSets)
 router.register('requests', requestViewSets.RequestViewSets)
 router.register('reqspecs', requestViewSets.ReqSpecViewSets)
 router.register('proformas', requestViewSets.XprefViewSets)
