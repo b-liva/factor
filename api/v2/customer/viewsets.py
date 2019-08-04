@@ -1,4 +1,4 @@
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action, detail_route
 from api.v1.customer.serializers import CustomerSerializer, AddressSerializers, PhoneSerializers
@@ -6,6 +6,7 @@ from customer.models import Customer, Address, Phone
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.DjangoModelPermissions,)
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
 
@@ -33,10 +34,12 @@ class AddressViewSet(mixins.CreateModelMixin,
                      mixins.DestroyModelMixin,
                      viewsets.GenericViewSet):
 
+    permission_classes = (permissions.DjangoModelPermissions,)
     queryset = Address.objects.all()
     serializer_class = AddressSerializers
 
 
 class PhoneViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.DjangoModelPermissions,)
     queryset = Phone.objects.all()
     serializer_class = PhoneSerializers
