@@ -39,7 +39,7 @@ class ReqSpecViewSets(viewsets.ModelViewSet):
 
 
 class XprefViewSets(viewsets.ModelViewSet):
-    permission_classes = (permissions.DjangoModelPermissions,)
+    permission_classes = (IsSuperUserOrOwner,)
     queryset = Xpref.objects.filter(is_active=True)
     serializer_class = requestSerializers.XprefSerializers
 
@@ -57,6 +57,6 @@ class PrefSpecViewSets(viewsets.ModelViewSet):
 
 
 class IncomeViewSets(viewsets.ModelViewSet):
-    permission_classes = (permissions.DjangoModelPermissions,)
+    permission_classes = (IsSuperUserOrOwner,)
     queryset = Payment.objects.filter(is_active=True)
     serializer_class = requestSerializers.IncomeSerializers
