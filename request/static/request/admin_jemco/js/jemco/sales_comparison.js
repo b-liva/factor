@@ -44,7 +44,9 @@ Vue.component('sales_comparison', {
         "</tr>" +
         "</thead>" +
         "<tbody>" +
-        "<tr v-for='res in response' @click='expData(res.id)'>" +
+        "<template  v-for='res in response'>" +
+
+        "<tr @click='res.show_details = !res.show_details'>" +
         "<td>{{res.name}}</td>" +
         "<td>{{res.count}}</td>" +
         "<td>{{res.ps_count}}</td>" +
@@ -56,6 +58,30 @@ Vue.component('sales_comparison', {
         "<td>{{pretty(res.perms_total_received)}} ({{pretty(100*res.perms_total_received/res.price, '0,0.00')}}%)</td>" +
         "<td>{{pretty(res.price - res.perms_total_received)}} ({{pretty(100*(res.price - res.perms_total_received)/res.price, '0,0.00')}}%)</td>" +
         "</tr>" +
+
+        "<tr v-if='res.show_details'>" +
+        "<td colspan='8'><table class='table tableFull text-center'>" +
+        "<thead>" +
+        "<tr>" +
+        "<td>شماره</td>" +
+        "<td colspan='5'>مشتری</td>" +
+        "<td>جمع پیش فاکتور</td>" +
+        "<td>دریافت شده</td>" +
+        "<td>مانده</td>" +
+        "</tr>" +
+        "</thead>" +
+        "<tbody>" +
+        "<tr v-for='perm in res.perms'>" +
+        "<td><a :href='perm.url' class='badge badge-light'>{{perm.perm_number}}</a></td>" +
+        "<td colspan='5'>{{perm.customer}}</td>" +
+        "<td>{{pretty(perm.proforma_total)}}</td>" +
+        "<td>{{pretty(perm.total_received)}}({{pretty(perm.total_received_percentage)}}%)</td>" +
+        "<td>{{pretty(perm.perm_receivable)}}({{pretty(perm.perm_receivable_percentage)}}%)</td>" +
+        "</tr>" +
+        "</tbody>" +
+        "</table></td>" +
+        "</tr>" +
+        "</template>" +
         "<tr>" +
         "<td>جمع</td>" +
         "<td>{{total_fn('count')}}</td>" +
@@ -165,6 +191,7 @@ Vue.component('sales_comparison', {
             };
             axios.post(url, params)
                 .then((result) => {
+                    console.log(result);
                     this.response = result.data.response;
                     this.project_base = result.data.project_base;
                     this.perms_count = result.data.perms_count;

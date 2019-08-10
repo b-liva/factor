@@ -8,8 +8,8 @@
                     <li><a href="{% url 'dashboard' %}">داشبورد</a></li>
                     {% if user.is_superuser %}
                         <li><a href="{% url 'dashboard2' %}">پیگیری</a></li>
-                        <li><a href="{% url 'sales_comparison' %}">dash</a></li>
                     {% endif %}
+                    <li><a href="{% url 'sales_comparison' %}">dash</a></li>
                     <li><a href="{% url 'tenders_admin' %}">مناقصات</a></li>
                     <li><a href="{% url 'app' %}">New Panel</a></li>
                 </ul>
@@ -37,9 +37,9 @@
                         {#                        <li><a href="{% url 'request_index_paginate' %}">درخواست ها</a></li>#}
                         <li><a href="{% url 'req_report' %}">گزارش درخواست</a></li>
                         <li><a href="{% url 'reqspec_search' %}"> گزارش ردیف</a></li>
-{#                                                <li><a href="{% url 'request_index_vue' %}">Vue درخواست ها</a></li>#}
+                        {#                                                <li><a href="{% url 'request_index_vue' %}">Vue درخواست ها</a></li>#}
 
-                                                <li><a href="{% url 'fsearch3' %}">گزارش ردیف vue</a></li>
+                        <li><a href="{% url 'fsearch3' %}">گزارش ردیف vue</a></li>
                         {% if request.user|has_group:"board" or request.user.is_superuser or 1 %}
                             <li><a href="{% url 'req_track:check_orders' %}">چک درخواست ها</a></li>
                         {% endif %}
@@ -137,7 +137,8 @@
                             <li><a href="{% url 'req_track:prof_followup_list2' %}">2پیگیری پیش فاکتور</a></li>
                             <li><a href="{% url 'req_track:prof_followup_find' %}">پیگیری پیش فاکتور ? </a></li>
                             <li><a href="{% url 'req_track:customer_compare_list' %}">customer compare list</a></li>
-                            <li><a href="{% url 'req_track:customer_compare_entered' %}">customer compare entered</a></li>
+                            <li><a href="{% url 'req_track:customer_compare_entered' %}">customer compare entered</a>
+                            </li>
                             <li><a href="{% url 'req_track:perms_index' %}">مجوزها(آپلود شده)</a></li>
                             <li><a href="{% url 'req_track:modify_perm' %}">اصلاح مجوزها</a></li>
                             <li><a href="{% url 'req_track:perms_not_entered' %}">مجوز وارد نشده</a></li>

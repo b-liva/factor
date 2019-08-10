@@ -1373,6 +1373,11 @@ def fetch_sales_data(request):
             'show_details': False,
             'name': name,
             'perms': [{
+                'proforma_total': a.total_proforma_price_vat()['price_vat'],
+                'total_received': f"{a.total_proforma_received()['received']}",
+                'total_received_percentage': a.total_proforma_received()['received_percent'],
+                'perm_receivable': a.total_proforma_received()['remaining'],
+                'perm_receivable_percentage': a.total_proforma_received()['remaining_percent'],
                 'perm_number': a.number,
                 'url': request.build_absolute_uri(reverse('pref_details', kwargs={'ypref_pk': a.pk})),
                 'customer': a.req_id.customer.name,
