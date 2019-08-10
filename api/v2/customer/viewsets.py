@@ -1,13 +1,14 @@
 from rest_framework import viewsets, mixins, permissions
 from rest_framework.response import Response
-from rest_framework.decorators import action, detail_route
-from api.v1.customer.serializers import CustomerSerializer, AddressSerializers, PhoneSerializers
+from rest_framework.decorators import action
+from api.serializers.customerSerializers import CustomerSerializer, AddressSerializers, PhoneSerializers
+from api.permissions.permissions import IsSuperUserOrOwner
 from customer.models import Customer, Address, Phone
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.DjangoModelPermissions,)
-    queryset = Customer.objects.all()
+    permission_classes = (IsSuperUserOrOwner, permissions.DjangoModelPermissions,)
+    queryset = Customer.objects.order_by('name')
     serializer_class = CustomerSerializer
 
     # @detail_route(methods=['get'])

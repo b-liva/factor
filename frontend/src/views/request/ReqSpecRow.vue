@@ -5,7 +5,7 @@
                 <div>
                     <v-layout row wrap>
                         <v-flex md10>
-                            {{specs.qty}} - {{specs.kw}} - {{specs.rpm}} - {{specs.voltage}} - {{specs.details}}
+                            {{specs.qty}} - {{specs.kw}} - {{specs.speed}} - {{specs.voltage}} - {{specs.details}}
                         </v-flex>
                         <v-flex md2>
                             <v-layout row wrap>
@@ -44,7 +44,7 @@
                                 </v-flex>
                                 <v-flex md2>
                                     <v-text-field :disabled="!row.editable" label="سرعت" type="number"
-                                                  v-model="row.rpm"></v-text-field>
+                                                  v-model="row.speed"></v-text-field>
                                 </v-flex>
                                 <v-flex md2>
                                     <v-text-field :disabled="!row.editable" label="ولتاژ" type="number"

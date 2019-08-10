@@ -1,7 +1,7 @@
-from django.shortcuts import get_object_or_404, redirect
-from rest_framework import generics, viewsets
+from django.shortcuts import get_object_or_404
+from rest_framework import generics
 
-from .serializers import CustomerSerializer, AddressSerializers
+from api.serializers.customerSerializers import CustomerSerializer, AddressSerializers
 from customer.models import Customer, Address
 
 

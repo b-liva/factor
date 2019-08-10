@@ -14,19 +14,24 @@
                 <v-flex md4>
 
                     <v-card-text>
-                        <v-form ref="form">
-                            <v-text-field label="شماره" type="number" v-model="reqData.number"></v-text-field>
+                        <v-form ref="req_form">
+                            <v-text-field label="شماره" type="number" v-model="reqData.number"
+                                          :rules="titleRules"></v-text-field>
                             <date-picker v-model="reqData.date"></date-picker>
+
                             <v-autocomplete
                                     v-model="reqData.customer.id"
                                     label="مشتری"
                                     :items="customersListDropDown"
                                     item-value="id"
                                     item-text="name"
+                                    :rules="required"
                             ></v-autocomplete>
                             <v-textarea label="جزئیات" prepend-icon="edit" v-model="reqData.details"></v-textarea>
-                            <v-btn class="success mx-0 mt-3" @click="submit" :loading="reqData.submitting">ذخیره</v-btn>
-                            <v-btn class="success mx-0 mt-3" @click="clearForm" :loading="reqData.submitting">پاکسازی
+                            <v-btn class="success mx-0 mt-3" @click="submit" :loading="reqData.submitting">ذخیره
+                            </v-btn>
+                            <v-btn class="success mx-0 mt-3" @click="clearForm" :loading="reqData.submitting">
+                                پاکسازی
                                 فرم
                             </v-btn>
                         </v-form>
@@ -62,6 +67,7 @@
     export default {
         data() {
             return {
+                error: '',
                 reqData: {
                     number: '',
                     date: '',
@@ -87,24 +93,62 @@
                 titleRules: [
                     v => v.length >= 3 || 'حداقل 5 حرف لازم است.'
                 ],
+                required: [v => !!v || 'فیلد اجباری'],
                 dialog: false,
             }
         },
         methods: {
+            saveRequest() {
+                if (this.$refs.req_form.validate() && this.reqData.date != '') {
+                    const url = 'api/v2/requests/';
+                    let params = {
+                        "number": this.reqData.number,
+                        "customer": this.reqData.customer.id,
+                        "date_fa": this.reqData.date,
+                        "is_active": true,
+                        "summary": this.reqData.details
+                    };
+                    axios.post(url, params).then(
+                        (response) => {
+                            console.log('success');
+                            console.log(response);
+                            if (response.status == 201) {
+                                this.$emit('request_added', {
+                                    'msg': 'درخواست با موفقیت ثبت گردید.',
+                                    'color': 'success',
+                                });
+                            }
+
+                        },
+                        (error) => {
+                            this.error = error;
+                            console.log(error.response);
+                            let msg = 'خطایی رخ داده است.';
+                            this.$emit('request_added', {
+                                'msg': msg,
+                                'color': 'warning',
+                            });
+                        }
+                    )
+                }
+
+            },
+            saveSpecs() {
+                let params = {
+                    'specs': this.specs,
+                };
+                console.log('saveSpecs should be implemented...');
+                console.log(params.specs);
+            },
             submit() {
-                if (this.$refs.form.validate()) {
+                if (this.$refs.req_form.validate()) {
                     this.reqData.submitting = true;
                     console.log('Data: ');
-                    let dataParam = {
-                        'request': this.reqData,
-                        'specs': this.specs,
-                    };
-                    console.log(dataParam);
+                    this.saveRequest();
+                    this.saveSpecs();
+
                     this.reqData.submitting = false;
-                    this.$emit('request_added', {
-                        'msg': 'درخواست با موفقیت ثبت گردید.',
-                        'color': 'success',
-                    });
+
                     this.reqData.show = true;
                 }
             },
@@ -117,13 +161,13 @@
             },
             getCustomer() {
                 this.customersListDropDown = [];
-                const url = 'api/customer/index';
+                const url = 'api/v2/customers/';
                 let params = {
                     'name': this.reqData.customer.name,
                 };
-                axios.post(url, params).then((respons) => {
+                axios.get(url).then((respons) => {
                     console.log(respons);
-                    this.customersListDropDown = respons.data.customers;
+                    this.customersListDropDown = respons.data;
                 }, (error) => {
                     console.log(error);
                 });

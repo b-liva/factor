@@ -30,15 +30,20 @@
                                 <date-picker v-model="profData.perm.due_date"></date-picker>
 
                             </template>
-                            <v-btn class="success mx-0 mt-3" @click="submit" :loading="profData.submitting">ذخیره</v-btn>
+                            <v-btn class="success mx-0 mt-3" @click="submit" :loading="profData.submitting">ذخیره
+                            </v-btn>
                         </v-form>
                     </v-card-text>
                 </v-flex>
                 <v-flex v-if="reqData.show" md8>
-                    <div v-for="(rspec, index) in reqData.specs" v-if="rspec.show">
-                        {{index}}: {{rspec.qty}} - {{rspec.kw}} - {{rspec.rpm}} - {{rspec.price}} - {{rspec.modified}}<v-icon @click="addToProforma(rspec)">add</v-icon><br/>
+                    <div v-for="(rspec, index) in specs" v-if="rspec.show">
+                        {{index}}: {{rspec.code}} - {{rspec.qty}} - {{rspec.kw}} - {{rspec.rpm}} - {{rspec.price}} - {{rspec.modified}} - TF:{{rspec.show}}
+                        <v-icon @click="addToProforma(rspec)">add</v-icon>
+                        <br/>
                     </div>
-                    <v-btn @click="addAllToProforma">all<v-icon>add</v-icon></v-btn>
+                    <v-btn @click="addAllToProforma">all
+                        <v-icon>add</v-icon>
+                    </v-btn>
                     <ProformaSpecRow
                             v-if="profData.show"
                             :row="profData"
@@ -57,6 +62,7 @@
 </template>
 
 <script>
+    import axios from 'axios';
     import VuePersianDatetimePicker from 'vue-persian-datetime-picker';
     import ProformaSpecRow from './ProformaSpecRow';
     import _ from 'underscore';
@@ -82,13 +88,55 @@
                 reqData: {
                     show: false,
                     number: '',
-                    specs: [
-                        {'id': 10, 'qty': 2, 'kw': 132, 'rpm': 1500, 'voltage': 400, 'show': true, 'price': 1000000,'sentQty': 0, 'modified': false},
-                        {'id': 11, 'qty': 1, 'kw': 160, 'rpm': 1000, 'voltage': 380, 'show': true, 'price': 1500000,'sentQty': 0, 'modified': false},
-                        {'id': 12, 'qty': 3, 'kw': 315, 'rpm': 3000, 'voltage': 400, 'show': true, 'price': 2000000,'sentQty': 0, 'modified': false},
-                        {'id': 13, 'qty': 2, 'kw': 75, 'rpm': 1500, 'voltage': 380, 'show': true, 'price': 3000000,'sentQty': 0, 'modified': false},
+                    specs: [],
+                    specsOld: [
+                        {
+                            'id': 10,
+                            'qty': 2,
+                            'kw': 132,
+                            'rpm': 1500,
+                            'voltage': 400,
+                            'show': true,
+                            'price': 1000000,
+                            'sentQty': 0,
+                            'modified': false
+                        },
+                        {
+                            'id': 11,
+                            'qty': 1,
+                            'kw': 160,
+                            'rpm': 1000,
+                            'voltage': 380,
+                            'show': true,
+                            'price': 1500000,
+                            'sentQty': 0,
+                            'modified': false
+                        },
+                        {
+                            'id': 12,
+                            'qty': 3,
+                            'kw': 315,
+                            'rpm': 3000,
+                            'voltage': 400,
+                            'show': true,
+                            'price': 2000000,
+                            'sentQty': 0,
+                            'modified': false
+                        },
+                        {
+                            'id': 13,
+                            'qty': 2,
+                            'kw': 75,
+                            'rpm': 1500,
+                            'voltage': 380,
+                            'show': true,
+                            'price': 3000000,
+                            'sentQty': 0,
+                            'modified': false
+                        },
                     ],
                 },
+                specs: [],
                 titleRules: [
                     v => v.length >= 3 || 'حداقل 5 حرف لازم است.'
                 ],
@@ -112,9 +160,37 @@
                     this.profData.show = true;
                 }
             },
+            getSpecs() {
+                const url = 'api/v2/requests/' + this.reqData.number + '/reqspecs';
+                console.log(url);
+                axios.get(url).then(
+                    (response) => {
+                        this.specs = [];
+                        response.data.forEach((spec) => {
+                            spec.show = true;
+                            console.log(spec);
+                            this.specs.push(spec);
+                        });
+                        console.log(this.specs);
+                    },
+                    (error) => {
+                        console.log('error')
+                    }
+                )
+            },
             getReqData() {
-                console.log('fn: getReqData');
-                this.reqData.show = true;
+                const url = 'api/v2/requests/' + this.reqData.number;
+                axios.get(url).then(
+                    (response) => {
+                        console.log(response);
+                        this.reqData = response.data;
+                        this.reqData.show = true;
+                        this.getSpecs();
+                    },
+                    (error) => {
+                        console.log(error);
+                    });
+
             },
             saveProforma: function () {
                 console.log('اطلاعات قابل ثبت');
@@ -123,7 +199,7 @@
             addAllToProforma: function () {
                 let list = [];
                 this.profData.show = true;
-                this.reqData.specs.forEach((e) => {
+                this.specs.forEach((e) => {
                     list.push(e);
                     e.show = false;
                 });
@@ -133,15 +209,15 @@
                 // });
                 this.profData.specs = list;
             },
-            addToProforma(reqSpec){
+            addToProforma(reqSpec) {
                 console.log(reqSpec);
                 console.log(this.profData);
                 this.profData.specs.push(reqSpec);
                 this.profData.show = true;
                 reqSpec.show = false;
             },
-            showReqSpec(id){
-                let result = this.reqData.specs.filter(object => {
+            showReqSpec(id) {
+                let result = this.specs.filter(object => {
                     return object.id === id;
                 });
                 result[0].show = true;

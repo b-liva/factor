@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from request.models import Requests, ReqSpec, Xpref, PrefSpec, Payment
+from request.models import Requests, ReqSpec, Xpref, PrefSpec, Payment, IMType, ICType, IPType, IEType
 
 
 class RequestSerializers(serializers.ModelSerializer):
@@ -33,4 +33,28 @@ class PrefSpecSerializers(serializers.ModelSerializer):
 class IncomeSerializers(serializers.ModelSerializer):
     class Meta:
         model = Payment
+        fields = "__all__"
+
+
+class ImTypeSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = IMType
+        fields = "__all__"
+
+
+class IcTypeSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = ICType
+        fields = "__all__"
+
+
+class IpTypeSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = IPType
+        fields = "__all__"
+
+
+class IeTypeSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = IEType
         fields = "__all__"

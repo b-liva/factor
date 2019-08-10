@@ -20,11 +20,17 @@ from rest_framework import routers
 from api.v2.customer import viewsets
 from api.v2.request import viewsets as requestViewSets
 from api.v2.account import viewsets as accountViewSets
+from api.v2.motorCodes import viewSets as motorCodeViewSets
 
 router = routers.SimpleRouter()
 router.register('users', accountViewSets.UserViewSets)
 router.register('requests', requestViewSets.RequestViewSets)
 router.register('reqspecs', requestViewSets.ReqSpecViewSets)
+router.register('imtypes', requestViewSets.ImTypeViewSets)
+router.register('ictypes', requestViewSets.IcTypeViewSets)
+router.register('iptypes', requestViewSets.IpTypeViewSets)
+router.register('ietypes', requestViewSets.IeTypeViewSets)
+router.register('motorCodes', motorCodeViewSets.MotorCodesViewSets)
 router.register('proformas', requestViewSets.XprefViewSets)
 router.register('prefspecs', requestViewSets.PrefSpecViewSets)
 router.register('incomes', requestViewSets.IncomeViewSets)
