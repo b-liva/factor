@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 import request.views
-from z_mine.request.routers import router
+# from z_mine.request.routers import router
 from request.viewsFolder import proformaViews
 
 urlpatterns = [
@@ -36,7 +36,7 @@ urlpatterns = [
                       path('prof_spec_form', request.viewsFolder.proformaViews.prof_spec_form, name='prof_spec_form'),
                       path('proforma-pdf', request.viewsFolder.proformaViews.proforma_pdf, name='proforma_pdf'),
                   ])),
-                  path('api/', include(router.urls)),
+                  # path('api/', include(router.urls)),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

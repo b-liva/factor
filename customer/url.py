@@ -7,7 +7,7 @@ from .viewsFolder.views import (
     CustomerRequestDetailsView,
     CustomerCreateRequestview,
 )
-from z_mine.customer.routers import router
+# from z_mine.customer.routers import router
 
 urlpatterns = [
     # FBV PATHS
@@ -72,6 +72,6 @@ urlpatterns = [
 
     ])),
     path('autocomplete', views.autocomplete, name='autocomplete'),
-    path('api/', include(router.urls)),
+    # path('api/', include(router.urls)),
     # path('ccustomers', TemplateView.as_view(template_name='api/customer.html')),
 ]

@@ -2,7 +2,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from z_mine.request.routers import router
+# from z_mine.request.routers import router
 from request.viewsFolder import paymentViews
 
 urlpatterns = [
@@ -22,7 +22,7 @@ urlpatterns = [
                       path('delete', paymentViews.payment_delete, name='payment_delete'),
                       path('edit', paymentViews.payment_edit, name='payment_edit'),
                   ])),
-                  path('api/', include(router.urls)),
+                  # path('api/', include(router.urls)),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)
