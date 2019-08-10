@@ -9,7 +9,8 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import json
 
-from accounts.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from customer.models import Customer
 from request.forms.forms import ReqFollowUpForm
 from request.forms.proforma_forms import ProfFollowUpForm

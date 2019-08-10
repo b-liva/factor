@@ -7,7 +7,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from accounts.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from request.forms.forms import RequestFrom, RequestFileForm
 from customer.forms import CustomerCreateRequestForm, CustomerCreateSpecForm
 from request.models import Requests, RequestFiles, ReqSpec, ProjectType

@@ -10,7 +10,8 @@ from allauth.account.forms import (LoginForm as allauthLoginForm,
 from allauth.account.views import LoginView
 from django.contrib.auth import password_validation
 # from django.contrib.auth.models import User
-from accounts.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from accounts import models
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm

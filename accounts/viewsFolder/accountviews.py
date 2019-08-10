@@ -5,7 +5,8 @@ from django.views.generic import (ListView,
                                   UpdateView,
                                   DeleteView
                                   )
-from accounts.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from customer.models import Customer
 from accounts.formsDir.user_edit_forms import AccountUpdateForm, CustomerProfileUpdateForm
 from braces import views as braces

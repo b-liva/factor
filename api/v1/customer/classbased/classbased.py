@@ -2,7 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView, UpdateView
 from api.v1 import mixins
-from accounts.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from customer.models import Customer
 
 

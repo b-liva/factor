@@ -1,5 +1,6 @@
 from rest_framework import viewsets, permissions
-from accounts.models import User, CustomerUser
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from api.serializers import accountSerializers
 
 
@@ -8,8 +9,3 @@ class UserViewSets(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = accountSerializers.UserSerializers
 
-
-class CustomerUserViewSets(viewsets.ModelViewSet):
-    permission_classes = (permissions.DjangoModelPermissions,)
-    queryset = CustomerUser.objects.all()
-    serializer_class = accountSerializers.CustomerUserSerializers

@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from accounts.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from accounts.formsDir.fbv_forms import UserEditForm
 from customer.models import Customer
 from customer.forms import CustomerForm, CustomerLimitedForm

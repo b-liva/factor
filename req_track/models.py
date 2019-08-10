@@ -1,5 +1,6 @@
 from django.db import models
-from accounts.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from django.utils.timezone import now
 from django_jalali.db import models as jmodels
 

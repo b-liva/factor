@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm, PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import render, redirect
-from accounts.models import User
+
 from django.contrib import auth, messages
 from django.template.response import TemplateResponse
 
@@ -15,7 +15,8 @@ from django.contrib.auth.views import (
     password_reset_done,
 )
 from django.db import models
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class qsome(models.QuerySet):
     pass

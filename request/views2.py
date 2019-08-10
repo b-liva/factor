@@ -14,7 +14,9 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils import timezone
 # from django.utils.datetime_safe import strftime
-from accounts.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 from request.filters.filters import RequestFilter
 from request.forms.forms import RequestCopyForm, CommentForm
 from request.forms.search import ReqSearchForm

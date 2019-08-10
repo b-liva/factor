@@ -4,7 +4,8 @@ import base64
 
 from django import template
 
-from accounts.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from req_track.models import ReqEntered
 from request.models import Requests, Xpref, ReqSpec, PrefSpec, Payment
 
