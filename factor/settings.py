@@ -37,8 +37,6 @@ ALLOWED_HOSTS = ['localhost', '192.168.1.4', 'testserver', '192.168.56.102', '12
 # When Debug is set to false
 # ALLOWED_HOSTS = ['*']
 
-AUTH_USER_MODEL = 'accounts.User'
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -264,3 +262,5 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 # DEBUG_TOOLBAR_CONFIG = {
 #     'SHOW_TOOLBAR_CALLBACK': lambda x: False,
 # }
+
+AUTH_USER_MODEL = 'accounts.User'

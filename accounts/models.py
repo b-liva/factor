@@ -1,9 +1,15 @@
 from django.db.models import Sum, F, FloatField, Count
 from django.urls import reverse
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import Permission
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import (
+    AbstractUser,
+    AbstractBaseUser,
+    Permission,
+    Group,
+    BaseUserManager,
+    PermissionsMixin,
+)
+
 # from customer.models import Customer
 # Create your models here.
 from request.models import Xpref, PrefSpec, Payment
@@ -90,4 +96,24 @@ class CustomerUser(User):
         return '%s' % self.last_name
 
 
+# class EmailUserManager(BaseUserManager):
+#
+#     def create_user(self, email, password=None, **extra_fields):
+#         """Create and saves a new user by email and password"""
+#         user = self.model(email=email, **extra_fields)
+#         user.set_password(password)
+#         user.save(using=self.db)
+#
+#         return user
 
+
+# class EmailUser(AbstractBaseUser, PermissionsMixin):
+#     """Custom user model that supports email instead of username"""
+#     email = models.EmailField(max_length=255, unique=True)
+#     name = models.CharField(max_length=255)
+#     is_active = models.BooleanField(default=True)
+#     is_staff = models.BooleanField(default=False)
+#
+#     objects = EmailUserManager()
+#
+#     USERNAME_FIELD = 'email'
