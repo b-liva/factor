@@ -340,10 +340,19 @@ def perm_index(request):
     res = []
     for p in prof_list:
         res.append(p)
-
+    prof_list_nums = [prof.number for prof in prof_list]
+    qty = {
+        'total': PrefSpec.objects.filter(xpref_id__number__in=prof_list_nums, price__gt=0).aggregate(total=Sum('qty'))['total'],
+        'qty_sent': PrefSpec.objects.filter(xpref_id__number__in=prof_list_nums, price__gt=0).aggregate(qty_sent=Sum('qty_sent'))['qty_sent'],
+        # 'total': prof_list.aggregate(total=Sum('qty'))['total'],
+        # 'sent': prof_list.aggregate(sent=Sum('sent'))['sent'],
+        # 'remain': prof_list.aggregate(remain=F('total')-F('sent'))['remain'],
+    }
+    qty['remain'] = qty['total'] - qty['qty_sent']
     context = {
         'permission': res,
         'form': form,
+        'qty': qty,
         'title': 'مجوز ساخت',
         'showDelete': True,
     }

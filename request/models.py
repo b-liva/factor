@@ -358,6 +358,15 @@ class Xpref(models.Model):
             'status': status
         }
 
+    def total_proforma_qty(self):
+        return PrefSpec.objects.filter(xpref_id=self, price__gt=0).aggregate(sum=Sum('qty'))['sum']
+
+    def total_proforma_qty_sent(self):
+        return PrefSpec.objects.filter(xpref_id=self, price__gt=0).aggregate(sum=Sum('qty_sent'))['sum']
+
+    def total_proforma_qty_remain(self):
+        return self.total_proforma_qty() - self.total_proforma_qty_sent()
+
     class Meta:
         permissions = (
             ('index_proforma', 'Can index Proforma'),

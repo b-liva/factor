@@ -167,10 +167,13 @@ def req_form(request):
     else:
         form = forms.RequestFrom()
         file_instance = forms.RequestFileForm()
-    return render(request, 'requests/admin_jemco/yrequest/req_form.html', {
+
+    context = {
         'form': form,
-        'req_img': file_instance
-    })
+        'req_img': file_instance,
+        'add_new': True,
+    }
+    return render(request, 'requests/admin_jemco/yrequest/req_form.html', context)
 
 
 @login_required
@@ -1137,6 +1140,10 @@ def request_edit_form(request, request_pk):
     if not Requests.objects.filter(is_active=True).filter(pk=request_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
+    c_cookie = request.COOKIES.get('customer')
+    print(f"coockie: {c_cookie}")
+    customer = Customer.objects.get(pk=c_cookie)
+
     req = Requests.objects.filter(is_active=True).get(pk=request_pk)
     colleagues = req.colleagues.all()
     colleague = False
@@ -1162,6 +1169,7 @@ def request_edit_form(request, request_pk):
     if form.is_valid() and img_form.is_valid():
         req_item = form.save(commit=False)
         # req_item.owner = request.user
+        req.customer = customer
         req_item.save()
         form.save_m2m()
         for f in files:
@@ -1171,10 +1179,12 @@ def request_edit_form(request, request_pk):
         return redirect('request_index_paginate')
 
     context = {
+        'customer': req.customer.name,
         'form': form,
         'req_img': img_form,
         'req_images': req_images,
-        'img_names': img_names
+        'img_names': img_names,
+        'add_new': False,
     }
     return render(request, 'requests/admin_jemco/yrequest/req_form.html', context)
 

@@ -117,6 +117,7 @@
                         <th scope="col" class="text-center">شماره درخواست</th>
                         <th scope="col" class="text-center">مشتری</th>
                         <th scope="col" class="text-center">تاریخ مجوز</th>
+
                         <th scope="col" class="text-center">تعداد کل</th>
                         <th scope="col" class="text-center">تعداد ارسال شده</th>
                         <th scope="col" class="text-center">تعداد باقیمانده</th>
@@ -149,9 +150,10 @@
                                 <a href="{% url 'customer_read' customer_pk=p.req_id.customer.pk %}">{{ p.req_id.customer.name }}</a>
                             </td>
                             <td>{{ p.perm_date }}</td>
-                            <td>{{ p.total_qty }}</td>
-                            <td>{{ p.total_qty_sent }}</td>
-                            <td>{{ p.qty_remaining }}</td>
+
+                            <td>{{ p.total_proforma_qty }}</td>
+                            <td>{{ p.total_proforma_qty_sent }}</td>
+                            <td>{{ p.total_proforma_qty_remain }}</td>
                             {#                            <td>{{ p|days }}</td>#}
                             <td class="{{ p|perm_warning_class }}">{{ p|perm_days }}</td>
                             <td>{% if p.issue_type %}{{ p.issue_type }}{% else %}{% endif %}</td>
@@ -179,6 +181,12 @@
                             </td>
                         </tr>
                     {% endfor %}
+                    <tr>
+                        <td colspan="6">جمع</td>
+                        <td>{{ qty.total }}</td>
+                        <td>{{ qty.qty_sent }}</td>
+                        <td>{{ qty.remain }}</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
