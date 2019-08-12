@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     'pytest_django',
     # 'debug_toolbar',
     'request.apps.RequestConfig',
-    'api.v1.apps.ApiConfig',
+    'api.apps.ApiConfig',
     'tender.apps.TenderConfig',
     'customer.apps.CustomerConfig',
     'fund.apps.FundConfig',
@@ -152,6 +152,7 @@ DATABASES = {
         'NAME': 'newfromlive',
         'USER': 'root',
         'PASSWORD': '',
+        # 'PASSWORD': 'livapass',
         'HOST': 'localhost',
         # 'OPTIONS': {
         #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"

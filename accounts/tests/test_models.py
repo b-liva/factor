@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class ModelTests(TestCase):
@@ -8,7 +9,7 @@ class ModelTests(TestCase):
         """test creating a new user with an username successful"""
         username = 'someUserName'
         password = 'TestPass123'
-        user = get_user_model().objects.create_user(
+        user = User.objects.create_user(
             username=username,
             password=password
         )

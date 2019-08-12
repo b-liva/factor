@@ -7,9 +7,15 @@ from customer.models import Customer, Address, Phone
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsSuperUserOrOwner, permissions.DjangoModelPermissions,)
+    permission_classes = (permissions.IsAuthenticated, IsSuperUserOrOwner, permissions.DjangoModelPermissions,)
     queryset = Customer.objects.order_by('name')
     serializer_class = CustomerSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
     # @detail_route(methods=['get'])
     @action(detail=True, methods=['get'])

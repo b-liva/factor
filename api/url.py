@@ -22,6 +22,8 @@ from api.v2.request import viewsets as requestViewSets
 from api.v2.account import viewsets as accountViewSets
 from api.v2.motorCodes import viewSets as motorCodeViewSets
 
+app_name = 'apivs'
+
 router = routers.SimpleRouter()
 router.register('users', accountViewSets.UserViewSets)
 router.register('requests', requestViewSets.RequestViewSets)
@@ -37,7 +39,6 @@ router.register('incomes', requestViewSets.IncomeViewSets)
 router.register('customers', viewsets.CustomerViewSet)
 router.register('addresses', viewsets.AddressViewSet)
 router.register('phones', viewsets.PhoneViewSet)
-app_name = 'apivs'
 urlpatterns = [
                   path('v1/', include('api.v1.url')),
                   path('v2/', include(router.urls)),
