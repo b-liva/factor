@@ -1170,7 +1170,6 @@ def request_edit_form(request, request_pk):
     if form.is_valid() and img_form.is_valid():
         req_item = form.save(commit=False)
         # req_item.owner = request.user
-        req_item.customer = customer
         req_item.save()
         form.save_m2m()
         for f in files:
