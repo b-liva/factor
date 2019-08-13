@@ -690,6 +690,7 @@ def request_insert(request):
 
 @login_required
 def request_index(request):
+    # todo: should be removed.
     # requests =request_form Requests.objects.all()
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
     if not can_index:
