@@ -25,17 +25,22 @@ class PublicRequestViewsTests(TestCase):
         )
 
 
-class PirvateCustomerViewsTest(TestCase):
+class PrivateCustomerViewsTest(TestCase):
     """Tests Request privately avaible"""
 
     def setUp(self):
-        self.user = funcs.sample_user()
-        self.superuser = funcs.sample_user(username='superuser')
-        self.superuser.is_superuser = True
-        self.superuser.save()
+        # self.user = funcs.sample_user()
+
+        # Superuser.
+        self.superuser = funcs.sample_superuser(username='superuser')
+
+        # ordinary user: not superuser, not expert, not...
+        self.user = funcs.sample_user(username='user02')
         self.client.force_login(user=self.user)
-        self.user2 = funcs.sample_user(username='user02')
-        self.customer = funcs.sample_customer(name='name123', owner=self.user2)
+        self.customer = funcs.sample_customer(name='name123', owner=self.user)
+
+        # Expert user.
+        self.ex_user = funcs.login_as_expert()
 
     def test_retrieve_request_list_view(self):
         """Test private list requests: superuser sees all, experts sees themselves"""
@@ -45,7 +50,7 @@ class PirvateCustomerViewsTest(TestCase):
         response = self.client.get(reverse('request_index'))
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
-        self.ex_user = funcs.login_as_expert()
+        # self.ex_user = funcs.login_as_expert(username='exuser')
         self.client.force_login(user=self.ex_user)
         funcs.sample_request(owner=self.ex_user, number=13245, customer=self.customer)
         res = self.client.get(reverse('request_index'))
@@ -61,3 +66,32 @@ class PirvateCustomerViewsTest(TestCase):
         # todo: should be implemented.
 
         return True
+
+    def test_retrieve_request_view(self):
+        """Test retrieve request as superuser, expert_user, ordinary authenticated user"""
+        funcs.sample_request(number=1545, owner=self.ex_user, customer=funcs.sample_customer(owner=self.ex_user))
+        funcs.sample_request(number=15455, owner=self.ex_user, customer=funcs.sample_customer(owner=self.ex_user))
+        funcs.sample_request(number=1645, owner=self.user, customer=funcs.sample_customer(owner=self.ex_user))
+
+        # expert user:
+        self.client.force_login(user=self.ex_user)
+        response = self.client.get(reverse('request_details', kwargs={'request_pk': 1}))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.context['request'].number, 1545)
+
+        response = self.client.get(reverse('request_details', args=[3]))
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+
+        # ordinary user:
+        self.client.force_login(user=self.user)
+        response = self.client.get(reverse('request_details', args=[1]))
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        response = self.client.get(reverse('request_details', args=[3]))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.client.force_login(user=self.superuser)
+        response = self.client.get(reverse('request_details', args=[1]))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.get(reverse('request_details', args=[3]))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

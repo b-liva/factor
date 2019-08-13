@@ -14,16 +14,19 @@ def sample_user(username='testuser', password='testpass123'):
     return User.objects.create_user(username, password)
 
 
+def sample_superuser(username='superuser'):
+    user = sample_user(username=username)
+    user.is_superuser = True
+    user.save()
+    return user
+
+
 def sample_customer_type(name='پتروشیمی'):
     """Create a sample customer type"""
     return Type.objects.create(name=name)
 
 
-def sample_customer(
-        owner=None,
-        name='سازش',
-        date2=datetime.datetime.now(),
-        customer_type=None):
+def sample_customer(owner=None, name='سازش', date2=datetime.datetime.now(), customer_type=None):
     if owner is None:
         owner = sample_user()
     if customer_type is None:
@@ -37,11 +40,7 @@ def sample_customer(
     return customer
 
 
-def sample_request(
-        owner=None,
-        number=None,
-        customer=None,
-):
+def sample_request(owner=None, number=None, customer=None):
     if owner is None:
         owner = sample_user()
     if customer is None:
@@ -54,8 +53,8 @@ def sample_request(
     return req
 
 
-def login_as_expert():
-    ex_user = sample_user(username='zarif')
+def login_as_expert(username='expert_user'):
+    ex_user = sample_user(username=username)
     sale_expert_group = Group.objects.create(name='sale_expert')
     sale_expert_group.permissions.add(
         Permission.objects.get(codename='add_customer', content_type__app_label='customer'),
