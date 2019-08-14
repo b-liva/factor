@@ -2,25 +2,31 @@ from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from api.permissions.permissions import IsSuperUserOrOwner
-from customer.models import Customer
 from request.models import Requests, ReqSpec, Xpref, PrefSpec, Payment, IMType, ICType, IPType, IEType
 from api.serializers import requestSerializers
-from api.permissions import permissions as ApiPermisssions
-import jdatetime, datetime
+from api.permissions import permissions as CustomPerms
+import datetime
+import jdatetime
+
 
 class RequestViewSets(viewsets.ModelViewSet):
     permission_classes = (
-        IsSuperUserOrOwner,
-        # permissions.DjangoModelPermissions,
+        permissions.IsAuthenticated,
+        CustomPerms.IsSuperUserOrOwner,
+        CustomPerms.CustomDjangoModelPermission,
     )
     queryset = Requests.objects.filter(is_active=True)
+    deleted_queryset = Requests.objects.filter(is_active=False)
     lookup_field = 'number'
     serializer_class = requestSerializers.RequestSerializers
 
-    # def get_queryset(self):
-    #     queryset = self.get_queryset()
-    #     return queryset
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            # todo: everywhere should updated with actives or is_active=True
+            # todo: In the next version deletion should be cascaded but a copy of the object should be created
+            # todo: some permission defenition required. such as list all. update all, delete all, etc.
+            return self.queryset
+        return self.queryset.filter(owner=self.request.user)
 
     def date_correction(self, date):
         """
@@ -47,7 +53,7 @@ class RequestViewSets(viewsets.ModelViewSet):
 
 class ReqSpecViewSets(viewsets.ModelViewSet):
     permission_classes = (
-        ApiPermisssions.IsSuperUserOrOwner,
+        CustomPerms.IsSuperUserOrOwner,
         permissions.DjangoModelPermissions,
     )
     queryset = ReqSpec.objects.filter(is_active=True)
@@ -55,7 +61,7 @@ class ReqSpecViewSets(viewsets.ModelViewSet):
 
 
 class XprefViewSets(viewsets.ModelViewSet):
-    permission_classes = (IsSuperUserOrOwner,)
+    permission_classes = (CustomPerms.IsSuperUserOrOwner,)
     queryset = Xpref.objects.filter(is_active=True)
     serializer_class = requestSerializers.XprefSerializers
 
@@ -73,7 +79,7 @@ class PrefSpecViewSets(viewsets.ModelViewSet):
 
 
 class IncomeViewSets(viewsets.ModelViewSet):
-    permission_classes = (IsSuperUserOrOwner,)
+    permission_classes = (CustomPerms.IsSuperUserOrOwner,)
     queryset = Payment.objects.filter(is_active=True)
     serializer_class = requestSerializers.IncomeSerializers
 

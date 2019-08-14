@@ -1,6 +1,10 @@
 from rest_framework import permissions
 from django.shortcuts import get_object_or_404
-from request.models import ReqSpec, Requests
+
+
+class CustomDjangoModelPermission(permissions.DjangoModelPermissions):
+    def __init__(self):
+        self.perms_map.update({'GET': ['%(app_label)s.index_%(model_name)s']})
 
 
 class IsSuperUserOrOwner(permissions.DjangoModelPermissions):
@@ -11,13 +15,11 @@ class IsSuperUserOrOwner(permissions.DjangoModelPermissions):
     def has_permission(self, request, view):
         # if request.method == 'DELETE' or request.method == 'PUT' or :
         perm = super().has_permission(request, view)
-        print('perm: ', perm)
 
         mdl = self._queryset(view).model
 
         if 'pk' in view.kwargs:
             obj = get_object_or_404(mdl, pk=view.kwargs['pk'])
-            print(obj)
             return request.user == obj.owner or request.user.is_superuser
         return perm
 
