@@ -36,6 +36,11 @@ class PrivateRequestApiTests(TestCase):
         self.ex_user = funcs.login_as_expert()
         self.client.force_authenticate(user=self.user)
 
+        self.request_payload = {
+            'number': 1000,
+            'customer': funcs.sample_customer(owner=self.user),
+        }
+
     def test_retrieve_requests_api(self):
         """Test list requests only auth users. users see own requests. should have list_requests permission"""
         customer1 = funcs.sample_customer(name='customer1', owner=self.user)
@@ -61,5 +66,31 @@ class PrivateRequestApiTests(TestCase):
         serializer = requestSerializers.RequestSerializers(reqs, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
+
+    def test_create_requests_successful_api(self):
+
+        res = self.client.post(REQUESTS_URL, self.request_payload)
+        exist = Requests.objects.filter(
+            owner=self.user,
+            customer=self.request_payload['customer'],
+            number=self.request_payload['number'],
+        ).exists()
+
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertFalse(exist)
+
+    def test_create_request_by_expert_successful_api(self):
+
+        self.client.force_authenticate(user=self.ex_user)
+        res = self.client.post(REQUESTS_URL, self.request_payload)
+
+        exist = Requests.objects.filter(
+            owner=self.ex_user,
+            customer=self.request_payload['customer'],
+            number=self.request_payload['number'],
+        ).exists()
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(exist)
 
 

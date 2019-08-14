@@ -37,11 +37,6 @@ class RequestViewSets(viewsets.ModelViewSet):
         date = date.replace('/', '-')
         return jdatetime.datetime.strptime(date, "%Y-%m-%d").date().togregorian()
 
-    def create(self, request, *args, **kwargs):
-        request.data['owner'] = request.user.pk
-        request.data['date_fa'] = self.date_correction(request.data['date_fa'])
-        return super(RequestViewSets, self).create(request, *args, **kwargs)
-
     @action(detail=True, methods=['get'])
     def reqspecs(self, request, pk=None, **kwargs):
         reqspecs = ReqSpec.objects.filter(
