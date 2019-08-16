@@ -132,3 +132,43 @@ class PrivateRequestApiTests(TestCase):
         funcs.sample_request(owner=self.superuser, customer=self.customer, number=981011)
         res = self.client.delete(reverse('apivs:requests-detail', args=[981011]))
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_request_api(self):
+        """Test update a request, logged in and has permission"""
+        self.client.force_authenticate(user=self.ex_user)
+        funcs.sample_request(number=981010, customer=self.customer, owner=self.ex_user)
+
+        payload = {
+            'customer': funcs.sample_customer(owner=self.user, name='mapna').pk,
+            'number': 981011,
+        }
+
+        res = self.client.patch(reverse('apivs:requests-detail', args=[981010]), payload)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data['customer'], payload['customer'])
+        self.assertEqual(res.data['number'], 981011)
+
+    def test_update_request_limited_api(self):
+        """Test can't update other users request. Even if logged in and has permission."""
+        self.client.force_authenticate(user=self.ex_user)
+
+        funcs.sample_request(owner=self.superuser, customer=self.customer, number=981000)
+
+        payload = {
+            'customer': funcs.sample_customer(owner=self.user, name='mapna').pk,
+        }
+
+        res = self.client.patch(reverse('apivs:requests-detail', args=[981000]), payload)
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_request_superuser_api(self):
+        """Test superuser can update other users requests."""
+        funcs.sample_request(owner=self.ex_user, customer=self.customer, number=981010)
+        self.client.force_authenticate(user=self.superuser)
+
+        payload = {
+            'customer': funcs.sample_customer(owner=self.user, name='mapna').pk,
+        }
+
+        res = self.client.patch(reverse('apivs:requests-detail', args=[981010]), payload)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)

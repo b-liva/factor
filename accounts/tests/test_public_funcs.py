@@ -63,6 +63,7 @@ def login_as_expert(username='expert_user'):
         Permission.objects.get(codename='index_requests', content_type__app_label='request'),
         Permission.objects.get(codename='add_requests', content_type__app_label='request'),
         Permission.objects.get(codename='delete_requests', content_type__app_label='request'),
+        Permission.objects.get(codename='change_requests', content_type__app_label='request'),
     )
     ex_user.groups.add(sale_expert_group)
     ex_user.super_user = True
