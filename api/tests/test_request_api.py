@@ -131,7 +131,7 @@ class PrivateRequestApiTests(TestCase):
         self.client.force_authenticate(user=self.ex_user)
         funcs.sample_request(owner=self.superuser, customer=self.customer, number=981011)
         res = self.client.delete(reverse('apivs:requests-detail', args=[981011]))
-        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_request_api(self):
         """Test update a request, logged in and has permission"""
@@ -159,7 +159,7 @@ class PrivateRequestApiTests(TestCase):
         }
 
         res = self.client.patch(reverse('apivs:requests-detail', args=[981000]), payload)
-        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_request_superuser_api(self):
         """Test superuser can update other users requests."""

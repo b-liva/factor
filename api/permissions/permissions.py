@@ -16,9 +16,13 @@ class IsSuperUserOrOwner(permissions.DjangoModelPermissions):
         # if request.method == 'DELETE' or request.method == 'PUT' or :
         perm = super().has_permission(request, view)
         mdl = self._queryset(view).model
-
+        print(mdl, perm)
         if 'pk' in view.kwargs:
+            print(view.kwargs['pk'])
             obj = get_object_or_404(mdl, pk=view.kwargs['pk'])
+            return request.user == obj.owner or request.user.is_superuser
+        if 'number' in view.kwargs:
+            obj = get_object_or_404(mdl, number=view.kwargs['number'])
             return request.user == obj.owner or request.user.is_superuser
         return perm
 
