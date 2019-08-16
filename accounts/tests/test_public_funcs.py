@@ -41,7 +41,7 @@ def sample_customer(owner=None, name='سازش', date2=datetime.datetime.now(), 
 
 
 def sample_request(owner=None, number=None, customer=None):
-    if owner is None:
+    if not owner:
         owner = sample_user()
     if customer is None:
         customer = sample_customer()
@@ -62,6 +62,7 @@ def login_as_expert(username='expert_user'):
         Permission.objects.get(codename='read_customer', content_type__app_label='customer'),
         Permission.objects.get(codename='index_requests', content_type__app_label='request'),
         Permission.objects.get(codename='add_requests', content_type__app_label='request'),
+        Permission.objects.get(codename='delete_requests', content_type__app_label='request'),
     )
     ex_user.groups.add(sale_expert_group)
     ex_user.super_user = True

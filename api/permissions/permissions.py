@@ -15,7 +15,6 @@ class IsSuperUserOrOwner(permissions.DjangoModelPermissions):
     def has_permission(self, request, view):
         # if request.method == 'DELETE' or request.method == 'PUT' or :
         perm = super().has_permission(request, view)
-
         mdl = self._queryset(view).model
 
         if 'pk' in view.kwargs:
