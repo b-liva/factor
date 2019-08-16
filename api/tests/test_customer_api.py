@@ -94,16 +94,17 @@ class PrivateCustomerApiTests(TestCase):
         self.login_as_expert()
         payload = {
             'name': 'sazesh',
-            'date2': datetime.datetime.now(),
-            'type': self.customer_type,
+            'type': self.customer_type.pk,
         }
         res = self.client.post(CUSTOMERS_URL, payload)
+        print(res.data)
         exists = Customer.objects.filter(
             owner=self.ex_user,
-            date2=payload['date2'],
             type=payload['type'],
             name=payload['name'],
         ).exists()
+
+
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(exists)
 

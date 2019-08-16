@@ -24,3 +24,5 @@ class CustomerSerializer(serializers.ModelSerializer):
         model = Customer
         # fields = ('pk', 'name', 'owner', 'type')
         fields = "__all__"
+        read_only_fields = ['owner', 'date', 'date2']
+

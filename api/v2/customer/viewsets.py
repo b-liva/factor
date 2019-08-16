@@ -1,3 +1,6 @@
+import datetime
+
+import jdatetime
 from rest_framework import viewsets, mixins, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -15,7 +18,11 @@ class CustomerViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(owner=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        if 'date2' not in self.request.data:
+            date2 = jdatetime.datetime.now().date()
+        else:
+            date2 = self.request.data['date2']
+        serializer.save(owner=self.request.user, date2=date2)
 
     # @detail_route(methods=['get'])
     @action(detail=True, methods=['get'])
