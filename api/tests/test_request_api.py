@@ -38,7 +38,8 @@ class PrivateRequestApiTests(TestCase):
 
         self.request_payload = {
             'number': 1000,
-            'customer': funcs.sample_customer(owner=self.user),
+            'customer': funcs.sample_customer(owner=self.user).pk,
+            "date_fa": "1398-05-06",
         }
 
     def test_retrieve_requests_api(self):
@@ -85,12 +86,11 @@ class PrivateRequestApiTests(TestCase):
         res = self.client.post(REQUESTS_URL, self.request_payload)
 
         exist = Requests.objects.filter(
-            owner=self.ex_user,
             customer=self.request_payload['customer'],
             number=self.request_payload['number'],
         ).exists()
 
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(exist)
 
 

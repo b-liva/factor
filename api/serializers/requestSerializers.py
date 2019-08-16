@@ -18,11 +18,13 @@ class RequestSerializers(serializers.ModelSerializer):
     class Meta:
         model = Requests
         fields = "__all__"
+        read_only_fields = ['owner']
 
     def create(self, validated_data):
-        validated_data['date_fa'] = self.date_correction(str(self.validated_data.get('date_fa')))
+        if 'date_fa' in self.validated_data:
+            validated_data['date_fa'] = self.date_correction(str(self.validated_data.get('date_fa')))
         validated_data['owner'] = self.context['request'].user
-        return super(RequestSerializers, self).create(validated_data)
+        return super().create(validated_data)
 
 
 class ReqSpecSerializers(serializers.ModelSerializer):
