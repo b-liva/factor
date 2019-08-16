@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group, Permission
 from customer.models import Type, Customer
 import datetime
 
-from request.models import Requests
+from request.models import Requests, ReqSpec, ProjectType, RpmType
 
 User = get_user_model()
 
@@ -64,8 +64,20 @@ def login_as_expert(username='expert_user'):
         Permission.objects.get(codename='add_requests', content_type__app_label='request'),
         Permission.objects.get(codename='delete_requests', content_type__app_label='request'),
         Permission.objects.get(codename='change_requests', content_type__app_label='request'),
+        Permission.objects.get(codename='read_reqspecs', content_type__app_label='request'),
     )
     ex_user.groups.add(sale_expert_group)
     ex_user.super_user = True
     ex_user.save()
     return ex_user
+
+
+def sample_reqspec(req, **params):
+    defaults = {
+        'type': ProjectType.objects.create(title='روتین'),
+        'rpm_new': RpmType.objects.create(rpm=1500, pole=4),
+        'qty': 132, 'kw': 132, 'rpm': 1500, 'voltage': 380,
+    }
+    defaults.update(params)
+
+    return ReqSpec.objects.create(req_id=req, **defaults)
