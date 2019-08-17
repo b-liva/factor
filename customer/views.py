@@ -61,23 +61,16 @@ def customer_create(request):
 @login_required
 def customer_read(request):
     customers = Customer.objects.all()
-    print(customers)
     x = 0
     for customer in customers:
         reqs = Requests.objects.filter(is_active=True).filter(customer=customer)
-        print('customer name: ' + customer.name)
         for req in reqs:
-            print('     req No. ' + str(req.number))
             xprefs = Xpref.objects.filter(is_active=True).filter(req_id=req)
 
             for xpref in xprefs:
-                print('         prefactor number ' + str(xpref.number))
                 specs = PrefSpec.objects.filter(xpref_id=xpref)
                 payments = Payment.objects.filter(is_active=True).filter(xpref_id=xpref)
-                for payment in payments:
-                    print('             payment: ' + str(payment.amount))
                 x += 1
-    print('total orders ' + str(x))
 
     return render(request, 'customer/read.html')
 
@@ -124,13 +117,6 @@ def customer_insert(request):
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
-    # print('001')
-    # form = forms.CustomerForm(request.POST)
-    # if form.is_valid():
-    #     print('form is valid')
-    #     form.save(commit=True)
-    #     return customer_index(request)
-    # print('002')
 
     name = request.POST['name']
     code = request.POST['code']
@@ -185,7 +171,6 @@ def customer_index_vue(request):
 
 @login_required
 def customer_index_vue_refresh(request):
-    print('inside view')
     # data = json.loads(request.body.decode('utf-8'))
     customers = Customer.objects.all()
     response = [{
@@ -237,10 +222,8 @@ def customer_search_vue(request):
     response = {}
     data = json.loads(request.body.decode('utf-8'))
     name = data['name']
-    print(name)
     try:
         customers = Customer.objects.filter(name__contains=name)
-        print('count: ', customers.count())
         response = [{
             'id': a.id,
             'name': a.name,
@@ -451,7 +434,6 @@ def addr_list(request, customer_pk):
         for p in phones:
             phoneList.append(p.phone_number)
         addrs_dict[a.pk] = phoneList
-    print(addrs_dict)
 
     context = {
         'customer': c,
@@ -485,9 +467,7 @@ def autocomplete(request):
     # lookup = requests.utils.quote(request.GET['query'])
     lookup = str(request.GET['query'])
     list = {}
-    print(f'request: {lookup}')
     customers = Customer.objects.filter(name__contains=lookup)
-    print(customers)
     list2 = []
     list3 = {}
     for c in customers:
@@ -497,7 +477,5 @@ def autocomplete(request):
         }
         list2.append(list)
     list3['suggestions'] = list2
-    print(list2)
-    print(f'list3: {list3}')
     return JsonResponse(list3, safe=False)
     # return HttpResponse(list2)

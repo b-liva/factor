@@ -40,7 +40,6 @@ def find_proformas(amount, profs):
         prefspc = p.prefspec_set.all()
         for p in prefspc:
             amount += p.price * p.qty
-        print(p)
     return amount
 
 
@@ -55,7 +54,6 @@ def kwjs(request):
     days = 30
     if request.method == "POST":
         days = int(request.POST['days'])
-        print(f'request is post and days: {days}')
     today = jdatetime.date.today()
     startDate = today + jdatetime.timedelta(-days)
 

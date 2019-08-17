@@ -42,12 +42,9 @@ class CustomerRequestsListView(ListView):
                 proformaDict = {}
                 pList.append(p)
                 payments = p.payment_set.all()
-                print(f'payments is: {payments}')
                 for pmnt in payments:
                     paymentList.append(pmnt)
                 proformaDict['payments'] = paymentList
-
-            print(f'***payment list is: {paymentList}')
 
             proformaDict['proformas'] = req_profs
             reqspec = customer_req.reqspec_set.all()
@@ -58,7 +55,6 @@ class CustomerRequestsListView(ListView):
             totalRes[customer_req.pk] = tempDict
 
         totalpaymenst = customer.payment_set.all()
-        print(f'total result: {totalRes}')
         payList = []
         for pay in totalpaymenst:
             payList.append(pay.amount)
@@ -90,7 +86,6 @@ class CustomerRequestDetailsView(DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         req = self.get_object()
-        # print(req.customer.user.last_name)
         if request.user != req.customer.user:
             messages.error(request, 'مجاز نیستید.')
             return redirect('errorpage')
@@ -162,10 +157,6 @@ class CustomerRequestDetailsView(DetailView):
             newname = name.split('/')
             las = newname[-1]
             img_names[r.pk] = las
-
-        # for x, y in nested_files['ximg'].items():
-        #     print(f"last is: {y['name']}")
-
 
         respone = {
             'req': req,

@@ -14,17 +14,12 @@ def has_perm_or_is_owner(user_obj, permissions, instance=None, colleague=None):
         else:
             return colleague
     if instance is not None:
-        print(instance)
-        print(user_obj)
-        print(instance.owner)
         if user_obj == instance.owner:
-            print('01')
             if hasattr(instance, 'is_active'):
                 return instance.is_active
             else:
                 return True
         if hasattr(instance, 'customer') and not hasattr(instance, 'xpref_id'):
-            print('02')
             if user_obj == instance.customer.user:
                 return True
         elif hasattr(instance, 'req_id') and hasattr(instance.req_id, 'customer'):

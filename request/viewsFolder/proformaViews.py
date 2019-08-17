@@ -713,13 +713,11 @@ def pref_delete(request, ypref_pk):
 @login_required
 def delete_proforma_no_prefspec(request, ypref_pk):
     try:
-        print('h01')
         prof = Xpref.objects.get(pk=ypref_pk)
         print(prof)
         prefspecs = prof.prefspec_set.filter(price__gt=0)
         print(prefspecs.values('price'))
         if prefspecs.count() == 0:
-            print('h02')
             prof.delete()
     except:
         print('h03')
@@ -801,9 +799,7 @@ def pro_form(request):
         else:
             print('form is not Valid')
     else:
-        print('001')
         if 'request_pk' in request.session:
-            print('002')
             reqq = Requests.objects.filter(pk=request.session['request_pk'])
             print(reqq)
             data = {
@@ -1098,11 +1094,9 @@ def prof_spec_form(request, ypref_pk):
         return redirect('errorpage')
 
     if request.method == 'POST':
-        print('01')
         # form = forms.ProfSpecForm(request.POST, request.user)
         form = forms.ProfSpecForm(request.POST)
         if form.is_valid():
-            print('02')
             spec = form.save(commit=False)
             spec.xpref_id = proforma
             spec.save()

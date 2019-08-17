@@ -142,7 +142,6 @@ def req_form(request):
     file_instance = forms.RequestFileForm()
     if request.method == 'POST':
         c_cookie = request.COOKIES.get('customer')
-        print(f"coockie: {c_cookie}")
 
         form = forms.RequestFrom(request.POST or None, request.FILES or None)
         img_form = forms.RequestFileForm(request.POST, request.FILES)
@@ -152,7 +151,6 @@ def req_form(request):
         if form.is_valid() and img_form.is_valid():
             req_item = form.save(commit=False)
             req_item.owner = request.user
-            print(f"autocomplete user is: {customer}")
             req_item.customer = customer
             # year = jdatetime.date.today().year
             year = req_item.date_fa.year
@@ -294,7 +292,6 @@ def reqspec_search(request):
         request.session['reqspec-search-post'] = request.POST
 
         (form_data, specs,) = function_define(request.POST, specs)
-        print(form_data)
         search_form = search.SpecSearchForm(form_data)
         item_per_page = form_data['item_per_page']
 
@@ -342,11 +339,9 @@ def reqspec_clear_cache(request):
 
 @login_required
 def spec_export(request):
-    print('here..')
     try:
         # specs = request.session['spec_in_sessions']
         context = cache.get('spec_in_sessions')
-        print(context['reqspecs'])
         specs = context['reqspecs']
         total_kw = context['total_kw']
         total_qty = context['total_qty']
@@ -446,7 +441,6 @@ def fsearch2(request):
         return redirect('errorpage')
 
     data = json.loads(request.body.decode('utf-8'))
-    print(data)
     specs = ReqSpec.objects.filter(is_active=True)
     pmnt_total = Payment.objects.filter(is_active=True)
 
@@ -529,7 +523,6 @@ def fsearch2(request):
         # if request.POST['customer_name']:
         #     form_data['customer_name'] = request.POST['customer_name']
         #     specs = specs.filter(req_id__customer__name__icontains=form_data['customer_name'])
-        print(form_data)
         # specs = ReqSpec.objects.filter(req_id__customer__name__icontains=customer_name).filter(kw=kw).filter(rpm=rpm)
         # print(f"items: {form_data['kw']} + {form_data['rpm']} + {form_data['customer_name']}")
         search_form = search.SpecSearchForm(form_data)
@@ -585,12 +578,10 @@ def fsearch2(request):
             if prof.verified:
                 verified_profs_total += prof_amount
                 verified_profs.append(temp_prof)
-                print(f"verified {prof.req_id.number} + paid: {prof.payment_set.first()}")
             else:
 
                 unverified_profs_total += prof_amount
                 unverified_profs.append(temp_prof)
-                print(f"not verified: {prof.req_id.number}")
             pmnts = prof.payment_set.filter(is_active=True)
             for pay in pmnts:
                 payment_sum += pay.amount
@@ -795,7 +786,6 @@ def req_to_follow(request, request_pk):
     req.save()
 
     if req.to_follow:
-        print(req.to_follow)
         comment = req.comments.create(author=request.user, body='وضعیت درخواست؟')
         comment.is_read = False
         comment.save()
@@ -815,7 +805,6 @@ def request_index_vue(request):
     today = jdatetime.date.today()
 
     requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
-    print(f'super user: {request.user.is_superuser}')
     if not request.user.is_superuser:
         requests = requests.filter(owner=request.user)
     response = {}
@@ -823,13 +812,11 @@ def request_index_vue(request):
     date_format = "%m/%d/%Y"
     for req in requests:
         diff = today - req.date_fa
-        print(f'diff is: {diff.days}')
         response[req.pk] = {
             'req': req,
             'delay': diff.days,
             'colleagues': req.colleagues.all(),
         }
-    print(response)
     if request.user.is_superuser:
         requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
     context = {
@@ -964,11 +951,6 @@ def request_read(request, request_pk):
         las = newname[-1]
         img_names[r.pk] = las
 
-    for x, y in nested_files['ximg'].items():
-        print(f"last is: {y['name']}")
-
-    print(f'file names: {nested_files}')
-
     parent_request = Requests.objects.filter(is_active=True).filter(number=req.parent_number)
     sub_requests = Requests.objects.filter(is_active=True).filter(parent_number=req.number)
 
@@ -995,7 +977,6 @@ def request_read(request, request_pk):
 @login_required
 def read_vue(request, request_pk):
     if not Requests.objects.filter(pk=request_pk) and not request.user.is_superuser:
-        print('entered')
         messages.error(request, 'صفحه مورد نظر یافت نشد')
         return redirect('errorpage')
 
@@ -1072,11 +1053,6 @@ def read_vue(request, request_pk):
         las = newname[-1]
         img_names[r.pk] = las
 
-    for x, y in nested_files['ximg'].items():
-        print(f"last is: {y['name']}")
-
-    print(f'file names: {nested_files}')
-
     kw = total_kw(request_pk)
     context = {
         'request': req,
@@ -1143,7 +1119,6 @@ def request_edit_form(request, request_pk):
         return redirect('errorpage')
     if 'customer' in request.COOKIES:
         c_cookie = request.COOKIES.get('customer')
-        print(f"coockie: {c_cookie}")
         customer = Customer.objects.get(pk=c_cookie)
 
     req = Requests.objects.filter(is_active=True).get(pk=request_pk)
@@ -1202,7 +1177,6 @@ def image_delete(request, img_pk):
 
 @login_required
 def img_del(request, img_pk):
-    print(request)
     # with ajax
     # image = models.RequestFiles.objects.get(pk=request.POST['id'])
 
@@ -1271,7 +1245,6 @@ def req_report(request):
             else:
                 req_list = req_list.filter(customer__name__contains=request.POST['customer_name'])
         if request.POST['owner'] and request.POST['owner'] != '0':
-            print(request.POST['owner'])
             owner = User.objects.get(pk=request.POST['owner'])
             req_list = req_list.distinct().filter(Q(owner=owner) | Q(colleagues=owner))
         if request.POST['date_min']:
@@ -1279,7 +1252,6 @@ def req_report(request):
         if request.POST['date_max']:
             req_list = req_list.filter(date_fa__lte=request.POST['date_max'])
         if request.POST['status'] and request.POST['status'] != '0':
-            print(request.POST['status'])
             status = request.POST['status']
             if status == 'close':
                 req_list = req_list.filter(finished=True)
@@ -1334,7 +1306,6 @@ def change_date_string(date):
     for i in [1, 2]:
         d[i] = str(d[i]) if d[i] > 9 else '0' + str(d[i])
     date = '-'.join(d)
-    print('date: ', date)
     return date
 
 
@@ -1376,7 +1347,6 @@ def fetch_sales_data(request):
         perms_queryset = exp.perms(date_min=date_min, date_max=date_max)
         ps_qty = exp.perms(date_min=date_min, date_max=date_max)['ps_qty']['sum']
         ps_count = exp.perms(date_min=date_min, date_max=date_max)['ps_count']['count']
-        print('count: ', ps_count)
         count = perms_queryset['count']
         perms = perms_queryset['perms']
         price = exp.perms_price_total(date_min=date_min, date_max=date_max)['price']['sum']
@@ -1434,7 +1404,6 @@ def fetch_sales_data(request):
         } for i in p2.filter(reqspec_eq__type__title=a['reqspec_eq__type__title'])],
     } for a in q]
 
-    print(project_base)
     context = {
         'response': res,
         'project_base': project_base,

@@ -75,7 +75,6 @@ def req_form(request):
                 file_instance.save()
             return redirect('spec_form', req_pk=req_item.pk)
     else:
-        print('request is GET')
         form = forms.RequestFrom()
         file_instance = forms.RequestFileForm()
     return render(request, 'requests/admin_jemco/yrequest/req_form.html', {
@@ -182,7 +181,6 @@ def pref_add(request):
 
 @login_required
 def pref_insert(request):
-    print('added to the db...')
     return render(request, 'test.html', {'is_add': True})
 
 
@@ -426,7 +424,6 @@ def image_delete(request, img_pk):
 
 @login_required
 def img_del(request, img_pk):
-    print(request)
     # with ajax
     # image = models.RequestFiles.objects.get(pk=request.POST['id'])
 

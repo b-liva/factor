@@ -97,7 +97,6 @@ class PrivateCustomerApiTests(TestCase):
             'type': self.customer_type.pk,
         }
         res = self.client.post(CUSTOMERS_URL, payload)
-        print(res.data)
         exists = Customer.objects.filter(
             owner=self.ex_user,
             type=payload['type'],

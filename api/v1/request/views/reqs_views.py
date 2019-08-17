@@ -42,13 +42,11 @@ def request_specs(request):
                 'rpm': spec.rpm,
             } for spec in specs]
         }
-        print('req', context)
     except:
         msg = 'موردی یافت نشد.'
         context.update({
             'msg': msg
         })
-    print('all', context)
     return JsonResponse(context, safe=False)
 
 
