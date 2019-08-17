@@ -262,6 +262,7 @@ class ReqSpec(models.Model):
     class Meta:
         permissions = (
             ('index_reqspecs', 'can see list of request Specs'),
+            ('index_reqspec', 'can see list of request Spec!'),
             ('read_reqspecs', 'can read request Specs'),
         )
 

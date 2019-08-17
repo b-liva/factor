@@ -14,6 +14,7 @@ class RequestViewSets(viewsets.ModelViewSet):
         permissions.IsAuthenticated,
         CustomPerms.IsSuperUserOrOwner,
         CustomPerms.CustomDjangoModelPermission,
+        # permissions.DjangoModelPermissions,
     )
     queryset = Requests.objects.filter(is_active=True)
     deleted_queryset = Requests.objects.filter(is_active=False)
@@ -48,7 +49,9 @@ class RequestViewSets(viewsets.ModelViewSet):
 
 class ReqSpecViewSets(viewsets.ModelViewSet):
     permission_classes = (
+        permissions.IsAuthenticated,
         CustomPerms.IsSuperUserOrOwner,
+        # CustomPerms.CustomDjangoModelPermission,
         permissions.DjangoModelPermissions,
     )
     queryset = ReqSpec.objects.filter(is_active=True)
