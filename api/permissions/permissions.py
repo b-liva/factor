@@ -15,9 +15,9 @@ class IsSuperUserOrOwner(permissions.DjangoModelPermissions):
     def get_required_permissions(self, method, model_cls):
         perms = super().get_required_permissions(method, model_cls)
         # print(perms, method, model_cls._meta)
-        if method == 'GET' and model_cls == ReqSpec:
-            print(perms, method, model_cls._meta)
-            print(self.perms_map['GET'], model_cls)
+        # if method == 'GET' and model_cls == ReqSpec:
+            # print(perms, method, model_cls._meta)
+            # print(self.perms_map['GET'], model_cls)
             # todo: why 'request.index_reqspec' that dosen't exist is required? this class extends DjangoModelPermissions?
             # two ways to handle: 1- add the line bellow 2- add index_reqspec to the ReqSpec model permissions.
             # self.perms_map['GET'] = []

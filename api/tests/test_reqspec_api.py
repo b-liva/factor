@@ -96,6 +96,94 @@ class PrivateReqSepcTests(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['kw'], spec2.kw)
 
+    def test_retrieve_reqspec_limited_api(self):
+        """Test retrieve spec is limited by ownership and permissions"""
+        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.user)
+
+        spec1 = funcs.sample_reqspec(req, owner=self.user, **self.specs_payload[0])
+        spec2 = funcs.sample_reqspec(req, owner=self.user, **self.specs_payload[3])
+
+        self.client.force_authenticate(user=self.ex_user)
+
+        res = self.client.get(reverse('apivs:reqspec-detail', args=[spec2.pk]))
+        # todo: probably some bug with setUp(self).
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_update_reqspec_noperm_api(self):
+        """Test update spec needs delete_reqspec permission."""
+
+        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.ex_user)
+
+        spec1 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[0])
+        spec2 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[3])
+        self.client.force_authenticate(user=self.user)
+        payload = {
+            'kw': 1200,
+        }
+        res = self.client.patch(reverse('apivs:reqspec-detail', args=[spec2.pk]), payload)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_update_reqspec_api(self):
+        """Test update spec"""
+
+        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.ex_user)
+
+        spec1 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[0])
+        spec2 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[3])
+        self.client.force_authenticate(user=self.ex_user)
+        payload = {
+            'kw': 1200,
+        }
+        res = self.client.patch(reverse('apivs:reqspec-detail', args=[spec2.pk]), payload)
+        # todo: probably some bug with setUp(self).
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data['kw'], payload['kw'])
+
+    def test_update_reqspec_limited_api(self):
+        """Test update spec is limited by ownership and permissions"""
+        # todo: what about the case: owner of the req but not reqspec.
+
+        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.user)
+
+        spec1 = funcs.sample_reqspec(req, owner=self.user, **self.specs_payload[0])
+        spec2 = funcs.sample_reqspec(req, owner=self.user, **self.specs_payload[3])
+        self.client.force_authenticate(user=self.ex_user)
+        payload = {
+            'kw': 1200,
+        }
+        res = self.client.patch(reverse('apivs:reqspec-detail', args=[spec2.pk]), payload)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_reqspec_api(self):
+        """Test delete spec"""
+
+        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.ex_user)
+
+        spec1 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[0])
+        spec2 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[3])
+        self.client.force_authenticate(user=self.ex_user)
+
+        res = self.client.delete(reverse('apivs:reqspec-detail', args=[spec2.pk]))
+        exist = ReqSpec.objects.filter(pk=spec2.pk).exists()
+        # todo: probably some bug with setUp(self).
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(exist)
+
+    def test_delete_reqspec_limited_api(self):
+        """Test delete spec is limited by ownership and permissions"""
+
+        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.user)
+
+        spec1 = funcs.sample_reqspec(req, owner=self.user, **self.specs_payload[0])
+        spec2 = funcs.sample_reqspec(req, owner=self.user, **self.specs_payload[3])
+        self.client.force_authenticate(user=self.ex_user)
+
+        res = self.client.delete(reverse('apivs:reqspec-detail', args=[spec2.pk]))
+        exist = ReqSpec.objects.filter(pk=spec2.pk).exists()
+        # todo: probably some bug with setUp(self).
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertTrue(exist)
+
 
 class NewReqSpecTest(APITestCase):
     # todo: this class should be deleted after the above bug is fixed
