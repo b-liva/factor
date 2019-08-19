@@ -47,6 +47,7 @@ class PrivatePrefSpecTest(APITestCase):
         self.proforma = funcs.sample_proforma(req=self.req, number=985050, owner=self.user)
 
     def test_retrieve_prefspec_list_api(self):
+        """Test retrieve prefspecs list"""
 
         self.client.force_authenticate(user=self.ex_user)
         req = funcs.sample_request(owner=self.ex_user, customer=self.customer, number=982020)
@@ -63,6 +64,7 @@ class PrivatePrefSpecTest(APITestCase):
         self.assertEqual(res.data[0]['id'], prefspec1.pk)
 
     def test_retrieve_prefspec_list_limited_api(self):
+        """Test retrieve prefspecs list is limited by permissions and ownership"""
 
         self.client.force_authenticate(user=self.ex_user)
 
@@ -77,6 +79,8 @@ class PrivatePrefSpecTest(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_retrieve_prefspec_api(self):
+        """Test retrieve prefspec"""
+
         self.client.force_authenticate(user=self.ex_user)
 
         req = funcs.sample_request(owner=self.ex_user, customer=self.customer, number=982020)
@@ -93,6 +97,8 @@ class PrivatePrefSpecTest(APITestCase):
         self.assertEqual(res.data['id'], prefspec1.pk)
 
     def test_retrieve_prefspec_limited_api(self):
+        """Test retrieve prefspec limited by permission and ownership"""
+
         self.client.force_authenticate(self.ex_user)
 
         spec1 = funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[0])
@@ -105,6 +111,7 @@ class PrivatePrefSpecTest(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_prefspec_api(self):
+        """Test update prefspec"""
         self.client.force_authenticate(self.ex_user)
 
         req = funcs.sample_request(owner=self.ex_user, customer=self.customer, number=982020)
@@ -125,6 +132,7 @@ class PrivatePrefSpecTest(APITestCase):
         self.assertEqual(res.data['kw'], payload['kw'])
 
     def test_update_prefspec_limited_api(self):
+        """Test update prefspec is limited by permissions and ownership"""
 
         self.client.force_authenticate(user=self.ex_user)
         spec1 = funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[0])
@@ -142,6 +150,8 @@ class PrivatePrefSpecTest(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_prefspec_api(self):
+        """Test delete prefspec"""
+
         self.client.force_authenticate(self.ex_user)
 
         req = funcs.sample_request(owner=self.ex_user, customer=self.customer, number=982020)
@@ -163,6 +173,8 @@ class PrivatePrefSpecTest(APITestCase):
         self.assertFalse(exist)
 
     def test_delete_prefspec_limited_api(self):
+        """Test delete prefspec is limited by permissions and ownership"""
+
         self.client.force_authenticate(user=self.ex_user)
         spec1 = funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[0])
         spec2 = funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[1])
