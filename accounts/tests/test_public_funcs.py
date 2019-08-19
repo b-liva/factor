@@ -74,6 +74,10 @@ def login_as_expert(username='expert_user'):
         Permission.objects.get(codename='add_xpref', content_type__app_label='request'),
         Permission.objects.get(codename='delete_xpref', content_type__app_label='request'),
         Permission.objects.get(codename='change_xpref', content_type__app_label='request'),
+        Permission.objects.get(codename='index_prefspec', content_type__app_label='request'),
+        Permission.objects.get(codename='add_prefspec', content_type__app_label='request'),
+        Permission.objects.get(codename='delete_prefspec', content_type__app_label='request'),
+        Permission.objects.get(codename='change_prefspec', content_type__app_label='request'),
     )
     ex_user.groups.add(sale_expert_group)
     ex_user.super_user = True
@@ -99,3 +103,12 @@ def sample_proforma(req, owner, number, **params):
     defaults.update(params)
     return Xpref.objects.create(req_id=req, owner=owner, number=number, **defaults)
 
+
+def sample_prefspec(proforma, owner, reqspe, **params):
+
+    defaults = {
+        'kw': reqspe.kw,
+        'rpm': reqspe.rpm,
+    }
+    defaults.update(params)
+    return PrefSpec.objects.create(xpref_id=proforma, owner=owner, reqspec_eq=reqspe, **defaults)

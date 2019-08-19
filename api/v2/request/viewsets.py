@@ -86,7 +86,11 @@ class XprefViewSets(viewsets.ModelViewSet):
 
 
 class PrefSpecViewSets(viewsets.ModelViewSet):
-    permission_classes = (permissions.DjangoModelPermissions,)
+    permission_classes = (
+        permissions.IsAuthenticated,
+        CustomPerms.IsSuperUserOrOwner,
+        CustomPerms.CustomDjangoModelPermission,
+    )
     queryset = PrefSpec.objects.all()
     serializer_class = requestSerializers.PrefSpecSerializers
 

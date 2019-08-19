@@ -409,6 +409,11 @@ class PrefSpec(models.Model):
     def __str__(self):
         return 'pk:%s | %s | %sKW - %sRPM - %sV' % (self.pk, self.qty, self.kw, self.rpm, self.voltage)
 
+    class Meta:
+        permissions = (
+            ('index_prefspec', 'can see list of prefsepcs'),
+        )
+
 
 class PaymentType(models.Model):
     title = models.CharField(max_length=25)
