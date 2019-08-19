@@ -200,5 +200,4 @@ class NewReqSpecTest(APITestCase):
         self.client.force_authenticate(user=user)
 
         res = self.client.get(reverse('apivs:reqspec-detail', args=[spec2.pk]))
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data['kw'], spec2.kw)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
