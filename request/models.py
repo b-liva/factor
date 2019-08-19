@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from django.db import models
 import datetime
+import jdatetime
 from django.utils.timezone import now
 from django_jalali.db import models as jmodels
 
@@ -371,6 +372,7 @@ class Xpref(models.Model):
     class Meta:
         permissions = (
             ('index_proforma', 'Can index Proforma'),
+            ('index_xpref', 'Can index Proformas'),
             ('read_proforma', 'Can read Proforma'),
         )
 

@@ -3,8 +3,7 @@ from rest_framework import serializers
 from request.models import Requests, ReqSpec, Xpref, PrefSpec, Payment, IMType, ICType, IPType, IEType
 
 
-class RequestSerializers(serializers.ModelSerializer):
-    reqspec_set = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+class DateCorrection:
 
     def date_correction(self, date):
         """
@@ -14,6 +13,10 @@ class RequestSerializers(serializers.ModelSerializer):
         """
         date = date.replace('/', '-')
         return jdatetime.datetime.strptime(date, "%Y-%m-%d").date().togregorian()
+
+
+class RequestSerializers(DateCorrection, serializers.ModelSerializer):
+    reqspec_set = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Requests
@@ -33,18 +36,38 @@ class ReqSpecSerializers(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class XprefSerializers(serializers.ModelSerializer):
+class XprefSerializers(DateCorrection, serializers.ModelSerializer):
     prefspec_set = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Xpref
         fields = "__all__"
+        read_only_fields = ['date_fa', 'pub_date', 'date_modified', 'exp_date_fa']
+
+    def create(self, validated_data):
+        if 'date_fa' in self.validated_data:
+            validated_data['date_fa'] = self.date_correction(str(self.validated_data.get('date_fa')))
+        # else:
+        #     validated_data['date_fa'] = jdatetime.datetime.now().date()
+        validated_data['owner'] = self.context['request'].user
+        return super().create(validated_data)
 
 
 class PrefSpecSerializers(serializers.ModelSerializer):
     class Meta:
         model = PrefSpec
         fields = "__all__"
+        read_only_fields = ['kw', 'rpm']
+
+    def create(self, validated_data):
+        print('validated data: ', validated_data)
+        reqspec = validated_data.get('reqspec_eq')
+        print(reqspec)
+        print(reqspec.req_id.pk)
+        validated_data['kw'] = reqspec.kw
+        validated_data['rpm'] = reqspec.rpm
+        print("validated data: ***************: ", validated_data)
+        return super().create(validated_data)
 
 
 class IncomeSerializers(serializers.ModelSerializer):

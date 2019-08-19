@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
-
+from django.shortcuts import get_object_or_404
 from customer.models import Type, Customer
 import datetime
 
-from request.models import Requests, ReqSpec, ProjectType, RpmType
+from request.models import Requests, ReqSpec, ProjectType, RpmType, Xpref, PrefSpec
 
 User = get_user_model()
 
@@ -70,6 +70,10 @@ def login_as_expert(username='expert_user'):
         Permission.objects.get(codename='change_reqspec', content_type__app_label='request'),
         Permission.objects.get(codename='delete_reqspec', content_type__app_label='request'),
         Permission.objects.get(codename='read_reqspecs', content_type__app_label='request'),
+        Permission.objects.get(codename='index_xpref', content_type__app_label='request'),
+        Permission.objects.get(codename='add_xpref', content_type__app_label='request'),
+        Permission.objects.get(codename='delete_xpref', content_type__app_label='request'),
+        Permission.objects.get(codename='change_xpref', content_type__app_label='request'),
     )
     ex_user.groups.add(sale_expert_group)
     ex_user.super_user = True
@@ -86,3 +90,12 @@ def sample_reqspec(req, **params):
     defaults.update(params)
 
     return ReqSpec.objects.create(req_id=req, **defaults)
+
+
+def sample_proforma(req, owner, number, **params):
+    defaults = {
+        'number_auto': number,
+    }
+    defaults.update(params)
+    return Xpref.objects.create(req_id=req, owner=owner, number=number, **defaults)
+

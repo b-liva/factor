@@ -59,9 +59,24 @@ class ReqSpecViewSets(viewsets.ModelViewSet):
 
 
 class XprefViewSets(viewsets.ModelViewSet):
-    permission_classes = (CustomPerms.IsSuperUserOrOwner,)
+    permission_classes = (
+        permissions.IsAuthenticated,
+        CustomPerms.IsSuperUserOrOwner,
+        CustomPerms.CustomDjangoModelPermission,
+        # permissions.DjangoModelPermissions,
+    )
     queryset = Xpref.objects.filter(is_active=True)
     serializer_class = requestSerializers.XprefSerializers
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
+
+    # def perform_create(self, serializer):
+    #     if 'date_fa' not in self.request.data:
+    #         date_fa = jdatetime.datetime.now().date()
+    #     else:
+    #         date_fa = self.request.data['date_fa']
+    #     serializer.save(owner=self.request.user, date_fa=date_fa)
 
     @action(detail=True, methods=['get'])
     def prefspecs(self, request, pk=None):
