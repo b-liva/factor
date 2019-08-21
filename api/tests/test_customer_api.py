@@ -30,20 +30,41 @@ class PrivateCustomerApiTests(TestCase):
 
     def setUp(self):
         self.user = funcs.sample_user()
+        self.superuser = funcs.sample_superuser(username='superuser')
+        self.ex_user = funcs.login_as_expert(username='ex_user')
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
         self.customer_type = funcs.sample_customer_type()
 
-    def login_as_expert(self):
-        # client can't be more than one user.
-        self.ex_user = funcs.sample_user(username='zarif')
+    def test_create_customer_successful_api(self):
+        """Test create customer from api successfully"""
         self.client.force_authenticate(user=self.ex_user)
-        self.sale_expert_group = Group.objects.create(name='sale_expert')
-        self.sale_expert_group.permissions.add(
-            Permission.objects.get(codename='add_customer', content_type__app_label='customer')
-        )
-        self.ex_user.groups.add(self.sale_expert_group)
-        return True
+        payload = {
+            'name': 'sazesh',
+            'type': self.customer_type.pk,
+        }
+        res = self.client.post(CUSTOMERS_URL, payload)
+        exists = Customer.objects.filter(
+            owner=self.ex_user,
+            type=payload['type'],
+            name=payload['name'],
+        ).exists()
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(exists)
+        self.assertEqual(res.data['name'], payload['name'])
+
+    def test_create_customer_api_invalid(self):
+        """Test creating a new customer with invalid payload"""
+        self.client.force_authenticate(user=self.ex_user)
+
+        payload = {
+            'name': '',
+            'date2': datetime.datetime.now(),
+            'type': self.customer_type,
+        }
+        res = self.client.post(CUSTOMERS_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_retrieve_customers(self):
         """Test retrieving customer api"""
@@ -89,33 +110,3 @@ class PrivateCustomerApiTests(TestCase):
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['name'], customer.name)
 
-    def test_create_customer_successful_api(self):
-        """Test create customer from api successfully"""
-        self.login_as_expert()
-        payload = {
-            'name': 'sazesh',
-            'type': self.customer_type.pk,
-        }
-        res = self.client.post(CUSTOMERS_URL, payload)
-        exists = Customer.objects.filter(
-            owner=self.ex_user,
-            type=payload['type'],
-            name=payload['name'],
-        ).exists()
-
-
-        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(exists)
-
-    def test_create_customer_api_invalid(self):
-        """Test creating a new customer with invalid payload"""
-        self.login_as_expert()
-
-        payload = {
-            'name': '',
-            'date2': datetime.datetime.now(),
-            'type': self.customer_type,
-        }
-        res = self.client.post(CUSTOMERS_URL, payload)
-
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)

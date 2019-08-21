@@ -17,12 +17,12 @@ class CustomerViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(owner=self.request.user)
 
-    def perform_create(self, serializer):
-        if 'date2' not in self.request.data:
-            date2 = jdatetime.datetime.now().date()
-        else:
-            date2 = self.request.data['date2']
-        serializer.save(owner=self.request.user, date2=date2)
+    # def perform_create(self, serializer):
+    #     if 'date2' not in self.request.data:
+    #         date2 = jdatetime.datetime.now().date()
+    #     else:
+    #         date2 = self.request.data['date2']
+    #     serializer.save(owner=self.request.user, date2=date2)
 
     # @detail_route(methods=['get'])
     @action(detail=True, methods=['get'])
