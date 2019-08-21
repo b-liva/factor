@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
 from customer.models import Customer
-from request.models import Requests, ReqSpec
+from request.models import Requests, ReqSpec, ProjectType, RpmType
 from accounts.tests import test_public_funcs as funcs
 
 REQSPEC_URL = reverse('apivs:reqspec-list')
@@ -50,13 +50,45 @@ class PrivateReqSepcTests(APITestCase):
         self.req = funcs.sample_request(number=981010, customer=self.customer, owner=self.user)
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
-
+        # self.reqspe_type = ProjectType.objects.create(title='روتین'),
+        self.reqspe_type = ProjectType.objects.create(title='lksjdf')
+        self.reqspec_rpm_new = RpmType.objects.create(rpm=1500, pole=4)
         self.specs_payload = [
-            {'qty': 2, 'kw': 132, 'rpm': 1500, 'voltage': 380},
-            {'qty': 1, 'kw': 160, 'rpm': 1500, 'voltage': 380},
-            {'qty': 3, 'kw': 315, 'rpm': 3000, 'voltage': 380},
-            {'qty': 5, 'kw': 75, 'rpm': 1000, 'voltage': 380},
+            {'code': 98585, 'qty': 2, 'kw': 132, 'rpm': 1500, 'rpm_new': self.reqspec_rpm_new, 'voltage': 380},
+            {'code': 98586, 'qty': 1, 'kw': 160, 'rpm': 1500, 'rpm_new': self.reqspec_rpm_new, 'voltage': 380},
+            {'code': 98587, 'qty': 3, 'kw': 315, 'rpm': 3000, 'rpm_new': self.reqspec_rpm_new, 'voltage': 380},
+            {'code': 98588, 'qty': 5, 'kw': 75, 'rpm': 1000, 'rpm_new': self.reqspec_rpm_new, 'voltage': 380},
         ]
+
+    def test_create_reqspec_needs_permission_api(self):
+        res = self.client.post(REQSPEC_URL, self.specs_payload[0])
+
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_reqspec_api(self):
+        """Test create reqspec"""
+        self.client.force_authenticate(user=self.ex_user)
+        req = funcs.sample_request(owner=self.ex_user, number=9855454, customer=self.customer)
+        payload = {
+            'req_id': req.pk,
+            'type': self.reqspe_type.pk,
+            'owner': self.ex_user.pk,
+            'rpm_new': self.reqspec_rpm_new.pk,
+        }
+        self.specs_payload[0].pop('rpm_new')
+        payload.update(self.specs_payload[0])
+
+        res = self.client.post(REQSPEC_URL, payload)
+        exist = ReqSpec.objects.filter(
+            kw=payload['kw'],
+            voltage=payload['voltage'],
+            owner=payload['owner'],
+            type=payload['type'],
+            code=payload['code'],
+            qty=payload['qty'],
+        ).exists()
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(exist)
 
     def test_retrieve_reqspec_list_for_request_api(self):
         """Test retrieve specs of a request, needs to be filtered by request"""
