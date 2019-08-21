@@ -24,7 +24,6 @@ class PublicPrefSpecTests(APITestCase):
 
 
 class PrivatePrefSpecTest(APITestCase):
-
     def setUp(self):
         """Setup for private prefspecs test cases."""
         self.user = funcs.sample_user(username='user')
@@ -45,6 +44,28 @@ class PrivatePrefSpecTest(APITestCase):
         # self.reqspec1 = funcs.sample_reqspec(req=self.req, **self.specs_payload[0])
         # self.reqspec2 = funcs.sample_reqspec(req=self.req, **self.specs_payload[1])
         self.proforma = funcs.sample_proforma(req=self.req, number=985050, owner=self.user)
+
+    def test_create_prefspec_api(self):
+        self.client.force_authenticate(user=self.ex_user)
+        proforma = funcs.sample_proforma(req=self.req, owner=self.ex_user, number=837498345)
+        spec = funcs.sample_reqspec(req=self.req, owner=self.ex_user, **self.specs_payload[0])
+        payload = {
+            'owner': self.ex_user.pk,
+            'xpref_id': proforma.pk,
+            'reqspec_eq': spec.pk,
+        }
+        payload.update(self.specs_payload[0])
+        res = self.client.post(PREFSPEC_URL, payload)
+        exist = PrefSpec.objects.filter(
+            owner=payload['owner'],
+            xpref_id=payload['xpref_id'],
+            reqspec_eq=payload['reqspec_eq'],
+            kw=payload['kw'],
+            rpm=payload['rpm'],
+            voltage=payload['voltage'],
+        ).exists()
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(exist)
 
     def test_retrieve_prefspec_list_api(self):
         """Test retrieve prefspecs list"""

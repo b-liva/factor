@@ -42,25 +42,28 @@ class PrivateProformaTest(APITestCase):
         self.req = funcs.sample_request(owner=self.user, number=981010, customer=self.customer)
         self.proforma = funcs.sample_proforma(req=self.req, number=981000, owner=self.user)
 
-    def test_create_proforma_successful_api(self):
-        self.client.force_authenticate(user=self.ex_user)
+    def test_create_proforma_need_permission(self):
         payload = {
             'req_id': self.req.pk,
-            'number': 985050,
-            'owner': self.user.pk,
-            'number_auto': 985050,
-            'date_fa': "1398-05-26",
+            'number': 52215,
+            'number_auto': 52215,
+            'owner': self.user,
         }
         res = self.client.post(PROFORMA_URL, payload)
-        exist = Xpref.objects.filter(
-            number=payload['number'],
-            req_id=payload['req_id'],
-            owner=self.ex_user,
-        ).exists()
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_proforma(self):
+        """Test create proforma"""
+        self.client.force_authenticate(user=self.ex_user)
+        req2 = funcs.sample_request(owner=self.ex_user, number=981011, customer=self.customer)
+        payload = {
+            'req_id': req2.pk,
+            'number': 52215,
+            'number_auto': 52215,
+            'owner': self.ex_user.pk,
+        }
+        res = self.client.post(PROFORMA_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(exist)
-        self.assertEqual(res.data['number'], 985050)
-        self.assertEqual(res.data['owner'], self.ex_user)
 
     def test_retrieve_proforma_permission_required_api(self):
         """Test retrieve proforma list is limited for a user that hasn't index_xpref permission"""
