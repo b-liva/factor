@@ -96,9 +96,16 @@ class PrefSpecViewSets(viewsets.ModelViewSet):
 
 
 class IncomeViewSets(viewsets.ModelViewSet):
-    permission_classes = (CustomPerms.IsSuperUserOrOwner,)
+    permission_classes = (
+        permissions.IsAuthenticated,
+        CustomPerms.IsSuperUserOrOwner,
+        CustomPerms.CustomDjangoModelPermission,
+    )
     queryset = Payment.objects.filter(is_active=True)
     serializer_class = requestSerializers.IncomeSerializers
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
 
 
 class ImTypeViewSets(viewsets.ModelViewSet):

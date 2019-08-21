@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from customer.models import Type, Customer
 import datetime
 
-from request.models import Requests, ReqSpec, ProjectType, RpmType, Xpref, PrefSpec
+from request.models import Requests, ReqSpec, ProjectType, RpmType, Xpref, PrefSpec, Payment
 
 User = get_user_model()
 
@@ -78,6 +78,10 @@ def login_as_expert(username='expert_user'):
         Permission.objects.get(codename='add_prefspec', content_type__app_label='request'),
         Permission.objects.get(codename='delete_prefspec', content_type__app_label='request'),
         Permission.objects.get(codename='change_prefspec', content_type__app_label='request'),
+        Permission.objects.get(codename='index_payment', content_type__app_label='request'),
+        Permission.objects.get(codename='add_payment', content_type__app_label='request'),
+        Permission.objects.get(codename='change_payment', content_type__app_label='request'),
+        Permission.objects.get(codename='delete_payment', content_type__app_label='request'),
     )
     ex_user.groups.add(sale_expert_group)
     ex_user.super_user = True
@@ -112,3 +116,11 @@ def sample_prefspec(proforma, owner, reqspe, **params):
     }
     defaults.update(params)
     return PrefSpec.objects.create(xpref_id=proforma, owner=owner, reqspec_eq=reqspe, **defaults)
+
+
+def sample_income(proforma, owner, number, **params):
+    defaults = {
+        'amount': 1500000,
+    }
+    defaults.update(params)
+    return Payment.objects.create(xpref_id=proforma, owner=owner, number=number, **defaults)
