@@ -47,7 +47,7 @@ class PrivateRequestApiTests(TestCase):
         self.request_payload = {
             'number': 1000,
             'customer': funcs.sample_customer(owner=self.user).pk,
-            "date_fa": "1398-05-06",
+            # "date_fa": "1398-05-06",
         }
 
     def test_retrieve_requests_list_api(self):
@@ -77,7 +77,7 @@ class PrivateRequestApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
-    def test_create_requests_successful_api(self):
+    def test_create_requests_need_permission_api(self):
         """Test can't create request with no permission even if logged in"""
         res = self.client.post(REQUESTS_URL, self.request_payload)
         exist = Requests.objects.filter(
@@ -89,7 +89,7 @@ class PrivateRequestApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         self.assertFalse(exist)
 
-    def test_create_request_by_expert_successful_api(self):
+    def test_create_request_successful_api(self):
         """Test create a request"""
         self.client.force_authenticate(user=self.ex_user)
         res = self.client.post(REQUESTS_URL, self.request_payload)
