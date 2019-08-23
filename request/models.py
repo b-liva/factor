@@ -377,6 +377,19 @@ class Xpref(models.Model):
         )
 
 
+class ProformaFollowUP(models.Model):
+    author = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
+    xpref = models.ForeignKey(Xpref, on_delete=models.CASCADE)
+    summary = models.CharField(max_length=100)
+    description = models.TextField(null=True)
+    pub_date = models.DateTimeField(default=now)
+    date_fa = jmodels.jDateField(default=now)
+    next_followup = jmodels.jDateField(default=now() + jdatetime.timedelta(7))
+
+    def __str__(self):
+        return "%s(%s)" % (self.summary, self.date_fa,)
+
+
 class ProfFiles(models.Model):
     prof = models.ForeignKey(Xpref, on_delete=models.CASCADE)
     image = models.FileField(upload_to=upload_location, null=True, blank=True)

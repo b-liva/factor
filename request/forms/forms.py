@@ -271,3 +271,31 @@ class CommentForm(forms.ModelForm):
         labels = {
             'body': 'شرح',
         }
+
+
+class ProfFollowUpForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+
+        super(ProfFollowUpForm, self).__init__(*args, **kwargs)
+
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = models.ProformaFollowUP
+        fields = '__all__'
+        exclude = ('xpref', 'author', 'pub_date', 'description')
+        widgets = {
+
+            'date_fa': forms.DateInput(attrs={
+                'id': 'date_fa'
+            }),
+            'next_followup': forms.DateInput(attrs={
+                'id': 'exp_date_fa'
+            })
+        }
+        labels = {
+            'summary': 'شرح',
+            'date_fa': 'تاریخ',
+            'next_followup': 'تاریخ پیگیری بعدی',
+        }

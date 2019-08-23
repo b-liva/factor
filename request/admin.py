@@ -10,6 +10,7 @@ from .models import (
     ProjectType,
     FrameSize,
     IssueType,
+    ProformaFollowUP,
     RpmType, IPType, ICType, IMType, IEType, Comment, PaymentType)
 
 admin.site.register(Requests)
@@ -27,3 +28,4 @@ admin.site.register(IMType)
 admin.site.register(IEType)
 admin.site.register(FrameSize)
 admin.site.register(IssueType)
+admin.site.register(ProformaFollowUP)

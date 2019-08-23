@@ -24,10 +24,10 @@ User = get_user_model()
 from customer.models import Customer
 from factor import settings
 from request import models
-from request.forms.forms import CommentForm
+from request.forms.forms import CommentForm, ProfFollowUpForm
 from request.forms.search import ProformaSearchForm, PermSearchForm, PrefSpecSearchForm
 
-from request.models import Requests, Xpref, ReqSpec, PrefSpec
+from request.models import Requests, Xpref, ReqSpec, PrefSpec, ProformaFollowUP
 from pricedb.models import MotorDB
 
 from request.forms import proforma_forms, forms
@@ -556,8 +556,6 @@ def pref_find(request):
         return redirect('errorpage')
 
 
-
-
 @login_required
 def pref_details(request, ypref_pk):
     if not Xpref.objects.filter(pk=ypref_pk):
@@ -589,10 +587,16 @@ def pref_details(request, ypref_pk):
         i += 1
 
     if request.method == 'POST':
-        comment = pref.comments.create(author=request.user, body=request.POST['body'])
-        pref.comments.all().update(is_read=True)
-        comment.is_read = False
-        comment.save()
+        # comment = pref.comments.create(author=request.user, body=request.POST['body'])
+        # pref.comments.all().update(is_read=True)
+        # comment.is_read = False
+        # comment.save()
+        followup_form = forms.ProfFollowUpForm(request.POST)
+        if followup_form.is_valid():
+            followup = followup_form.save(commit=False)
+            followup.author = request.user
+            followup.xpref = pref
+            followup.save()
 
     context = {
         'pref': pref,
@@ -603,6 +607,9 @@ def pref_details(request, ypref_pk):
         'kw_total': kw_total,
         'prof_images': prof_images,
         'comment_form': CommentForm(),
+        # 'followup_form': ProfFollowUpForm(initial={'xpref': pref, 'author': request.user}),
+        'followup_form': ProfFollowUpForm(),
+        'followUps': pref.proformafollowup_set.all(),
     }
     return render(request, 'requests/admin_jemco/ypref/details.html', context)
 
@@ -1214,3 +1221,11 @@ def proforma_pdf(request, ypref_pk):
         }
         print(context['contents']['pref'].date_fa)
         return render(request, 'requests/admin_jemco/ypref/details_pdf.html', context)
+
+
+@login_required
+def followup_delete(request, followup_pk):
+    followup = ProformaFollowUP.objects.get(pk=followup_pk)
+    pref_pk = followup.xpref.pk
+    followup.delete()
+    return redirect('pref_details', ypref_pk=pref_pk)
