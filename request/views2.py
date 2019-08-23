@@ -1253,7 +1253,9 @@ def req_report(request):
             req_list = req_list.filter(date_fa__lte=request.POST['date_max'])
         if request.POST['status'] and request.POST['status'] != '0':
             status = request.POST['status']
-            if status == 'close':
+            if status == 'no_prof':
+                req_list = req_list.filter(xpref__isnull=True)
+            elif status == 'close':
                 req_list = req_list.filter(finished=True)
             elif status == 'open':
                 req_list = req_list.filter(finished=False)

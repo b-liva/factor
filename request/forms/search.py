@@ -139,6 +139,7 @@ class ReqSearchForm(forms.Form):
         'class': 'form-control',})
     CHOICES = (
         ('0', '---',),
+        ('no_prof', 'بدون پیش فاکتور',),
         ('close', 'بسته',),
         ('open', 'باز',),
         ('to_follow', 'اولویت پیگیری',),
