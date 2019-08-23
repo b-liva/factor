@@ -102,7 +102,7 @@ class SpecForm(forms.ModelForm):
     class Meta:
         model = models.ReqSpec
         fields = '__all__'
-        exclude = ('owner', 'req_id', 'is_active', 'ip_type', 'ic_type', 'price', 'permission', 'sent')
+        exclude = ('owner', 'req_id', 'is_active', 'ip_type', 'ic_type', 'price', 'permission', 'sent', 'rpm',)
         labels = {
             'qty': ('تعداد'),
             'type': ('نوع'),

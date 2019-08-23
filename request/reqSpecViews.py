@@ -214,16 +214,17 @@ def spec_form(request, req_pk):
             spec = form.save(commit=False)
             spec.req_id = req
             spec.owner = request.user
-            code = MotorsCode.objects.filter(
-                kw=spec.kw,
-                speed=spec.rpm_new.rpm,
-                voltage=spec.voltage,
-                im=spec.im.title,
-                ic=spec.ic.title,
-                ip=spec.ip.title,
-            )
-            if code.count() == 1:
-                spec.code = code.first().code
+            if hasattr(spec.im, 'title') and hasattr(spec.ic, 'title') and hasattr(spec.ip, 'title'):
+                code = MotorsCode.objects.filter(
+                    kw=spec.kw,
+                    speed=spec.rpm_new.rpm,
+                    voltage=spec.voltage,
+                    im=spec.im.title,
+                    ic=spec.ic.title,
+                    ip=spec.ip.title,
+                )
+                if code.count() == 1:
+                    spec.code = code.first().code
 
             spec.save()
             messages.add_message(request, level=20, message=f'یک ردیف به درخواست شماره {req.number} اضافه شد.')
@@ -266,16 +267,20 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
     if request.method == 'POST':
         if form.is_valid():
             spec = form.save(commit=False)
-            code = MotorsCode.objects.filter(
-                kw=spec.kw,
-                speed=spec.rpm_new.rpm,
-                voltage=spec.voltage,
-                im=spec.im.title,
-                ic=spec.ic.title,
-                ip=spec.ip.title,
-            )
-            if code.count() == 1:
-                spec.code = code.first().code
+            spec.rpm = spec.rpm_new.rpm
+            if hasattr(spec.im, 'title') and hasattr(spec.ic, 'title') and hasattr(spec.ip, 'title'):
+                code = MotorsCode.objects.filter(
+                    kw=spec.kw,
+                    speed=spec.rpm_new.rpm,
+                    voltage=spec.voltage,
+                    im=spec.im.title,
+                    ic=spec.ic.title,
+                    ip=spec.ip.title,
+                )
+                if code.count() == 1:
+                    spec.code = code.first().code
+                else:
+                    spec.code = 99009900
             else:
                 spec.code = 99009900
             spec.save()
