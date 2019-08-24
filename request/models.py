@@ -241,7 +241,7 @@ class ReqSpec(models.Model):
 
     qty = models.IntegerField(default=1)
     kw = models.FloatField()
-    rpm = models.IntegerField()
+    rpm = models.IntegerField(null=True, blank=True)
     rpm_new = models.ForeignKey(RpmType, on_delete=models.DO_NOTHING)
     voltage = models.IntegerField(default=380)
     ip_type = models.IntegerField(null=True, blank=True)
@@ -283,9 +283,9 @@ class Xpref(models.Model):
     owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
     req_id = models.ForeignKey(Requests, on_delete=models.DO_NOTHING)
     number = models.IntegerField(unique=True)
-    number_auto = models.IntegerField(unique=True)
+    # number_auto = models.IntegerField(unique=True)
     number_td = models.IntegerField(null=True, blank=True)
-    temp_number = models.IntegerField(null=True, blank=True)
+    # temp_number = models.IntegerField(null=True, blank=True)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
     date_modified = models.DateTimeField(null=True, blank=True)
@@ -384,7 +384,7 @@ class ProformaFollowUP(models.Model):
     description = models.TextField(null=True)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
-    next_followup = jmodels.jDateField(default=now() + jdatetime.timedelta(7))
+    next_followup = jmodels.jDateField(null=True, blank=True)
 
     def __str__(self):
         return "%s(%s)" % (self.summary, self.date_fa,)

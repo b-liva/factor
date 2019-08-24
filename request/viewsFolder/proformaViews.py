@@ -766,8 +766,6 @@ def pro_form(request):
             last = Xpref.objects.order_by('number').last()
 
             proforma.number = last.number + 1
-            # todo: Xpref.number_auto can be deleted after migration is done all over the places. local, vbstech, crm
-            proforma.number_auto = proforma.number
             proforma.save()
 
             # Save files
