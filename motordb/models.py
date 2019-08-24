@@ -130,6 +130,7 @@ class Motors(models.Model):
 
 
 class MotorsCode(models.Model):
+    owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
     code = models.CharField(max_length=15, unique=True)
     kw = models.DecimalField(max_digits=7, decimal_places=1)
     frame_size = models.CharField(max_length=6, blank=True, null=True)
@@ -157,6 +158,11 @@ class MotorsCode(models.Model):
 
     def __str__(self):
         return '%s kw - %s rpm - %s V' % (self.kw, self.speed, self.voltage)
+
+    class Meta:
+        permissions = (
+            ('index_motorscode', 'can view motor codes'),
+        )
 
 
 class MotorsPrice(models.Model):

@@ -8,3 +8,6 @@ class MotorCodesSerializers(serializers.ModelSerializer):
         model = MotorsCode
         fields = "__all__"
 
+    def create(self, validated_data):
+        validated_data['owner'] = self.context['request'].user
+        return super().create(validated_data)

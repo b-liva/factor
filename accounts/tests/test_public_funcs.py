@@ -4,7 +4,9 @@ from django.shortcuts import get_object_or_404
 from customer.models import Type, Customer
 import datetime
 
-from request.models import Requests, ReqSpec, ProjectType, RpmType, Xpref, PrefSpec, Payment
+from motordb.models import MotorsCode
+from request.models import Requests, ReqSpec, ProjectType, RpmType, Xpref, PrefSpec, Payment, IEType, IMType, IPType, \
+    ICType
 
 User = get_user_model()
 
@@ -84,6 +86,10 @@ def login_as_expert(username='expert_user'):
         Permission.objects.get(codename='add_payment', content_type__app_label='request'),
         Permission.objects.get(codename='change_payment', content_type__app_label='request'),
         Permission.objects.get(codename='delete_payment', content_type__app_label='request'),
+        Permission.objects.get(codename='add_motorscode', content_type__app_label='motordb'),
+        Permission.objects.get(codename='index_motorscode', content_type__app_label='motordb'),
+        Permission.objects.get(codename='change_motorscode', content_type__app_label='motordb'),
+        Permission.objects.get(codename='delete_motorscode', content_type__app_label='motordb'),
     )
     ex_user.groups.add(sale_expert_group)
     ex_user.super_user = True
@@ -126,3 +132,18 @@ def sample_income(proforma, owner, number, **params):
     }
     defaults.update(params)
     return Payment.objects.create(xpref_id=proforma, owner=owner, number=number, **defaults)
+
+
+def sample_motorcode(owner, code, kw, speed, voltage, **params):
+    im = IMType.objects.create(title='IMB35')
+    ip = IPType.objects.create(title='IP56')
+    ic = ICType.objects.create(title='IC511')
+    ie = IEType.objects.create(title='IE2')
+    default = {
+        'ie': ie.pk,
+        'im': im.pk,
+        'ic': ic.pk,
+        'ip': ip.pk,
+    }
+    default.update(params)
+    return MotorsCode.objects.create(owner=owner, code=code, kw=kw, speed=speed, voltage=voltage, **default)
