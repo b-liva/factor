@@ -60,6 +60,8 @@ def login_as_expert(username='expert_user'):
         Permission.objects.get(codename='add_customer', content_type__app_label='customer'),
         Permission.objects.get(codename='index_customer', content_type__app_label='customer'),
         Permission.objects.get(codename='read_customer', content_type__app_label='customer'),
+        Permission.objects.get(codename='change_customer', content_type__app_label='customer'),
+        Permission.objects.get(codename='delete_customer', content_type__app_label='customer'),
         Permission.objects.get(codename='index_requests', content_type__app_label='request'),
         Permission.objects.get(codename='add_requests', content_type__app_label='request'),
         Permission.objects.get(codename='delete_requests', content_type__app_label='request'),
