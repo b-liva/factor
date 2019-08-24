@@ -213,6 +213,7 @@ def spec_form(request, req_pk):
         if form.is_valid():
             spec = form.save(commit=False)
             spec.req_id = req
+            spec.rpm = spec.rpm_new.rpm
             spec.owner = request.user
             if hasattr(spec.im, 'title') and hasattr(spec.ic, 'title') and hasattr(spec.ip, 'title'):
                 code = MotorsCode.objects.filter(
