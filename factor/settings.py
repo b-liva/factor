@@ -154,9 +154,9 @@ DATABASES = {
         'PASSWORD': '',
         # 'PASSWORD': 'livapass',
         'HOST': 'localhost',
-        # 'OPTIONS': {
-        #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        # },
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        },
         'TEST': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(BASE_DIR, 'mytestdatabase.sqlite3'),
