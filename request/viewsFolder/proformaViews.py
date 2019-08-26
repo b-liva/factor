@@ -759,13 +759,16 @@ def pro_form(request):
         form = forms.ProformaForm(request.user.pk, request.POST)
         img_form = proforma_forms.ProfFileForm(request.POST, request.FILES)
         files = request.FILES.getlist('image')
+        print(request.POST)
         if form.is_valid():
+            print('form is valid.')
             # Save Proforma
             proforma = form.save(commit=False)
             proforma.owner = request.user
             last = Xpref.objects.order_by('number').last()
 
             proforma.number = last.number + 1
+            print(proforma.number)
             proforma.save()
 
             # Save files
@@ -1092,7 +1095,8 @@ def prof_spec_form(request, ypref_pk):
     proforma = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
     req = proforma.req_id
     reqspecs = req.reqspec_set.all()
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
+
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref', instance=proforma)
 
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')

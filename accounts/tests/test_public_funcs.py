@@ -93,7 +93,7 @@ def sample_reqspec(req, **params):
     defaults = {
         'type': ProjectType.objects.create(title='روتین'),
         'rpm_new': RpmType.objects.create(rpm=1500, pole=4),
-        'qty': 132, 'kw': 132, 'rpm': 1500, 'voltage': 380,
+        'qty': 2, 'kw': 132, 'rpm': 1500, 'voltage': 380,
     }
     defaults.update(params)
 
@@ -101,9 +101,7 @@ def sample_reqspec(req, **params):
 
 
 def sample_proforma(req, owner, number, **params):
-    defaults = {
-        'number_auto': number,
-    }
+    defaults = {}
     defaults.update(params)
     return Xpref.objects.create(req_id=req, owner=owner, number=number, **defaults)
 
