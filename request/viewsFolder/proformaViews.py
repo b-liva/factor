@@ -460,7 +460,6 @@ def perms_export(request):
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
     profs = Xpref.objects.filter(perm=True).order_by('due_date')
-    print(profs.count())
     profs = Xpref.objects.filter(is_active=True, owner=request.user, perm=True) \
         .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0))) \
         .annotate(total_qty_sent=Sum('prefspec__qty_sent', filter=Q(prefspec__price__gt=0))) \
@@ -476,9 +475,6 @@ def perms_export(request):
             .annotate(qty_remaining=F('total_qty') - F('total_qty_sent')) \
             .filter(qty_remaining__gt=0) \
             .order_by('due_date', 'pk')
-
-    print(profs.count())
-
 
     profs_values = profs.values()
     final = {}
@@ -721,9 +717,7 @@ def pref_delete(request, ypref_pk):
 def delete_proforma_no_prefspec(request, ypref_pk):
     try:
         prof = Xpref.objects.get(pk=ypref_pk)
-        print(prof)
         prefspecs = prof.prefspec_set.filter(price__gt=0)
-        print(prefspecs.values('price'))
         if prefspecs.count() == 0:
             prof.delete()
     except:
@@ -754,21 +748,17 @@ def pro_form(request):
     reqs = Requests.objects.filter(is_active=True)
     owners_reqs = Requests.objects.filter(is_active=True).filter(owner=request.user)
     imgform = proforma_forms.ProfFileForm()
-    print(f"method: {request.method}")
     if request.method == 'POST':
         form = forms.ProformaForm(request.user.pk, request.POST)
         img_form = proforma_forms.ProfFileForm(request.POST, request.FILES)
         files = request.FILES.getlist('image')
-        print(request.POST)
         if form.is_valid():
-            print('form is valid.')
             # Save Proforma
             proforma = form.save(commit=False)
             proforma.owner = request.user
             last = Xpref.objects.order_by('number').last()
 
             proforma.number = last.number + 1
-            print(proforma.number)
             proforma.save()
 
             # Save files
@@ -805,11 +795,10 @@ def pro_form(request):
 
             return redirect('prof_spec_form', ypref_pk=proforma.pk)
         else:
-            print('form is not Valid')
+            pass
     else:
         if 'request_pk' in request.session:
             reqq = Requests.objects.filter(pk=request.session['request_pk'])
-            print(reqq)
             data = {
                 'req_id': Requests.objects.get(pk=request.session['request_pk']),
             }
@@ -1027,7 +1016,6 @@ def pref_insert(request):
     # can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
     reqs = Requests.objects.filter(is_active=True)
     req_no = request.POST['req_no']
-    print(req_no)
     xpref_no = request.POST['xpref']
     spec_prices = request.POST.getlist('price')
     spec_ids = request.POST.getlist('spec_id')
@@ -1094,7 +1082,7 @@ def prof_spec_form(request, ypref_pk):
         return redirect('errorpage')
     proforma = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
     req = proforma.req_id
-    reqspecs = req.reqspec_set.all()
+    reqspecs = req.reqspec_set.filter(is_active=True)
 
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref', instance=proforma)
 
@@ -1103,6 +1091,8 @@ def prof_spec_form(request, ypref_pk):
         return redirect('errorpage')
 
     if request.method == 'POST':
+        print(request.POST)
+        print('this is not ran at all')
         # form = forms.ProfSpecForm(request.POST, request.user)
         form = forms.ProfSpecForm(request.POST)
         if form.is_valid():
@@ -1114,8 +1104,6 @@ def prof_spec_form(request, ypref_pk):
         else:
             print('form is not valid')
     else:
-        print('03')
-        print(proforma.prefspec_set.all())
         form = forms.ProfSpecForm(request.POST)
 
     context = {

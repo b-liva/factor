@@ -15,7 +15,8 @@ class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
 
     def get_queryset(self):
-        return self.queryset.filter(owner=self.request.user)
+        # return self.queryset.filter(owner=self.request.user)
+        return self.queryset.order_by('name')
 
     # def perform_create(self, serializer):
     #     if 'date2' not in self.request.data:

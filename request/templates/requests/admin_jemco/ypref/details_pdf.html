@@ -91,10 +91,11 @@
                                         <span>{{ object.obj.kw }}kw</span>
                                         <span>{{ object.obj.rpm }}rpm</span>
                                         <span>{{ object.obj.voltage }}V</span>
-                                        {% if object.obj.ip %}<span>{{ object.obj.ip }} IP</span>{% endif %}
-                                        {% if object.obj.ic %}<span>{{ object.obj.ic }} IC</span>{% endif %}
-                                        {% if object.obj.im %}<span>{{ object.obj.im }} IM</span>{% endif %}
+                                        {% if object.obj.ip %}<span>{{ object.obj.ip }}</span>{% endif %}
+                                        {% if object.obj.ic %}<span>{{ object.obj.ic }}</span>{% endif %}
+                                        {% if object.obj.im %}<span>{{ object.obj.im }}</span>{% endif %}
                                     </td>
+                                {{ object.obj.im }}
                                     <td class="text-center">{{ object.obj.qty }}</td>
                                     <td class="text-center">{{ object.obj.price|intcomma:0 }}</td>
                                     <td class="text-center">{{ object.spec_total|intcomma:0 }}</td>

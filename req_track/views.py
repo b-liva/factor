@@ -429,10 +429,8 @@ def prof_followup_list2(request):
 def prof_followup_find(request):
     if request.method == 'POST':
         number = request.POST['prof_number']
-        print(number)
         if Xpref.objects.get(number=int(number)):
             prof = Xpref.objects.get(number=int(number))
-            print('Ok')
             return redirect('req_track:prof_followup_form', prof_pk=prof.pk)
         else:
             print('Not Ok')
