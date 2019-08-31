@@ -125,6 +125,7 @@ class CustomAPITestCase(APITestCase):
             Permission.objects.get(codename='delete_reqspec', content_type__app_label='request'),
             Permission.objects.get(codename='read_reqspecs', content_type__app_label='request'),
             Permission.objects.get(codename='index_xpref', content_type__app_label='request'),
+            Permission.objects.get(codename='read_proforma', content_type__app_label='request'),
             Permission.objects.get(codename='add_xpref', content_type__app_label='request'),
             Permission.objects.get(codename='delete_xpref', content_type__app_label='request'),
             Permission.objects.get(codename='change_xpref', content_type__app_label='request'),

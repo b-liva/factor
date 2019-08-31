@@ -828,9 +828,16 @@ def pref_insert_spec_form(request, ypref_pk):
     specs = req.reqspec_set.filter(is_active=True)
     prefspecs = pref.prefspec_set.filter(is_active=True)
     # prices = request.POST.getlist('price')
-
     prices = [float(i) if i is not '' else 0 for i in request.POST.getlist('price')]
+    if prices == [0 for i in prices]:
+        messages.error(request, 'پیش فاکتور شامل هیچ قیمتی نیست.')
+        return redirect('prof_spec_form', ypref_pk=pref.pk)
+
     qty = request.POST.getlist('qty')
+    if qty == ['0' for i in qty]:
+        messages.error(request, 'پیش فاکتور شامل هیچ دستگاهی نیست.')
+        return redirect('prof_spec_form', ypref_pk=pref.pk)
+
     considerations = request.POST.getlist('considerations')
     i = 0
     for s in prefspecs:
@@ -850,7 +857,7 @@ def pref_edit(request, ypref_pk):
         messages.error(request, 'no Proforma ّFound')
         return redirect('errorpage')
     xpref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', xpref)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.change_xpref', xpref)
     if not can_edit:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
@@ -858,7 +865,15 @@ def pref_edit(request, ypref_pk):
     # spec_prices = [float(i.replace(',', '')) for i in request.POST.getlist('price')]
     # spec_prices = request.POST.getlist('price')
     spec_prices = [float(i) if i is not '' else 0 for i in request.POST.getlist('price')]
+    if spec_prices == [0 for i in spec_prices]:
+        messages.error(request, 'تمام قیمت ها نمیتواند صفر باشد')
+        return redirect('pref_edit_form', ypref_pk=xpref.pk)
+
     spec_qty = request.POST.getlist('qty')
+    if spec_qty == ['0' for i in spec_qty]:
+        messages.error(request, 'پیش فاکتور شامل هیچ دستگاهی نیست')
+        return redirect('pref_edit_form', ypref_pk=xpref.pk)
+
     spec_qty_sent = request.POST.getlist('qty_sent')
     spec_sent = request.POST.getlist('sent')
     prof_images = xpref.proffiles_set.all()
@@ -1062,14 +1077,18 @@ def pref_edit_form(request, ypref_pk):
         messages.error(request, 'no Proforma')
         return redirect('errorpage')
     proforma = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', proforma)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.change_xpref', proforma)
     if not can_edit:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
+    show = True
+    if proforma.total_proforma_price_vat()['price_vat'] == 0:
+        show = False
     prof_specs = proforma.prefspec_set.all()
     context = {
         'proforma': proforma,
-        'prof_specs': prof_specs
+        'prof_specs': prof_specs,
+        'show': show,
     }
 
     return render(request, 'requests/admin_jemco/ypref/edit_form.html', context)
