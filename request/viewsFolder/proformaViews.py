@@ -1208,7 +1208,12 @@ def proforma_pdf(request, ypref_pk):
 
     # response['Content-disposition'] = 'attachment;filename={}.pdf'.format(your_filename)
     # response['Content-disposition'] = 'inline;filename={}.pdf'.format('output')
-    response['Content-disposition'] = 'inline;filename={}{}.pdf'.format('PF_', pref.number)
+    # response['Content-disposition'] = 'inline;filename={}{}.pdf'.format(
+    response['Content-disposition'] = 'attachment;filename=PF_{}_Req{}_{}.pdf'.format(
+        pref.number,
+        pref.req_id.number,
+        pref.owner.username,
+    )
 
     pdf_render = True
     if pdf_render:
