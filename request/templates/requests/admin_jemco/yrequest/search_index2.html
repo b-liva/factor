@@ -93,6 +93,7 @@
                     <th colspan="col" class="text-center">مشتری</th>
                     <th colspan="col" class="text-center">تاریخ ثبت</th>
                     <th colspan="col" class="text-center">KW</th>
+                    <th colspan="col" class="text-center">دستگاه</th>
                     <th colspan="col" class="text-center">کارشناس</th>
                     <th colspan="col" class="text-center">جزئیات</th>
                 </tr>
@@ -109,7 +110,10 @@
                         <td scope="row" class="text-center">{{ r.number }}</td>
                         <td class="text-center">{{ r.customer }}</td>
                         <td class="text-center">{{ r.date_fa }}</td>
-                        <td class="text-center">{{ r.total_kw }}</td>
+{#                    previouse version#}
+{#                        <td class="text-center">{{ r.total_kw }}</td>#}
+                        <td class="text-center">{{ r.kw }}</td>
+                        <td class="text-center">{{ r.qty }}</td>
                         <td class="text-center">{{ r.owner.last_name }} -
                             {% for colleague in r.colleagues.all %}
                                 {% if colleague != r.owner %}
@@ -158,7 +162,13 @@
                         </td>
                     </tr>
                 {% endfor %}
-
+                <tr>
+                    <td class="text-center">جمع</td>
+                    <td colspan="3"></td>
+                    <td class="text-center">{{ kw.sum|intcomma }}</td>
+                    <td class="text-center">{{ qty.sum|intcomma }}</td>
+                    <td colspan="2"></td>
+                </tr>
                 </tbody>
             </table>
             {% if req_page.has_other_pages %}
