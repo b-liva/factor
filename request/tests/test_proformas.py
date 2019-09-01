@@ -112,7 +112,6 @@ class PrivateProformaTest(CustomAPITestCase):
         exist = Requests.objects.filter(pk=1000).exists()
         self.proforma_payload.update({'req_id': 1000})
         res = self.client.post(reverse('pro_form'), self.proforma_payload)
-        print(res.context['form'].errors)
         self.assertTrue(res.context['form'].errors)
         self.assertFalse(exist)
 
@@ -138,7 +137,6 @@ class PrivateProformaTest(CustomAPITestCase):
         self.sample_reqspec(owner=self.ex_user, kw=355, rpm=1500)
         proforma = self.sample_proforma(req=req, owner=self.ex_user, number=983424)
         res = self.client.get(reverse('pref_details', args=[proforma.pk]))
-        print(res)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.context['pref'].pk, proforma.pk)
 
@@ -325,10 +323,10 @@ class PrivateProformaTest(CustomAPITestCase):
         spec3 = self.sample_reqspec(owner=self.ex_user, req_id=req, kw=160, rpm=3000)
         proforma = self.sample_proforma(req=req, owner=self.ex_user, number=9820009)
         payload = {
-            'qty': ['1', '1', '2'], 'price': ['0', '0', '0'], 'spec_id': [spec1.pk, spec2.pk, spec3.pk],
+            'qty': ['1', '1', '2'], 'price': [0,0,0], 'spec_id': [spec1.pk, spec2.pk, spec3.pk],
         }
         res = self.client.post(reverse('pref_insert_spec_form', args=[proforma.pk]), payload)
-
+        print(res)
         self.assertRedirects(
             res,
             expected_url=reverse('prof_spec_form', args=[proforma.pk]),
@@ -371,7 +369,7 @@ class PrivateProformaTest(CustomAPITestCase):
         spec3 = self.sample_reqspec(owner=self.ex_user, req_id=req, kw=160, rpm=3000)
         proforma = self.sample_proforma(req=req, owner=self.ex_user, number=9820009)
         payload = {
-            'qty': ['515', '3531', 'osljf'], 'price': ['651', '68435', '68451'], 'spec_id': [spec1.pk, spec2.pk, spec3.pk],
+            'qty': ['515', '3531', '34'], 'price': ['651', '68435', 'dgfg'], 'spec_id': [spec1.pk, spec2.pk, spec3.pk],
         }
         res = self.client.post(reverse('pref_insert_spec_form', args=[proforma.pk]), payload)
 
@@ -459,6 +457,38 @@ class PrivateProformaTest(CustomAPITestCase):
         proforma = self.sample_proforma(req=req, owner=self.ex_user, number=9820009)
 
         res = self.client.get(reverse('pref_edit_form', args=[proforma.pk]))
-        print('this is res: ', res)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_update_prefspec_post_sent_gt_qty_fail(self):
+        """Test if qty sent is greater than qty it will fail."""
+        self.client.force_login(user=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, customer=self.customer, number=981515)
+        spec1 = self.sample_reqspec(owner=self.ex_user, req_id=req, kw=55, rpm=1000)
+        spec2 = self.sample_reqspec(owner=self.ex_user, req_id=req, kw=315, rpm=1500)
+        spec3 = self.sample_reqspec(owner=self.ex_user, req_id=req, kw=160, rpm=3000)
+        proforma = self.sample_proforma(req=req, owner=self.ex_user, number=9820009)
+        payload = {
+            'qty': ['1', '1', '2'], 'price': ['3452345', '2345345', '83975'], 'spec_id': [spec1.pk, spec2.pk, spec3.pk],
+        }
+        res = self.client.post(reverse('pref_insert_spec_form', args=[proforma.pk]), payload)
+
+        self.assertRedirects(
+            res,
+            expected_url=reverse('pref_details', args=[proforma.pk]),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+        response = self.client.get(reverse('pref_details', args=[proforma.pk]))
+        prefspecs = proforma.prefspec_set.all().count()
+        self.assertEqual(response.context['prefspecs'].count(), prefspecs)
+        payload = {
+            'qty': ['1', '1', '2'], 'qty_sent': ['1', '1', '5'], 'price': ['3452345', '2345345', '83975'], 'spec_id': [spec1.pk, spec2.pk, spec3.pk],
+        }
+        res = self.client.post(reverse('pref_edit', args=[proforma.pk]), payload)
+        self.assertRedirects(
+            res,
+            expected_url=reverse('pref_edit_form', args=[proforma.pk]),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
     # Delete

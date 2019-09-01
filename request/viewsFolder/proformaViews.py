@@ -828,8 +828,17 @@ def pref_insert_spec_form(request, ypref_pk):
     specs = req.reqspec_set.filter(is_active=True)
     prefspecs = pref.prefspec_set.filter(is_active=True)
     # prices = request.POST.getlist('price')
-    prices = [float(i) if i is not '' else 0 for i in request.POST.getlist('price')]
-    if prices == [0 for i in prices]:
+    prices = [i if i is not '' else 0 for i in request.POST.getlist('price')]
+
+    price_list = []
+    # These checks if there is any string that can't be change to a number.
+    for i in prices:
+        try:
+            price_list.append(float(i))
+        except:
+            messages.error(request, 'اشکال در اطلاعات قیمت')
+            return redirect('prof_spec_form', ypref_pk=pref.pk)
+    if prices == ['0' for i in prices]:
         messages.error(request, 'پیش فاکتور شامل هیچ قیمتی نیست.')
         return redirect('prof_spec_form', ypref_pk=pref.pk)
 
@@ -842,8 +851,7 @@ def pref_insert_spec_form(request, ypref_pk):
     i = 0
     for s in prefspecs:
         s.qty = qty[i]
-        s.price = float(prices[i]) if prices[i] else 0
-        # x = 10 if a > b else 11 --> as a sample
+        s.price = prices[i] if prices[i] else 0
         s.considerations = considerations[i]
         s.save()
         i += 1
@@ -875,6 +883,10 @@ def pref_edit(request, ypref_pk):
         return redirect('pref_edit_form', ypref_pk=xpref.pk)
 
     spec_qty_sent = request.POST.getlist('qty_sent')
+    for i in range(len(spec_qty)):
+        if int(spec_qty_sent[i]) > int(spec_qty[i]):
+            messages.error(request, 'تعداد ارسال شده نمیتواند از تعداد سفارش بیشتر باشد.')
+            return redirect('pref_edit_form', ypref_pk=xpref.pk)
     spec_sent = request.POST.getlist('sent')
     prof_images = xpref.proffiles_set.all()
     xspec = xpref.prefspec_set.all()
@@ -883,9 +895,6 @@ def pref_edit(request, ypref_pk):
         item.sent = True if str(item.pk) in spec_sent and spec_prices[x] != 0 and item.xpref_id.perm else False
         item.price = spec_prices[x]
         item.qty = spec_qty[x]
-        if int(spec_qty_sent[x]) > int(item.qty):
-            messages.error(request, 'تعداد ارسال شده نمی تواند از تعداد سفارش بیشتر باشد.')
-            return redirect('pref_edit_form', ypref_pk=xpref.pk)
 
         item.qty_sent = spec_qty_sent[x]
         item.save()
@@ -896,7 +905,7 @@ def pref_edit(request, ypref_pk):
     for prefspec in prefspecs:
         kw = prefspec.kw
         speed = prefspec.rpm
-        price = MotorDB.objects.filter(kw=kw).filter(speed=speed).last()
+        price = MotorDB.objects.filter(motor__kw=kw, motor__speed=speed, motor__voltage=prefspec.voltage).last()
         if hasattr(price, 'prime_cost'):
             prime = price.prime_cost
             percentage = (prefspec.price / (prime))
