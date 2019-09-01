@@ -1274,6 +1274,11 @@ def req_report(request):
     if request.method == 'GET':
         form = ReqSearchForm()
 
+    req_list = req_list.annotate(qty=Sum('reqspec__qty'))
+    qty = req_list.aggregate(sum=Sum('qty'))
+    req_list = req_list.annotate(kw=Sum(F('reqspec__qty') * F('reqspec__kw'), output_field=FloatField()))
+    kw = req_list.aggregate(sum=Sum('kw'))
+
     page = request.GET.get('page', 1)
     orders_list = req_list
     paginator = Paginator(orders_list, 30)
@@ -1287,6 +1292,8 @@ def req_report(request):
         'fil': req_filter,
         'req_page': req_page,
         'form': form,
+        'qty': qty,
+        'kw': kw,
     }
     return render(request, 'requests/admin_jemco/yrequest/search_index2.html', context)
 
