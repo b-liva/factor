@@ -1,11 +1,11 @@
 from django.test import TestCase
 from customer.func import addNum
-from accounts.tests import test_public_funcs as funcs
+from accounts.tests.test_public_funcs import CustomAPITestCase
 from customer.models import Customer
 import datetime
 
 
-class PublicCustomerModelTest(TestCase):
+class PublicCustomerModelTest(CustomAPITestCase):
 
     def test_add_number(self):
         self.assertEqual(addNum(8, 3), 11)
@@ -13,10 +13,10 @@ class PublicCustomerModelTest(TestCase):
     def test_customer_str(self):
         """Test the customer string representation"""
         customer = Customer.objects.create(
-            owner=funcs.sample_user(),
+            owner=self.sample_user(),
             name='سازش',
             date2=datetime.datetime.now(),
-            type=funcs.sample_customer_type(),
+            type=self.sample_customer_type(),
         )
 
         self.assertEqual(str(customer), customer.name)

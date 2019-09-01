@@ -2,19 +2,15 @@ from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 from django.shortcuts import reverse
 from request.models import PrefSpec, Xpref
-from accounts.tests import test_public_funcs as funcs
+from accounts.tests.test_public_funcs import CustomAPITestCase
 
 PREFSPEC_URL = reverse('apivs:prefspec-list')
 
 
-class PublicPrefSpecTests(APITestCase):
+class PublicPrefSpecTests(CustomAPITestCase):
 
     def setUp(self):
-        self.user = funcs.sample_user(username='user')
-        self.superuser = funcs.sample_superuser(username='superuser')
-        self.ex_user = funcs.login_as_expert(username='ex_user')
-
-        self.client = APIClient()
+        super().setUp()
 
     def test_prefspec_login_required(self):
         """Test prefspec is login required."""
@@ -23,32 +19,23 @@ class PublicPrefSpecTests(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class PrivatePrefSpecTest(APITestCase):
+class PrivatePrefSpecTest(CustomAPITestCase):
     def setUp(self):
         """Setup for private prefspecs test cases."""
-        self.user = funcs.sample_user(username='user')
-        self.superuser = funcs.sample_superuser(username='superuser')
-        self.ex_user = funcs.login_as_expert(username='ex_user')
-
-        self.client = APIClient()
+        super().setUp()
         self.client.force_authenticate(user=self.user)
 
-        self.customer = funcs.sample_customer(owner=self.user, name='samplecustomer')
-        self.req = funcs.sample_request(owner=self.user, number=981010, customer=self.customer)
         self.specs_payload = [
             {'qty': 132, 'kw': 132, 'rpm': 1500, 'voltage': 380},
             {'qty': 315, 'kw': 160, 'rpm': 1500, 'voltage': 380},
             {'qty': 132, 'kw': 315, 'rpm': 3000, 'voltage': 380},
             {'qty': 75, 'kw': 75, 'rpm': 1000, 'voltage': 380},
         ]
-        # self.reqspec1 = funcs.sample_reqspec(req=self.req, **self.specs_payload[0])
-        # self.reqspec2 = funcs.sample_reqspec(req=self.req, **self.specs_payload[1])
-        self.proforma = funcs.sample_proforma(req=self.req, number=985050, owner=self.user)
 
     def test_create_prefspec_api(self):
         self.client.force_authenticate(user=self.ex_user)
-        proforma = funcs.sample_proforma(req=self.req, owner=self.ex_user, number=837498345)
-        spec = funcs.sample_reqspec(req=self.req, owner=self.ex_user, **self.specs_payload[0])
+        proforma = self.sample_proforma(req=self.req, owner=self.ex_user, number=837498345)
+        spec = self.sample_reqspec(req_id=self.req, owner=self.ex_user, **self.specs_payload[0])
         payload = {
             'owner': self.ex_user.pk,
             'xpref_id': proforma.pk,
@@ -71,13 +58,13 @@ class PrivatePrefSpecTest(APITestCase):
         """Test retrieve prefspecs list"""
 
         self.client.force_authenticate(user=self.ex_user)
-        req = funcs.sample_request(owner=self.ex_user, customer=self.customer, number=982020)
-        spec1 = funcs.sample_reqspec(req=req, owner=self.ex_user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req=req, owner=self.ex_user, **self.specs_payload[1])
-        prof = funcs.sample_proforma(req=req, number=984040, owner=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, customer=self.customer, number=982020)
+        spec1 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[1])
+        prof = self.sample_proforma(req=req, number=984040, owner=self.ex_user)
 
-        prefspec1 = funcs.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec1)
-        prefspec2 = funcs.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec2)
+        prefspec1 = self.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec1)
+        prefspec2 = self.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec2)
 
         res = self.client.get(reverse('apivs:xpref-prefspecs', args=[prof.pk]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -89,11 +76,11 @@ class PrivatePrefSpecTest(APITestCase):
 
         self.client.force_authenticate(user=self.ex_user)
 
-        spec1 = funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[1])
+        spec1 = self.sample_reqspec(req_id=self.req, owner=self.user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=self.req, owner=self.user, **self.specs_payload[1])
 
-        prefspec1 = funcs.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec1)
-        prefspec2 = funcs.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec2)
+        prefspec1 = self.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec1)
+        prefspec2 = self.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec2)
 
         res = self.client.get(reverse('apivs:xpref-prefspecs', args=[self.proforma.pk]))
 
@@ -101,18 +88,16 @@ class PrivatePrefSpecTest(APITestCase):
 
     def test_retrieve_prefspec_api(self):
         """Test retrieve prefspec"""
-
         self.client.force_authenticate(user=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, customer=self.customer, number=982020)
+        spec1 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[1])
+        prof = self.sample_proforma(req=req, number=984040, owner=self.ex_user)
 
-        req = funcs.sample_request(owner=self.ex_user, customer=self.customer, number=982020)
-        spec1 = funcs.sample_reqspec(req=req, owner=self.ex_user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req=req, owner=self.ex_user, **self.specs_payload[1])
-        prof = funcs.sample_proforma(req=req, number=984040, owner=self.ex_user)
+        prefspec1 = self.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec1)
+        prefspec2 = self.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec2)
 
-        prefspec1 = funcs.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec1)
-        prefspec2 = funcs.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec2)
-
-        res = self.client.get(reverse('apivs:reqspec-detail', args=[prefspec1.pk]))
+        res = self.client.get(reverse('apivs:prefspec-detail', args=[prefspec1.pk]))
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['id'], prefspec1.pk)
@@ -122,33 +107,34 @@ class PrivatePrefSpecTest(APITestCase):
 
         self.client.force_authenticate(self.ex_user)
 
-        spec1 = funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[1])
+        spec1 = self.sample_reqspec(req_id=self.req, owner=self.user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=self.req, owner=self.user, **self.specs_payload[1])
 
-        prefspec1 = funcs.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec1)
-        prefspec2 = funcs.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec2)
+        prefspec1 = self.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec1)
+        prefspec2 = self.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec2)
 
         res = self.client.get(reverse('apivs:reqspec-detail', args=[prefspec1.pk]))
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_prefspec_api(self):
         """Test update prefspec"""
+        # todo: It shouldn't be updated directly.
         self.client.force_authenticate(self.ex_user)
 
-        req = funcs.sample_request(owner=self.ex_user, customer=self.customer, number=982020)
-        spec1 = funcs.sample_reqspec(req=req, owner=self.ex_user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req=req, owner=self.ex_user, **self.specs_payload[1])
-        prof = funcs.sample_proforma(req=req, number=984040, owner=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, number=982020)
+        spec1 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[1])
+        prof = self.sample_proforma(req=req, number=984040, owner=self.ex_user)
 
-        prefspec1 = funcs.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec1)
-        prefspec2 = funcs.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec2)
+        prefspec1 = self.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec1)
+        prefspec2 = self.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec2)
 
         payload = {
             'kw': 355,
             'rpm': 1500,
         }
 
-        res = self.client.patch(reverse('apivs:reqspec-detail', args=[prefspec1.pk]), payload)
+        res = self.client.patch(reverse('apivs:prefspec-detail', args=[prefspec1.pk]), payload)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['kw'], payload['kw'])
 
@@ -156,11 +142,11 @@ class PrivatePrefSpecTest(APITestCase):
         """Test update prefspec is limited by permissions and ownership"""
 
         self.client.force_authenticate(user=self.ex_user)
-        spec1 = funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[1])
+        spec1 = self.sample_reqspec(req_id=self.req, owner=self.user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=self.req, owner=self.user, **self.specs_payload[1])
 
-        prefspec1 = funcs.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec1)
-        prefspec2 = funcs.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec2)
+        prefspec1 = self.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec1)
+        prefspec2 = self.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec2)
 
         payload = {
             'kw': 355,
@@ -175,13 +161,13 @@ class PrivatePrefSpecTest(APITestCase):
 
         self.client.force_authenticate(self.ex_user)
 
-        req = funcs.sample_request(owner=self.ex_user, customer=self.customer, number=982020)
-        spec1 = funcs.sample_reqspec(req=req, owner=self.ex_user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req=req, owner=self.ex_user, **self.specs_payload[1])
-        prof = funcs.sample_proforma(req=req, number=984040, owner=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, customer=self.customer, number=982020)
+        spec1 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[1])
+        prof = self.sample_proforma(req=req, number=984040, owner=self.ex_user)
 
-        prefspec1 = funcs.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec1)
-        prefspec2 = funcs.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec2)
+        prefspec1 = self.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec1)
+        prefspec2 = self.sample_prefspec(proforma=prof, owner=self.ex_user, reqspe=spec2)
 
         res = self.client.delete(reverse('apivs:prefspec-detail', args=[prefspec1.pk]))
         exist = PrefSpec.objects.filter(
@@ -197,11 +183,11 @@ class PrivatePrefSpecTest(APITestCase):
         """Test delete prefspec is limited by permissions and ownership"""
 
         self.client.force_authenticate(user=self.ex_user)
-        spec1 = funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[1])
+        spec1 = self.sample_reqspec(req_id=self.req, owner=self.user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=self.req, owner=self.user, **self.specs_payload[1])
 
-        prefspec1 = funcs.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec1)
-        prefspec2 = funcs.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec2)
+        prefspec1 = self.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec1)
+        prefspec2 = self.sample_prefspec(proforma=self.proforma, owner=self.user, reqspe=spec2)
 
         res = self.client.delete(reverse('apivs:prefspec-detail', args=[prefspec1.pk]))
         exist = PrefSpec.objects.filter(

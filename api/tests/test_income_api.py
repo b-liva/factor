@@ -1,19 +1,17 @@
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from django.shortcuts import reverse
-from accounts.tests import test_public_funcs as funcs
+from accounts.tests.test_public_funcs import CustomAPITestCase
 from request.models import Payment
 
 
 INCOME_URL = reverse('apivs:payment-list')
 
 
-class PublicIncomeTests(APITestCase):
+class PublicIncomeTests(CustomAPITestCase):
 
     def setUp(self):
-        self.user = funcs.sample_user(username='user')
-        self.superuser = funcs.sample_superuser(username='superuser')
-        self.ex_user = funcs.login_as_expert(username='ex_user')
+        super().setUp()
 
     def test_login_requried(self):
         """Test login requried."""
@@ -21,24 +19,17 @@ class PublicIncomeTests(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class PrivateIncomeTests(APITestCase):
+class PrivateIncomeTests(CustomAPITestCase):
 
     def setUp(self):
-        self.user = funcs.sample_user(username='user')
-        self.superuser = funcs.sample_superuser(username='superuser')
-        self.ex_user = funcs.login_as_expert(username='ex_user')
-
-        self.customer = funcs.sample_customer(owner=self.user, name='customer')
-        self.req = funcs.sample_request(owner=self.user, customer=self.customer, number=981010)
-        self.proforma = funcs.sample_proforma(req=self.req, owner=self.user, number=982020)
-        self.income = funcs.sample_income(proforma=self.proforma, owner=self.user, number=79348347)
-        self.client = APIClient()
+        super().setUp()
+        self.income = self.sample_income(proforma=self.proforma, owner=self.user, number=79348347)
 
     def test_create_income_api(self):
         """Test create income"""
         self.client.force_authenticate(user=self.ex_user)
-        req1 = funcs.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
-        prof1 = funcs.sample_proforma(req=req1, owner=self.ex_user, number=983020)
+        req1 = self.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
+        prof1 = self.sample_proforma(req=req1, owner=self.ex_user, number=983020)
         payload = {
             'number': 9347348,
             'xpref_id': prof1.pk,
@@ -62,13 +53,13 @@ class PrivateIncomeTests(APITestCase):
         """Test retrieve income list"""
         self.client.force_authenticate(user=self.ex_user)
 
-        req1 = funcs.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
-        req2 = funcs.sample_request(owner=self.ex_user, number=981021, customer=self.customer)
-        prof1 = funcs.sample_proforma(req=req1, owner=self.ex_user, number=983020)
-        prof2 = funcs.sample_proforma(req=req2, owner=self.ex_user, number=983021)
+        req1 = self.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
+        req2 = self.sample_request(owner=self.ex_user, number=981021, customer=self.customer)
+        prof1 = self.sample_proforma(req=req1, owner=self.ex_user, number=983020)
+        prof2 = self.sample_proforma(req=req2, owner=self.ex_user, number=983021)
 
-        income1 = funcs.sample_income(proforma=prof1, owner=self.ex_user, number=9813030)
-        income2 = funcs.sample_income(proforma=prof2, owner=self.ex_user, number=9813031)
+        income1 = self.sample_income(proforma=prof1, owner=self.ex_user, number=9813030)
+        income2 = self.sample_income(proforma=prof2, owner=self.ex_user, number=9813031)
 
         res = self.client.get(INCOME_URL)
 
@@ -88,9 +79,9 @@ class PrivateIncomeTests(APITestCase):
         """Test retrieve income"""
 
         self.client.force_authenticate(user=self.ex_user)
-        req1 = funcs.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
-        prof1 = funcs.sample_proforma(req=req1, owner=self.ex_user, number=983020)
-        income1 = funcs.sample_income(proforma=prof1, owner=self.ex_user, number=9813030)
+        req1 = self.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
+        prof1 = self.sample_proforma(req=req1, owner=self.ex_user, number=983020)
+        income1 = self.sample_income(proforma=prof1, owner=self.ex_user, number=9813030)
 
         res = self.client.get(reverse('apivs:payment-detail', args=[income1.pk]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -119,9 +110,9 @@ class PrivateIncomeTests(APITestCase):
         """Test update income"""
 
         self.client.force_authenticate(user=self.ex_user)
-        req1 = funcs.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
-        prof1 = funcs.sample_proforma(req=req1, owner=self.ex_user, number=983020)
-        income1 = funcs.sample_income(proforma=prof1, owner=self.ex_user, number=9813030)
+        req1 = self.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
+        prof1 = self.sample_proforma(req=req1, owner=self.ex_user, number=983020)
+        income1 = self.sample_income(proforma=prof1, owner=self.ex_user, number=9813030)
         payload = {
             'amount': 2450000,
         }
@@ -161,9 +152,9 @@ class PrivateIncomeTests(APITestCase):
         """Test delete income"""
 
         self.client.force_authenticate(user=self.ex_user)
-        req1 = funcs.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
-        prof1 = funcs.sample_proforma(req=req1, owner=self.ex_user, number=983020)
-        income1 = funcs.sample_income(proforma=prof1, owner=self.ex_user, number=9813030)
+        req1 = self.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
+        prof1 = self.sample_proforma(req=req1, owner=self.ex_user, number=983020)
+        income1 = self.sample_income(proforma=prof1, owner=self.ex_user, number=9813030)
 
         res = self.client.delete(reverse('apivs:payment-detail', args=[income1.pk]))
 

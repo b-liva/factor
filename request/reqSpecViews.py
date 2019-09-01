@@ -83,7 +83,6 @@ def reqspec_index_with_summary(request):
     # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='فلنج دار')
     # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='با پایه وفلنج')
     # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4)).filter(Q(summary='فلنجی') | Q(summary='فلنج دار') | Q(summary='با پایه وفلنج'))
-    print(reqspecs.count())
 
     context = {
         'motors': reqspecs
@@ -117,7 +116,6 @@ def assign_code_to_motor(request):
     ie1 = IEType.objects.get(title='IE1')
     reqspecs = ReqSpec.objects.filter(is_active=True, code=99009900, req_id__owner=User.objects.get(pk=4), summary='',
                                       type__title='روتین')
-    print(reqspecs.count())
     for req in reqspecs:
         try:
             code = MotorsCode.objects.get(kw=req.kw, speed=req.rpm, im='B3', ip='IP55')
@@ -200,7 +198,11 @@ def reqspec_edit(request, yreqSpec_pk, req_pk):
 
 @login_required
 def spec_form(request, req_pk):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec')
+    if not Requests.objects.get(pk=req_pk):
+        messages.error(request, 'درخواست مورد نظر یافت نشد.')
+        return redirect('errorpage')
+
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec', instance=Requests.objects.get(pk=req_pk))
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
@@ -211,6 +213,7 @@ def spec_form(request, req_pk):
     if request.method == 'POST':
         form = forms.SpecForm(request.POST)
         if form.is_valid():
+            print('form valid')
             spec = form.save(commit=False)
             spec.req_id = req
             spec.rpm = spec.rpm_new.rpm
@@ -231,6 +234,7 @@ def spec_form(request, req_pk):
             messages.add_message(request, level=20, message=f'یک ردیف به درخواست شماره {req.number} اضافه شد.')
             return redirect('spec_form', req_pk=req_pk)
     else:
+        print('form not valid(reqspec)')
         form = forms.SpecAddForm()
 
     specs = req.reqspec_set.all()

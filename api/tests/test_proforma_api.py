@@ -1,23 +1,16 @@
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.shortcuts import reverse
-from accounts.tests import test_public_funcs as funcs
+from accounts.tests.test_public_funcs import CustomAPITestCase
 from request.models import Xpref
 
 PROFORMA_URL = reverse('apivs:xpref-list')
 
 
-class PublicProformaTests(APITestCase):
+class PublicProformaTests(CustomAPITestCase):
 
     def setUp(self):
-        self.user = funcs.sample_user(username='user')
-        self.superuser = funcs.sample_user(username='username')
-        self.ex_user = funcs.login_as_expert(username='ex_user')
-        self.client = APIClient()
-
-        self.customer = funcs.sample_customer(owner=self.user, name='customerOne')
-        self.req = funcs.sample_request(owner=self.user, number=981010, customer=self.customer)
-        self.proforma = funcs.sample_proforma(req=self.req, number=981000, owner=self.user)
+        super().setUp()
 
     def test_login_required(self):
         """Test Anonymous user can't access the url"""
@@ -28,19 +21,10 @@ class PublicProformaTests(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class PrivateProformaTest(APITestCase):
+class PrivateProformaTest(CustomAPITestCase):
 
     def setUp(self):
-        self.user = funcs.sample_user(username='user')
-        self.superuser = funcs.sample_user(username='username')
-        self.ex_user = funcs.login_as_expert(username='ex_user')
-
-        self.client = APIClient()
-        self.client.force_authenticate(user=self.user)
-
-        self.customer = funcs.sample_customer(owner=self.user, name='customerOne')
-        self.req = funcs.sample_request(owner=self.user, number=981010, customer=self.customer)
-        self.proforma = funcs.sample_proforma(req=self.req, number=981000, owner=self.user)
+        super().setUp()
 
     def test_create_proforma_need_permission(self):
         payload = {
@@ -55,7 +39,7 @@ class PrivateProformaTest(APITestCase):
     def test_create_proforma(self):
         """Test create proforma"""
         self.client.force_authenticate(user=self.ex_user)
-        req2 = funcs.sample_request(owner=self.ex_user, number=981011, customer=self.customer)
+        req2 = self.sample_request(owner=self.ex_user, number=981011, customer=self.customer)
         payload = {
             'req_id': req2.pk,
             'number': 52215,
@@ -74,12 +58,12 @@ class PrivateProformaTest(APITestCase):
         """Test retrieve proforma list: limited by ownership and permission"""
         self.client.force_authenticate(user=self.ex_user)
 
-        req2 = funcs.sample_request(owner=self.ex_user, number=981011, customer=self.customer)
-        proforma2 = funcs.sample_proforma(req=req2, number=981001, owner=self.ex_user)
-        req3 = funcs.sample_request(owner=self.ex_user, number=981012, customer=self.customer)
-        proforma3 = funcs.sample_proforma(req=req2, number=981002, owner=self.ex_user)
-        req4 = funcs.sample_request(owner=self.ex_user, number=981013, customer=self.customer)
-        proforma4 = funcs.sample_proforma(req=req2, number=981003, owner=self.user)
+        req2 = self.sample_request(owner=self.ex_user, number=981011, customer=self.customer)
+        proforma2 = self.sample_proforma(req=req2, number=981001, owner=self.ex_user)
+        req3 = self.sample_request(owner=self.ex_user, number=981012, customer=self.customer)
+        proforma3 = self.sample_proforma(req=req2, number=981002, owner=self.ex_user)
+        req4 = self.sample_request(owner=self.ex_user, number=981013, customer=self.customer)
+        proforma4 = self.sample_proforma(req=req2, number=981003, owner=self.user)
 
         res = self.client.get(PROFORMA_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -92,8 +76,8 @@ class PrivateProformaTest(APITestCase):
 
     def test_retrieve_proforma_api(self):
         self.client.force_authenticate(user=self.ex_user)
-        req = funcs.sample_request(owner=self.ex_user, number=981011, customer=self.customer)
-        proforma = funcs.sample_proforma(req=self.req, number=981050, owner=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, number=981011, customer=self.customer)
+        proforma = self.sample_proforma(req=self.req, number=981050, owner=self.ex_user)
 
         res = self.client.get(reverse('apivs:xpref-detail', args=[proforma.pk]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -101,8 +85,8 @@ class PrivateProformaTest(APITestCase):
 
     def test_retrieve_proforma_limited_api(self):
         self.client.force_authenticate(user=self.ex_user)
-        req = funcs.sample_request(owner=self.user, number=981011, customer=self.customer)
-        proforma = funcs.sample_proforma(req=self.req, number=981050, owner=self.user)
+        req = self.sample_request(owner=self.user, number=981011, customer=self.customer)
+        proforma = self.sample_proforma(req=self.req, number=981050, owner=self.user)
 
         res = self.client.get(reverse('apivs:xpref-detail', args=[proforma.pk]))
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
@@ -110,7 +94,7 @@ class PrivateProformaTest(APITestCase):
     def test_delete_proforma_api(self):
         """Test proforma deletion"""
         self.client.force_authenticate(user=self.ex_user)
-        proforma = funcs.sample_proforma(req=self.req, owner=self.ex_user, number=9810001)
+        proforma = self.sample_proforma(req=self.req, owner=self.ex_user, number=9810001)
 
         res = self.client.delete(reverse('apivs:xpref-detail', args=[proforma.pk]))
         exist = Xpref.objects.filter(
@@ -138,7 +122,7 @@ class PrivateProformaTest(APITestCase):
     def test_update_proforma_api(self):
         """Test update proforma"""
         self.client.force_authenticate(user=self.ex_user)
-        proforma = funcs.sample_proforma(req=self.req, owner=self.ex_user, number=9810001)
+        proforma = self.sample_proforma(req=self.req, owner=self.ex_user, number=9810001)
 
         payload = {
             'number': 982020,

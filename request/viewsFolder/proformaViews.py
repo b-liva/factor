@@ -460,7 +460,6 @@ def perms_export(request):
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
     profs = Xpref.objects.filter(perm=True).order_by('due_date')
-    print(profs.count())
     profs = Xpref.objects.filter(is_active=True, owner=request.user, perm=True) \
         .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0))) \
         .annotate(total_qty_sent=Sum('prefspec__qty_sent', filter=Q(prefspec__price__gt=0))) \
@@ -476,9 +475,6 @@ def perms_export(request):
             .annotate(qty_remaining=F('total_qty') - F('total_qty_sent')) \
             .filter(qty_remaining__gt=0) \
             .order_by('due_date', 'pk')
-
-    print(profs.count())
-
 
     profs_values = profs.values()
     final = {}
@@ -721,9 +717,7 @@ def pref_delete(request, ypref_pk):
 def delete_proforma_no_prefspec(request, ypref_pk):
     try:
         prof = Xpref.objects.get(pk=ypref_pk)
-        print(prof)
         prefspecs = prof.prefspec_set.filter(price__gt=0)
-        print(prefspecs.values('price'))
         if prefspecs.count() == 0:
             prof.delete()
     except:
@@ -754,7 +748,6 @@ def pro_form(request):
     reqs = Requests.objects.filter(is_active=True)
     owners_reqs = Requests.objects.filter(is_active=True).filter(owner=request.user)
     imgform = proforma_forms.ProfFileForm()
-    print(f"method: {request.method}")
     if request.method == 'POST':
         form = forms.ProformaForm(request.user.pk, request.POST)
         img_form = proforma_forms.ProfFileForm(request.POST, request.FILES)
@@ -802,11 +795,10 @@ def pro_form(request):
 
             return redirect('prof_spec_form', ypref_pk=proforma.pk)
         else:
-            print('form is not Valid')
+            pass
     else:
         if 'request_pk' in request.session:
             reqq = Requests.objects.filter(pk=request.session['request_pk'])
-            print(reqq)
             data = {
                 'req_id': Requests.objects.get(pk=request.session['request_pk']),
             }
@@ -836,15 +828,30 @@ def pref_insert_spec_form(request, ypref_pk):
     specs = req.reqspec_set.filter(is_active=True)
     prefspecs = pref.prefspec_set.filter(is_active=True)
     # prices = request.POST.getlist('price')
+    prices = [i if i is not '' else 0 for i in request.POST.getlist('price')]
 
-    prices = [float(i) if i is not '' else 0 for i in request.POST.getlist('price')]
+    price_list = []
+    # These checks if there is any string that can't be change to a number.
+    for i in prices:
+        try:
+            price_list.append(float(i))
+        except:
+            messages.error(request, 'اشکال در اطلاعات قیمت')
+            return redirect('prof_spec_form', ypref_pk=pref.pk)
+    if prices == ['0' for i in prices]:
+        messages.error(request, 'پیش فاکتور شامل هیچ قیمتی نیست.')
+        return redirect('prof_spec_form', ypref_pk=pref.pk)
+
     qty = request.POST.getlist('qty')
+    if qty == ['0' for i in qty]:
+        messages.error(request, 'پیش فاکتور شامل هیچ دستگاهی نیست.')
+        return redirect('prof_spec_form', ypref_pk=pref.pk)
+
     considerations = request.POST.getlist('considerations')
     i = 0
     for s in prefspecs:
         s.qty = qty[i]
-        s.price = float(prices[i]) if prices[i] else 0
-        # x = 10 if a > b else 11 --> as a sample
+        s.price = prices[i] if prices[i] else 0
         s.considerations = considerations[i]
         s.save()
         i += 1
@@ -858,7 +865,7 @@ def pref_edit(request, ypref_pk):
         messages.error(request, 'no Proforma ّFound')
         return redirect('errorpage')
     xpref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', xpref)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.change_xpref', xpref)
     if not can_edit:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
@@ -866,8 +873,20 @@ def pref_edit(request, ypref_pk):
     # spec_prices = [float(i.replace(',', '')) for i in request.POST.getlist('price')]
     # spec_prices = request.POST.getlist('price')
     spec_prices = [float(i) if i is not '' else 0 for i in request.POST.getlist('price')]
+    if spec_prices == [0 for i in spec_prices]:
+        messages.error(request, 'تمام قیمت ها نمیتواند صفر باشد')
+        return redirect('pref_edit_form', ypref_pk=xpref.pk)
+
     spec_qty = request.POST.getlist('qty')
+    if spec_qty == ['0' for i in spec_qty]:
+        messages.error(request, 'پیش فاکتور شامل هیچ دستگاهی نیست')
+        return redirect('pref_edit_form', ypref_pk=xpref.pk)
+
     spec_qty_sent = request.POST.getlist('qty_sent')
+    for i in range(len(spec_qty)):
+        if int(spec_qty_sent[i]) > int(spec_qty[i]):
+            messages.error(request, 'تعداد ارسال شده نمیتواند از تعداد سفارش بیشتر باشد.')
+            return redirect('pref_edit_form', ypref_pk=xpref.pk)
     spec_sent = request.POST.getlist('sent')
     prof_images = xpref.proffiles_set.all()
     xspec = xpref.prefspec_set.all()
@@ -876,9 +895,6 @@ def pref_edit(request, ypref_pk):
         item.sent = True if str(item.pk) in spec_sent and spec_prices[x] != 0 and item.xpref_id.perm else False
         item.price = spec_prices[x]
         item.qty = spec_qty[x]
-        if int(spec_qty_sent[x]) > int(item.qty):
-            messages.error(request, 'تعداد ارسال شده نمی تواند از تعداد سفارش بیشتر باشد.')
-            return redirect('pref_edit_form', ypref_pk=xpref.pk)
 
         item.qty_sent = spec_qty_sent[x]
         item.save()
@@ -889,7 +905,7 @@ def pref_edit(request, ypref_pk):
     for prefspec in prefspecs:
         kw = prefspec.kw
         speed = prefspec.rpm
-        price = MotorDB.objects.filter(kw=kw).filter(speed=speed).last()
+        price = MotorDB.objects.filter(motor__kw=kw, motor__speed=speed, motor__voltage=prefspec.voltage).last()
         if hasattr(price, 'prime_cost'):
             prime = price.prime_cost
             percentage = (prefspec.price / (prime))
@@ -1024,7 +1040,6 @@ def pref_insert(request):
     # can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
     reqs = Requests.objects.filter(is_active=True)
     req_no = request.POST['req_no']
-    print(req_no)
     xpref_no = request.POST['xpref']
     spec_prices = request.POST.getlist('price')
     spec_ids = request.POST.getlist('spec_id')
@@ -1071,14 +1086,18 @@ def pref_edit_form(request, ypref_pk):
         messages.error(request, 'no Proforma')
         return redirect('errorpage')
     proforma = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', proforma)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.change_xpref', proforma)
     if not can_edit:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
+    show = True
+    if proforma.total_proforma_price_vat()['price_vat'] == 0:
+        show = False
     prof_specs = proforma.prefspec_set.all()
     context = {
         'proforma': proforma,
-        'prof_specs': prof_specs
+        'prof_specs': prof_specs,
+        'show': show,
     }
 
     return render(request, 'requests/admin_jemco/ypref/edit_form.html', context)
@@ -1091,14 +1110,17 @@ def prof_spec_form(request, ypref_pk):
         return redirect('errorpage')
     proforma = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
     req = proforma.req_id
-    reqspecs = req.reqspec_set.all()
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
+    reqspecs = req.reqspec_set.filter(is_active=True)
+
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref', instance=proforma)
 
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     if request.method == 'POST':
+        print(request.POST)
+        print('this is not ran at all')
         # form = forms.ProfSpecForm(request.POST, request.user)
         form = forms.ProfSpecForm(request.POST)
         if form.is_valid():
@@ -1110,8 +1132,6 @@ def prof_spec_form(request, ypref_pk):
         else:
             print('form is not valid')
     else:
-        print('03')
-        print(proforma.prefspec_set.all())
         form = forms.ProfSpecForm(request.POST)
 
     context = {

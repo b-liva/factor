@@ -142,7 +142,8 @@ def req_form(request):
     file_instance = forms.RequestFileForm()
     if request.method == 'POST':
         c_cookie = request.COOKIES.get('customer')
-
+        # print('this is reqeust cookies: ', request.COOKIES)
+        # print('this is cookie: ', c_cookie)
         form = forms.RequestFrom(request.POST or None, request.FILES or None)
         img_form = forms.RequestFileForm(request.POST, request.FILES)
         files = request.FILES.getlist('image')
@@ -1224,6 +1225,10 @@ class LazyEncoder(DjangoJSONEncoder):
 
 @login_required
 def req_report(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not can_add:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
     filters = {}
     req_list = Requests.objects.filter(is_active=True)
     if not request.user.is_superuser:

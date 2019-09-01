@@ -1,13 +1,7 @@
-from import_export.admin import ImportExportModelAdmin
 from django.contrib import admin
-from .models import PriceDb, SalesPrice
-from import_export import resources
+from .models import PriceDb, MotorDB
 
 admin.site.register(PriceDb)
-# admin.site.register(SalesPrice)
+admin.site.register(MotorDB)
 
-
-@admin.register(SalesPrice)
-class SalesPriceAdmin(ImportExportModelAdmin):
-    pass
 

@@ -6,19 +6,15 @@ from rest_framework.test import APIClient, APITestCase
 
 from customer.models import Customer
 from request.models import Requests, ReqSpec, ProjectType, RpmType
-from accounts.tests import test_public_funcs as funcs
+from accounts.tests.test_public_funcs import CustomAPITestCase
 
 REQSPEC_URL = reverse('apivs:reqspec-list')
 
 
-class PublicReqSepcTests(APITestCase):
+class PublicReqSepcTests(CustomAPITestCase):
 
     def setUp(self):
-        self.user = funcs.sample_user(username='user')
-        self.superuser = funcs.sample_superuser(username='superuser')
-        self.ex_use = funcs.login_as_expert(username='expert')
-        self.customer = funcs.sample_customer(owner=self.user, name='testcasecustomer')
-        self.req = funcs.sample_request(number=981010, customer=self.customer, owner=self.user)
+        super().setUp()
 
         self.specs_payload = [
             {'qty': 132, 'kw': 132, 'rpm': 1500, 'voltage': 380},
@@ -35,22 +31,16 @@ class PublicReqSepcTests(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
         # reqspec-detail
-        funcs.sample_reqspec(req=self.req, owner=self.user, **self.specs_payload[0])
+        self.sample_reqspec(req_id=self.req, owner=self.user, **self.specs_payload[0])
         res = self.client.get(reverse('apivs:reqspec-detail', args=[1]))
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class PrivateReqSepcTests(APITestCase):
+class PrivateReqSepcTests(CustomAPITestCase):
 
     def setUp(self):
-        self.user = funcs.sample_user(username='user')
-        self.superuser = funcs.sample_superuser(username='superuser')
-        self.ex_user = funcs.login_as_expert(username='expert')
-        self.customer = funcs.sample_customer(owner=self.user, name='testcasecustomer')
-        self.req = funcs.sample_request(number=981010, customer=self.customer, owner=self.user)
-        self.client = APIClient()
+        super().setUp()
         self.client.force_authenticate(user=self.user)
-        # self.reqspe_type = ProjectType.objects.create(title='روتین'),
         self.reqspe_type = ProjectType.objects.create(title='lksjdf')
         self.reqspec_rpm_new = RpmType.objects.create(rpm=1500, pole=4)
         self.specs_payload = [
@@ -68,7 +58,7 @@ class PrivateReqSepcTests(APITestCase):
     def test_create_reqspec_api(self):
         """Test create reqspec"""
         self.client.force_authenticate(user=self.ex_user)
-        req = funcs.sample_request(owner=self.ex_user, number=9855454, customer=self.customer)
+        req = self.sample_request(owner=self.ex_user, number=9855454, customer=self.customer)
         payload = {
             'req_id': req.pk,
             'type': self.reqspe_type.pk,
@@ -92,9 +82,9 @@ class PrivateReqSepcTests(APITestCase):
 
     def test_retrieve_reqspec_list_for_request_api(self):
         """Test retrieve specs of a request, needs to be filtered by request"""
-        req = funcs.sample_request(number=981011, customer=self.customer, owner=self.ex_user)
-        spec1 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[1])
+        req = self.sample_request(number=981011, customer=self.customer, owner=self.ex_user)
+        spec1 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[1])
 
         self.client.force_authenticate(user=self.ex_user)
         res = self.client.get(reverse('apivs:requests-reqspecs', args=[req.number]))
@@ -105,10 +95,10 @@ class PrivateReqSepcTests(APITestCase):
     def test_retrieve_reqsepc_list_for_request_limited_api(self):
         """Test retrieving spec list limited by request ownership and permissions."""
 
-        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.user)
+        req = self.sample_request(number=981012, customer=self.customer, owner=self.user)
 
-        funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[0])
-        funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[3])
+        self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[0])
+        self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[3])
         self.client.force_authenticate(user=self.ex_user)
 
         res = self.client.get(reverse('apivs:requests-reqspecs', args=[req.number]))
@@ -117,10 +107,10 @@ class PrivateReqSepcTests(APITestCase):
     def test_retrieve_reqspec_api(self):
         """Test retrieve spec"""
 
-        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.ex_user)
+        req = self.sample_request(number=981012, customer=self.customer, owner=self.ex_user)
 
-        spec1 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[3])
+        spec1 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[3])
         self.client.force_authenticate(user=self.ex_user)
 
         res = self.client.get(reverse('apivs:reqspec-detail', args=[spec2.pk]))
@@ -130,10 +120,10 @@ class PrivateReqSepcTests(APITestCase):
 
     def test_retrieve_reqspec_limited_api(self):
         """Test retrieve spec is limited by ownership and permissions"""
-        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.user)
+        req = self.sample_request(number=981012, customer=self.customer, owner=self.user)
 
-        spec1 = funcs.sample_reqspec(req, owner=self.user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req, owner=self.user, **self.specs_payload[3])
+        spec1 = self.sample_reqspec(req_id=req, owner=self.user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=req, owner=self.user, **self.specs_payload[3])
 
         self.client.force_authenticate(user=self.ex_user)
 
@@ -144,10 +134,10 @@ class PrivateReqSepcTests(APITestCase):
     def test_update_reqspec_noperm_api(self):
         """Test update spec needs delete_reqspec permission."""
 
-        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.ex_user)
+        req = self.sample_request(number=981012, customer=self.customer, owner=self.ex_user)
 
-        spec1 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[3])
+        spec1 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[3])
         self.client.force_authenticate(user=self.user)
         payload = {
             'kw': 1200,
@@ -158,10 +148,10 @@ class PrivateReqSepcTests(APITestCase):
     def test_update_reqspec_api(self):
         """Test update spec"""
 
-        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.ex_user)
+        req = self.sample_request(number=981012, customer=self.customer, owner=self.ex_user)
 
-        spec1 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[3])
+        spec1 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[3])
         self.client.force_authenticate(user=self.ex_user)
         payload = {
             'kw': 1200,
@@ -175,10 +165,10 @@ class PrivateReqSepcTests(APITestCase):
         """Test update spec is limited by ownership and permissions"""
         # todo: what about the case: owner of the req but not reqspec.
 
-        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.user)
+        req = self.sample_request(number=981012, customer=self.customer, owner=self.user)
 
-        spec1 = funcs.sample_reqspec(req, owner=self.user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req, owner=self.user, **self.specs_payload[3])
+        spec1 = self.sample_reqspec(req_id=req, owner=self.user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=req, owner=self.user, **self.specs_payload[3])
         self.client.force_authenticate(user=self.ex_user)
         payload = {
             'kw': 1200,
@@ -189,10 +179,10 @@ class PrivateReqSepcTests(APITestCase):
     def test_delete_reqspec_api(self):
         """Test delete spec"""
 
-        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.ex_user)
+        req = self.sample_request(number=981012, customer=self.customer, owner=self.ex_user)
 
-        spec1 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req, owner=self.ex_user, **self.specs_payload[3])
+        spec1 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=req, owner=self.ex_user, **self.specs_payload[3])
         self.client.force_authenticate(user=self.ex_user)
 
         res = self.client.delete(reverse('apivs:reqspec-detail', args=[spec2.pk]))
@@ -204,10 +194,10 @@ class PrivateReqSepcTests(APITestCase):
     def test_delete_reqspec_limited_api(self):
         """Test delete spec is limited by ownership and permissions"""
 
-        req = funcs.sample_request(number=981012, customer=self.customer, owner=self.user)
+        req = self.sample_request(number=981012, customer=self.customer, owner=self.user)
 
-        spec1 = funcs.sample_reqspec(req, owner=self.user, **self.specs_payload[0])
-        spec2 = funcs.sample_reqspec(req, owner=self.user, **self.specs_payload[3])
+        spec1 = self.sample_reqspec(req_id=req, owner=self.user, **self.specs_payload[0])
+        spec2 = self.sample_reqspec(req_id=req, owner=self.user, **self.specs_payload[3])
         self.client.force_authenticate(user=self.ex_user)
 
         res = self.client.delete(reverse('apivs:reqspec-detail', args=[spec2.pk]))
@@ -217,7 +207,7 @@ class PrivateReqSepcTests(APITestCase):
         self.assertTrue(exist)
 
 
-class NewReqSpecTest(APITestCase):
+class NewReqSpecTest(CustomAPITestCase):
     # todo: this class should be deleted after the above bug is fixed
     def test_retrieve_reqspec_new(self):
         """Test retrieve spec"""
@@ -225,10 +215,10 @@ class NewReqSpecTest(APITestCase):
         from customer.models import Type
         type = Type.objects.create(name='petro')
         customer = Customer.objects.create(name='name', owner=user, type=type)
-        req = Requests.objects.create(number=981010, owner=user, customer=customer)
+        req = Requests.objects.create(number=981077, owner=user, customer=customer)
 
-        spec1 = funcs.sample_reqspec(req, owner=user)
-        spec2 = funcs.sample_reqspec(req, owner=user)
+        spec1 = self.sample_reqspec(req_id=req, owner=user)
+        spec2 = self.sample_reqspec(req_id=req, owner=user)
         self.client.force_authenticate(user=user)
 
         res = self.client.get(reverse('apivs:reqspec-detail', args=[spec2.pk]))
