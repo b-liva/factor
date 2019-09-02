@@ -137,7 +137,7 @@ class PrivateCustomerApiTests(CustomAPITestCase):
     def test_update_customer_successful_api(self):
         """Test update a customer successful"""
         self.client.force_authenticate(user=self.ex_user)
-        customer = funcs.sample_customer(owner=self.ex_user, name='somecustomer')
+        customer = self.sample_customer(owner=self.ex_user, name='somecustomer')
         payload = {
             'name': 'newname',
         }
@@ -164,7 +164,7 @@ class PrivateCustomerApiTests(CustomAPITestCase):
     def test_delete_customer_successful(self):
         """Test delete a customer seuccessful"""
         self.client.force_authenticate(user=self.ex_user)
-        customer = funcs.sample_customer(owner=self.ex_user, name='something')
+        customer = self.sample_customer(owner=self.ex_user, name='something')
         res = self.client.delete(reverse('apivs:customer-detail', args=[customer.pk]))
         exist = Customer.objects.filter(pk=customer.pk).exists()
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)

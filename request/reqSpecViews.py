@@ -221,7 +221,6 @@ def spec_form(request, req_pk):
     if request.method == 'POST':
         form = forms.SpecForm(request.POST)
         if form.is_valid():
-            print('form valid')
             spec = form.save(commit=False)
             spec.req_id = req
             spec.rpm = spec.rpm_new.rpm
@@ -242,7 +241,6 @@ def spec_form(request, req_pk):
             messages.add_message(request, level=20, message=f'یک ردیف به درخواست شماره {req.number} اضافه شد.')
             return redirect('spec_form', req_pk=req_pk)
     else:
-        print('form not valid(reqspec)')
         form = forms.SpecAddForm()
 
     specs = req.reqspec_set.all()

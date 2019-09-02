@@ -1,19 +1,17 @@
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from django.shortcuts import reverse
-from accounts.tests import test_public_funcs as funcs
+from accounts.tests.test_public_funcs import CustomAPITestCase
 from motordb.models import MotorsCode
 from request.models import IMType, IPType, ICType, IEType
 
 MOTORCODES_URL = reverse('apivs:motorscode-list')
 
 
-class PublicMotorCodesTest(APITestCase):
+class PublicMotorCodesTest(CustomAPITestCase):
     def setUp(self):
         """set up for public access"""
-        self.user = funcs.sample_user(username='user', password='passowrd123')
-        self.client = APIClient()
-        self.motorcode = funcs.sample_motorcode(owner=self.user, code=9900, kw=450, speed=1500, voltage=380)
+        super().setUp()
 
     def test_retrieve_motorcode_list_login_required(self):
         """Test accessing motor codes needs authentication"""
@@ -26,53 +24,34 @@ class PublicMotorCodesTest(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class PrivateMotorCodesTests(APITestCase):
+class PrivateMotorCodesTests(CustomAPITestCase):
     def setUp(self):
+        super().setUp()
         """setup for private motorcodes access"""
-        self.user = funcs.sample_user(username='user', password='password123')
-        self.superuser = funcs.sample_superuser(username='superuser')
-        self.ex_user = funcs.login_as_expert(username='ex_user')
-        self.client = APIClient()
-        self.motorcode = funcs.sample_motorcode(owner=self.user, code=9900, kw=450, speed=1500, voltage=380)
-        self.im = IMType.objects.create(title='IMB3')
-        self.ip = IPType.objects.create(title='IP55')
-        self.ic = ICType.objects.create(title='IC411')
-        self.ie = IEType.objects.create(title='IE1')
-        self.payload = {
-            'owner': self.user.pk,
-            'code': 99009900,
-            'kw': 132,
-            'speed': 1500,
-            'voltage': 380,
-            'ip': self.ip.pk,
-            'ic': self.ic.pk,
-            'im': self.im.pk,
-            'ie': self.ie.pk,
-        }
 
     def test_create_motor_code_needs_permission_api(self):
         """Test creating motor codes needs permission (add_motorcode)"""
         self.client.force_authenticate(user=self.user)
 
-        res = self.client.post(MOTORCODES_URL, self.payload)
+        res = self.client.post(MOTORCODES_URL, self.reqspec_payload)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_motor_code_successful(self):
         """Test create motorcode successful"""
         self.client.force_authenticate(user=self.ex_user)
-        res = self.client.post(MOTORCODES_URL, self.payload)
+        res = self.client.post(MOTORCODES_URL, self.motorcode_payload)
         exist = MotorsCode.objects.filter(
-            code=self.payload['code'],
-            kw=self.payload['kw'],
-            speed=self.payload['speed'],
-            voltage=self.payload['voltage'],
-            ip=self.payload['ip'],
-            ic=self.payload['ic'],
-            im=self.payload['im'],
-            ie=self.payload['ie'],
+            code=self.motorcode_payload['code'],
+            kw=self.motorcode_payload['kw'],
+            speed=self.motorcode_payload['speed'],
+            voltage=self.motorcode_payload['voltage'],
+            ip=self.motorcode_payload['ip'],
+            ic=self.motorcode_payload['ic'],
+            im=self.motorcode_payload['im'],
+            ie=self.motorcode_payload['ie'],
         ).exists()
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(res.data['code'], str(self.payload['code']))
+        self.assertEqual(res.data['code'], str(self.motorcode_payload['code']))
         self.assertEqual(res.data['owner'], self.ex_user.pk)
         self.assertTrue(exist)
 
@@ -85,9 +64,9 @@ class PrivateMotorCodesTests(APITestCase):
     def test_retrieve_motor_codes_list_not_limited_by_user_api(self):
         """Test retrieving motor codes list successful"""
         self.client.force_authenticate(user=self.ex_user)
-        funcs.sample_motorcode(owner=self.ex_user, code=235435, kw=132, speed=1500, voltage=380)
-        funcs.sample_motorcode(owner=self.ex_user, code=1435, kw=160, speed=1500, voltage=380)
-        funcs.sample_motorcode(owner=self.user, code=25435, kw=355, speed=3000, voltage=400)
+        self.sample_motorcode(owner=self.ex_user, code=235435, kw=132, speed=1500, voltage=380)
+        self.sample_motorcode(owner=self.ex_user, code=1435, kw=160, speed=1500, voltage=380)
+        self.sample_motorcode(owner=self.user, code=25435, kw=355, speed=3000, voltage=400)
         res = self.client.get(MOTORCODES_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 4)

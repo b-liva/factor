@@ -4,6 +4,7 @@ from django.shortcuts import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
+from accounts.tests.test_public_funcs import CustomAPITestCase
 from customer.models import Customer
 from request.models import Requests, ReqSpec, ProjectType, RpmType, IMType, ICType, IPType, IEType
 from accounts.tests import test_public_funcs as funcs
@@ -87,33 +88,22 @@ class PrivateReqSepcTests(CustomAPITestCase):
     def test_create_spec_update_code_api(self):
         """Test create spec needs to update code according to MotorCodes"""
         self.client.force_authenticate(user=self.ex_user)
-        req = funcs.sample_request(owner=self.ex_user, number=9855454, customer=self.customer)
-        funcs.sample_motorcode(
+        req = self.sample_request(owner=self.ex_user, number=9855454, customer=self.customer)
+        ccdoe = self.sample_motorcode(
             owner=self.ex_user,
             code=100100100,
             kw=160,
             speed=1500,
-            im=self.im.pk,
-            ip=self.ip.pk,
-            ie=self.ie.pk,
-            ic=self.ic.pk,
+            im=self.im.title,
+            ip=self.ip.title,
+            ie=self.ie.title,
+            ic=self.ic.title,
             voltage=380,
         )
-        payload = {
-            'req_id': req.pk,
-            'owner': self.ex_user.pk,
-            'qty': 1,
+        self.reqspec_payload.update({
             'kw': 160,
-            'rpm': 1500,
-            'rpm_new': self.reqspec_rpm_new.pk,
-            'im': self.im.pk,
-            'ip': self.ip.pk,
-            'ie': self.ie.pk,
-            'ic': self.ic.pk,
-            'voltage': 380,
-            'type': self.reqspe_type.pk,
-        }
-        res = self.client.post(REQSPEC_URL, payload)
+        })
+        res = self.client.post(REQSPEC_URL, self.reqspec_payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(res.data['code'], 100100100)
 

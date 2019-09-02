@@ -326,7 +326,6 @@ class PrivateProformaTest(CustomAPITestCase):
             'qty': ['1', '1', '2'], 'price': [0,0,0], 'spec_id': [spec1.pk, spec2.pk, spec3.pk],
         }
         res = self.client.post(reverse('pref_insert_spec_form', args=[proforma.pk]), payload)
-        print(res)
         self.assertRedirects(
             res,
             expected_url=reverse('prof_spec_form', args=[proforma.pk]),
