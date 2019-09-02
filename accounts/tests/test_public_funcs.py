@@ -37,6 +37,7 @@ class CustomAPITestCase(APITestCase):
         self.spec2 = self.sample_reqspec(owner=self.user, kw=315, rpm=1500)
         self.spec3 = self.sample_reqspec(owner=self.user, kw=160, rpm=3000)
         self.proforma = self.sample_proforma(req=self.req, owner=self.user, number=981000)
+        self.motorcode = self.sample_motorcode(owner=self.user, code=9900, kw=450, speed=1500, voltage=380)
 
         self.request_payload = {
             'number': 1000,
@@ -44,10 +45,23 @@ class CustomAPITestCase(APITestCase):
             # "date_fa": "1398-05-06",
         }
         self.reqspec_payload = {
+            'req_id': self.req.pk,
             'code': self.code,
             'qty': 3,
             'kw': 315,
             'rpm_new': self.rpm_new.pk,
+            'voltage': 380,
+            'im': self.im.pk,
+            'ip': self.ip.pk,
+            'ic': self.ic.pk,
+            'ie': self.ie.pk,
+            'type': self.project_type.pk,
+        }
+        self.motorcode_payload = {
+            'code': self.code,
+            'qty': 3,
+            'kw': 315,
+            'speed': self.rpm_new.pk,
             'voltage': 380,
             'im': self.im.pk,
             'ip': self.ip.pk,
@@ -114,6 +128,8 @@ class CustomAPITestCase(APITestCase):
             Permission.objects.get(codename='add_customer', content_type__app_label='customer'),
             Permission.objects.get(codename='index_customer', content_type__app_label='customer'),
             Permission.objects.get(codename='read_customer', content_type__app_label='customer'),
+            Permission.objects.get(codename='change_customer', content_type__app_label='customer'),
+            Permission.objects.get(codename='delete_customer', content_type__app_label='customer'),
             Permission.objects.get(codename='index_requests', content_type__app_label='request'),
             Permission.objects.get(codename='read_requests', content_type__app_label='request'),
             Permission.objects.get(codename='add_requests', content_type__app_label='request'),
@@ -140,6 +156,10 @@ class CustomAPITestCase(APITestCase):
             Permission.objects.get(codename='add_payment', content_type__app_label='request'),
             Permission.objects.get(codename='change_payment', content_type__app_label='request'),
             Permission.objects.get(codename='delete_payment', content_type__app_label='request'),
+            Permission.objects.get(codename='add_motorscode', content_type__app_label='motordb'),
+            Permission.objects.get(codename='index_motorscode', content_type__app_label='motordb'),
+            Permission.objects.get(codename='change_motorscode', content_type__app_label='motordb'),
+            Permission.objects.get(codename='delete_motorscode', content_type__app_label='motordb'),
         )
         ex_user.super_user = True
         ex_user.save()
@@ -181,9 +201,24 @@ class CustomAPITestCase(APITestCase):
         defaults.update(params)
         return PrefSpec.objects.create(xpref_id=proforma, owner=owner, reqspec_eq=reqspe, **defaults)
 
-    def sample_income(self, proforma, owner, number, **params):
-        defaults = {
-            'amount': 1500000,
+    def sample_income(self, **params):
+            defaults = {
+                'amount': 1500000,
+            }
+            defaults.update(params)
+            return Payment.objects.create(**defaults)
+
+    def sample_motorcode(self, **params):
+        im = IMType.objects.create(title='IMB35')
+        ip = IPType.objects.create(title='IP56')
+        ic = ICType.objects.create(title='IC511')
+        ie = IEType.objects.create(title='IE2')
+        default = {
+            'ie': ie.title,
+            'im': im.title,
+            'ic': ic.title,
+            'ip': ip.title,
         }
-        defaults.update(params)
-        return Payment.objects.create(xpref_id=proforma, owner=owner, number=number, **defaults)
+        default.update(params)
+        return MotorsCode.objects.create(**default)
+

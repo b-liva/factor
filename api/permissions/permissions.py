@@ -1,6 +1,8 @@
 from rest_framework import permissions
 from django.shortcuts import get_object_or_404
 
+from customer.models import Customer
+from motordb.models import MotorsCode
 from request.models import ReqSpec, Xpref
 
 
@@ -11,6 +13,10 @@ class CustomDjangoModelPermission(permissions.DjangoModelPermissions):
 
 
 class IsSuperUserOrOwner(permissions.DjangoModelPermissions):
+
+    def __init__(self):
+        self.not_limited = [Customer, MotorsCode]
+        super().__init__()
 
     def get_required_permissions(self, method, model_cls):
         perms = super().get_required_permissions(method, model_cls)
@@ -24,6 +30,9 @@ class IsSuperUserOrOwner(permissions.DjangoModelPermissions):
         return perms
 
     def has_object_permission(self, request, view, obj):
+        mdl = self._queryset(view).model
+        if mdl in self.not_limited:
+            return True
         return obj.owner == request.user or request.user.is_superuser
 
     def has_permission(self, request, view):
@@ -32,6 +41,8 @@ class IsSuperUserOrOwner(permissions.DjangoModelPermissions):
         mdl = self._queryset(view).model
         if 'pk' in view.kwargs:
             obj = get_object_or_404(mdl, pk=view.kwargs['pk'])
+            if mdl in self.not_limited:
+                return True
             return request.user == obj.owner or request.user.is_superuser
         if 'number' in view.kwargs:
             obj = get_object_or_404(mdl, number=view.kwargs['number'])
@@ -45,4 +56,3 @@ class IsSuperUserOrOwner(permissions.DjangoModelPermissions):
     #     self.model_name = model_cls
     #     print(output)
     #     return output
-

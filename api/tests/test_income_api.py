@@ -23,7 +23,7 @@ class PrivateIncomeTests(CustomAPITestCase):
 
     def setUp(self):
         super().setUp()
-        self.income = self.sample_income(proforma=self.proforma, owner=self.user, number=79348347)
+        self.income = self.sample_income(xpref_id=self.proforma, owner=self.user, number=79348347)
 
     def test_create_income_api(self):
         """Test create income"""
@@ -58,8 +58,8 @@ class PrivateIncomeTests(CustomAPITestCase):
         prof1 = self.sample_proforma(req=req1, owner=self.ex_user, number=983020)
         prof2 = self.sample_proforma(req=req2, owner=self.ex_user, number=983021)
 
-        income1 = self.sample_income(proforma=prof1, owner=self.ex_user, number=9813030)
-        income2 = self.sample_income(proforma=prof2, owner=self.ex_user, number=9813031)
+        income1 = self.sample_income(xpref_id=prof1, owner=self.ex_user, number=9813030)
+        income2 = self.sample_income(xpref_id=prof2, owner=self.ex_user, number=9813031)
 
         res = self.client.get(INCOME_URL)
 
@@ -81,7 +81,7 @@ class PrivateIncomeTests(CustomAPITestCase):
         self.client.force_authenticate(user=self.ex_user)
         req1 = self.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
         prof1 = self.sample_proforma(req=req1, owner=self.ex_user, number=983020)
-        income1 = self.sample_income(proforma=prof1, owner=self.ex_user, number=9813030)
+        income1 = self.sample_income(xpref_id=prof1, owner=self.ex_user, number=9813030)
 
         res = self.client.get(reverse('apivs:payment-detail', args=[income1.pk]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -112,7 +112,7 @@ class PrivateIncomeTests(CustomAPITestCase):
         self.client.force_authenticate(user=self.ex_user)
         req1 = self.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
         prof1 = self.sample_proforma(req=req1, owner=self.ex_user, number=983020)
-        income1 = self.sample_income(proforma=prof1, owner=self.ex_user, number=9813030)
+        income1 = self.sample_income(xpref_id=prof1, owner=self.ex_user, number=9813030)
         payload = {
             'amount': 2450000,
         }
@@ -154,7 +154,7 @@ class PrivateIncomeTests(CustomAPITestCase):
         self.client.force_authenticate(user=self.ex_user)
         req1 = self.sample_request(owner=self.ex_user, number=981020, customer=self.customer)
         prof1 = self.sample_proforma(req=req1, owner=self.ex_user, number=983020)
-        income1 = self.sample_income(proforma=prof1, owner=self.ex_user, number=9813030)
+        income1 = self.sample_income(xpref_id=prof1, owner=self.ex_user, number=9813030)
 
         res = self.client.delete(reverse('apivs:payment-detail', args=[income1.pk]))
 

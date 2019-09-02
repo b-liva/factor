@@ -4,9 +4,10 @@ from django.shortcuts import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
-from customer.models import Customer
-from request.models import Requests, ReqSpec, ProjectType, RpmType
 from accounts.tests.test_public_funcs import CustomAPITestCase
+from customer.models import Customer
+from request.models import Requests, ReqSpec, ProjectType, RpmType, IMType, ICType, IPType, IEType
+from accounts.tests import test_public_funcs as funcs
 
 REQSPEC_URL = reverse('apivs:reqspec-list')
 
@@ -43,6 +44,10 @@ class PrivateReqSepcTests(CustomAPITestCase):
         self.client.force_authenticate(user=self.user)
         self.reqspe_type = ProjectType.objects.create(title='lksjdf')
         self.reqspec_rpm_new = RpmType.objects.create(rpm=1500, pole=4)
+        self.im = IMType.objects.create(title='IMB3')
+        self.ic = ICType.objects.create(title='IC411')
+        self.ip = IPType.objects.create(title='IP55')
+        self.ie = IEType.objects.create(title='IE1')
         self.specs_payload = [
             {'code': 98585, 'qty': 2, 'kw': 132, 'rpm': 1500, 'rpm_new': self.reqspec_rpm_new, 'voltage': 380},
             {'code': 98586, 'qty': 1, 'kw': 160, 'rpm': 1500, 'rpm_new': self.reqspec_rpm_new, 'voltage': 380},
@@ -74,11 +79,33 @@ class PrivateReqSepcTests(CustomAPITestCase):
             voltage=payload['voltage'],
             owner=payload['owner'],
             type=payload['type'],
-            code=payload['code'],
+            # code=payload['code'],
             qty=payload['qty'],
         ).exists()
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(exist)
+
+    def test_create_spec_update_code_api(self):
+        """Test create spec needs to update code according to MotorCodes"""
+        self.client.force_authenticate(user=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, number=9855454, customer=self.customer)
+        ccdoe = self.sample_motorcode(
+            owner=self.ex_user,
+            code=100100100,
+            kw=160,
+            speed=1500,
+            im=self.im.title,
+            ip=self.ip.title,
+            ie=self.ie.title,
+            ic=self.ic.title,
+            voltage=380,
+        )
+        self.reqspec_payload.update({
+            'kw': 160,
+        })
+        res = self.client.post(REQSPEC_URL, self.reqspec_payload)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(res.data['code'], 100100100)
 
     def test_retrieve_reqspec_list_for_request_api(self):
         """Test retrieve specs of a request, needs to be filtered by request"""

@@ -7,16 +7,20 @@ from rest_framework.decorators import action
 from api.serializers.customerSerializers import CustomerSerializer, AddressSerializers, PhoneSerializers
 from api.permissions.permissions import IsSuperUserOrOwner
 from customer.models import Customer, Address, Phone
+from api.permissions import permissions as CustomPerms
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAuthenticated, IsSuperUserOrOwner, permissions.DjangoModelPermissions,)
+    permission_classes = (
+        permissions.IsAuthenticated,
+        IsSuperUserOrOwner,
+        CustomPerms.CustomDjangoModelPermission,
+    )
     queryset = Customer.objects.order_by('name')
     serializer_class = CustomerSerializer
 
-    def get_queryset(self):
-        # return self.queryset.filter(owner=self.request.user)
-        return self.queryset.order_by('name')
+    # def get_queryset(self):
+    #     return self.queryset.filter(owner=self.request.user)
 
     # def perform_create(self, serializer):
     #     if 'date2' not in self.request.data:
