@@ -828,8 +828,8 @@ def pref_insert_spec_form(request, ypref_pk):
     specs = req.reqspec_set.filter(is_active=True)
     prefspecs = pref.prefspec_set.filter(is_active=True)
     # prices = request.POST.getlist('price')
-    prices = [i if i is not '' else 0 for i in request.POST.getlist('price')]
-
+    prices = [i if i is not '' else '0' for i in request.POST.getlist('price')]
+    zeros = ['0' for i in prices]
     price_list = []
     # These checks if there is any string that can't be change to a number.
     for i in prices:
@@ -838,7 +838,7 @@ def pref_insert_spec_form(request, ypref_pk):
         except:
             messages.error(request, 'اشکال در اطلاعات قیمت')
             return redirect('prof_spec_form', ypref_pk=pref.pk)
-    if prices == ['0' for i in prices]:
+    if prices == zeros:
         messages.error(request, 'پیش فاکتور شامل هیچ قیمتی نیست.')
         return redirect('prof_spec_form', ypref_pk=pref.pk)
 
@@ -872,9 +872,10 @@ def pref_edit(request, ypref_pk):
 
     # spec_prices = [float(i.replace(',', '')) for i in request.POST.getlist('price')]
     # spec_prices = request.POST.getlist('price')
-    spec_prices = [float(i) if i is not '' else 0 for i in request.POST.getlist('price')]
-    if spec_prices == [0 for i in spec_prices]:
-        messages.error(request, 'تمام قیمت ها نمیتواند صفر باشد')
+    spec_prices = [i if i is not '' else '0' for i in request.POST.getlist('price')]
+    zeros = ['0' for i in spec_prices]
+    if spec_prices == zeros:
+        messages.error(request, 'پیش فاکتور شامل هیچ قیمتی نیست.')
         return redirect('pref_edit_form', ypref_pk=xpref.pk)
 
     spec_qty = request.POST.getlist('qty')
