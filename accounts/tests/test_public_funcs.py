@@ -109,6 +109,7 @@ class CustomAPITestCase(APITestCase):
 
     def sample_expert_user(self, username='expert_user'):
         ex_user = self.sample_user(username=username)
+        ex_user.groups.add(self.sale_expert_group)
         self.sale_expert_group.permissions.add(
             Permission.objects.get(codename='add_customer', content_type__app_label='customer'),
             Permission.objects.get(codename='index_customer', content_type__app_label='customer'),
@@ -124,6 +125,7 @@ class CustomAPITestCase(APITestCase):
             Permission.objects.get(codename='change_reqspec', content_type__app_label='request'),
             Permission.objects.get(codename='delete_reqspec', content_type__app_label='request'),
             Permission.objects.get(codename='read_reqspecs', content_type__app_label='request'),
+            Permission.objects.get(codename='add_reqpart', content_type__app_label='request'),
             Permission.objects.get(codename='index_xpref', content_type__app_label='request'),
             Permission.objects.get(codename='read_proforma', content_type__app_label='request'),
             Permission.objects.get(codename='add_xpref', content_type__app_label='request'),
@@ -138,7 +140,6 @@ class CustomAPITestCase(APITestCase):
             Permission.objects.get(codename='change_payment', content_type__app_label='request'),
             Permission.objects.get(codename='delete_payment', content_type__app_label='request'),
         )
-        ex_user.groups.add(self.sale_expert_group)
         ex_user.super_user = True
         ex_user.save()
         return ex_user

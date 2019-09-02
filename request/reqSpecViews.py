@@ -238,13 +238,54 @@ def spec_form(request, req_pk):
         form = forms.SpecAddForm()
 
     specs = req.reqspec_set.all()
+    parts = req.reqpart_set.all()
     list = ['kw', 'qty']
 
     return render(request, 'requests/admin_jemco/yreqspec/spec_form.html', {
         'form': form,
         'req_obj': req,
         'specs': specs,
+        'parts': parts,
         'list': list,
+        'show_part_form': False,
+    })
+
+
+@login_required
+def part_form(request, req_pk):
+    if not Requests.objects.get(pk=req_pk):
+        messages.error(request, 'درخواست مورد نظر یافت نشد.')
+        return redirect('errorpage')
+
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqpart', instance=Requests.objects.get(pk=req_pk))
+    if not can_add:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+    req = Requests.objects.get(pk=req_pk, is_active=True)
+
+    if request.method == 'POST':
+        form = forms.PartForm(request.POST)
+        if form.is_valid():
+            part = form.save(commit=False)
+            part.req = req
+            part.owner = request.user
+            part.save()
+            messages.add_message(request, level=20, message=f'یک ردیف به درخواست شماره {req.number} اضافه شد.')
+            return redirect('part_form', req_pk=req_pk)
+        else:
+            print('form not valid(part)')
+    else:
+        form = forms.PartForm()
+
+    specs = req.reqspec_set.all()
+    parts = req.reqpart_set.all()
+
+    return render(request, 'requests/admin_jemco/yreqspec/spec_form.html', {
+        'form': form,
+        'req_obj': req,
+        'specs': specs,
+        'parts': parts,
+        'show_part_form': True
     })
 
 

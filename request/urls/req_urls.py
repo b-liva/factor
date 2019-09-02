@@ -43,7 +43,8 @@ urlpatterns = [
     ])),
 
     path('<int:req_pk>/reqSpec/form', reqSpecViews.reqspec_form, name='reqSpec_form'),
-    path('<int:req_pk>/reqSpec/spec_form', reqSpecViews.spec_form, name='spec_form'),
+    path('<int:req_pk>/spec_form', reqSpecViews.spec_form, name='spec_form'),
+    path('<int:req_pk>/part_form', reqSpecViews.part_form, name='part_form'),
     path('reqSpec/index', request.reqSpecViews.reqspec_index, name='reqSpec_index'),
     path('index-no-summary', request.reqSpecViews.reqspec_index_no_summary, name='reqspec_index_no_summary'),
     path('reqspec_index_no_summary_no_routine', request.reqSpecViews.reqspec_index_no_summary_no_routine, name='reqspec_index_no_summary_no_routine'),

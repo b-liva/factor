@@ -271,6 +271,16 @@ class ReqSpec(models.Model):
         return '%s - %skw' % (self.qty, self.kw)
 
 
+class ReqPart(models.Model):
+    req = models.ForeignKey(Requests, on_delete=models.CASCADE)
+    owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
+    title = models.CharField(max_length=60)
+    qty = models.IntegerField(default=1)
+
+    def __str__(self):
+        return "%s عدد %s" % (self.qty, self.title,)
+
+
 class IssueType(models.Model):
     title = models.CharField(max_length=60)
     summary = models.TextField(max_length=600, null=True, blank=True)

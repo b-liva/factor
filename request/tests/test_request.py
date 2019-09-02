@@ -20,6 +20,16 @@ class PublicRequestTests(CustomAPITestCase):
             target_status_code=status.HTTP_200_OK,
         )
 
+    def test_create_reqpart_get_login_required(self):
+        """Test getting request part creation form need authentication"""
+        res = self.client.get(reverse('part_form', args=[self.req.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=settings.LOGIN_URL + '?next=' + reverse('part_form', args=[self.req.pk]),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+
 
 class PrivateRequestTests(CustomAPITestCase):
     def setUp(self):
@@ -226,11 +236,10 @@ class PrivateRequestTests(CustomAPITestCase):
     def test_retrieve_request_owner_success(self):
         """Test success can retrieve own request details"""
         self.client.force_login(user=self.ex_user)
-        self.req.owner = self.ex_user
-        self.req.save()
-        res = self.client.get(reverse('request_details', args=[self.req.pk]))
+        req = self.sample_request(owner=self.ex_user, number=985344)
+        res = self.client.get(reverse('request_details', args=[req.pk]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.context['request'].number, self.req.number)
+        self.assertEqual(res.context['request'].number, req.number)
 
     def test_retrieve_request_details_not_found(self):
         """Test retrieving non-existing request redirects to error page"""
@@ -255,3 +264,74 @@ class PrivateRequestTests(CustomAPITestCase):
             status_code=status.HTTP_302_FOUND,
             target_status_code=status.HTTP_200_OK,
         )
+
+# ReqPart
+    def test_create_reqpart_get_needs_permission(self):
+        """Test getting reqpart creation form needs permission"""
+        self.client.force_login(user=self.user)
+        res = self.client.get(reverse('part_form', args=[self.req.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+
+    def test_create_reqpart_post_needs_permission(self):
+        """Test getting reqpart creation form needs permission"""
+        self.client.force_login(user=self.user)
+        payload = {'qty': 3, 'title': 'براکت جلو'}
+        res = self.client.post(reverse('part_form', args=[self.req.pk]), payload)
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+
+    def test_create_reqpart_get_limited_to_owner(self):
+        """Test users can get reqpart create form if they are owner of request."""
+        self.client.force_login(user=self.ex_user)
+        res = self.client.get(reverse('part_form', args=[self.req.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+
+    def test_create_reqpart_post_limited_to_owner(self):
+        """Test users can post reqpart if they are owner of request."""
+        self.client.force_login(user=self.ex_user)
+        payload = {'qty': 3, 'title': 'براکت جلو'}
+        res = self.client.post(reverse('part_form', args=[self.req.pk]), payload)
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+
+    def test_create_reqpart_get_success(self):
+        """Test users get reqpart create form if they are owner or request."""
+        self.client.force_login(user=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, number=98734)
+        res = self.client.get(reverse('part_form', args=[req.pk]))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_create_reqpart_post_success(self):
+        """Test create req part post success"""
+        self.client.force_login(user=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, number=98734)
+        payload = {'qty': 3, 'title': 'براکت جلو'}
+        res = self.client.post(reverse('part_form', args=[req.pk]), payload)
+        print(res)
+        parts = req.reqpart_set.all()
+        self.assertRedirects(
+            res,
+            expected_url=reverse('part_form', args=[req.pk]),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+        self.assertEqual(parts.count(), 1)
+        self.assertEqual(parts.last().qty, payload['qty'])
