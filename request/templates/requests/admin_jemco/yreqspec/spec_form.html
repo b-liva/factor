@@ -107,7 +107,7 @@
                         <td>{{ part.title }}</td>
                         <td>{{ part.qty }}</td>
                     <td>
-
+                        <a href="{% url 'reqpart_edit_form' part_pk=part.pk %}">ویرایش</a>
                     </td>
                     </tr>
                     {% endfor %}

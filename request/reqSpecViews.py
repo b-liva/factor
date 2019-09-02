@@ -1,9 +1,10 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
 
-from .models import Requests, ReqSpec, IMType, IPType, ICType, IEType
+from .models import Requests, ReqSpec, IMType, IPType, ICType, IEType, ReqPart
 from motordb.models import MotorsCode
 from django.contrib.auth.decorators import login_required
 import request.templatetags.functions as funcs
@@ -44,8 +45,10 @@ def reqspec_index_no_summary(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='', type__title='روتین')
-    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='').exclude(code=99009900)
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='',
+                                      type__title='روتین')
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='').exclude(
+        code=99009900)
 
     context = {
         'motors': reqspecs
@@ -60,7 +63,8 @@ def reqspec_index_no_summary_no_routine(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='', type__title='روتین')
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='',
+                                      type__title='روتین')
     reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), code=99009900, summary='')
 
     context = {
@@ -76,8 +80,10 @@ def reqspec_index_with_summary(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='', type__title='روتین')
-    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), code=99009900).exclude(summary='')
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='',
+                                      type__title='روتین')
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), code=99009900).exclude(
+        summary='')
     # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='فلنجدارعمودنصب روبه پایین')
     # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='فلنجی')
     # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='فلنج دار')
@@ -97,7 +103,8 @@ def reqspec_index_IE(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='', type__title='روتین')
+    reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='',
+                                      type__title='روتین')
     reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary__contains='IE')
 
     context = {
@@ -128,7 +135,7 @@ def assign_code_to_motor(request):
         except:
             print('Nothing Found')
 
-    reqspecs = ReqSpec.objects.filter(is_active=True, code=99009900, req_id__owner=User.objects.get(pk=4))\
+    reqspecs = ReqSpec.objects.filter(is_active=True, code=99009900, req_id__owner=User.objects.get(pk=4)) \
         .filter(Q(summary='فلنجی') | Q(summary='فلنج دار') | Q(summary='با پایه وفلنج'))
 
     for req in reqspecs:
@@ -177,7 +184,8 @@ def reqspec_delete(request, yreqSpec_pk, req_pk):
 
 @login_required
 def reqspec_edit(request, yreqSpec_pk, req_pk):
-    if not Requests.objects.filter(is_active=True).filter(pk=req_pk) or not ReqSpec.objects.filter(is_active=True).filter(pk=yreqSpec_pk):
+    if not Requests.objects.filter(is_active=True).filter(pk=req_pk) or not ReqSpec.objects.filter(
+            is_active=True).filter(pk=yreqSpec_pk):
         messages.error(request, 'no request or specs')
         return redirect('errorpage')
     req = Requests.objects.filter(is_active=True).get(pk=req_pk)
@@ -291,8 +299,8 @@ def part_form(request, req_pk):
 
 @login_required
 def reqspec_edit_form(request, yreqSpec_pk, req_pk):
-
-    if not Requests.objects.filter(is_active=True).filter(pk=req_pk) or not ReqSpec.objects.filter(is_active=True).filter(pk=yreqSpec_pk):
+    if not Requests.objects.filter(is_active=True).filter(pk=req_pk) or not ReqSpec.objects.filter(
+            is_active=True).filter(pk=yreqSpec_pk):
         messages.error(request, 'no request or specs')
         return redirect('errorpage')
 
@@ -301,13 +309,14 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
     colleague = False
     if request.user in colleagues:
         colleague = True
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_reqspec', reqspec, colleague)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.change_reqspec', reqspec, colleague)
     if not can_edit:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
     req = Requests.objects.get(pk=req_pk)
     specs = req.reqspec_set.all()
+    parts = req.reqpart_set.all()
     spec = ReqSpec.objects.filter(is_active=True).get(pk=yreqSpec_pk)
     form = forms.SpecForm(request.POST or None, instance=spec)
     if request.method == 'POST':
@@ -331,11 +340,12 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
                 spec.code = 99009900
             spec.save()
             # form = forms.SpecForm()
-            messages.add_message(request, level=20,  message='جزئیات درخواست اصلاح شد')
+            messages.add_message(request, level=20, message='جزئیات درخواست اصلاح شد')
             return redirect('spec_form', req_pk=req.pk)
 
     context = {
         'req_obj': req,
+        'parts': parts,
         'specs': specs,
         'form': form
     }
@@ -349,3 +359,41 @@ def reqspec_copy(request, yreqSpec_pk, req_pk):
     spec.save()
     messages.error(request, 'ردیف با موفقیت کپی شد.')
     return redirect('reqspec_edit_form', yreqSpec_pk=spec.pk, req_pk=spec.req_id.pk)
+
+
+@login_required
+def reqpart_edit_form(request, part_pk):
+    if not ReqPart.objects.filter(pk=part_pk):
+        messages.error(request, 'قطعه مورد نظر یافت نشد.')
+        return redirect('errorpage')
+
+    reqpart = ReqPart.objects.get(pk=part_pk)
+    colleagues = reqpart.req.colleagues.all()
+    colleague = False
+    if request.user in colleagues:
+        colleague = True
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.change_reqpart', reqpart, colleague)
+    if not can_edit:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    req = Requests.objects.get(pk=reqpart.req.pk)
+    parts = req.reqpart_set.all()
+    specs = req.reqspec_set.all()
+    form = forms.PartForm(request.POST or None, instance=reqpart)
+    if request.method == 'POST':
+        if form.is_valid():
+            part = form.save(commit=False)
+            part.owner = request.user
+            part.save()
+            # form = forms.SpecForm()
+            messages.add_message(request, level=20, message='جزئیات درخواست اصلاح شد')
+            return redirect('part_form', req_pk=req.pk)
+
+    context = {
+        'req_obj': req,
+        'specs': specs,
+        'parts': parts,
+        'form': form
+    }
+    return render(request, 'requests/admin_jemco/yreqspec/spec_form.html', context)

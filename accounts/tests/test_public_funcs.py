@@ -8,7 +8,7 @@ from rest_framework.test import APIClient, APITestCase
 
 from motordb.models import MotorsCode
 from request.models import Requests, ReqSpec, ProjectType, RpmType, Xpref, PrefSpec, Payment, IMType, IPType, ICType, \
-    IEType
+    IEType, ReqPart
 
 User = get_user_model()
 
@@ -126,6 +126,7 @@ class CustomAPITestCase(APITestCase):
             Permission.objects.get(codename='delete_reqspec', content_type__app_label='request'),
             Permission.objects.get(codename='read_reqspecs', content_type__app_label='request'),
             Permission.objects.get(codename='add_reqpart', content_type__app_label='request'),
+            Permission.objects.get(codename='change_reqpart', content_type__app_label='request'),
             Permission.objects.get(codename='index_xpref', content_type__app_label='request'),
             Permission.objects.get(codename='read_proforma', content_type__app_label='request'),
             Permission.objects.get(codename='add_xpref', content_type__app_label='request'),
@@ -154,6 +155,17 @@ class CustomAPITestCase(APITestCase):
         defaults.update(params)
 
         return ReqSpec.objects.create(**defaults)
+
+    def sample_reqpart(self, **params):
+        defaults = {
+            'owner': self.user,
+            'req': self.req,
+            'qty': 2,
+            'title': 'درپوش عایقی',
+        }
+        defaults.update(params)
+
+        return ReqPart.objects.create(**defaults)
 
     def sample_proforma(self, req, owner, number, **params):
         defaults = {}
