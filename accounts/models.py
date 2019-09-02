@@ -81,7 +81,6 @@ class User(AbstractUser):
             kwargs['date_max'] = ''
         perms = self.perms(date_min=kwargs['date_min'], date_max=kwargs['date_max'])['perms']
         perm_numbers_list = [a.number for a in perms]
-        print(perm_numbers_list)
         pays = Payment.objects.filter(xpref_id__number__in=perm_numbers_list)
         total_received = pays.aggregate(sum=Sum('amount'))
         return total_received['sum']

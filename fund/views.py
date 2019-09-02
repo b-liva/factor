@@ -257,7 +257,6 @@ def fund_edit_form(request, fund_pk):
     fund_instance.date_fa = fund_instance.date_fa.togregorian()
     form = forms.FundForm(request.POST or None, instance=fund_instance)
     if form.is_valid():
-        print(f'fund is: valid')
         fund = form.save(commit=False)
         fund.save()
         return redirect('fund_index')

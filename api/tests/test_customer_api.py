@@ -8,16 +8,16 @@ from rest_framework.test import APIClient
 
 from customer.models import Customer
 from api.serializers import customerSerializers
-from accounts.tests import test_public_funcs as funcs
+from accounts.tests.test_public_funcs import CustomAPITestCase
 
 CUSTOMERS_URL = reverse('apivs:customer-list')
 
 
-class PublicCustomersApiTests(TestCase):
+class PublicCustomersApiTests(CustomAPITestCase):
     """Test available customer"""
 
     def setUp(self):
-        self.client = APIClient()
+        super().setUp()
 
     def test_login_required(self):
         """Test that login required for listing customer"""
@@ -25,17 +25,13 @@ class PublicCustomersApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class PrivateCustomerApiTests(TestCase):
+class PrivateCustomerApiTests(CustomAPITestCase):
     """Test the authorized user customer api"""
 
     def setUp(self):
-        self.user = funcs.sample_user()
-        self.superuser = funcs.sample_superuser(username='superuser')
-        self.ex_user = funcs.login_as_expert(username='ex_user')
-        self.client = APIClient()
+        super().setUp()
         self.client.force_authenticate(user=self.user)
-        self.customer_type = funcs.sample_customer_type()
-        self.customer = funcs.sample_customer(owner=self.user, name='تام ایرانخودرو')
+
 
     def test_create_customer_needs_permission_api(self):
         """Test create customer needs permission"""
@@ -91,67 +87,25 @@ class PrivateCustomerApiTests(TestCase):
     def test_retrieve_customers_list_api(self):
         """Test retrieving customer api"""
         self.client.force_authenticate(user=self.ex_user)
-        Customer.objects.create(
-            owner=self.ex_user,
-            name='سازش',
-            date2=datetime.datetime.now(),
-            type=self.customer_type,
-        )
-        Customer.objects.create(
-            owner=self.ex_user,
-            name='پمپ یاران',
-            date2=datetime.datetime.now(),
-            type=self.customer_type,
-        )
-        Customer.objects.create(
-            owner=self.user,
-            name='فولاد خوزستان',
-            date2=datetime.datetime.now(),
-            type=self.customer_type,
-        )
-        Customer.objects.create(
-            owner=self.user,
-            name='آتیه سازان',
-            date2=datetime.datetime.now(),
-            type=self.customer_type,
-        )
+        self.sample_customer(name='lkasjdf')
+        self.sample_customer(name='oijg')
         res = self.client.get(CUSTOMERS_URL)
         customers = Customer.objects.all().order_by('name')
         serializer = customerSerializers.CustomerSerializer(customers, many=True)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        # self.assertEqual(res.data, serializer.data)
-        self.assertEqual(len(res.data), 5)
-        self.assertEqual(res.data[0]['name'], 'آتیه سازان')
+        self.assertEqual(res.data, serializer.data)
 
-    def test_retreive_customers_list_not_limited_to_user_api(self):
-        """Test that customers are for the authenticated user"""
+    def test_customers_not_limited_to_user(self):
+        """Test users can see all customers."""
         self.client.force_authenticate(user=self.ex_user)
-        user2 = funcs.sample_user(username='unauth', password='unauthpass123')
-        user3 = funcs.sample_user(username='unauth2', password='unauthpass123')
-        Customer.objects.create(
-            owner=self.ex_user,
-            name='second',
-            date2=datetime.datetime.now(),
-            type=self.customer_type,
-        )
-        Customer.objects.create(
-            owner=user2,
-            name='fake',
-            date2=datetime.datetime.now(),
-            type=self.customer_type,
-        )
-        Customer.objects.create(
-            owner=user3,
-            name='fake2',
-            date2=datetime.datetime.now(),
-            type=self.customer_type,
-        )
+        user2 = self.sample_user(username='unauth', password='unauthpass123')
+        customer = self.sample_customer(owner=self.user, name='customer01')
+        self.sample_customer(owner=self.ex_user, name='customer02')
+        self.sample_customer(owner=user2, name='customer03')
         res = self.client.get(CUSTOMERS_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 4)
-        self.assertEqual(res.data[0]['name'], 'fake')  # Ordered by name
 
     def test_update_customer_needs_permission_api(self):
         """Test updating a customer needs permission(change_customer)"""

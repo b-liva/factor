@@ -42,7 +42,6 @@ def find_tenders(key=''):
 
 
 def render_tenders(request, parsTender, ariaTender, key=''):
-    print('05')
     # return render(request, 'requests/admin_jemco/tenders/tenders.html', {'tenders_items': parsTender, 'aria_tenders': ariaTender, 'key': key})
     return redirect('requests/admin_jemco/tenders/tenders.html', {'tenders_items': parsTender, 'aria_tenders': ariaTender, 'key': key})
 
@@ -93,7 +92,6 @@ class TendersScraper(object):
 
             results = response.json()
             res = results['list']
-            print(res)
             pager = results['pagerData']['total']
             for x in res:
                 tender = {}

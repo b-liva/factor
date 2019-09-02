@@ -55,7 +55,7 @@
                             <td>{{ spec.qty }}</td>
                             <td>{{ spec.kw | intcomma }}</td>
                             <td>{{ spec.voltage | floatformat:0 | intcomma }}</td>
-                            <td>{{ spec.rpm }}</td>
+                            <td>{{ spec.rpm_new.rpm }}</td>
                             <td>{{ spec.im }}</td>
                             <td>{{ spec.ip }}</td>
                             <td>{{ spec.ic }}</td>
@@ -93,9 +93,34 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <table class="table table-hover text-center">
+                    <thead>
+                    <tr>
+                        <td>ردیف</td>
+                        <td>عنوان</td>
+                        <td>تعداد</td></tr>
+                    </thead>
+                    <tbody>
+                    {% for part in parts %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ part.title }}</td>
+                        <td>{{ part.qty }}</td>
+                    <td>
+                        <a href="{% url 'reqpart_edit_form' part_pk=part.pk %}">ویرایش</a>
+                    </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
             <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
                 <div>
+                    {% if show_part_form %}
+                        <a class="btn btn-xs btn-success" href="{% url 'spec_form' req_pk=req_obj.pk %}"><i class="fa fa-plus"></i> الکتروموتور</a>
+                        {% else %}
+                        <a class="btn btn-xs btn-success" href="{% url 'part_form' req_pk=req_obj.pk %}"><i class="fa fa-plus"></i> قطعه</a>
+                    {% endif %}
                     {#                    <form method="POST" action="{% url 'spec_form' req_pk=req_obj.pk %}" enctype="multipart/form-data">#}
                     <div class="">
                         <form method="POST" enctype="multipart/form-data">

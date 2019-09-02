@@ -44,7 +44,6 @@ def expert_remaining_reqs_not_entered(pk):
     reqs = ReqEntered.objects.filter(owner_text__contains=account.last_name, is_request=True, is_entered=False)
     if account.last_name == 'فروغی':
         reqs = reqs.exclude(owner_text__contains='ظریف')
-    print(reqs.count())
     return reqs.count()
 
 

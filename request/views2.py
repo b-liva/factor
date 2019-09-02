@@ -142,7 +142,8 @@ def req_form(request):
     file_instance = forms.RequestFileForm()
     if request.method == 'POST':
         c_cookie = request.COOKIES.get('customer')
-
+        # print('this is reqeust cookies: ', request.COOKIES)
+        # print('this is cookie: ', c_cookie)
         form = forms.RequestFrom(request.POST or None, request.FILES or None)
         img_form = forms.RequestFileForm(request.POST, request.FILES)
         files = request.FILES.getlist('image')
@@ -1224,6 +1225,10 @@ class LazyEncoder(DjangoJSONEncoder):
 
 @login_required
 def req_report(request):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not can_add:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
     filters = {}
     req_list = Requests.objects.filter(is_active=True)
     if not request.user.is_superuser:
@@ -1269,6 +1274,11 @@ def req_report(request):
     if request.method == 'GET':
         form = ReqSearchForm()
 
+    req_list = req_list.annotate(qty=Sum('reqspec__qty'))
+    qty = req_list.aggregate(sum=Sum('qty'))
+    req_list = req_list.annotate(kw=Sum(F('reqspec__qty') * F('reqspec__kw'), output_field=FloatField()))
+    kw = req_list.aggregate(sum=Sum('kw'))
+
     page = request.GET.get('page', 1)
     orders_list = req_list
     paginator = Paginator(orders_list, 30)
@@ -1282,6 +1292,8 @@ def req_report(request):
         'fil': req_filter,
         'req_page': req_page,
         'form': form,
+        'qty': qty,
+        'kw': kw,
     }
     return render(request, 'requests/admin_jemco/yrequest/search_index2.html', context)
 

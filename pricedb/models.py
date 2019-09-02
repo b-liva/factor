@@ -1,26 +1,29 @@
 from django.db import models
 from django.utils.timezone import now
-
+from django_jalali.db import models as jmodels
 
 # Create your models here.
+from motordb.models import MotorsCode
+
+
 class PriceDb(models.Model):
     title = models.CharField(max_length=40)
     summary = models.TextField(max_length=600)
+    date_published = models.DateTimeField(default=now)
+    date_published_fa = jmodels.jDateField(default=now)
 
     def __str__(self):
         return '%s' % (self.title)
 
-
-class PrimeCost(models.Model):
-    price_db = models.ForeignKey(PriceDb, on_delete=models.CASCADE)
-    kw5_5 = models.FloatField()
+    class Meta:
+        permissions = (
+            ('index_pricedb', 'can list price dbs'),
+        )
 
 
 class MotorDB(models.Model):
     price_set = models.ForeignKey(PriceDb, on_delete=models.CASCADE)
-    kw = models.FloatField()
-    speed = models.IntegerField()
-    voltage = models.IntegerField(default=380)
+    motor = models.ForeignKey(MotorsCode, on_delete=models.CASCADE)
     prime_cost = models.FloatField(null=True, blank=True)
     base_price = models.FloatField(null=True, blank=True)
     sale_price = models.FloatField(null=True, blank=True)
@@ -31,15 +34,8 @@ class MotorDB(models.Model):
 
     class Meta:
         permissions = (
-            ('view_pricedb', 'can view price database'),
-            ('clean_pricedb', 'can view price database'),
+            ('index_motordb', 'can view price database'),
+            ('view_motordb', 'can view price database'),
+            ('clean_motordb', 'can view price database'),
         )
 
-
-class SalesPrice(models.Model):
-    price_set = models.ForeignKey(PriceDb, on_delete=models.CASCADE)
-    code = models.CharField(max_length=10)
-    price = models.IntegerField()
-
-    def __str__(self):
-        return '%s - %s - %s' % (self.price_set, self.code, self.price)

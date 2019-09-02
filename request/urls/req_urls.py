@@ -43,7 +43,7 @@ urlpatterns = [
     ])),
 
     path('<int:req_pk>/reqSpec/form', reqSpecViews.reqspec_form, name='reqSpec_form'),
-    path('<int:req_pk>/reqSpec/spec_form', reqSpecViews.spec_form, name='spec_form'),
+    path('<int:req_pk>/spec_form', reqSpecViews.spec_form, name='spec_form'),
     path('reqSpec/index', request.reqSpecViews.reqspec_index, name='reqSpec_index'),
     path('index-no-summary', request.reqSpecViews.reqspec_index_no_summary, name='reqspec_index_no_summary'),
     path('reqspec_index_no_summary_no_routine', request.reqSpecViews.reqspec_index_no_summary_no_routine, name='reqspec_index_no_summary_no_routine'),
@@ -55,6 +55,11 @@ urlpatterns = [
         path('edit', request.reqSpecViews.reqspec_edit, name='reqSpec_edit'),
         path('editForm', request.reqSpecViews.reqspec_edit_form, name='reqspec_edit_form'),
         path('copy', request.reqSpecViews.reqspec_copy, name='reqspec_copy'),
+    ])),
+
+    path('<int:req_pk>/part_form', reqSpecViews.part_form, name='part_form'),
+    path('part/<int:part_pk>/', include([
+        path('edit', request.reqSpecViews.reqpart_edit_form, name='reqpart_edit_form')
     ])),
     path("vue", TemplateView.as_view(template_name="requests/admin_jemco/yrequest/vue/index_test.html"), name="req_app", ),
 
