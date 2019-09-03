@@ -780,7 +780,8 @@ def pro_form(request):
                 spec_item.price = 0
                 spec_item.kw = spec.kw
                 spec_item.qty = spec.qty
-                spec_item.rpm = spec.rpm
+                # spec_item.rpm = spec.rpm
+                spec_item.rpm = int(spec.rpm_new.rpm)
                 spec_item.voltage = spec.voltage
                 spec_item.ip = spec.ip
                 spec_item.ic = spec.ic
