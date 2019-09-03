@@ -780,7 +780,14 @@ def pro_form(request):
                 spec_item.price = 0
                 spec_item.kw = spec.kw
                 spec_item.qty = spec.qty
-                spec_item.rpm = spec.rpm
+                # spec_item.rpm = spec.rpm
+                try:
+                    spec_item.rpm = int(spec.rpm_new.rpm)
+                except:
+                    proforma.prefspec_set.all().delete()
+                    proforma.delete()
+                    messages.error(request, 'اطلاعات سرعت صحیح نیست.')
+                    return redirect('reqspec_edit_form', req_pk=req.pk, yreqSpec_pk=spec.pk)
                 spec_item.voltage = spec.voltage
                 spec_item.ip = spec.ip
                 spec_item.ic = spec.ic
