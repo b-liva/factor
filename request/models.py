@@ -438,6 +438,18 @@ class PrefSpec(models.Model):
         )
 
 
+class PrefPart(models.Model):
+    xpref = models.ForeignKey(Xpref, on_delete=models.CASCADE)
+    reqpart_eq = models.ForeignKey(ReqPart, on_delete=models.CASCADE)
+    owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
+    title = models.CharField(max_length=60)
+    qty = models.IntegerField(default=1)
+    price = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return "%s عدد %s" % (self.qty, self.title,)
+
+
 class PaymentType(models.Model):
     title = models.CharField(max_length=25)
 

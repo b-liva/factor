@@ -249,6 +249,13 @@ class ProfSpecForm(forms.ModelForm):
         fields = '__all__'
 
 
+class ProfPartForm(forms.ModelForm):
+
+    class Meta:
+        model = models.PrefPart
+        fields = '__all__'
+
+
 class RequestCopyForm(forms.Form):
     number = forms.IntegerField(label='شماره درخواست')
     new_number = forms.IntegerField(label='شماره جدید', required=False)
