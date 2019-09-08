@@ -1,15 +1,54 @@
-@font-face {
-    font-family: IRANSans;
-    src: url(../fonts/eot/IRANSansWeb_Black.eot?1532072864);
-    src: url(../fonts/eot/IRANSansWeb_Black.eot?&1532072864#iefix) format('embedded-opentype'), url(../fonts/woff2/IRANSansWeb_Black.woff2?1532072864) format('woff2'), url(../fonts/woff/IRANSansWeb_Black.woff?1532072864) format('woff'), url(../fonts/ttf/IRANSansWeb_Black.ttf?1532072864) format('truetype');
-    font-weight: 900;
-    font-style: normal
-}
+/*@font-face {*/
+    /*font-family: IRANSans;*/
+    /*!*src: url(../fonts/eot/IRANSansWeb_Black.eot);*!*/
+    /*src: url(../fonts/woff/IRANSansWeb.woff) format('woff');*/
+    /*!*src: url(../fonts/woff/IRANSansWeb_Black.woff) format('woff');*!*/
+    /*font-weight: 900;*/
+    /*font-style: normal*/
+/*}*/
 .body{
-    font-family: IRANSans, Helvetica Neue, Roboto, Arial, Droid Sans, sans-serif;
-    color: red;
+    /*font-family: IRANSans, Helvetica Neue, Roboto, Arial, Droid Sans, sans-serif;*/
+    font-family: IRANSans1, Helvetica Neue, Roboto, Arial, Droid Sans, sans-serif;
+
+}
+thead { display: table-header-group }
+tfoot { display: table-row-group }
+tr { page-break-inside: avoid }
+
+table th,
+table td{
+    font-size: 12px;
+    padding: 2px 10px 2px;
+    text-align: center;
+}
+.details-rows{
+    font-size: 10px;
 }
 
-.aziz{
-    color: red;
+.table-bordered-custom td,
+.table-bordered-custom th
+{
+    border: 1px solid black;
+}
+.border-bottom-only td,
+.border-bottom-only th
+{
+    border: 0;
+    border-bottom: 1px solid black;
+}
+.border-bottom-only td:last-child
+{}
+.rotate_90_ccw{
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+ol.prof-details li{
+}
+div.prof-details p{
+}
+.price-pdf{
+    width: 60px;
 }

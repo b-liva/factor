@@ -1170,9 +1170,10 @@ def proforma_pdf(request, ypref_pk):
     from django.conf import settings
     css = [
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'style.css'),
+        os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'pdf_style.css'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'custom.min.css'),
-        # os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'pdf_style.css'),
-        os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap', 'dist', 'css', 'bootstrap.min.css')
+        os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap', 'dist', 'css', 'bootstrap.min.css'),
+        os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap-rtl', 'dist', 'css', 'bootstrap-rtl.css')
     ]
 
     options = {
@@ -1230,7 +1231,6 @@ def proforma_pdf(request, ypref_pk):
     )
 
     pdf = pdfkit.PDFKit(content, "string", options=options, css=css).to_pdf()
-
     response = HttpResponse(pdf)
     response['Content-Type'] = 'application/pdf'
 
@@ -1250,7 +1250,6 @@ def proforma_pdf(request, ypref_pk):
         context = {
             'contents': data,
         }
-        print(context['contents']['pref'].date_fa)
         return render(request, 'requests/admin_jemco/ypref/details_pdf.html', context)
 
 

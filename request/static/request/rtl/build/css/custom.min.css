@@ -39,7 +39,7 @@
 }
 
 @font-face {
-    font-family: IRANSans;
+    font-family: IRANSans1;
     src: url(../fonts/eot/IRANSansWeb.eot?1532072864);
     src: url(../fonts/eot/IRANSansWeb.eot?&1532072864#iefix) format('embedded-opentype'), url(../fonts/woff2/IRANSansWeb.woff2?1532072864) format('woff2'), url(../fonts/woff/IRANSansWeb.woff?1532072864) format('woff'), url(../fonts/ttf/IRANSansWeb.ttf?1532072864) format('truetype');
     font-weight: 400;
@@ -728,7 +728,7 @@ pre {
 body {
     color: #73879c;
     background: #34495e;
-    font-family: IRANSans, Helvetica Neue, Roboto, Arial, Droid Sans, sans-serif;
+    font-family: IRANSans1, Helvetica Neue, Roboto, Arial, Droid Sans, sans-serif;
     font-size: 13px;
     font-weight: 400;
     line-height: 1.471

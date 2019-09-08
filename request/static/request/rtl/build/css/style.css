@@ -19,15 +19,20 @@
 table.withBorder tbody,
 table.withBorder th,
 table.withBorder td {
-    /*border:1px solid black;*/
+    border: 1px solid black;
     /*text-align: center;*/
 }
-
+.noBorder{
+    border: none;
+}
+.bot-border>tr{
+    border-bottom: 1px solid black;
+}
 .withBorder th,
 .withBorder td,
 .withBorder tbody {
-    border: 1px solid black;
-    text-align: center;
+    /*border: 1px solid black;*/
+    /*text-align: center;*/
 }
 
 table.withBorder {
