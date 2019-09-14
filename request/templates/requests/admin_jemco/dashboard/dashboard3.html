@@ -22,43 +22,43 @@
 
                             <tr>
                                 <td>تعداد درخواست</td>
-                                <td>{{ count.agent.orders.value | floatformat:0 | intcomma }}
-                                    ({{ count.agent.orders.percent | floatformat:2 }}%)
+                                <td>{{ count.agent.orders.value | floatformat | intcomma }}
+                                    ({{ count.agent.orders.percent | floatformat }}%)
                                 </td>
-                                <td>{{ count.customer.orders.value | floatformat:0 | intcomma }}
-                                    ({{ count.customer.orders.percent | floatformat:2 }}%)
+                                <td>{{ count.customer.orders.value | floatformat | intcomma }}
+                                    ({{ count.customer.orders.percent | floatformat }}%)
                                 </td>
-                                <td>{{ count.total.orders | floatformat:0 | intcomma }}</td>
+                                <td>{{ count.total.orders | floatformat | intcomma }}</td>
                             </tr>
                             <tr>
                                 <td>تعداد ردیف</td>
-                                <td>{{ count.agent.row.value | floatformat:0 | intcomma }}
-                                    ({{ count.agent.row.percent | floatformat:2 }}%)
+                                <td>{{ count.agent.row.value | floatformat | intcomma }}
+                                    ({{ count.agent.row.percent | floatformat }}%)
                                 </td>
-                                <td>{{ count.customer.row.value | floatformat:0 | intcomma }}
-                                    ({{ count.customer.row.percent | floatformat:2 }}%)
+                                <td>{{ count.customer.row.value | floatformat | intcomma }}
+                                    ({{ count.customer.row.percent | floatformat }}%)
                                 </td>
-                                <td>{{ count.total.row | floatformat:0 | intcomma }}</td>
+                                <td>{{ count.total.row | floatformat | intcomma }}</td>
                             </tr>
                             <tr>
                                 <td>تعداد دستگاه</td>
-                                <td>{{ qty.agent.value | floatformat:0 | intcomma }}
-                                    ({{ qty.agent.percent | floatformat:2 }}%)
+                                <td>{{ qty.agent.value | floatformat | intcomma }}
+                                    ({{ qty.agent.percent | floatformat }}%)
                                 </td>
-                                <td>{{ qty.customer.value | floatformat:0 | intcomma }}
-                                    ({{ qty.customer.percent | floatformat:2 }}%)
+                                <td>{{ qty.customer.value | floatformat | intcomma }}
+                                    ({{ qty.customer.percent | floatformat }}%)
                                 </td>
-                                <td>{{ qty.total | floatformat:0 | intcomma }}</td>
+                                <td>{{ qty.total | floatformat | intcomma }}</td>
                             </tr>
                             <tr>
                                 <td>کیلووات</td>
-                                <td>{{ megaWatt.agent.value | floatformat:0 | intcomma }}
-                                    ({{ megaWatt.agent.percent | floatformat:2 }}%)
+                                <td>{{ megaWatt.agent.value | floatformat | intcomma }}
+                                    ({{ megaWatt.agent.percent | floatformat }}%)
                                 </td>
-                                <td>{{ megaWatt.customer.value | floatformat:0 | intcomma }}
-                                    ({{ megaWatt.customer.percent | floatformat:2 }}%)
+                                <td>{{ megaWatt.customer.value | floatformat | intcomma }}
+                                    ({{ megaWatt.customer.percent | floatformat }}%)
                                 </td>
-                                <td>{{ megaWatt.total | floatformat:0 | intcomma }}</td>
+                                <td>{{ megaWatt.total | floatformat | intcomma }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        <div id="customerDetails" class="col-xs-6 col-sm-4">
+        <div id="customerDetails" class=".fixed_height_320 col-xs-6 col-sm-4">
             <h3>وضعیت درخواست ها </h3>
             <div class="table-responsive">
                 <table class="table">
@@ -100,10 +100,17 @@
                     </tr>
                     <tr>
                         <td>درصد وارد شده</td>
-                        <td>{% expert_reqs_percent 4 as reqs %}{{ reqs|floatformat:1 }}</td>
-                        <td>{% expert_reqs_percent 2 as reqs %}{{ reqs|floatformat:1 }}</td>
-                        <td>{% expert_reqs_percent 3 as reqs %}{{ reqs|floatformat:1 }}</td>
-                        <td>{% expert_reqs_percent 5 as reqs %}{{ reqs|floatformat:1 }}</td>
+                        <td>{% expert_reqs_percent 4 as reqs %}{{ reqs|floatformat }}</td>
+                        <td>{% expert_reqs_percent 2 as reqs %}{{ reqs|floatformat }}</td>
+                        <td>{% expert_reqs_percent 3 as reqs %}{{ reqs|floatformat }}</td>
+                        <td>{% expert_reqs_percent 5 as reqs %}{{ reqs|floatformat }}</td>
+                    </tr>
+                    <tr>
+                        <td>درخواست بدون پیش فاکتور</td>
+                        <td>{% expert_remaining_reqs_no_xp 4 as reqs %}{{ reqs }}</td>
+                        <td>{% expert_remaining_reqs_no_xp 2 as reqs %}{{ reqs }}</td>
+                        <td>{% expert_remaining_reqs_no_xp 3 as reqs %}{{ reqs }}</td>
+                        <td>{% expert_remaining_reqs_no_xp 5 as reqs %}{{ reqs }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -111,6 +118,62 @@
 
         </div>
         <div class="col-md-8">
+            <div class="col-xs-12">
+                <div class="x_panel tile fixed_height_320">
+                    <div class="x_title">
+                        <h2>درخواست های وارد نشده</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-expanded="false"><i
+                                        class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#">Settings 1</a>
+                                    </li>
+                                    <li><a href="#">Settings 2</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="dashboard-widget-content">
+                            <ul class="quick-list">
+                                {% reqs_no_xp user as reqs %}
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <td>ردیف</td>
+                                            <td>شماره</td>
+                                            <td>مشتری</td>
+                                            <td>تاریخ درخواست</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for r in reqs %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td><a href="{% url 'request_details' request_pk=r.pk %}">{{ r.number }}</a></td>
+                                                <td>{{ r.customer.name }}</td>
+                                                <td>{{ r.date_fa }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
             <div class="col-xs-12">
                 <div class="x_panel tile fixed_height_320">
                     <div class="x_title">

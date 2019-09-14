@@ -28,6 +28,22 @@ def reqs_to_entered(user):
 
 
 @register.simple_tag()
+def reqs_noxp(user):
+    reqs = Requests.objects.filter(is_active=True, xpref__isnull=True).order_by('date_fa').reverse()
+    if not user.is_superuser:
+        reqs = reqs.filter(owner=user)
+    return reqs
+
+
+@register.simple_tag()
+def reqs_no_xp(user):
+    reqs = Requests.objects.filter(is_active=True, xpref__isnull=True).order_by('date_fa').reverse()
+    if not user.is_superuser:
+        reqs = reqs.filter(owner=user)
+    return reqs
+
+
+@register.simple_tag()
 def unread_comments(status, user):
     filter_query = Q(req_comment__owner=user, req_comment__is_active=True) | \
                    Q(req_comment__colleagues=user, req_comment__is_active=True) | \
@@ -44,6 +60,13 @@ def expert_remaining_reqs_not_entered(pk):
     reqs = ReqEntered.objects.filter(owner_text__contains=account.last_name, is_request=True, is_entered=False)
     if account.last_name == 'فروغی':
         reqs = reqs.exclude(owner_text__contains='ظریف')
+    return reqs.count()
+
+
+@register.simple_tag()
+def expert_remaining_reqs_no_xp(pk):
+    account = User.objects.get(pk=pk)
+    reqs = Requests.objects.filter(is_active=True, owner=account, xpref__isnull=True)
     return reqs.count()
 
 

@@ -265,6 +265,12 @@ def expert_reqs_percent_new(account):
 
 
 @register.simple_tag()
+def expert_reqs_noxp(account):
+    reqs = Requests.objects.filter(is_active=True, owner=account, xpref__isnull=True)
+    return reqs.count()
+
+
+@register.simple_tag()
 def total_orders_not_remaining():
     reqs = ReqEntered.objects.filter(is_request=True, is_entered=False)
     return reqs.count()
