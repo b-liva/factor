@@ -35,7 +35,7 @@
                     <div class="tile-stats">
                         <div class="icon">
                         </div>
-                        <div class="count">{{ object_list.customer_kw_total|floatformat:0|intcomma }}</div>
+                        <div class="count">{{ object_list.customer_kw_total|floatformat|intcomma }}</div>
 
                         <h3>کیلووات</h3>
                     </div>
@@ -47,7 +47,7 @@
                         <div class="icon col-md-6">
                             {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
                         </div>
-                        <div class="count">${{ object_list.pay_sum|floatformat:0|intcomma }}</div>
+                        <div class="count">${{ object_list.pay_sum|floatformat|intcomma }}</div>
 
                         <h3>پرداخت ها</h3>
                     </div>
@@ -110,7 +110,7 @@
                                             <tr>
                                                 <td>
                                                     <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">#{{ pay.xpref_id.number }}
-                                                        - ${{ pay.amount|floatformat:0|intcomma }}</a></td>
+                                                        - ${{ pay.amount|floatformat|intcomma }}</a></td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -122,9 +122,9 @@
                         {% endfor %}
                         <tr style="border-top: 3px solid black;">
                             <td colspan="3">مجموع</td>
-                            <td class="emphsize"><b>{{ object_list.customer_kw_total|floatformat:0|intcomma }}</b></td>
+                            <td class="emphsize"><b>{{ object_list.customer_kw_total|floatformat|intcomma }}</b></td>
                             <td></td>
-                            <td class="emphsize"><b>{{ object_list.pay_sum|floatformat:0|intcomma }}</b></td>
+                            <td class="emphsize"><b>{{ object_list.pay_sum|floatformat|intcomma }}</b></td>
                         </tr>
                         </tbody>
                     </table>

@@ -45,14 +45,14 @@
                         <td>{{ object.obj.price }}</td>
                         <td>{{ object.spec_total }}</td>
                         <td>{{ object.sale_price }}</td>
-                        <td class="{{ object.percentage_class }}">{{ object.percentage|floatformat:2 }}</td>
+                        <td class="{{ object.percentage_class }}">{{ object.percentage|floatformat }}</td>
                     </tr>
                 {% endfor %}
                 <tr style="border-top: 2px black solid">
                     <td colspan="8">sum</td>
                     <td>{{ proforma_total }}</td>
                     <td>{{ sales_total }}</td>
-                    <td class="{{ total_percentage_class }}">{{ total_percentage|floatformat:2 }}</td>
+                    <td class="{{ total_percentage_class }}">{{ total_percentage|floatformat }}</td>
                 </tr>
                 </tbody>
 

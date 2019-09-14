@@ -28,7 +28,7 @@
                     <div class="tile-stats">
                         <div class="icon">
                         </div>
-                        <div class="count">{{ total_kw|floatformat:1|intcomma }}</div>
+                        <div class="count">{{ total_kw|floatformat|intcomma }}</div>
 
                         <h3>مجموع کیلووات</h3>
                     </div>
@@ -40,7 +40,7 @@
                         <div class="icon col-md-6">
                             {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
                         </div>
-                        <div class="count">${{ pay_sum|floatformat:0|intcomma }}</div>
+                        <div class="count">${{ pay_sum|floatformat|intcomma }}</div>
 
                         <h3>پرداخت ها</h3>
                     </div>

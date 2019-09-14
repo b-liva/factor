@@ -24,8 +24,8 @@
         <div class="x_content">
             <div class="dashboard-widget-content">
                 <ul class="quick-list">
-{#                    <li><b>مجموع: {% total_received as total_amount %}{{ total_amount|floatformat:0|intcomma }} ریال </b></li>#}
-                    <li><b>مجموع: {{ daily_payments.sum.sum| floatformat:0 | intcomma }} ریال </b></li>
+{#                    <li><b>مجموع: {% total_received as total_amount %}{{ total_amount|floatformat|intcomma }} ریال </b></li>#}
+                    <li><b>مجموع: {{ daily_payments.sum.sum| floatformat | intcomma }} ریال </b></li>
                         <table class="table table-hover">
                             <thead >
                             <tr>
@@ -39,7 +39,7 @@
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ item.date_fa }}</td>
-                                    <td>{{ item.amount | floatformat:0 | intcomma }}</td>
+                                    <td>{{ item.amount | floatformat | intcomma }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

@@ -29,7 +29,7 @@
                                         <tr>
                                             {% if pay.is_active %}
                                                 <td>
-                                                    <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">{{ pay.amount | floatformat:0 | intcomma }}</a>
+                                                    <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">{{ pay.amount | floatformat | intcomma }}</a>
                                                 </td>
 
                                             {% endif %}

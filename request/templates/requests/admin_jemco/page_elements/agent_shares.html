@@ -48,7 +48,7 @@
                                     <td>
                                         <p><i class="fa fa-square blue"></i>{{ value.customer.name }} </p>
                                     </td>
-                                    <td>{{ value.kw|floatformat:0|intcomma }}</td>
+                                    <td>{{ value.kw|floatformat|intcomma }}</td>
                                 </tr>
                             {% endfor %}
                         </table>

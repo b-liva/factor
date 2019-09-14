@@ -43,7 +43,7 @@
                         <div class="icon col-md-6">
                             {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
                         </div>
-                        <div class="count">${{ proforma_total|floatformat:0|intcomma }}</div>
+                        <div class="count">{{ proforma_total|floatformat|intcomma }}</div>
 
                         <h3>مبلغ پیش فاکتور</h3>
                     </div>
@@ -52,8 +52,8 @@
                     <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
                         <div class="tile-stats">
                             <div>
-                                <span class="count">${{ pref.total_proforma_received.remaining|floatformat:0|intcomma }}</span>
-                                <span class="red">(%{{ pref.total_proforma_received.remaining_percent|floatformat:2 }})</span>
+                                <span class="count">${{ pref.total_proforma_received.remaining|floatformat|intcomma }}</span>
+                                <span class="red">(%{{ pref.total_proforma_received.remaining_percent|floatformat }})</span>
                             </div>
                             <h3 class="col-xs-12">تسویه نشده</h3>
                         </div>
@@ -142,25 +142,25 @@
                                     <td>{{ object.obj.qty }}</td>
                                     <td>{{ object.obj.qty_sent }}</td>
                                     <td style="border: 1px dashed brown">{{ object.obj|qty_remaining }}</td>
-                                    <td>{{ object.obj.kw }}</td>
+                                    <td>{{ object.obj.kw|floatformat }}</td>
                                     <td>{{ object.obj.rpm }}</td>
                                     <td>{{ object.obj.voltage }}</td>
                                     <td>{{ object.obj.considerations }}</td>
-                                    <td>{{ object.obj.price|intcomma:0 }}</td>
-                                    <td>{{ object.spec_total|intcomma:0 }}</td>
+                                    <td>{{ object.obj.price|floatformat|intcomma }}</td>
+                                    <td>{{ object.spec_total|floatformat|intcomma }}</td>
                                 </tr>
                             {% endif %}
                         {% endfor %}
                         <tr style="border-top: 2px black solid">
                             <td colspan="3">مالیات ارزش افزوده</td>
                             <td colspan="5"></td>
-                            <td class="amount-total ">{{ vat | floatformat:1 | intcomma }}</td>
+                            <td class="amount-total ">{{ vat|floatformat|intcomma }}</td>
                         </tr>
                         <tr style="border-top: 2px black solid">
                             <td colspan="3" class="emphsize">مجموع</td>
-                            <td class="kw-total emphsize">{{ kw_total|intcomma }} کیلووات</td>
+                            <td class="kw-total emphsize">{{ kw_total|floatformat|intcomma }} کیلووات</td>
                             <td colspan="4"></td>
-                            <td class="amount-total emphsize">{{ proforma_total | floatformat:1 | intcomma }}</td>
+                            <td class="amount-total emphsize">{{ proforma_total|floatformat|intcomma }}</td>
                         </tr>
                         </tbody>
 
@@ -207,7 +207,7 @@
                                                 </a>
                                                 </td>
                                                 <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
-                                                    {{ pay.amount | floatformat:0 | intcomma }}
+                                                    {{ pay.amount | floatformat | intcomma }}
                                                 </a>
                                                 </td>
                                             </tr>

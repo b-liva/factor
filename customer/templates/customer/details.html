@@ -51,7 +51,7 @@
                     <div class="tile-stats">
                         <div class="icon">
                         </div>
-                        <div class="count">{{ customer.total_kw.amount|floatformat:0|intcomma }}</div>
+                        <div class="count">{{ customer.total_kw.amount|floatformat|intcomma }}</div>
 
                         <h3>کیلووات</h3>
                     </div>
@@ -63,7 +63,7 @@
                         <div class="icon col-md-6">
                             {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
                         </div>
-                        <div class="count">${{ customer.total_received.amount|floatformat:0|intcomma }}</div>
+                        <div class="count">${{ customer.total_received.amount|floatformat|intcomma }}</div>
 
                         <h3>پرداخت ها</h3>
                     </div>
@@ -71,14 +71,14 @@
             </div>
         </div>
         <div>
-            <p>قابل دریافت: {{ customer.total_receivable|floatformat:0|intcomma }}</p>
-            <p>دریافتی از مشتری: {{ customer.total_received.amount|floatformat:0|intcomma }}</p>
-            <p>معادل کالای ارسالی به مشتری: {{ customer.pref_sent.sent_value|floatformat:0|intcomma }}
+            <p>قابل دریافت: {{ customer.total_receivable|floatformat|intcomma }}</p>
+            <p>دریافتی از مشتری: {{ customer.total_received.amount|floatformat|intcomma }}</p>
+            <p>معادل کالای ارسالی به مشتری: {{ customer.pref_sent.sent_value|floatformat|intcomma }}
                 (<span data-toggle="tooltip" title="تعداد دستگاه مجوز شده">{{ customer.spec_perms.qty }}</span>
                 /<span data-toggle="tooltip" title="تعداد دستگاه ارسال شده">{{ customer.pref_sent.sent_count|intcomma }}</span>)
             </p>
-            <p><span data-toggle="tooltip" title="اختلاف دریافتی و معادل کالای ارسال شده">تراز ارسال شده: {{ customer.ballance.ballance_sent|floatformat:0|intcomma }}</span></p>
-            <p ><span data-toggle="tooltip" title="اختلاف دریافتی و مجوز شده">تراز کل: {{ customer.ballance.ballance_total|floatformat:0|intcomma }}</span></p>
+            <p><span data-toggle="tooltip" title="اختلاف دریافتی و معادل کالای ارسال شده">تراز ارسال شده: {{ customer.ballance.ballance_sent|floatformat|intcomma }}</span></p>
+            <p ><span data-toggle="tooltip" title="اختلاف دریافتی و مجوز شده">تراز کل: {{ customer.ballance.ballance_total|floatformat|intcomma }}</span></p>
         </div>
 
         <div class="row customerTable">
@@ -127,7 +127,7 @@
                                 <td>
                                     {{ req.date_fa }}
                                 </td>
-                                <td>{{ req.total_kw|floatformat:1|intcomma }}</td>
+                                <td>{{ req.total_kw|floatformat|intcomma }}</td>
                                 <td class="text-center ">
                                     <table class="col-xs-12 text-center">
                                         <tbody>
@@ -143,7 +143,7 @@
                                                             <tr>
                                                                 <td>
                                                                     <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
-                                                                        ${{ pay.amount|floatformat:0|intcomma }}</a>
+                                                                        ${{ pay.amount|floatformat|intcomma }}</a>
                                                                 </td>
                                                             </tr>
                                                         {% endfor %}
@@ -157,14 +157,14 @@
                                     </table>
                                 </td>
                                 <td>{{ req.total_received|intcomma }}</td>
-                                <td>{{ req.total_receivable|floatformat:0|intcomma }}</td>
+                                <td>{{ req.total_receivable|floatformat|intcomma }}</td>
                             </tr>
                         {% endfor %}
                         <tr style="border-top: 3px solid black;">
                             <td colspan="3">مجموع</td>
-                            <td class="emphsize"><b>{{ customer.total_kw.amount|floatformat:0|intcomma }}</b></td>
+                            <td class="emphsize"><b>{{ customer.total_kw.amount|floatformat|intcomma }}</b></td>
                             <td></td>
-                            <td class="emphsize"><b>{{ customer.total_received.amount|floatformat:0|intcomma }}</b></td>
+                            <td class="emphsize"><b>{{ customer.total_received.amount|floatformat|intcomma }}</b></td>
                             <td></td>
                         </tr>
                         </tbody>

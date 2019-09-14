@@ -208,7 +208,7 @@
                                                     <tr>
                                                         <td>
                                                             <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
-                                                                ${{ pay.amount|floatformat:0|intcomma }}</a>
+                                                                ${{ pay.amount|floatformat|intcomma }}</a>
                                                         </td>
                                                     </tr>
                                                 {% endfor %}
@@ -248,8 +248,8 @@
                 {% endfor %}
                 <tr style="font-size: large; font-weight: bold">
                     <td colspan="2">مجموع</td>
-                    <td>{{ total_qty | floatformat:0 | intcomma }}</td>
-                    <td>{{ total_kw | floatformat:0 | intcomma }}</td>
+                    <td>{{ total_qty | floatformat | intcomma }}</td>
+                    <td>{{ total_kw | floatformat | intcomma }}</td>
                 </tr>
                 </tbody>
             </table>

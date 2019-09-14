@@ -20,7 +20,7 @@
                     <div class="tile-stats">
                         <div class="icon">
                         </div>
-                        <div class="count">{{ request.total_kw|floatformat:1|intcomma }}</div>
+                        <div class="count">{{ request.total_kw|floatformat|intcomma }}</div>
 
                         <h3>مجموع کیلووات</h3>
                     </div>
@@ -32,7 +32,7 @@
                         <div class="icon col-md-6">
                             {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
                         </div>
-                        <div class="count">${{ request.total_received|floatformat:0|intcomma }}</div>
+                        <div class="count">${{ request.total_received|floatformat|intcomma }}</div>
 
                         <h3>پرداخت ها</h3>
                     </div>
@@ -144,7 +144,7 @@
                                 {#                <td>{{ customer.pk }}</td>#}
                                 <td>{{ reqspec.code }}</td>
                                 <td>{{ reqspec.qty }}</td>
-                                <td>{{ reqspec.kw }}</td>
+                                <td>{{ reqspec.kw|floatformat }}</td>
                                 <td>{{ reqspec.rpm_new.rpm }}</td>
                                 <td class="text-right">{{ reqspec.summary }}</td>
 

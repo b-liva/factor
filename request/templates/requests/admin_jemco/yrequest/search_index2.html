@@ -112,7 +112,7 @@
                         <td class="text-center">{{ r.date_fa }}</td>
 {#                    previouse version#}
 {#                        <td class="text-center">{{ r.total_kw }}</td>#}
-                        <td class="text-center">{{ r.kw }}</td>
+                        <td class="text-center">{{ r.kw|floatformat }}</td>
                         <td class="text-center">{{ r.qty }}</td>
                         <td class="text-center">{{ r.owner.last_name }} -
                             {% for colleague in r.colleagues.all %}

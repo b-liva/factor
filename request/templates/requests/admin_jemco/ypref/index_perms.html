@@ -157,9 +157,9 @@
                             {#                            <td>{{ p|days }}</td>#}
                             <td class="{{ p|perm_warning_class }}">{{ p|perm_days }}</td>
                             <td>{% if p.issue_type %}{{ p.issue_type }}{% else %}{% endif %}</td>
-                            <td>{{ p.total_proforma_price_vat.price_vat|floatformat:0 | intcomma }}</td>
-                            <td>{{ p.total_proforma_received.remaining|floatformat:0 | intcomma }}</td>
-                            <td>{{ p.total_proforma_received.remaining_percent|floatformat:2 }}</td>
+                            <td>{{ p.total_proforma_price_vat.price_vat|floatformat | intcomma }}</td>
+                            <td>{{ p.total_proforma_received.remaining|floatformat | intcomma }}</td>
+                            <td>{{ p.total_proforma_received.remaining_percent|floatformat }}</td>
                             {#                            <td>{{ p.perm.summary|truncatechars:60 }}</td>#}
                             <td>{{ p.owner.last_name }} ({{ p.req_id.owner.last_name }})</td>
                             <td>

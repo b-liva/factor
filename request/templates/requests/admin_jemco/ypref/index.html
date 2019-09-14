@@ -155,7 +155,7 @@
                                 <a href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
                             </td>
                             <td>{{ pref.req_id.customer.name }}</td>
-                            <td>{{ pref.total_proforma_price_vat.price_vat|floatformat:0|intcomma }}</td>
+                            <td>{{ pref.total_proforma_price_vat.price_vat|floatformat|intcomma }}</td>
                             <td>{{ pref.date_fa }}</td>
                             <td class="{{ pref|prof_expiry }}">{{ pref.exp_date_fa }}</td>
                             <td>{{ pref.owner.last_name }}</td>

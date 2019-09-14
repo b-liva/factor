@@ -39,7 +39,7 @@
                 <td>{{ fund.title }}</td>
                 <td>{{ fund.summary }}</td>
                 <td>{{ fund.date_fa }}</td>
-                <td>{{ total_exp|floatformat:0|intcomma }}</td>
+                <td>{{ total_exp|floatformat|intcomma }}</td>
                 <td>{{ fund.owner.username }}</td>
                 <td>
                     <a class="btn btn-primary btn-xs" href="{% url 'fund_details' fund_pk=fund.pk %}">
