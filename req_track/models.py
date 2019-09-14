@@ -176,3 +176,18 @@ class Perm(models.Model):
 
     def __str__(self):
         return "perm: %s, Proforma: %s, qty: %s kw: %s" % (self.perm_number, self.prof_number, self.qty, self.kw)
+
+
+class PriceList(models.Model):
+    price_list_id = models.IntegerField()
+    price_list_name = models.CharField(max_length=40)
+    kw = models.FloatField()
+    rpm = models.IntegerField()
+    code = models.BigIntegerField()
+    prime_cost = models.FloatField(null=True, blank=True)
+    base_price = models.FloatField()
+    sale_price = models.FloatField()
+    pub_date = models.DateTimeField(default=now)
+
+    def __str__(self):
+        return '%s kw - %s rpm: %s' % (self.kw, self.rpm, self.sale_price,)
