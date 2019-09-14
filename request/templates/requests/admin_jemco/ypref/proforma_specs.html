@@ -58,7 +58,7 @@
                                     <th>قیمت</th>
                                     <th>ملاحضات</th>
                                 </tr>
-                                {% for spec in reqspec %}
+                                {% for spec in prefspecs %}
                                     <tr>
                                         <td>{{ forloop.counter }}</td>
                                         <td>{{ spec.type }}</td>
@@ -73,7 +73,7 @@
                                         <td>
                                             <input type="number" name="price" value="{{ spec.price }}"
                                                    class="form-control">
-                                            <input type="hidden" name="spec_id" value="{{ spec.id }}">
+                                            <input  type="hidden" name="spec_id" value="{{ spec.id }}">
                                         </td>
                                         <td>
                                             <textarea type="number" name="considerations" value=""

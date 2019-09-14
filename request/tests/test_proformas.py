@@ -200,8 +200,12 @@ class PrivateProformaTest(CustomAPITestCase):
         self.assertEqual(res.context['proforma'].pk, proforma.pk)
         self.assertEqual(res.context['req_obj'].pk, req.pk)
         self.assertEqual(
-            len(res.context['reqspec']),
+            len(res.context['reqspecs']),
             req.reqspec_set.filter(is_active=True).count()
+        )
+        self.assertEqual(
+            len(res.context['prefspecs']),
+            proforma.prefspec_set.filter(is_active=True).count()
         )
 
     def test_create_prefspec_post_req_owner_no_permission(self):

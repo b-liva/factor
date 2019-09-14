@@ -188,6 +188,7 @@ class PriceList(models.Model):
     base_price = models.FloatField()
     sale_price = models.FloatField()
     pub_date = models.DateTimeField(default=now)
+    entered = models.BooleanField(default=False)
 
     def __str__(self):
         return '%s kw - %s rpm: %s' % (self.kw, self.rpm, self.sale_price,)

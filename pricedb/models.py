@@ -30,7 +30,7 @@ class MotorDB(models.Model):
     pub_date = models.DateTimeField(default=now)
 
     def __str__(self):
-        return 'prime cost: %s' % (self.prime_cost)
+        return 'kw: %s - rpm: %s - sale price: %s' % (self.motor.kw, self.motor.speed, self.sale_price,)
 
     class Meta:
         permissions = (

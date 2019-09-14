@@ -790,13 +790,21 @@ def pro_form(request):
                     return redirect('reqspec_edit_form', req_pk=req.pk, yreqSpec_pk=spec.pk)
                 spec_item.voltage = spec.voltage
                 spec_item.ip = spec.ip
+                spec_item.im = spec.im
                 spec_item.ic = spec.ic
                 spec_item.summary = spec.summary
                 spec_item.owner = request.user
                 spec_item.xpref_id = proforma
                 spec_item.reqspec_eq = spec
-                spec_item.save()
+                try:
+                    if proforma.req_id.customer.agent:
+                        spec_item.price = MotorDB.objects.get(motor__code=spec_item.code).base_price
+                    else:
+                        spec_item.price = MotorDB.objects.get(motor__code=spec_item.code).sale_price
+                except:
+                    pass
 
+                spec_item.save()
                 spec.price = True
                 spec.save()
 
@@ -914,7 +922,7 @@ def pref_edit(request, ypref_pk):
         kw = prefspec.kw
         speed = prefspec.rpm
         price = MotorDB.objects.filter(motor__kw=kw, motor__speed=speed, motor__voltage=prefspec.voltage).last()
-        if hasattr(price, 'prime_cost'):
+        if hasattr(price, 'prime_cost') and price.prime_cost:
             prime = price.prime_cost
             percentage = (prefspec.price / (prime))
         else:
@@ -1140,13 +1148,15 @@ def prof_spec_form(request, ypref_pk):
         else:
             print('form is not valid')
     else:
-        form = forms.ProfSpecForm(request.POST)
+        pass
+        # form = forms.ProfSpecForm(request.POST)
 
     context = {
-        'form': form,
+        # 'form': form,
         'proforma': proforma,
         'req_obj': req,
-        'reqspec': reqspecs
+        'reqspecs': reqspecs,
+        'prefspecs': proforma.prefspec_set.all()
     }
     return render(request, 'requests/admin_jemco/ypref/proforma_specs.html', context)
 
