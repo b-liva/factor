@@ -594,6 +594,7 @@ def pref_details(request, ypref_pk):
             followup.xpref = pref
             followup.save()
 
+    print(proforma_total)
     context = {
         'pref': pref,
         'prefspecs': prefspecs,
@@ -1181,6 +1182,7 @@ def proforma_pdf(request, ypref_pk):
     css = [
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'style.css'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'pdf_style.css'),
+        # os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'pdf_style2.css'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'custom.min.css'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap', 'dist', 'css', 'bootstrap.min.css'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap-rtl', 'dist', 'css', 'bootstrap-rtl.css')
@@ -1188,10 +1190,12 @@ def proforma_pdf(request, ypref_pk):
 
     options = {
         'page-size': 'A4',
-        'margin-top': '2.3622in',
-        'margin-right': '0.55in',
+        'margin-top': '1in',
+        # 'margin-top': '0.77in',
+        'margin-right': '0.1in',
+        # 'margin-bottom': '1in',
         'margin-bottom': '1.5748in',
-        'margin-left': '0.55in',
+        'margin-left': '0.1in',
         'encoding': "UTF-8",
     }
     if header:

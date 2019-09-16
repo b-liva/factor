@@ -342,8 +342,6 @@ class Xpref(models.Model):
     def total_proforma_price_vat(self):
         no_vat = self.prefspec_set.aggregate(sum=Sum(F('qty') * F('price'), output_field=FloatField()))
         no_vat = no_vat['sum']
-        print(self.pk)
-        print(no_vat)
         if no_vat is None:
             no_vat = 0
         vat = .09 * no_vat
