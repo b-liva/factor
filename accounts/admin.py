@@ -1,7 +1,7 @@
 from django.contrib import admin
 # from django.contrib.auth.models import User as DefaultUser
 from django.contrib.auth import get_user_model
-from accounts.models import CustomerUser
+from accounts.models import CustomerUser, StaffPosition, StaffInfo
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
@@ -29,6 +29,8 @@ class CustomerUserAdmin(admin.ModelAdmin):
 
 admin.site.register(User, CustomUserAdmin)
 # admin.site.register(User)
+admin.site.register(StaffPosition)
+admin.site.register(StaffInfo)
 admin.site.register(CustomerUser, CustomerUserAdmin)
 
 # Register your models here.

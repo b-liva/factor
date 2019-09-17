@@ -95,6 +95,21 @@ class CustomerUser(User):
         return '%s' % self.last_name
 
 
+class StaffPosition(models.Model):
+    title = models.CharField(max_length=100)
+
+    def __str__(self):
+        return "%s" % self.title
+
+
+class StaffInfo(models.Model):
+    account = models.ForeignKey(User, on_delete=models.CASCADE)
+    position = models.ManyToManyField('accounts.StaffPosition', null=True, blank=True)
+    tel = models.CharField(max_length=4)
+
+    def __str__(self):
+        return "%s (%s) tel: %s" % (self.account.last_name, self.position.last().title, self.tel,)
+
 # class EmailUserManager(BaseUserManager):
 #
 #     def create_user(self, email, password=None, **extra_fields):
