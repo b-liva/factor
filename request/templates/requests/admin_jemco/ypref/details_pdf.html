@@ -99,12 +99,12 @@
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ object.obj.code }}</td>
                                     <td>
-                                        <span>{{ object.obj.kw | floatformat }}kw</span>
-                                        <span>{{ object.obj.rpm }}rpm</span>
-                                        <span>{{ object.obj.voltage }}V</span>
-                                        {% if object.obj.ip %}<span>{{ object.obj.ip }}</span>{% endif %}
-                                        {% if object.obj.ic %}<span>{{ object.obj.ic }}</span>{% endif %}
-                                        {% if object.obj.im %}<span>{{ object.obj.im }}</span>{% endif %}
+                                        <span>{{ object.obj.kw | floatformat }}KW</span>
+                                        <span> - {{ object.obj.rpm }}RPM</span>
+                                        <span> - {{ object.obj.voltage }}V</span>
+                                        {% if object.obj.ip %}<span> - {{ object.obj.ip }}</span>{% endif %}
+                                        {% if object.obj.ic %}<span> - {{ object.obj.ic }}</span>{% endif %}
+                                        {% if object.obj.im %}<span> - {{ object.obj.im }}</span>{% endif %}
                                     </td>
                                     <td>{{ object.obj.qty }}</td>
                                     <td>{{ object.obj.price|floatformat|intcomma }}</td>
@@ -122,7 +122,7 @@
                         </tr>
 
                         <tr>
-                            <td rowspan="5" colspan="3" class="text-right">
+                            <td rowspan="6" colspan="3" class="text-right">
                                 <p>توضیحات:</p>
                                 <ol class="prof-details">
                                     <li>مدت اعتبار پیش فاکتور هفت روز پس از تاریخ صدور می باشد.</li>
@@ -150,6 +150,10 @@
                             <td></td>
                         </tr>
                         <tr>
+                            <td colspan="2" class="details-rows text-right">بسته بندی</td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <td colspan="2" class="details-rows text-right">قانون مالیات بر ارزش افزوده 9%</td>
                             <td>{{ contents.vat | floatformat | intcomma }}</td>
                         </tr>
@@ -159,8 +163,11 @@
                         </tr>
                         <tr>
                             <td colspan="3">
-                                <div>کارشناس فروش</div>
-                                <div>{{ contents.pref.req_id.owner.last_name }}</div>
+                                <div>{{ contents.pref.req_id.owner.staffinfo_set.first.position.first.title }}</div>
+                                <div>
+                                    <span style="font-size: 11px;">{{ contents.pref.req_id.owner.last_name }}</span>
+                                    <span style="font-style: italic; font-size: 10px;">(داخلی: {{ contents.pref.req_id.owner.staffinfo_set.first.tel }})</span>
+                                </div>
                             </td>
                             <td colspan="3">معاونت بازرگانی</td>
                         </tr>
