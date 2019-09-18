@@ -399,12 +399,11 @@ def payment_edit(request, ypayment_pk):
         payment.due_date = payment.due_date.togregorian()
     form = payment_forms.PaymentFrom(request.POST or None, instance=payment)
     if form.is_valid():
-        print('form is valid')
         pay = form.save(commit=False)
         pay.save()
         return redirect('payment_index')
     else:
-        print('payment form is not valid')
+        pass
 
     return render(request, 'requests/admin_jemco/ypayment/payment_form.html', {
         'form': form,

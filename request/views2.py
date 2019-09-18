@@ -1230,7 +1230,7 @@ def req_report(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     filters = {}
-    req_list = Requests.objects.filter(is_active=True)
+    req_list = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
     if not request.user.is_superuser:
         # req_list = req_list.filter(owner=request.user)
         req_list = req_list.filter(Q(owner=request.user) | Q(colleagues=request.user))

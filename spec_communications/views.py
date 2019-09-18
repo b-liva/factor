@@ -16,7 +16,6 @@ def speccm_vueadd(request):
         print(f"{data['text']} for sped {data['spec']}")
         form = SpecCmForm(data)
         if form.is_valid():
-            print('form is valid')
             speccm_item = form.save(commit=False)
             # speccm_item.text = form_data['text']
             speccm_item.is_read = False
