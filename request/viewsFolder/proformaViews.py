@@ -557,7 +557,6 @@ def pref_details(request, ypref_pk):
     if not Xpref.objects.filter(pk=ypref_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
-
     pref = Xpref.objects.get(pk=ypref_pk)
     can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
 
@@ -594,7 +593,6 @@ def pref_details(request, ypref_pk):
             followup.xpref = pref
             followup.save()
 
-    print(proforma_total)
     context = {
         'pref': pref,
         'prefspecs': prefspecs,

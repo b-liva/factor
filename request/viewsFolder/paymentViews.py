@@ -42,28 +42,40 @@ def pay_form_prof(request, prof_pk):
 
 @login_required
 def pay_form(request):
-    img_form = payment_forms.PaymentFileForm()
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
+    try:
+        proforma = Xpref.objects.get(pk=request.POST['xpref_id'])
+        can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment', instance=proforma)
+        if not proforma.perm:
+            messages.error(request, 'پیش فاکتور مورد نظر مجوز نشده و دریافتی برای آن قابل ثبت نیست.')
+            # todo: this is too messy. please refactor me.
+            if can_add:
+                if proforma.owner == request.user:
+                    return redirect('pref_details', ypref_pk=proforma.pk)
+                else:
+                    return redirect('payment_index')
+            else:
+                return redirect('errorpage')
+    except:
+        can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
+
+    img_form = payment_forms.PaymentFileForm()
     if request.method == 'POST':
         form = payment_forms.PaymentFrom(request.POST, request.FILES)
         add_img_form = payment_forms.PaymentFileForm(request.POST or None, request.FILES or None)
         files = request.FILES.getlist('image')
-        print(f'files are: {files}')
         if form.is_valid() and add_img_form.is_valid():
-            print('forms are valid')
             payment = form.save(commit=False)
             payment.owner = request.user
             payment.save()
-            print(f'payment id is: {payment.pk}')
             for f in files:
                 img = models.PaymentFiles(image=f, pay=payment)
                 img.save()
             return redirect('payment_index')
         else:
-            print('forms are not valid')
+            pass
     else:
         if 'proforma_pk' in request.session:
             data = {

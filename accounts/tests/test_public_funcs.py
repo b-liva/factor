@@ -7,8 +7,8 @@ from django.test import Client, TestCase
 from rest_framework.test import APIClient, APITestCase
 
 from motordb.models import MotorsCode
-from request.models import Requests, ReqSpec, ProjectType, RpmType, Xpref, PrefSpec, Payment, IMType, IPType, ICType, \
-    IEType, ReqPart
+# from request.models import Requests, ReqSpec, ProjectType, RpmType, Xpref, PrefSpec, Payment, IMType, IPType, ICType, IEType, ReqPart
+from request.models import *
 
 User = get_user_model()
 
@@ -37,6 +37,7 @@ class CustomAPITestCase(APITestCase):
         self.spec2 = self.sample_reqspec(owner=self.user, kw=315, rpm=1500)
         self.spec3 = self.sample_reqspec(owner=self.user, kw=160, rpm=3000)
         self.proforma = self.sample_proforma(req=self.req, owner=self.user, number=981000)
+        self.payment = self.sample_payment(proforma=self.proforma, owner=self.user, number=45422345, amount=84532135100)
         self.motorcode = self.sample_motorcode(owner=self.user, code=9900, kw=450, speed=1500, voltage=380)
 
         self.request_payload = {
@@ -73,6 +74,14 @@ class CustomAPITestCase(APITestCase):
             'req_id': self.req.pk,
             'date_fa': ['۱۳۹۸-۰۶-۰۳'],
             'exp_date_fa': ['۱۳۹۸-۰۶-۰۳'],
+            'summary': ['somte data goes here...'],
+        }
+
+        self.payment_payload = {
+            'xpref_id': self.proforma.pk,
+            'number': 15220,
+            'amount': 1500000,
+            'date_fa': ['۱۳۹۸-۰۶-۰۳'],
             'summary': ['somte data goes here...'],
         }
         self.prefspec_payload = {}
@@ -155,6 +164,7 @@ class CustomAPITestCase(APITestCase):
             Permission.objects.get(codename='index_payment', content_type__app_label='request'),
             Permission.objects.get(codename='add_payment', content_type__app_label='request'),
             Permission.objects.get(codename='change_payment', content_type__app_label='request'),
+            Permission.objects.get(codename='read_payment', content_type__app_label='request'),
             Permission.objects.get(codename='delete_payment', content_type__app_label='request'),
             Permission.objects.get(codename='add_motorscode', content_type__app_label='motordb'),
             Permission.objects.get(codename='index_motorscode', content_type__app_label='motordb'),
@@ -191,6 +201,11 @@ class CustomAPITestCase(APITestCase):
         defaults = {}
         defaults.update(params)
         return Xpref.objects.create(req_id=req, owner=owner, number=number, **defaults)
+
+    def sample_payment(self, proforma, owner, number, amount, **params):
+        defaults = {}
+        defaults.update(params)
+        return Payment.objects.create(xpref_id=proforma, owner=owner, number=number, amount=amount, **defaults)
 
     def sample_prefspec(self, proforma, owner, reqspe, **params):
 
