@@ -1,190 +1,215 @@
-{% extends 'requests/admin_jemco/page_elements/base_html/pdf_base.html' %}
+{% load static %}
 {% load humanize %}
-{% load request_extras %}
-{% load sales_ex_dashboard %}
-{% block right_col %}
-    <div class="container-fluid" style="color: #000;">
-        {% if contents.header %}
-            <div class="sticky-top">
-                <div class="col-xs-12 text-center">
-                    <div class="col-xs-4">Logo goes here...</div>
-                    <div class="col-xs-4">text</div>
-                    <div class="col-xs-4">date and number</div>
-                </div>
-            </div>
-        {% endif %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+</head>
 
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="col-xs-12">
-                    <p class="text-center text-bold"></p>
-                    <table class="tableFull table-bordered-custom">
-                    <caption class="text-center">پیش فاکتور</caption>
-                        <thead>
-                        <tr>
-                            <td colspan="2">فروشنده</td>
-                            <td colspan="4" class="text-right">
-                                <div class="row">
-                                    <div class="col-xs-8">
-                                        <div><span>شرکت صنایع ماشین های الکتریکی جوین(جمکو) - شماره ثبت: 2045</span>
-                                        </div>
-                                        <div><span>تهران - خیابان طالقانی بعد از چهارراه بهار خیابان جهان بن بست بنیاد پلاک 2
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="right_col" role="main" style="background-color: white">
+            <div style="margin-top: 40px;">
+                <div class="container-fluid" style="color: #000;">
+                    {% if contents.header %}
+                        <div class="sticky-top">
+                            <div class="col-xs-12 text-center">
+                                <div class="col-xs-4">Logo goes here...</div>
+                                <div class="col-xs-4">text</div>
+                                <div class="col-xs-4">date and number</div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="col-xs-12">
+                                <p class="text-center text-bold"></p>
+                                <table class="tableFull table-bordered-custom">
+                                    <caption class="text-center">پیش فاکتور</caption>
+                                    <thead>
+                                    <tr>
+                                        <td colspan="2">فروشنده</td>
+                                        <td colspan="4" class="text-right">
+                                            <div class="row">
+                                                <div class="pdf-addr">
+                                                    <div><span>شرکت صنایع ماشین های الکتریکی جوین(جمکو) - شماره ثبت: 2045</span>
+                                                    </div>
+                                                    <div><span>تهران - خیابان طالقانی بعد از چهارراه بهار خیابان جهان بن بست بنیاد پلاک 2
                                             واحد 1</span></div>
-                                        <div><span>تلفن: 77532401 فکس: 77532795</span></div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class=""><span>شماره اقتصادی: 5877-9368-4111</span></div>
-                                        <div class="">شماره پیش فاکتور: <span>{{ contents.pref.number }}</span></div>
-                                        <div class="">
-                                            <span>تاریخ پیش فاکتور:</span>
-                                            <span style="direction: rtl !important; unicode-bidi: embed;">{{ contents.pref.date_fa }}</span>
-                                        </div>
-                                        <div>شماره درخواست: <span>{{ contents.pref.req_id.number }}</span></div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">خریدار</td>
-                            <td colspan="4" class="text-right">
-                                <div class="row">
-                                    <div class="col-xs-8">
-                                        <div>
-                                            <span>کد خریدار:</span>
-                                            {% if contents.pref.req_id.customer.code_temp %}
-                                                <span>{{ contents.pref.req_id.customer.code_temp }}</span>
-                                            {% endif %}
-                                        </div>
-                                        <div>
-                                            <span>نام خریدار: {{ contents.pref.req_id.customer.name }}</span>
-                                        </div>
-                                        <div>
-                                            <span>نشانی: {{ contents.pref.req_id.customer.addr }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="clearfix">
-                                            {% if contents.pref.req_id.customer.phone %}
-                                                <span>تلفن:</span>
-                                                <span style="direction: rtl !important; unicode-bidi: embed;">
+                                                    <div><span>تلفن: 77532401 فکس: 77532795</span></div>
+                                                </div>
+                                                <div class="pdf-tel">
+                                                    <div class=""><span>شماره اقتصادی: 5877-9368-4111</span></div>
+                                                    <div class="">شماره پیش فاکتور:
+                                                        <span>{{ contents.pref.number }}</span>
+                                                    </div>
+                                                    <div class="">
+                                                        <span>تاریخ پیش فاکتور:</span>
+                                                        <span style="direction: rtl !important; unicode-bidi: embed;">{{ contents.pref.date_fa }}</span>
+                                                    </div>
+                                                    <div>شماره درخواست: <span>{{ contents.pref.req_id.number }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">خریدار</td>
+                                        <td colspan="4" class="text-right">
+                                            <div class="row">
+                                                <div class="pdf-addr">
+                                                    <div>
+                                                        <span>کد خریدار:</span>
+                                                        {% if contents.pref.req_id.customer.code_temp %}
+                                                            <span>{{ contents.pref.req_id.customer.code_temp }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div>
+                                                        <span>نام خریدار: {{ contents.pref.req_id.customer.name }}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span>نشانی: {{ contents.pref.req_id.customer.addr }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="pdf-tel">
+                                                    <div class="clearfix">
+                                                        {% if contents.pref.req_id.customer.phone %}
+                                                            <span>تلفن:</span>
+                                                            <span style="direction: rtl !important; unicode-bidi: embed;">
                                                         {{ contents.pref.req_id.customer.phone }}</span>
-                                            {% else %}
-                                            {% endif %}
-                                        </div>
-                                        <div class="clearfix">
-                                            {% if contents.pref.req_id.customer.fax %}
-                                                <div style="float: right;"><span>فکس:</span></div>
-                                                <div style="float: right;">
-                                                    <span>{{ contents.pref.req_id.customer.fax }}</span></div>
-                                            {% else %}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="" style="width: 10px;">ردیف</th>
-                            <th style="width: 40px;">کد کالا</th>
-                            <th>شرح کالا</th>
-                            <th>تعداد</th>
-                            <th class="price-pdf">قیمت واحد</th>
-                            <th class="price-pdf">قیمت کل</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for index, object in contents.nested.items %}
-                            {% if object.obj.price and object.obj.qty %}
-                                <tr>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ object.obj.code }}</td>
-                                    <td>
-                                        <span>{{ object.obj.kw | floatformat }}KW</span>
-                                        <span> - {{ object.obj.rpm }}RPM</span>
-                                        <span> - {{ object.obj.voltage }}V</span>
-                                        {% if object.obj.ip %}<span> - {{ object.obj.ip }}</span>{% endif %}
-                                        {% if object.obj.ic %}<span> - {{ object.obj.ic }}</span>{% endif %}
-                                        {% if object.obj.im %}<span> - {{ object.obj.im }}</span>{% endif %}
-                                    </td>
-                                    <td>{{ object.obj.qty }}</td>
-                                    <td>{{ object.obj.price|floatformat|intcomma }}</td>
-                                    <td>{{ object.spec_total|floatformat|intcomma }}</td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                        <tr style="height: 100%;">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+                                                        {% else %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="clearfix">
+                                                        {% if contents.pref.req_id.customer.fax %}
+                                                            <div style="float: right;"><span>فکس:</span></div>
+                                                            <div style="float: right;">
+                                                                <span>{{ contents.pref.req_id.customer.fax }}</span>
+                                                            </div>
+                                                        {% else %}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="" style="width: 10px;">ردیف</th>
+                                        <th style="width: 40px;">کد کالا</th>
+                                        <th>شرح کالا</th>
+                                        <th>تعداد</th>
+                                        <th class="price-pdf">قیمت واحد</th>
+                                        <th class="price-pdf">قیمت کل</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for index, object in contents.nested.items %}
+                                        {% if object.obj.price and object.obj.qty %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ object.obj.code }}</td>
+                                                <td>
+                                                    <span>{{ object.obj.kw | floatformat }}KW</span>
+                                                    <span> - {{ object.obj.rpm }}RPM</span>
+                                                    <span> - {{ object.obj.voltage }}V</span>
+                                                    {% if object.obj.ip %}<span> - {{ object.obj.ip }}</span>{% endif %}
+                                                    {% if object.obj.ic %}<span> - {{ object.obj.ic }}</span>{% endif %}
+                                                    {% if object.obj.im %}<span> - {{ object.obj.im }}</span>{% endif %}
+                                                </td>
+                                                <td>{{ object.obj.qty }}</td>
+                                                <td>{{ object.obj.price|floatformat|intcomma }}</td>
+                                                <td>{{ object.spec_total|floatformat|intcomma }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <tr style="height: 100%;">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
 
-                        <tr>
-                            <td rowspan="6" colspan="3" class="text-right">
-                                <p>توضیحات:</p>
-                                <ol class="prof-details">
-                                    <li>مدت اعتبار پیش فاکتور هفت روز پس از تاریخ صدور می باشد.</li>
-                                    <li>
-                                        <span style="direction: rtl !important; unicode-bidi: embed">زمان تحویل:</span>
-                                    </li>
-                                    <li>نحوه پرداخت: 50% مبلغ پس از درخواست مشتری جهت ساخت و 50% الباقی زمان
-                                        خروج از درب کارخانه می باشد.
-                                    </li>
-                                    <li>با توجه به نوسانات بازار در صورت آماده شدن الکتروموتور و عدم مراجعه
-                                        خریدار جهت تحویل الکتروموتور با شرایط قیمت فروش جدید محاسبه و تحویل
-                                        خریدار خواهد گردید.
-                                    </li>
-                                </ol>
-                            </td>
-                            <td colspan="2" class="details-rows text-right">جمع کل</td>
-                            <td>{{ contents.no_total | floatformat | intcomma }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="details-rows text-right">تخفیف</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="details-rows text-right">نصب و راه اندازی</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="details-rows text-right">بسته بندی</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="details-rows text-right">قانون مالیات بر ارزش افزوده 9%</td>
-                            <td>{{ contents.vat | floatformat | intcomma }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="details-rows text-right">قابل پرداخت</td>
-                            <td>{{ contents.proforma_total | floatformat | intcomma }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">
-{#                                <div>{{ contents.pref.req_id.owner.staffinfo_set.first.position.first.title }}</div>#}
-                                <div>کارشناس فروش</div>
-                                <div>
-                                    <span style="font-size: 11px;">{{ contents.pref.req_id.owner.last_name }}</span>
-                                    <span style="font-style: italic; font-size: 10px;">(داخلی: {{ contents.pref.req_id.owner.staffinfo_set.first.tel }})</span>
-                                </div>
-                            </td>
-                            <td colspan="3">معاونت بازرگانی</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                    <tr>
+                                        <td rowspan="6" colspan="3" class="text-right">
+                                            <p>توضیحات:</p>
+                                            <ol class="prof-details">
+                                                <li>مدت اعتبار پیش فاکتور هفت روز پس از تاریخ صدور می باشد.</li>
+                                                <li>
+                                                    <span style="direction: rtl !important; unicode-bidi: embed">زمان تحویل:</span>
+                                                </li>
+                                                <li>نحوه پرداخت: 50% مبلغ پس از درخواست مشتری جهت ساخت و 50% الباقی زمان
+                                                    خروج از درب کارخانه می باشد.
+                                                </li>
+                                                <li>با توجه به نوسانات بازار در صورت آماده شدن الکتروموتور و عدم مراجعه
+                                                    خریدار جهت تحویل الکتروموتور با شرایط قیمت فروش جدید محاسبه و تحویل
+                                                    خریدار خواهد گردید.
+                                                </li>
+                                            </ol>
+                                        </td>
+                                        <td colspan="2" class="details-rows text-right">جمع کل</td>
+                                        <td>{{ contents.no_total | floatformat | intcomma }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="details-rows text-right">تخفیف</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="details-rows text-right">نصب و راه اندازی</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="details-rows text-right">بسته بندی</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="details-rows text-right">قانون مالیات بر ارزش افزوده 9%
+                                        </td>
+                                        <td>{{ contents.vat | floatformat | intcomma }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="details-rows text-right">قابل پرداخت</td>
+                                        <td>{{ contents.proforma_total | floatformat | intcomma }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            {#                                <div>{{ contents.pref.req_id.owner.staffinfo_set.first.position.first.title }}</div>#}
+                                            <div>کارشناس فروش</div>
+                                            <div>
+                                                <span style="font-size: 11px;">{{ contents.pref.req_id.owner.last_name }}</span>
+                                                <span style="font-style: italic; font-size: 10px;">(داخلی: {{ contents.pref.req_id.owner.staffinfo_set.first.tel }})</span>
+                                            </div>
+                                        </td>
+                                        <td colspan="3">معاونت بازرگانی</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% if contents.footer %}
+                        <div class="footer">
+                            <div class="col-xs-12 text-center">
+                                <div class="col-xs-6">address</div>
+                                <div class="col-xs-3">tel</div>
+                                <div class="col-xs-3">fax</div>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
+
+
             </div>
+
         </div>
-        {% if contents.footer %}
-            <div class="footer">
-                <div class="col-xs-12 text-center">
-                    <div class="col-xs-6">address</div>
-                    <div class="col-xs-3">tel</div>
-                    <div class="col-xs-3">fax</div>
-                </div>
-            </div>
-        {% endif %}
+
+        <!-- /page content -->
     </div>
-{% endblock %}
+</div>
+
+
+</body>
+</html>

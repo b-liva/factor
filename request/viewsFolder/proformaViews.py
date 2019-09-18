@@ -1160,6 +1160,7 @@ def prof_spec_form(request, ypref_pk):
     return render(request, 'requests/admin_jemco/ypref/proforma_specs.html', context)
 
 
+@login_required
 def proforma_pdf(request, ypref_pk):
     header = False
     footer = False
@@ -1195,6 +1196,7 @@ def proforma_pdf(request, ypref_pk):
         'margin-bottom': '1.5748in',
         'margin-left': '0.1in',
         'encoding': "UTF-8",
+        # 'footer-right': 'page: [page] of [topage]',
     }
     if header:
         options['margin-top'] = '0.5in'
@@ -1205,7 +1207,7 @@ def proforma_pdf(request, ypref_pk):
     kw_total = 0
 
     prof_images = pref.proffiles_set.all()
-    prefspecs = pref.prefspec_set.all()
+    prefspecs = pref.prefspec_set.filter(qty__gt=0, price__gt=0)
     i = 0
     for prefspec in prefspecs:
         proforma_total += prefspec.qty * prefspec.price
@@ -1233,7 +1235,7 @@ def proforma_pdf(request, ypref_pk):
         'prof_images': prof_images,
         'comment_form': CommentForm(),
         'header': header,
-        'footer': footer
+        'footer': footer,
     }
 
     content = render_to_string(
@@ -1243,6 +1245,7 @@ def proforma_pdf(request, ypref_pk):
     )
 
     pdf = pdfkit.PDFKit(content, "string", options=options, css=css).to_pdf()
+    size = pdf.__sizeof__()
     response = HttpResponse(pdf)
     response['Content-Type'] = 'application/pdf'
 
@@ -1261,6 +1264,7 @@ def proforma_pdf(request, ypref_pk):
     if not pdf_render:
         context = {
             'contents': data,
+            'size': size,
         }
         return render(request, 'requests/admin_jemco/ypref/details_pdf.html', context)
 

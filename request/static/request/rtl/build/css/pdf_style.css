@@ -23,6 +23,7 @@
 
 table {
     margin: 0;
+    /*height: 25cm;*/
     height: 950px;
 }
 
@@ -87,7 +88,15 @@ div.prof-details p {
 .price-pdf {
     width: 120px;
 }
-
+.pdf-addr{
+    float: right;
+    width: 70%;
+    padding-right: 10px;
+}
+.pdf-tel{
+    float: right;
+    width: 30%;
+}
 .english-abbr {
     /*font-family: IRANSans1;*/
     /*font-family: Helvetica Neue;*/
