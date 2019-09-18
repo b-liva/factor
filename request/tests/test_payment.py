@@ -136,6 +136,17 @@ class PrivatePaymentTests(CustomAPITestCase):
             target_status_code=status.HTTP_200_OK
         )
 
+    def test_retrieve_payment_limited_by_user(self):
+        """Test retrieving payment is limited by user"""
+        self.client.force_login(user=self.ex_user)
+        res = self.client.get(reverse('payment_details', args=[self.payment.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+
     def test_retrieve_payment_success(self):
         """Test retrieving payment needs permission"""
         self.client.force_login(user=self.ex_user)
@@ -150,4 +161,129 @@ class PrivatePaymentTests(CustomAPITestCase):
         self.assertEqual(res.context['payment'].pk, payment.pk)
 
     # Update
+    def test_update_payment_get_needs_permission(self):
+        """Test update payment getting form needs permision"""
+        self.client.force_login(user=self.user)
+        res = self.client.get(reverse('payment_edit', args=[self.payment.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+
+    def test_update_payment_post_needs_permission(self):
+        """Test update payment posting data needs permision"""
+        self.client.force_login(user=self.user)
+        res = self.client.post(reverse('payment_edit', args=[self.payment.pk]), self.payment_payload)
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+
+    def test_update_payment_get_limited_by_owner(self):
+        """Test update payment getting form limited to owner or super user"""
+        self.client.force_login(user=self.ex_user)
+        res = self.client.post(reverse('payment_edit', args=[self.payment.pk]), self.payment_payload)
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+
+    def test_update_payment_post_limited_by_owner(self):
+        """Test update payment posting data limited to owner or super user"""
+        self.client.force_login(user=self.ex_user)
+        res = self.client.post(reverse('payment_edit', args=[self.payment.pk]), self.payment_payload)
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+
+    def test_update_payment_get_successful(self):
+        """Test update payment getting form successfully"""
+        self.client.force_login(user=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, number=987643)
+
+        self.sample_reqspec(owner=self.ex_user, kw=550, rpm=1000)
+        self.sample_reqspec(owner=self.ex_user, kw=355, rpm=1500)
+        proforma = self.sample_proforma(req=req, owner=self.ex_user, number=983424)
+        payment = self.sample_payment(proforma=proforma, owner=self.ex_user, number=51459878, amount=25000000)
+        res = self.client.get(reverse('payment_edit', args=[payment.pk]))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_update_payment_post_successful(self):
+        """Test update payment posting data successfully"""
+        self.client.force_login(user=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, number=987643)
+
+        self.sample_reqspec(owner=self.ex_user, kw=550, rpm=1000)
+        self.sample_reqspec(owner=self.ex_user, kw=355, rpm=1500)
+        proforma = self.sample_proforma(req=req, owner=self.ex_user, number=983424)
+        payment = self.sample_payment(proforma=proforma, owner=self.ex_user, number=5145, amount=25000000)
+        self.payment_payload.update({
+            'xpref_id': proforma.pk,
+        })
+        res = self.client.post(reverse('payment_edit', args=[payment.pk]), self.payment_payload)
+        pay_retreived = Payment.objects.get(pk=payment.pk)
+        self.assertRedirects(
+            res,
+            expected_url=reverse('payment_index'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+        self.assertEqual(self.payment_payload['xpref_id'], pay_retreived.pk)
+        self.assertEqual(self.payment_payload['amount'], pay_retreived.amount)
+        self.assertEqual(self.payment_payload['number'], pay_retreived.number)
+        # self.assertEqual(self.payment_payload['date_fa'], str(pay_retreived.date_fa))
+        self.assertEqual(self.payment_payload['summary'], pay_retreived.summary)
+
     # Delete
+    def test_delete_payment_get_needs_permission(self):
+        """Test delete payment getting page needs permission"""
+        self.client.force_login(user=self.user)
+        res = self.client.get(reverse('payment_delete', args=[self.payment.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+
+    def test_delete_payment_needs_permission(self):
+        """Test delete payment needs permission"""
+        self.client.force_login(user=self.user)
+        res = self.client.delete(reverse('payment_delete', args=[self.payment.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+
+    def test_delete_payment_get_limited_by_owner(self):
+        """Test delete payment getting page limited by owner"""
+        self.client.force_login(user=self.ex_user)
+        res = self.client.delete(reverse('payment_delete', args=[self.payment.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+
+    def test_delete_payment_limited_by_owner(self):
+        """Test delete payment limited by owner"""
+        self.client.force_login(user=self.ex_user)
+        res = self.client.delete(reverse('payment_delete', args=[self.payment.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )

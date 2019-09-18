@@ -42,7 +42,7 @@ def has_perm_or_is_owner(user_obj, permissions, instance=None, colleague=None):
         if instance.__class__.__name__ == 'User':
             return user_obj == instance
         if instance.__class__.__name__ == 'Payment':
-            print("payment model")
+            return user_obj == instance.owner
     return user_obj.has_perm(permissions)
 
 

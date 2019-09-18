@@ -81,8 +81,10 @@ class CustomAPITestCase(APITestCase):
             'xpref_id': self.proforma.pk,
             'number': 15220,
             'amount': 1500000,
-            'date_fa': ['۱۳۹۸-۰۶-۰۳'],
-            'summary': ['somte data goes here...'],
+            'date_fa': '۱۳۹۸-۰۶-۰۳',
+            # 'date_fa': ['۱۳۹۸-۰۶-۰۳'],
+            'summary': 'somte data goes here...',
+            # 'summary': ['somte data goes here...'],
         }
         self.prefspec_payload = {}
         self.client = APIClient()

@@ -389,7 +389,7 @@ def payment_edit(request, ypayment_pk):
     # 6 - if form is valid the save request and its related images
     # 7 - render the template file
     payment = Payment.objects.filter(is_active=True).get(pk=ypayment_pk)
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.edit_payment', payment)
+    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.change_payment', payment)
     if not can_edit:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
