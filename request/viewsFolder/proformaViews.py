@@ -976,7 +976,7 @@ def pref_edit2(request, ypref_pk):
 
     prof = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
 
-    can_read = funcs.has_perm_or_is_owner(request.user, 'request.edit_xpref', prof)
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.change_xpref', prof)
     if not can_read:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
