@@ -1095,7 +1095,7 @@ def request_delete(request, request_pk):
         req.save()
         req.reqspec_set.update(is_active=False)
 
-    return redirect('request_index')
+    return redirect('request_index_paginate')
 
 
 @login_required
@@ -1115,7 +1115,7 @@ def request_edit_form(request, request_pk):
     # 5 - get the list of files from request
     # 6 - if form is valid the save request and its related images
     # 7 - render the template file
-    if not Requests.objects.filter(is_active=True).filter(pk=request_pk):
+    if not Requests.objects.filter(is_active=True, pk=request_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
     if 'customer' in request.COOKIES:

@@ -43,7 +43,7 @@ class CustomAPITestCase(APITestCase):
         self.request_payload = {
             'number': 1000,
             'customer': self.customer.pk,
-            # "date_fa": "1398-05-06",
+            "date_fa": "1398-05-06",
         }
         self.reqspec_payload = {
             'req_id': self.req.pk,

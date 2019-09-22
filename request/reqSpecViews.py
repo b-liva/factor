@@ -160,7 +160,7 @@ def reqspec_delete(request, yreqSpec_pk, req_pk):
         return redirect('errorpage')
 
     reqspec = ReqSpec.objects.filter(is_active=True).get(pk=yreqSpec_pk)
-    can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_reqspecs', reqspec)
+    can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_reqspec', reqspec)
     if not can_del:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
