@@ -37,7 +37,7 @@ def reqs_noxp(user):
 
 @register.simple_tag()
 def reqs_no_xp(user):
-    reqs = Requests.objects.filter(is_active=True, xpref__isnull=True).order_by('date_fa').reverse()
+    reqs = Requests.objects.filter(finished=False, xpref__isnull=True).order_by('date_fa').reverse()
     if not user.is_superuser:
         reqs = reqs.filter(owner=user)
     return reqs
