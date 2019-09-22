@@ -1127,7 +1127,7 @@ def request_edit_form(request, request_pk):
     colleague = False
     if request.user in colleagues:
         colleague = True
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.edit_requests', req, colleague=colleague)
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.change_requests', req, colleague=colleague)
     if not can_add:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
