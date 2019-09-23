@@ -21,6 +21,16 @@ class PublicProformaTests(CustomAPITestCase):
             target_status_code=status.HTTP_200_OK,
         )
 
+    def test_index_proforma_login_required(self):
+        """Test index proforma need authentication"""
+        res = self.client.get(reverse('pref_index'))
+        self.assertRedirects(
+            res,
+            expected_url=settings.LOGIN_URL + '?next=' + reverse('pref_index'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+
 
 class PrivateProformaTest(CustomAPITestCase):
 
@@ -116,6 +126,23 @@ class PrivateProformaTest(CustomAPITestCase):
         self.assertFalse(exist)
 
     # List
+    def test_index_proforma_needs_permission(self):
+        """Test index proforma needs permission"""
+        self.client.force_login(user=self.user)
+        res = self.client.get(reverse('pref_index'))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+
+    def test_index_proforma_success(self):
+        """Test index proforma success"""
+        self.client.force_login(user=self.ex_user)
+        res = self.client.get(reverse('pref_index'))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
     # Retrieve
     def test_retrieve_proforma_needs_permission(self):
         """Test retrieving proforma needs permission"""
@@ -142,10 +169,91 @@ class PrivateProformaTest(CustomAPITestCase):
 
     # Update
     # Delete
+    def test_delete_proforma_get_needs_permission(self):
+        """Test delete proforma gettin form needs permission"""
+        self.client.force_login(user=self.user)
+        res = self.client.get(reverse('pref_delete', args=[self.proforma.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+
+    def test_delete_proforma_post_needs_permission(self):
+        """Test delete proforma posting data needs permission"""
+        self.client.force_login(user=self.user)
+        res = self.client.post(reverse('pref_delete', args=[self.proforma.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+
+    def test_delete_proforma_get_limited_by_owner(self):
+        """Test delete proforma gettin form limited by owner"""
+        self.client.force_login(user=self.ex_user)
+        res = self.client.get(reverse('pref_delete', args=[self.proforma.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+
+    def test_delete_proforma_post_limited_by_owner(self):
+        """Test delete proforma posting data limited by owner"""
+        self.client.force_login(user=self.ex_user)
+        res = self.client.post(reverse('pref_delete', args=[self.proforma.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+
+    def test_delete_proforma_get_success(self):
+        """Test delete proforma gettin form success"""
+        self.client.force_login(user=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, number=986354)
+        spec1 = self.sample_reqspec(owner=self.ex_user, kw=225)
+        spec2 = self.sample_reqspec(owner=self.ex_user, kw=125)
+        proforma = self.sample_proforma(owner=self.ex_user, number=2435, req=req)
+        res = self.client.get(reverse('pref_delete', args=[proforma.pk]))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.context['fn'], 'prof_del')
+
+    def test_delete_proforma_post_success(self):
+        """Test delete proforma posting data success"""
+        self.client.force_login(user=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, number=986354)
+        spec1 = self.sample_reqspec(owner=self.ex_user, kw=225)
+        spec2 = self.sample_reqspec(owner=self.ex_user, kw=125)
+        proforma = self.sample_proforma(owner=self.ex_user, number=2435, req=req)
+        prefspec1 = self.sample_prefspec(proforma=proforma, owner=self.ex_user, reqspe=spec1)
+        prefspec2 = self.sample_prefspec(proforma=proforma, owner=self.ex_user, reqspe=spec2)
+        res = self.client.post(reverse('pref_delete', args=[proforma.pk]))
+        exist = Xpref.objects.filter(pk=proforma.pk, is_active=True).exists()
+        exist_spec1_active = PrefSpec.objects.filter(pk=prefspec1.pk).exists()
+        exist_spec2_active = PrefSpec.objects.filter(pk=prefspec1.pk).exists()
+        exist_spec1_not_active = PrefSpec.objects.filter(pk=prefspec2.pk, is_active=True).exists()
+        exist_spec2_not_active = PrefSpec.objects.filter(pk=prefspec2.pk, is_active=True).exists()
+
+        self.assertRedirects(
+            res,
+            expected_url=reverse('pref_index'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+        self.assertFalse(exist)
+        self.assertTrue(exist_spec1_active)
+        self.assertTrue(exist_spec2_active)
+        self.assertFalse(exist_spec1_not_active)
+        self.assertFalse(exist_spec2_not_active)
 
     # PROFORMA SPEC
     # Create
-
     def test_create_prefspec_get_user_not_req_owner_nor_prof_owner(self):
         """Test create prefspec needs permission
         :return redirect to error page

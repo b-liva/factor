@@ -700,11 +700,10 @@ def pref_delete(request, ypref_pk):
         }
         return render(request, 'general/confirmation_page.html', context)
     elif request.method == 'POST':
-        # pref.delete()
         pref.is_active = False
         pref.temp_number = pref.number
         rand_num = random.randint(100000, 200000)
-        while Xpref.objects.filter(number=rand_num):
+        while Xpref.objects.filter(number=rand_num).exists():
             rand_num = random.randint(100000, 200000)
         pref.number = rand_num
         pref.save()
