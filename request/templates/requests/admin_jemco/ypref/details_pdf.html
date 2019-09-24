@@ -114,9 +114,14 @@
                                                     <span>{{ object.obj.kw | floatformat }}KW</span>
                                                     <span> - {{ object.obj.rpm }}RPM</span>
                                                     <span> - {{ object.obj.voltage }}V</span>
-                                                    {% if object.obj.ip %}<span> - {{ object.obj.ip }}</span>{% endif %}
-                                                    {% if object.obj.ic %}<span> - {{ object.obj.ic }}</span>{% endif %}
-                                                    {% if object.obj.im %}<span> - {{ object.obj.im }}</span>{% endif %}
+                                                    {% if object.obj.code != 99009900 %}
+                                                        {% if object.obj.ip %}<span> - {{ object.obj.ip }}</span>
+                                                        {% endif %}
+                                                        {% if object.obj.ic %}<span> - {{ object.obj.ic }}</span>
+                                                        {% endif %}
+                                                        {% if object.obj.im %}<span> - {{ object.obj.im }}</span>
+                                                        {% endif %}
+                                                    {% endif %}
                                                 </td>
                                                 <td>{{ object.obj.qty }}</td>
                                                 <td>{{ object.obj.price|floatformat|intcomma }}</td>
@@ -176,11 +181,11 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3">
-                                            {#                                <div>{{ contents.pref.req_id.owner.staffinfo_set.first.position.first.title }}</div>#}
-                                            <div>کارشناس فروش</div>
+                                            <div>{{ contents.pref.owner.staffinfo_set.first.position.first.title }}</div>
+                                            {#                                            <div>کارشناس فروش</div>#}
                                             <div>
-                                                <span style="font-size: 11px;">{{ contents.pref.req_id.owner.last_name }}</span>
-                                                <span style="font-style: italic; font-size: 10px;">(داخلی: {{ contents.pref.req_id.owner.staffinfo_set.first.tel }})</span>
+                                                <span style="font-size: 11px;">{{ contents.pref.owner.last_name }}</span>
+                                                <span style="font-style: italic; font-size: 10px;">(داخلی: {{ contents.pref.owner.staffinfo_set.first.tel }})</span>
                                             </div>
                                         </td>
                                         <td colspan="3">معاونت بازرگانی</td>
