@@ -145,7 +145,11 @@
                                                 <li>مدت اعتبار پیش فاکتور هفت روز پس از تاریخ صدور می باشد.</li>
                                                 <li>
                                                     <span style="direction: rtl !important; unicode-bidi: embed">
-                                                        زمان تحویل: {{ contents.pref.due_date_days }}</span>
+                                                        زمان تحویل:
+                                                        {% if contents.pref.due_date_days is not None %}
+                                                            {{ contents.pref.due_date_days }}
+                                                        {% endif %}
+                                                    </span>
                                                 </li>
                                                 <li>نحوه پرداخت: 50% مبلغ پس از درخواست مشتری جهت ساخت و 50% الباقی زمان
                                                     خروج از درب کارخانه می باشد.
