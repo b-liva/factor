@@ -172,7 +172,7 @@ class ProformaForm(forms.ModelForm):
 
     class Meta:
         model = models.Xpref
-        fields = ('req_id', 'number_td', 'date_fa', 'exp_date_fa', 'summary',)
+        fields = ('req_id', 'number_td', 'date_fa', 'exp_date_fa', 'summary', 'due_date_days')
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
@@ -191,6 +191,7 @@ class ProformaForm(forms.ModelForm):
             'exp_date_fa': 'تاریخ انقضا',
             'summary': 'جزئیات',
             'verified': 'تاییدیه',
+            'due_date_days': 'زمان تحویل (روز)',
 
         }
 
@@ -208,7 +209,18 @@ class ProformaEditForm(forms.ModelForm):
 
     class Meta:
         model = models.Xpref
-        fields = ('number_td', 'date_fa', 'exp_date_fa', 'perm_number', 'perm_date', 'due_date', 'summary', 'perm', 'issue_type')
+        fields = (
+            'number_td',
+            'date_fa',
+            'exp_date_fa',
+            'perm_number',
+            'perm_date',
+            'due_date',
+            'summary',
+            'perm',
+            'issue_type',
+            'due_date_days'
+        )
         widgets = {
 
             'date_fa': forms.DateInput(attrs={
@@ -238,6 +250,7 @@ class ProformaEditForm(forms.ModelForm):
             'perm_date': 'تاریخ مجوز',
             'perm_number': 'شماره مجوز',
             'issue_type': 'دلیل تأخیر',
+            'due_date_days': 'زمان تحویل (روز)',
         }
 
 

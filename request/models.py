@@ -303,6 +303,7 @@ class Xpref(models.Model):
     perm_number = models.IntegerField(null=True, blank=True)
     perm_date = jmodels.jDateField(null=True, blank=True)
     due_date = jmodels.jDateField(null=True, blank=True)
+    due_date_days = models.CharField(max_length=50, blank=True, null=True)
     summary = models.TextField(max_length=600, null=True, blank=True)
     verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
