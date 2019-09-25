@@ -73,9 +73,9 @@
         <div>
             <p>قابل دریافت: {{ customer.total_receivable|floatformat|intcomma }}</p>
             <p>دریافتی از مشتری: {{ customer.total_received.amount|floatformat|intcomma }}</p>
-            <p>معادل کالای ارسالی به مشتری: {{ customer.pref_sent.sent_value|floatformat|intcomma }}
+            <p>معادل کالای ارسالی به مشتری: {{ customer.perm_qty_delivered.sent_value|floatformat|intcomma }}
                 (<span data-toggle="tooltip" title="تعداد دستگاه مجوز شده">{{ customer.spec_perms.qty }}</span>
-                /<span data-toggle="tooltip" title="تعداد دستگاه ارسال شده">{{ customer.pref_sent.sent_count|intcomma }}</span>)
+                /<span data-toggle="tooltip" title="تعداد دستگاه ارسال شده">{{ customer.perm_qty_delivered.sent_count|intcomma }}</span>)
             </p>
             <p><span data-toggle="tooltip" title="اختلاف دریافتی و معادل کالای ارسال شده">تراز ارسال شده: {{ customer.ballance.ballance_sent|floatformat|intcomma }}</span></p>
             <p ><span data-toggle="tooltip" title="اختلاف دریافتی و مجوز شده">تراز کل: {{ customer.ballance.ballance_total|floatformat|intcomma }}</span></p>

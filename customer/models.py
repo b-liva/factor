@@ -89,7 +89,7 @@ class Customer(models.Model):
         }
         return context
 
-    def pref_sent(self):
+    def perm_qty_delivered(self):
         sent = PrefSpec.objects.filter(xpref_id__req_id__customer=self, qty_sent__gt=0)
         sent_value = sent.aggregate(sum=Sum(F('price') * F('qty'), output_field=FloatField()))
         sent_value = 1.09 * sent_value['sum'] if sent_value['sum'] else 0
@@ -103,8 +103,11 @@ class Customer(models.Model):
         }
         return context
 
+    def perm_qty_not_delivered(self):
+        pass
+
     def ballance(self):
-        ballance_sent = self.total_received()['amount'] - self.pref_sent()['sent_value']
+        ballance_sent = self.total_received()['amount'] - self.perm_qty_delivered()['sent_value']
         ballance_total = self.total_received()['amount'] - self.total_receivable()
         ballance_sent = ballance_sent if ballance_sent else 0
         ballance_total = ballance_total if ballance_total else 0

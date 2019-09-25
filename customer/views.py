@@ -194,16 +194,16 @@ def customer_details_vue(request):
     try:
         customer = Customer.objects.get(pk=id)
         total_received = customer.total_received()
-        pref_sent = customer.pref_sent()
+        perm_qty_delivered = customer.perm_qty_delivered()
         spec_perms = customer.spec_perms()
 
         response = {
             'name': customer.name,
             'total_receivable': customer.total_receivable(),
             'total_received': total_received['amount'],
-            'pref_sent': {
-                'count': pref_sent['sent_count'],
-                'sent_value': pref_sent['sent_value'],
+            'perm_qty_delivered': {
+                'count': perm_qty_delivered['perm_qty_delivered'],
+                'sent_value': perm_qty_delivered['sent_value'],
             },
             'spec_perms': spec_perms['qty'],
         }

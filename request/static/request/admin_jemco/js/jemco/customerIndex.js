@@ -25,8 +25,8 @@ Vue.component('customer_index', {
         "<div class='row'><h3 class='pull-right'><a class=\"btn btn-warning\" href='#'>{{cus.details.name}}</a></h3>" +
         "<i class='pull-left fa fa-close' @click='cus.status=!cus.status'></i></div>" +
         "<p><i class=\"fa fa-calendar\" aria-hidden=\"true\"></i> جمع دریافت شده: {{cus.details.total_received}}</p>" +
-        "<p><i class=\"fa fa-calendar\" aria-hidden=\"true\"></i> تعداد: {{cus.details.pref_sent.count}}</p>" +
-        "<p><i class=\"fa fa-calendar\" aria-hidden=\"true\"></i> معادل ریالی ارسال شده: {{cus.details.pref_sent.sent_value}}</p>" +
+        "<p><i class=\"fa fa-calendar\" aria-hidden=\"true\"></i> تعداد: {{cus.details.perm_qty_delivered.count}}</p>" +
+        "<p><i class=\"fa fa-calendar\" aria-hidden=\"true\"></i> معادل ریالی ارسال شده: {{cus.details.perm_qty_delivered.sent_value}}</p>" +
         "<p><i class=\"fa fa-globe\" aria-hidden=\"true\"></i>" +
         "<a style=\"color: yellow;\" href=\"{{ customer.website }}\"> جمع قابل دریافت: {{cus.details.total_receivable}}</a>" +
         "</p>" +
