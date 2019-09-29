@@ -19,14 +19,24 @@ from xhtml2pdf import pisa
 import request.templatetags.functions as funcs
 
 from django.contrib.auth import get_user_model
-User = get_user_model()
+from django.templatetags.static import static
+from django.conf import settings
+from django.core.cache import cache
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationField, Value, DateField, DateTimeField, Q, \
+    Sum
 
-from customer.models import Customer
+import pdfkit
+import jdatetime
+import xlwt
+
 from factor import settings
+from customer.models import Customer
 from request import models
 from request.forms.forms import CommentForm, ProfFollowUpForm
 from request.forms.search import ProformaSearchForm, PermSearchForm, PrefSpecSearchForm
-
+import request.templatetags.functions as funcs
 from request.models import Requests, Xpref, ReqSpec, PrefSpec, ProformaFollowUP
 from pricedb.models import MotorDB
 
@@ -37,8 +47,9 @@ from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationFi
     Sum
 
 from request.templatetags import functions, request_extras
+from pricedb.models import MotorDB
 
-from django.http import HttpResponse
+User = get_user_model()
 from django.views.generic import View
 from ..utils import render_to_pdf, link_callback
 
@@ -210,7 +221,7 @@ def prefspec_index(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    spec_list = PrefSpec.objects.filter(xpref_id__is_active=True, xpref_id__perm=True)\
+    spec_list = PrefSpec.objects.filter(xpref_id__is_active=True, xpref_id__perm=True) \
         .annotate(qty_remaining=F('qty') - F('qty_sent'))
 
     if not request.method == 'POST':
@@ -316,7 +327,8 @@ def perm_index(request):
         if request.POST['owner'] and request.POST['owner'] != '0':
 
             owner = User.objects.get(pk=request.POST['owner'])
-            prof_list = prof_list.distinct().filter(Q(owner=owner) | Q(req_id__colleagues=owner) | Q(req_id__owner=owner))
+            prof_list = prof_list.distinct().filter(
+                Q(owner=owner) | Q(req_id__colleagues=owner) | Q(req_id__owner=owner))
         if request.POST['date_min']:
             prof_list = prof_list.filter(perm_date__gte=request.POST['date_min'])
         if request.POST['date_max']:
@@ -1160,9 +1172,18 @@ def prof_spec_form(request, ypref_pk):
 
 
 @login_required
-def proforma_pdf(request, ypref_pk):
-    header = False
+def proforma_pdf(request, ypref_pk, render_header):
+    render_header = True if render_header == 'True' else False
     footer = False
+
+    logo_img = static('request/admin_jemco/images/logo.jpg')
+    prizes_img = static('request/admin_jemco/images/prizes.jpg')
+
+    logo_full_url = request.build_absolute_uri(logo_img)
+    prizes_full_url = request.build_absolute_uri(prizes_img)
+
+    header = render_header
+    footer = render_header
 
     if not Xpref.objects.filter(pk=ypref_pk):
         messages.error(request, 'Nothin found')
@@ -1182,8 +1203,10 @@ def proforma_pdf(request, ypref_pk):
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'pdf_style.css'),
         # os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'pdf_style2.css'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'custom.min.css'),
-        os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap', 'dist', 'css', 'bootstrap.min.css'),
-        os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap-rtl', 'dist', 'css', 'bootstrap-rtl.css')
+        os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap', 'dist', 'css',
+                     'bootstrap.min.css'),
+        os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap-rtl', 'dist', 'css',
+                     'bootstrap-rtl.css')
     ]
 
     options = {
@@ -1198,9 +1221,9 @@ def proforma_pdf(request, ypref_pk):
         # 'footer-right': 'page: [page] of [topage]',
     }
     if header:
-        options['margin-top'] = '0.5in'
+        options['margin-top'] = '0in'
     if footer:
-        options['margin-bottom'] = '0.5in'
+        options['margin-bottom'] = '0.1in'
     nestes_dict = {}
     proforma_total = 0
     kw_total = 0
@@ -1235,10 +1258,14 @@ def proforma_pdf(request, ypref_pk):
         'comment_form': CommentForm(),
         'header': header,
         'footer': footer,
+        'logo_full_url': logo_full_url,
+        'prizes_full_url': prizes_full_url,
+        'today': jdatetime.date.today()
     }
 
     content = render_to_string(
-        'requests/admin_jemco/ypref/details_pdf.html', {
+        # 'requests/admin_jemco/ypref/details_pdf.html', {
+        'requests/admin_jemco/ypref/details_pdf_with_header.html', {
             'contents': data
         }
     )
@@ -1260,12 +1287,12 @@ def proforma_pdf(request, ypref_pk):
     pdf_render = True
     if pdf_render:
         return response
-    if not pdf_render:
+    else:
         context = {
             'contents': data,
             'size': size,
         }
-        return render(request, 'requests/admin_jemco/ypref/details_pdf.html', context)
+        return render(request, 'requests/admin_jemco/ypref/details_pdf_with_header.html', context)
 
 
 @login_required

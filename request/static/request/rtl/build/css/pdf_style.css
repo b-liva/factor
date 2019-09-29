@@ -6,6 +6,12 @@
 /*font-weight: 900;*/
 /*font-style: normal*/
 /*}*/
+@font-face {
+    font-family: Arial;
+    src: url(../fonts/woff/arial/arial.woff) format('woff');
+    font-weight: 900;
+    font-style: normal
+}
 
 @font-face {
     font-family: TimesNewRoman;
@@ -101,7 +107,17 @@ div.prof-details p {
     /*font-family: IRANSans1;*/
     /*font-family: Helvetica Neue;*/
     /*font-family: Roboto;*/
+    /*font-family: Roboto;*/
     font-family: TimesNewRoman, IRANSans1, Helvetica Neue, Roboto, Arial, Droid Sans, sans-serif;
     /*font-family: Droid Sans;*/
     /*font-family: sans-serif;*/
+}
+.center-img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+}
+.footer{
+    margin-top: 75px;
 }

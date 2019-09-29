@@ -94,8 +94,11 @@
                                            data-toggle="tooltip" title="ثبت پرداخت">
                                         <i class="fa fa-plus green" aria-hidden="true"></i>
                                         ثبت دریافتی</a></li>
-                                    <li><a href="{% url 'proforma_pdf' ypref_pk=pref.pk %}">
-                                        <i class="fa fa-file-pdf-o red" aria-hidden="true"></i> ذخیره پیش فاکتور</a>
+                                    <li><a href="{% url 'proforma_pdf' ypref_pk=pref.pk render_header=False %}">
+                                        <i class="fa fa-file-pdf-o red" aria-hidden="true"></i>پیش فاکتور بدون سربرگ</a>
+                                    </li>
+                                    <li><a href="{% url 'proforma_pdf' ypref_pk=pref.pk render_header=True %}">
+                                        <i class="fa fa-file-pdf-o red" aria-hidden="true"></i> یپش فاکتور با سربرگ</a>
                                     </li>
                                 </ul>
                             </div>

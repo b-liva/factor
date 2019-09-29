@@ -34,7 +34,7 @@ urlpatterns = [
                       path('edit2', proformaViews.pref_edit2, name='pref_edit2'),
                       path('to-follow', proformaViews.to_follow, name='to_follow'),
                       path('prof_spec_form', request.viewsFolder.proformaViews.prof_spec_form, name='prof_spec_form'),
-                      path('proforma-pdf', request.viewsFolder.proformaViews.proforma_pdf, name='proforma_pdf'),
+                      path('proforma-pdf/<render_header>/', request.viewsFolder.proformaViews.proforma_pdf, name='proforma_pdf'),
                   ])),
                   path('followup/<int:followup_pk>/', include([
                       path('delete', request.viewsFolder.proformaViews.followup_delete,
