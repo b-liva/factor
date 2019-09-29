@@ -1,3 +1,4 @@
+import jdatetime
 from django.db.models import Sum, F, FloatField, Avg, Count, Q
 from django_jalali.db import models as jmodels
 import base64
@@ -29,7 +30,12 @@ def reqs_to_entered(user):
 
 @register.simple_tag()
 def reqs_noxp(user):
-    reqs = Requests.objects.filter(is_active=True, xpref__isnull=True).order_by('date_fa').reverse()
+    date = jdatetime.date(month=10, day=1, year=1397)
+    reqs = Requests.objects.filter(
+        is_active=True,
+        xpref__isnull=True,
+        date_fa__gte=date
+    ).distinct().order_by('date_fa').reverse()
     if not user.is_superuser:
         reqs = reqs.filter(owner=user)
     return reqs
@@ -37,7 +43,12 @@ def reqs_noxp(user):
 
 @register.simple_tag()
 def reqs_no_xp(user):
-    reqs = Requests.objects.filter(finished=False, xpref__isnull=True).order_by('date_fa').reverse()
+    date = jdatetime.date(month=10, day=1, year=1397)
+    reqs = Requests.objects.filter(
+        finished=False,
+        date_fa__gte=date,
+        xpref__isnull=True
+    ).order_by('date_fa').reverse()
     if not user.is_superuser:
         reqs = reqs.filter(owner=user)
     return reqs
@@ -66,7 +77,8 @@ def expert_remaining_reqs_not_entered(pk):
 @register.simple_tag()
 def expert_remaining_reqs_no_xp(pk):
     account = User.objects.get(pk=pk)
-    reqs = Requests.objects.filter(is_active=True, owner=account, xpref__isnull=True)
+    date = jdatetime.date(month=10, day=1, year=1397)
+    reqs = Requests.objects.filter(is_active=True, date_fa__gte=date, owner=account, xpref__isnull=True)
     return reqs.count()
 
 

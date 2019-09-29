@@ -1,3 +1,4 @@
+import jdatetime
 from django.db.models import Sum, F, FloatField, Avg, Count, Q
 from django_jalali.db import models as jmodels
 import base64
@@ -266,7 +267,8 @@ def expert_reqs_percent_new(account):
 
 @register.simple_tag()
 def expert_reqs_noxp(account):
-    reqs = Requests.objects.filter(is_active=True, owner=account, xpref__isnull=True)
+    date = jdatetime.date(month=10, day=1, year=1397)
+    reqs = Requests.objects.filter(is_active=True, date_fa__gte=date, owner=account, xpref__isnull=True)
     return reqs.count()
 
 
