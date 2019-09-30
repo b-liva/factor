@@ -1218,12 +1218,20 @@ def proforma_pdf(request, ypref_pk, render_header):
         'margin-bottom': '1.5748in',
         'margin-left': '0.1in',
         'encoding': "UTF-8",
-        # 'footer-right': 'page: [page] of [topage]',
+        # 'footer-html': 'http://google.com',
     }
     if header:
-        options['margin-top'] = '0in'
+        # options['margin-top'] = '0in'
+        options.update({
+            'header-html': request.build_absolute_uri(reverse('pdf_header')),
+        })
+        # del(options['header-html'])
     if footer:
-        options['margin-bottom'] = '0.1in'
+        # options['margin-bottom'] = '0.1in'
+        options.update({
+            'footer-html': request.build_absolute_uri(reverse('pdf_footer')),
+        })
+
     nestes_dict = {}
     proforma_total = 0
     kw_total = 0
@@ -1301,3 +1309,12 @@ def followup_delete(request, followup_pk):
     pref_pk = followup.xpref.pk
     followup.delete()
     return redirect('pref_details', ypref_pk=pref_pk)
+
+
+def pdf_header(request):
+    # return render(request, 'requests/admin_jemco/ypref/header.html')
+    return render(request, 'requests/admin_jemco/ypref/header.html')
+
+
+def pdf_footer(request):
+    return render(request, 'requests/admin_jemco/ypref/footer.html')

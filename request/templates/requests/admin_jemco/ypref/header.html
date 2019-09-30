@@ -1,0 +1,46 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <link href="{% static 'request/rtl/vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'request/rtl/vendors/bootstrap-rtl/dist/css/bootstrap-rtl.css' %}" rel="stylesheet">
+    <link href="{% static 'request/rtl/build/css/pdf_header_footer.css' %}" rel="stylesheet">
+</head>
+
+<body class="nav-md" style="margin-top: 10px;">
+<div class="container body">
+    <div class="main_container">
+        <div class="right_col" role="main" style="background-color: white">
+            <div style="margin-top: 40px;">
+                <div class="container-fluid" style="color: #000;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xs-12" style="font-size: 12px;">
+                                <div class="col-xs-4">
+                                    <img src="{% static 'request/admin_jemco/images/logo.jpg' %}" alt="" class="center-block"
+                                             style="width: 150px;">
+                                    <p class="text-center">صنایع ماشین های الکتریکی جوین(جمکو)</p>
+                                    <p class="text-center">Jovain Electrical Machines Industries Co</p>
+                                </div>
+                                <div class="col-xs-2 col-xs-offset-6">
+                                    <p><span>تاریخ: </span> <span
+                                            style="direction: rtl !important; unicode-bidi: embed;">{{ contents.today }}</span>
+                                    </p>
+                                    <p>شماره: </p>
+                                    <p>پیوست: </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page content -->
+    </div>
+</div>
+
+
+</body>
+</html>
