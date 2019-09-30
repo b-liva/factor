@@ -1212,7 +1212,7 @@ def proforma_pdf(request, ypref_pk, render_header):
 
     options = {
         'page-size': 'A4',
-        'margin-top': '1in',
+        'margin-top': '1.2in',
         # 'margin-top': '0.77in',
         'margin-right': '0.1in',
         # 'margin-bottom': '1in',
@@ -1314,7 +1314,10 @@ def followup_delete(request, followup_pk):
 
 def pdf_header(request):
     # return render(request, 'requests/admin_jemco/ypref/header.html')
-    return render(request, 'requests/admin_jemco/ypref/header.html')
+    context = {
+        'today': jdatetime.date.today()
+    }
+    return render(request, 'requests/admin_jemco/ypref/header.html', context)
 
 
 def pdf_footer(request):
