@@ -878,7 +878,11 @@ def request_read(request, request_pk):
         messages.error(request, 'صفحه مورد نظر یافت نشد')
         return redirect('errorpage')
 
-    req = Requests.objects.get(pk=request_pk)
+    try:
+        req = Requests.objects.get(pk=request_pk)
+    except:
+        messages.error(request, 'درخواست مورد نظر یافت نشد.')
+        return redirect('errorpage')
 
     colleagues = req.colleagues.all()
     colleague = False
