@@ -741,6 +741,21 @@ def delete_proforma_no_prefspec(request, ypref_pk):
 @login_required
 def pro_form_cookie(request, req_id):
     print(f"request id is: {req_id}")
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
+    if not can_add:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+    try:
+        req = Requests.objects.get(pk=req_id)
+        print('req count: ', req.reqspec_set.count())
+        if req.reqspec_set.count() == 0:
+            print('no spec at all.')
+            messages.error(request, 'درخواست باید شامل حداقل یک ردیف باشد.')
+            return redirect('request_details', request_pk=req_id)
+    except:
+        messages.error(request, 'درخواست مورد نظر یافت نشد.')
+        return redirect('errorpage')
+
     # response = HttpResponse()
     # response.set_cookie('request_pk', req_id)
     # request.set_cookie('request_pk', req_id)

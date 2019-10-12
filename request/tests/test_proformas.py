@@ -1,4 +1,6 @@
 import unittest
+
+import jdatetime
 from django.test import TestCase, Client
 from django.shortcuts import reverse
 from django.conf import settings
@@ -81,6 +83,43 @@ class PrivateProformaTest(CustomAPITestCase):
             res,
             # todo: this has a bug --> payload['req_id']
             expected_url=reverse('prof_spec_form', args=[self.proforma_payload['req_id']]),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+
+    def test_create_proforma_post_no_expiry_date(self):
+        """Test create proforma post page"""
+        self.client.force_login(user=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, customer=self.customer, number=981515)
+        spec1 = self.sample_reqspec(owner=self.ex_user, req_id=req, kw=55, rpm=1000)
+        spec2 = self.sample_reqspec(owner=self.ex_user, req_id=req, kw=315, rpm=1500)
+        spec3 = self.sample_reqspec(owner=self.ex_user, req_id=req, kw=160, rpm=3000)
+        self.proforma_payload.update({'req_id': req.pk})
+        del(self.proforma_payload['exp_date_fa'])
+        res = self.client.post(reverse('pro_form'), self.proforma_payload)
+        print(res)
+        proforma = req.xpref_set.first()
+        date_fa_str = self.proforma_payload['date_fa']
+        exp_date_expected = jdatetime.datetime.strptime(date_fa_str, "%Y-%m-%d").date() + jdatetime.timedelta(7)
+        pref = Xpref.objects.get(pk=proforma.pk)
+
+        self.assertRedirects(
+            res,
+            # todo: this has a bug --> payload['req_id']
+            expected_url=reverse('prof_spec_form', args=[self.proforma_payload['req_id']]),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK,
+        )
+        self.assertEqual(exp_date_expected, pref.exp_date_fa)
+
+    def test_create_proforma_req_no_spec(self):
+        """Test create proforma getting form fails if request has no specs."""
+        self.client.force_login(user=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, customer=self.customer, number=981515)
+        res = self.client.get(reverse('pro_form_cookie', args=[req.pk]))
+        self.assertRedirects(
+            res,
+            expected_url=reverse('request_details', args=[req.id]),
             status_code=status.HTTP_302_FOUND,
             target_status_code=status.HTTP_200_OK,
         )
