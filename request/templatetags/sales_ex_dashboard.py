@@ -33,6 +33,7 @@ def reqs_noxp(user):
     date = jdatetime.date(month=10, day=1, year=1397)
     reqs = Requests.objects.filter(
         is_active=True,
+        finished=False,
         xpref__isnull=True,
         date_fa__gte=date
     ).distinct().order_by('date_fa').reverse()
@@ -45,6 +46,7 @@ def reqs_noxp(user):
 def reqs_no_xp(user):
     date = jdatetime.date(month=10, day=1, year=1397)
     reqs = Requests.objects.filter(
+        is_active=True,
         finished=False,
         date_fa__gte=date,
         xpref__isnull=True
@@ -69,8 +71,6 @@ def expert_remaining_reqs_not_entered(pk):
     account = User.objects.get(pk=pk)
     print(account)
     reqs = ReqEntered.objects.filter(owner_text__contains=account.last_name, is_request=True, is_entered=False)
-    if account.last_name == 'فروغی':
-        reqs = reqs.exclude(owner_text__contains='ظریف')
     return reqs.count()
 
 
@@ -78,7 +78,13 @@ def expert_remaining_reqs_not_entered(pk):
 def expert_remaining_reqs_no_xp(pk):
     account = User.objects.get(pk=pk)
     date = jdatetime.date(month=10, day=1, year=1397)
-    reqs = Requests.objects.filter(is_active=True, date_fa__gte=date, owner=account, xpref__isnull=True)
+    reqs = Requests.objects.filter(
+        is_active=True,
+        finished=False,
+        date_fa__gte=date,
+        owner=account,
+        xpref__isnull=True
+    )
     return reqs.count()
 
 

@@ -268,7 +268,13 @@ def expert_reqs_percent_new(account):
 @register.simple_tag()
 def expert_reqs_noxp(account):
     date = jdatetime.date(month=10, day=1, year=1397)
-    reqs = Requests.objects.filter(is_active=True, date_fa__gte=date, owner=account, xpref__isnull=True)
+    reqs = Requests.objects.filter(
+        is_active=True,
+        finished=False,
+        date_fa__gte=date,
+        owner=account,
+        xpref__isnull=True
+    )
     return reqs.count()
 
 
