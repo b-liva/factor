@@ -15,6 +15,16 @@ from django.utils.timezone import now
 from django_jalali.db import models as jmodels
 
 
+class TimeStampedModel(models.Model):
+    """
+    An abstract base class model that provides selfupdating ``created`` and ``modified`` fields.
+    """
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    class Meta:
+        abstract = True
+
+
 def upload_location(instance, filename):
     id = 'first'
     no = 'number'
@@ -487,3 +497,25 @@ class Payment(models.Model):
 class PaymentFiles(models.Model):
     pay = models.ForeignKey(Payment, on_delete=models.CASCADE)
     image = models.FileField(upload_to=upload_location, null=True, blank=True)
+
+
+class Perm(TimeStampedModel):
+    proforma = models.ForeignKey(Xpref, on_delete=models.CASCADE, related_name='perm_prof')
+    number = models.IntegerField()
+    date = models.CharField(max_length=10)
+    year = models.CharField(max_length=4)
+
+    def __str__(self):
+        return "Perm: %s - Prof: %s: " % (self.number, self.proforma,)
+
+
+class PermSpec(TimeStampedModel):
+    perm = models.ForeignKey(Perm, on_delete=models.CASCADE, related_name='permspec_perm')
+    row = models.IntegerField()
+    code = models.IntegerField()
+    details = models.CharField(max_length=100)
+    qty = models.IntegerField()
+    price_unit = models.FloatField()
+
+    def __str__(self):
+        return "%s دستگاه %s با مجوز %s" % (self.qty, self.code, self.perm.number,)
