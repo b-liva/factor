@@ -518,4 +518,73 @@ class PermSpec(TimeStampedModel):
     price_unit = models.FloatField()
 
     def __str__(self):
-        return "%s دستگاه %s با مجوز %s" % (self.qty, self.code, self.perm.number,)
+        return "%s دستگاه %s با مجوز %s" % (
+            self.qty,
+            self.code,
+            self.perm.number,
+        )
+
+
+class InventoryOut(TimeStampedModel):
+    perm = models.ForeignKey(Perm, on_delete=models.CASCADE, related_name='inv_out_perm')
+    number = models.IntegerField()
+    date = models.CharField(max_length=10)
+    year = models.CharField(max_length=4)
+
+    def __str__(self):
+        return "InvOut: %s - Perm: %s: " % (
+            self.number,
+            self.perm.number,
+        )
+
+
+class InventoryOutSpec(TimeStampedModel):
+    invout = models.ForeignKey(InventoryOut, on_delete=models.CASCADE)
+    row = models.IntegerField()
+    code = models.IntegerField()
+    details = models.CharField(max_length=100)
+    qty = models.IntegerField(default=1)
+    serial_number = models.CharField(max_length=20)
+    price_unit = models.FloatField()
+
+    def __str__(self):
+        return "InvOut: %s - qty: %s - serial:%s - date out: %s " % (
+            self.invout.number,
+            self.qty,
+            self.serial_number,
+            self.invout.date
+        )
+
+
+class Invoice(TimeStampedModel):
+    invout = models.ForeignKey(InventoryOut, on_delete=models.CASCADE, related_name='invoice_invout')
+    number = models.IntegerField()
+    date = models.CharField(max_length=10)
+    year = models.CharField(max_length=4)
+
+    def __str__(self):
+        return "Invoice: %s - Invout: %s: " % (
+            self.number,
+            self.invout.number,
+        )
+
+
+class InvoiceSpec(TimeStampedModel):
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    row = models.IntegerField()
+    code = models.IntegerField()
+    details = models.CharField(max_length=100)
+    qty = models.IntegerField(default=1)
+    serial_number = models.CharField(max_length=20)
+    price_unit = models.FloatField()
+
+    def __str__(self):
+        return "invoce: %s - qty: %s: - price: %s - invout: %s - perm:%s - proforma: %s - req: %s" % (
+            self.invoice.number,
+            self.qty,
+            self.price_unit,
+            self.invoice.invout.number,
+            self.invoice.invout.perm.number,
+            self.invoice.invout.perm.proforma.number,
+            self.invoice.invout.perm.proforma.req_id.number,
+        )

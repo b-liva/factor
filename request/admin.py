@@ -15,6 +15,10 @@ from .models import (
     RpmType, IPType, ICType, IMType, IEType, Comment, PaymentType,
     Perm,
     PermSpec,
+    InventoryOut,
+    InventoryOutSpec,
+    Invoice,
+    InvoiceSpec,
 )
 
 admin.site.register(Requests)
@@ -36,3 +40,7 @@ admin.site.register(IssueType)
 admin.site.register(ProformaFollowUP)
 admin.site.register(Perm)
 admin.site.register(PermSpec)
+admin.site.register(InventoryOut)
+admin.site.register(InventoryOutSpec)
+admin.site.register(Invoice)
+admin.site.register(InvoiceSpec)
