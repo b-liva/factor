@@ -24,8 +24,8 @@ from req_track.models import (
     ProformaFollowUp,
     Customer as Customer_temp,
     CustomerResolver,
-    Perm
-)
+    Perm,
+    TadvinTotal)
 from .forms import E_Req_Form, E_Req_Edit_Form
 from django.db import models
 
@@ -603,3 +603,11 @@ def perms_not_entered(request):
        'diff': diff,
     }
     return render(request, 'perms/index.html', context)
+
+
+def data(request):
+    data = TadvinTotal.objects.all()
+    context = {
+        'data': data,
+    }
+    return render(request, 'data/data.html', context)

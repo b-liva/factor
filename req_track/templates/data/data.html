@@ -1,0 +1,43 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+
+{% block right_col %}
+    <div>
+        <h3 class="text-center col-xs-12">
+            {{ title_msg }}
+        </h3>
+
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td>ردیف</td>
+                        <td>شماره</td>
+                        <td>نوع سند</td>
+                        <td>پیش فاکتور</td>
+                        <td>مجوز</td>
+                        <td>انبار</td>
+                        <td>فاکتور</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dt in data %}
+                        <tr class="{% if dt.entered %} success {% endif %}">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ dt.doc_number }}</td>
+                            <td>{{ dt.doctype }}</td>
+                            <td>{{ dt.prof_number }}</td>
+                            <td>{{ dt.perm_number }}</td>
+                            <td>{{ dt.havale_number }}</td>
+                            <td>{{ dt.factor_number }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
