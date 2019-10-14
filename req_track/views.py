@@ -611,3 +611,121 @@ def data(request):
         'data': data,
     }
     return render(request, 'data/data.html', context)
+
+
+def data_process_first(request):
+    print('process started 1 of 9')
+    from request.models import (
+        Requests,
+        Xpref,
+        Perm,
+        PermSpec,
+        InventoryOut,
+        InventoryOutSpec,
+        Invoice,
+        InvoiceSpec,
+    )
+    from req_track.models import TadvinTotal
+    print('Reseting Tadvin data data 2 of 9')
+
+    TadvinTotal.objects.all().update(entered=False)
+    print('Reseting perms data 3 of 9')
+
+    Perm.objects.all().delete()
+
+    perms = TadvinTotal.objects.filter(doctype_code=62, entered=False)
+    distinct_perms = perms.values('doc_number').distinct().values('doc_number', 'year', 'date', 'prof_number')
+    print('adding perms 4 of 9 ')
+
+    for d in distinct_perms:
+        pref = Xpref.objects.filter(number_td=d['prof_number'])
+        if pref.exists():
+            p = pref.first()
+            Perm.objects.create(
+                proforma=p,
+                number=d['doc_number'],
+                date=d['date'],
+                year=d['year']
+            )
+    print('adding perms spec 5 of 9')
+
+    allPerms = Perm.objects.all()
+    for a in allPerms:
+        tperm = TadvinTotal.objects.filter(doctype_code=62, doc_number=a.number)
+        for t in tperm:
+            PermSpec.objects.create(
+                perm=a,
+                row=t.row_number,
+                code=t.code,
+                details=t.details,
+                qty=t.qty,
+                price_unit=t.price_unit,
+                price=t.price,
+            )
+            t.entered = True
+            t.save()
+
+    invouts = TadvinTotal.objects.filter(doctype_code=64, entered=False)
+    distinct_invouts = invouts.values('doc_number').distinct().values('doc_number', 'year', 'date', 'perm_number')
+    print('adding Inventories 6 of 9 ')
+    for d in distinct_invouts:
+        perm = Perm.objects.filter(number=d['perm_number'])
+        if perm.exists():
+            p = perm.first()
+            InventoryOut.objects.create(
+                perm=p,
+                number=d['doc_number'],
+                date=d['date'],
+                year=d['year']
+            )
+
+    allInvouts = InventoryOut.objects.all()
+    print('adding Inventory specs 7 of 9')
+    for a in allInvouts:
+        tinvout = TadvinTotal.objects.filter(doctype_code=64, doc_number=a.number)
+        for t in tinvout:
+            InventoryOutSpec.objects.create(
+                invout=a,
+                row=t.row_number,
+                code=t.code,
+                details=t.details,
+                qty=t.qty,
+                serial_number=t.serial_number,
+                price_unit=t.price_unit,
+                price=t.price,
+            )
+            t.entered = True
+            t.save()
+
+    invoices = TadvinTotal.objects.filter(doctype_code=66, entered=False)
+    distinct_invoices = invoices.values('doc_number').distinct().values('doc_number', 'year', 'date', 'havale_number')
+    print('adding Inventory invoices 8 of 9')
+    for d in distinct_invoices:
+        invouts = InventoryOut.objects.filter(number=d['havale_number'])
+        if invouts.exists():
+            p = invouts.first()
+            Invoice.objects.create(
+                invout=p,
+                number=d['doc_number'],
+                date=d['date'],
+                year=d['year']
+            )
+
+    allInvoices = Invoice.objects.all()
+    print('adding Inventory invoices specs 9 of 9')
+    for a in allInvoices:
+        tinvoices = TadvinTotal.objects.filter(doctype_code=66, doc_number=a.number)
+        for t in tinvoices:
+            InvoiceSpec.objects.create(
+                invoice=a,
+                row=t.row_number,
+                code=t.code,
+                details=t.details,
+                qty=t.qty,
+                price_unit=t.price_unit,
+                price=t.price,
+            )
+            t.entered = True
+            t.save()
+
+    return redirect('req_track:data')
