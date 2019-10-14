@@ -8,15 +8,15 @@
             {% if messages %}
                 {% include 'general/errors.html' %}
             {% endif %}
-            {% include 'elements/customer_card.html' with customer=invout.perm.proforma.req_id.customer %}
+            {% include 'elements/customer_card.html' with customer=invoice.invout.perm.proforma.req_id.customer %}
             <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
                 <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="tile-stats">
                         <div class="icon">
                         </div>
-                        <span class="count">{{ invout.number }}</span>
+                        <span class="count">{{ invoice.number }}</span>
 
-                        <h3>شماره حواله</h3>
+                        <h3>شماره فاکتور</h3>
                     </div>
                 </div>
                 <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -25,11 +25,9 @@
                         </div>
                         <span class="count">
                             <a class="badge"
-                               href="{% url 'pref_details' ypref_pk=invout.perm.proforma.pk %}">{{ invout.perm.proforma.number }}</a>
-                            <span style="display: none;" class="ltrClass" data-toggle="tooltip"
-                                  title="پیش فاکتور تدوین">{{ invout.perm.proforma.number_td }}</span>
+                               href="{% url 'invout:invout_details' invout_pk=invoice.invout.pk %}">{{ invoice.invout.number }}</a>
                         </span>
-                        <h3>شماره مجوز</h3>
+                        <h3>شماره حواله</h3>
                     </div>
 
                 </div>
@@ -37,7 +35,7 @@
                     <div class="tile-stats">
                         <div class="icon">
                         </div>
-                        <div class="count">{{ invout.date }}</div>
+                        <div class="count">{{ invoice.date }}</div>
 
                         <h3>تاریخ </h3>
                     </div>
@@ -47,7 +45,7 @@
                         <div class="icon col-md-6">
                         </div>
                         <div class="count">value</div>
-                        <h3>مبلغ حواله</h3>
+                        <h3>مبلغ فاکتور</h3>
                     </div>
                 </div>
 
@@ -58,52 +56,12 @@
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
                 <div class="row" style="margin-top: 75px">
                     <div class="col-xs-12">
-                        <h4 class="greenBtn">فاکتور</h4>
-                    <ol>
-                        {% for f in invout.invoice_invout.all %}
-                            <li><a class="badge" href="{% url 'invoice:invoice_details' invoice_pk=f.pk %}">{{ f.number }} </a> - {{ f.date }}</li>
-                        {% endfor %}
-                    </ol>
+                        <h4 class="greenBtn">other?</h4>
 
-                    </div>
-
-                    <div class="col-xs-4">
-                        {% if perms.request.add_xpref %}
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle"
-                                        data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>
-                                <button type="button" class="btn btn-default">
-                                    <a href="{% url 'pref_index' %}">
-                                        <i class="fa fa-list-ul" aria-hidden="true"></i>
-                                        پیش فاکتورها</a>
-                                </button>
-
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{% url 'pro_form' %}">
-                                        <i class="fa fa-plus green" aria-hidden="true"></i>
-                                        پیش فاکتور جدید</a></li>
-
-                                </ul>
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="col-xs-8">
-                        {% if pref.summary %}
-                            <h4 class="greenBtn">شرح پیگیری</h4>
-                            {{ pref.summary }}
-                        {% endif %}
                     </div>
 
                 </div>
 
-                {#                <h3 style="margin-top: 75px;" class="greenBtn">جزئیات پیشفاکتور شماره {{ pref.number }} مربوط به درخواست#}
-                {#                    شماره#}
-                {#                    <a class="badge badge-light"#}
-                {#                       href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>#}
-                {#                </h3>#}
-                {#                Table of specs#}
                 <div class="table-responsive">
                     <table class="table table-hover text-center">
                         <thead>
@@ -118,15 +76,15 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for invout in invout_specs %}
+                        {% for spec in invoice_specs %}
                             <tr>
                                 <th scope="row" class="text-center">{{ forloop.counter }}</th>
-                                <td>{{ invout.code }}</td>
-                                <td>{{ invout.details }}</td>
-                                <td>{{ invout.serial_number }}</td>
-                                <td>{{ invout.qty }}</td>
-                                <td>{{ invout.price_unit | floatformat | intcomma }}</td>
-                                <td>{{ invout.price | floatformat | intcomma }}</td>
+                                <td>{{ spec.code }}</td>
+                                <td>{{ spec.details }}</td>
+                                <td>{{ spec.serial_number }}</td>
+                                <td>{{ spec.qty }}</td>
+                                <td>{{ spec.price_unit | floatformat | intcomma }}</td>
+                                <td>{{ spec.price | floatformat | intcomma }}</td>
                             </tr>
                         {% endfor %}
                         <tr style="border-top: 2px black solid">
