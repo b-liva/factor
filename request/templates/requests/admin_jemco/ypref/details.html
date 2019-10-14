@@ -24,7 +24,16 @@
                             {% else %}<i class="fa fa-times-circle-o" style="font-size: 1.5em" data-toggle="tooltip"
                                          title="مجوز نشده"></i>
                             {% endif %}
-                        </span><span class="xs1">({{ pref.number_td }})</span>
+                        </span><span class="xs1">(پیش فاکتور تدوین: {{ pref.number_td }})</span>
+{#                                            {{ pref.perm_prof.all }}#}
+                        {#                    {% if perf.perm_prof.all %}#}
+                        (مجوزها:
+                        {% for new_perm in pref.perm_prof.all %}
+                            <span><a class="badge" href="{% url 'perms:perm_details' perm_pk=new_perm.pk %}">{{ new_perm.number }}</a></span>
+                        {% endfor %}
+                        )
+
+                        {#                    {% endif %}#}
 
                         <h3>شماره پیش فاکتور</h3>
                     </div>

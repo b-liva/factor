@@ -90,6 +90,13 @@
                 </li>
             {% endif %}
             {% if user.is_superuser %}
+                <li><a> دیتا <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        {% if perms.request.index_reqspecs %}
+                            <li><a href="{% url 'req_track:data' %}">دیتا</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
                 <li><a> سایر <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% if perms.request.index_reqspecs %}
