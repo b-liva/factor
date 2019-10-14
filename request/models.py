@@ -504,6 +504,7 @@ class Perm(TimeStampedModel):
     number = models.IntegerField()
     date = models.CharField(max_length=10)
     year = models.CharField(max_length=4)
+    due_date = jmodels.jDateField(null=True, blank=True)
 
     def __str__(self):
         return "Perm: %s - Prof: %s: " % (self.number, self.proforma,)
@@ -516,6 +517,7 @@ class PermSpec(TimeStampedModel):
     details = models.CharField(max_length=100)
     qty = models.IntegerField()
     price_unit = models.FloatField()
+    price = models.FloatField()
 
     def __str__(self):
         return "%s دستگاه %s با مجوز %s" % (
@@ -544,8 +546,9 @@ class InventoryOutSpec(TimeStampedModel):
     code = models.IntegerField()
     details = models.CharField(max_length=100)
     qty = models.IntegerField(default=1)
-    serial_number = models.CharField(max_length=20)
+    serial_number = models.CharField(max_length=20, null=True, blank=True)
     price_unit = models.FloatField()
+    price = models.FloatField()
 
     def __str__(self):
         return "InvOut: %s - qty: %s - serial:%s - date out: %s " % (
@@ -575,8 +578,9 @@ class InvoiceSpec(TimeStampedModel):
     code = models.IntegerField()
     details = models.CharField(max_length=100)
     qty = models.IntegerField(default=1)
-    serial_number = models.CharField(max_length=20)
+    serial_number = models.CharField(max_length=20,null=True, blank=True)
     price_unit = models.FloatField()
+    price = models.FloatField()
 
     def __str__(self):
         return "invoce: %s - qty: %s: - price: %s - invout: %s - perm:%s - proforma: %s - req: %s" % (

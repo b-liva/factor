@@ -94,6 +94,7 @@
                     <ul class="nav child_menu">
                         {% if perms.request.index_reqspecs %}
                             <li><a href="{% url 'req_track:data' %}">دیتا</a></li>
+                            <li><a href="{% url 'req_track:data_process_first' %}">پردازش همه ی دیتا</a></li>
                         {% endif %}
                     </ul>
                 </li>

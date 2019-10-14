@@ -15,14 +15,23 @@
                         <div class="icon">
                         </div>
                         <span class="count">{{ perm.number }}</span>
-                        <span>
-                                (<span class="ltrClass" data-toggle="tooltip"
-                                       title="پیش فاکتور">{{ perm.proforma.number }}</span>)
 
-                        </span><span class="xs1">(پیش فاکتور تدوین: <a class="badge"
-                            href="{% url 'pref_details' ypref_pk=perm.proforma.pk %}">{{ perm.proforma.number_td }}</a>)</span>
                         <h3>شماره مجوز</h3>
                     </div>
+                </div>
+                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="tile-stats">
+                        <div class="icon">
+                        </div>
+                        <span class="count">
+                            <a class="badge"
+                               href="{% url 'pref_details' ypref_pk=perm.proforma.pk %}">{{ perm.proforma.number }}</a>
+                            <span style="display: none;" class="ltrClass" data-toggle="tooltip"
+                                  title="پیش فاکتور تدوین">{{ perm.proforma.number_td }}</span>
+                        </span>
+                        <h3>شماره پیشفاکتور</h3>
+                    </div>
+
                 </div>
                 <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="tile-stats">
@@ -38,7 +47,7 @@
                         <div class="icon col-md-6">
                             {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
                         </div>
-{#                        <div class="count">{{ proforma_total|floatformat|intcomma }}</div>#}
+                        {#                        <div class="count">{{ proforma_total|floatformat|intcomma }}</div>#}
                         <div class="count">value</div>
                         <h3>مبلغ مجوز</h3>
                     </div>
@@ -60,6 +69,17 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
                 <div class="row" style="margin-top: 75px">
+                    <div class="col-xs-12">
+                        <h4 class="greenBtn">خروجی انبار</h4>
+                        <ol>
+                            {% for invout in perm.inv_out_perm.all %}
+                                <li><a class="badge"
+                                       href="{% url 'invout:invout_details' invout_pk=invout.pk %}">{{ invout.number }}</a>
+                                    - {{ perm.date }}</li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+
                     <div class="col-xs-4">
                         {% if perms.request.add_xpref %}
                             <div class="btn-group">
@@ -91,46 +111,34 @@
 
                 </div>
 
-{#                <h3 style="margin-top: 75px;" class="greenBtn">جزئیات پیشفاکتور شماره {{ pref.number }} مربوط به درخواست#}
-{#                    شماره#}
-{#                    <a class="badge badge-light"#}
-{#                       href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>#}
-{#                </h3>#}
+                {#                <h3 style="margin-top: 75px;" class="greenBtn">جزئیات پیشفاکتور شماره {{ pref.number }} مربوط به درخواست#}
+                {#                    شماره#}
+                {#                    <a class="badge badge-light"#}
+                {#                       href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>#}
+                {#                </h3>#}
                 {#                Table of specs#}
                 <div class="table-responsive">
                     <table class="table table-hover text-center">
                         <thead>
                         <tr>
                             <th scope="col" class="text-center">ردیف</th>
-                            <th scope="col" class="text-center">کد کالا</th>
+                            <th scope="col" class="text-center">کد</th>
+                            <th scope="col" class="text-center">شرح</th>
                             <th scope="col" class="text-center">تعداد</th>
-                            <th scope="col" class="text-center">ارسال شده</th>
-                            <th scope="col" class="text-center">مانده</th>
-                            <th scope="col" class="text-center">کیلووات</th>
-                            <th scope="col" class="text-center">سرعت</th>
-                            <th scope="col" class="text-center">ولتاژ</th>
-                            <th scope="col" class="text-center">ملاحظات</th>
-                            <th scope="col" class="text-center">قیمت واحد</th>
-                            <th scope="col" class="text-center">مجموع قیمت</th>
+                            <th scope="col" class="text-center">بهای واحد</th>
+                            <th scope="col" class="text-center">بهای کل</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {% for index, object in nested.items %}
-                            {% if object.obj.price and object.obj.qty %}
-                                <tr>
-                                    <th scope="row" class="text-center">{{ forloop.counter }}</th>
-                                    <td>{{ object.obj.code }}</td>
-                                    <td>{{ object.obj.qty }}</td>
-                                    <td>{{ object.obj.qty_sent }}</td>
-                                    <td style="border: 1px dashed brown">{{ object.obj|qty_remaining }}</td>
-                                    <td>{{ object.obj.kw|floatformat }}</td>
-                                    <td>{{ object.obj.rpm }}</td>
-                                    <td>{{ object.obj.voltage }}</td>
-                                    <td>{{ object.obj.considerations }}</td>
-                                    <td>{{ object.obj.price|floatformat|intcomma }}</td>
-                                    <td>{{ object.spec_total|floatformat|intcomma }}</td>
-                                </tr>
-                            {% endif %}
+                        {% for spec in perm_specs %}
+                            <tr>
+                                <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                <td>{{ spec.code }}</td>
+                                <td>{{ spec.details }}</td>
+                                <td>{{ spec.qty }}</td>
+                                <td>{{ spec.price_unit | floatformat | intcomma }}</td>
+                                <td>{{ spec.price | floatformat | intcomma }}</td>
+                            </tr>
                         {% endfor %}
                         <tr style="border-top: 2px black solid">
                             <td colspan="3">مالیات ارزش افزوده</td>
@@ -151,59 +159,59 @@
 
                 {#        Images#}
 
-{#                <div class="row">#}
-{#                    <div class="col-md-10 col-md-offset-1">#}
-{#                        {% for img in prof_images %}#}
-{#                            <a href="{{ img.image.url }}" target="_blank">#}
-{#                                <img class="img-responsive img-thumbnail col-md-3"#}
-{#                                     src="{{ img.image.url }}" style="">#}
-{#                            </a>#}
-{#                        {% endfor %}#}
-{#                    </div>#}
-{##}
-{##}
-{#                </div>#}
+                {#                <div class="row">#}
+                {#                    <div class="col-md-10 col-md-offset-1">#}
+                {#                        {% for img in prof_images %}#}
+                {#                            <a href="{{ img.image.url }}" target="_blank">#}
+                {#                                <img class="img-responsive img-thumbnail col-md-3"#}
+                {#                                     src="{{ img.image.url }}" style="">#}
+                {#                            </a>#}
+                {#                        {% endfor %}#}
+                {#                    </div>#}
+                {##}
+                {##}
+                {#                </div>#}
 
                 {#        Payments#}
 
-{#                {% if pref.payment_set.all.count %}#}
-{#                    <div class="row">#}
-{#                        <div style="margin-top: 100px">#}
-{#                            <h4 class="greenBtn">مبالغ دریافتی بابت این پیش فاکتور:</h4>#}
-{#                            <div class="col-xs-12 col-sm-6 col-md-4">#}
-{#                                <div class="table-responsive">#}
-{#                                    <table class="table">#}
-{#                                        <thead>#}
-{#                                        <tr>#}
-{#                                            <td>شماره</td>#}
-{#                                            <td>تاریخ</td>#}
-{#                                            <td>مبلغ</td>#}
-{#                                        </tr>#}
-{#                                        </thead>#}
-{#                                        <tbody>#}
-{#                                        {% for pay in pref.payment_set.all %}#}
-{#                                            <tr>#}
-{#                                                <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">#}
-{#                                                    {{ pay.number }}#}
-{#                                                </a>#}
-{#                                                </td>#}
-{#                                                <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">#}
-{#                                                    {{ pay.date_fa }}#}
-{#                                                </a>#}
-{#                                                </td>#}
-{#                                                <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">#}
-{#                                                    {{ pay.amount | floatformat | intcomma }}#}
-{#                                                </a>#}
-{#                                                </td>#}
-{#                                            </tr>#}
-{#                                        {% endfor %}#}
-{#                                        </tbody>#}
-{#                                    </table>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                {% endif %}#}
+                {#                {% if pref.payment_set.all.count %}#}
+                {#                    <div class="row">#}
+                {#                        <div style="margin-top: 100px">#}
+                {#                            <h4 class="greenBtn">مبالغ دریافتی بابت این پیش فاکتور:</h4>#}
+                {#                            <div class="col-xs-12 col-sm-6 col-md-4">#}
+                {#                                <div class="table-responsive">#}
+                {#                                    <table class="table">#}
+                {#                                        <thead>#}
+                {#                                        <tr>#}
+                {#                                            <td>شماره</td>#}
+                {#                                            <td>تاریخ</td>#}
+                {#                                            <td>مبلغ</td>#}
+                {#                                        </tr>#}
+                {#                                        </thead>#}
+                {#                                        <tbody>#}
+                {#                                        {% for pay in pref.payment_set.all %}#}
+                {#                                            <tr>#}
+                {#                                                <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">#}
+                {#                                                    {{ pay.number }}#}
+                {#                                                </a>#}
+                {#                                                </td>#}
+                {#                                                <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">#}
+                {#                                                    {{ pay.date_fa }}#}
+                {#                                                </a>#}
+                {#                                                </td>#}
+                {#                                                <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">#}
+                {#                                                    {{ pay.amount | floatformat | intcomma }}#}
+                {#                                                </a>#}
+                {#                                                </td>#}
+                {#                                            </tr>#}
+                {#                                        {% endfor %}#}
+                {#                                        </tbody>#}
+                {#                                    </table>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                {% endif %}#}
 
             </div>
         </div>

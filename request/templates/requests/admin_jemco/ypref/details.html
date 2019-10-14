@@ -18,20 +18,12 @@
                         <span class="{% if pref.perm %}green{% else %}red{% endif %}">
                             {% if pref.perm %}
                                 <i class="fa fa-check-circle" style="font-size: 1.2em" data-toggle="tooltip"
-                                   title="مجوز شده است"></i>
-                                (<span class="ltrClass" data-toggle="tooltip"
-                                       title="تاریخ مجوز">{{ pref.perm_date }}</span>)
+                                   title=" مجوز شده است"></i>
                             {% else %}<i class="fa fa-times-circle-o" style="font-size: 1.5em" data-toggle="tooltip"
                                          title="مجوز نشده"></i>
                             {% endif %}
-                        </span><span class="xs1">(پیش فاکتور تدوین: {{ pref.number_td }})</span>
-{#                                            {{ pref.perm_prof.all }}#}
-                        {#                    {% if perf.perm_prof.all %}#}
-                        (مجوزها:
-                        {% for new_perm in pref.perm_prof.all %}
-                            <span><a class="badge" href="{% url 'perms:perm_details' perm_pk=new_perm.pk %}">{{ new_perm.number }}</a></span>
-                        {% endfor %}
-                        )
+                        </span>
+                        <span class="xs1">(پیش فاکتور تدوین: {{ pref.number_td }})</span>
 
                         {#                    {% endif %}#}
 
@@ -74,6 +66,16 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
                 <div class="row" style="margin-top: 75px">
+                    <div class="col-xs-12">
+                        <h4 class="greenBtn">مجوزها</h4>
+                        <ol>
+                            {% for perm in pref.perm_prof.all %}
+                                <li><a class="badge"
+                                       href="{% url 'perms:perm_details' perm_pk=perm.pk %}">{{ perm.number }}</a>
+                                    - {{ perm.date }}</li>
+                            {% endfor %}
+                        </ol>
+                    </div>
                     <div class="col-xs-4">
                         {% if perms.request.add_xpref %}
                             <div class="btn-group">
@@ -127,6 +129,7 @@
                     <a class="badge badge-light"
                        href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
                 </h3>
+
                 {#                Table of specs#}
                 <div class="table-responsive">
                     <table class="table table-hover text-center">

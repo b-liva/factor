@@ -20,10 +20,11 @@ def perm_find(request):
 
 
 def perm_details(request, perm_pk):
-    print('hello from perm details')
     perm = Perm.objects.get(pk=perm_pk)
+    perm_specs = perm.permspec_perm.all()
     context = {
         'perm': perm,
+        'perm_specs': perm_specs,
     }
     return render(request, 'requests/admin_jemco/perms/details.html', context)
 
