@@ -60,7 +60,7 @@
                             <button type="button" class="btn btn-default">
                                 {% if perms.request.sale_expert %}
                                     <a href="{% url 'request_edit_form' request_pk=request.pk %}">
-                                         ویرایش درخواست</a>
+                                        ویرایش درخواست</a>
                                 {% endif %}
                             </button>
 
@@ -86,6 +86,17 @@
                                         </a>
 
                                     {% endif %}
+                                </li>
+                                <li>
+                                    <a href="{% url 'request_finish' request_pk=request.pk %}">
+                                        <i class="fa fa-plus green"></i>
+                                        {{ request.finished }}
+                                        {% if not request.finished %}
+                                            اختتام
+                                        {% else %}
+                                            لغو اختتام
+                                        {% endif %}
+                                    </a>
                                 </li>
 
                             </ul>
