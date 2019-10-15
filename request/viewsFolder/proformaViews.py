@@ -1227,7 +1227,6 @@ def proforma_pdf(request, ypref_pk, render_header):
         'margin-top': '1.2in',
         # 'margin-top': '0.77in',
         'margin-right': '0.1in',
-        # 'margin-bottom': '1in',
         'margin-bottom': '1.5748in',
         'margin-left': '0.1in',
         'encoding': "UTF-8",
@@ -1283,6 +1282,10 @@ def proforma_pdf(request, ypref_pk, render_header):
         'prizes_full_url': prizes_full_url,
         'today': jdatetime.date.today()
     }
+    size = len(data['prefspecs'])
+    critical_range = [19, 20]
+    if size in critical_range:
+        options.update({'margin-bottom': '2.15039in'})
 
     content = render_to_string(
         # 'requests/admin_jemco/ypref/details_pdf.html', {
