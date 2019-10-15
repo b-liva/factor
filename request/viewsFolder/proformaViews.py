@@ -1227,7 +1227,7 @@ def proforma_pdf(request, ypref_pk, render_header):
         'margin-top': '1.2in',
         # 'margin-top': '0.77in',
         'margin-right': '0.1in',
-        'margin-bottom': '1.5748in',
+        'margin-bottom': '1.37795in',
         'margin-left': '0.1in',
         'encoding': "UTF-8",
         # 'footer-html': 'http://google.com',
