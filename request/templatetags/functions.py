@@ -15,7 +15,7 @@ def has_perm_or_is_owner(user_obj, permissions, instance=None, colleague=None):
             return colleague
     if instance is not None:
         # print('*&*&*&*&: ', instance.owner.username, user_obj.username)
-        if user_obj == instance.owner:
+        if user_obj == instance.owner or user_obj in instance.colleagues.all():
             if hasattr(instance, 'is_active'):
                 return instance.is_active and user_obj.has_perm(permissions)
             else:
