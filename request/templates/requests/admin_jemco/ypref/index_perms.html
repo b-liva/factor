@@ -112,16 +112,23 @@
                     <thead>
                     <tr>
                         <th scope="col" class="text-center">ردیف</th>
-                        <th scope="col" class="text-center">شماره مجوز</th>
-                        <th scope="col" class="text-center">شماره پیش فاکتور</th>
                         <th scope="col" class="text-center">شماره درخواست</th>
+                        <th scope="col" class="text-center">شماره پیش فاکتور</th>
+                        <th scope="col" class="text-center">شماره مجوز</th>
+                        <th scope="col" class="text-center test-phase">شماره مجوز</th>
+                        <th scope="col" class="text-center test-phase">حواله</th>
+                        <th scope="col" class="text-center test-phase">فاکتور</th>
                         <th scope="col" class="text-center">مشتری</th>
                         <th scope="col" class="text-center">تاریخ مجوز</th>
 
                         <th scope="col" class="text-center">تعداد کل</th>
+                        <th scope="col" class="text-center test-phase">تعداد کل</th>
                         <th scope="col" class="text-center">تعداد ارسال شده</th>
+                        <th scope="col" class="text-center test-phase">ارسال شده</th>
                         <th scope="col" class="text-center">تعداد باقیمانده</th>
+                        <th scope="col" class="text-center test-phase">باقیمانده</th>
                         <th scope="col" class="text-center">باقیمانده(روز)</th>
+                        <th scope="col" class="text-center test-phase">باقیمانده(روز)</th>
                         <th scope="col" class="text-center">دلیل تأخیر</th>
                         <th scope="col" class="text-center">کل(مبلغ)</th>
                         <th scope="col" class="text-center">تسویه نشده(مبلغ)</th>
@@ -134,28 +141,71 @@
                             <td scope="row">{{ forloop.counter }}</td>
                             <td>
                                 <a class="badge badge-light"
-                                   href="{% url 'pref_details' ypref_pk=p.pk %}">{{ p|perm_number }}</a>
+                                   href="{% url 'request_details' request_pk=p.req_id.pk %}">{{ p.req_id.number }}</a>
                             </td>
                             <td>
                                 <a class="badge badge-light"
                                    href="{% url 'pref_details' ypref_pk=p.pk %}">{{ p.number }}</a>
                             </td>
+                            <td>
+                                <a class="badge badge-light"
+                                   href="{% url 'pref_details' ypref_pk=p.pk %}">{{ p|perm_number }}</a>
+                            </td>
+
                             {% if not showDelete %}
                                 <td>{{ p.temp_number }}</td>{% endif %}
                             <td>
-                                <a class="badge badge-light"
-                                   href="{% url 'request_details' request_pk=p.req_id.pk %}">{{ p.req_id.number }}</a>
+
+                                {% for x in p.perm_prof.all %}
+                                    <p><a class="badge"
+                                          href="{% url 'perms:perm_details' perm_pk=x.pk %}">{{ x.number }}</a></p>
+                                {% endfor %}
                             </td>
+                            <td>
+
+                                {% for x in p.perm_prof.all %}
+                                    {% for inv in x.inv_out_perm.all %}
+                                        <p><a class="badge"
+                                              href="{% url 'invout:invout_details' invout_pk=inv.pk %}">{{ inv.number }}</a>
+                                        </p>
+                                    {% endfor %}
+
+                                {% endfor %}
+                            </td>
+                            <td>
+
+                                {% for x in p.perm_prof.all %}
+                                    {% for inv in x.inv_out_perm.all %}
+                                        {% for invoice in inv.invoice_invout.all %}
+                                            <p><a class="badge"
+                                                  href="{% url 'invoice:invoice_details' invoice_pk=invoice.pk %}">
+                                                {{ invoice.number }}
+                                            </a></p>
+                                        {% endfor %}
+                                    {% endfor %}
+
+                                {% endfor %}
+                            </td>
+
                             <td>
                                 <a href="{% url 'customer_read' customer_pk=p.req_id.customer.pk %}">{{ p.req_id.customer.name }}</a>
                             </td>
                             <td>{{ p.perm_date }}</td>
 
                             <td>{{ p.total_proforma_qty }}</td>
+                            <td>{{ p.perm_prof.first.qy_total }}</td>
                             <td>{{ p.total_proforma_qty_sent }}</td>
+                            <td>
+                                {% invout_qty_sent p.perm_prof.first %}
+                            </td>
                             <td>{{ p.total_proforma_qty_remain }}</td>
+                            <td>
+                                {% invout_qty_not_sent p.perm_prof.first %}
+                            </td>
                             {#                            <td>{{ p|days }}</td>#}
                             <td class="{{ p|perm_warning_class }}">{{ p|perm_days }}</td>
+                            {% perm_days_new p as pdn %}
+                            <td class="{{ pdn.warning_class }}">{{ pdn.delay }}</td>
                             <td>{% if p.issue_type %}{{ p.issue_type }}{% else %}{% endif %}</td>
                             <td>{{ p.total_proforma_price_vat.price_vat|floatformat | intcomma }}</td>
                             <td>{{ p.total_proforma_received.remaining|floatformat | intcomma }}</td>

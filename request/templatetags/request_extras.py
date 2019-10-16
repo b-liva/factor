@@ -306,3 +306,57 @@ def proforma_customer(prof_follow):
         return prof.req_id.customer.name
     except:
         return ''
+
+
+@register.simple_tag()
+def invout_qty_sent(perm):
+    qty = 0
+    if perm is not None and perm.inv_out_perm.all().exists():
+        qty = perm.inv_out_perm.all().aggregate(qty=Sum('inventoryoutspec__qty'))['qty']
+    return qty
+
+
+@register.simple_tag()
+def invout_qty_not_sent(perm):
+    qty = 0
+    total = 0
+    if perm:
+        total = perm.qy_total()
+    if perm is not None and perm.inv_out_perm.all().exists():
+        qty = perm.inv_out_perm.all().aggregate(qty=Sum('inventoryoutspec__qty'))['qty']
+    return total - qty
+
+
+@register.simple_tag()
+def perm_days_new(proforma):
+    perm = proforma.perm_prof.first()
+    today_fa = jmodels.jdatetime.date.today()
+    date = today_fa
+    qty = 0
+    total = 0
+    if perm:
+        total = perm.qy_total()
+    if perm is not None and perm.inv_out_perm.all().exists():
+        qty = perm.inv_out_perm.all().aggregate(qty=Sum('inventoryoutspec__qty'))['qty']
+        remaining = total - qty
+        if remaining == 0 and perm.inv_out_perm.exists():
+            last_invout = perm.inv_out_perm.last()
+            date_values = last_invout.date.split('/')
+            date = jdatetime.date(year=int(date_values[0]), month=int(date_values[1]), day=int(date_values[2]))
+
+    diff = (proforma.due_date - date)
+    warning_class = ""
+
+    if diff.days < 0:
+        warning_class = 'btn-danger'
+
+    if 0 <= diff.days <= 31:
+            warning_class = 'btn-warning'
+    if diff.days > 31:
+        warning_class = 'btn-success'
+    context = {
+        'warning_class': warning_class,
+        'delay': diff.days,
+    }
+    print(context)
+    return context

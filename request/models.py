@@ -509,6 +509,10 @@ class Perm(TimeStampedModel):
     def __str__(self):
         return "Perm: %s - Prof: %s: " % (self.number, self.proforma,)
 
+    def qy_total(self):
+        count = self.permspec_perm.aggregate(Sum('qty'))
+        return count['qty__sum']
+
 
 class PermSpec(TimeStampedModel):
     perm = models.ForeignKey(Perm, on_delete=models.CASCADE, related_name='permspec_perm')
