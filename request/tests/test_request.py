@@ -386,7 +386,7 @@ class PrivateRequestTests(CustomAPITestCase):
 
     # ReqSpec
     # CREATE
-    def test_create_reqspec_get_form_form_needs_permission(self):
+    def test_create_reqspec_get_form_needs_permission(self):
         """Test create reqspec, getting form page needs permission"""
         self.client.force_login(user=self.user)
         res = self.client.get(reverse('spec_form', args=[self.req.pk]))
@@ -420,6 +420,23 @@ class PrivateRequestTests(CustomAPITestCase):
         """
         self.client.force_login(user=self.ex_user)
         req = self.sample_request(owner=self.ex_user, number=87463)
+        res = self.client.get(reverse('spec_form', args=[req.pk]))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.context['req_obj'].pk, req.pk)
+        self.assertEqual(len(res.context['specs']), len(req.reqspec_set.filter(is_active=True)))
+
+    def test_create_reqspec_get_form_colleague_success(self):
+        """Test reqspec form limited to req owners and colleagues
+        :return {
+        'form': form,
+        'req_obj': req,
+        'specs': specs,
+        'list': list,
+        }
+        """
+        self.client.force_login(user=self.ex_user)
+        req = self.sample_request(owner=self.user, number=87463)
+        req.colleagues.add(self.ex_user)
         res = self.client.get(reverse('spec_form', args=[req.pk]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.context['req_obj'].pk, req.pk)
