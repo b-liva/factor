@@ -866,7 +866,8 @@ def pref_insert_spec_form(request, ypref_pk):
     specs = req.reqspec_set.filter(is_active=True)
     prefspecs = pref.prefspec_set.filter(is_active=True)
     # prices = request.POST.getlist('price')
-    prices = [i if i is not '' else '0' for i in request.POST.getlist('price')]
+    z = ['0.0', '0']
+    prices = [i if i not in z else '0' for i in request.POST.getlist('price')]
     zeros = ['0' for i in prices]
     price_list = []
     # These checks if there is any string that can't be change to a number.
