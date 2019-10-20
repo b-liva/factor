@@ -24,3 +24,4 @@ package-lock.json
 /.idea
 /.vs
 *.orig
+/factor/djangobin-secrets.json

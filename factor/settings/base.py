@@ -10,9 +10,20 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 import environ
-import os
-import sys
+import os, json, sys
 from django.urls import reverse_lazy
+from django.core.exceptions import ImproperlyConfigured
+
+with open(os.path.abspath('factor/factor-secrets.json')) as f:
+    secrets = json.loads(f.read())
+
+
+def get_secret_setting(settings, secrets=secrets):
+    try:
+        return secrets[settings]
+    except KeyError:
+        raise ImproperlyConfigured('set the %s settings' % settings)
+
 
 ROOT_DIR = (
     environ.Path(__file__) - 3
@@ -260,7 +271,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "username"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ADAPTER = "allauth.account.adapter.DefaultAccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -273,26 +284,6 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(FRONTEND_DIR, 'webpack-stats.json'),
     }
 }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'newfromlive',
-        'USER': 'root',
-        'PASSWORD': '',
-        # 'PASSWORD': 'livapass',
-        'HOST': 'localhost',
-        # 'OPTIONS': {
-        #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        # },
-        'TEST': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, '../../test_database.sqlite3'),
-        },
-    }
-}
-if 'test' in sys.argv or 'test_coverage' in sys.argv:  # Covers regular testing and django-coverage
-    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

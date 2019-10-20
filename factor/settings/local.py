@@ -13,6 +13,7 @@ DEBUG = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
+    # "SECRET_KEY_LOCAL",
     default="wf$gn46*y4((^9gsj8_4j=%i=40v2dpuyypf56xww72aj40b5=",
 )
 # SECRET_KEY = 'wf$gn46*y4((^9gsj8_4j=%i=40v2dpuyypf56xww72aj40b5='
@@ -28,6 +29,25 @@ CACHES = {
         "LOCATION": "",
     }
 }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'newfromlive',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        },
+        'TEST': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, '../../test_database.sqlite3'),
+        },
+    }
+}
+if 'test' in sys.argv or 'test_coverage' in sys.argv:  # Covers regular testing and django-coverage
+    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
 # EMAIL
 # ------------------------------------------------------------------------------

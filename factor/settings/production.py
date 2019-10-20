@@ -1,3 +1,19 @@
 from .base import *  # noqa
 from .base import env
-SECRET_KEY = 'wf$gn46*y4((^9gsj8_4j=%i=40v2dpuyypf56xww72aj40b5='
+
+SECRET_KEY = get_secret_setting('SECRET_KEY_PRODUCTION')
+DEBUG = True
+ALLOWED_HOSTS = ['crm.jemcomotor.ir', 'localhost', '127.0.0.1']
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'jcrm_production',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        },
+    }
+}
