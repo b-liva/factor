@@ -147,7 +147,7 @@ def check_payment(request):
         if Request_payment.objects.filter(number=p.number):
             p.is_entered = True
         try:
-            Xpref.objects.get(number=p.prof_number)
+            Xpref.objects.get(number_td=p.prof_number)
         except:
             p.red_flag = True
 
@@ -193,7 +193,7 @@ def payment_assign(request):
     for payment in payments:
         # if not Request_payment.objects.filter(number=payment.number):
 
-        proforma = Xpref.objects.get(number=payment.prof_number)
+        proforma = Xpref.objects.get(number_td=payment.prof_number)
         pay = Request_payment()
         pay.number = payment.number
         pay.date_fa = payment.date
