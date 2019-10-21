@@ -12,7 +12,9 @@ from .base import *  # noqa
 #     "DJANGO_SECRET_KEY",
 #     default="fhzDw68Aq75xg9I3QkpMNd40JYak98wvF1ryJ1Q1hC7oNH7KibU6P4HVyaemkBTY",
 # )
-SECRET_KEY = get_secret_setting('SECRET_KEY_TEST')
+# SECRET_KEY = get_secret_setting('SECRET_KEY_TEST')
+SECRET_KEY = os.environ['SECRET_KEY_TEST']
+print('secret key: ', SECRET_KEY)
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 # https://docs.djangoproject.com/en/dev/ref/settings/#test-runner
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
@@ -50,6 +52,7 @@ TEMPLATES[0]["OPTIONS"]["loaders"] = [  # noqa F405
         ],
     )
 ]
+TEMPLATES[0]["APP_DIRS"] = False
 
 # EMAIL
 # ------------------------------------------------------------------------------

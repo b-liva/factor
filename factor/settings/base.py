@@ -13,16 +13,16 @@ import environ
 import os, json, sys
 from django.urls import reverse_lazy
 from django.core.exceptions import ImproperlyConfigured
+print('******: ', os.environ['DJANGO_SETTINGS_MODULE'])
+# with open(os.path.abspath('factor/factor-secrets.json')) as f:
+#     secrets = json.loads(f.read())
 
-with open(os.path.abspath('factor/factor-secrets.json')) as f:
-    secrets = json.loads(f.read())
 
-
-def get_secret_setting(settings, secrets=secrets):
-    try:
-        return secrets[settings]
-    except KeyError:
-        raise ImproperlyConfigured('set the %s settings' % settings)
+# def get_secret_setting(settings, secrets=secrets):
+#     try:
+#         return secrets[settings]
+#     except KeyError:
+#         raise ImproperlyConfigured('set the %s settings' % settings)
 
 
 ROOT_DIR = (
@@ -156,10 +156,10 @@ MIDDLEWARE = [
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 # STATIC_ROOT = str(ROOT_DIR("staticfiles"))
-STATIC_ROOT = os.path.join(BASE_DIR, '../../static')
+STATIC_URL = "/static/"
+# STATIC_ROOT = os.path.join(BASE_DIR, '../../static')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 # STATICFILES_DIRS = [str(APPS_DIR.path("static"))]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
@@ -174,7 +174,7 @@ STATICFILES_FINDERS = [
 # MEDIA_ROOT = str(APPS_DIR("media"))
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
