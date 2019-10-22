@@ -1,48 +1,39 @@
-{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
+{% extends 'requests/admin_jemco/search_index_base.html' %}
 {% load humanize %}
 {% load static %}
-{% block right_col %}
-    <div class="container">
-        <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
-            <div class="row" style="margin-bottom: 50px;">
-            <h4 class="text-center">احتمال وجود خطا در داده های زیر وجود دارد.</h4>
-            </div>
 
-            <table class="table table-hover text-center">
-                <thead class="dark">
-                <tr>
-                    <th scope="col" class="text-center rotate_deg">ردیف</th>
-                    <th scope="col" class="text-center rotate_deg">کد</th>
-                    <th scope="col" class="text-center rotate_deg">کیلووات</th>
-                    <th scope="col" class="text-center rotate_deg">سرعت</th>
-                    <th scope="col" class="text-center rotate_deg">شماره درخواست</th>
-{#                    <th scope="col" class="text-center rotate_deg">کارشناس</th>#}
-                </tr>
-                </thead>
-
-                <tbody>
-                {% for reqspec in reqspecs %}
-                    <tr>
-                        <td class="dark">{{ forloop.counter }}</td>
-                        <td>{{ reqspec.pk }}</td>
-                        <td>{{ reqspec.kw }}</td>
-                        <td>{{ reqspec.rpm }}</td>
-                        <td><a href="{% url 'request_details' request_pk=reqspec.req_id.pk%}">{{ reqspec.req_id.number }}</a></td>
-                        {% if perms.request.sale_expert %}
-                            <td>
-                                <a class="btn btn-xs btn-warning"
-                                   href="{% url 'reqspec_edit_form' req_pk=reqspec.req_id.pk yreqSpec_pk=reqspec.pk %}" data-toggle="tooltip" title="ویرایش">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                                </a>
-                            </td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <br>
-            <div>
-            </div>
-        </div>
-    </div>
+{% block header %}
+    احتمال وجود خطا در داده های زیر وجود دارد.
 {% endblock %}
+{% block forms %}{% endblock %}
+{% block table_head_body %}
+    <thead class="dark"><tr>
+        <th scope="col" class="text-center rotate_deg">ردیف</th>
+        <th scope="col" class="text-center rotate_deg">کد</th>
+        <th scope="col" class="text-center rotate_deg">کیلووات</th>
+        <th scope="col" class="text-center rotate_deg">سرعت</th>
+        <th scope="col" class="text-center rotate_deg">شماره درخواست</th>
+        {#                    <th scope="col" class="text-center rotate_deg">کارشناس</th>#}
+    </tr></thead>
+    <tbody>
+    {% for reqspec in reqspecs %}
+        <tr>
+            <td class="dark">{{ forloop.counter }}</td>
+            <td>{{ reqspec.pk }}</td>
+            <td>{{ reqspec.kw }}</td>
+            <td>{{ reqspec.rpm }}</td>
+            <td><a href="{% url 'request_details' request_pk=reqspec.req_id.pk %}">{{ reqspec.req_id.number }}</a></td>
+            {% if perms.request.sale_expert %}
+                <td>
+                    <a class="btn btn-xs btn-warning"
+                       href="{% url 'reqspec_edit_form' req_pk=reqspec.req_id.pk yreqSpec_pk=reqspec.pk %}"
+                       data-toggle="tooltip" title="ویرایش">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a>
+                </td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+{% endblock %}
+{% block pagination_links %}{% endblock %}

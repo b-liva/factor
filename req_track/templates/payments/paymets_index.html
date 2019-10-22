@@ -1,21 +1,18 @@
-{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
+{% extends 'requests/admin_jemco/search_index_base.html' %}
 {% load humanize %}
 {% load request_extras %}
 
-{% block right_col %}
+{% block header %}
+    {{ title_msg }}
+{% endblock %}
+{% block forms %}
     <div>
-        <h3 class="text-center col-xs-12">
-            {{ title_msg }}
-        </h3>
-
-        <div class="col-xs-12">
-            <div>
                 <a class="btn btn-primary" href="{% url 'req_track:payment_check' %}">بروز رسانی وضعیت دریافتی ها</a>
                 <a class="btn btn-primary" href="{% url 'req_track:payment_assign' %}">تخصیص دریافتی ها به پیش فاکتور ها (مجوزها)</a>
             </div>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
+{% endblock %}
+{% block table_head_body %}
+    <thead>
                     <tr>
                         <td>ردیف</td>
                         <td>شماره</td>
@@ -55,9 +52,5 @@
                         </tr>
                     {% endfor %}
                     </tbody>
-                </table>
-            </div>
-
-        </div>
-    </div>
 {% endblock %}
+{% block pagination_links %}{% endblock %}

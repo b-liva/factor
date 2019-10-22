@@ -192,7 +192,7 @@ def payment_index(request):
     }
     cache.set('payments_in_sessions', context, 300)
     context.update({
-        'title': 'پرداخت ها',
+        'title': 'دریافتی ها',
         'showHide': True,
         'form': form,
     })

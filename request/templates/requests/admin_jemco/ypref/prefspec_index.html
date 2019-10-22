@@ -1,26 +1,12 @@
-{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
+{% extends 'requests/admin_jemco/search_index_base.html' %}
 {% load humanize %}
 {% load request_extras %}
-{% block right_col %}
-    <div class="container">
-        <div class="col-md-10 col-md-offset-1">
-            <h3>{{ msg }}</h3>
-            {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
-            <h1 class="page-header">
-                {{ title }}</h1>
-            <div class="row">
-                {% if messages %}
-                    <div class="col-md-10 col-md-offset-1">
-                        <div class="alert alert-danger">
-                            {% for msg in messages %}
-                                <p>{{ msg }}</p>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
 
-            </div>
-            <div class="row">
+{% block header %}
+    {{ title }}
+{% endblock %}
+{% block forms %}
+    <div class="row">
                 <div class="col-xs-6 col-md-4">
                     {% if showDelete %}
                         <form method="POST" action="{% url 'pref_find' %}">
@@ -40,12 +26,8 @@
                                     class="fa fa-plus"></i>
                                 پیش فاکتور جدید</a>
                         {% endif %}
-
                     </div>
-
                 </div>
-
-
             </div>
             <form method="post" action="">
                 {% csrf_token %}
@@ -129,12 +111,9 @@
                 </button>
                 <a class="btn btn-danger btn-sm" href="{% url 'prefspec_clear_cache' %}" data-toggle="tooltip" title="حذف فیلترها"><i class="fa fa-close"></i></a>
             </form>
-
-
-            <div class="table-responsive">
-
-                <table class="table table-hover text-center">
-                    <thead>
+{% endblock %}
+{% block table_head_body %}
+    <thead>
                     <tr>
                         <th scope="col" class="text-center">ردیف</th>
                         <th scope="col" class="text-center">kw</th>
@@ -171,10 +150,9 @@
                         </tr>
                     {% endfor %}
                     </tbody>
-                </table>
-            </div>
-            <br>
-            {% if pref_specs.has_other_pages %}
+{% endblock %}
+{% block pagination_links %}
+    {% if pref_specs.has_other_pages %}
                 <ul class="pagination">
                     {% if pref_specs.has_previous %}
                         <li><a href="?page={{ pref_specs.previous_page_number }}">&laquo;</a></li>
@@ -195,7 +173,4 @@
                     {% endif %}
                 </ul>
             {% endif %}
-
-        </div>
-    </div>
 {% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="form-group">
+                        <ul class="message">
+                            {% for msg in messages %}
+                                <li class="alert alert-error">{{ msg }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <h1 class="page-header">
+                {% block header %}{% endblock %}
+            </h1>
+            <div class="row">
+                {% block forms %}{% endblock %}
+            </div>
+            <div class="row">
+                <table class="table table-hover text-center table-condensed">
+                    {% block table_head_body %} {% endblock %}
+                </table>
+                {% block pagination_links %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

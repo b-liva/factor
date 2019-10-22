@@ -1,87 +1,79 @@
-{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
+{% extends 'requests/admin_jemco/search_index_base.html' %}
 {% load jformat %}
-{% block right_col %}
-    <div class="container">
-        <div class="col-md-10 col-md-offset-1">
-
-            <h3>{{ msg }}</h3>
-{#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
-            <h1 class="page-header">
-                {{ title }}</h1>
-            <form method="POST" action="{% url 'customer_find' %}">
-                {% csrf_token %}
-                کد مشتری<input name="customer_no">
-                <button type="submit" name="submit" class="btn btn-sm btn-primary">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </button>
-            </form>
-            {% if perms.customer.add_customer %}
-                <div class="pull-left">
-                    <a href="{% url 'cform' %}" class="btn btn-success btn-sm">
-                        <i class="fa fa-plus"></i> مشتری جدید </a>
-                </div>
-            {% endif %}
-            <table class="table table-hover text-center">
-                <thead class="text-center">
-                <tr class="text-center">
-                    <th class="text-center">ردیف</th>
-                    {#                    <th class="text-center">pk</th>#}
-                    {#            <th>Id</th>#}
-                    <th class="text-center">کد مشتری</th>
-                    <th class="text-center">کد تدوین</th>
-                    <th class="text-center">نام</th>
-                    <th class="text-center">تلفن</th>
-                    <th class="text-center">owner</th>
-{#                    <th class="text-center">نوع</th>#}
-                    {#            <th>Date</th>#}
-                    <th class="text-center">تاریخ عضویت</th>
-                    {#                    <th class="text-center"></th>#}
-                </tr>
-                </thead>
-
-                <tbody>
-                {% for customer in customers %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        {#                        <td>{{ customer.pk }}</td>#}
-                        <td>{{ customer.code }}</td>
-                        <td>{% if customer.code_temp %}{{ customer.code_temp }}{% endif %}</td>
-                        <td>{{ customer.name }}</td>
-                        <td>{% if customer.phone %}{{ customer.phone }}{% endif %}</td>
-                        <td>{{ customer.owner.last_name }}</td>
-{#                        <td>{{ customer.type.name }}</td>#}
-                        <td>{{ customer.date2 }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-xs" href="{% url 'customer_read' customer_pk=customer.pk %}" data-toggle="tooltip" title="مشاهده">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
-                            </a>
-                            {% if perms.customer.add_customer %}
-                                <a class="btn btn-warning btn-xs"
-                                   href="{% url 'customer_edit_form' customer_pk=customer.pk %}" data-toggle="tooltip" title="مشاهده">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                                </a>
-{#                                <a class="btn btn-danger btn-xs "#}
-{#                                   href="">#}
-{#                                    <i class="fa fa-trash" aria-hidden="true"></i> حذف#}
-{#                                </a>#}
-                                    <a class="btn btn-xs btn-danger "
-                                       href="{% url 'customer_delete' customer_pk=customer.pk %}" data-toggle="tooltip" title="مشاهده"><i
-                                            class="fa fa-trash"></i></a>
-                            {% endif %}
-                        </td>
-
-
-                    </tr>
-
-                {% endfor %}
-
-                </tbody>
-            </table>
-            <br>
-            {#            <a href="{% url 'cform' %}" class="btn btn-success btn-sm">#}
-            {#                <i class="fa fa-plus"></i> Customer</a>#}
-        </div>
-
+{% block header %}
+ {{ title }}
+{% endblock %}
+{% block forms %}
+    <form method="POST" action="{% url 'customer_find' %}">
+    {% csrf_token %}
+    کد مشتری<input name="customer_no">
+    <button type="submit" name="submit" class="btn btn-sm btn-primary">
+        <i class="fa fa-search" aria-hidden="true"></i>
+    </button>
+</form>
+    {% if perms.customer.add_customer %}
+    <div class="pull-left">
+        <a href="{% url 'cform' %}" class="btn btn-success btn-sm">
+            <i class="fa fa-plus"></i> مشتری جدید </a>
     </div>
+{% endif %}
+{% endblock %}
+{% block table_head_body %}
+    <thead class="text-center">
+    <tr class="text-center">
+        <th class="text-center">ردیف</th>
+        {#                    <th class="text-center">pk</th>#}
+        {#            <th>Id</th>#}
+        <th class="text-center">کد مشتری</th>
+        <th class="text-center">کد تدوین</th>
+        <th class="text-center">نام</th>
+        <th class="text-center">تلفن</th>
+        <th class="text-center">owner</th>
+        {#                    <th class="text-center">نوع</th>#}
+        {#            <th>Date</th>#}
+        <th class="text-center">تاریخ عضویت</th>
+        {#                    <th class="text-center"></th>#}
+    </tr>
+    </thead>
 
+    <tbody>
+    {% for customer in customers %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            {#                        <td>{{ customer.pk }}</td>#}
+            <td>{{ customer.code }}</td>
+            <td>{% if customer.code_temp %}{{ customer.code_temp }}{% endif %}</td>
+            <td>{{ customer.name }}</td>
+            <td>{% if customer.phone %}{{ customer.phone }}{% endif %}</td>
+            <td>{{ customer.owner.last_name }}</td>
+            {#                        <td>{{ customer.type.name }}</td>#}
+            <td>{{ customer.date2 }}</td>
+            <td>
+                <a class="btn btn-primary btn-xs" href="{% url 'customer_read' customer_pk=customer.pk %}"
+                   data-toggle="tooltip" title="مشاهده">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                </a>
+                {% if perms.customer.add_customer %}
+                    <a class="btn btn-warning btn-xs"
+                       href="{% url 'customer_edit_form' customer_pk=customer.pk %}" data-toggle="tooltip"
+                       title="مشاهده">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a>
+                    {#                                <a class="btn btn-danger btn-xs "#}
+                    {#                                   href="">#}
+                    {#                                    <i class="fa fa-trash" aria-hidden="true"></i> حذف#}
+                    {#                                </a>#}
+                    <a class="btn btn-xs btn-danger "
+                       href="{% url 'customer_delete' customer_pk=customer.pk %}" data-toggle="tooltip"
+                       title="مشاهده"><i
+                            class="fa fa-trash"></i></a>
+                {% endif %}
+            </td>
+
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
 {% endblock %}

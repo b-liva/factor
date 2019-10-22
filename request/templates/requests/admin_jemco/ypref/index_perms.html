@@ -1,26 +1,12 @@
-{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
+{% extends 'requests/admin_jemco/search_index_base.html' %}
 {% load humanize %}
 {% load request_extras %}
-{% block right_col %}
-    <div class="container">
-        <div class="col-md-12 ">
-            <h3>{{ msg }}</h3>
-            {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
-            <h1 class="page-header">
-                {{ title }}</h1>
-            <div class="row">
-                {% if messages %}
-                    <div class="col-md-10 col-md-offset-1">
-                        <div class="alert alert-danger">
-                            {% for msg in messages %}
-                                <p>{{ msg }}</p>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
 
-            </div>
-            <div class="row">
+{% block header %}
+    {{ title }}
+{% endblock %}
+{% block forms %}
+    <div class="row">
                 {% if showDelete %}
                     <div class="col-md-8">
                         <form class="" method="POST" action="{% url 'pref_find' %}">
@@ -107,9 +93,9 @@
 
 
             </div>
-            <div class="table-responsive">
-                <table class="table text-center">
-                    <thead>
+{% endblock %}
+{% block table_head_body %}
+    <thead>
                     <tr>
                         <th scope="col" class="text-center">ردیف</th>
                         <th scope="col" class="text-center">شماره مجوز</th>
@@ -188,11 +174,5 @@
                         <td>{{ qty.remain }}</td>
                     </tr>
                     </tbody>
-                </table>
-            </div>
-            <br>
-            {#            <a href="{% url 'pref_form' %}" class="btn btn-success btn-sm">Add new Prefactor</a>#}
-
-        </div>
-    </div>
 {% endblock %}
+{% block pagination_links %}{% endblock %}

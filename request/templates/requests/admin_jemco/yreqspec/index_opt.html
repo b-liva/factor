@@ -1,16 +1,11 @@
-{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
+{% extends 'requests/admin_jemco/search_index_base.html' %}
 {% load humanize %}
 {% load request_extras %}
-{% block right_col %}
-    <div class="container">
-        <div class="col-md-12">
-            <h3>{{ msg }}</h3>
-            {#                <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">Request Specs</h1>#}
-            <h2 class="page-header">ردیف های درخواستی</h2>
-
-            <div id="example-table"></div>
-            <div class="searchApp">
-                <form method="POST" action="{% url 'reqspec_search' %}">
+{% block header %}
+    ردیف های درخواستی
+{% endblock %}
+{% block forms %}
+    <form method="POST" action="{% url 'reqspec_search' %}">
                     {% csrf_token %}
                     {#                    {{ search_form }}#}
 
@@ -137,11 +132,10 @@
 
                     </div>
                 </form>
-
-            </div>
-
-            <table id="req_search_table" class="table table-hover">
-                <tr>
+{% endblock %}
+{% block table_head_body %}
+    <thead>
+        <tr>
                     <th>No</th>
                     <th class="customer-column">مشتری</th>
                     <th>QTY</th>
@@ -161,7 +155,8 @@
                     <th>زمان</th>
                     <th></th>
                 </tr>
-                <tbody class="request-table-body">
+    </thead>
+    <tbody class="request-table-body">
                 {#                            {% for reqspec in reqspecs %}#}
                 {% for reqspec in reqspecs %}
                     <tr>
@@ -252,10 +247,9 @@
                     <td>{{ total_kw | floatformat | intcomma }}</td>
                 </tr>
                 </tbody>
-            </table>
-        </div>
-    </div>
-    {% if reqspecs.has_other_pages %}
+{% endblock %}
+{% block pagination_links %}
+        {% if reqspecs.has_other_pages %}
         <ul class="pagination">
             {% if reqspecs.has_previous %}
                 <li><a href="?page={{ reqspecs.previous_page_number }}">&laquo;</a></li>
@@ -276,5 +270,5 @@
             {% endif %}
         </ul>
     {% endif %}
-
 {% endblock %}
+
