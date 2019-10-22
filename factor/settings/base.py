@@ -13,7 +13,7 @@ import environ
 import os, json, sys
 from django.urls import reverse_lazy
 from django.core.exceptions import ImproperlyConfigured
-print('******: ', os.environ['DJANGO_SETTINGS_MODULE'])
+
 # with open(os.path.abspath('factor/factor-secrets.json')) as f:
 #     secrets = json.loads(f.read())
 
@@ -23,7 +23,12 @@ print('******: ', os.environ['DJANGO_SETTINGS_MODULE'])
 #         return secrets[settings]
 #     except KeyError:
 #         raise ImproperlyConfigured('set the %s settings' % settings)
-
+def set_secret_key(settings, secret):
+    try:
+        print(os.environ[secret])
+        return os.environ[secret]
+    except KeyError:
+        raise ImproperlyConfigured('SECRET_KEY Error, please set the %s %s on Env' % (settings, secret,))
 
 ROOT_DIR = (
     environ.Path(__file__) - 3

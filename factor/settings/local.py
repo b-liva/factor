@@ -16,7 +16,14 @@ DEBUG = True
 #     # "SECRET_KEY_LOCAL",
 #     default="wf$gn46*y4((^9gsj8_4j=%i=40v2dpuyypf56xww72aj40b5=",
 # )
-SECRET_KEY = os.environ['SECRET_KEY_LOCAL']
+
+# SECRET_KEY = os.environ['SECRET_KEY_LOCAL']
+# SECRET_KEY = os.environ.get('SECRET_KEY_LOCAL')
+SECRET_KEY = set_secret_key(
+    os.environ['DJANGO_SETTINGS_MODULE'],
+    'SECRET_KEY_LOCAL'
+)
+
 print('secret key: ', SECRET_KEY)
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
