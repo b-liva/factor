@@ -141,14 +141,11 @@ def req_form(request):
 
     file_instance = forms.RequestFileForm()
     if request.method == 'POST':
-        c_cookie = request.COOKIES.get('customer')
-        # print('this is reqeust cookies: ', request.COOKIES)
-        # print('this is cookie: ', c_cookie)
         form = forms.RequestFrom(request.POST or None, request.FILES or None)
         img_form = forms.RequestFileForm(request.POST, request.FILES)
         files = request.FILES.getlist('image')
-        # customer = Customer.objects.get(name=request.POST['cu'])
-        customer = Customer.objects.get(pk=c_cookie)
+        customer_id = form.data.get('cu_value')
+        customer = Customer.objects.get(pk=customer_id)
         if form.is_valid() and img_form.is_valid():
             req_item = form.save(commit=False)
             req_item.owner = request.user
@@ -157,7 +154,6 @@ def req_form(request):
             year = req_item.date_fa.year
             req_item.number = str(int(str(year)[2:4]) * 10000 + int(request.POST['number']))
             req_item.save()
-
             form.save_m2m()
             for f in files:
                 file_instance = models.RequestFiles(image=f, req=req_item)
@@ -1122,9 +1118,6 @@ def request_edit_form(request, request_pk):
     if not Requests.objects.filter(is_active=True, pk=request_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
-    if 'customer' in request.COOKIES:
-        c_cookie = request.COOKIES.get('customer')
-        customer = Customer.objects.get(pk=c_cookie)
 
     req = Requests.objects.filter(is_active=True).get(pk=request_pk)
     colleagues = req.colleagues.all()
@@ -1148,10 +1141,13 @@ def request_edit_form(request, request_pk):
     form = forms.RequestFrom(request.POST or None, request.FILES or None, instance=req)
     img_form = forms.RequestFileForm(request.POST, request.FILES)
     files = request.FILES.getlist('image')
+
     if form.is_valid() and img_form.is_valid():
         req_item = form.save(commit=False)
-        # req_item.owner = request.user
-        req_item.customer = customer
+        if form.data.get('cu_value'):
+            customer_id = form.data.get('cu_value')
+            customer = Customer.objects.get(pk=customer_id)
+            req_item.customer = customer
         req_item.save()
         form.save_m2m()
         for f in files:
@@ -1166,7 +1162,6 @@ def request_edit_form(request, request_pk):
         'req_img': img_form,
         'req_images': req_images,
         'img_names': img_names,
-        'add_new': False,
     }
     return render(request, 'requests/admin_jemco/yrequest/req_form.html', context)
 

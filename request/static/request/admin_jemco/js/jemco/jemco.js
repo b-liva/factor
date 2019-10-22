@@ -165,7 +165,7 @@ $(document).ready(function () {
             document.cookie = "customer=" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             // document.cookie("customer", suggestion.data);
             document.cookie = "customer=" + suggestion.data;
-            // alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+            $('#cu_value').val(suggestion.data);
         }
     });
     $('#cu_chosen').chosen();
