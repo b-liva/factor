@@ -110,8 +110,9 @@ class PrivateRequestTests(CustomAPITestCase):
         payload = {
             'number': 98774455,
             "date_fa": "1398-05-06",
+            'cu_value': self.customer.pk,
         }
-        self.client.cookies.update(SimpleCookie({'customer': self.customer.pk}))
+        # self.client.cookies.update(SimpleCookie({'customer': self.customer.pk}))
 
         res = self.client.post(reverse('req_form'), payload)
         req_id = res.url.split('/')[2]
