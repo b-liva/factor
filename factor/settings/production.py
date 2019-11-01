@@ -6,7 +6,6 @@ SECRET_KEY = set_secret_key(
     'SECRET_KEY_PRODUCTION'
 )
 
-print('secret key: ', SECRET_KEY)
 DEBUG = True
 ALLOWED_HOSTS = ['crm.jemcomotor.ir', 'localhost', '127.0.0.1']
 

@@ -2,7 +2,7 @@ from .base import *  # noqa
 from .base import env
 
 """
-CAN BE RAN USING: python manage.py shell --settings=factory.settings.local
+CAN BE RAN USING: python manage.py shell --settings=factor.settings.local
 Otherwise DJANGO SETTINGS MODULE and PYTHONPATH environment variable should be used.
 """
 
@@ -24,7 +24,6 @@ SECRET_KEY = set_secret_key(
     'SECRET_KEY_LOCAL'
 )
 
-print('secret key: ', SECRET_KEY)
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]

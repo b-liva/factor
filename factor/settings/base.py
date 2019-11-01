@@ -25,7 +25,6 @@ from django.core.exceptions import ImproperlyConfigured
 #         raise ImproperlyConfigured('set the %s settings' % settings)
 def set_secret_key(settings, secret):
     try:
-        print(os.environ[secret])
         return os.environ[secret]
     except KeyError:
         raise ImproperlyConfigured('SECRET_KEY Error, please set the %s %s on Env' % (settings, secret,))
