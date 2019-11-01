@@ -18,6 +18,7 @@ urlpatterns = [
                   path('prefspec-prefspec_clear_cache', proformaViews.prefspec_clear_cache,
                        name='prefspec_clear_cache'),
                   path('index-perms', proformaViews.perm_index, name='perm_index'),
+                  path('index-perms2', proformaViews.perm_index2, name='perm_index2'),
                   path('user-perms', proformaViews.user_export, name='user_export'),
                   path('export-perms', proformaViews.perms_export, name='perm_export'),
                   path('request-perms', proformaViews.request_export, name='request_export'),

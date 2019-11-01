@@ -30,6 +30,9 @@ urlpatterns = [
 
                   path('', include('request.urls.req_urls'), name='request_urls'),
                   path('pref/', include('request.urls.prof_urls')),
+                  path('perm/', include('request.urls.perm_urls')),
+                  path('invout/', include('request.urls.invout_urls')),
+                  path('invoice/', include('request.urls.invoice_url')),
                   path('payment/', include('request.urls.payment_urls')),
                   path('fetch-sales-data', request.views2.fetch_sales_data, name='fetch_sales_data'),
 

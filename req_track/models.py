@@ -192,3 +192,32 @@ class PriceList(models.Model):
 
     def __str__(self):
         return '%s kw - %s rpm: %s' % (self.kw, self.rpm, self.sale_price,)
+
+
+class TadvinTotal(models.Model):
+    year = models.IntegerField()
+    doctype_code = models.IntegerField()
+    doctype = models.CharField(max_length=20)
+    doc_number = models.IntegerField()
+    row_number = models.IntegerField()
+    date = models.CharField(max_length=14)
+    serial_number = models.CharField(null=True, blank=True, max_length=30)
+    code = models.IntegerField(null=True, blank=True)
+    details = models.CharField(max_length=150, null=True, blank=True)
+    prof_number = models.IntegerField()
+    prof_row = models.IntegerField()
+    perm_number = models.PositiveIntegerField(null=True, blank=True)
+    perm_row = models.PositiveIntegerField(null=True, blank=True)
+    havale_number = models.PositiveIntegerField(null=True, blank=True)
+    havale_row = models.PositiveIntegerField(null=True, blank=True)
+    factor_number = models.PositiveIntegerField(null=True, blank=True)
+    factor_row = models.PositiveIntegerField(null=True, blank=True)
+    qty = models.IntegerField()
+    discount_value = models.FloatField(null=True, blank=True)
+    discount_percent = models.FloatField(null=True, blank=True)
+    price_unit = models.FloatField()
+    price = models.FloatField()
+    entered = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "%s - %s" % (self.doctype, self.doc_number,)

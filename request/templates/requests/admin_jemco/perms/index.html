@@ -1,0 +1,168 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-10 col-md-offset-1">
+            <h3>{{ msg }}</h3>
+
+            <h1 class="page-header">
+                {{ title }}</h1>
+            <div class="row">
+                {% if messages %}
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="alert alert-danger">
+                            {% for msg in messages %}
+                                <p>{{ msg }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+            <div class="row">
+                <div class="col-xs-6 col-md-4">
+                    {% if showDelete %}
+                        <form method="POST" action="{% url 'pref_find' %}">
+                            {% csrf_token %}
+                            شماره پیشفاکتور <input name="pref_no">
+                            {#                    <input name="text">#}
+                            <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="col-xs-6 col-md-8 pull-left">
+                    <div class="pull-left">
+                        {% if perms.request.add_xpref and showDelete %}
+                            <a href="{% url 'pro_form' %}" class="btn btn-success btn-sm "><i
+                                    class="fa fa-plus"></i>
+                                پیش فاکتور جدید</a>
+                        {% endif %}
+                        <form action="{% url 'prof_export' %}" method="post">
+                            {% csrf_token %}
+                            <input name="prefs" type="hidden" value="{{ prefs }}">
+                            <button class="btn-success btn btn-sm " type="submit">
+                                <i class="fa fa-download" aria-hidden="true"></i> اکسل
+                            </button>
+
+                        </form>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="col-md-4">
+                    <div class="col-md-12">
+                        {{ form.customer_name.errors }}
+                        <label for="{{ form.customer_name.id_for_label }}">{{ form.customer_name.label }}</label>
+                        {{ form.customer_name }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.date_min.errors }}
+                        <label for="{{ form.date_min.id_for_label }}">{{ form.date_min.label }}</label>
+                        {{ form.date_min }}
+
+
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.date_max.errors }}
+                        <label for="{{ form.date_max.id_for_label }}">{{ form.date_max.label }}</label>
+                        {{ form.date_max }}
+
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-6">
+                        {{ form.status.errors }}
+                        <label for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+                        {{ form.status }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.owner.errors }}
+                        <label for="{{ form.owner.id_for_label }}"> {{ form.owner.label }} </label>
+                        {{ form.owner }}
+
+
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.sort_by.errors }}
+                        <label for="{{ form.sort_by.id_for_label }}">{{ form.sort_by.label }}</label>
+                        {{ form.sort_by }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.dsc_asc.errors }}
+                        <label for="{{ form.dsc_asc.id_for_label }}"> {{ form.dsc_asc.label }} </label>
+                        {{ form.dsc_asc }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.item_per_page.errors }}
+                        <label for="{{ form.item_per_page.id_for_label }}"> {{ form.item_per_page.label }} </label>
+                        {{ form.item_per_page }}
+                    </div>
+
+                </div>
+                <button type="submit" name="submit" class="btn btn-sm btn-primary">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+                <a class="btn btn-danger btn-sm" href="{% url 'pref_index_cc' %}" data-toggle="tooltip"
+                   title="حذف فیلترها"><i class="fa fa-close"></i></a>
+            </form>
+
+
+            <div class="table-responsive">
+
+                <table class="table table-hover text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="text-center">ردیف</th>
+                        <th scope="col" class="text-center">شماره مجوز</th>
+                        <th scope="col" class="text-center">شماره پیش فاکتور</th>
+                    </tr>
+                    </thead>
+
+                    <tbody class="">
+                    {% for perm in perms %}
+                        <tr class="largTooltip" data-toggle="tooltip" data-placement="auto"
+                            title="{{ pref.pretty_follow_up }}">
+                            <td scope="row">{{ forloop.counter }}</td>
+                            <td>{{ perm.number }}</td>
+                            <td><a href="{% url 'pref_details' ypref_pk=perm.proforma.pk %}">{{ perm.proforma.number }}</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <br>
+
+            {% if prefs.has_other_pages %}
+                <ul class="pagination">
+                    {% if prefs.has_previous %}
+                        <li><a href="?page={{ prefs.previous_page_number }}">&laquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                    {% endif %}
+                    {% for i in prefs.paginator.page_range %}
+                        {% if prefs.number == i %}
+                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                            <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if prefs.has_next %}
+                        <li><a href="?page={{ prefs.next_page_number }}">&raquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+
+
+        </div>
+    </div>
+{% endblock %}

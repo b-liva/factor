@@ -1,0 +1,109 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+{% load sales_ex_dashboard %}
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+            {% if messages %}
+                {% include 'general/errors.html' %}
+            {% endif %}
+            {% include 'elements/customer_card.html' with customer=invoice.invout.perm.proforma.req_id.customer %}
+            <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
+                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="tile-stats">
+                        <div class="icon">
+                        </div>
+                        <span class="count">{{ invoice.number }}</span>
+
+                        <h3>شماره فاکتور</h3>
+                    </div>
+                </div>
+                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="tile-stats">
+                        <div class="icon">
+                        </div>
+                        <span class="count">
+                            <a class="badge"
+                               href="{% url 'invout:invout_details' invout_pk=invoice.invout.pk %}">{{ invoice.invout.number }}</a>
+                        </span>
+                        <h3>شماره حواله خروجی انبار</h3>
+                    </div>
+
+                </div>
+                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="tile-stats">
+                        <div class="icon">
+                        </div>
+                        <div class="count">{{ invoice.date }}</div>
+
+                        <h3>تاریخ </h3>
+                    </div>
+                </div>
+                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="tile-stats">
+                        <div class="icon col-md-6">
+                        </div>
+                        <div class="count">value</div>
+                        <h3>مبلغ فاکتور</h3>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
+                <div class="row" style="margin-top: 75px">
+                    <div class="col-xs-12">
+                        <h4 class="greenBtn">other?</h4>
+
+                    </div>
+
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="text-center">ردیف</th>
+                            <th scope="col" class="text-center">کد</th>
+                            <th scope="col" class="text-center">شرح</th>
+                            <th scope="col" class="text-center">شماره سریال</th>
+                            <th scope="col" class="text-center">تعداد</th>
+                            <th scope="col" class="text-center">بهای واحد</th>
+                            <th scope="col" class="text-center">بهای کل</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for spec in invoice_specs %}
+                            <tr>
+                                <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                <td>{{ spec.code }}</td>
+                                <td>{{ spec.details }}</td>
+                                <td>{{ spec.serial_number }}</td>
+                                <td>{{ spec.qty }}</td>
+                                <td>{{ spec.price_unit | floatformat | intcomma }}</td>
+                                <td>{{ spec.price | floatformat | intcomma }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr style="border-top: 2px black solid">
+                            <td colspan="3">مالیات ارزش افزوده</td>
+                            <td colspan="5"></td>
+                            <td class="amount-total ">{{ vat|floatformat|intcomma }}</td>
+                        </tr>
+                        <tr style="border-top: 2px black solid">
+                            <td colspan="3" class="emphsize">مجموع</td>
+                            <td class="kw-total emphsize">{{ kw_total|floatformat|intcomma }} کیلووات</td>
+                            <td colspan="4"></td>
+                            <td class="amount-total emphsize">{{ proforma_total|floatformat|intcomma }}</td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

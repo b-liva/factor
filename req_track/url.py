@@ -54,6 +54,8 @@ urlpatterns = [
     path('perms-index', views.perms_index, name='perms_index'),
     path('modify-perms', views.modify_perm, name='modify_perm'),
     path('perms-not-entered', views.perms_not_entered, name='perms_not_entered'),
+    path('data', views.data, name='data'),
+    path('data_process_first', views.data_process_first, name='data_process_first')
 
 ]
 

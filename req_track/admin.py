@@ -10,6 +10,7 @@ from .models import (
     CustomerResolver,
     Perm,
     PriceList,
+    TadvinTotal,
 )
 
 
@@ -26,6 +27,7 @@ from import_export import resources
 @admin.register(CustomerResolver)
 @admin.register(Perm)
 @admin.register(PriceList)
+@admin.register(TadvinTotal)
 
 # class ReqResource(resources.ModelResource):
 #

@@ -15,6 +15,16 @@ from django.utils.timezone import now
 from django_jalali.db import models as jmodels
 
 
+class TimeStampedModel(models.Model):
+    """
+    An abstract base class model that provides selfupdating ``created`` and ``modified`` fields.
+    """
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    class Meta:
+        abstract = True
+
+
 def upload_location(instance, filename):
     id = 'first'
     no = 'number'
@@ -358,6 +368,7 @@ class Xpref(models.Model):
         value = self.payment_set.filter(is_active=True).aggregate(sum=Sum('amount'))
         received = 0 if value['sum'] is None else value['sum']
         remaining = self.total_proforma_price_vat()['price_vat'] - received
+        # Todo: Debug division by zero if total_proforma_price_vat()['price_vat'] == 0
         received_percent = 100 * received / self.total_proforma_price_vat()['price_vat']
         remaining_percent = 100 * remaining / self.total_proforma_price_vat()['price_vat']
         status = True if remaining == 0 else False
@@ -487,3 +498,138 @@ class Payment(models.Model):
 class PaymentFiles(models.Model):
     pay = models.ForeignKey(Payment, on_delete=models.CASCADE)
     image = models.FileField(upload_to=upload_location, null=True, blank=True)
+
+
+def change_date_format(date, separator='/'):
+    date_splitted = date.split(separator)
+    year = int(date_splitted[0])
+    month = int(date_splitted[1])
+    day = int(date_splitted[2])
+    date = jdatetime.date(year=year, month=month, day=day)
+    return date
+
+
+class Perm(TimeStampedModel):
+    proforma = models.ForeignKey(Xpref, on_delete=models.CASCADE, related_name='perm_prof')
+    number = models.IntegerField()
+    date = models.CharField(max_length=10)
+    year = models.CharField(max_length=4)
+    due_date = jmodels.jDateField(null=True, blank=True)
+    date_complete = jmodels.jDateField(null=True, blank=True)
+
+    def __str__(self):
+        return "Perm: %s - Prof: %s: " % (self.number, self.proforma,)
+
+    def qty_total(self):
+        count = self.permspec_perm.aggregate(Sum('qty'))
+        return count['qty__sum']
+
+    def qty_sent(self):
+        count = self.inv_out_perm.aggregate(sum=Sum('inventoryoutspec__qty'))
+        if not count['sum']:
+            return 0
+        return count['sum']
+
+    def qty_remained(self):
+        return self.qty_total() - self.qty_sent()
+
+    def update_delays(self):
+        remaining = self.qty_total() - self.qty_sent()
+        print('remaingin: ', remaining)
+        if remaining == 0:
+            date = change_date_format(self.date, '/')
+            self.date_complete = date
+            self.save()
+
+
+class PermSpec(TimeStampedModel):
+    perm = models.ForeignKey(Perm, on_delete=models.CASCADE, related_name='permspec_perm')
+    row = models.IntegerField()
+    code = models.IntegerField()
+    details = models.CharField(max_length=100)
+    qty = models.IntegerField()
+    price_unit = models.FloatField()
+    price = models.FloatField()
+
+    def __str__(self):
+        return "%s دستگاه %s با مجوز %s" % (
+            self.qty,
+            self.code,
+            self.perm.number,
+        )
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        super(PermSpec, self).save()
+
+        self.perm.update_delays()
+
+
+class InventoryOut(TimeStampedModel):
+    perm = models.ForeignKey(Perm, on_delete=models.CASCADE, related_name='inv_out_perm')
+    number = models.IntegerField()
+    date = models.CharField(max_length=10)
+    year = models.CharField(max_length=4)
+
+    def __str__(self):
+        return "InvOut: %s - Perm: %s: " % (
+            self.number,
+            self.perm.number,
+        )
+
+    def qty(self):
+        return self.inventoryoutspec_set.aggregate(sum=Sum('qty'))['sum']
+
+
+class InventoryOutSpec(TimeStampedModel):
+    invout = models.ForeignKey(InventoryOut, on_delete=models.CASCADE)
+    row = models.IntegerField()
+    code = models.IntegerField()
+    details = models.CharField(max_length=100)
+    qty = models.IntegerField(default=1)
+    serial_number = models.CharField(max_length=20, null=True, blank=True)
+    price_unit = models.FloatField()
+    price = models.FloatField()
+
+    def __str__(self):
+        return "InvOut: %s - qty: %s - serial:%s - date out: %s " % (
+            self.invout.number,
+            self.qty,
+            self.serial_number,
+            self.invout.date
+        )
+
+
+class Invoice(TimeStampedModel):
+    invout = models.ForeignKey(InventoryOut, on_delete=models.CASCADE, related_name='invoice_invout')
+    number = models.IntegerField()
+    date = models.CharField(max_length=10)
+    year = models.CharField(max_length=4)
+
+    def __str__(self):
+        return "Invoice: %s - Invout: %s: " % (
+            self.number,
+            self.invout.number,
+        )
+
+
+class InvoiceSpec(TimeStampedModel):
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    row = models.IntegerField()
+    code = models.IntegerField()
+    details = models.CharField(max_length=100)
+    qty = models.IntegerField(default=1)
+    serial_number = models.CharField(max_length=20,null=True, blank=True)
+    price_unit = models.FloatField()
+    price = models.FloatField()
+
+    def __str__(self):
+        return "invoce: %s - qty: %s: - price: %s - invout: %s - perm:%s - proforma: %s - req: %s" % (
+            self.invoice.number,
+            self.qty,
+            self.price_unit,
+            self.invoice.invout.number,
+            self.invoice.invout.perm.number,
+            self.invoice.invout.perm.proforma.number,
+            self.invoice.invout.perm.proforma.req_id.number,
+        )

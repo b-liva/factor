@@ -1,0 +1,68 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-12 ">
+            <h3>{{ msg }}</h3>
+            {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
+            <h1 class="page-header">{{ title }}</h1>
+            <div class="row">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>ردیف</th>
+                        <th>مجوز</th>
+                        <th>تاریخ مجوز</th>
+                        <th>پیش فاکتور</th>
+                        <th>تعداد</th>
+                        <th>ارسال شده</th>
+                        <th>مانده</th>
+                        <th>خروجی</th>
+                        <th>فاکتور</th>
+                        <th>تاریخ اتمام</th>
+                        <th>تاخیر</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for perm in perm_numbers %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a class="badge"
+                                   href="{% url 'perms:perm_details' perm_pk=perm.pk %}">{{ perm.number }}</a></td>
+                            <td>{{ perm.date }}</td>
+                            <td><a class="badge"
+                                   href="{% url 'pref_details' ypref_pk=perm.proforma.pk %}">{{ perm.proforma.number }}</a>
+                            </td>
+                            <td>{{ perm.qty_total }}</td>
+                            <td>{{ perm.qty_sent }}</td>
+                            <td>{{ perm.qty_remained }}</td>
+                            <td>
+                                {% for invout in perm.inv_out_perm.all %}
+                                    <p><a class="badge"
+                                          href="{% url 'invout:invout_details' invout_pk=invout.pk %}">{{ invout.number }}</a>
+                                    </p>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for inv in perm.inv_out_perm.all %}
+                                        {% for invoice in inv.invoice_invout.all %}
+                                            <p><a class="badge"
+                                                  href="{% url 'invoice:invoice_details' invoice_pk=invoice.pk %}">
+                                                {{ invoice.number }}
+                                            </a></p>
+                                        {% endfor %}
+                                    {% endfor %}
+                            </td>
+                            <td>{{ perm.date_complete }}</td>
+                            <td>{{ perm.delay_days }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
+        </div>
+    </div>
+{% endblock %}
