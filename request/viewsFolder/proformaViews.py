@@ -38,7 +38,7 @@ from request import models
 from request.forms.forms import CommentForm, ProfFollowUpForm
 from request.forms.search import ProformaSearchForm, PermSearchForm, PrefSpecSearchForm
 import request.templatetags.functions as funcs
-from request.models import Requests, Xpref, ReqSpec, PrefSpec, ProformaFollowUP
+from request.models import Requests, Xpref, ReqSpec, PrefSpec, ProformaFollowUP, Perm
 from pricedb.models import MotorDB
 
 from request.forms import proforma_forms, forms
@@ -371,6 +371,23 @@ def perm_index(request):
     }
 
     return render(request, 'requests/admin_jemco/ypref/index_perms.html', context)
+
+
+@login_required
+def perm_index2(request):
+    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
+    if not can_index:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+    # perm_numbers = Perm.objects.values('number').distinct().prefetch_related('permspec_perm__qty', 'inv_out_perm__inventoryoutspec__qty')
+    perm_numbers = Perm.objects.all().order_by('date')
+    context = {
+        'perm_numbers': perm_numbers,
+        'title': 'مجوز ساخت',
+        'showDelete': True,
+    }
+
+    return render(request, 'requests/admin_jemco/ypref/index_perms2.html', context)
 
 
 @login_required

@@ -321,7 +321,7 @@ def invout_qty_not_sent(perm):
     qty = 0
     total = 0
     if perm:
-        total = perm.qy_total()
+        total = perm.qty_total()
     if perm is not None and perm.inv_out_perm.all().exists():
         qty = perm.inv_out_perm.all().aggregate(qty=Sum('inventoryoutspec__qty'))['qty']
     return total - qty
@@ -335,7 +335,7 @@ def perm_days_new(proforma):
     qty = 0
     total = 0
     if perm:
-        total = perm.qy_total()
+        total = perm.qty_total()
     if perm is not None and perm.inv_out_perm.all().exists():
         qty = perm.inv_out_perm.all().aggregate(qty=Sum('inventoryoutspec__qty'))['qty']
         remaining = total - qty

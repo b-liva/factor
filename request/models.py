@@ -368,6 +368,7 @@ class Xpref(models.Model):
         value = self.payment_set.filter(is_active=True).aggregate(sum=Sum('amount'))
         received = 0 if value['sum'] is None else value['sum']
         remaining = self.total_proforma_price_vat()['price_vat'] - received
+        # Todo: Debug division by zero if total_proforma_price_vat()['price_vat'] == 0
         received_percent = 100 * received / self.total_proforma_price_vat()['price_vat']
         remaining_percent = 100 * remaining / self.total_proforma_price_vat()['price_vat']
         status = True if remaining == 0 else False
@@ -499,19 +500,46 @@ class PaymentFiles(models.Model):
     image = models.FileField(upload_to=upload_location, null=True, blank=True)
 
 
+def change_date_format(date, separator='/'):
+    date_splitted = date.split(separator)
+    year = int(date_splitted[0])
+    month = int(date_splitted[1])
+    day = int(date_splitted[2])
+    date = jdatetime.date(year=year, month=month, day=day)
+    return date
+
+
 class Perm(TimeStampedModel):
     proforma = models.ForeignKey(Xpref, on_delete=models.CASCADE, related_name='perm_prof')
     number = models.IntegerField()
     date = models.CharField(max_length=10)
     year = models.CharField(max_length=4)
     due_date = jmodels.jDateField(null=True, blank=True)
+    date_complete = jmodels.jDateField(null=True, blank=True)
 
     def __str__(self):
         return "Perm: %s - Prof: %s: " % (self.number, self.proforma,)
 
-    def qy_total(self):
+    def qty_total(self):
         count = self.permspec_perm.aggregate(Sum('qty'))
         return count['qty__sum']
+
+    def qty_sent(self):
+        count = self.inv_out_perm.aggregate(sum=Sum('inventoryoutspec__qty'))
+        if not count['sum']:
+            return 0
+        return count['sum']
+
+    def qty_remained(self):
+        return self.qty_total() - self.qty_sent()
+
+    def update_delays(self):
+        remaining = self.qty_total() - self.qty_sent()
+        print('remaingin: ', remaining)
+        if remaining == 0:
+            date = change_date_format(self.date, '/')
+            self.date_complete = date
+            self.save()
 
 
 class PermSpec(TimeStampedModel):
@@ -530,6 +558,12 @@ class PermSpec(TimeStampedModel):
             self.perm.number,
         )
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        super(PermSpec, self).save()
+
+        self.perm.update_delays()
+
 
 class InventoryOut(TimeStampedModel):
     perm = models.ForeignKey(Perm, on_delete=models.CASCADE, related_name='inv_out_perm')
@@ -542,6 +576,9 @@ class InventoryOut(TimeStampedModel):
             self.number,
             self.perm.number,
         )
+
+    def qty(self):
+        return self.inventoryoutspec_set.aggregate(sum=Sum('qty'))['sum']
 
 
 class InventoryOutSpec(TimeStampedModel):
