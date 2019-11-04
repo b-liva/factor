@@ -161,6 +161,7 @@ MIDDLEWARE = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 # STATIC_ROOT = str(ROOT_DIR("staticfiles"))
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(ROOT_DIR, 'static')
 # STATIC_ROOT = os.path.join(BASE_DIR, '../../static')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
@@ -178,6 +179,7 @@ STATICFILES_FINDERS = [
 # MEDIA_ROOT = str(APPS_DIR("media"))
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(ROOT_DIR, 'media')
 # MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
 
 # TEMPLATES
