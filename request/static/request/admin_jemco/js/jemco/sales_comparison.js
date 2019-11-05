@@ -5,6 +5,7 @@ Vue.component('sales_comparison', {
             name: 'some name',
             show: true,
             loading: false,
+            computing: false,
             response: '',
             project_base: '',
             perms_count: '',
@@ -22,10 +23,10 @@ Vue.component('sales_comparison', {
     template: "<div>" +
         "<div v-if=''>" +
         // "<input id='date_fa' class='' type='text' :value='date_min' name='date_min'>{{date_min}}" +
-        "<input id='date_fa' class='' type='text' name='date_min'>{{date_min}}" +
-        "<input id='exp_date_fa' class='' type='text' name='date_max'>{{date_max}}" +
-        "<button @click='getPerms'>بروزرسانی</button>" +
-        "<input id='dayes' class='' type='text' name='days' v-model='days'>{{days}}({{by_date}})<br>{{msg}}" +
+        "<input id='date_fa' class='' type='text' name='date_min' :disabled=\"computing == true\">{{date_min}}" +
+        "<input id='exp_date_fa' class='' type='text' name='date_max' :disabled=\"computing == true\">{{date_max}}" +
+        "<button @click='getPerms' v-if='!computing'>بروزرسانی</button>" +
+        "<input id='dayes' class='' type='text' name='days' v-model='days' :disabled=\"computing == true\"><br>{{msg}}" +
         "</div>" +
         "<div v-if='details'>details</div>" +
         "<div v-if='response' class='col-md-10 col-md-offset-1'>" +
@@ -176,7 +177,8 @@ Vue.component('sales_comparison', {
         },
         getPerms: function () {
             this.loading = true;
-            this.msg = '';
+            this.computing = true;
+            this.msg = 'در حال دریافت اطلاعات';
             if (this.by_date) {
                 this.date_min = $("input[name=date_min]").val();
                 this.date_max = $("input[name=date_max]").val();
@@ -201,12 +203,16 @@ Vue.component('sales_comparison', {
                     $("input[name=date_max]").val(this.date_max);
                     // this.days = result.data.diff_days;
                     this.loading = false;
+                    this.computing = false;
                     this.days.stop = result.data.diff_days;
                     this.by_date = true;
+                    this.msg = '';
 
                 }, (error) => {
                     console.log(error);
                     this.by_date = true;
+                    this.computing = false;
+                    this.msg = '';
                 })
         },
         printData: function () {
