@@ -125,30 +125,10 @@
 
     {% endfor %}
     <tr style="border-top: 3px solid black;">
-        <td colspan="3" class="emphsize">مجموع</td>
-        <td class="emphsize">{{ pref_sum|intcomma }}</td>
+        <td colspan="4" class="emphsize">مجموع</td>
         <td class="emphsize"><b>{{ amount_sum|intcomma }}</b></td>
-        <td class="emphsize">{{ debt|intcomma }}</td>
-        <td class="emphsize" style="direction: ltr">{{ debt_percent|floatformat }} %</td>
+        <td colspan="6" class=""></td>
     </tr>
-    <table style="border-top: 3px solid black " class="col-md-4 table-bordered ">
-        <tr>
-            <td>جمع پیش فاکتور</td>
-            <td>{{ pref_sum|intcomma }}</td>
-        </tr>
-        <tr>
-            <td>جمع پرداخت</td>
-            <td>{{ amount_sum|intcomma }}</td>
-        </tr>
-        <tr>
-            <td>+/-</td>
-            <td>{{ debt|intcomma }}</td>
-        </tr>
-        <tr>
-            <td>%</td>
-            <td>{{ debt_percent|floatformat }}</td>
-        </tr>
-    </table>
 
     </tbody>
 {% endblock %}
