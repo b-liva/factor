@@ -29,7 +29,6 @@ Vue.component('sales_comparison', {
         "<input id='dayes' class='' type='text' name='days' v-model='days' :disabled=\"computing == true\">" +
         "<div class=\"load-wrapp\" v-if='computing'>\n" +
         "            <div class=\"load-1\">\n" +
-        "                <p>Loading 1</p>\n" +
         "                <div class=\"line\"></div>\n" +
         "                <div class=\"line\"></div>\n" +
         "                <div class=\"line\"></div>\n" +
