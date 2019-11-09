@@ -26,7 +26,15 @@ Vue.component('sales_comparison', {
         "<input id='date_fa' class='' type='text' name='date_min' :disabled=\"computing == true\">{{date_min}}" +
         "<input id='exp_date_fa' class='' type='text' name='date_max' :disabled=\"computing == true\">{{date_max}}" +
         "<button @click='getPerms' v-if='!computing'>بروزرسانی</button>" +
-        "<input id='dayes' class='' type='text' name='days' v-model='days' :disabled=\"computing == true\"><br>{{msg}}" +
+        "<input id='dayes' class='' type='text' name='days' v-model='days' :disabled=\"computing == true\">" +
+        "<div class=\"load-wrapp\" v-if='computing'>\n" +
+        "            <div class=\"load-1\">\n" +
+        "                <p>Loading 1</p>\n" +
+        "                <div class=\"line\"></div>\n" +
+        "                <div class=\"line\"></div>\n" +
+        "                <div class=\"line\"></div>\n" +
+        "            </div>\n" +
+        "        </div>" +
         "</div>" +
         "<div v-if='details'>details</div>" +
         "<div v-if='response' class='col-md-10 col-md-offset-1'>" +
@@ -178,6 +186,7 @@ Vue.component('sales_comparison', {
         getPerms: function () {
             this.loading = true;
             this.computing = true;
+            this.response = false;
             this.msg = 'در حال دریافت اطلاعات';
             if (this.by_date) {
                 this.date_min = $("input[name=date_min]").val();
