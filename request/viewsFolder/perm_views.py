@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from request.models import Perm
+from req_track.models import TadvinTotal
 
 
 def form(request):
@@ -35,4 +36,13 @@ def perm_delete(request):
 
 def perm_edit(request):
     pass
+
+
+def perm_not_entered(request):
+    perms = TadvinTotal.objects.filter(doctype_code=62, entered=False, perm_number__gt=1000)\
+        .values('perm_number').distinct().values('perm_number', 'prof_number', 'date')
+    context = {
+        'perms': perms,
+    }
+    return render(request, 'requests/admin_jemco/perms/index_not_entered.html', context)
 

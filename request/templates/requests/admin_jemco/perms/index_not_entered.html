@@ -1,0 +1,49 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/minimal_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+{% block right_col %}
+    <div class="container">
+        <div class="col-md-10 col-md-offset-1">
+            <h3>{{ msg }}</h3>
+
+            <h1 class="page-header">
+                {{ title }}</h1>
+            <div class="row">
+                {% if messages %}
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="alert alert-danger">
+                            {% for msg in messages %}
+                                <p>{{ msg }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        <div class="row">
+            <table class="table table-hover text-center">
+                <thead>
+                <tr>
+                    <th class="text-center">ردیف</th>
+                    <th class="text-center">شماره مجوز</th>
+                    <th class="text-center">پیش فاکتور</th>
+                    <th class="text-center">تاریخ</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for perm in perms %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ perm.perm_number }}</td>
+                        <td>{{ perm.prof_number }}</td>
+                        <td>{{ perm.date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        </div>
+    </div>
+{% endblock %}

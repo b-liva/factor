@@ -10,6 +10,7 @@ urlpatterns = [
                   path('form', perm_views.form, name='pro_form'),
                   path('index', perm_views.perm_index, name='perm_index'),
                   path('find', perm_views.perm_find, name='perm_find'),
+                  path('perm-not-entered', perm_views.perm_not_entered, name='perm_not_entered'),
                   path('<int:perm_pk>/', include([
                       path('', perm_views.perm_details, name='perm_details'),
                       path('delete', perm_views.perm_delete, name='perm_delete'),

@@ -58,6 +58,7 @@
                             <li><a href="{% url 'prefspec_index' %}">ردیف - مجوز</a></li>
                             <li><a href="{% url 'perm_index2' %}">مجوزها(جدید)</a></li>
                             <li><a href="{% url 'perm_index' %}">مجوزها(قدیم)</a></li>
+                            <li><a href="{% url 'perms:perm_not_entered' %}">وارد نشده</a></li>
                             {% if perms.request.index_deleted_proforma %}
                                 <li><a href="{% url 'pref_index_deleted' %}">پیش فاکتورهای حذف شده</a></li>
                             {% endif %}
