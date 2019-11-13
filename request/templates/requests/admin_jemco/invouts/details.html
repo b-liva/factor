@@ -25,7 +25,7 @@
                         </div>
                         <span class="count">
                             <a class="badge"
-                               href="{% url 'pref_details' ypref_pk=invout.perm.proforma.pk %}">{{ invout.perm.proforma.number }}</a>
+                               href="{% url 'perms:perm_details' perm_pk=invout.perm.pk %}">{{ invout.perm.number }}</a>
                             <span style="display: none;" class="ltrClass" data-toggle="tooltip"
                                   title="پیش فاکتور تدوین">{{ invout.perm.proforma.number_td }}</span>
                         </span>

@@ -56,12 +56,10 @@
                                     data-toggle="dropdown">
                                 <span class="caret"></span>
                             </button>
-                            <button type="button" class="btn btn-default">
-                                {% if perms.request.sale_expert %}
-                                    <a href="{% url 'request_edit_form' request_pk=request.pk %}">
+                            {% if perms.request.sale_expert %}
+                                    <a class="btn btn-default" href="{% url 'request_edit_form' request_pk=request.pk %}">
                                         ویرایش درخواست</a>
                                 {% endif %}
-                            </button>
 
                             <ul class="dropdown-menu" role="menu">
                                 <li>
