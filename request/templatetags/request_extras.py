@@ -341,7 +341,7 @@ def perm_days_new(proforma):
         remaining = total - qty
         if remaining == 0 and perm.inv_out_perm.exists():
             last_invout = perm.inv_out_perm.last()
-            date_values = last_invout.date.split('/')
+            date_values = last_invout.date.split('-')
             date = jdatetime.date(year=int(date_values[0]), month=int(date_values[1]), day=int(date_values[2]))
 
     diff = (proforma.due_date - date)
