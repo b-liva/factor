@@ -48,6 +48,7 @@ urlpatterns = [
     path('req_followup_form/<int:req_pk>', views.req_followup_form, name='req_followup_form'),
     path('customer-compare', views.customer_compare, name='customer_compare'),
     path('customer-compare-list', views.customer_compare_list, name='customer_compare_list'),
+    path('customer-compare', views.customer_compare, name='customer_compare'),
     path('customer-compare-entered', views.customer_compare_entered, name='customer_compare_entered'),
     path('customer-status-update', views.customer_status_update, name='customer_compare_update'),
     path('customer-entered', views.customer_entered, name='customer_entered'),

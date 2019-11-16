@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 from req_track.models import ReqEntered
 from request.models import Requests, Xpref, ReqSpec, PrefSpec, Payment
+from req_track.models import Customer as RCustomer
 
 register = template.Library()
 
@@ -360,3 +361,12 @@ def perm_days_new(proforma):
     }
     print(context)
     return context
+
+
+@register.simple_tag()
+def similar_customer(code):
+    try:
+        value = RCustomer.objects.get(code=code)
+    except:
+        value = ""
+    return value

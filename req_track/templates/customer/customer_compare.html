@@ -1,0 +1,47 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+
+{% block right_col %}
+
+    <div class="col-md-6">
+    <table>
+        <thead>
+        <th>1</th>
+        <th>2</th>
+        </thead>
+        <tbody>
+        {% for customer in customers %}
+        <tr>
+        <td>{{ customer.name }}</td>
+        <td>{% similar_customer customer.code_temp as value %} {{ value }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    </div>
+    <div class="col-md-6">
+    <table>
+        <thead>
+        <th>ردیف</th>
+        <th>نام</th>
+        </thead>
+        <tbody>
+        {% for customer in no_code %}
+        <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ customer.name }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+{#    <div id="customerResolverVue">#}
+{#        <customer_resolver_vue#}
+{#                customer_name="{{ customers }}"#}
+{#        ></customer_resolver_vue>#}
+{#    </div>#}
+
+
+{% endblock %}

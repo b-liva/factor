@@ -512,6 +512,16 @@ def customer_compare_list(request):
     return render(request, 'customer/customer_compare_list.html', context)
 
 
+def customer_compare(requests):
+    customers = Customer.objects.filter(code_temp__isnull=False)
+    no_code = Customer.objects.filter(code_temp__isnull=True)
+    context = {
+        'customers': customers,
+        'no_code': no_code,
+    }
+    return render(requests, 'customer/customer_compare.html', context)
+
+
 def customer_compare_entered(request):
     resolvers = CustomerResolver.objects.filter(resolved=True, cleared=False)
     context = {
