@@ -482,6 +482,7 @@ class Payment(models.Model):
     date_fa = jmodels.jDateField(default=now)
     date_fa_text = models.CharField(null=True, blank=True, max_length=20)
     due_date = jmodels.jDateField(blank=True, null=True)
+    due_date_text = models.CharField(null=True, blank=True, max_length=20)
     summary = models.TextField(max_length=600, blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
