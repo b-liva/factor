@@ -32,8 +32,6 @@ def has_perm_or_is_owner(user_obj, permissions, instance=None, colleague=None):
                 return True
             else:
                 return False
-        elif instance.__class__.__name__ == 'ReqPart':
-            return user_obj.has_perm(permissions) and user_obj == instance.owner
         elif hasattr(instance, 'xpref_id') and hasattr(instance.xpref_id.req_id, 'customer'):
             if user_obj == instance.xpref_id.req_id.customer.user \
                     or user_obj in instance.xpref_id.req_id.colleagues.all() \

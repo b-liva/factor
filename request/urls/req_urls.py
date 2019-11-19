@@ -58,9 +58,6 @@ urlpatterns = [
     ])),
 
     path('<int:req_pk>/part_form', reqSpecViews.part_form, name='part_form'),
-    path('part/<int:part_pk>/', include([
-        path('edit', request.reqSpecViews.reqpart_edit_form, name='reqpart_edit_form')
-    ])),
     path("vue", TemplateView.as_view(template_name="requests/admin_jemco/yrequest/vue/index_test.html"), name="req_app", ),
 
 ]

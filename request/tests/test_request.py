@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http.cookie import SimpleCookie
 from rest_framework import status
 from accounts.tests.test_public_funcs import CustomAPITestCase
-from request.models import ReqSpec, Requests, ReqPart
+from request.models import ReqSpec, Requests
 
 
 class PublicRequestTests(CustomAPITestCase):

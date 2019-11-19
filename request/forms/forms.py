@@ -5,7 +5,7 @@ from request import models
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from request.models import Xpref, ProjectType, IMType, ICType, IEType, IPType, ReqPart
+from request.models import Xpref, ProjectType, IMType, ICType, IEType, IPType
 
 
 class ProjectTypeForm(forms.ModelForm):
@@ -127,21 +127,6 @@ class SpecAddForm(SpecForm):
         exclude = SpecForm.Meta.exclude
 
 
-class PartForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(PartForm, self).__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
-
-    class Meta:
-        model = ReqPart
-        fields = ('qty', 'title', )
-        labels = {
-            'qty': 'تعداد',
-            'title': 'شرح کالا',
-        }
-
-
 def user_choices(user):
     reqs = models.Requests.objects.filter(is_active=True).filter(owner=user)
     return reqs
@@ -259,13 +244,6 @@ class ProfSpecForm(forms.ModelForm):
     class Meta:
         model = models.PrefSpec
         # fields = ('qty', 'price',)
-        fields = '__all__'
-
-
-class ProfPartForm(forms.ModelForm):
-
-    class Meta:
-        model = models.PrefPart
         fields = '__all__'
 
 
