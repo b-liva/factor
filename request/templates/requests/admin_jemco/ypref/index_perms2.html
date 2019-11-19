@@ -3,7 +3,13 @@
 {% load request_extras %}
 {% block right_col %}
     <div class="container">
-        <div class="col-md-12 ">
+        <div class="row">
+        <div class="col-md-12">
+            {% if messages %}
+                {% include 'general/errors.html' %}
+            {% endif %}
+        </div>
+                <div class="col-md-12 ">
             <h3>{{ msg }}</h3>
             {#            <h1 style="text-align: center; background-color: #3E5367; border: 1px solid burlywood; color: whitesmoke;">#}
             <h1 class="page-header">{{ title }}</h1>
@@ -63,6 +69,8 @@
             </div>
 
             <br>
+        </div>
+
         </div>
     </div>
 {% endblock %}
