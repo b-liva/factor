@@ -5,6 +5,9 @@
 {% block right_col %}
     <div class="container">
         <div class="row">
+            {% include 'admin_theme/page_elements/details_header.html' with request=request show_me='req' %}
+        </div>
+        <div class="row">
             {% if messages %}
                 {% include 'general/errors.html' %}
             {% endif %}

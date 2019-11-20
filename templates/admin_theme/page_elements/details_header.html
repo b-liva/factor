@@ -1,0 +1,64 @@
+{% load request_extras %}
+
+{% proforma_from_requests_with_perms req=request as proformas %}
+{% payments_from_proformas proformas=proformas.proformas as pays %}
+{% perms_from_proformas proformas=proformas.proformas as perms %}
+{% invouts_from_perms perms=perms.perms as invouts %}
+{% invoices_from_invouts invouts=invouts.invouts as invoices %}
+
+
+{# orders #}
+<div class="col-md-1 {{ request.status_class }}" style="border-right: 1px solid darkslategrey; {% if show_me == 'req' %} border-top: 5px solid darkred; {% endif %}">
+    <p class="green">درخواست</p>
+    <a class="req-id-{{ request.pk }}" href="{% url 'request_details' request_pk=request.pk %}">{{ request.number }}</a>
+</div>
+
+
+{# proformas #}
+<div class="col-md-1 {{ proformas.status_class }}" style="border-right: 1px solid darkslategrey; {% if show_me == 'proforma' %} border-top: 5px solid darkred; {% endif %}">
+    <p>پیش فاکتور</p>
+    {% for proforma in proformas.proformas %}
+        <a class="req-id-{{ proforma.req_id.pk }} prof-id-{{ proforma.pk }}"
+           href="{% url 'pref_details' ypref_pk=proforma.pk %}">{{ proforma.number }}</a>
+    {% endfor %}
+</div>
+
+
+{# Money #}
+<div class="col-md-1 {{ pays.status_class }}" style="border-right: 1px solid darkslategrey; {% if show_me == 'payment' %} border-top: 5px solid darkred; {% endif %}">
+    <p>دریافتی</p>
+        {% for pay in pays.pays %}
+            <a href="{% url 'payment_details' ypayment_pk=pay.pk %}">{{ pay.number }}</a>
+        {% endfor %}
+
+</div>
+
+
+{# Perms #}
+<div class="col-md-1 {{ perms.status_class }}" style="border-right: 1px solid darkslategrey; {% if show_me == 'perm' %} border-top: 5px solid darkred; {% endif %}">
+    <p>مجوز ساخت</p>
+        {% for perm in perms.perms %}
+            <a class="req-id-{{ payment.xpref_id.req_id.pk }} prof-id-{{ payment.xpref_id.pk }} perm-id-{{ perm.pk }}"
+               href="{% url 'perms:perm_details' perm_pk=perm.pk %}">{{ perm.number }}</a>
+        {% endfor %}
+</div>
+
+
+{# InvIns #}
+
+{# InvsOuts #}
+<div class="col-md-1 {{ invouts.status_class }}" style="border-right: 1px solid darkslategrey;  {% if show_me == 'invout' %} border-top: 5px solid darkred; {% endif %}">
+    <p>خروج از انبار</p>
+        {% for invout in invouts.invouts %}
+            <a href="{% url 'invout:invout_details' invout_pk=invout.pk %}">{{ invout.number }}</a>
+        {% endfor %}
+</div>
+
+
+{# Invoices #}
+<div class="col-md-1 {{ invoices.status_class }}" style="border-right: 1px solid darkslategrey; {% if show_me == 'invoice' %} border-top: 5px solid darkred; {% endif %}">
+    <p>فاکتور فروش</p>
+        {% for invoice in invoices.invoices %}
+            <a href="{% url 'invoice:invoice_details' invoice_pk=invoice.pk %}">{{ invoice.number }}</a>
+        {% endfor %}
+</div>

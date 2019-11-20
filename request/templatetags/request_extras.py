@@ -8,7 +8,7 @@ from django import template
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from req_track.models import ReqEntered
-from request.models import Requests, Xpref, ReqSpec, PrefSpec, Payment
+from request.models import Requests, Xpref, ReqSpec, PrefSpec, Payment, Perm, InventoryOut, Invoice
 from req_track.models import Customer as RCustomer
 
 register = template.Library()
@@ -370,3 +370,61 @@ def similar_customer(code):
     except:
         value = ""
     return value
+
+
+@register.simple_tag()
+def proforma_from_requests_with_perms(req):
+    proformas = Xpref.objects.filter(is_active=True, req_id=req, perm_prof__isnull=False)
+    status = 'element_enabled' if proformas.exists() else 'element-disabled'
+    context = {
+        'proformas': proformas,
+        'status_class': status
+    }
+    return context
+
+
+@register.simple_tag()
+def payments_from_proformas(proformas):
+    print(proformas)
+    pays = Payment.objects.filter(is_active=True, xpref_id__in=proformas)
+    status = 'element_enabled' if pays.exists() else 'element-disabled'
+    context = {
+        'pays': pays,
+        'status_class': status
+    }
+    return context
+
+
+@register.simple_tag()
+def perms_from_proformas(proformas):
+    perms = Perm.objects.filter(proforma__in=proformas)
+    status = 'element_enabled' if perms.exists() else 'element-disabled'
+    context = {
+        'perms': perms,
+        'status_class': status
+    }
+    return context
+
+
+@register.simple_tag()
+def invouts_from_perms(perms):
+    invouts = InventoryOut.objects.filter(perm__in=perms)
+    status = 'element_enabled' if invouts.exists() else 'element-disabled'
+    context = {
+        'invouts': invouts,
+        'status_class': status
+    }
+    return context
+
+
+@register.simple_tag()
+def invoices_from_invouts(invouts):
+    invoices = Invoice.objects.filter(invout__in=invouts)
+    enable = True if invoices.exists() else False
+    status = 'element_enabled' if invoices.exists() else 'element-disabled'
+    context = {
+        'invoices': invoices,
+        'enable': enable,
+        'status_class': status
+    }
+    return context
