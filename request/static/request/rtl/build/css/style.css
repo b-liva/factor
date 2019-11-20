@@ -244,7 +244,9 @@ ul.quick-list {
     background: lightgrey;
     cursor: not-allowed;
 }
-
+.top-red{
+    border-top: 5px solid darkred;
+}
 /* =Elements style
 ---------------------- */
 .load-wrapp {
