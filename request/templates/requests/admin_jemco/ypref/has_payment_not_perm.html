@@ -1,0 +1,18 @@
+{% extends 'requests/admin_jemco/search_index_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+
+{% block right_col %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <p>            پیش فاکتورهای بدون مجوز با پرداخت</p>
+            <ol>
+            {% for proforma in prof_has_payment_no_perm %}
+                <li><a href="{% url 'pref_details' ypref_pk=proforma.pk %}">{{ proforma.number }}</a></li>
+            {% endfor %}
+            </ol>
+        </div>
+    </div>
+</div>
+{% endblock %}

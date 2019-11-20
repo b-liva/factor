@@ -1355,3 +1355,14 @@ def pdf_header(request):
 
 def pdf_footer(request):
     return render(request, 'requests/admin_jemco/ypref/footer.html')
+
+
+def proforma_has_payment_no_perm(request):
+    np = Xpref.objects.filter(is_active=True, payment__isnull=False, perm_prof__isnull=True)
+    print(np.count())
+    if not request.user.is_superuser:
+        np = np.filter(owner=request.user)
+    context = {
+        'prof_has_payment_no_perm': np,
+    }
+    return render(request, 'requests/admin_jemco/ypref/has_payment_not_perm.html', context)
