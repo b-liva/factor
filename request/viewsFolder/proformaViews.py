@@ -1358,11 +1358,24 @@ def pdf_footer(request):
 
 
 def proforma_has_payment_no_perm(request):
-    np = Xpref.objects.filter(is_active=True, payment__isnull=False, perm_prof__isnull=True)
-    print(np.count())
+    np = Xpref.objects.filter(is_active=True, payment__isnull=False, perm_prof__isnull=True).distinct()
+    perm_no_payments = Perm.objects.filter(proforma__payment__isnull=True)
+    ps = Xpref.objects.filter(is_active=True)
+
     if not request.user.is_superuser:
         np = np.filter(owner=request.user)
+        perm_no_payments = perm_no_payments.filter(proforma__owner=request.user)
+
+    all_proformas = [proforma.number_td for proforma in ps if proforma.number_td is not None]
+    duplicates_proforma_tds = []
+    for proforma in all_proformas:
+        count = all_proformas.count(proforma)
+        if count > 1 and duplicates_proforma_tds.count(proforma) == 0:
+            duplicates_proforma_tds.append(proforma)
+
     context = {
         'prof_has_payment_no_perm': np,
+        'perm_no_payments': perm_no_payments,
+        'duplicates_proforma_tds': duplicates_proforma_tds,
     }
     return render(request, 'requests/admin_jemco/ypref/has_payment_not_perm.html', context)

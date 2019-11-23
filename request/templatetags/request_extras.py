@@ -375,6 +375,7 @@ def similar_customer(code):
 @register.simple_tag()
 def proforma_from_requests_with_perms(req):
     proformas = Xpref.objects.filter(is_active=True, req_id=req, perm_prof__isnull=False)
+    print(proformas.count())
     status = 'element_enabled' if proformas.exists() else 'element-disabled'
     context = {
         'proformas': proformas,
@@ -428,3 +429,9 @@ def invoices_from_invouts(invouts):
         'status_class': status
     }
     return context
+
+
+@register.simple_tag()
+def proformas_by_td(proforma_td):
+    proformas = Xpref.objects.filter(number_td=proforma_td)
+    return proformas
