@@ -57,9 +57,9 @@
 
 
 {# Invoices #}
-<div class="col-md-2 {% if show_me == 'invoice' %} tile-stats top-red {% endif %}  {{ invoices.status_class }}" style="border-right: 1px solid darkslategrey;">
+<div class="col-md-2 {% if show_me == 'invoice' %}   {% endif %}  {{ invoices.status_class }}" style="border-right: 1px solid darkslategrey;">
     <p>فاکتور فروش</p>
         {% for invoice in invoices.invoices %}
-            <a class="count" href="{% url 'invoice:invoice_details' invoice_pk=invoice.pk %}">{{ invoice.number }}</a>
+            <a class="" href="{% url 'invoice:invoice_details' invoice_pk=invoice.pk %}">{{ invoice.number }}</a>
         {% endfor %}
 </div>
