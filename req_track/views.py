@@ -2,6 +2,7 @@ import datetime
 import math
 
 import jdatetime
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Sum, F, FloatField
 from django.shortcuts import render, redirect
@@ -14,7 +15,18 @@ User = get_user_model()
 from customer.models import Customer
 from request.forms.forms import ReqFollowUpForm
 from request.forms.proforma_forms import ProfFollowUpForm
-from request.models import Requests, Xpref, PrefSpec, ReqSpec
+from request.models import (
+    Requests,
+    Xpref,
+    PrefSpec,
+    Perm,
+    PermSpec,
+    InventoryOut,
+    InventoryOutSpec,
+    Invoice,
+    InvoiceSpec,
+)
+
 from request.models import Payment as Request_payment
 from req_track.models import (
     ReqEntered,
@@ -24,7 +36,6 @@ from req_track.models import (
     ProformaFollowUp,
     Customer as Customer_temp,
     CustomerResolver,
-    Perm,
     TadvinTotal)
 from .forms import E_Req_Form, E_Req_Edit_Form
 from django.db import models
@@ -613,6 +624,177 @@ def perms_not_entered(request):
        'diff': diff,
     }
     return render(request, 'perms/index.html', context)
+
+
+def update_perms(statistics):
+    perms = TadvinTotal.objects.filter(doctype_code=62, entered=False)
+    distinct_perms = perms.values('doc_number').distinct().values('doc_number', 'year', 'date', 'prof_number')
+    print(statistics, perms.count(), distinct_perms.count())
+
+    newly_added_perms = []
+    index = 1
+    for d in distinct_perms:
+        pref = Xpref.objects.filter(number_td=d['prof_number'])
+        if pref.exists():
+            p = pref.last()
+            print(d, p)
+            perm = Perm.objects.create(
+                proforma=p,
+                number=d['doc_number'],
+                date=d['date'],
+                year=d['year']
+            )
+            newly_added_perms.append(perm)
+            print(index, ' of ', distinct_perms.count())
+            index += 1
+
+    statistics['perms'] = index - 1
+    print('perms updated successfully!')
+    return statistics, newly_added_perms
+
+
+def update_permspecs(statistics, newly_added_perms):
+    index = 1
+    for a in newly_added_perms:
+        tperm = TadvinTotal.objects.filter(doctype_code=62, doc_number=a.number)
+        for t in tperm:
+            PermSpec.objects.create(
+                perm=a,
+                row=t.row_number,
+                code=t.code,
+                details=t.details,
+                qty=t.qty,
+                price_unit=t.price_unit,
+                price=t.price,
+            )
+            t.entered = True
+            t.save()
+            print(index, ' of ', len(newly_added_perms))
+            index += 1
+    print('updating perm specs complete.')
+    statistics['perm_specs'] = index - 1
+    return statistics
+
+
+def update_invouts(statistics, newly_added_perms):
+    newly_added_perms_ids = [perm.number for perm in newly_added_perms]
+    invouts = TadvinTotal.objects.filter(doctype_code=64, entered=False, perm_number__in=newly_added_perms_ids)
+    distinct_invouts = invouts.values('doc_number').distinct().values('doc_number', 'year', 'date', 'perm_number')
+    index = 1
+    newly_added_invouts = []
+    for d in distinct_invouts:
+        perm = Perm.objects.filter(number=d['perm_number'])
+        if perm.exists():
+            p = perm.last()
+            inv = InventoryOut.objects.create(
+                perm=p,
+                number=d['doc_number'],
+                date=d['date'],
+                year=d['year']
+            )
+            newly_added_invouts.append(inv)
+            print('#', index)
+            index += 1
+
+    statistics['invouts'] = index - 1
+    print('invouts updated successfully')
+    return statistics, newly_added_invouts
+
+
+def update_invout_specs(statistics, newly_added_invouts):
+    index = 1
+    for a in newly_added_invouts:
+        tinvout = TadvinTotal.objects.filter(doctype_code=64, doc_number=a.number)
+        for t in tinvout:
+            InventoryOutSpec.objects.create(
+                invout=a,
+                row=t.row_number,
+                code=t.code,
+                details=t.details,
+                qty=t.qty,
+                serial_number=t.serial_number,
+                price_unit=t.price_unit,
+                price=t.price,
+            )
+            t.entered = True
+            t.save()
+            print('#', index)
+            index += 1
+
+    statistics['invout_specs'] = index - 1
+    print('invtous completed successfully')
+    return statistics
+
+
+def update_invoices(statistics, newly_added_invouts):
+    newly_added_invouts_ids = [inv.number for inv in newly_added_invouts]
+    invoices = TadvinTotal.objects.filter(doctype_code=66, entered=False, havale_number__in=newly_added_invouts_ids)
+    distinct_invoices = invoices.values('doc_number').distinct().values('doc_number', 'year', 'date', 'havale_number')
+    index = 1
+    newly_added_invoices = []
+    for d in distinct_invoices:
+        invouts = InventoryOut.objects.filter(number=d['havale_number'])
+        if invouts.exists():
+            p = invouts.last()
+            invoice = Invoice.objects.create(
+                invout=p,
+                number=d['doc_number'],
+                date=d['date'],
+                year=d['year']
+            )
+            newly_added_invoices.append(invoice)
+            print('#', index)
+            index += 1
+
+    statistics['invoices'] = index - 1
+    print('invoices updated succesfully')
+    return statistics, newly_added_invoices
+
+
+def update_invoice_specs(statistics, newly_added_invoices):
+    index = 1
+    # allInvoices = Invoice.objects.all()
+    for a in newly_added_invoices:
+        tinvoices = TadvinTotal.objects.filter(doctype_code=66, doc_number=a.number)
+        for t in tinvoices:
+            InvoiceSpec.objects.create(
+                invoice=a,
+                row=t.row_number,
+                code=t.code,
+                details=t.details,
+                qty=t.qty,
+                price_unit=t.price_unit,
+                price=t.price,
+            )
+            t.entered = True
+            t.save()
+            print("#", index)
+            index += 1
+
+    statistics['invoice_specs'] = index - 1
+    print('invoices specs updating done.')
+    return statistics
+
+
+def update_data_from_tadvin(request):
+
+    statistics = {}
+    statistics, newly_added_perms = update_perms(statistics)
+
+    # new = Perm.objects.all()
+    statistics = update_permspecs(statistics, newly_added_perms)
+
+    statistics, newly_added_invouts = update_invouts(statistics, newly_added_perms)
+    # allInvouts = InventoryOut.objects.all()
+    statistics = update_invout_specs(statistics, newly_added_invouts)
+
+    statistics, newly_added_invoices = update_invoices(statistics, newly_added_invouts)
+
+    statistics = update_invoice_specs(statistics, newly_added_invoices)
+    messages.info(request,
+                  f"تعداد {statistics['perms']} مجوز، {statistics['perm_specs']} ردیف مجوز، {statistics['invouts']}خروجی انبار، {statistics['invout_specs']} ردیف خروجی انبار، {statistics['invoices']} فاکتور، {statistics['invoice_specs']} ردیف فاکتور بروزرسانی شد.")
+
+    return redirect('perm_index2')
 
 
 def data(request):

@@ -2,6 +2,9 @@
 {% load humanize %}
 {% block right_col %}
     <div class="container">
+        <div class="row">
+            {% include 'admin_theme/page_elements/details_header.html' with show_me='payment' request=payment.xpref_id.req_id %}
+        </div>
         <div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
                 <h1 class="text-center">پرداخت</h1>

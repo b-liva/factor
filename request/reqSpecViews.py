@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-from .models import Requests, ReqSpec, IMType, IPType, ICType, IEType, ReqPart
+from .models import Requests, ReqSpec, IMType, IPType, ICType, IEType
 from motordb.models import MotorsCode
 from django.contrib.auth.decorators import login_required
 import request.templatetags.functions as funcs
@@ -357,41 +357,3 @@ def reqspec_copy(request, yreqSpec_pk, req_pk):
     spec.save()
     messages.error(request, 'ردیف با موفقیت کپی شد.')
     return redirect('reqspec_edit_form', yreqSpec_pk=spec.pk, req_pk=spec.req_id.pk)
-
-
-@login_required
-def reqpart_edit_form(request, part_pk):
-    if not ReqPart.objects.filter(pk=part_pk):
-        messages.error(request, 'قطعه مورد نظر یافت نشد.')
-        return redirect('errorpage')
-
-    reqpart = ReqPart.objects.get(pk=part_pk)
-    colleagues = reqpart.req.colleagues.all()
-    colleague = False
-    if request.user in colleagues:
-        colleague = True
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.change_reqpart', reqpart, colleague)
-    if not can_edit:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
-    req = Requests.objects.get(pk=reqpart.req.pk)
-    parts = req.reqpart_set.all()
-    specs = req.reqspec_set.all()
-    form = forms.PartForm(request.POST or None, instance=reqpart)
-    if request.method == 'POST':
-        if form.is_valid():
-            part = form.save(commit=False)
-            part.owner = request.user
-            part.save()
-            # form = forms.SpecForm()
-            messages.add_message(request, level=20, message='جزئیات درخواست اصلاح شد')
-            return redirect('part_form', req_pk=req.pk)
-
-    context = {
-        'req_obj': req,
-        'specs': specs,
-        'parts': parts,
-        'form': form
-    }
-    return render(request, 'requests/admin_jemco/yreqspec/spec_form.html', context)

@@ -1,0 +1,56 @@
+{% extends 'requests/admin_jemco/search_index_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <h4>پیش فاکتورهای دارای دریافتی اما بدون مجوز</h4>
+                <ol>
+                    <li>دریافتی اشتباه ثبت شده است یا</li>
+                    <li>پیش پرداخت بوده که در اینصورت باید مجوز ثبت شود.</li>
+                </ol>
+                <ol>
+                    {% for proforma in prof_has_payment_no_perm %}
+                        <li><a href="{% url 'pref_details' ypref_pk=proforma.pk %}">{{ proforma.number }}
+                            ({{ proforma.owner.last_name }})</a></li>
+                    {% endfor %}
+                </ol>
+            </div>
+            <div class="col-md-3">
+                <h4>مجوز های بدون دریافتی</h4>
+                <ol>
+                    <li>مجوز نمی تواند بدون هیچ گونه دریافتی باشد.</li>
+                </ol>
+                <ol>
+                    {% for perm in perm_no_payments %}
+                        <li><a href="{% url 'perms:perm_details' perm_pk=perm.pk %}">{{ perm.number }}
+                            ({{ perm.proforma.owner.last_name }})</a></li>
+                    {% endfor %}
+                </ol>
+            </div>
+            <div class="col-md-3">
+                <h4>پیش فاکتور های با شماره تدوین تکراری</h4>
+                <ol>
+                    <li>مجوز نمی تواند بدون هیچ گونه دریافتی باشد.</li>
+                </ol>
+                <ol>
+                    {% for proforma_td in duplicates_proforma_tds %}
+                        {% proformas_by_td proforma_td=proforma_td as proformas %}
+                        <li>
+                            {{ proforma_td }}
+                            <ul>
+                                {% for prof in proformas %}
+                                    <li><a href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof.number }}</a> ({{ prof.owner.last_name }})</li>
+                                {% endfor %}
+                            </ul>
+
+                        </li>
+
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+    </div>
+{% endblock %}

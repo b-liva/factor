@@ -282,14 +282,33 @@ class ReqSpec(models.Model):
         return '%s - %skw' % (self.qty, self.kw)
 
 
-class ReqPart(models.Model):
+class ReqRows(TimeStampedModel):
     req = models.ForeignKey(Requests, on_delete=models.CASCADE)
     owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
-    title = models.CharField(max_length=60)
+    code = models.BigIntegerField(default=55005500)
+    title = models.CharField(max_length=150)
     qty = models.IntegerField(default=1)
 
+    class Meta:
+        abstract = True
+
     def __str__(self):
-        return "%s عدد %s" % (self.qty, self.title,)
+        return "%s عدد %s(%s)" % (self.qty, self.title, self.code)
+
+
+class ReqPart(ReqRows):
+    pass
+
+
+class Wastage(ReqRows):
+    pass
+
+
+class Services(ReqRows):
+    qty = models.FloatField(default=1)
+
+    def __str__(self):
+        return "%s نفر ساعت %s(%s)" % (self.qty, self.title, self.code)
 
 
 class IssueType(models.Model):
@@ -450,18 +469,6 @@ class PrefSpec(models.Model):
         )
 
 
-class PrefPart(models.Model):
-    xpref = models.ForeignKey(Xpref, on_delete=models.CASCADE)
-    reqpart_eq = models.ForeignKey(ReqPart, on_delete=models.CASCADE)
-    owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
-    title = models.CharField(max_length=60)
-    qty = models.IntegerField(default=1)
-    price = models.FloatField(null=True, blank=True)
-
-    def __str__(self):
-        return "%s عدد %s" % (self.qty, self.title,)
-
-
 class PaymentType(models.Model):
     title = models.CharField(max_length=25)
 
@@ -482,6 +489,7 @@ class Payment(models.Model):
     date_fa = jmodels.jDateField(default=now)
     date_fa_text = models.CharField(null=True, blank=True, max_length=20)
     due_date = jmodels.jDateField(blank=True, null=True)
+    due_date_text = models.CharField(null=True, blank=True, max_length=20)
     summary = models.TextField(max_length=600, blank=True, null=True)
     is_active = models.BooleanField(default=True)
 

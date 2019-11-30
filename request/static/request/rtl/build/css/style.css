@@ -240,6 +240,13 @@ ul.quick-list {
     background: #ffa09c;
 }
 
+.element-disabled{
+    background: lightgrey;
+    cursor: not-allowed;
+}
+.top-red{
+    border-top: 5px solid darkred;
+}
 /* =Elements style
 ---------------------- */
 .load-wrapp {
@@ -272,3 +279,4 @@ ul.quick-list {
     50% {height: 35px;}
     100% {height: 15px;}
 }
+

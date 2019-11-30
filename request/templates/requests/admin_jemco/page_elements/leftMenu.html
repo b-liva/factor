@@ -59,6 +59,7 @@
                             <li><a href="{% url 'perm_index2' %}">مجوزها(جدید)</a></li>
                             <li><a href="{% url 'perm_index' %}">مجوزها(قدیم)</a></li>
                             <li><a href="{% url 'perms:perm_not_entered' %}">وارد نشده</a></li>
+                            <li><a href="{% url 'proforma_has_payment_no_perm' %}">ایراد پیش فاکتور</a></li>
                             {% if perms.request.index_deleted_proforma %}
                                 <li><a href="{% url 'pref_index_deleted' %}">پیش فاکتورهای حذف شده</a></li>
                             {% endif %}
@@ -154,6 +155,7 @@
                             <li><a href="{% url 'req_track:perms_index' %}">مجوزها(آپلود شده)</a></li>
                             <li><a href="{% url 'req_track:modify_perm' %}">اصلاح مجوزها</a></li>
                             <li><a href="{% url 'req_track:perms_not_entered' %}">مجوز وارد نشده</a></li>
+                            <li><a href="{% url 'req_track:update_data_from_tadvin' %}">اصلاح گزارش تدوین</a></li>
                         {% endif %}
                     </ul>
                 </li>
