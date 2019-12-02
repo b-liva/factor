@@ -2,7 +2,8 @@ const BundleTracker = require("webpack-bundle-tracker");
 
 module.exports = {
     // publicPath: "http://0.0.0.0:8080/",
-    publicPath: "http://localhost:8000/static/",
+    // publicPath: "http://localhost:8000/static/",
+    publicPath: "http://vbstech.ir/static/",
     // baseUrl: "http://localhost:8000/",
     // publicPath: "http://vbstech.ir/",
     outputDir: './dist/',
@@ -22,7 +23,7 @@ module.exports = {
 
         config.devServer
             // .public('http://0.0.0.0:8080')
-            .public('http://localhost:8000')
+            .public('http://vbstech.ir')
             // .host('0.0.0.0')
             .host('localhost')
             .port(8000)
