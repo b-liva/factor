@@ -2,9 +2,11 @@ const BundleTracker = require("webpack-bundle-tracker");
 
 module.exports = {
     // publicPath: "http://0.0.0.0:8080/",
-    publicPath: "http://localhost:8080/",
+    publicPath: "http://localhost:8000/static/",
+    // baseUrl: "http://localhost:8000/",
     // publicPath: "http://vbstech.ir/",
     outputDir: './dist/',
+    assetsDir: './frontend/',
 
     chainWebpack: config => {
 
@@ -20,10 +22,10 @@ module.exports = {
 
         config.devServer
             // .public('http://0.0.0.0:8080')
-            .public('http://localhost:8080')
+            .public('http://localhost:8000')
             // .host('0.0.0.0')
             .host('localhost')
-            .port(8080)
+            .port(8000)
             .hotOnly(true)
             .watchOptions({poll: 1000})
             .https(false)
