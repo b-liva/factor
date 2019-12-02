@@ -162,6 +162,9 @@ MIDDLEWARE = [
 # STATIC_ROOT = str(ROOT_DIR("staticfiles"))
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(ROOT_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(FRONTEND_DIR, 'dist')
+]
 # STATIC_ROOT = os.path.join(BASE_DIR, '../../static')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
@@ -190,10 +193,11 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(ROOT_DIR, 'requeROOT_DIRst/templates'),
+            os.path.join(ROOT_DIR, 'request/templates'),
             os.path.join(ROOT_DIR, 'reportbugs/templates'),
             os.path.join(ROOT_DIR, 'api/v1/templates'),
-            os.path.join(ROOT_DIR, 'templates')
+            os.path.join(ROOT_DIR, 'templates'),
+            os.path.join(ROOT_DIR, 'frontend/dist/templates')
         ],
         'APP_DIRS': True,
         'OPTIONS': {

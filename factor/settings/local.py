@@ -41,7 +41,7 @@ CACHES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'jcrm_local',
+        'NAME': 'qlikview',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
