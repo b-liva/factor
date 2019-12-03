@@ -25,3 +25,6 @@ package-lock.json
 /.vs
 *.orig
 /factor/djangobin-secrets.json
+
+
+frontend/
