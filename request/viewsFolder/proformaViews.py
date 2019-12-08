@@ -567,19 +567,33 @@ def pref_index_deleted(request):
 
 @login_required
 def pref_find(request):
+    prof_no = False
+    prof_td_no = False
     # term = request.POST['text']
-    if not request.POST['pref_no']:
+    if not request.POST['pref_no'] and not request.POST['pref_td_no']:
         return redirect('pref_index')
-    prof_no = request.POST['pref_no']
-    if not Xpref.objects.filter(number=prof_no):
-        messages.error(request, 'پیش فاکتور مورد نظر یافت نشد')
-        return redirect('pref_index')
-    try:
-        pref = Xpref.objects.filter(is_active=True).get(number=prof_no)
+    elif request.POST['pref_no']:
+        prof_no = request.POST['pref_no']
+        pref = Xpref.objects.filter(number=prof_no)
+    elif request.POST['pref_td_no']:
+        prof_td_no = request.POST['pref_td_no']
+        pref = Xpref.objects.filter(number_td=prof_td_no)
+    if pref.exists():
+        pref = pref.last()
         return redirect('pref_details', ypref_pk=pref.pk)
-    except:
+    else:
         messages.error(request, 'پیشفاکتور یافت نشد.')
         return redirect('errorpage')
+
+    # if not Xpref.objects.filter(number=prof_no):
+    #     messages.error(request, 'پیش فاکتور مورد نظر یافت نشد')
+    #     return redirect('pref_index')
+    # try:
+    #     pref = Xpref.objects.filter(is_active=True).get(number=prof_no)
+    #     return redirect('pref_details', ypref_pk=pref.pk)
+    # except:
+    #     messages.error(request, 'پیشفاکتور یافت نشد.')
+    #     return redirect('errorpage')
 
 
 @login_required

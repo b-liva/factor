@@ -11,7 +11,14 @@
                     {% if showDelete %}
                         <form method="POST" action="{% url 'pref_find' %}">
                             {% csrf_token %}
-                            شماره پیشفاکتور <input name="pref_no">
+                            <div class="col-md-6">
+                                <label for="prof_no">شماره پیشفاکتور </label>
+                                <input name="pref_no" id="pref_no" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="prof_td_no">شماره پیشفاکتور تدوین</label>
+                                <input name="pref_td_no" id="pref_td_no" class="form-control">
+                            </div>
                             {#                    <input name="text">#}
                             <button type="submit" name="submit" class="btn btn-sm btn-primary">
                                 <i class="fa fa-search" aria-hidden="true"></i>
