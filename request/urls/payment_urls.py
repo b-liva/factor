@@ -16,6 +16,9 @@ urlpatterns = [
                   path('payment-index-cc', paymentViews.payment_index_cc, name='payment_index_cc'),
                   path('payments-export', paymentViews.payments_export, name='payments_export'),
                   path('index-deleted', paymentViews.payment_index_deleted, name='payment_index_deleted'),
+                  path('download-received', paymentViews.download_received, name='download_received'),
+                  path('assign', paymentViews.assign, name='assign'),
+                  path('payment_download', paymentViews.payment_download, name='payment_download'),
                   path('find', paymentViews.payment_find, name='payment_find'),
                   path('<int:ypayment_pk>/', include([
                       path('', paymentViews.payment_details, name='payment_details'),

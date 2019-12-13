@@ -1,8 +1,10 @@
+import datetime
+import jdatetime
 import xlwt
 from django.core.cache import cache
 import random
-
-from django.db.models import Q
+import json
+from django.db.models import Q, Sum
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
@@ -15,7 +17,7 @@ from request import models
 from django.contrib.auth.decorators import login_required
 import request.templatetags.functions as funcs
 from request.forms import payment_forms
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 
 
@@ -228,8 +230,8 @@ def payments_export(request):
     # Sheet header, first row
     row_num = 0
 
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
+    style = xlwt.XFStyle()
+    style.font.bold = True
 
     columns = (
         'ردیف',
@@ -245,10 +247,10 @@ def payments_export(request):
     )
 
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
+        ws.write(row_num, col_num, columns[col_num], style)
 
     # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
+    style = xlwt.XFStyle()
 
     # if request.user.is_superuser:
     #     pass
@@ -278,7 +280,7 @@ def payments_export(request):
         # exportables.append(str(payment.date_fa))
 
         for col_num in range(len(exportables)):
-            ws.write(row_num, col_num, exportables[col_num], font_style)
+            ws.write(row_num, col_num, exportables[col_num], style)
     ws.write(len(payments) + 2, 4, amount_sum)
     ws.cols_right_to_left = True
     wb.save(response)
@@ -320,6 +322,233 @@ def payment_index_deleted(request):
         'showHide': False,
     }
     return render(request, 'requests/admin_jemco/ypayment/index.html', context)
+
+
+@login_required
+def download_received(request):
+
+    return render(request, 'requests/admin_jemco/ypayment/download_received.html')
+
+
+@login_required
+def assign(request):
+    data = json.loads(request.body.decode('utf-8'))
+    r_payments = data['payments']
+    payments = []
+    not_found = []
+    print(r_payments)
+    for payment in r_payments:
+        pay = Payment.objects.filter(number=payment)
+        if pay.exists():
+            p = pay.last()
+            payments.append({
+                'id': p.pk,
+                'number': p.number,
+                'amount': p.amount,
+                'customer': p.xpref_id.req_id.customer.name,
+            })
+        else:
+            not_found.append(payment)
+    context = {
+        'payments': payments,
+        'not_found': not_found,
+    }
+    return JsonResponse(context, safe=False)
+
+
+def add_sheet(payments, wb):
+    import locale
+    locale.setlocale(locale.LC_ALL, 'en_US')
+    sheet_no = 1
+    today = jdatetime.date.today()
+    print(today)
+    today = str(today)
+    today = today.replace('-', '/')
+    customers = payments.values('xpref_id__req_id__customer').distinct()
+    columns = (
+        'ردیف',
+        'شماره پیش  فاکتور',
+        'شماره مجوز',
+        'شماره قرار داد',
+        'شماره چک/حواله',
+        'سر رسید',
+        'نام بانک',
+        'مبلغ',
+    )
+    for customer in customers:
+        pays = payments.filter(xpref_id__req_id__customer_id=customer['xpref_id__req_id__customer'])
+        customer_sum = pays.aggregate(sum=Sum('amount'))['sum']
+        customer_sum = locale.format("%d", customer_sum, grouping=True)
+
+        ws = wb.add_sheet(f'{pays.last().xpref_id.req_id.customer.name[:25]}_{sheet_no}')
+        row_num = 0
+        ws.write(row_num, 3, 'رسید اسناد دریافتی از مشتری')
+        ws.write(row_num, 5, 'تاریخ:')
+        ws.write(row_num, 6, today)
+        ws.cols_right_to_left = True
+        row_num += 1
+        ws.write(row_num, 3, 'روتین')
+        row_num += 2
+        ws.write(row_num, 0, 'بدینوسیله تایید میگردد اسناد مشروحه ذیل:')
+        row_num += 1
+        ws.write(row_num, 0, f'از شرکت / یا موسسه:{pays.last().xpref_id.req_id.customer.name}')
+        row_num += 1
+        ws.write(row_num, 0, f'جمعا به مبلغ {customer_sum} ریال دریافت گردید.')
+        row_num += 1
+        for column_num in range(len(columns)):
+            ws.write(row_num, column_num, columns[column_num])
+        index = 0
+        for pay in pays:
+            index += 1
+            row_num += 1
+            printable = [
+                index,
+                pay.xpref_id.number_td,
+                pay.xpref_id.perm_number,
+                pay.number,
+                pay.number,
+                str(pay.due_date),
+                'رسالت',
+                locale.format("%d", pay.amount, grouping=True)
+            ]
+            for column_num in range(len(printable)):
+                ws.write(
+                    row_num,
+                    column_num,
+                    printable[column_num]
+                )
+        sheet_no += 1
+        row_num += 1
+        ws.write_merge(row_num, row_num, 0, 6, 'جمع')
+
+
+        ws.write(row_num, 7, customer_sum)
+
+    return wb
+
+
+@login_required
+def payment_download(request):
+    from zipfile import ZipFile
+    import io
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="received.xlsx"'
+    data = json.loads(request.body.decode('utf-8'))
+    print(data)
+    ids = [item['id'] for item in data['payments']]
+    print(ids)
+    payments = Payment.objects.filter(id__in=ids)
+    print(payments)
+    # response = HttpResponse(content_type='application/ms-excel')
+    wb = make_excel_total_payments(payments)
+    wb = add_sheet(payments, wb)
+    # wb.save('temp_files/total.xls') # if we want to save as a file
+    wb.save(response)
+
+    return response
+
+
+def make_excel_total_payments(payments):
+    import io
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('نمونه نامه')
+
+    # sheed header and first row
+    row_num = 2
+    style = xlwt.XFStyle()
+    # style.font.bold = True
+    font = xlwt.Font()
+    borders = xlwt.Borders()
+
+    font.bold = True
+    borders.top = borders.right = borders.THIN
+    borders.left_colour = 0x00
+    borders.right_colour = 0x00
+    borders.top_colour = 0x7FF
+    borders.bottom_colour = 0x00
+
+    style.font = font
+    style.borders = borders
+
+    # pattern = xlwt.Pattern()
+    # pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+    # pattern.pattern_fore_colour = xlwt.Style.colour_map['ice_blue']
+    # style.pattern = pattern
+
+    style0 = xlwt.easyxf('pattern: pattern solid, fore_colour white')
+    style1 = xlwt.easyxf('pattern: pattern solid, fore_colour ice_blue')
+    even_style = xlwt.easyxf(
+        'align: wrap yes, vert centre, horiz right ; '
+        'pattern: pattern solid, fore-colour white; '
+        'borders: top_color dark_teal, right_color dark_teal, bottom_color dark_teal, left_color dark_teal,'
+        'left thin,right thin,top thin,bottom thin'
+    )
+    odd_style = xlwt.easyxf(
+        'align: wrap yes, vert centre, horiz right ; '
+        'pattern: pattern solid, fore-colour pale_blue;'
+        'borders:  top_color dark_teal, right_color dark_teal, bottom_color dark_teal, left_color dark_teal,'
+        'left thin,right thin,top thin,bottom thin'
+    )
+    columns = (
+        'ردیف',
+        'شماره چك/حواله',
+        'تاريخ سر رسيد',
+        'مبلغ',
+        'نوع سند',
+        'نام شركت ',
+        'شماره پیش فاکتور تدوین',
+        'پ ف',
+        'مجوز',
+        'شماره درخواست',
+    )
+
+
+    today = jdatetime.date.today()
+    print(today)
+    today = str(today)
+    today = today.replace('-', '/')
+    ws.write(row_num, 3, f'ارسال رسید اسناد دریافتنی در تاریخ {today}', even_style)
+    row_num = 4
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], even_style)
+    index = 1
+    for payment in payments:
+        row_num += 1
+        type = payment.type.title if payment.type is not None else None
+        due_date = str(payment.due_date) if payment.due_date is not None else None
+        exportables = [
+            index,
+            payment.number,
+            due_date,
+            payment.amount,
+            type,
+            payment.xpref_id.req_id.customer.name,
+            payment.xpref_id.number_td,
+            payment.xpref_id.number,
+            payment.xpref_id.perm_number,
+            payment.xpref_id.req_id.number,
+        ]
+        index += 1
+        style.font.bold = False
+
+        print(row_num % 2)
+        for col_num in range(len(exportables)):
+            ws.write(row_num, col_num, exportables[col_num], [odd_style, even_style][index % 2])
+
+    sum = payments.aggregate(sum=Sum('amount'))['sum']
+    row_num += 1
+    ws.write(row_num, 3, 'جمع')
+    ws.write(row_num, 4, sum)
+
+    ws.cols_right_to_left = True
+    # wb.save('python_excel_test.xls')
+    # print(wb)
+    # print('file: ', wb)
+    # sio = io.BytesIO()
+    # wb.save(sio)
+    # print(sio)
+    return wb
 
 
 @login_required

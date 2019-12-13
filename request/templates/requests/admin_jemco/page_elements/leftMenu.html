@@ -83,6 +83,9 @@
                         {% if perms.request.index_deleted_payment %}
                             <li><a href="{% url 'payment_index_deleted' %}">پرداخت های حذف شده</a></li>
                         {% endif %}
+                        {% if perms.request.index_payment %}
+                            <li><a href="{% url 'download_received' %}">رسید اسناد</a></li>
+                        {% endif %}
                     </ul>
                 </li>
             {% endif %}
