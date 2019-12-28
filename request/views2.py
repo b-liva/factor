@@ -95,7 +95,7 @@ def req_form_copy(request):
                 return redirect('errorpage')
 
             master_req = Requests.objects.filter(is_active=True).get(number=req_no)
-            can_add = funcs.has_perm_or_is_owner(request.user, 'request.copy_requests', instance=master_req)
+            can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests', instance=master_req)
             if not can_add:
                 messages.error(request, 'عدم دسترسی کافی')
                 return redirect('errorpage')
