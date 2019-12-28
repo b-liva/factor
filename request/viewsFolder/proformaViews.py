@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 from base64 import encode
 
@@ -9,7 +10,7 @@ import jdatetime
 import xlwt
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import get_template, render_to_string
 
@@ -594,6 +595,91 @@ def pref_find(request):
     # except:
     #     messages.error(request, 'پیشفاکتور یافت نشد.')
     #     return redirect('errorpage')
+
+
+# @login_required
+def find_price_by_id(request):
+    data = json.loads(request.body.decode('utf-8'))
+    pk = data['rspec']
+    spec = PrefSpec.objects.get(pk=pk)
+
+    # Exact specs
+    exact = True
+    # rspecs = PrefSpec.objects.filter(
+    #     code=spec.code,
+    #     price__gt=0,
+    # )
+
+    # if not rspecs.exists():
+
+    # exact = False
+    rspecs = PrefSpec.objects.filter(
+        kw=spec.kw,
+        rpm=spec.rpm,
+        voltage=spec.voltage,
+        im=spec.im,
+        xpref_id__is_active=True,
+        price__gt=0,
+    )
+    rspecs = rspecs.order_by('xpref_id__date_fa').reverse()
+
+    prices = [{
+        'price': rspec.price,
+        'url': request.build_absolute_uri(reverse('pref_details', kwargs={'ypref_pk': rspec.xpref_id.pk})),
+        'date': str(rspec.xpref_id.date_fa),
+        'customer': rspec.xpref_id.req_id.customer.name[:45],
+    } for rspec in rspecs]
+
+    # Similar specs
+
+    context = {
+        'rs': pk,
+        'prices': prices,
+        'exact': exact,
+    }
+    return JsonResponse(context, safe=False)
+
+
+def find_no_price_by_id(request):
+    data = json.loads(request.body.decode('utf-8'))
+    pk = data['rspec']
+    spec = PrefSpec.objects.get(pk=pk)
+
+    # Exact specs
+    exact = True
+    # rspecs = PrefSpec.objects.filter(
+    #     code=spec.code,
+    #     price__gt=0,
+    # )
+
+    # if not rspecs.exists():
+
+    # exact = False
+    rspecs = ReqSpec.objects.filter(
+        kw=spec.kw,
+        rpm=spec.rpm,
+        voltage=spec.voltage,
+        im=spec.im,
+        is_active=True,
+        req_id__xpref__isnull=True,
+    )
+    rspecs = rspecs.order_by('req_id__date_fa').reverse()
+
+    requests = [{
+        'url': request.build_absolute_uri(reverse('request_details', kwargs={'request_pk': rspec.req_id.pk})),
+        'date': str(rspec.req_id.date_fa),
+        'number': rspec.req_id.number,
+        'customer': rspec.req_id.customer.name[:45],
+    } for rspec in rspecs]
+
+    # Similar specs
+    print(len(requests))
+    context = {
+        'rs': pk,
+        'requests': requests,
+        'exact': exact,
+    }
+    return JsonResponse(context, safe=False)
 
 
 @login_required

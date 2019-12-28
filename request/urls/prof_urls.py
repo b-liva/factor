@@ -27,6 +27,8 @@ urlpatterns = [
                   path('perms-specs', proformaViews.perm_specs, name='perm_specs'),
                   path('index-deleted', proformaViews.pref_index_deleted, name='pref_index_deleted'),
                   path('find', proformaViews.pref_find, name='pref_find'),
+                  path('find_price_by_id', proformaViews.find_price_by_id, name='find_price_by_id'),
+                  path('find_no_price_by_id', proformaViews.find_no_price_by_id, name='find_no_price_by_id'),
                   path('<int:ypref_pk>/', include([
                       path('insert_form', proformaViews.pref_insert_spec_form, name='pref_insert_spec_form'),
                       path('', proformaViews.pref_details, name='pref_details'),

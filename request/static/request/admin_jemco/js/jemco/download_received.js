@@ -138,5 +138,107 @@ const download_received = new Vue({
     computed: {}
 });
 
+Vue.component('find_pref_price', {
+    data() {
+        return {
+            status: false,
+            status_no_price: false,
+            msg: '',
+            number: '',
+            data: '',
+            data_no_price: '',
+            prices: [],
+        }
+    },
+    template: "<div>" +
+        "<p @click='find_pref_price(rspec)' style='cursor: pointer; color: #26b99a;'>قیمت قبل</p>" +
+        "<div style='height: 200px; width: 100%; overflow: auto; background: #ededed;' v-if='status'>" +
+        "<div v-for='price in data.prices'>" +
+        "<span>{{price.customer}} - </span><a class='btn btn-success btn-xs' :href='price.url' target='_blank'> {{pretty(price.price)}}</a>" +
+        "<span style='float: left;'>({{price.date}})</span>" +
+        "</div>" +
+        "</div>" +
+        "<p @click='find_pref_no_price(rspec)' style='cursor: pointer; color: #d9534f;'>مشابه بدون قیمت</p>" +
+        "<div style='height: 200px; width: 100%; overflow: auto; background: #ededed;' v-if='status_no_price'>" +
+        "<div v-for='req in data_no_price.requests'>" +
+        "<span></span> {{req.customer}} - <a class='btn btn-danger btn-xs' :href='req.url' target='_blank'> {{req.number}}</a>" +
+        "<span style='float: left;'>({{req.date}})</span>" +
+        "</div>" +
+        "</div>" +
+        "</div>",
+
+    props: {
+        rspec: '',
+    },
+    created() {
+    },
+    beforeCreate() {
+    },
+    beforeMount() {
+    },
+    mounted() {
+    },
+    computed: {},
+    watch: {
+
+    },
+    methods: {
+        find_pref_price:function (pk) {
+            if (!this.status){
+                url = '/request/pref/find_price_by_id';
+                params = {
+                    'rspec': pk
+                };
+                axios.post(url, params)
+                    .then((result) => {
+                        this.data = result.data;
+                        this.prices = result.prices;
+                        console.log(result);
+                        this.status = true;
+                    }, (error) => {
+                        console.log('error');
+                    })
+            }else {
+                this.status = false;
+            }
+
+        },
+        find_pref_no_price:function (pk) {
+            if (!this.status_no_price){
+                url = '/request/pref/find_no_price_by_id';
+                params = {
+                    'rspec': pk
+                };
+                axios.post(url, params)
+                    .then((result) => {
+                        this.data_no_price = result.data;
+                        this.requests = result.requests;
+                        console.log(result);
+                        this.status_no_price= true;
+                    }, (error) => {
+                        console.log('error');
+                    })
+            }else {
+                this.status_no_price = false;
+            }
+
+        },
+        pretty: function (value, format) {
+            return numeral(value).format(format)
+        },
+    }
+});
+
+const find_pref_price = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#find_pref_price',
+    data: {},
+    watch: {},
+    created: function () {
+    },
+    methods: {},
+    computed: {}
+});
+
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";
