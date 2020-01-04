@@ -200,6 +200,14 @@ def sales_comparison(request):
 
 
 @login_required
+def sales_comparison_tadvin_perms(request):
+    context = {
+
+    }
+    return render(request, 'requests/admin_jemco/dashboard/sales_comparison_tadvin_perms.html', context)
+
+
+@login_required
 def sales_expert_dashboard(request):
 
     profs_to_follow_on = Xpref.objects.filter(req_id__owner=request.user, is_active=True, to_follow=True, on=True)\

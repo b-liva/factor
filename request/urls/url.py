@@ -35,6 +35,8 @@ urlpatterns = [
                   path('invoice/', include('request.urls.invoice_url')),
                   path('payment/', include('request.urls.payment_urls')),
                   path('fetch-sales-data', request.views2.fetch_sales_data, name='fetch_sales_data'),
+                  path('fetch-sales-data-tadvin', request.views2.fetch_sales_data_tadvin, name='fetch_sales_data_tadvin'),
+                  path('fetch-sales-data-tadvin-per-owner', request.views2.fetch_sales_data_tadvin_per_owner, name='fetch_sales_data_tadvin_per_owner'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

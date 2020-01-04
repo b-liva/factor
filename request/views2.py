@@ -21,7 +21,7 @@ from request.filters.filters import RequestFilter
 from request.forms.forms import RequestCopyForm, CommentForm
 from request.forms.search import ReqSearchForm
 from request.views import find_all_obj
-from .models import Requests, ReqSpec, PrefSpec, IMType
+from .models import Requests, ReqSpec, PrefSpec, IMType, Perm
 from .models import Xpref, Payment
 from . import models
 from customer.models import Customer
@@ -1426,4 +1426,145 @@ def fetch_sales_data(request):
         'diff_days': days,
         # 'date_max': str(date_max),
     }
+    return JsonResponse(context, safe=False)
+
+
+class KwTotal(object):
+    function = 'KwTotal'
+
+
+@login_required
+def fetch_sales_data_tadvin(request):
+    data = json.loads(request.body.decode('utf-8'))
+    by_date = data['by_date']
+
+    today = jdatetime.date.today()
+
+    if by_date:
+        date_min = data['date_min']
+        date_max = data['date_max']
+        date_min = change_date_string(date_min)
+        date_max = change_date_string(date_max)
+        date_min = jdatetime.datetime.strptime(date_min, "%Y-%m-%d").date()
+        date_max = jdatetime.datetime.strptime(date_max, "%Y-%m-%d").date()
+        diff = date_max - date_min
+        days = diff.days
+    else:
+        days = int(data['days'])
+        date_min = today + jdatetime.timedelta(-days)
+        date_max = today
+
+    res = []
+    sales_queryset = User.objects.filter(sales_exp=True)
+
+    perms = Perm.objects.filter(date__gte=date_min, date__lte=date_max).values('proforma__req_id__owner').distinct().values('number')
+
+    all_perms = Perm.objects.filter(date__gte=date_min, date__lte=date_max)
+    exp_perms_distinct = all_perms.values('proforma__req_id__owner__username').distinct()\
+        .values('proforma__req_id__owner__last_name', 'proforma__req_id__owner__id')
+    exp_perms_count = exp_perms_distinct.annotate(perms=Count('id'))
+    exp_perms_qty = exp_perms_distinct.annotate(qty=Sum('permspec_perm__qty'))
+    exp_perms_amount = exp_perms_distinct.annotate(total=Sum('permspec_perm__price') * 1.09)
+    exp_perms_amount_received = exp_perms_distinct.annotate(amount=Sum('proforma__payment__amount'))
+    exp_perms_amount_remaining = exp_perms_distinct.annotate(remaining=Sum(F('permspec_perm__price') * 1.09 - F('proforma__payment__amount')))
+
+    # todo: Projects by type
+    total_qty = all_perms.aggregate(sum=Sum('permspec_perm__qty'))['sum']
+    total_perms_count = all_perms.aggregate(count=Count('id'))['count']
+    total_sales_by_owner = all_perms.aggregate(sum=Sum('permspec_perm__price'))['sum'] * 1.09
+    total_received = all_perms.filter(proforma__payment__is_active=True).aggregate(sum=Sum('proforma__payment__amount'))['sum']
+    total_remainder = total_sales_by_owner - total_received
+
+    context = {
+        'response': [{
+            'owner': {
+                'name': exp_perms_distinct[index]['proforma__req_id__owner__last_name'],
+                'id': exp_perms_distinct[index]['proforma__req_id__owner__id'],
+            },
+            'count': exp_perms_count[index]['perms'],
+            'ps_qty': exp_perms_qty[index]['qty'],
+            'price': exp_perms_amount[index]['total'],
+            'perms_total_received': exp_perms_amount_received[index]['amount'],
+            'exp_perms_amount_remaining': exp_perms_amount_remaining[index]['remaining'],
+            'show_details': False,
+        } for index in range(exp_perms_distinct.count())],
+        'date_min': str(date_min),
+        'date_max': str(date_max),
+        'diff_days': days,
+        'by_date': by_date,
+        'total_sales_by_owner': total_sales_by_owner,
+        'total_qty': total_qty,
+        'total_perms_count': total_perms_count,
+        'total_received': total_received,
+        'total_remainder': total_remainder,
+        'show_details': False,
+    }
+    return JsonResponse(context, safe=False)
+
+
+@login_required
+def fetch_sales_data_tadvin_per_owner(request):
+    data = json.loads(request.body.decode('utf-8'))
+    print(data)
+    by_date = data['by_date']
+    owner_id = data['id']
+    owner = User.objects.get(pk=owner_id)
+    perms = Perm.objects.filter(proforma__req_id__owner=owner)
+
+    today = jdatetime.date.today()
+
+    if by_date:
+        date_min = data['date_min']
+        date_max = data['date_max']
+        date_min = change_date_string(date_min)
+        date_max = change_date_string(date_max)
+        date_min = jdatetime.datetime.strptime(date_min, "%Y-%m-%d").date()
+        date_max = jdatetime.datetime.strptime(date_max, "%Y-%m-%d").date()
+        diff = date_max - date_min
+        days = diff.days
+    else:
+        days = int(data['days'])
+        date_min = today + jdatetime.timedelta(-days)
+        date_max = today
+
+    perms = perms.filter(date__gte=date_min, date__lte=date_max)
+
+    # details = [{
+    #     'perm_number': perm.number,
+    #     'customer': perm.proforma.req_id.customer.name,
+    #     'proforma_total': perm.permspec_perm.aggregate(sum=Sum('price'))['sum'] * 1.09,
+    #     # 'proforma_total': perm.proforma.total_proforma_price_vat()['price_vat'],
+    #     'total_received': perm.proforma.payment_set.aggregate(sum=Sum('amount'))['sum'],
+    #     # 'total_remainder': perm.permspec_perm.aggregate(sum=Sum('price'))['sum'] * 1.09 - perm.proforma.payment_set.aggregate(sum=Sum('amount'))['sum'],
+    #     'url': request.build_absolute_uri(
+    #         reverse('perms:perm_details', kwargs={'perm_pk': perm.pk})),
+    # } for perm in perms]
+    details = list()
+    from decimal import Decimal
+    for perm in perms:
+        print(perm.pk)
+        proforma_total = total_remainder = perm.permspec_perm.aggregate(sum=Sum('price'))['sum'] * 1.09
+        total_received = perm.proforma.payment_set.aggregate(sum=Sum('amount'))['sum']
+        total_received = total_received if total_received is not None else 0
+        print('total: ', proforma_total)
+        print('received: ', total_received)
+        if proforma_total is not None and total_received is not None:
+            total_remainder = proforma_total - total_received
+            # todo: temporarily solved floating points.
+            total_remainder = 0 if total_remainder < 0.01 else total_remainder
+            print('remain: ', total_remainder)
+        print('type remain: ', type(total_remainder))
+        details.append({
+            'perm_number': perm.number,
+            'customer': perm.proforma.req_id.customer.name,
+            'proforma_total': proforma_total,
+            'total_received': total_received,
+            'total_remainder': total_remainder,
+            'url': request.build_absolute_uri(reverse('perms:perm_details', kwargs={'perm_pk': perm.pk})),
+        })
+
+    context = {
+        'details': details,
+    }
+
     return JsonResponse(context, safe=False)

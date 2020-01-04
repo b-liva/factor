@@ -1,0 +1,21 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load static %}
+{% load humanize %}
+{% load request_extras %}
+{% load sales_ex_dashboard %}
+{% block right_col %}
+    <div id="sales_comparison_tadvin">
+        <div class="container">
+            <div class="row">
+                {% if user.is_superuser %}{% else %}
+                    <h3>وضعیت مجوز 30 روز اخیر</h3>
+                {% endif %}
+                <sales_comparison_tadvin :user_data='{{ user.is_superuser|lower }}'></sales_comparison_tadvin>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'request/admin_jemco/js/jemco/sales_comparison_tadvin.js' %}"></script>
+{% endblock %}
