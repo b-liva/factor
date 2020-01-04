@@ -434,4 +434,9 @@ def invoices_from_invouts(invouts):
 @register.simple_tag()
 def proformas_by_td(proforma_td):
     proformas = Xpref.objects.filter(number_td=proforma_td)
+    if not proformas.exists():
+        proformas = 'ندارد'
+
     return proformas
+
+

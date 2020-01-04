@@ -21,28 +21,152 @@
 
             </div>
 
-        <div class="row">
-            <table class="table table-hover text-center">
-                <thead>
-                <tr>
-                    <th class="text-center">ردیف</th>
-                    <th class="text-center">شماره مجوز</th>
-                    <th class="text-center">پیش فاکتور</th>
-                    <th class="text-center">تاریخ</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for perm in perms %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ perm.perm_number }}</td>
-                        <td>{{ perm.prof_number }}</td>
-                        <td>{{ perm.date }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <h4>فروش محصول</h4>
+                    <table class="table table-hover text-center">
+                        <thead>
+                        <tr>
+                            <th class="text-center">ردیف</th>
+                            <th class="text-center">شماره مجوز</th>
+                            <th class="text-center">پیش فاکتور تدوین</th>
+                            <th class="text-center">پیش فاکتور</th>
+                            <th class="text-center">تاریخ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for perm in perms_sales %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ perm.perm_number }}</td>
+                                <td>{{ perm.prof_number }}</td>
+                                <td>
+                                    {% proformas_by_td proforma_td=perm.prof_number as proformas %}
+                                    {% if proformas.count %}
+                                        {% for prof in proformas %}
+                                            {{ prof.number }}
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ proformas }}
+                                    {% endif %}
+
+                                </td>
+                                <td>{{ perm.date }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-md-3">
+                    <h4>فروش قطعات</h4>
+                    <table class="table table-hover text-center">
+                        <thead>
+                        <tr>
+                            <th class="text-center">ردیف</th>
+                            <th class="text-center">شماره مجوز</th>
+                            <th class="text-center">پیش فاکتور تدوین</th>
+                            <th class="text-center">پیش فاکتور</th>
+                            <th class="text-center">تاریخ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for perm in perms_parts %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ perm.perm_number }}</td>
+                                <td>{{ perm.prof_number }}</td>
+                                <td>
+                                    {% proformas_by_td proforma_td=perm.prof_number as proformas %}
+                                    {% if proformas.count %}
+                                        {% for prof in proformas %}
+                                            {{ prof.number }}
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ proformas }}
+                                    {% endif %}
+
+                                </td>
+                                <td>{{ perm.date }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-md-3">
+                    <h4>تعمیرات</h4>
+                    <table class="table table-hover text-center">
+                        <thead>
+                        <tr>
+                            <th class="text-center">ردیف</th>
+                            <th class="text-center">شماره مجوز</th>
+                            <th class="text-center">پیش فاکتور تدوین</th>
+                            <th class="text-center">پیش فاکتور</th>
+                            <th class="text-center">تاریخ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for perm in perms_services %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ perm.perm_number }}</td>
+                                <td>{{ perm.prof_number }}</td>
+                                <td>
+                                    {% proformas_by_td proforma_td=perm.prof_number as proformas %}
+                                    {% if proformas.count %}
+                                        {% for prof in proformas %}
+                                            {{ prof.number }}
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ proformas }}
+                                    {% endif %}
+
+                                </td>
+                                <td>{{ perm.date }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-md-3">
+                    <h4>ضایعات</h4>
+                    <table class="table table-hover text-center">
+                        <thead>
+                        <tr>
+                            <th class="text-center">ردیف</th>
+                            <th class="text-center">شماره مجوز</th>
+                            <th class="text-center">پیش فاکتور تدوین</th>
+                            <th class="text-center">پیش فاکتور</th>
+                            <th class="text-center">تاریخ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for perm in perms_wastages %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ perm.perm_number }}</td>
+                                <td>{{ perm.prof_number }}</td>
+                                <td>
+                                    {% proformas_by_td proforma_td=perm.prof_number as proformas %}
+                                    {% if proformas.count %}
+                                        {% for prof in proformas %}
+                                            {{ prof.number }}
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ proformas }}
+                                    {% endif %}
+
+                                </td>
+                                <td>{{ perm.date }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
 
         </div>
     </div>

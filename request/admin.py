@@ -4,6 +4,8 @@ from django.contrib import admin
 from .models import (
     Requests,
     ReqSpec,
+    ReqPart,
+    Services,
     Xpref,
     PrefSpec,
     Payment,
@@ -22,6 +24,8 @@ from .models import (
 
 admin.site.register(Requests)
 admin.site.register(ReqSpec)
+admin.site.register(ReqPart)
+admin.site.register(Services)
 admin.site.register(Xpref)
 admin.site.register(PrefSpec)
 admin.site.register(Payment)

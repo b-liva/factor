@@ -32,9 +32,7 @@
             </div>
             <div class="col-md-3">
                 <h4>پیش فاکتور های با شماره تدوین تکراری</h4>
-                <ol>
-                    <li>مجوز نمی تواند بدون هیچ گونه دریافتی باشد.</li>
-                </ol>
+
                 <ol>
                     {% for proforma_td in duplicates_proforma_tds %}
                         {% proformas_by_td proforma_td=proforma_td as proformas %}
