@@ -104,6 +104,27 @@ class TrackItemsCode(models.Model):
     temp_str = models.TextField(max_length=1000, null=True, blank=True)
 
 
+class Code(models.Model):
+    code = models.BigIntegerField()
+    kw = models.CharField(max_length=50, null=True, blank=True)
+    frame = models.CharField(max_length=50, blank=True, null=True)
+    speed = models.CharField(max_length=50, null=True, blank=True)
+    voltage = models.CharField(max_length=50, null=True, blank=True)
+    ip = models.CharField(max_length=50, null=True, blank=True)
+    ic = models.CharField(max_length=50, null=True, blank=True)
+    im = models.CharField(max_length=50, null=True, blank=True)
+    type = models.CharField(max_length=50, null=True, blank=True)
+    weight = models.CharField(max_length=50, null=True, blank=True)
+    details = models.TextField()
+    red_flag = models.BooleanField(default=False)
+    green_flag = models.BooleanField(default=False)
+    is_entered = models.BooleanField(default=False)
+    temp_str = models.TextField(max_length=1000, null=True, blank=True)
+
+    def __str__(self):
+        return '%s: %sKW - %sRPM - %sV' % (self.code, self.kw, self.speed, self.voltage)
+
+
 class ProformaFollowUp(models.Model):
     owner = models.CharField(max_length=15)
     date = models.CharField(max_length=15)

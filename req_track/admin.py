@@ -11,6 +11,7 @@ from .models import (
     Perm,
     PriceList,
     TadvinTotal,
+    Code
 )
 
 
@@ -20,6 +21,7 @@ from import_export import resources
 # admin.site.register(ReqEntered)
 @admin.register(ReqEntered)
 @admin.register(TrackItemsCode)
+@admin.register(Code)
 @admin.register(TrackXpref)
 @admin.register(Payments)
 @admin.register(ProformaFollowUp)

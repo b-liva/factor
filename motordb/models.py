@@ -140,7 +140,7 @@ class MotorsCode(models.Model):
     ic = models.CharField(max_length=10, null=True, blank=True)
     im = models.CharField(max_length=8, null=True, blank=True)
     ie = models.CharField(max_length=8, null=True, blank=True)
-    yd = models.CharField(max_length=10, null=True, blank=True)
+    yd = models.CharField(max_length=20, null=True, blank=True)
     # ex_type = models.IntegerField(choices=ex_types, default=0, null=True, blank=True)
     # images = models.FileField(upload_to='motordb/')
     efficiency = models.FloatField(null=True, blank=True)
@@ -155,6 +155,7 @@ class MotorsCode(models.Model):
     freq = models.FloatField(default=50)
     description = models.CharField(max_length=100, null=True, blank=True)
     summary = models.TextField(max_length=700, blank=True, null=True)
+    label = models.IntegerField()
 
     def __str__(self):
         return '%s kw - %s rpm - %s V' % (self.kw, self.speed, self.voltage)

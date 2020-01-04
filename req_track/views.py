@@ -37,8 +37,8 @@ from req_track.models import (
     Customer as Customer_temp,
     CustomerResolver,
     TadvinTotal)
-from .forms import E_Req_Form, E_Req_Edit_Form
 from django.db import models
+from .forms import E_Req_Form, E_Req_Edit_Form
 
 
 # Create your views here.
