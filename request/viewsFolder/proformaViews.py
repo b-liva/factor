@@ -223,7 +223,7 @@ def prefspec_index(request):
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
-    spec_list = PrefSpec.objects.filter(xpref_id__is_active=True, xpref_id__perm=True) \
+    spec_list = PrefSpec.objects.filter(xpref_id__is_active=True, xpref_id__perm=True, price__gt=0) \
         .annotate(qty_remaining=F('qty') - F('qty_sent'))
 
     if not request.method == 'POST':
