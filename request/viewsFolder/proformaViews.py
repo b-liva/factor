@@ -39,7 +39,7 @@ from request import models
 from request.forms.forms import CommentForm, ProfFollowUpForm
 from request.forms.search import ProformaSearchForm, PermSearchForm, PrefSpecSearchForm
 import request.templatetags.functions as funcs
-from request.models import Requests, Xpref, ReqSpec, PrefSpec, ProformaFollowUP, Perm
+from request.models import Requests, Xpref, ReqSpec, PrefSpec, ProformaFollowUP, Perm, ProjectType
 from pricedb.models import MotorDB
 
 from request.forms import proforma_forms, forms
@@ -258,6 +258,9 @@ def prefspec_index(request):
             spec_list = spec_list.filter(kw__gte=request.POST['kw_min'])
         if request.POST['rpm']:
             spec_list = spec_list.filter(rpm=request.POST['rpm'])
+        if request.POST['project_type'] and request.POST['project_type'] != '0':
+            project_type = ProjectType.objects.get(title=request.POST['project_type'])
+            spec_list = spec_list.filter(reqspec_eq__type=project_type)
         if request.POST['status'] and request.POST['status'] != '0':
             status = request.POST['status']
 

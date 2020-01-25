@@ -324,4 +324,19 @@ class PrefSpecSearchForm(PermSearchForm):
         'class': 'form-control'
     })
 
+    PROJECT_TYPE_CHOICES = (
+        ('0', '---',),
+        ('روتین', 'روتین',),
+        ('پروژه', 'پروژه',),
+        ('ضد انفجار', 'ضدانفجار',),
+        ('تعمیرات', 'خدمات پس از فروش',),
+        ('سایر', 'سایر',),
+
+    )
+    project_type = forms.ChoiceField(
+        label='نوع پروژه',
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        }), choices=PROJECT_TYPE_CHOICES, required=False)
+
 
