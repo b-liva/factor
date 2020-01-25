@@ -440,3 +440,18 @@ def proformas_by_td(proforma_td):
     return proformas
 
 
+@register.simple_tag()
+def proforma_payments(proforma_number):
+    proforma = Xpref.objects.get(number=proforma_number)
+    payments = proforma.payment_set.filter(is_active=True)
+    return payments
+
+
+@register.simple_tag()
+def kw_sold(kw, qty):
+    return kw * qty
+
+
+@register.simple_tag()
+def amount_sold(price, qty):
+    return price * qty * 1.09

@@ -90,20 +90,25 @@
 
                 </div>
                 <div class="col-md-4">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         {{ form.sort_by.errors }}
                         <label for="{{ form.sort_by.id_for_label }}">{{ form.sort_by.label }}</label>
                         {{ form.sort_by }}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         {{ form.dsc_asc.errors }}
                         <label for="{{ form.dsc_asc.id_for_label }}"> {{ form.dsc_asc.label }} </label>
                         {{ form.dsc_asc }}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         {{ form.item_per_page.errors }}
                         <label for="{{ form.item_per_page.id_for_label }}"> {{ form.item_per_page.label }} </label>
                         {{ form.item_per_page }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.project_type.errors }}
+                        <label for="{{ form.project_type.id_for_label }}"> {{ form.project_type.label }} </label>
+                        {{ form.project_type }}
                     </div>
                 </div>
                 <button type="submit" name="submit" class="btn btn-sm btn-primary">
@@ -118,14 +123,18 @@
                         <th scope="col" class="text-center">ردیف</th>
                         <th scope="col" class="text-center">kw</th>
                         <th scope="col" class="text-center">rpm</th>
+                        <th scope="col" class="text-center">نوع پروژه</th>
                         <th scope="col" class="text-center">تعداد</th>
                         <th scope="col" class="text-center">ارسال شده</th>
                         <th scope="col" class="text-center">مانده</th>
+                        <th scope="col" class="text-center">کیلووات</th>
+                        <th scope="col" class="text-center">مبلغ</th>
                         <th scope="col" class="text-center">شماره پیش فاکتور</th>
                         <th scope="col" class="text-center">شماره مجوز</th>
                         <th scope="col" class="text-center">شماره درخواست</th>
                         <th scope="col" class="text-center">مشتری</th>
                         <th scope="col" class="text-center">تاریخ</th>
+                        <th scope="col" class="text-center">تاریخ مجوز</th>
                         <th scope="col" class="text-center">تحویل</th>
                         <th scope="col" class="text-center"></th>
                     </tr>
@@ -137,14 +146,18 @@
                             <td scope="row">{{ forloop.counter }}</td>
                             <td>{{ prefspec.kw }}</td>
                             <td>{{ prefspec.rpm }}</td>
+                            <td>{{ prefspec.reqspec_eq.type.title }}</td>
                             <td>{{ prefspec.qty }}</td>
                             <td>{{ prefspec.qty_sent }}</td>
                             <td>{{ prefspec.qty_remaining }}</td>
+                            <td>{% kw_sold kw=prefspec.kw qty=prefspec.qty as kw_sold %}{{ kw_sold | floatformat | intcomma }}</td>
+                            <td>{% amount_sold price=prefspec.price qty=prefspec.qty as amount_sold %}{{ amount_sold | floatformat | intcomma }}</td>
                             <td><a href="{% url 'pref_details' ypref_pk=prefspec.xpref_id.pk %}">{{ prefspec.xpref_id.number }}</a></td>
                             <td><a href="{% url 'pref_details' ypref_pk=prefspec.xpref_id.pk %}">{{ prefspec.xpref_id.perm_number }}</a></td>
                             <td><a href="{% url 'request_details' request_pk=prefspec.xpref_id.req_id.pk %}">{{ prefspec.xpref_id.req_id.number }}</a></td>
                             <td><a href="{% url 'customer_read' customer_pk=prefspec.xpref_id.req_id.customer.pk %}">{{ prefspec.xpref_id.req_id.customer.name }}</a></td>
                             <td>{{ prefspec.xpref_id.date_fa }}</td>
+                            <td>{{ prefspec.xpref_id.perm_date }}</td>
                             <td>{{ prefspec.xpref_id.due_date }}</td>
                             <td>{{ prefspec.xpref_id.owner }}</td>
                         </tr>

@@ -214,7 +214,8 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for pay in pref.payment_set.all %}
+                                        {% proforma_payments proforma_number=pref.number as payments %}
+                                        {% for pay in payments %}
                                             <tr>
                                                 <td><a href="{% url 'payment_details' ypayment_pk=pay.pk %}">
                                                     {{ pay.number }}
