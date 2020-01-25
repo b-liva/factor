@@ -435,3 +435,10 @@ def invoices_from_invouts(invouts):
 def proformas_by_td(proforma_td):
     proformas = Xpref.objects.filter(number_td=proforma_td)
     return proformas
+
+
+@register.simple_tag()
+def proforma_payments(proforma_number):
+    proforma = Xpref.objects.get(number=proforma_number)
+    payments = proforma.payment_set.filter(is_active=True)
+    return payments
