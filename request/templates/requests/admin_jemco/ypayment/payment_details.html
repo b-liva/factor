@@ -7,7 +7,7 @@
         </div>
         <div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
-                <h1 class="text-center">پرداخت</h1>
+                <h1 class="text-center">دریافتی</h1>
             </div>
         </div>
         <div class="row">
@@ -27,8 +27,7 @@
                         <div class="icon">
                         </div>
                         <div class="count">{{ payment.date_fa }}</div>
-
-                        <h3>تاریخ پرداخت</h3>
+                        <h3>تاریخ دریافت</h3>
                     </div>
                 </div>
 
@@ -51,10 +50,19 @@
 
             </div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+                {% if payment.owner.username == 'jemco3' %}
+                    <h4 class="text-right">ثبت نرم افزاری</h4>
+                {% else %}
+                    <h4 class="text-right">مهندس {{ payment.owner.last_name }}</h4>
+                {% endif %}
+
                 <div class="pull-left">
                     {% if perms.request.add_payment %}
                         <a href="{% url 'payment_edit' ypayment_pk=payment.pk %}" class="btn btn-warning btn-sm">
                             <i class="fa fa-pencil"></i> ویرایش </a>
+                        <a class="btn btn-primary btn-sm btn-danger" href="{% url 'payment_delete' ypayment_pk=payment.pk %}"
+                       data-toggle="tooltip" title="حذف"><i
+                            class="fa fa-trash"></i> حذف دریافتی</a>
                         <a href="{% url 'payment_index' %}" class="btn btn-info btn-sm">
                             <i class="fa fa-list "></i> لیست پرداخت ها</a>
                     {% endif %}
@@ -77,9 +85,9 @@
                         <div class="panel-body">
                             <p class="card-text">
                                 پرداخت مربوط به پیش فاکتور شماره <a class="badge badge-light"
-                                    href="{% url 'pref_details' ypref_pk=payment.xpref_id.pk %}">{{ payment.xpref_id.number }}</a>
+                                                                    href="{% url 'pref_details' ypref_pk=payment.xpref_id.pk %}">{{ payment.xpref_id.number }}</a>
                                 و درخواست شماره <a class="badge badge-light"
-                                    href="{% url 'request_details' request_pk=payment.xpref_id.req_id.pk %}">{{ payment.xpref_id.req_id.number }}</a>
+                                                   href="{% url 'request_details' request_pk=payment.xpref_id.req_id.pk %}">{{ payment.xpref_id.req_id.number }}</a>
                             </p>
                         </div>
                     </div>

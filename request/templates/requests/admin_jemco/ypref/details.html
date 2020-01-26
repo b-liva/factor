@@ -80,6 +80,11 @@
                         </ol>
                     </div>
                     <div class="col-xs-4">
+                        {% if pref.owner.username == 'jemco3' %}
+                            <h4 class="text-right">ثبت نرم افزاری</h4>
+                        {% else %}
+                            <h4 class="text-right">مهندس {{ pref.owner.last_name }}</h4>
+                        {% endif %}
                         {% if perms.request.add_xpref %}
                             <div class="btn-group">
                                 <button type="button" class="btn btn-primary dropdown-toggle"
@@ -104,6 +109,8 @@
                                            data-toggle="tooltip" title="ویرایش قیمت"
                                            href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
                                         <i class="fa fa-pencil btn-warning"></i> ویرایش قیمت</a></li>
+                                    <li><a href="{% url 'pref_delete' ypref_pk=pref.pk %}" data-toggle="tooltip"
+                                       title="حذف"><i class="fa fa-trash red"></i> حذف پیش فاکتور</a></li>
                                     <li><a href="{% url 'pay_form_prof' prof_pk=pref.pk %}"
                                            data-toggle="tooltip" title="ثبت پرداخت">
                                         <i class="fa fa-plus green" aria-hidden="true"></i>
