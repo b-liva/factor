@@ -21,7 +21,7 @@ from request.filters.filters import RequestFilter
 from request.forms.forms import RequestCopyForm, CommentForm
 from request.forms.search import ReqSearchForm
 from request.views import find_all_obj
-from .models import Requests, ReqSpec, PrefSpec, IMType
+from .models import Requests, ReqSpec, PrefSpec, IMType, Perm
 from .models import Xpref, Payment
 from . import models
 from customer.models import Customer
@@ -1426,4 +1426,35 @@ def fetch_sales_data(request):
         'diff_days': days,
         # 'date_max': str(date_max),
     }
+    return JsonResponse(context, safe=False)
+
+
+@login_required
+def find_by_number(request):
+    data = json.loads(request.body.decode('utf-8'))
+    number = data['number']
+    proforma = Xpref.objects.filter(number=number).last()
+    perm = Xpref.objects.filter(perm_number=number).last()
+    context = dict()
+    if proforma:
+        context['proforma'] = {
+                'type_slug': 'پیش فاکتور',
+                'number': proforma.number,
+                'id': proforma.pk,
+                'customer': {
+                    'id': proforma.req_id.customer.id,
+                    'name': proforma.req_id.customer.name,
+                }
+            }
+    if perm:
+        context['perm'] = {
+            'type_slug': 'مجوز',
+            'number': perm.perm_number,
+            'id': perm.pk,
+            'customer': {
+                'id': perm.req_id.customer.id,
+                'name': perm.req_id.customer.name,
+            }
+        }
+
     return JsonResponse(context, safe=False)

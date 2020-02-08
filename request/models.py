@@ -390,8 +390,11 @@ class Xpref(models.Model):
         received = 0 if value['sum'] is None else value['sum']
         remaining = self.total_proforma_price_vat()['price_vat'] - received
         # Todo: Debug division by zero if total_proforma_price_vat()['price_vat'] == 0
-        received_percent = 100 * received / self.total_proforma_price_vat()['price_vat']
-        remaining_percent = 100 * remaining / self.total_proforma_price_vat()['price_vat']
+        received_percent = 0
+        remaining_percent = 0
+        if self.total_proforma_price_vat()['price_vat']:
+            received_percent = 100 * received / self.total_proforma_price_vat()['price_vat']
+            remaining_percent = 100 * remaining / self.total_proforma_price_vat()['price_vat']
         status = True if remaining == 0 else False
         return {
             'received': received,
