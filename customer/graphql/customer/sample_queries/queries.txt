@@ -1,0 +1,26 @@
+mutation someMutation {
+  customerModelMutation(input: {
+    clientMutationId: "vvsllsl",
+    owner: 12,
+    code: 35116,
+    name: "مشتری جدید",
+    phone: "1",
+    type: 3,
+    pubDate: "1992-10-09T00:00:00Z",
+    date2: "1398-02-02"}) {
+    customer{
+      name
+      owner{
+        username
+        lastName
+      }
+      type{
+        name
+      }
+    }
+    errors{
+      field,
+      messages
+    }
+  }
+}
