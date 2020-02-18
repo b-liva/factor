@@ -100,6 +100,7 @@ THIRD_PARTY_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'webpack_loader',
     'pytest_django',
+    'graphene_django',
 ]
 
 LOCAL_APPS = [
@@ -343,3 +344,7 @@ ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = True
 # DEBUG_TOOLBAR_CONFIG = {
 #     'SHOW_TOOLBAR_CALLBACK': lambda x: False,
 # }
+
+GRAPHENE = {
+    'SCHEMA': 'factor.schema.schema'
+}
