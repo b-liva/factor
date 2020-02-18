@@ -1,0 +1,96 @@
+Adding a new customer
+
+mutation ReqMutation{
+  requestMutation(input:{
+    customer:13
+    owner:3
+    pubDate: "1992-10-09T00:00:00Z",
+    clientMutationId:"klsjf"
+    number:18315
+    colleagues:4
+    dateFa: "1398-02-12"
+    summary: "something about this request"
+    isActive:true
+  }){
+    requests{
+      id
+      number
+      customer{
+        name
+      }
+    }
+    errors{
+    field,
+      messages
+  }
+  }
+}
+
+Adding ReqSpec to a request:
+
+mutation reqSpecMutation{
+  reqSpecMutation(input:{
+    clientMutationId:"alsdjf"
+    code:99009900
+    reqId:1784
+    owner:4
+    qty:25
+    kw:160
+    rpm:1500
+    voltage:380
+    rpmNew:1
+    type:2
+    isActive:true
+  }){
+    reqSpec{
+      reqId{
+        id
+        number
+      }
+      qty
+      kw
+      rpm
+      voltage
+    }
+    errors{
+      field,
+      messages
+    }
+  }
+}
+
+
+mutation (
+$reqId:ID!,
+$qty: Int!,
+$type: ID!,
+$kw:Float!,
+$rpm: Int!,
+$voltage:Int!,
+$tech: Boolean!,
+$price: Boolean!,
+$permission: Boolean!,
+$sent: Boolean!,
+$cancelled: Boolean!
+) {
+    createSpec(
+      input: {
+        reqId:$reqId,
+        qty:$qty,
+        type:$type,
+        kw:$kw,
+        rpm:$rpm,
+        voltage:$voltage,
+        permission:$permission,
+        tech: $tech,
+        sent:$sent,
+        price:$price,
+        cancelled:$cancelled
+      }
+    ) {
+    reqSpec {
+      id
+    }
+    }
+  }
+`;
