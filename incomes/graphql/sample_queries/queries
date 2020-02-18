@@ -1,0 +1,214 @@
+{
+  income(id: "SW5jb21lTm9kZTox") {
+    id
+    customer {
+      id
+      name
+    }
+    assignedCount
+    amount
+    amountAssigned
+    amountNotAssigned
+    incomerowSet {
+      edges {
+        node {
+          id
+          amount
+          income {
+            customer {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+find income by number:
+{
+  allIncomes(number:56151){
+    edges {
+      node {
+        id
+        number
+        customer {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+
+find income by number:
+{
+  allIncomes(number:1351351) {
+    edges {
+      node {
+        id
+        number
+        amount
+        amountNotAssigned
+      }
+    }
+  }
+}
+
+find perm by number(permspecs included):
+{
+  allPerms(number:218) {
+    edges {
+      node {
+        id
+        number
+        permspecPerm {
+          edges {
+            node {
+              id
+              qty
+              details
+              price
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+find proforma by number
+{
+  allProformas(number:870) {
+    edges {
+      node {
+        id
+        number
+      }
+    }
+  }
+}
+find request by number
+{
+  allRequests(number:970222) {
+    edges {
+      node {
+        id
+        number
+        customer {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+
+find payment by number
+{
+  allPayments(number:238175) {
+    edges {
+      node {
+        id
+        number
+        amount
+      }
+    }
+  }
+}
+
+find payment type by title:
+{
+  allPaymentTypes(title: "حواله"){
+    edges {
+      node {
+        id
+        title
+        paymentSet {
+          edges {
+            node {
+              id
+              number
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+{
+  allIncomes {
+    edges {
+      node {
+        number
+        type {
+          id
+          title
+        }
+        amount
+        assignedCount
+        amountAssigned
+        amountNotAssigned
+        owner{
+          lastName
+        }
+        customer {
+          name
+        }
+        incomerowSet{
+          edges{
+            node{
+              amount
+              summary
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+Adding new Income
+mutation incomeMutation{
+  incomeMutation(input:{
+    owner:4
+    customer:24
+    number:321560
+    amount:125000000
+    dateFa:"1398-12-02"
+    isActive:true
+  }){
+    income{
+      amount
+      amountAssigned
+    }
+    errors{
+      field
+      messages
+    }
+  }
+
+}
+
+Adding new IncomeRow: todo: customers should match
+mutation incomeRowMutation{
+  incomeRowMutation(input:{
+    owner:4
+    income:5
+    proforma:10
+    amount:100
+    dateFa:"1398-10-01"
+  }){
+   incomeRow{
+    id
+    amount
+    income{
+      customer{
+        name
+      }
+    }
+  }
+  }
+}

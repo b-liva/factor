@@ -42,6 +42,17 @@ class Income(TimeStampedModel):
     def __str__(self):
         return '#%s - amount:%s - customer:%s' % (self.number, self.amount, self.customer)
 
+    def assigned(self):
+        from django.db.models import Sum
+        assigned = self.incomerow_set.aggregate(sum=Sum('amount'))
+        if assigned['sum'] is not None:
+            return assigned['sum']
+        return 0
+
+    def not_assigned(self):
+        not_assigned = self.amount - self.assigned()
+        return not_assigned
+
     class Meta:
         permissions = (
             ('read_payment', 'Can read payment details'),

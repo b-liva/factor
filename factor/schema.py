@@ -1,4 +1,3 @@
-import incomes.schema
 import accounts.graphql.queries
 import customer.graphql.schema_temp
 import request.graphql.perm.queries
@@ -8,11 +7,13 @@ import request.graphql.payment.queries
 import customer.graphql.customer.queries
 import pricedb.graphql.queries
 import motordb.graphql.queries
+import incomes.graphql.queries
 # mutations
 import customer.graphql.customer.mutations
 import request.graphql.orders.mutations
 import request.graphql.proforma.mutations
 import request.graphql.payment.mutations
+import incomes.graphql.mutations
 import graphene
 from graphene_django.debug import DjangoDebug
 
@@ -27,8 +28,8 @@ class Query(
     request.graphql.payment.queries.Query,
     customer.graphql.customer.queries.Query,
     pricedb.graphql.queries.Query,
+    incomes.graphql.queries.Query,
     motordb.graphql.queries.Query,
-    incomes.schema.Query,
     # customer.graphql.schema_temp.Query,
     graphene.ObjectType
 ):
@@ -41,6 +42,7 @@ class Mutations(
     request.graphql.orders.mutations.RequestModelMutations,
     request.graphql.proforma.mutations.ProformaModelMutation,
     request.graphql.payment.mutations.PaymentModelMutation,
+    incomes.graphql.mutations.IncomeModelMutation,
     graphene.ObjectType
 ):
     pass
