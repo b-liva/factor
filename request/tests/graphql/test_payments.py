@@ -83,8 +83,6 @@ class RequestTestCases(GraphQLTestCase, CustomAPITestCase):
         response = self.query(query)
         json_response = json.loads(response.content)
 
-        print(json_response)
-        print(json_response['data']['payment']['id'])
         self.assertResponseNoErrors(response)
         self.assertEqual(json_response['data']['payment']['id'], 'UGF5bWVudE5vZGU6MQ==')
         self.assertEqual(json_response['data']['payment']['number'], 45422345)
@@ -158,6 +156,5 @@ class RequestTestCases(GraphQLTestCase, CustomAPITestCase):
             # 'pdate': json.dumps(today, default=str) This also works.
         })
         json_respone = json.loads(response.content)
-        print(json_respone)
 
     # subscription

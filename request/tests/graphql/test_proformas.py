@@ -38,7 +38,7 @@ class TestProforma(GraphQLTestCase, CustomAPITestCase):
         '''
         response = self.query(query)
         json_response = json.loads(response.content)
-        print(json_response)
+
         proformas = json_response['data']['allProformas']['edges']
 
         self.assertResponseNoErrors(response)

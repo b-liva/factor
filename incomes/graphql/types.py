@@ -1,14 +1,16 @@
+"""
+Graphql Types for Income app
+"""
 import graphene
-
-from incomes.models import Income, IncomeRow
-
-from graphene import Node
-from graphene_django.filter import DjangoFilterConnectionField
+from graphene import Node, relay
 from graphene_django.types import DjangoObjectType
-from graphene import relay
+from incomes.models import Income, IncomeRow
 
 
 class IncomeNode(DjangoObjectType):
+    """
+    Node For Income app with relay interface.
+    """
     class Meta:
         model = Income
         filter_fields = {
@@ -33,6 +35,7 @@ class IncomeNode(DjangoObjectType):
 
 
 class IncomeRowNode(DjangoObjectType):
+    """Node for incomerow app with relay interface."""
     class Meta:
         model = IncomeRow
         interfaces = (Node,)

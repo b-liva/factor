@@ -189,7 +189,6 @@ mutation incomeMutation{
       messages
     }
   }
-
 }
 
 Adding new IncomeRow: todo: customers should match

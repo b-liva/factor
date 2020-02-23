@@ -6,6 +6,7 @@ import datetime
 from django.test import Client, TestCase
 from rest_framework.test import APIClient, APITestCase
 
+from incomes.models import Income, IncomeRow
 from motordb.models import MotorsCode
 # from request.models import Requests, ReqSpec, ProjectType, RpmType, Xpref, PrefSpec, Payment, IMType, IPType, ICType, IEType, ReqPart
 from request.models import *
@@ -40,6 +41,8 @@ class CustomAPITestCase(APITestCase):
         self.payment = self.sample_payment(proforma=self.proforma, owner=self.user, number=45422345, amount=84532135100)
         self.motorcode = self.sample_motorcode(owner=self.user, code=9900, kw=450, speed=1500, voltage=380)
 
+        self.income = self.sample_income_new(number=9807)
+        self.income_row = self.sample_income_row()
         self.request_payload = {
             'number': 1000,
             'customer': self.customer.pk,
@@ -171,6 +174,16 @@ class CustomAPITestCase(APITestCase):
             Permission.objects.get(codename='change_payment', content_type__app_label='request'),
             Permission.objects.get(codename='read_payment', content_type__app_label='request'),
             Permission.objects.get(codename='delete_payment', content_type__app_label='request'),
+            Permission.objects.get(codename='add_income', content_type__app_label='incomes'),
+            # Permission.objects.get(codename='index_income', content_type__app_label='incomes'),
+            Permission.objects.get(codename='change_income', content_type__app_label='incomes'),
+            # Permission.objects.get(codename='read_income', content_type__app_label='incomes'),
+            Permission.objects.get(codename='delete_income', content_type__app_label='incomes'),
+            Permission.objects.get(codename='add_incomerow', content_type__app_label='incomes'),
+            # Permission.objects.get(codename='index_incomerow', content_type__app_label='incomes'),
+            Permission.objects.get(codename='change_incomerow', content_type__app_label='incomes'),
+            # Permission.objects.get(codename='read_incomerow', content_type__app_label='incomes'),
+            Permission.objects.get(codename='delete_incomerow', content_type__app_label='incomes'),
             Permission.objects.get(codename='add_motorscode', content_type__app_label='motordb'),
             Permission.objects.get(codename='index_motorscode', content_type__app_label='motordb'),
             Permission.objects.get(codename='change_motorscode', content_type__app_label='motordb'),
@@ -213,20 +226,20 @@ class CustomAPITestCase(APITestCase):
         return Payment.objects.create(xpref_id=proforma, owner=owner, number=number, amount=amount, **defaults)
 
     def sample_prefspec(self, proforma, owner, reqspe, **params):
-
         defaults = {
             'kw': reqspe.kw,
             'rpm': reqspe.rpm,
+            'price': 1000
         }
         defaults.update(params)
         return PrefSpec.objects.create(xpref_id=proforma, owner=owner, reqspec_eq=reqspe, **defaults)
 
     def sample_income(self, **params):
-            defaults = {
-                'amount': 1500000,
-            }
-            defaults.update(params)
-            return Payment.objects.create(**defaults)
+        defaults = {
+            'amount': 1500000,
+        }
+        defaults.update(params)
+        return Payment.objects.create(**defaults)
 
     def sample_motorcode(self, **params):
         im = IMType.objects.create(title='IMB35')
@@ -242,3 +255,32 @@ class CustomAPITestCase(APITestCase):
         default.update(params)
         return MotorsCode.objects.create(**default)
 
+    def sample_income_new(self, **params):
+        default = {
+            'owner': self.ex_user,
+            'customer': self.customer,
+            'amount': 25600000,
+            'date_fa': "1398-02-03",
+            'summary': "for test purposes",
+            'is_active': True,
+        }
+        default.update(params)
+        income = Income.objects.create(**default)
+
+        return income
+
+    def sample_income_row(self, **params):
+
+        default = {
+            'owner': self.ex_user,
+            'income': self.income,
+            'proforma': self.proforma,
+            'amount': 25600,
+            'date_fa': "1398-02-03",
+            'summary': "for test purposes",
+            'is_active': True,
+        }
+        default.update(params)
+        income_row = IncomeRow.objects.create(**default)
+
+        return income_row
