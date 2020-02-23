@@ -14,6 +14,7 @@ class IncomeNode(DjangoObjectType):
     class Meta:
         model = Income
         filter_fields = {
+            'owner__last_name': ['icontains'],
             'number': ['exact'],
             'amount': ['exact'],
             'customer__name': ['icontains'],

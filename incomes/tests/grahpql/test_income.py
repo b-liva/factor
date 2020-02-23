@@ -13,9 +13,9 @@ class TestIncomes(GraphQLTestCase, CustomAPITestCase):
     def test_retrieve_income_list(self):
         """Test retreive income list"""
 
-        income1 = self.sample_income_new(number=123654)
-        income2 = self.sample_income_new(number=154)
-        income3 = self.sample_income_new(number=987)
+        self.sample_income_new(number=123654)
+        self.sample_income_new(number=154)
+        self.sample_income_new(number=987)
         query = '''
             {
               allIncomes {
@@ -36,13 +36,38 @@ class TestIncomes(GraphQLTestCase, CustomAPITestCase):
         self.assertEqual(len(incomes), 4)
         self.assertEqual(incomes[0]['node']['number'], 9807)
 
-    def test_income_mutation_customer_mismatch_fail(self):
-        """Test income mutations fails if request customer differs from income customer"""
-        pass
-
     def test_retrieve_incomes_by_customer(self):
         """Test retrieve incomes by customer"""
-        pass
+        new_customer = self.sample_customer(owner=self.user, name='temp_customer')
+        self.sample_income_new(customer=new_customer, number=6548)
+        self.sample_income_new(customer=new_customer, number=123654)
+        self.sample_income_new(number=154)
+        self.sample_income_new(number=987)
+
+        query = '''
+            query($name:String){
+              allIncomes(customer_Name_Icontains:$name) {
+                edges {
+                  node {
+                    number
+                    amount
+                    customer{
+                      name
+                    }
+                  }
+                }
+              }
+            }
+            '''
+        response = self.query(query, variables={
+            'name': new_customer.name
+        })
+        json_response = json.loads(response.content)
+        print(json_response)
+        incomes = json_response['data']['allIncomes']['edges']
+        self.assertTrue('data' in json_response)
+        self.assertEqual(len(incomes), 2)
+        self.assertEqual(incomes[0]['node']['number'], 6548)
 
     def test_retrieve_incomes_by_date(self):
         """Test retrieve incomes by date"""
@@ -54,7 +79,41 @@ class TestIncomes(GraphQLTestCase, CustomAPITestCase):
 
     def test_retrieve_incomes_by_owner(self):
         """Test retrieve incomes by owner"""
-        pass
+        new_customer = self.sample_customer(owner=self.user, name='temp_customer')
+        self.sample_income_new(owner=self.ex_user, customer=new_customer, number=6548)
+        self.sample_income_new(owner=self.ex_user, customer=new_customer, number=123654)
+        self.sample_income_new(owner=self.ex_user, number=154)
+        self.sample_income_new(owner=self.user, number=987)
+        self.user.last_name = 'someLastName'
+        self.user.save()
+
+        query = '''
+            query($name:String){
+                allIncomes(owner_LastName_Icontains:$name) {
+                  edges {
+                    node {
+                      number
+                      amount
+                      customer{
+                        name
+                      }
+                      owner{
+                        username
+                      }
+                    }
+                  }
+                }
+              }
+        '''
+        response = self.query(query, variables={
+            'name': self.user.last_name
+        })
+        json_response = json.loads(response.content)
+
+        incomes = json_response['data']['allIncomes']['edges']
+        self.assertTrue('data' in json_response)
+        self.assertEqual(len(incomes), 1)
+        self.assertEqual(incomes[0]['node']['number'], 987)
 
     def test_retrieve_incomes_by_due_date(self):
         """Test retrieve incomes by due_date"""

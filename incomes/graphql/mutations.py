@@ -1,10 +1,8 @@
 import sys
-from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
-from graphene_django.forms.mutation import DjangoModelFormMutation
 from graphql import GraphQLError
+from graphene_django.forms.mutation import DjangoModelFormMutation
 
-from request.models import Xpref
 from .forms.form import IncomeModelForm, IncomeRowModelForm
 import request.templatetags.functions as funcs
 
@@ -54,7 +52,7 @@ class IncomeRowModelFormMutation(DjangoModelFormMutation):
             raise GraphQLError("customer mismatch")
         # TODO: two checks should be done.
         # 1- sum of income rows shouldn't be more than income amount,
-        # 2- proforma incomerows sum should be less than proforma amount
+        # 2- proforma income rows sum should be less than proforma amount
 
         proforma_assigns = proforma.incomerow_set.aggregate(sum=Sum('amount'))
         remained_income = income.amount - income.incomerow_set.aggregate(sum=Sum('amount'))['sum']

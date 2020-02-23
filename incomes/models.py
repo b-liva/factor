@@ -1,27 +1,14 @@
-import os.path
-from os.path import split
-
-# from django.contrib.auth.models import User
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
-from django.contrib.contenttypes.models import ContentType
-from django.db.models import Sum, F, FloatField
-from django.utils import timezone
-
-
 from django.db import models
-import datetime
-import jdatetime
 from django.utils.timezone import now
+from django.contrib.auth import get_user_model
 from django_jalali.db import models as jmodels
 
-from django.contrib.auth import get_user_model
-
 from customer.models import Customer
+from request.models import Xpref, PaymentType, TimeStampedModel, Perm
 
 User = get_user_model()
 
 # Create your models here.
-from request.models import Xpref, PaymentType, TimeStampedModel, Perm
 
 
 class Income(TimeStampedModel):
