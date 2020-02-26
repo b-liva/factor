@@ -23,11 +23,6 @@ class CustomerNode(DjangoObjectType):
 
     class Meta:
         model = Customer
-        # filter_fields is now a duplication and will be deleted.
-        filter_fields = {
-            'id': ['exact'],
-            'name': ['exact', 'icontains']
-        }
         interfaces = (relay.Node,)
 
     customer_total_kw = graphene.Int()
