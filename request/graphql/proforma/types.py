@@ -20,6 +20,7 @@ class ProformaFilterSet(django_filters.FilterSet):
 
 class ProformaNode(DjangoObjectType):
     customer_name = graphene.String()
+    pk = graphene.Field(type=graphene.Int, source='id')
 
     def resolve_customer_name(self, info):
         return self.req_id.customer.name
