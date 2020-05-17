@@ -1,9 +1,12 @@
 from graphene import relay, ObjectType
 from graphene_django.forms.mutation import DjangoModelFormMutation
 from ..forms.forms import RequestModelForm, ReqSpecModelForm
+from ..orders.types import RequestNode
 
 
 class RequestModelFormMutation(DjangoModelFormMutation):
+    order = relay.node.Field(RequestNode)
+
     class Meta:
         form_class = RequestModelForm
 

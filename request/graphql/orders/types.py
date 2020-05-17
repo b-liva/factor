@@ -1,4 +1,5 @@
-from graphene import relay
+from django.db.models import Sum, F, FloatField
+from graphene import relay, Int, String
 from graphene_django.types import DjangoObjectType
 
 from request.models import (
@@ -15,8 +16,30 @@ from request.models import (
 class RequestNode(DjangoObjectType):
     class Meta:
         model = Requests
-        filter_fields = ['number', 'customer__name']
+        filter_fields = {
+            'number': ['exact'],
+            'customer__name': ['icontains'],
+            'is_active': ['exact'],
+            'finished': ['exact'],
+            'date_fa': ['exact', 'gte'],
+            'xpref': ['isnull']
+        }
         interfaces = (relay.Node,)
+
+    total_kw = Int()
+    total_qty = Int()
+
+    def resolve_total_kw(self, info, **kwargs):
+        total_kw = self.reqspec_set.filter(is_active=True).aggregate(kw=Sum(F('qty') * F('kw'), output_field=FloatField()))['kw']
+        if total_kw is None:
+            total_kw = 0
+        return total_kw
+
+    def resolve_total_qty(self, info):
+        total_qty = self.reqspec_set.filter(is_active=True).aggregate(Sum('qty'))['qty__sum']
+        if total_qty is None:
+            total_qty = 0
+        return total_qty
 
 
 class ReqSpecNode(DjangoObjectType):
