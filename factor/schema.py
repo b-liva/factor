@@ -8,6 +8,8 @@ import customer.graphql.customer.queries
 import pricedb.graphql.queries
 import motordb.graphql.queries
 import incomes.graphql.queries
+import req_track.graphql.orders_automation.queries
+
 # mutations
 import customer.graphql.customer.mutations
 import request.graphql.orders.mutations
@@ -30,6 +32,7 @@ class Query(
     pricedb.graphql.queries.Query,
     incomes.graphql.queries.Query,
     motordb.graphql.queries.Query,
+    req_track.graphql.orders_automation.queries.Query,
     # customer.graphql.schema_temp.Query,
     graphene.ObjectType
 ):
