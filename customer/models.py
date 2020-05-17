@@ -59,7 +59,6 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING, blank=True, null=True)
     imported = models.BooleanField(default=False)
 
-
     class Meta:
         permissions = (
             ('read_customer', 'Can read a customer details'),
@@ -88,6 +87,29 @@ class Customer(models.Model):
             'amount': amount
         }
         return context
+
+    def permits(self):
+        permits = PrefSpec.objects.filter(
+            xpref_id__perm=True,
+            price__gt=0,
+            xpref_id__req_id__customer=self
+        )
+        return permits
+
+    def sales_qty(self):
+        permits = self.permits()
+        qty = permits.aggregate(Sum('qty'))['qty__sum']
+        return qty
+
+    def sales_kw(self):
+        permits = self.permits()
+        kw = permits.aggregate(sum=Sum(F('qty') * F('kw'), output_field=FloatField()))['sum']
+        return kw
+
+    def sales_amount(self):
+        permits = self.permits()
+        amount = permits.aggregate(Sum('price'))['price__sum']
+        return amount
 
     def perm_qty_delivered(self):
         sent = PrefSpec.objects.filter(xpref_id__req_id__customer=self, qty_sent__gt=0)
