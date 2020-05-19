@@ -1,8 +1,10 @@
 import django_filters
 import graphene
-from graphene import relay
+from graphene import relay, InputObjectType
 from graphene_django import DjangoObjectType
-from request.models import Xpref, PrefSpec
+
+from request.graphql.orders.types import ReqSpecNode
+from request.models import Xpref, PrefSpec, ReqSpec
 
 
 class ProformaFilterSet(django_filters.FilterSet):
@@ -34,6 +36,14 @@ class ProformaNode(DjangoObjectType):
         }
 
         interfaces = (relay.Node,)
+    specs_no_proforma = graphene.List(ReqSpecNode)
+
+    def resolve_specs_no_proforma(self, info):
+        # proforma = Xpref.objects.get(number=9820555)
+        pspecs = self.prefspec_set.all()
+        specs = ReqSpec.objects.filter(req_id=self.req_id).exclude(prefspec__in=pspecs)
+        # specs = ReqSpec.objects.filter(req_id=self.req_id, prefspec__isnull=True)
+        return specs
 
 
 class PrefSpecNode(DjangoObjectType):
@@ -41,3 +51,9 @@ class PrefSpecNode(DjangoObjectType):
         model = PrefSpec
         filter_fields = '__all__'
         interfaces = (relay.Node,)
+
+
+class ProformaSpecInput(InputObjectType):
+    id = graphene.ID()
+    qty = graphene.Int()
+    price = graphene.Float()

@@ -1,5 +1,6 @@
 from django.db.models import Sum, F, FloatField
-from graphene import relay, Int, String
+import graphene
+from graphene import relay, Int, String, InputObjectType
 from graphene_django.types import DjangoObjectType
 
 from request.models import (
@@ -50,7 +51,6 @@ class ReqSpecNode(DjangoObjectType):
 
 
 # Not using relays
-
 class ProjectTypeType(DjangoObjectType):
     class Meta:
         model = ProjectType
