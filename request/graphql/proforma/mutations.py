@@ -3,7 +3,9 @@ from graphene import ObjectType, relay
 from graphene_django.forms.mutation import DjangoModelFormMutation
 from graphql_relay import from_global_id
 
-from .types import PrefSpecNode, ProformaSpecInput
+from accounts.graphql.types import UserNode
+from customer.graphql.customer.types import CustomerNode
+from .types import PrefSpecNode, ProformaSpecInput, ProformaNode
 from ..forms.forms import ProformaModelForm, PrefSpecForm
 from ...models import ReqSpec, PrefSpec, Xpref
 
@@ -56,7 +58,28 @@ class CreateProformaSpecBatch(relay.ClientIDMutation):
         return CreateProformaSpecBatch(proforma_specs=proforma_spec_list)
 
 
+class DeleteProforma(relay.ClientIDMutation):
+
+    class Input:
+        proforma_id = graphene.ID()
+
+    msg = graphene.String()
+    prof = graphene.Field(ProformaNode)
+    number = graphene.Int()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, proforma_id):
+        pid = from_global_id(proforma_id)[1]
+        proforma = Xpref.objects.get(pk=pid)
+        proforma.delete()
+        return cls(
+            msg=f"پیش فاکتور شماره {proforma.number} با موفقیت حذف گردید.",
+            number=proforma.number
+        )
+
+
 class ProformaModelMutation(ObjectType):
     proforma_mutation = ProformaModelFormMutation.Field()
     prefspec_mutation = PrefSpecModelFormMutation.Field()
     create_pref_specs_bulk = CreateProformaSpecBatch.Field()
+    delete_proforma = DeleteProforma.Field()
