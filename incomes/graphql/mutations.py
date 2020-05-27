@@ -1,11 +1,15 @@
 import sys
+
+import graphene
 from django.db.models import Sum
 from graphql import GraphQLError
+from graphene import relay
 from graphene_django.forms.mutation import DjangoModelFormMutation
 from graphql_relay import from_global_id
 
 from .forms.form import IncomeModelForm, IncomeRowModelForm
 import request.templatetags.functions as funcs
+from ..models import Income
 
 
 class IncomeModelFormMutation(DjangoModelFormMutation):
@@ -95,6 +99,26 @@ class IncomeRowModelFormMutation(DjangoModelFormMutation):
         return super().perform_mutate(form, info)
 
 
+class DeleteIncome(relay.ClientIDMutation):
+
+    class Input:
+        income_id = graphene.ID()
+
+    msg = graphene.String()
+    number = graphene.Int()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, income_id):
+        pid = from_global_id(income_id)[1]
+        income = Income.objects.get(pk=pid)
+        income.delete()
+        return cls(
+            msg=f"واریزی شماره {income.number} با موفقیت حذف گردید.",
+            number=income.number
+        )
+
+
 class IncomeModelMutation(object):
     income_mutation = IncomeModelFormMutation.Field()
     income_row_mutation = IncomeRowModelFormMutation.Field()
+    delete_income = DeleteIncome.Field()
