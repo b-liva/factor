@@ -75,10 +75,9 @@ class CustomerModelform(forms.ModelForm):
     #     return super().is_valid()
 
 
-class CustomerType(DjangoObjectType):
-    class Meta:
-        model = Customer
-
+# class CustomerType(DjangoObjectType):
+#     class Meta:
+#         model = Customer
 
 class CreateCustomer(DjangoModelFormMutation):
     customer = relay.node.Field(CustomerNode)
