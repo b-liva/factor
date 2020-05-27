@@ -1,3 +1,4 @@
+from django.db.models import Sum, F, FloatField
 import django_filters
 import graphene
 from graphene import relay, InputObjectType
@@ -37,6 +38,9 @@ class ProformaNode(DjangoObjectType):
 
         interfaces = (relay.Node,)
     specs_no_proforma = graphene.List(ReqSpecNode)
+    amount_total = graphene.Float()
+    paid_total = graphene.Float()
+    unpaid_total = graphene.Float()
 
     def resolve_specs_no_proforma(self, info):
         # proforma = Xpref.objects.get(number=9820555)
@@ -44,6 +48,28 @@ class ProformaNode(DjangoObjectType):
         specs = ReqSpec.objects.filter(req_id=self.req_id).exclude(prefspec__in=pspecs)
         # specs = ReqSpec.objects.filter(req_id=self.req_id, prefspec__isnull=True)
         return specs
+
+    def resolve_amount_total(self, info):
+        total_amount = Xpref.objects.filter(id=self.id, perm=True).aggregate(
+            amount=Sum(1.09 * F('prefspec__price') * F('prefspec__qty'),
+                    output_field=FloatField()))['amount']
+        total_amount = total_amount if total_amount is not None else 0
+
+        return total_amount
+
+    def resolve_paid_total(self, info):
+        paid_total = Xpref.objects.filter(id=self.id).aggregate(amount=Sum('incomerow__amount'))['amount']
+        paid_total = paid_total if paid_total is not None else 0
+        return paid_total
+
+    def resolve_unpaid_total(self, info):
+        total_amount = Xpref.objects.filter(id=self.id, perm=True).aggregate(
+            amount=Sum(1.09 * F('prefspec__price') * F('prefspec__qty'),
+                       output_field=FloatField()))['amount']
+        paid_total = Xpref.objects.filter(id=self.id).aggregate(amount=Sum('incomerow__amount'))['amount']
+        total_amount = total_amount if total_amount is not None else 0
+        paid_total = paid_total if paid_total is not None else 0
+        return total_amount - paid_total
 
 
 class PrefSpecNode(DjangoObjectType):
