@@ -51,4 +51,8 @@ class IncomeRowNode(DjangoObjectType):
     class Meta:
         model = IncomeRow
         interfaces = (Node,)
-        filter_fields = ['amount', 'summary']
+        filter_fields = {
+            'amount': ['exact', 'gt'],
+            'income': ['exact'],
+            'summary': ['icontains']
+        }
