@@ -1,3 +1,4 @@
+import math
 from django.db.models import Sum, F, FloatField
 import graphene
 from graphene import relay, Int, String, InputObjectType
@@ -14,7 +15,44 @@ from request.models import (
 )
 
 
+class TotalCountMixin(graphene.types.ObjectType):
+    @classmethod
+    def get_connection(cls):
+        class CountableConnection(relay.Connection):
+            total_count = Int()
+
+            class Meta:
+                name = '{}Connection'.format(cls._meta.name)
+                node = cls
+
+            @staticmethod
+            def resolve_total_count(root, args, context, info):
+                return root.length
+
+        return CountableConnection
+
+
+class CountableConnectionBase(relay.Connection):
+
+    class Meta:
+        abstract = True
+
+    total_count = Int()
+    num_pages = Int()
+
+    def resolve_total_count(self, info, **kwargs):
+        return self.iterable.count()
+
+    def resolve_num_pages(self, info, *args, **kwargs):
+        if 'first' in info.variable_values:
+            number_pages = math.ceil(self.iterable.count() / info.variable_values['first'])
+        else:
+            number_pages = math.ceil(self.iterable.count() / info.variable_values['last'])
+        return number_pages
+
+
 class RequestNode(DjangoObjectType):
+
     class Meta:
         model = Requests
         filter_fields = {
@@ -26,6 +64,7 @@ class RequestNode(DjangoObjectType):
             'xpref': ['isnull']
         }
         interfaces = (relay.Node,)
+        connection_class = CountableConnectionBase
 
     total_kw = Int()
     total_qty = Int()

@@ -50,7 +50,7 @@ class Statistics(ObjectType):
         return KwCounts(title='پروژه (KW)', count=125)
 
 
-class Query(object):
+class Query(ObjectType):
 
     request = relay.Node.Field(RequestNode)
     all_requests = DjangoFilterConnectionField(RequestNode)
