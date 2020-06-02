@@ -4,15 +4,41 @@ from graphene_django.forms.mutation import DjangoModelFormMutation
 from graphql_relay import from_global_id
 
 from accounts.graphql.types import UserNode
+from accounts.models import User
 from customer.graphql.customer.types import CustomerNode
 from .types import PrefSpecNode, ProformaSpecInput, ProformaNode
 from ..forms.forms import ProformaModelForm, PrefSpecForm
 from ...models import ReqSpec, PrefSpec, Xpref
+from utils.graphql import utils as graphql_utils
 
 
 class ProformaModelFormMutation(DjangoModelFormMutation):
     class Meta:
         form_class = ProformaModelForm
+
+    @classmethod
+    def get_form_kwargs(cls, root, info, **input):
+        owner = info.context.user
+        owner = User.objects.get(pk=4)
+        input['owner'] = str(owner.pk)
+        attrs = ['req_id']
+        input = graphql_utils.from_globad_bulk(attrs, input)
+
+        kwargs = {"data": input}
+        if "id" not in input:
+            last = Xpref.objects.order_by('number').last()
+            input['number'] = last.number + 1
+        else:
+            input.pop("number")
+
+        global_id = input.pop("id", None)
+        if global_id:
+            node_type, pk = from_global_id(global_id)
+            instance = cls._meta.model._default_manager.get(pk=pk)
+            kwargs["instance"] = instance
+            input['number'] = instance.number
+            input['req_id'] = instance.req_id.pk
+        return kwargs
 
 
 class PrefSpecModelFormMutation(DjangoModelFormMutation):
