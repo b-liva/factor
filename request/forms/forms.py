@@ -3,9 +3,8 @@ from django.db.models import Q
 from django.utils.timezone import now
 from request import models
 from django.contrib.auth import get_user_model
-User = get_user_model()
-
 from request.models import Xpref, ProjectType, IMType, ICType, IEType, IPType
+User = get_user_model()
 
 
 class ProjectTypeForm(forms.ModelForm):

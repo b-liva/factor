@@ -6,13 +6,34 @@ from graphql_relay import from_global_id
 from ..forms.forms import RequestModelForm, ReqSpecModelForm
 from ..orders.types import RequestNode
 from ...models import Requests
+from utils.graphql import utils as graphql_utils
 
 
 class RequestModelFormMutation(DjangoModelFormMutation):
+
     order = relay.node.Field(RequestNode)
 
     class Meta:
         form_class = RequestModelForm
+
+    @classmethod
+    def get_form_kwargs(cls, root, info, **input):
+        owner = info.context.user
+        input['owner'] = str(owner.pk)
+        attrs = ['customer']
+        input = graphql_utils.from_globad_bulk(attrs, input)
+        print(input)
+        if 'colleagues' in input:
+            input['colleagues'] = [from_global_id(colleague_pk)[1] for colleague_pk in input['colleagues']]
+
+        kwargs = {"data": input}
+        global_id = input.pop("id", None)
+        if global_id:
+            node_type, pk = from_global_id(global_id)
+            instance = cls._meta.model._default_manager.get(pk=pk)
+            kwargs["instance"] = instance
+
+        return kwargs
 
 
 class ReqSpecModelFormMutation(DjangoModelFormMutation):

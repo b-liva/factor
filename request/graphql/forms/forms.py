@@ -7,18 +7,6 @@ from accounts.models import User
 
 # Request Mutations
 class RequestModelForm(ModelForm):
-    def __init__(self, data=None, *args, **kwargs):
-        current_user = User.objects.get(pk=4)
-        attrs = ['customer']
-        # Changing graphql ids to pk
-        if data is not None:
-            data['owner'] = str(current_user.pk)
-            for attr in attrs:
-                if attr in data:
-                    data[attr] = from_global_id(data[attr])[1]
-            if 'colleagues' in data:
-                data['colleagues'] = [from_global_id(colleague_pk)[1] for colleague_pk in data['colleagues']]
-        super(RequestModelForm, self).__init__(data, args, kwargs)
 
     class Meta:
         model = Requests
