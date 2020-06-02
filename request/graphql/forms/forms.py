@@ -16,18 +16,6 @@ class RequestModelForm(ModelForm):
 
 class ReqSpecModelForm(ModelForm):
 
-    def __init__(self, data=None, *args, **kwargs):
-        
-        current_user = User.objects.get(pk=4)
-        attrs = ['req_id', 'rpm_new', 'im', 'ip', 'ic']
-        # Changing graphql ids to pk
-        if data is not None:
-            data['owner'] = str(current_user.pk)
-            for attr in attrs:
-                if attr in data:
-                    data[attr] = from_global_id(data[attr])[1]
-        super(ReqSpecModelForm, self).__init__(data, args, kwargs)
-
     class Meta:
         model = ReqSpec
         # fields = '__all__'

@@ -3,6 +3,7 @@ from graphene import relay, ObjectType
 from graphene_django.forms.mutation import DjangoModelFormMutation
 from graphql_relay import from_global_id
 
+from accounts.models import User
 from ..forms.forms import RequestModelForm, ReqSpecModelForm
 from ..orders.types import RequestNode
 from ...models import Requests
@@ -39,6 +40,23 @@ class RequestModelFormMutation(DjangoModelFormMutation):
 class ReqSpecModelFormMutation(DjangoModelFormMutation):
     class Meta:
         form_class = ReqSpecModelForm
+
+    @classmethod
+    def get_form_kwargs(cls, root, info, **input):
+        owner = info.context.user
+        owner = User.objects.get(pk=4)
+        input['owner'] = str(owner.pk)
+        attrs = ['req_id', 'rpm_new', 'im', 'ip', 'ic']
+        input = graphql_utils.from_globad_bulk(attrs, input)
+
+        kwargs = {"data": input}
+        global_id = input.pop("id", None)
+        if global_id:
+            node_type, pk = from_global_id(global_id)
+            instance = cls._meta.model._default_manager.get(pk=pk)
+            kwargs["instance"] = instance
+
+        return kwargs
 
 
 class DeleteOrder(relay.ClientIDMutation):
