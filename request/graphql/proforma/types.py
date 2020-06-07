@@ -43,10 +43,7 @@ class ProformaNode(DjangoObjectType):
     unpaid_total = graphene.Float()
 
     def resolve_specs_no_proforma(self, info):
-        # proforma = Xpref.objects.get(number=9820555)
-        pspecs = self.prefspec_set.all()
-        specs = ReqSpec.objects.filter(req_id=self.req_id).exclude(prefspec__in=pspecs)
-        # specs = ReqSpec.objects.filter(req_id=self.req_id, prefspec__isnull=True)
+        specs = ReqSpec.objects.filter(req_id=self.req_id)
         return specs
 
     def resolve_amount_total(self, info):

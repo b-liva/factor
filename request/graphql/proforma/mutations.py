@@ -45,6 +45,37 @@ class PrefSpecModelFormMutation(DjangoModelFormMutation):
     class Meta:
         form_class = PrefSpecForm
 
+    @classmethod
+    def get_form_kwargs(cls, root, info, **input):
+        owner = info.context.user
+        input['owner'] = str(owner.pk)
+        attrs = ['xpref_id', 'reqspec_eq', 'im', 'ip', 'ic']
+        input = graphql_utils.from_globad_bulk(attrs, input)
+
+        kwargs = {"data": input}
+        # todo: refactor to something more dynamic.
+        if "id" not in input:
+            proforma = Xpref.objects.get(pk=input['xpref_id'])
+            reqspec_eq = ReqSpec.objects.get(pk=input['reqspec_eq'])
+            input['xpref_id'] = str(proforma.pk)
+            input['reqspec_eq'] = str(reqspec_eq.pk)
+            input['code'] = reqspec_eq.code
+            input['qty'] = reqspec_eq.qty
+            input['kw'] = reqspec_eq.kw
+            input['voltage'] = reqspec_eq.voltage
+            input['rpm'] = reqspec_eq.rpm_new.rpm
+            input['type'] = str(reqspec_eq.type.pk)
+            input['ic'] = str(reqspec_eq.ic.pk)
+            input['ip'] = str(reqspec_eq.ip.pk)
+            input['im'] = str(reqspec_eq.ip.pk)
+        global_id = input.pop("id", None)
+        if global_id:
+            node_type, pk = from_global_id(global_id)
+            instance = cls._meta.model._default_manager.get(pk=pk)
+            kwargs["instance"] = instance
+
+        return kwargs
+
 
 class CreateProformaSpecBatch(relay.ClientIDMutation):
     class Input:
@@ -55,12 +86,10 @@ class CreateProformaSpecBatch(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, proforma_id, specs_list):
-        print('proforma id: ', proforma_id)
         proforma_spec_list = []
         proforma = Xpref.objects.get(pk=from_global_id(proforma_id)[1])
         proforma.prefspec_set.all().delete()
         for spec in specs_list:
-            print('these are specs: ', spec)
             spec.price = 0 if spec.price is None else spec.price
             order_spec = ReqSpec.objects.get(pk=from_global_id(spec.id)[1])
             proforma_spec = PrefSpec.objects.create(
@@ -80,7 +109,6 @@ class CreateProformaSpecBatch(relay.ClientIDMutation):
                 summary=order_spec.summary
             )
             proforma_spec_list.append(proforma_spec)
-        print('Done successfully....')
         return CreateProformaSpecBatch(proforma_specs=proforma_spec_list)
 
 
