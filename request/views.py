@@ -298,3 +298,7 @@ def find_all_obj():
     xprefs = Xpref.objects.filter(is_active=True)
     xpayment = Payment.objects.filter(is_active=True)
     return reqs, xprefs, xpayment
+
+
+def new_panel(request):
+    return redirect('http://localhost:8080')

@@ -37,6 +37,7 @@ urlpatterns = [
                   path('', request.views.dashboard, name='dashboard'),
                   path("vue", TemplateView.as_view(template_name="application.html"), name="app",),
                   path("vue2", TemplateView.as_view(template_name="index.html"), name="app",),
+                  path('new-panel', request.views.new_panel, name='new_panel'),
                   path('dashboard2', request.views.dashboard2, name='dashboard2'),
                   path('sales_comparison', request.views.sales_comparison, name='sales_comparison'),
                   path('sales-dash', request.views.sales_expert_dashboard, name='dashboard'),
