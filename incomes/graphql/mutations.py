@@ -7,9 +7,11 @@ from graphene import relay
 from graphene_django.forms.mutation import DjangoModelFormMutation
 from graphql_relay import from_global_id
 
+from accounts.models import User
 from .forms.form import IncomeModelForm, IncomeRowModelForm
 import request.templatetags.functions as funcs
 from ..models import Income
+from utils.graphql import utils as graphql_utils
 
 
 class IncomeModelFormMutation(DjangoModelFormMutation):
@@ -40,9 +42,7 @@ class IncomeModelFormMutation(DjangoModelFormMutation):
         :return:
         """
         owner = form.cleaned_data['owner']
-        print(owner)
         customer = form.cleaned_data['customer']
-        print('customer: ', customer)
         can_add = funcs.has_perm_or_is_owner(owner, 'incomes.add_income')
 
         if not can_add:
@@ -51,6 +51,23 @@ class IncomeModelFormMutation(DjangoModelFormMutation):
             raise RuntimeError('No permission to do that.')
         return super().perform_mutate(form, info)
 
+    @classmethod
+    def get_form_kwargs(cls, root, info, **input):
+        owner = info.context.user
+        owner = User.objects.get(pk=4)
+        input['owner'] = str(owner.pk)
+        attrs = ['customer', 'type']
+        input = graphql_utils.from_globad_bulk(attrs, input)
+        kwargs = {"data": input}
+
+        global_id = input.pop("id", None)
+        if global_id:
+            node_type, pk = from_global_id(global_id)
+            instance = cls._meta.model._default_manager.get(pk=pk)
+            kwargs["instance"] = instance
+
+        return kwargs
+
 
 class IncomeRowModelFormMutation(DjangoModelFormMutation):
     class Meta:
@@ -58,6 +75,7 @@ class IncomeRowModelFormMutation(DjangoModelFormMutation):
 
     @classmethod
     def perform_mutate(cls, form, info):
+        # todo: every perform_update override can lead to an update problem although it works on creation.
         owner = form.cleaned_data['owner']
         can_add = funcs.has_perm_or_is_owner(owner, 'incomes.add_incomerow')
         print(owner, can_add)
@@ -97,6 +115,23 @@ class IncomeRowModelFormMutation(DjangoModelFormMutation):
             raise GraphQLError('proforma amount not sufficient')
 
         return super().perform_mutate(form, info)
+
+    @classmethod
+    def get_form_kwargs(cls, root, info, **input):
+        owner = info.context.user
+        owner = User.objects.get(pk=4)
+        input['owner'] = str(owner.pk)
+        attrs = ['income', 'proforma']
+        input = graphql_utils.from_globad_bulk(attrs, input)
+        kwargs = {"data": input}
+
+        global_id = input.pop("id", None)
+        if global_id:
+            node_type, pk = from_global_id(global_id)
+            instance = cls._meta.model._default_manager.get(pk=pk)
+            kwargs["instance"] = instance
+
+        return kwargs
 
 
 class DeleteIncome(relay.ClientIDMutation):
