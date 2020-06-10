@@ -19,7 +19,6 @@ class ProformaModelFormMutation(DjangoModelFormMutation):
     @classmethod
     def get_form_kwargs(cls, root, info, **input):
         owner = info.context.user
-        owner = User.objects.get(pk=4)
         input['owner'] = str(owner.pk)
         attrs = ['req_id']
         input = graphql_utils.from_globad_bulk(attrs, input)
