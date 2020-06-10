@@ -4,6 +4,7 @@ import graphene
 from graphene import relay, InputObjectType
 from graphene_django import DjangoObjectType
 
+from core.utils import OwnQuerySet
 from request.graphql.orders.types import ReqSpecNode
 from request.models import Xpref, PrefSpec, ReqSpec
 
@@ -21,7 +22,7 @@ class ProformaFilterSet(django_filters.FilterSet):
         }
 
 
-class ProformaNode(DjangoObjectType):
+class ProformaNode(OwnQuerySet, DjangoObjectType):
     customer_name = graphene.String()
     pk = graphene.Field(type=graphene.Int, source='id')
 
@@ -69,7 +70,7 @@ class ProformaNode(DjangoObjectType):
         return total_amount - paid_total
 
 
-class PrefSpecNode(DjangoObjectType):
+class PrefSpecNode(OwnQuerySet, DjangoObjectType):
     class Meta:
         model = PrefSpec
         filter_fields = '__all__'

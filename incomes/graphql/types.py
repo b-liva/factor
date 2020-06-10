@@ -5,7 +5,10 @@ import django_filters
 import graphene
 from graphene import Node, relay
 from graphene_django.types import DjangoObjectType
+from graphql_jwt.decorators import login_required
+
 from incomes.models import Income, IncomeRow, PaymentType
+from core.utils import OwnQuerySet
 
 
 class IncomeFilterSet(django_filters.FilterSet):
@@ -21,7 +24,7 @@ class IncomeFilterSet(django_filters.FilterSet):
         }
 
 
-class IncomeNode(DjangoObjectType):
+class IncomeNode(OwnQuerySet, DjangoObjectType):
     """
     Node For Income app with relay interface.
     """
@@ -46,7 +49,7 @@ class IncomeNode(DjangoObjectType):
         return self.not_assigned()
 
 
-class IncomeRowNode(DjangoObjectType):
+class IncomeRowNode(OwnQuerySet, DjangoObjectType):
     """Node for incomerow app with relay interface."""
     class Meta:
         model = IncomeRow
@@ -56,3 +59,4 @@ class IncomeRowNode(DjangoObjectType):
             'income': ['exact'],
             'summary': ['icontains']
         }
+

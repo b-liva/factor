@@ -4,6 +4,7 @@ import graphene
 from graphene import relay, Int, String, InputObjectType
 from graphene_django.types import DjangoObjectType
 
+from core.utils import OwnQuerySet
 from request.models import (
     Requests,
     ReqSpec,
@@ -51,7 +52,7 @@ class CountableConnectionBase(relay.Connection):
         return number_pages
 
 
-class RequestNode(DjangoObjectType):
+class RequestNode(OwnQuerySet, DjangoObjectType):
 
     class Meta:
         model = Requests
@@ -82,7 +83,7 @@ class RequestNode(DjangoObjectType):
         return total_qty
 
 
-class ReqSpecNode(DjangoObjectType):
+class ReqSpecNode(OwnQuerySet, DjangoObjectType):
     class Meta:
         model = ReqSpec
         filter_fields = '__all__'

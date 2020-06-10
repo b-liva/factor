@@ -3,6 +3,7 @@ import graphene
 from graphene import relay
 from graphene_django.types import DjangoObjectType
 
+from core.utils import OwnQuerySet
 from request.models import Payment, PaymentType
 
 
@@ -12,7 +13,7 @@ from request.models import Payment, PaymentType
 #         fields =
 
 
-class PaymentNode(DjangoObjectType):
+class PaymentNode(OwnQuerySet, DjangoObjectType):
     customer_name = graphene.String()
     pk = graphene.Field(type=graphene.Int, source='id')
 
