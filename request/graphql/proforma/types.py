@@ -3,7 +3,10 @@ import django_filters
 import graphene
 from graphene import relay, InputObjectType
 from graphene_django import DjangoObjectType
+from graphql_jwt.decorators import login_required
 
+from core.decorators import permission_required
+from core.permissions import ProformaPermissions
 from core.utils import OwnQuerySet
 from request.graphql.orders.types import ReqSpecNode
 from request.models import Xpref, PrefSpec, ReqSpec
@@ -43,6 +46,12 @@ class ProformaNode(OwnQuerySet, DjangoObjectType):
     paid_total = graphene.Float()
     unpaid_total = graphene.Float()
 
+    @classmethod
+    @login_required
+    @permission_required([ProformaPermissions.ADD_PROFORMA])  # todo: change this to read permission later.
+    def get_node(cls, info, id):
+        return super(ProformaNode, cls).get_node(info, id)
+
     def resolve_specs_no_proforma(self, info):
         specs = ReqSpec.objects.filter(req_id=self.req_id)
         return specs
@@ -75,6 +84,12 @@ class PrefSpecNode(OwnQuerySet, DjangoObjectType):
         model = PrefSpec
         filter_fields = '__all__'
         interfaces = (relay.Node,)
+
+    @classmethod
+    @login_required
+    @permission_required([ProformaPermissions.ADD_PREF_SPEC])  # todo: change this to read permission later.
+    def get_node(cls, info, id):
+        return super(PrefSpecNode, cls).get_node(info, id)
 
 
 class ProformaSpecInput(InputObjectType):

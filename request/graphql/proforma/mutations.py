@@ -1,12 +1,12 @@
 import graphene
 from graphene import ObjectType, relay
 from graphene_django.forms.mutation import DjangoModelFormMutation
+from graphql_jwt.decorators import login_required
 from graphql_relay import from_global_id
-
-from accounts.graphql.types import UserNode
-from accounts.models import User
-from customer.graphql.customer.types import CustomerNode
-from .types import PrefSpecNode, ProformaSpecInput, ProformaNode
+from core.decorators import permission_required
+from core.utils import DeletePermissionCheck
+from core.permissions import ProformaPermissions
+from .types import PrefSpecNode, ProformaSpecInput
 from ..forms.forms import ProformaModelForm, PrefSpecForm
 from ...models import ReqSpec, PrefSpec, Xpref
 from utils.graphql import utils as graphql_utils
@@ -111,24 +111,36 @@ class CreateProformaSpecBatch(relay.ClientIDMutation):
         return CreateProformaSpecBatch(proforma_specs=proforma_spec_list)
 
 
-class DeleteProforma(relay.ClientIDMutation):
+class DeleteProforma(DeletePermissionCheck, relay.ClientIDMutation):
 
     class Input:
-        proforma_id = graphene.ID()
+        id = graphene.ID()
+        model = Xpref
+        label = 'پیش فاکتور'
 
-    msg = graphene.String()
-    prof = graphene.Field(ProformaNode)
-    number = graphene.Int()
+    permission_list = [ProformaPermissions.DELETE_PROFORMA]
 
     @classmethod
-    def mutate_and_get_payload(cls, root, info, proforma_id):
-        pid = from_global_id(proforma_id)[1]
-        proforma = Xpref.objects.get(pk=pid)
-        proforma.delete()
-        return cls(
-            msg=f"پیش فاکتور شماره {proforma.number} با موفقیت حذف گردید.",
-            number=proforma.number
-        )
+    @login_required
+    @permission_required(permission_list)
+    def mutate(cls, root, info, input):
+        return super(DeleteProforma, cls).mutate(root, info, input)
+
+
+class DeleteProformaSpec(DeletePermissionCheck, relay.ClientIDMutation):
+
+    class Input:
+        id = graphene.ID()
+        model = PrefSpec
+        label = 'ردیف پیش فاکتور'
+
+    permission_list = [ProformaPermissions.DELETE_PREF_SPEC]
+
+    @classmethod
+    @login_required
+    @permission_required(permission_list)
+    def mutate(cls, root, info, input):
+        return super(DeleteProformaSpec, cls).mutate(root, info, input)
 
 
 class ProformaModelMutation(ObjectType):
@@ -136,3 +148,4 @@ class ProformaModelMutation(ObjectType):
     prefspec_mutation = PrefSpecModelFormMutation.Field()
     create_pref_specs_bulk = CreateProformaSpecBatch.Field()
     delete_proforma = DeleteProforma.Field()
+    delete_proforma_spec = DeleteProformaSpec.Field()
