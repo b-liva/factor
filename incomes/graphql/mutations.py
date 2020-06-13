@@ -5,9 +5,12 @@ from django.db.models import Sum
 from graphql import GraphQLError
 from graphene import relay
 from graphene_django.forms.mutation import DjangoModelFormMutation
+from graphql_jwt.decorators import login_required
 from graphql_relay import from_global_id
 
-from accounts.models import User
+from core.decorators import permission_required
+from core.permissions import IncomePermissions
+from core.utils import DeletePermissionCheck
 from .forms.form import IncomeModelForm, IncomeRowModelForm
 import request.templatetags.functions as funcs
 from ..models import Income
@@ -26,36 +29,19 @@ class IncomeModelFormMutation(DjangoModelFormMutation):
     3 - and the 3rd way is to change get_node_from_global_id() method so that id first changes to 
     model id by from_global_id() and then pass it to the super method.
     '''
-    # @classmethod
-    # def mutate_and_get_payload(cls, root, info, **input):
-    #     print(input)
-    #     customer = from_global_id(input['customer'])[1]
-    #     input['customer'] = customer
-    #     print(input)
-    #     return super().mutate_and_get_payload(root, info, **input)
 
     @classmethod
-    # @login_required
-    def perform_mutate(cls, form, info):
-        """ Checks for permission and then perform the mutate.
-        :param form:
-        :param info:
-        :return:
-        """
-        owner = form.cleaned_data['owner']
-        customer = form.cleaned_data['customer']
-        can_add = funcs.has_perm_or_is_owner(owner, 'incomes.add_income')
+    @login_required
+    @permission_required([IncomePermissions.ADD_INCOME])
+    def mutate(cls, root, info, input):
+        return super(IncomeModelFormMutation, cls).mutate(root, info, input)
 
-        if not can_add:
-            sys.tracebacklimit = -1
-            # traceback.format_exc()
-            raise RuntimeError('No permission to do that.')
-        return super().perform_mutate(form, info)
 
     @classmethod
+    @login_required
     def get_form_kwargs(cls, root, info, **input):
         owner = info.context.user
-        print('this is the owner from vue client: ', owner, owner.is_authenticated)
+        # print('this is the owner from vue client: ', owner, owner.is_authenticated)
         input['owner'] = str(owner.pk)
         attrs = ['customer', 'type']
         input = graphql_utils.from_globad_bulk(attrs, input)
@@ -65,7 +51,9 @@ class IncomeModelFormMutation(DjangoModelFormMutation):
         if global_id:
             node_type, pk = from_global_id(global_id)
             instance = cls._meta.model._default_manager.get(pk=pk)
+            print('nn: ', instance)
             kwargs["instance"] = instance
+            kwargs['data']['owner'] = str(instance.owner.pk)
 
         return kwargs
 
@@ -76,6 +64,7 @@ class IncomeRowModelFormMutation(DjangoModelFormMutation):
 
     @classmethod
     def perform_mutate(cls, form, info):
+        # todo: probably i should remove all permform_updates.
         # todo: every perform_update override can lead to an update problem although it works on creation.
         owner = form.cleaned_data['owner']
         can_add = funcs.has_perm_or_is_owner(owner, 'incomes.add_incomerow')
@@ -86,9 +75,7 @@ class IncomeRowModelFormMutation(DjangoModelFormMutation):
         proforma = form.cleaned_data['proforma']
         income = form.cleaned_data['income']
         amount = form.cleaned_data['amount']
-        print(proforma)
-        print(income)
-        print(amount)
+
         if proforma.req_id.customer != income.customer:
             sys.tracebacklimit = -1
             raise GraphQLError("customer mismatch")
@@ -133,26 +120,40 @@ class IncomeRowModelFormMutation(DjangoModelFormMutation):
         return kwargs
 
 
-class DeleteIncome(relay.ClientIDMutation):
+class DeleteIncome(DeletePermissionCheck, relay.ClientIDMutation):
 
     class Input:
-        income_id = graphene.ID()
+        id = graphene.ID()
+        model = Income
+        label = 'واریزی'
 
-    msg = graphene.String()
-    number = graphene.Int()
+    permission_list = [IncomePermissions.DELETE_INCOME]
 
     @classmethod
-    def mutate_and_get_payload(cls, root, info, income_id):
-        pid = from_global_id(income_id)[1]
-        income = Income.objects.get(pk=pid)
-        income.delete()
-        return cls(
-            msg=f"واریزی شماره {income.number} با موفقیت حذف گردید.",
-            number=income.number
-        )
+    @login_required
+    @permission_required(permission_list)
+    def mutate(cls, root, info, input):
+        return super(DeleteIncome, cls).mutate(root, info, input)
+
+
+class DeleteIncomeRow(DeletePermissionCheck, object):
+
+    class Input:
+        id = graphene.ID()
+        model = Income
+        label = 'واریزی'
+
+    permission_list = [IncomePermissions.DELETE_INCOME_ROW]
+
+    @classmethod
+    @login_required
+    @permission_required(permission_list)
+    def mutate(cls, root, info, input):
+        return super(DeleteIncomeRow, cls).mutate(root, info, input)
 
 
 class IncomeModelMutation(object):
     income_mutation = IncomeModelFormMutation.Field()
     income_row_mutation = IncomeRowModelFormMutation.Field()
     delete_income = DeleteIncome.Field()
+    delete_income_row = DeleteIncomeRow.Field()

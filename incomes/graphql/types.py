@@ -7,7 +7,9 @@ from graphene import Node, relay
 from graphene_django.types import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
-from incomes.models import Income, IncomeRow, PaymentType
+from core.decorators import permission_required
+from core.permissions import IncomePermissions
+from incomes.models import Income, IncomeRow
 from core.utils import OwnQuerySet
 
 
@@ -32,12 +34,17 @@ class IncomeNode(OwnQuerySet, DjangoObjectType):
 
     class Meta:
         model = Income
-
         interfaces = (relay.Node,)
 
     assigned_count = graphene.String()
     amount_assigned = graphene.Float()
     amount_not_assigned = graphene.Float()
+
+    @classmethod
+    @login_required
+    @permission_required([IncomePermissions.ADD_INCOME])  # todo: change this to read permission later.
+    def get_node(cls, info, id):
+        return super(IncomeNode, cls).get_node(info, id)
 
     def resolve_assigned_count(self, info):
         return self.incomerow_set.count()
@@ -59,4 +66,10 @@ class IncomeRowNode(OwnQuerySet, DjangoObjectType):
             'income': ['exact'],
             'summary': ['icontains']
         }
+
+    @classmethod
+    @login_required
+    @permission_required([IncomePermissions.ADD_INCOME_ROW])  # todo: change this to read permission later.
+    def get_node(cls, info, id):
+        return super(IncomeRowNode, cls).get_node(info, id)
 
