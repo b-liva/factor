@@ -1,12 +1,14 @@
 import graphene
 from graphene import relay, ObjectType
 from graphene_django.forms.mutation import DjangoModelFormMutation
+from graphql_jwt.decorators import login_required
 from graphql_relay import from_global_id
-
-from accounts.models import User
+from core.decorators import permission_required
+from core.permissions import OrderPermissions
+from core.utils import DeletePermissionCheck
 from ..forms.forms import RequestModelForm, ReqSpecModelForm
 from ..orders.types import RequestNode
-from ...models import Requests
+from ...models import Requests, ReqSpec
 from utils.graphql import utils as graphql_utils
 
 
@@ -58,27 +60,41 @@ class ReqSpecModelFormMutation(DjangoModelFormMutation):
         return kwargs
 
 
-class DeleteOrder(relay.ClientIDMutation):
-    class Input:
-        order_id = graphene.ID()
+class DeleteOrder(DeletePermissionCheck, relay.ClientIDMutation):
 
-    msg = graphene.String()
-    number = graphene.Int()
+    class Input:
+        id = graphene.ID()
+        model = Requests
+        label = 'درخواست'
+
+    permission_list = [OrderPermissions.DELETE_REQUESTS]
 
     @classmethod
-    def mutate_and_get_payload(cls, root, info, order_id):
-        pid = from_global_id(order_id)[1]
-        order = Requests.objects.get(pk=pid)
-        order.delete()
-        return cls(
-            msg=f"درخواست خرید شماره {order.number} با موفقیت حذف گردید.",
-            number=order.number
-        )
+    @login_required
+    @permission_required(permission_list)
+    def mutate(cls, root, info, input):
+        return super(DeleteOrder, cls).mutate(root, info, input)
+
+
+class DeleteOrderSpec(DeletePermissionCheck, relay.ClientIDMutation):
+    class Input:
+        id = graphene.ID()
+        model = ReqSpec
+        label = 'ردیف'
+
+    permission_list = [OrderPermissions.DELETE_REQSPEC]
+
+    @classmethod
+    @login_required
+    @permission_required(permission_list)
+    def mutate(cls, root, info, input):
+        return super(DeleteOrderSpec, cls).mutate(root, info, input)
 
 
 class RequestModelMutations(ObjectType):
     request_mutation = RequestModelFormMutation.Field()
     req_spec_mutation = ReqSpecModelFormMutation.Field()
     delete_order = DeleteOrder.Field()
+    delete_order_spec = DeleteOrderSpec.Field()
 
 

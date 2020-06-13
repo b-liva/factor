@@ -1,9 +1,11 @@
 import math
 from django.db.models import Sum, F, FloatField
 import graphene
-from graphene import relay, Int, String, InputObjectType
+from graphene import relay, Int
 from graphene_django.types import DjangoObjectType
-
+from graphql_jwt.decorators import login_required
+from core.decorators import permission_required
+from core.permissions import OrderPermissions
 from core.utils import OwnQuerySet
 from request.models import (
     Requests,
@@ -70,12 +72,20 @@ class RequestNode(OwnQuerySet, DjangoObjectType):
     total_kw = Int()
     total_qty = Int()
 
+    @classmethod
+    @login_required
+    @permission_required([OrderPermissions.ADD_REQUESTS])  # todo: change this to read permission later.
+    def get_node(cls, info, id):
+        return super(RequestNode, cls).get_node(info, id)
+
+    @login_required
     def resolve_total_kw(self, info, **kwargs):
         total_kw = self.reqspec_set.filter(is_active=True).aggregate(kw=Sum(F('qty') * F('kw'), output_field=FloatField()))['kw']
         if total_kw is None:
             total_kw = 0
         return total_kw
 
+    @login_required
     def resolve_total_qty(self, info):
         total_qty = self.reqspec_set.filter(is_active=True).aggregate(Sum('qty'))['qty__sum']
         if total_qty is None:
@@ -88,6 +98,12 @@ class ReqSpecNode(OwnQuerySet, DjangoObjectType):
         model = ReqSpec
         filter_fields = '__all__'
         interfaces = (relay.Node,)
+
+    @classmethod
+    @login_required
+    @permission_required([OrderPermissions.ADD_REQSPEC])  # todo: change this to read permission later.
+    def get_node(cls, info, id):
+        return super(ReqSpecNode, cls).get_node(info, id)
 
 
 # Not using relays
