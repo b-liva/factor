@@ -25,7 +25,6 @@ class RequestModelFormMutation(DjangoModelFormMutation):
         input['owner'] = str(owner.pk)
         attrs = ['customer']
         input = graphql_utils.from_globad_bulk(attrs, input)
-        print(input)
         if 'colleagues' in input:
             input['colleagues'] = [from_global_id(colleague_pk)[1] for colleague_pk in input['colleagues']]
 

@@ -124,8 +124,8 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = (
-    'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'graphql_jwt.backends.JSONWebTokenBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
@@ -362,5 +362,5 @@ GRAPHENE = {
     ],
 }
 GRAPHQL_JWT = {
-    'JWT_ALLOW_ARGUMENT': False,
+    'JWT_ALLOW_ARGUMENT': True,
 }
