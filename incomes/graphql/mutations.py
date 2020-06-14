@@ -136,7 +136,7 @@ class DeleteIncome(DeletePermissionCheck, relay.ClientIDMutation):
         return super(DeleteIncome, cls).mutate(root, info, input)
 
 
-class DeleteIncomeRow(DeletePermissionCheck, object):
+class DeleteIncomeRow(DeletePermissionCheck, relay.ClientIDMutation):
 
     class Input:
         id = graphene.ID()
