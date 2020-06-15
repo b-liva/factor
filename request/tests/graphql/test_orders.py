@@ -1,6 +1,6 @@
 import json
 from graphene_django.utils.testing import GraphQLTestCase
-
+from graphql_relay import to_global_id
 from accounts.tests.test_public_funcs import CustomAPITestCase
 from factor.schema import schema
 
@@ -31,6 +31,7 @@ class TestReqeusts(GraphQLTestCase, CustomAPITestCase):
     # Mutations
     def test_request_mutation_success(self):
         """Test request mutation success"""
+        self._client.force_login(user=self.ex_user)
         mutation = '''
             mutation ReqMutation(
                 $customer: ID!
@@ -40,13 +41,11 @@ class TestReqeusts(GraphQLTestCase, CustomAPITestCase):
               requestMutation(input:{
                 customer: $customer
                 owner:$owner
-                pubDate: "1992-10-09T00:00:00Z", 
                 clientMutationId:"klsjf"
                 number:18665
                 colleagues:$colleague
                 dateFa: "1398-02-12"
                 summary: "something about this request"
-                isActive:true
               }){
                 requests{
                   id
@@ -62,103 +61,25 @@ class TestReqeusts(GraphQLTestCase, CustomAPITestCase):
               }
             }
         '''
-        response = self.query(mutation,
-                              variables={
-                                  'customer': self.customer.pk,
-                                  'owner': self.ex_user.pk,
-                                  'colleague': self.user.pk
-                              })
+        variables = {
+            'customer': to_global_id("CustomerNode", self.customer.pk),
+            'owner': "",
+            'colleague': []
+        }
+
+        response = self.query(mutation, variables=variables)
         json_response = json.loads(response.content)
+
+        self.assertResponseNoErrors(response)
         self.assertTrue('data' in json_response)
+        self.assertIsNotNone(json_response['data']['requestMutation']['requests'])
 
         self.assertEqual(json_response['data']['requestMutation']['requests']['number'], 18665)
-        self.assertEqual(json_response['data']['requestMutation']['requests']['customer']['name'], 'zsamplecustomer')
-
-    def test_request_mutation_no_customer_fail(self):
-        """Test request mutation fails with no customer"""
-        mutation = '''
-                    mutation ReqMutation(
-                        $customer: ID!
-                        $owner: ID!
-                        $colleague: [ID]
-                    ){
-                      requestMutation(input:{
-                        owner:$owner
-                        pubDate: "1992-10-09T00:00:00Z", 
-                        clientMutationId:"klsjf"
-                        number:18665
-                        colleagues:$colleague
-                        dateFa: "1398-02-12"
-                        summary: "something about this request"
-                        isActive:true
-                      }){
-                        requests{
-                          id
-                          number
-                          customer{
-                            name
-                          }
-                        }
-                        errors{
-                        field,
-                          messages
-                      }
-                      }
-                    }
-                '''
-        response = self.query(mutation,
-                              variables={
-                                  'owner': self.ex_user.pk,
-                                  'colleague': self.user.pk
-                              })
-        json_response = json.loads(response.content)
-        self.assertFalse('data' in json_response)
-        self.assertTrue('errors' in json_response)
-
-    def test_request_mutation_no_number_fail(self):
-        """Test request mutation fails with no number provided."""
-        mutation = '''
-                            mutation ReqMutation(
-                                $customer: ID!
-                                $owner: ID!
-                                $colleague: [ID]
-                            ){
-                              requestMutation(input:{
-                                owner:$owner
-                                customer:$customer
-                                pubDate: "1992-10-09T00:00:00Z", 
-                                clientMutationId:"klsjf"
-                                colleagues:$colleague
-                                dateFa: "1398-02-12"
-                                summary: "something about this request"
-                                isActive:true
-                              }){
-                                requests{
-                                  id
-                                  number
-                                  customer{
-                                    name
-                                  }
-                                }
-                                errors{
-                                field,
-                                  messages
-                              }
-                              }
-                            }
-                        '''
-        response = self.query(mutation,
-                              variables={
-                                  'customer': self.customer.pk,
-                                  'owner': self.ex_user.pk,
-                                  'colleague': self.user.pk
-                              })
-        json_response = json.loads(response.content)
-        self.assertFalse('data' in json_response)
-        self.assertTrue('errors' in json_response)
+        self.assertEqual(json_response['data']['requestMutation']['requests']['customer']['name'], self.customer.name)
 
     def test_request_mutation_number_exists_fail(self):
         """Test request mutation fails when number exists"""
+        self._client.force_login(user=self.ex_user)
         req = self.sample_request(owner=self.ex_user, customer=self.customer, number=981515)
 
         mutation = '''
@@ -170,13 +91,12 @@ class TestReqeusts(GraphQLTestCase, CustomAPITestCase):
                             ){
                               requestMutation(input:{
                                 owner:$owner
-                                pubDate: "1992-10-09T00:00:00Z", 
+                                customer:$customer
                                 clientMutationId:"klsjf"
                                 number:$number
                                 colleagues:$colleague
                                 dateFa: "1398-02-12"
                                 summary: "something about this request"
-                                isActive:true
                               }){
                                 requests{
                                   id
@@ -192,21 +112,24 @@ class TestReqeusts(GraphQLTestCase, CustomAPITestCase):
                               }
                             }
                         '''
-        response = self.query(mutation,
-                              variables={
-                                  'owner': self.ex_user.pk,
-                                  'colleague': self.user.pk,
-                                  'number': self.req.number
-                              })
+        variables = {
+            'owner': '',
+            'customer': to_global_id("CustomerNode", self.customer.pk),
+            'colleague': [],
+            'number': req.number
+        }
+
+        response = self.query(mutation, variables=variables)
         json_response = json.loads(response.content)
-        # todo: more assertion to test errors.
-        self.assertFalse('data' in json_response)
-        self.assertTrue('errors' in json_response)
+
+        self.assertNotEqual(json_response['data']['requestMutation']['errors'], [])
+        self.assertTrue('number' in json_response['data']['requestMutation']['errors'][0].values())
 
     def test_request_mutation_future_date_fail(self):
         pass
 
     def test_reqspec_mutation_success(self):
+        self._client.force_login(user=self.ex_user)
         req = self.sample_request(owner=self.ex_user, customer=self.customer, number=981515)
         mutation = '''
             mutation reqSpecMutation(
@@ -232,6 +155,9 @@ class TestReqeusts(GraphQLTestCase, CustomAPITestCase):
                   kw
                   rpm
                   voltage
+                  owner{
+                    id
+                  }
                 }
                 errors{
                   field,
@@ -240,31 +166,20 @@ class TestReqeusts(GraphQLTestCase, CustomAPITestCase):
               }
             }
         '''
-        response = self.query(mutation, variables={
-            'reqId': req.pk,
-            'owner': self.ex_user.pk,
+        variables = {
+            'reqId': to_global_id("RequestNode", req.pk),
+            'owner': "",
             'type': self.project_type.pk,
-            'rpm_new': self.rpm_new.pk
-        })
+            'rpm_new': to_global_id("RpmTypeNode", self.rpm_new.pk)
+        }
+        response = self.query(mutation, variables=variables)
         json_response = json.loads(response.content)
         reqspec = req.reqspec_set.last()
         self.assertEqual(reqspec.kw, json_response['data']['reqSpecMutation']['reqSpec']['kw'])
         self.assertEqual(reqspec.rpm, json_response['data']['reqSpecMutation']['reqSpec']['rpm'])
         self.assertEqual(reqspec.voltage, json_response['data']['reqSpecMutation']['reqSpec']['voltage'])
         self.assertEqual(reqspec.qty, json_response['data']['reqSpecMutation']['reqSpec']['qty'])
-
-    def test_reqspec_mutation_no_kw_fail(self):
-        """Test reqspec mutation fails with no kw provided."""
-        pass
-
-    def test_reqspec_mutation_no_qty_fail(self):
-        """Test reqspec mutation fails with no qty provided."""
-        pass
-
-    def test_reqspec_mutation_no_rpm_fail(self):
-        """Test reqspec mutation fails with no rpm provided."""
-        pass
-
-    def test_reqspec_mutation_no_voltage_fail(self):
-        """Test reqspec mutation fails with no voltage provided."""
-        pass
+        self.assertEqual(
+            to_global_id("UserNode", reqspec.owner.pk),
+            json_response['data']['reqSpecMutation']['reqSpec']['owner']['id']
+        )
