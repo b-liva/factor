@@ -12,6 +12,7 @@ urlpatterns = [
                   path('pro_form', proformaViews.pro_form, name='pro_form'),
                   path('pro_form_cookie/<int:req_id>', proformaViews.pro_form_cookie, name='pro_form_cookie'),
                   path('index', proformaViews.pref_index, name='pref_index'),
+                  path('verify', proformaViews.verify, name='verify'),
                   path('index-pay-no-perm', proformaViews.proforma_has_payment_no_perm, name='proforma_has_payment_no_perm'),
                   path('pref_index_cc', proformaViews.pref_index_cc, name='pref_index_cc'),
                   path('perm_clear_session', proformaViews.perm_clear_session, name='perm_clear_session'),
@@ -32,6 +33,10 @@ urlpatterns = [
                   path('<int:ypref_pk>/', include([
                       path('insert_form', proformaViews.pref_insert_spec_form, name='pref_insert_spec_form'),
                       path('', proformaViews.pref_details, name='pref_details'),
+                      path('verified', proformaViews.pref_verify_to_send, name='pref_verify_to_send'),
+                      path('signed', proformaViews.pref_send_verified, name='pref_send_verified'),
+                      path('cancel_verified', proformaViews.cancel_pref_verify_to_send, name='cancel_pref_verify_to_send'),
+                      path('cancel_signed', proformaViews.cancel_pref_send_verified, name='cancel_pref_send_verified'),
                       path('delete', proformaViews.pref_delete, name='pref_delete'),
                       path('prof-delete', proformaViews.delete_proforma_no_prefspec,
                            name='delete_proforma_no_prefspec'),

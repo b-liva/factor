@@ -5,6 +5,9 @@
         <ul class="nav side-menu">
             <li><a><i class="fa fa-home"></i> داشبورد <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
+                    {% if user.is_superuser %}
+                        <li><a href="{% url 'verify' %}">تأیید پیش فاکتور</a></li>
+                    {% endif %}
                     <li><a href="{% url 'dashboard' %}">داشبورد</a></li>
                     {% if user.is_superuser %}
                         <li><a href="{% url 'dashboard2' %}">پیگیری</a></li>
@@ -72,7 +75,7 @@
             {% if perms.request.index_payment %}
                 <li>
                     <a><i class="fa fa-money" aria-hidden="true"></i> پرداخت <span
-                        class="fa fa-chevron-down"></span></a>
+                            class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% if perms.request.index_payment %}
                             <li><a href="{% url 'payment_index' %}">پرداخت ها</a></li>

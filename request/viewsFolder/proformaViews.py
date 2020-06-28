@@ -142,6 +142,21 @@ def pref_index(request):
 
 
 @login_required
+def verify(request):
+    profs = Xpref.objects.filter(is_active=True, verified=False)
+    profs_to_verified = Xpref.objects.filter(is_active=True, verified=True, signed=False)
+    profs_signed = Xpref.objects.filter(is_active=True, verified=True, signed=True)
+    if profs_signed.count() >= 50:
+        profs_signed = profs_signed[profs_signed.count() - 50:]
+    context = {
+        'proformas': profs,
+        'profs_to_verified': profs_to_verified,
+        'profs_signed': profs_signed,
+    }
+    return render(request, 'requests/admin_jemco/ypref/to_verify.html', context)
+
+
+@login_required
 def pref_index_cc(request):
     if 'proforma-search-post' in request.session:
         request.session.pop('proforma-search-post')
@@ -816,6 +831,42 @@ def pref_details_backup(request, ypref_pk):
 
 
 @login_required
+def pref_verify_to_send(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    proforma.verified = True
+    proforma.save()
+    return redirect('verify')
+
+
+@login_required
+def pref_send_verified(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    proforma.signed = True
+    proforma.save()
+
+    return redirect('verify')
+
+
+@login_required
+def cancel_pref_send_verified(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    proforma.verified = False
+    proforma.signed = False
+    proforma.save()
+    return redirect('verify')
+
+
+@login_required
+def cancel_pref_verify_to_send(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    proforma.verified = True
+    proforma.signed = False
+    proforma.save()
+
+    return redirect('verify')
+
+
+@login_required
 def pref_delete(request, ypref_pk):
     if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
         messages.error(request, 'Nothin found')
@@ -1173,7 +1224,6 @@ def pref_edit2(request, ypref_pk):
             reqSpec = prof_spec.reqspec_eq
             reqSpec.permission = perm
             reqSpec.save()
-
         return redirect('pref_index')
 
     context = {

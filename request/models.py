@@ -344,6 +344,7 @@ class Xpref(models.Model):
     on = models.BooleanField(default=False)
     comments = GenericRelation('Comment', related_query_name='xpref_comment')
     issue_type = models.ForeignKey(IssueType, blank=True, null=True, on_delete=models.DO_NOTHING)
+    signed = models.BooleanField(default=False)
 
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')
