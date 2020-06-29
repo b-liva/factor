@@ -344,6 +344,7 @@ class Xpref(models.Model):
     on = models.BooleanField(default=False)
     comments = GenericRelation('Comment', related_query_name='xpref_comment')
     issue_type = models.ForeignKey(IssueType, blank=True, null=True, on_delete=models.DO_NOTHING)
+    signed = models.BooleanField(default=False)
 
     def pub_date_pretty(self):
         return self.pub_date.strftime('%b %e %Y')
@@ -470,6 +471,17 @@ class PrefSpec(models.Model):
         permissions = (
             ('index_prefspec', 'can see list of prefsepcs'),
         )
+
+
+class ProfChangeRequest(models.Model):
+    owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
+    proforma = models.ForeignKey(Xpref, on_delete=models.CASCADE)
+    description = models.TextField(max_length=600)
+    pub_date = models.DateTimeField(default=now)
+    change_needed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return '%s' % self.description[:100]
 
 
 class PaymentType(models.Model):

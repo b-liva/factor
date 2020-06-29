@@ -18,6 +18,7 @@ from .models import (
     InventoryOutSpec,
     Invoice,
     InvoiceSpec,
+    ProfChangeRequest
 )
 
 admin.site.register(Requests)
@@ -42,3 +43,4 @@ admin.site.register(InventoryOut)
 admin.site.register(InventoryOutSpec)
 admin.site.register(Invoice)
 admin.site.register(InvoiceSpec)
+admin.site.register(ProfChangeRequest)

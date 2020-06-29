@@ -39,7 +39,7 @@ from request import models
 from request.forms.forms import CommentForm, ProfFollowUpForm
 from request.forms.search import ProformaSearchForm, PermSearchForm, PrefSpecSearchForm
 import request.templatetags.functions as funcs
-from request.models import Requests, Xpref, ReqSpec, PrefSpec, ProformaFollowUP, Perm, ProjectType
+from request.models import Requests, Xpref, ReqSpec, PrefSpec, ProformaFollowUP, Perm, ProjectType, ProfChangeRequest
 from pricedb.models import MotorDB
 
 from request.forms import proforma_forms, forms
@@ -139,6 +139,37 @@ def pref_index(request):
         'showDelete': True,
     })
     return render(request, 'requests/admin_jemco/ypref/index.html', context)
+
+
+@login_required
+def verify(request):
+    profs_active = Xpref.objects.filter(is_active=True)
+    profs = profs_active.filter(
+        verified=False,
+        # profchangerequest__change_needed=False
+    ).exclude(profchangerequest__change_needed=True)
+    profs_need_change = profs_active.filter(
+        profchangerequest__change_needed=True
+    )
+    profs_to_verified = profs_active.filter(verified=True, signed=False)
+    profs_signed = profs_active.filter(verified=True, signed=True)
+    if profs_signed.count() >= 50:
+        profs_signed = profs_signed[profs_signed.count() - 50:]
+    context = {
+        'proformas': profs,
+        'profs_need_change': profs_need_change,
+        'profs_to_verified': profs_to_verified,
+        'profs_signed': profs_signed,
+    }
+    return render(request, 'requests/admin_jemco/ypref/to_verify.html', context)
+
+
+@login_required
+def change_done(request, ypref_pk, change_pk):
+    pchange = ProfChangeRequest.objects.get(pk=change_pk)
+    pchange.change_needed = False
+    pchange.save()
+    return redirect('pref_details', ypref_pk=ypref_pk)
 
 
 @login_required
@@ -702,6 +733,7 @@ def pref_details(request, ypref_pk):
 
     prof_images = pref.proffiles_set.all()
     prefspecs = pref.prefspec_set.all()
+    changes_needed = pref.profchangerequest_set.all()
     i = 0
     for prefspec in prefspecs:
         kw = prefspec.kw
@@ -729,6 +761,7 @@ def pref_details(request, ypref_pk):
     context = {
         'pref': pref,
         'prefspecs': prefspecs,
+        'changes_needed': changes_needed,
         'nested': nestes_dict,
         'vat': proforma_total * 0.09,
         'proforma_total': proforma_total * 1.09,
@@ -813,6 +846,74 @@ def pref_details_backup(request, ypref_pk):
         'total_percentage_class': total_percentage_class,
         'prof_images': prof_images,
     })
+
+
+@login_required
+def pref_verify_to_send(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    proforma.verified = True
+    proforma.save()
+    return redirect('verify')
+
+
+@login_required
+def pref_send_verified(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    proforma.signed = True
+    proforma.save()
+
+    return redirect('verify')
+
+
+@login_required
+def proforma_changed_needed(request, ypref_pk):
+    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_profchangerequest')
+    if not can_add:
+        messages.error(request, 'عدم دستری کافی!')
+        return redirect('errorpage')
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    from request.models import ProfChangeRequest
+
+    if request.method == 'POST':
+        form = forms.ProfChangeRequestForm(request.POST or None)
+
+        if form.is_valid():
+            req_item = form.save(commit=False)
+            req_item.owner = request.user
+            req_item.proforma = proforma
+            req_item.change_needed = True
+            req_item.save()
+            proforma.verified = False
+            proforma.signed = False
+            proforma.save()
+            return redirect('verify')
+    else:
+        form = forms.ProfChangeRequestForm()
+
+    context = {
+        'form': form,
+        'proforma': proforma,
+    }
+    return render(request, 'requests/admin_jemco/ypref/prof_need_change.html', context)
+
+
+@login_required
+def cancel_pref_send_verified(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    proforma.verified = False
+    proforma.signed = False
+    proforma.save()
+    return redirect('verify')
+
+
+@login_required
+def cancel_pref_verify_to_send(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    proforma.verified = True
+    proforma.signed = False
+    proforma.save()
+
+    return redirect('verify')
 
 
 @login_required
@@ -1173,7 +1274,6 @@ def pref_edit2(request, ypref_pk):
             reqSpec = prof_spec.reqspec_eq
             reqSpec.permission = perm
             reqSpec.save()
-
         return redirect('pref_index')
 
     context = {

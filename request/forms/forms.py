@@ -311,3 +311,19 @@ class ProfFollowUpForm(forms.ModelForm):
             'date_fa': 'تاریخ',
             'next_followup': 'تاریخ پیگیری بعدی',
         }
+
+
+class ProfChangeRequestForm(forms.ModelForm):
+
+    class Meta:
+        model = models.ProfChangeRequest
+        fields = ('description',)
+        labels = {
+            'description': 'تغییر مورد نیاز'
+        }
+        widgets = {
+            'description': forms.Textarea({
+                'class': 'form-control',
+                'placeholder': 'شرح درخواست'
+            })
+        }
