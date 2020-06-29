@@ -110,7 +110,7 @@
                                            href="{% url 'pref_edit_form' ypref_pk=pref.pk %}">
                                         <i class="fa fa-pencil btn-warning"></i> ویرایش قیمت</a></li>
                                     <li><a href="{% url 'pref_delete' ypref_pk=pref.pk %}" data-toggle="tooltip"
-                                       title="حذف"><i class="fa fa-trash red"></i> حذف پیش فاکتور</a></li>
+                                           title="حذف"><i class="fa fa-trash red"></i> حذف پیش فاکتور</a></li>
                                     <li><a href="{% url 'pay_form_prof' prof_pk=pref.pk %}"
                                            data-toggle="tooltip" title="ثبت پرداخت">
                                         <i class="fa fa-plus green" aria-hidden="true"></i>
@@ -316,7 +316,27 @@
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
                         <hr>
-                        <h3>افزودن شرح پیگیری</h3>
+                        <h3 class="greenBtn">تغییرات مورد نیاز روی این پیش فاکتور</h3>
+                        <ol>
+                            {% for prof_change in changes_needed %}
+                                <li>
+                                    {{ prof_change.date }}, {{ prof_change.description }},
+                                    {% if prof_change.change_needed %}
+                                        <span>
+                                <a class="btn btn-xs btn-success"
+                                   href="{% url 'change_done' ypref_pk=pref.pk change_pk=prof_change.pk %}">اعمال شد</a>
+                            </span>
+                                    {% else %}<span><input type="checkbox" checked disabled></span>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <hr>
+                        <h3 class="greenBtn" style="margin-top: 100px">افزودن شرح پیگیری</h3>
                         <form method="post">
                             {% csrf_token %}
                             <div class="row">

@@ -206,15 +206,21 @@ def sales_expert_dashboard(request):
         req_id__owner=request.user,
         is_active=True,
     )
+    profs_need_change = all_proformas.filter(
+        verified=False,
+        signed=False,
+        profchangerequest__change_needed=True
+    )
+
     profs_not_verified = all_proformas.filter(
         verified=False,
         signed=False
-    )
+    ).exclude(profchangerequest__change_needed=True)
 
     profs_verified_no_td = all_proformas.filter(
         verified=True,
         signed=False
-    )
+    ).exclude(profchangerequest__change_needed=True)
 
     profs_to_follow_on = Xpref.objects.filter(req_id__owner=request.user, is_active=True, to_follow=True, on=True)\
         .order_by('date_modified').reverse()
@@ -254,6 +260,7 @@ def sales_expert_dashboard(request):
         'profs_verified_no_td': profs_verified_no_td,
         'profs_to_follow_on': profs_to_follow_on,
         'profs_to_follow_off': profs_to_follow_off,
+        'profs_need_change': profs_need_change,
         'orders_count': orders.count(),
         'reqsCount': reqsCount,
         'count': {

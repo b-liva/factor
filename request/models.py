@@ -470,6 +470,17 @@ class PrefSpec(models.Model):
         )
 
 
+class ProfChangeRequest(models.Model):
+    owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)
+    proforma = models.ForeignKey(Xpref, on_delete=models.CASCADE)
+    description = models.TextField(max_length=600)
+    pub_date = models.DateTimeField(default=now)
+    change_needed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return '%s' % self.description[:100]
+
+
 class PaymentType(models.Model):
     title = models.CharField(max_length=25)
 

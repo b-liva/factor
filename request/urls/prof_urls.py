@@ -6,6 +6,8 @@ import request.views
 # from z_mine.request.routers import router
 from request.viewsFolder import proformaViews
 
+
+
 urlpatterns = [
                   path('pdf-header', proformaViews.pdf_header, name='pdf_header'),
                   path('pdf-footer', proformaViews.pdf_footer, name='pdf_footer'),
@@ -35,6 +37,8 @@ urlpatterns = [
                       path('', proformaViews.pref_details, name='pref_details'),
                       path('verified', proformaViews.pref_verify_to_send, name='pref_verify_to_send'),
                       path('signed', proformaViews.pref_send_verified, name='pref_send_verified'),
+                      path('changed-needed', proformaViews.proforma_changed_needed, name='proforma_changed_needed'),
+                      path('change-done/<int:change_pk>', proformaViews.change_done, name='change_done'),
                       path('cancel_verified', proformaViews.cancel_pref_verify_to_send, name='cancel_pref_verify_to_send'),
                       path('cancel_signed', proformaViews.cancel_pref_send_verified, name='cancel_pref_send_verified'),
                       path('delete', proformaViews.pref_delete, name='pref_delete'),
