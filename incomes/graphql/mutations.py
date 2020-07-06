@@ -13,7 +13,7 @@ from core.permissions import IncomePermissions
 from core.utils import DeletePermissionCheck
 from .forms.form import IncomeModelForm, IncomeRowModelForm
 import request.templatetags.functions as funcs
-from ..models import Income
+from ..models import Income, IncomeRow
 from utils.graphql import utils as graphql_utils
 
 
@@ -140,7 +140,7 @@ class DeleteIncomeRow(DeletePermissionCheck, relay.ClientIDMutation):
 
     class Input:
         id = graphene.ID()
-        model = Income
+        model = IncomeRow
         label = 'واریزی'
 
     permission_list = [IncomePermissions.DELETE_INCOME_ROW]
