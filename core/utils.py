@@ -27,8 +27,11 @@ class DeletePermissionCheck:
                 pk=from_global_id(input.id)[1]
             )
             obj.delete()
-            msg = f"{input.label} شماره {obj.number} با موفقیت حذف گردید."
-            number = obj.number
+            if hasattr(obj, 'number'):
+                number = obj.number
+                msg = f"{input.label} شماره {obj.number} با موفقیت حذف گردید."
+            else:
+                msg = "با موفقیت حذف شد."
         except:
             msg = f"بروز خطا"
         return cls(
