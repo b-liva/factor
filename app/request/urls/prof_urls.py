@@ -35,6 +35,7 @@ urlpatterns = [
                   path('<int:ypref_pk>/', include([
                       path('insert_form', proformaViews.pref_insert_spec_form, name='pref_insert_spec_form'),
                       path('', proformaViews.pref_details, name='pref_details'),
+                      path('proforma-copy', proformaViews.proforma_copy, name='proforma_copy'),
                       path('verified', proformaViews.pref_verify_to_send, name='pref_verify_to_send'),
                       path('signed', proformaViews.pref_send_verified, name='pref_send_verified'),
                       path('changed-needed', proformaViews.proforma_changed_needed, name='proforma_changed_needed'),

@@ -776,6 +776,35 @@ def pref_details(request, ypref_pk):
 
 
 @login_required
+def proforma_copy(request, ypref_pk):
+
+    if not Xpref.objects.filter(pk=ypref_pk):
+        messages.error(request, 'Nothin found')
+        return redirect('errorpage')
+    pref = Xpref.objects.get(pk=ypref_pk)
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
+
+    if not can_read:
+        messages.error(request, 'عدم دسترسی کافی')
+        return redirect('errorpage')
+
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    pref_specs = proforma.prefspec_set.all()
+    proforma.pk = None
+
+    last = Xpref.objects.order_by('number').last()
+    proforma.number = last.number + 1
+    proforma.save()
+
+    for pspec in pref_specs:
+        pspec.pk = None
+        pspec.xpref_id = proforma
+        pspec.save()
+
+    return redirect('pref_edit_form', ypref_pk=proforma.pk)
+
+
+@login_required
 def pref_details_backup(request, ypref_pk):
     if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
         messages.error(request, 'Nothin found')
