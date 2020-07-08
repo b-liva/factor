@@ -782,7 +782,7 @@ def proforma_copy(request, ypref_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
     pref = Xpref.objects.get(pk=ypref_pk)
-    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
+    can_read = funcs.has_perm_or_is_owner(request.user, 'request.add_proforma', pref)
 
     if not can_read:
         messages.error(request, 'عدم دسترسی کافی')

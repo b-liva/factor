@@ -72,6 +72,8 @@ Vue.component('sales_comparison', {
         "<thead>" +
         "<tr>" +
         "<td>شماره</td>" +
+        "<td>شماره مجوز</td>" +
+        "<td>شماره تدوین</td>" +
         "<td colspan='5'>مشتری</td>" +
         "<td>جمع پیش فاکتور</td>" +
         "<td>دریافت شده</td>" +
@@ -80,7 +82,9 @@ Vue.component('sales_comparison', {
         "</thead>" +
         "<tbody>" +
         "<tr v-for='perm in res.perms'>" +
-        "<td><a :href='perm.url' class='badge badge-light'>{{perm.perm_number}}</a></td>" +
+        "<td><a :href='perm.url' class='badge badge-light'>{{perm.proforma_number}}</a></td>" +
+        "<td>{{perm.perm_number}}</td>" +
+        "<td>{{perm.number_td}}</td>" +
         "<td colspan='5'>{{perm.customer}}</td>" +
         "<td>{{pretty(perm.proforma_total)}}</td>" +
         "<td>{{pretty(perm.total_received)}}({{pretty(perm.total_received_percentage)}}%)</td>" +
