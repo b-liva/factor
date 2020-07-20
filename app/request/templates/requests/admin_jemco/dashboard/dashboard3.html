@@ -152,6 +152,7 @@
                                             <td>ردیف</td>
                                             <td>شماره</td>
                                             <td>مشتری</td>
+                                            <td>کارشناس</td>
                                             <td>تاریخ درخواست</td>
                                         </tr>
                                         </thead>
@@ -161,6 +162,7 @@
                                                 <td>{{ forloop.counter }}</td>
                                                 <td><a href="{% url 'request_details' request_pk=r.pk %}">{{ r.number }}</a></td>
                                                 <td>{{ r.customer.name }}</td>
+                                                <td>{{ r.owner.last_name }}</td>
                                                 <td>{{ r.date_fa }}</td>
                                             </tr>
                                         {% endfor %}

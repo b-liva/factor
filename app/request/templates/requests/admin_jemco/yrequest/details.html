@@ -7,172 +7,194 @@
         <div class="row">
             {% include 'admin_theme/page_elements/details_header.html' with request=request show_me='req' %}
         </div>
+        <div>
+            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+                <h3 class="text-center">درخواست خرید</h3>
+            </div>
+        </div>
         <div class="row">
             {% if messages %}
                 {% include 'general/errors.html' %}
             {% endif %}
-            {% include 'elements/customer_card.html' with customer=request.customer %}
-            <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
-                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                    <div class="tile-stats">
-                        <div class="icon">
-                        </div>
-                        <div class="count">{{ request.number }}</div>
-
-                        <h3>شماره درخواست</h3>
-                    </div>
-                </div>
-                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                    <div class="tile-stats">
-                        <div class="icon">
-                        </div>
-                        <div class="count">{{ request.total_kw|floatformat|intcomma }}</div>
-
-                        <h3>مجموع کیلووات</h3>
-                    </div>
-                </div>
-
-                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                    <div class="tile-stats">
-                        <div class="icon col-md-6">
-                            {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
-                        </div>
-                        <div class="count">${{ request.total_received|floatformat|intcomma }}</div>
-
-                        <h3>پرداخت ها</h3>
-                    </div>
-                </div>
-            </div>
+            {#            {% include 'elements/customer_card.html' with customer=request.customer %}#}
         </div>
         <div class="row">
-
-            {#Buttons#}
-            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
-                <div class="row">
-                    <div class="row">
-                        {% if user.is_superuser %}
-                            <h4 class="text-right">مهندس {{ request.owner.last_name }}</h4>
+            <div>
+                <div>
+                    {% if user.is_superuser %}
+                        <h4 class="text-right">مهندس {{ request.owner.last_name }}</h4>
+                    {% endif %}
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success dropdown-toggle"
+                                data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        {% if perms.request.sale_expert %}
+                            <a class="btn btn-default" href="{% url 'request_edit_form' request_pk=request.pk %}">
+                                ویرایش درخواست</a>
                         {% endif %}
 
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary dropdown-toggle"
-                                    data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            {% if perms.request.sale_expert %}
-                                    <a class="btn btn-default" href="{% url 'request_edit_form' request_pk=request.pk %}">
-                                        ویرایش درخواست</a>
-                                {% endif %}
-
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    {% if perms.request.sale_expert %}
-                                        <a href="{% url 'spec_form' req_pk=request.pk %}">
-                                            <i class="fa fa-plus green"></i> افزودن ردیف
-                                        </a>
-                                    {% endif %}
-                                </li>
-                                <li>
-                                    {% if perms.request.sale_expert %}
-                                        <a href="{% url 'request_delete' request_pk=request.pk %}">
-                                            <i class="fa fa-trash red"></i>حذف درخواست
-                                        </a>
-                                    {% endif %}
-                                </li>
-                                <li>
-                                    {% if perms.request.sale_expert %}
-                                        <a href="{% url 'pro_form_cookie' req_id=request.pk %}">
-                                            <i class="fa fa-plus green"></i> افزودن پیش فاکتور
-                                        </a>
-
-                                    {% endif %}
-                                </li>
-                                <li>
-                                    <a href="{% url 'request_finish' request_pk=request.pk %}">
-                                        <i class="fa fa-plus green"></i>
-                                        {% if not request.finished %}
-                                            اختتام
-                                        {% else %}
-                                            لغو اختتام
-                                        {% endif %}
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </div>
-
-
-                    </div>
-
-                    <div class="row">
-                        {% if sub_requests %}
-                            <div>زیر درخواست های مربوط به این درخواست</div>
-                            {% for sub_request in sub_requests %}
-                                <span class="btn btn-xs btn-link"><a
-                                        href="{% url 'request_details' request_pk=sub_request.pk %}">{{ sub_request.number }}</a></span>
-                            {% endfor %}
-                        {% endif %}
-                        {% if parent_request %}
-                            <div>این درخواست از درخواست زیر کپی شده است.</div>
-                            {% for sub in parent_request %}
-                                <span><a
-                                        href="{% url 'request_details' request_pk=sub.pk %}">{{ sub.number }}</a></span>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="row">
-
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover text-center">
-                        <thead class="dark">
-                        <tr>
-                            <th scope="col" class="text-center rotate_deg">ردیف</th>
-                            <th scope="col" class="text-center rotate_deg">کد کالا</th>
-                            <th scope="col" class="text-center rotate_deg">تعداد</th>
-                            <th scope="col" class="text-center rotate_deg">کیلووات</th>
-                            <th scope="col" class="text-center rotate_deg">سرعت</th>
-                            <th scope="col" class="text-center rotate_deg">جزئیات</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        {% for reqspec in reqspecs %}
-                            <tr>
-                                <td class="dark">{{ forloop.counter }}</td>
-                                {#                <td>{{ customer.pk }}</td>#}
-                                <td>{{ reqspec.code }}</td>
-                                <td>{{ reqspec.qty }}</td>
-                                <td>{{ reqspec.kw|floatformat }}</td>
-                                <td>{{ reqspec.rpm_new.rpm }}</td>
-                                <td class="text-right">{{ reqspec.summary }}</td>
-
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
                                 {% if perms.request.sale_expert %}
-
-                                    <td>
-                                        <a class="btn btn-xs btn-warning"
-                                           href="{% url 'reqspec_edit_form' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
-                                            <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
-                                        </a>
-
-                                        <a class="btn btn-primary btn-xs btn-danger"
-                                           href="{% url 'reqSpec_delete' req_pk=request.pk yreqSpec_pk=reqspec.pk %}"><i
-                                                class="fa fa-trash"></i> حذف</a>
-                                    </td>
+                                    <a href="{% url 'spec_form' req_pk=request.pk %}">
+                                        <i class="fa fa-plus green"></i> افزودن ردیف
+                                    </a>
                                 {% endif %}
+                            </li>
+                            <li>
+                                {% if perms.request.sale_expert %}
+                                    <a href="{% url 'request_delete' request_pk=request.pk %}">
+                                        <i class="fa fa-trash red"></i>حذف درخواست
+                                    </a>
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if perms.request.sale_expert %}
+                                    <a href="{% url 'pro_form_cookie' req_id=request.pk %}">
+                                        <i class="fa fa-plus green"></i> افزودن پیش فاکتور
+                                    </a>
 
-                            </tr>
+                                {% endif %}
+                            </li>
+                            <li>
+                                <a href="{% url 'request_finish' request_pk=request.pk %}">
+                                    <i class="fa fa-plus green"></i>
+                                    {% if not request.finished %}
+                                        اختتام
+                                    {% else %}
+                                        لغو اختتام
+                                    {% endif %}
+                                </a>
+                            </li>
 
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    {% if sub_requests %}
+                        <div>زیر درخواست های مربوط به این درخواست</div>
+                        {% for sub_request in sub_requests %}
+                            <span class="btn btn-xs btn-link"><a
+                                    href="{% url 'request_details' request_pk=sub_request.pk %}">{{ sub_request.number }}</a></span>
                         {% endfor %}
+                    {% endif %}
+                    {% if parent_request %}
+                        <div>این درخواست از درخواست زیر کپی شده است.</div>
+                        {% for sub in parent_request %}
+                            <span><a
+                                    href="{% url 'request_details' request_pk=sub.pk %}">{{ sub.number }}</a></span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div style="margin-top: 50px">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-1">
+                                <span class="red">اطلاعات درخواست</span>
+                            </div>
+                            <div class="table-responsive col-md-11">
+                                <table class="table table-hover text-center">
+                                    <thead class="dark">
+                                    <tr class="d-inline bg-green">
+                                        <td scope="col" class="text-center">شماره درخواست</td>
+                                        <td scope="col" class="text-center">مشتری</td>
+                                        <td scope="col" class="text-center">تاریخ درخواست</td>
+                                        <td scope="col" class="text-center">کیلووات</td>
+                                        <td scope="col" class="text-center">پیش فاکتور ها</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="h4 red">{{ request.number }}</td>
+                                        <td>
+                                            <a class="badge badge-light"
+                                               href="{% url 'customer_read' customer_pk=request.customer.pk %}">{{ request.customer.name }}</a>
+                                        </td>
+                                        <td>{{ request.date_fa }}</td>
+                                        <td>{{ request.total_kw }}</td>
+                                        <td>
+                                            <ol>
+                                                {% for proforma in request.proformas %}
+                                                    <li><a class="badge"
+                                                           href="{% url 'pref_details' ypref_pk=proforma.pk %}">{{ proforma.number }}</a>
+                                                        - {{ perm.date }}</li>
+                                                {% endfor %}
+                                            </ol>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
-                        </tbody>
-                    </table>
+                </div>
+                <div style="margin-top: 50px">
+                    <div class="col-md-1">
+                        <span class="red">اطلاعات ردیف</span>
+                    </div>
+                    <div class="table-responsive col-md-11">
+                        <table class="table table-hover text-center">
+                            <thead class="dark">
+                            <tr class="d-inline bg-green">
+                                <td scope="col" class="text-center rotate_deg">ردیف</td>
+                                <td scope="col" class="text-center rotate_deg">کد کالا</td>
+                                <td scope="col" class="text-center rotate_deg">تعداد</td>
+                                <td scope="col" class="text-center rotate_deg">کیلووات</td>
+                                <td scope="col" class="text-center rotate_deg">سرعت</td>
+                                <td scope="col" class="text-center rotate_deg">ولتاژ</td>
+                                <td scope="col" class="text-center rotate_deg">IM</td>
+                                <td scope="col" class="text-center rotate_deg">IC</td>
+                                <td scope="col" class="text-center rotate_deg">IP</td>
+                                <td scope="col" class="text-center rotate_deg">جزئیات</td>
+                                <td scope="col" class="text-center rotate_deg"></td>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for reqspec in reqspecs %}
+                                <tr>
+                                    <td class="dark">{{ forloop.counter }}</td>
+                                    {#                <td>{{ customer.pk }}</td>#}
+                                    <td>{{ reqspec.code }}</td>
+                                    <td>{{ reqspec.qty }}</td>
+                                    <td>{{ reqspec.kw|floatformat }}</td>
+                                    <td>{{ reqspec.rpm_new.rpm }}</td>
+                                    <td>{{ reqspec.voltage }}</td>
+                                    <td>{{ reqspec.im.title }}</td>
+                                    <td>{{ reqspec.ic.title }}</td>
+                                    <td>{{ reqspec.ip.title }}</td>
+                                    <td data-toggle="tooltip"
+                                        title="{% if reqspec.summary %} {{ reqspec.summary }} {% endif %}">
+                                        {% if reqspec.summary %}
+                                            <strong style="color: darkred">*</strong>
+                                        {% endif %}</td>
+
+                                    {% if perms.request.sale_expert %}
+
+                                        <td>
+                                            <a class="btn btn-xs btn-warning"
+                                               href="{% url 'reqspec_edit_form' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
+                                            </a>
+
+                                            <a class="btn btn-primary btn-xs btn-danger"
+                                               href="{% url 'reqSpec_delete' req_pk=request.pk yreqSpec_pk=reqspec.pk %}"><i
+                                                    class="fa fa-trash"></i> حذف</a>
+                                        </td>
+                                    {% endif %}
+
+                                </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <br>
-
             </div>
-
             <div class="row">
                 {#Images#}
                 {#                                    {% include 'admin_theme/page_elements/files/files_img.html' with images=request.files_by_type.images %}#}
@@ -186,8 +208,6 @@
                 {% include 'admin_theme/page_elements/files/files_list.html' with files=request.files %}
 
             </div>
-
-
         </div>
 
         <div class="row">

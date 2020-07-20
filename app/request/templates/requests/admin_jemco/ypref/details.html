@@ -7,79 +7,74 @@
         <div class="row">
             {% include 'admin_theme/page_elements/details_header.html' with show_me='proforma' request=pref.req_id prof=pref %}
         </div>
+        <div>
+            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+                <h3 class="text-center">پیش فاکتور</h3>
+            </div>
+        </div>
         <div class="row">
             {% if messages %}
                 {% include 'general/errors.html' %}
             {% endif %}
-            {% include 'elements/customer_card.html' with customer=pref.req_id.customer %}
-            <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
-                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                    <div class="tile-stats">
-                        <div class="icon">
-                        </div>
-                        <span class="count">{{ pref.number }}</span>
-                        <span class="{% if pref.perm %}green{% else %}red{% endif %}">
-                            {% if pref.perm %}
-                                <i class="fa fa-check-circle" style="font-size: 1.2em" data-toggle="tooltip"
-                                   title=" مجوز شده است"></i>
-                            {% else %}<i class="fa fa-times-circle-o" style="font-size: 1.5em" data-toggle="tooltip"
-                                         title="مجوز نشده"></i>
-                            {% endif %}
-                        </span>
-                        <span class="xs1">(پیش فاکتور تدوین: {{ pref.number_td }})</span>
-
-                        {#                    {% endif %}#}
-
-                        <h3>شماره پیش فاکتور</h3>
-                    </div>
-                </div>
-                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                    <div class="tile-stats">
-                        <div class="icon">
-                        </div>
-                        <div class="count">{{ pref.exp_date_fa }}</div>
-
-                        <h3>تاریخ انقضا</h3>
-                    </div>
-                </div>
-                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                    <div class="tile-stats">
-                        <div class="icon col-md-6">
-                            {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
-                        </div>
-                        <div class="count">{{ proforma_total|floatformat|intcomma }}</div>
-
-                        <h3>مبلغ پیش فاکتور</h3>
-                    </div>
-                </div>
-                {% if pref.perm %}
-                    <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                        <div class="tile-stats">
-                            <div>
-                                <span class="count">${{ pref.total_proforma_received.remaining|floatformat|intcomma }}</span>
-                                <span class="red">(%{{ pref.total_proforma_received.remaining_percent|floatformat }})</span>
-                            </div>
-                            <h3 class="col-xs-12">تسویه نشده</h3>
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
+            {#            {% include 'elements/customer_card.html' with customer=pref.req_id.customer %}#}
+            {#            <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">#}
+            {#                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">#}
+            {#                    <div class="tile-stats">#}
+            {#                        <div class="icon">#}
+            {#                        </div>#}
+            {#                        <span class="count">{{ pref.number }}</span>#}
+            {#                        <span class="{% if pref.perm %}green{% else %}red{% endif %}">#}
+            {#                            {% if pref.perm %}#}
+            {#                                <i class="fa fa-check-circle" style="font-size: 1.2em" data-toggle="tooltip"#}
+            {#                                   title=" مجوز شده است"></i>#}
+            {#                            {% else %}<i class="fa fa-times-circle-o" style="font-size: 1.5em" data-toggle="tooltip"#}
+            {#                                         title="مجوز نشده"></i>#}
+            {#                            {% endif %}#}
+            {#                        </span>#}
+            {#                        <span class="xs1">(پیش فاکتور تدوین: {{ pref.number_td }})</span>#}
+            {##}
+            {#                    {% endif %}#}
+            {##}
+            {#                        <h3>شماره پیش فاکتور</h3>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {#                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">#}
+            {#                    <div class="tile-stats">#}
+            {#                        <div class="icon">#}
+            {#                        </div>#}
+            {#                        <div class="count">{{ pref.exp_date_fa }}</div>#}
+            {##}
+            {#                        <h3>تاریخ انقضا</h3>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {#                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">#}
+            {#                    <div class="tile-stats">#}
+            {#                        <div class="icon col-md-6">#}
+            {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
+            {#                        </div>#}
+            {#                        <div class="count">{{ proforma_total|floatformat|intcomma }}</div>#}
+            {##}
+            {#                        <h3>مبلغ پیش فاکتور</h3>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {#                {% if pref.perm %}#}
+            {#                    <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">#}
+            {#                        <div class="tile-stats">#}
+            {#                            <div>#}
+            {#                                <span class="count">${{ pref.total_proforma_received.remaining|floatformat|intcomma }}</span>#}
+            {#                                <span class="red">(%{{ pref.total_proforma_received.remaining_percent|floatformat }})</span>#}
+            {#                            </div>#}
+            {#                            <h3 class="col-xs-12">تسویه نشده</h3>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                {% endif %}#}
+            {#            </div>#}
         </div>
 
-        <div class="row">
-            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
-                <div class="row" style="margin-top: 75px">
-                    <div class="col-xs-12">
-                        <h4 class="greenBtn">مجوزها</h4>
-                        <ol>
-                            {% for perm in pref.perm_prof.all %}
-                                <li><a class="badge"
-                                       href="{% url 'perms:perm_details' perm_pk=perm.pk %}">{{ perm.number }}</a>
-                                    - {{ perm.date }}</li>
-                            {% endfor %}
-                        </ol>
-                    </div>
-                    <div class="col-xs-4">
+        <div class="row" style="margin-top: 50px;">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-8">
                         {% if pref.owner.username == 'jemco3' %}
                             <h4 class="text-right">ثبت نرم افزاری</h4>
                         {% else %}
@@ -120,16 +115,18 @@
                                         <i class="fa fa-plus green" aria-hidden="true"></i>
                                         ثبت دریافتی</a></li>
 {#                                    <li><a href="{% url 'proforma_pdf' ypref_pk=pref.pk render_header=False %}">#}
-{#                                        <i class="fa fa-file-pdf-o red" aria-hidden="true"></i>پیش فاکتور بدون سربرگ</a>#}
+{#                                        <i class="fa fa-file-pdf-o red"#}
+{#                                           aria-hidden="true"></i>پیش فاکتور بدون#}
+{#                                        سربرگ</a>#}
 {#                                    </li>#}
-{#                                    <li><a href="{% url 'proforma_pdf' ypref_pk=pref.pk render_header=True %}">#}
-{#                                        <i class="fa fa-file-pdf-o red" aria-hidden="true"></i> یپش فاکتور با سربرگ</a>#}
-{#                                    </li>#}
+                                    {#                                    <li><a href="{% url 'proforma_pdf' ypref_pk=pref.pk render_header=True %}">#}
+                                    {#                                        <i class="fa fa-file-pdf-o red" aria-hidden="true"></i> یپش فاکتور با سربرگ</a>#}
+                                    {#                                    </li>#}
                                 </ul>
                             </div>
                         {% endif %}
                     </div>
-                    <div class="col-xs-4 col-xs-offset-4">
+                    <div class="col-md-4">
                         {% if user.is_superuser %}
                             {% if not pref.verified %}
                                 <a class="btn btn-xs btn-success"
@@ -151,91 +148,163 @@
                             {% endif %}
                         {% endif %}
                     </div>
-                    <div class="col-xs-12">
-                        {% if pref.summary %}
-                            <h4 class="greenBtn">شرح پیگیری</h4>
-                            {{ pref.summary }}
-                        {% endif %}
+                </div>
+                <div class="row" style="margin-top: 50px">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-1 red">اطلاعات پیش فاکتور</div>
+                            <div class="col-md-11">
+                                <table class="table table-hover text-center">
+                                    <thead>
+                                    <tr class="d-inline bg-primary">
+                                        <td class="text-center">شماره پیش فاکتور</td>
+                                        <td class="text-center">شماره درخواست</td>
+                                        <td class="text-center">مشتری</td>
+                                        <td class="text-center">شماره تدوین</td>
+                                        <td class="text-center">تاریخ انقضا</td>
+                                        <td class="text-center">مبلغ</td>
+                                        <td class="text-center">تسویه نشده</td>
+                                        <td class="text-center">تسویه نشده%</td>
+                                        <td class="text-center">مجوز</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="text-center d-inline red h4">{{ pref.number }}</td>
+                                        <td class="text-center">
+                                            <a class="badge badge-light"
+                                               href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
+                                        </td>
+                                        <td><a class="badge badge-light"
+                                               href="{% url 'customer_read' customer_pk=pref.req_id.customer.pk %}">{{ pref.req_id.customer.name }}</a>
+                                        </td>
+                                        <td class="text-center">
+                                            {% if pref.number_td %}
+                                                {{ pref.number_td }}
+                                            {% else %}
+                                                ثبت نشده
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">{{ pref.exp_date_fa }}</td>
+                                        <td class="text-center">{{ proforma_total|floatformat|intcomma }}</td>
+                                        <td class="text-center">
+                                            {% if pref.perm %}
+                                                {{ pref.total_proforma_received.remaining|floatformat|intcomma }}
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if pref.perm %}
+                                                (%{{ pref.total_proforma_received.remaining_percent|floatformat }})
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if pref.perm %}
+                                                {#                                                <ol>#}
+                                                {#                                                    {% for perm in pref.perm_prof.all %}#}
+                                                {#                                                        <li><a class="badge"#}
+                                                {#                                                               href="{% url 'perms:perm_details' perm_pk=perm.pk %}">{{ perm.number }}</a>#}
+                                                {#                                                            - {{ perm.date }}</li>#}
+                                                {#                                                    {% endfor %}#}
+                                                {#                                                </ol>#}
+                                                {{ pref.perm_number }}
+                                            {% else %}
+                                                مجوز نشده
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
+            </div>
+        </div>
 
-                <h3 style="margin-top: 75px;" class="greenBtn">جزئیات پیشفاکتور شماره {{ pref.number }} مربوط به درخواست
-                    شماره
-                    <a class="badge badge-light"
-                       href="{% url 'request_details' request_pk=pref.req_id.pk %}">{{ pref.req_id.number }}</a>
-                </h3>
-
-                {#                Table of specs#}
-                <div class="table-responsive">
-                    <table class="table table-hover text-center">
-                        <thead>
-                        <tr>
-                            <th scope="col" class="text-center">ردیف</th>
-                            <th scope="col" class="text-center">کد کالا</th>
-                            <th scope="col" class="text-center">تعداد</th>
-                            <th scope="col" class="text-center">ارسال شده</th>
-                            <th scope="col" class="text-center">مانده</th>
-                            <th scope="col" class="text-center">کیلووات</th>
-                            <th scope="col" class="text-center">سرعت</th>
-                            <th scope="col" class="text-center">ولتاژ</th>
-                            <th scope="col" class="text-center">ملاحظات</th>
-                            <th scope="col" class="text-center">قیمت واحد</th>
-                            <th scope="col" class="text-center">مجموع قیمت</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for index, object in nested.items %}
-                            {% if object.obj.price and object.obj.qty %}
-                                <tr>
-                                    <th scope="row" class="text-center">{{ forloop.counter }}</th>
-                                    <td>{{ object.obj.code }}</td>
-                                    <td>{{ object.obj.qty }}</td>
-                                    <td>{{ object.obj.qty_sent }}</td>
-                                    <td style="border: 1px dashed brown">{{ object.obj|qty_remaining }}</td>
-                                    <td>{{ object.obj.kw|floatformat }}</td>
-                                    <td>{{ object.obj.rpm }}</td>
-                                    <td>{{ object.obj.voltage }}</td>
-                                    <td>{{ object.obj.considerations }}</td>
-                                    <td>{{ object.obj.price|floatformat|intcomma }}</td>
-                                    <td>{{ object.spec_total|floatformat|intcomma }}</td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                        <tr style="border-top: 2px black solid">
-                            <td colspan="3">مالیات ارزش افزوده</td>
-                            <td colspan="5"></td>
-                            <td class="amount-total ">{{ vat|floatformat|intcomma }}</td>
-                        </tr>
-                        <tr style="border-top: 2px black solid">
-                            <td colspan="3" class="emphsize">مجموع</td>
-                            <td class="kw-total emphsize">{{ kw_total|floatformat|intcomma }} کیلووات</td>
-                            <td colspan="4"></td>
-                            <td class="amount-total emphsize">{{ proforma_total|floatformat|intcomma }}</td>
-                        </tr>
-                        </tbody>
-
-
-                    </table>
-                </div>
-                {#        Images#}
-                <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
-                        {% for img in prof_images %}
-                            <a href="{{ img.image.url }}" target="_blank">
-                                <img class="img-responsive img-thumbnail col-md-3"
-                                     src="{{ img.image.url }}" style="">
-                            </a>
-                        {% endfor %}
+        <div class="row" style="margin-top: 50px;">
+            <div>
+                <div class="col-md-1 red"> اطلاعات ردیف ها</div>
+                <div class="col-md-11">
+                    <div class="table-responsive">
+                        <table class="table table-hover text-center">
+                            <thead>
+                            <tr class="d-inline bg-primary">
+                                <td scope="col" class="text-center">ردیف</td>
+                                <td scope="col" class="text-center">کد کالا</td>
+                                <td scope="col" class="text-center">تعداد</td>
+                                <td scope="col" class="text-center">ارسال شده</td>
+                                <td scope="col" class="text-center">مانده</td>
+                                <td scope="col" class="text-center">کیلووات</td>
+                                <td scope="col" class="text-center">سرعت</td>
+                                <td scope="col" class="text-center">ولتاژ</td>
+                                <td scope="col" class="text-center">IM</td>
+                                <td scope="col" class="text-center">IP</td>
+                                <td scope="col" class="text-center">IC</td>
+                                <td scope="col" class="text-center">جزئیات</td>
+                                <td scope="col" class="text-center">قیمت واحد</td>
+                                <td scope="col" class="text-center">مجموع قیمت</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for index, object in nested.items %}
+                                {% if object.obj.price and object.obj.qty %}
+                                    <tr>
+                                        <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                        <td>{{ object.obj.code }}</td>
+                                        <td>{{ object.obj.qty }}</td>
+                                        <td>{{ object.obj.qty_sent }}</td>
+                                        <td style="border: 1px dashed brown">{{ object.obj|qty_remaining }}</td>
+                                        <td>{{ object.obj.kw|floatformat }}</td>
+                                        <td>{{ object.obj.rpm }}</td>
+                                        <td>{{ object.obj.voltage }}</td>
+                                        <td>{% if object.obj.im %}{{ object.obj.im }}{% endif %}</td>
+                                        <td>{% if object.obj.ip %}{{ object.obj.ip }}{% endif %}</td>
+                                        <td>{% if object.obj.ic %}{{ object.obj.ic }}{% endif %}</td>
+                                        <td data-toggle="tooltip"
+                                            title="{% if object.obj.considerations %} {{ object.obj.considerations }} {% endif %}">
+                                            {% if object.obj.considerations %}
+                                                <strong style="color: darkred">*</strong>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ object.obj.price|floatformat|intcomma }}</td>
+                                        <td>{{ object.spec_total|floatformat|intcomma }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            <tr style="border-top: 2px black solid">
+                                <td colspan="3">مالیات ارزش افزوده</td>
+                                <td colspan="10"></td>
+                                <td class="amount-total ">{{ vat|floatformat|intcomma }}</td>
+                            </tr>
+                            <tr style="border-top: 2px black solid">
+                                <td colspan="3" class="emphsize">مجموع</td>
+                                <td colspan="2"></td>
+                                <td class="kw-total emphsize">{{ kw_total|floatformat|intcomma }} کیلووات</td>
+                                <td colspan="7"></td>
+                                <td class="amount-total emphsize">{{ proforma_total|floatformat|intcomma }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-
-
+                    {#        Images#}
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            {% for img in prof_images %}
+                                <a href="{{ img.image.url }}" target="_blank">
+                                    <img class="img-responsive img-thumbnail col-md-3"
+                                         src="{{ img.image.url }}" style="">
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <div>
                 {#        Payments#}
                 {% if pref.payment_set.all.count %}
                     <div class="row">
-                        <div style="margin-top: 100px">
-                            <h4 class="greenBtn">مبالغ دریافتی بابت این پیش فاکتور:</h4>
+                        <div class="col-md-8 col-md-offset-2" style="margin-top: 100px">
+                            <h4 style="color: #337ab7;">مبالغ دریافتی بابت این پیش فاکتور:</h4>
                             <div class="col-xs-12 col-sm-6 col-md-4">
                                 <div class="table-responsive">
                                     <table class="table">
@@ -276,7 +345,7 @@
                     <div class="row">
                         <div class="col-md-10 col-md-offset-1">
                             <hr>
-                            <h3>شرح پیگیری پیش فاکتور</h3>
+                            <h3 style="color: #337ab7">شرح پیگیری پیش فاکتور</h3>
                             <table class="tableFull">
                                 <thead>
                                 <tr>
@@ -339,30 +408,33 @@
                 {#                        </div>#}
                 {#                    </div>#}
                 {#                </div>#}
-                <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
-                        <hr>
-                        <h3 class="greenBtn">تغییرات مورد نیاز روی این پیش فاکتور</h3>
-                        <ol>
-                            {% for prof_change in changes_needed %}
-                                <li>
-                                    {{ prof_change.date }}, {{ prof_change.description }},
-                                    {% if prof_change.change_needed %}
-                                        <span>
+                {% if changes_needed %}
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <hr>
+                            <h3 style="color: #337ab7">تغییرات مورد نیاز روی این پیش فاکتور</h3>
+                            <ol>
+                                {% for prof_change in changes_needed %}
+                                    <li>
+                                        {{ prof_change.date }}, {{ prof_change.description }},
+                                        {% if prof_change.change_needed %}
+                                            <span>
                                 <a class="btn btn-xs btn-success"
                                    href="{% url 'change_done' ypref_pk=pref.pk change_pk=prof_change.pk %}">اعمال شد</a>
                             </span>
-                                    {% else %}<span><input type="checkbox" checked disabled></span>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ol>
+                                        {% else %}<span><input type="checkbox" checked disabled></span>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
+
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
                         <hr>
-                        <h3 class="greenBtn" style="margin-top: 100px">افزودن شرح پیگیری</h3>
+                        <h3 class="greenBtn" style="color: #337ab7; margin-top: 100px">افزودن شرح پیگیری</h3>
                         <form method="post">
                             {% csrf_token %}
                             <div class="row">
@@ -378,7 +450,7 @@
                                         {{ followup_form.next_followup }}</div>
                                 </div>
                             </div>
-                            <button class="btn-sm btn-success">ثبت</button>
+                            <button class="btn-sm btn-primary">ثبت</button>
                         </form>
                     </div>
                 </div>

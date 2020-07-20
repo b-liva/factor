@@ -7,94 +7,109 @@
         </div>
         <div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
-                <h1 class="text-center">دریافتی</h1>
+                <h3 class="text-center">دریافتی</h3>
             </div>
         </div>
         <div class="row">
-            {% include 'elements/customer_card.html' with customer=payment.xpref_id.req_id.customer %}
-            <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">
-                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                    <div class="tile-stats">
-                        <div class="icon">
-                        </div>
-                        <div class="count">{{ payment.number }}</div>
-
-                        <h3>شماره پرداخت</h3>
-                    </div>
-                </div>
-                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                    <div class="tile-stats">
-                        <div class="icon">
-                        </div>
-                        <div class="count">{{ payment.date_fa }}</div>
-                        <h3>تاریخ دریافت</h3>
-                    </div>
-                </div>
-
-
-                <div class="animated flipInY col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                    <div class="tile-stats">
-                        <div class="icon col-md-6">
-                            {#                        <i class="fa fa-usd" aria-hidden="true"></i>#}
-                        </div>
-                        <div class="count">${{ payment.amount|floatformat|intcomma }}</div>
-
-                        <h3>پرداخت ها</h3>
-                    </div>
-                </div>
-            </div>
+            {#            {% include 'elements/customer_card.html' with customer=payment.xpref_id.req_id.customer %}#}
         </div>
         <div class="row">
-
-            <div class="col-md-5 col-md-offset-1 col-sm-5 col-sm-offset-1">
-
-            </div>
-            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
-                {% if payment.owner.username == 'jemco3' %}
-                    <h4 class="text-right">ثبت نرم افزاری</h4>
-                {% else %}
-                    <h4 class="text-right">مهندس {{ payment.owner.last_name }}</h4>
-                {% endif %}
-
-                <div class="pull-left">
-                    {% if perms.request.add_payment %}
-                        <a href="{% url 'payment_edit' ypayment_pk=payment.pk %}" class="btn btn-warning btn-sm">
-                            <i class="fa fa-pencil"></i> ویرایش </a>
-                        <a class="btn btn-primary btn-sm btn-danger" href="{% url 'payment_delete' ypayment_pk=payment.pk %}"
-                       data-toggle="tooltip" title="حذف"><i
-                            class="fa fa-trash"></i> حذف دریافتی</a>
-                        <a href="{% url 'payment_index' %}" class="btn btn-info btn-sm">
-                            <i class="fa fa-list "></i> لیست پرداخت ها</a>
+            <div class="col-md-12">
+                <div class="row">
+                    {% if payment.owner.username == 'jemco3' %}
+                        <h4 class="text-right">ثبت نرم افزاری</h4>
+                    {% else %}
+                        <h4 class="text-right">مهندس {{ payment.owner.last_name }}</h4>
                     {% endif %}
+                    <div class="pull-left">
+                        {% if perms.request.add_payment %}
+                            <a href="{% url 'payment_edit' ypayment_pk=payment.pk %}" class="btn btn-warning btn-sm">
+                                <i class="fa fa-pencil"></i> ویرایش </a>
+                            <a class="btn btn-primary btn-sm btn-danger"
+                               href="{% url 'payment_delete' ypayment_pk=payment.pk %}"
+                               data-toggle="tooltip" title="حذف"><i
+                                    class="fa fa-trash"></i> حذف دریافتی</a>
+                            <a href="{% url 'payment_index' %}" class="btn btn-info btn-sm">
+                                <i class="fa fa-list "></i> لیست پرداخت ها</a>
+                        {% endif %}
 
-                </div>
-
-                <div>
-                    {% for i in images %}
-                        <div class="col-md-3 col-sm-4 col-xs-4">
-                            <a href="{{ i.image.url }}">
-                                <img src="{{ i.image.url }}" class="img-thumbnail ">
-                            </a>
-                        </div>
-                    {% endfor %}
+                    </div>
+                    <div>
+                        {% for i in images %}
+                            <div class="col-md-3 col-sm-4 col-xs-4">
+                                <a href="{{ i.image.url }}">
+                                    <img src="{{ i.image.url }}" class="img-thumbnail ">
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="panel-body">
-                    </div>
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <p class="card-text">
-                                پرداخت مربوط به پیش فاکتور شماره <a class="badge badge-light"
-                                                                    href="{% url 'pref_details' ypref_pk=payment.xpref_id.pk %}">{{ payment.xpref_id.number }}</a>
-                                و درخواست شماره <a class="badge badge-light"
-                                                   href="{% url 'request_details' request_pk=payment.xpref_id.req_id.pk %}">{{ payment.xpref_id.req_id.number }}</a>
-                            </p>
+                            <div>
+                                <div class="col-md-1">
+                                    <span class="red">اطلاعات دریافتی</span>
+                                </div>
+                                <div class="col-md-11">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover text-center">
+                                            <thead class="dark">
+                                            <tr class="bg-blue-sky">
+                                                <td scope="col" class="text-center">شماره دریافتی</td>
+                                                <td scope="col" class="text-center">مشتری</td>
+                                                <td scope="col" class="text-center">نوع</td>
+                                                <td scope="col" class="text-center"> پیش فاکتور</td>
+                                                <td scope="col" class="text-center"> پیش فاکتور تدوین</td>
+                                                <td scope="col" class="text-center">درخواست</td>
+                                                <td scope="col" class="text-center">مبلغ</td>
+                                                <td scope="col" class="text-center">تاریخ</td>
+                                                <td scope="col" class="text-center">سررسید</td>
+                                                <td scope="col" class="text-center">توضیحات</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ payment.number }}</td>
+                                                <td>
+                                                    <a class="badge badge-light"
+                                                       href="{% url 'customer_read' customer_pk=payment.xpref_id.req_id.customer.pk %}">
+                                                        {{ payment.xpref_id.req_id.customer.name }}
+                                                    </a>
+                                                </td>
+                                                <td>{{ payment.type.title }}</td>
+                                                <td>
+                                                    <a class="badge badge-light"
+                                                       href="{% url 'pref_details' ypref_pk=payment.xpref_id.pk %}">{{ payment.xpref_id.number }}</a>
+                                                </td>
+                                                <td>
+                                                    {% if payment.xpref_id.number_td %}
+                                                        <a class="badge badge-light"
+                                                           href="{% url 'pref_details' ypref_pk=payment.xpref_id.pk %}">{{ payment.xpref_id.number_td }}</a>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a class="badge badge-light"
+                                                       href="{% url 'request_details' request_pk=payment.xpref_id.req_id.pk %}">{{ payment.xpref_id.req_id.number }}</a>
+                                                </td>
+                                                <td>{{ payment.amount|intcomma }}</td>
+                                                <td>{{ payment.date_fa }}</td>
+                                                <td>{% if payment.type.title == 'چک' %}{{ payment.due_date }}{% endif %}</td>
+                                                <td data-toggle="tooltip"
+                                                    title="{% if payment.summary %} {{ payment.summary }} {% endif %}">
+                                                    {% if payment.summary %}
+                                                        <strong style="color: darkred">*</strong>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
-
-
             </div>
         </div>
     </div>
