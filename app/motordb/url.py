@@ -33,6 +33,8 @@ urlpatterns = [
   path('codes_not_entered', motordb.views.codes_not_entered, name='codes_not_entered'),
   path('find', motordb.views.motordb_find, name='motordb_find'),
   path('search_form', motordb.views.motordb_search_form, name='motordb_search_form'),
+  path('index-prices', motordb.views.index_prices, name='index_prices'),
+  path('update-prices', motordb.views.update_prices, name='update_prices'),
   path('search', motordb.views.motordb_search, name='motordb_search'),
   path('<int:motordb_pk>/', include([
       path('', motordb.views.motordb_details, name='motordb_details'),

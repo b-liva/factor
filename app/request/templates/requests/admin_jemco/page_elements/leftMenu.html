@@ -111,6 +111,10 @@
                 </li>
                 <li><a> سایر <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
+                        {% if perms.request.view_motordb %}
+                            <li><a href="{% url 'index_prices' %}">لیست قیمت</a></li>
+                            <li><a href="{% url 'update_prices' %}">آپدیت لیست قیمت</a></li>
+                        {% endif %}
                         {% if perms.request.index_reqspecs %}
                             <li><a href="{% url 'reqSpec_index' %}">جزئیات</a></li>
                         {% endif %}

@@ -1,28 +1,31 @@
 import operator
 from functools import reduce
 
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from motordb import forms
 from motordb import models
-
+from req_track.models import PriceList
+from pricedb.models import MotorDB, PriceDb
 
 # Create your views here.
 from motordb.models import MotorsCode
 from req_track.models import TrackXpref
 
 
+@login_required
 def motordb_index(request):
-
     motors = models.Motors.objects.all()
     motors = models.MotorsCode.objects.all()
 
     return render(request, 'motordb/index_motor_code.html', {'motors': motors})
 
 
+@login_required
 def codes_not_entered(request):
-    codes = TrackXpref.objects.values('code')\
-        .exclude(code__in=[a['code'] for a in MotorsCode.objects.values('code').distinct()])\
+    codes = TrackXpref.objects.values('code') \
+        .exclude(code__in=[a['code'] for a in MotorsCode.objects.values('code').distinct()]) \
         .distinct().values('code', 'details')
 
     context = {
@@ -32,6 +35,7 @@ def codes_not_entered(request):
     return render(request, 'motordb/codes_not_entered.html', context)
 
 
+@login_required
 def motor_view(request):
     form = forms.Motors()
 
@@ -46,6 +50,7 @@ def motor_view(request):
     return render(request, 'motordb/form_page.html', {'form': form})
 
 
+@login_required
 def test_view(request):
     form = forms.FormTest()
     if request.method == 'POST':
@@ -61,6 +66,7 @@ def test_view(request):
     return render(request, 'motordb/form_page.html', {'form': form})
 
 
+@login_required
 def test_view2(request, motordb_pk=None):
     form = forms.MotorsForm()
     if not motordb_pk:
@@ -79,22 +85,27 @@ def test_view2(request, motordb_pk=None):
     return render(request, 'motordb/form_page.html', {'form': form})
 
 
+@login_required
 def motordb_form(request):
     pass
 
 
+@login_required
 def motordb_insert(request):
     pass
 
 
+@login_required
 def motordb_find(request):
     pass
 
 
+@login_required
 def motordb_details(request):
     pass
 
 
+@login_required
 def motordb_delete(request, motordb_pk):
     delete = input('do you want to delete this ? (Y/N)')
     if delete == 'Y' or delete == 'y':
@@ -103,6 +114,7 @@ def motordb_delete(request, motordb_pk):
     return redirect('motordb_index')
 
 
+@login_required
 def motordb_edit_form(request, motordb_pk):
     # edit = input('do you want to edit this ? (Y/N)')
     # if edit == 'Y':
@@ -116,6 +128,7 @@ def motordb_edit_form(request, motordb_pk):
     })
 
 
+@login_required
 def motordb_edit(request, motordb_pk):
     motor_instance = models.Motors.objects.get(pk=motordb_pk)
 
@@ -127,6 +140,7 @@ def motordb_edit(request, motordb_pk):
         print('error: form invalid')
 
 
+@login_required
 def del_all_motors(request):
     motors = models.Motors.objects.all()
     print(motors)
@@ -135,6 +149,7 @@ def del_all_motors(request):
     return redirect('motordb_index')
 
 
+@login_required
 def motordb_search_form(request):
     filter_items = ('kw', 'speed', 'voltage')
     kwargs = {}
@@ -152,6 +167,51 @@ def motordb_search_form(request):
     })
 
 
+@login_required
+def index_prices(request):
+    prices = MotorDB.objects.all()
+    context = {
+        'prices': prices
+    }
+    return render(request, 'motordb/index_prices.html', context)
+
+
+@login_required
+def update_prices(request):
+    """
+    Adding a new price set(pricedb)
+    Adding new price list
+    cleaning motordb
+    Adding new motordb from newly created price list.
+    """
+    last_price_id = PriceList.objects.values(
+        'price_list_id'
+    ).order_by('price_list_id').distinct().last()['price_list_id']
+    price_list = PriceList.objects.filter(price_list_id=last_price_id)
+    price_db = PriceDb.objects.last()
+
+    MotorDB.objects.all().delete()
+    new_codes = []
+    for price in price_list:
+        try:
+            motor = MotorsCode.objects.get(code=price.code)
+            price_set = price_db
+            MotorDB.objects.create(
+                price_set=price_set,
+                motor=motor,
+                base_price=price.base_price,
+                sale_price=price.sale_price
+            )
+        except:
+            new_codes.append(price.code)
+    context = {
+        'prices_with_error': new_codes,
+        'prices': MotorDB.objects.all()
+    }
+    return render(request, 'motordb/index_prices.html', context)
+
+
+@login_required
 def motordb_search(request):
     filter_items = ('kw', 'speed', 'voltage')
 
@@ -173,7 +233,6 @@ def motordb_search(request):
     }
     return render(request, 'motordb/search.html', context)
 
-
 ## drafts:
 # motors = models.Motors.objects\
 #         .filter(kw=request.POST['kw']).filter(speed=request.POST['speed']).filter(voltage=request.POST['voltage'])
@@ -194,23 +253,23 @@ def motordb_search(request):
 #
 #     mt = models.Motors.objects.filter(**kwargs)
 #     if request.POST[filter]:
-    #         fil.append(Q(filter=request.POST[filter]))
-    # print('****')
-    # print(fil)
+#         fil.append(Q(filter=request.POST[filter]))
+# print('****')
+# print(fil)
 
-    # print(filter_clauses)
+# print(filter_clauses)
 
-    # if filter_clauses:
-    #     queryset = queryset.filter(reduce(operator.and_, filter_clauses))
+# if filter_clauses:
+#     queryset = queryset.filter(reduce(operator.and_, filter_clauses))
 
-    # print(queryset)
+# print(queryset)
 
-    # for f in filter_items:
-    #     # print(f)
-    #     # print(request.POST[f])
-    #     if request.POST[f]:
-    #         # print(m)
-    #         m = m.filter(request.POST[f])
-    #         print(m)
+# for f in filter_items:
+#     # print(f)
+#     # print(request.POST[f])
+#     if request.POST[f]:
+#         # print(m)
+#         m = m.filter(request.POST[f])
+#         print(m)
 
-    # motors = m.all()
+# motors = m.all()

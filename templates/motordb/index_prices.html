@@ -1,0 +1,50 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+
+            {% if prices_with_error %}
+                <div>
+                    <h3>قیمت الکتروموتور های زیر اصلاح نشد</h3>
+                    <ol>
+                        {% for item in prices_with_error %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+
+                    </ol>
+                </div>
+            {% endif %}
+            <div class="col-md-8 col-md-offset-2">
+                <h3>لیست قیمت جاری</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">ردیف</th>
+                        <th scope="col">کد</th>
+                        <th scope="col">کیلووات</th>
+                        <th scope="col">سرعت</th>
+                        <th scope="col">ولتاژ</th>
+                        <th scope="col">قیمت پایه</th>
+                        <th scope="col">قیمت فروش</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for price in prices %}
+                        <tr>
+                            <th>{{ forloop.counter }}</th>
+                            <td>{{ price.motor.code }}</td>
+                            <td>{{ price.motor.kw | floatformat }}</td>
+                            <td>{{ price.motor.speed }}</td>
+                            <td>{{ price.motor.voltage }}</td>
+                            <td>{{ price.base_price | floatformat | intcomma }}</td>
+                            <td>{{ price.sale_price | floatformat | intcomma }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
