@@ -1523,3 +1523,56 @@ def index_by_month_exp(request):
         'reqs_per_month': reqs_per_month
     }
     return render(request, 'requests/admin_jemco/yrequest/index_by_month_exp.html', context)
+
+def index_by_month_exp(request):
+    from request.models import Requests
+    from accounts.models import User
+    from req_track.models import ReqEntered
+
+    month = [
+        {'start': '1397-10-01', 'end': '1397-10-30', 'name': 'دی'},
+        {'start': '1397-11-01', 'end': '1397-11-30', 'name': 'بهمن'},
+        {'start': '1397-12-01', 'end': '1397-11-29', 'name': 'اسفند'},
+        {'start': '1398-01-01', 'end': '1398-01-31', 'name': 'فروردین'},
+        {'start': '1398-02-01', 'end': '1398-02-31', 'name': 'اردیبهشت'},
+        {'start': '1398-03-01', 'end': '1398-03-31', 'name': 'خرداد'},
+        {'start': '1398-04-01', 'end': '1398-04-31', 'name': 'تیر'},
+        {'start': '1398-05-01', 'end': '1398-05-31', 'name': 'مرداد'},
+        {'start': '1398-05-01', 'end': '1398-05-31', 'name': 'مرداد'},
+        {'start': '1398-06-01', 'end': '1398-06-31', 'name': 'شهریور'},
+        {'start': '1398-07-01', 'end': '1398-07-30', 'name': 'مهر'},
+        {'start': '1398-08-01', 'end': '1398-08-30', 'name': 'آبان'},
+        {'start': '1398-09-01', 'end': '1398-09-30', 'name': 'آذر'},
+        {'start': '1398-10-01', 'end': '1398-10-30', 'name': 'دی'},
+        {'start': '1398-11-01', 'end': '1398-11-30', 'name': 'بهمن'},
+        {'start': '1398-12-01', 'end': '1398-12-29', 'name': 'اسفند'},
+        {'start': '1399-01-01', 'end': '1399-01-31', 'name': 'فروردین'},
+        {'start': '1399-02-01', 'end': '1399-02-31', 'name': 'اردیبهشت'},
+        {'start': '1399-03-01', 'end': '1399-03-31', 'name': 'خرداد'},
+        {'start': '1399-04-01', 'end': '1399-04-31', 'name': 'تیر'},
+        {'start': '1399-05-01', 'end': '1399-05-31', 'name': 'مرداد'},
+    ]
+    users = User.objects.filter(sales_exp=True)
+    users_summary = list()
+    reqs_per_month = list()
+    for m in month:
+        inner_data = list()
+        index = f"{m['name']} - {m['start'].split('-')[0]}"
+        # reqs = Requests.objects.filter(date_fa__gte=m['start'], date_fa__lte=m['end'], is_active=True)
+        reqs = Requests.objects.filter(date_fa__gte=m['start'], date_fa__lte=m['end'])
+        reqs_input = ReqEntered.objects.filter(date_fa__gte=m['start'], date_fa__lte=m['end'], is_request=True)
+        inner_data.append(index)
+        inner_data.append(reqs_input.count())
+        for user in users:
+            user_reqs = reqs.filter(owner=user)
+            user_input = reqs_input.filter(owner_text__contains=user.last_name)
+            inner_data.append(user_input.count())
+            inner_data.append(user_reqs.count())
+
+        inner_data.append(reqs.count())
+        reqs_per_month.append(inner_data)
+    context = {
+        'users': users,
+        'reqs_per_month': reqs_per_month
+    }
+    return render(request, 'requests/admin_jemco/yrequest/index_by_month_exp.html', context)

@@ -1,3 +1,4 @@
+import jdatetime
 from django.db import models
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -28,10 +29,22 @@ class ReqEntered(models.Model):
     is_request = models.BooleanField(default=True)
     attachment = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField(max_length=600, null=True, blank=True)
+    date_fa = jmodels.jDateField(default=now, null=True, blank=True)
     # date_fa = jmodels.jDateField(default=now, null=True, blank=True)
 
     def __str__(self):
         return '%s' % self.number_automation
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.date_fa = self.jdate_form_text()
+        super(ReqEntered, self).save(force_insert, force_update, using, update_fields)
+
+    def jdate_form_text(self):
+        year, month, day = self.date_txt.split('/')
+        if len(year) == 2:
+            year = f"13{year}"
+        return jdatetime.date(int(year), int(month), int(day))
 
 
 class TrackXpref(models.Model):
