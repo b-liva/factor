@@ -86,9 +86,10 @@
                     </form>
                 </div>
                 <div class="col-md-4 left">
-                    <span class="btn-danger">تاخیر تحویل</span>
-                    <span class="btn-warning">کمتر از یک ماه</span>
-                    <span class="btn-success">بیشتر از یک ماه</span>
+                    <span class="btn-danger" style="padding: 3px;">تاخیر تحویل</span>
+                    <span class="btn-warning" style="padding: 3px;">کمتر از یک ماه</span>
+                    <span class="btn-success" style="padding: 3px;">بیشتر از یک ماه</span>
+                    <span class="" style="border: solid black 1px; padding: 3px;">تحویل شده</span>
                 </div>
 
 
@@ -108,13 +109,13 @@
                         <th scope="col" class="text-center">تاریخ مجوز</th>
 
                         <th scope="col" class="text-center">تعداد کل</th>
-                        <th scope="col" class="text-center test-phase">تعداد کل</th>
+{#                        <th scope="col" class="text-center test-phase">تعداد کل</th>#}
                         <th scope="col" class="text-center">تعداد ارسال شده</th>
-                        <th scope="col" class="text-center test-phase">ارسال شده</th>
+{#                        <th scope="col" class="text-center test-phase">ارسال شده</th>#}
                         <th scope="col" class="text-center">تعداد باقیمانده</th>
-                        <th scope="col" class="text-center test-phase">باقیمانده</th>
+{#                        <th scope="col" class="text-center test-phase">باقیمانده</th>#}
                         <th scope="col" class="text-center">باقیمانده(روز)</th>
-                        <th scope="col" class="text-center test-phase">باقیمانده(روز)</th>
+{#                        <th scope="col" class="text-center test-phase">باقیمانده(روز)</th>#}
                         <th scope="col" class="text-center">دلیل تأخیر</th>
                         <th scope="col" class="text-center">کل(مبلغ)</th>
                         <th scope="col" class="text-center">تسویه نشده(مبلغ)</th>
@@ -179,19 +180,20 @@
                             <td>{{ p.perm_date }}</td>
 
                             <td>{{ p.total_proforma_qty }}</td>
-                            <td>{{ p.perm_prof.first.qty_total }}</td>
+{#                            <td>{{ p.perm_prof.first.qty_total }}</td>#}
                             <td>{{ p.total_proforma_qty_sent }}</td>
-                            <td>
-                                {% invout_qty_sent p.perm_prof.first %}
-                            </td>
-                            <td>{{ p.total_proforma_qty_remain }}</td>
-                            <td>
-                                {% invout_qty_not_sent p.perm_prof.first %}
-                            </td>
+{#                            <td>#}
+{#                                {% invout_qty_sent p.perm_prof.first %}#}
+{#                            </td>#}
+{#                            <td>{{ p.total_proforma_qty_remain }}</td>#}
+                            <td>{{ p.perm_qty_remainder }}</td>
+{#                            <td>#}
+{#                                {% invout_qty_not_sent p.perm_prof.first %}#}
+{#                            </td>#}
                             {#                            <td>{{ p|days }}</td>#}
                             <td class="{{ p|perm_warning_class }}">{{ p|perm_days }}</td>
-                            {% perm_days_new p as pdn %}
-                            <td class="{{ pdn.warning_class }}">{{ pdn.delay }}</td>
+{#                            {% perm_days_new p as pdn %}#}
+{#                            <td class="{{ pdn.warning_class }}">{{ pdn.delay }}</td>#}
                             <td>{% if p.issue_type %}{{ p.issue_type }}{% else %}{% endif %}</td>
                             <td>{{ p.total_proforma_price_vat.price_vat|floatformat | intcomma }}</td>
                             <td>{{ p.total_proforma_received.remaining|floatformat | intcomma }}</td>

@@ -120,6 +120,10 @@ def perm_warning_class(perm):
     today_fa = jmodels.jdatetime.date.today()
     diff = perm.due_date - today_fa
     warning_class = ""
+    remainder = perm.perm_qty_remainder()
+    if remainder == 0:
+        warning_class = ""
+        return warning_class
 
     if diff.days <= 0:
         warning_class = 'btn-danger'
@@ -143,6 +147,8 @@ def days(perm):
 
 @register.filter(name='perm_days')
 def perm_days(permission):
+    if permission.perm_qty_remainder() == 0:
+        return ''
     today_fa = jmodels.jdatetime.date.today()
     diff = permission.due_date - today_fa
     return diff.days

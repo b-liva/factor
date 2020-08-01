@@ -383,6 +383,12 @@ class Xpref(models.Model):
         self.date_modified = timezone.now()
         super(Xpref, self).save()
 
+    def perm_qty_remainder(self):
+        ps = self.prefspec_set.filter(price__gt=0).aggregate(
+            remainder=Sum(F('qty') - F('qty_sent'), output_field=models.IntegerField())
+        )
+        return ps['remainder']
+
     def total_proforma_price_vat(self):
         no_vat = self.prefspec_set.aggregate(sum=Sum(F('qty') * F('price'), output_field=FloatField()))
         no_vat = no_vat['sum']
