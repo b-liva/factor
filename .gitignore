@@ -31,4 +31,6 @@ frontend/
 
 temp_files/
 
+.vscode/
+
 .fandogh/

@@ -489,6 +489,9 @@ class PrefSpec(models.Model):
             ('index_prefspec', 'can see list of prefsepcs'),
         )
 
+    def total_price(self):
+        return self.qty * self.price
+
 
 class ProfChangeRequest(models.Model):
     owner = models.ForeignKey('accounts.User', on_delete=models.DO_NOTHING)

@@ -10,12 +10,16 @@
         <div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
                 <h3 class="text-center">پیش فاکتور</h3>
+                <h4 class="text-center red">{{ pref.number }}</h4>
             </div>
         </div>
         <div class="row">
-            {% if messages %}
-                {% include 'general/errors.html' %}
-            {% endif %}
+            <div class="col-md-6 col-md-offset-3">
+                {% if messages %}
+                    {% include 'general/errors.html' %}
+                {% endif %}
+            </div>
+
             {#            {% include 'elements/customer_card.html' with customer=pref.req_id.customer %}#}
             {#            <div id="customerSummary" class=" col-md-9 col-sm-9 col-xs-12 ">#}
             {#                <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-6">#}
@@ -114,11 +118,15 @@
                                            data-toggle="tooltip" title="ثبت پرداخت">
                                         <i class="fa fa-plus green" aria-hidden="true"></i>
                                         ثبت دریافتی</a></li>
-{#                                    <li><a href="{% url 'proforma_pdf' ypref_pk=pref.pk render_header=False %}">#}
-{#                                        <i class="fa fa-file-pdf-o red"#}
-{#                                           aria-hidden="true"></i>پیش فاکتور بدون#}
-{#                                        سربرگ</a>#}
-{#                                    </li>#}
+                                    <li>
+                                        <a href="{% url 'perform_discount' ypref_pk=pref.pk %}">
+                                            <i class="fa fa-percent green" aria-hidden="true"></i>اعمال تخفیف</a>
+                                    </li>
+                                    {#                                    <li><a href="{% url 'proforma_pdf' ypref_pk=pref.pk render_header=False %}">#}
+                                    {#                                        <i class="fa fa-file-pdf-o red"#}
+                                    {#                                           aria-hidden="true"></i>پیش فاکتور بدون#}
+                                    {#                                        سربرگ</a>#}
+                                    {#                                    </li>#}
                                     {#                                    <li><a href="{% url 'proforma_pdf' ypref_pk=pref.pk render_header=True %}">#}
                                     {#                                        <i class="fa fa-file-pdf-o red" aria-hidden="true"></i> یپش فاکتور با سربرگ</a>#}
                                     {#                                    </li>#}

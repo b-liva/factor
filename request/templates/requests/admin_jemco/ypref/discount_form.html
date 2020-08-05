@@ -1,0 +1,76 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+{% load sales_ex_dashboard %}
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                {% if messages %}
+                    {% include 'general/errors.html' %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+                <h3 class="text-center">
+                    <p>تخفیف پیش فاکتور شماره</p>
+                    <p><a href="{% url 'pref_details' ypref_pk=proforma.pk %}">{{ proforma.number }}</a></p>
+                </h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <form method="POST">
+                {% csrf_token %}
+                <div>
+                    {{ form }}
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-primary" type="submit">اعمال</button>
+                    <a class="btn btn-sm btn-success" href="{% url 'pref_details' ypref_pk=proforma.pk %}">بازگشت به پیش
+                        فاکتور</a>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td>تعداد</td>
+                        <td>توان</td>
+                        <td>دور</td>
+                        <td>ولتاژ</td>
+                        <td>قیمت</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for pspec in pspecs %}
+                        <tr>
+                            <td>{{ pspec.qty }}</td>
+                            <td>{{ pspec.kw | floatformat }}</td>
+                            <td>{{ pspec.rpm }}</td>
+                            <td>{{ pspec.voltage }}</td>
+                            <td>{{ pspec.price }}</td>
+                            <td>{{ pspec.total_price | floatformat:0 | intcomma }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="5">ارزش افزوده</td>
+                        <td>{{ proforma.total_proforma_price_vat.no_vat | floatformat:0 | intcomma }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">قیمت کل</td>
+                        <td>{{ proforma.total_proforma_price_vat.vat | floatformat:0 | intcomma }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">قیمت با ارزش افزوده</td>
+                        <td>{{ proforma.total_proforma_price_vat.price_vat | floatformat:0 | intcomma }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

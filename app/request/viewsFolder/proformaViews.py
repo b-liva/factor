@@ -776,6 +776,35 @@ def pref_details(request, ypref_pk):
 
 
 @login_required
+def perform_discount(request, ypref_pk):
+    from request.forms.proforma_forms import DiscountForm
+    import math
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    if request.method == 'POST':
+        form = DiscountForm(request.POST)
+        if form.is_valid():
+            discount = form.cleaned_data['discount_value']
+            pspecs = proforma.prefspec_set.filter(price__gt=0)
+            coef = (1 - discount / 100)
+            round_leven = 100000
+            for pspec in pspecs:
+                pspec.price = coef * pspec.price
+                pspec.price = math.ceil(pspec.price / round_leven) * round_leven
+                pspec.save()
+        messages.add_message(request, level=messages.INFO, message=f"{discount} درصد تخفیف اعمال شد.")
+        return redirect('pref_details', ypref_pk=proforma.pk)
+    else:
+        form = DiscountForm()
+    pspecs = proforma.prefspec_set.filter(price__gt=0)
+    context = {
+        'proforma': proforma,
+        'pspecs': pspecs,
+        'form': form
+    }
+    return render(request, 'requests/admin_jemco/ypref/discount_form.html', context)
+
+
+@login_required
 def proforma_copy(request, ypref_pk):
 
     if not Xpref.objects.filter(pk=ypref_pk):
@@ -1577,6 +1606,7 @@ def followup_delete(request, followup_pk):
     return redirect('pref_details', ypref_pk=pref_pk)
 
 
+@login_required
 def pdf_header(request):
     # return render(request, 'requests/admin_jemco/ypref/header.html')
     context = {
@@ -1589,6 +1619,7 @@ def pdf_footer(request):
     return render(request, 'requests/admin_jemco/ypref/footer.html')
 
 
+@login_required
 def proforma_has_payment_no_perm(request):
     np = Xpref.objects.filter(is_active=True, payment__isnull=False, perm_prof__isnull=True).distinct()
     perm_no_payments = Perm.objects.filter(proforma__payment__isnull=True)

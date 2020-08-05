@@ -40,3 +40,7 @@ class ProfFollowUpForm(forms.ModelForm):
         labels = {
             'follow_up': 'شرح پیگیری',
         }
+
+
+class DiscountForm(forms.Form):
+    discount_value = forms.FloatField(label='درصد تخفیف')
