@@ -33,7 +33,7 @@
                 </li>
             {% endif %}
             {% if perms.request.index_requests %}
-                <li><a><i class="fa "></i> درخواست <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-file"  aria-hidden="true"></i> درخواست <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{% url 'req_form' %}">ثبت درخواست جدید</a></li>
                         <li><a href="{% url 'req_form_copy' %}">کپی درخواست</a></li>
@@ -55,7 +55,7 @@
                 </li>
             {% endif %}
             {% if perms.request.index_proforma %}
-                <li><a><i class="fa "></i> پیش فاکتور<span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-file-text" aria-hidden="true"></i> پیش فاکتور<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% if perms.request.index_proforma %}
                             <li><a href="{% url 'pref_index' %}">پیش فاکتورها</a></li>
@@ -94,14 +94,14 @@
                 </li>
             {% endif %}
             {% if user.is_superuser %}
-                <li><a> مشتری <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-users" aria-hidden="true"></i> مشتری <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{% url 'fbv_account_list' %}">لیست مشتریان</a></li>
                     </ul>
                 </li>
             {% endif %}
             {% if user.is_superuser %}
-                <li><a> دیتا <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-database" aria-hidden="true"></i> دیتا <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% if perms.request.index_reqspecs %}
                             <li><a href="{% url 'req_track:data' %}">دیتا</a></li>
@@ -109,7 +109,7 @@
                         {% endif %}
                     </ul>
                 </li>
-                <li><a> سایر <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-sort" aria-hidden="true"></i> سایر <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% if perms.request.view_motordb %}
                             <li><a href="{% url 'index_prices' %}">لیست قیمت</a></li>
@@ -167,6 +167,7 @@
                             <li><a href="{% url 'req_track:modify_perm' %}">اصلاح مجوزها</a></li>
                             <li><a href="{% url 'req_track:perms_not_entered' %}">مجوز وارد نشده</a></li>
                             <li><a href="{% url 'req_track:update_data_from_tadvin' %}">اصلاح گزارش تدوین</a></li>
+                            <li><a href="{% url 'req_track:update_jdate' %}">اصلاح تاریخ شمسی</a></li>
                         {% endif %}
                     </ul>
                 </li>
