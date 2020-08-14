@@ -41,13 +41,15 @@ CACHES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'qlikview',
+        # 'NAME': 'qlikview',
+        # 'NAME': 'vbstech_jdb',
+        'NAME': 'jcrm',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        },
+        # 'OPTIONS': {
+        #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        # },
     }
 }
 # if 'test' in sys.argv or 'test_coverage' in sys.argv:  # Covers regular testing and django-coverage
