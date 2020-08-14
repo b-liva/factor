@@ -57,7 +57,8 @@ urlpatterns = [
     path('perms-not-entered', views.perms_not_entered, name='perms_not_entered'),
     path('update_data_from_tadvin', views.update_data_from_tadvin, name='update_data_from_tadvin'),
     path('data', views.data, name='data'),
-    path('data_process_first', views.data_process_first, name='data_process_first')
+    path('data_process_first', views.data_process_first, name='data_process_first'),
+    path('update_jdate', views.update_jdate, name='update_jdate'),
 
 ]
 

@@ -131,6 +131,7 @@ def check_orders(request):
         return redirect('dashboard')
 
 
+@login_required
 def users_summary(user_txt, user_account, date, not_entered_reqs):
     reqs = Requests.objects.filter(is_active=True, date_fa__gte=date, owner=user_account)
     all_reqs = Requests.objects.filter(is_active=True, owner=user_account)
@@ -219,6 +220,7 @@ def payment_assign(request):
     return redirect('payment_index')
 
 
+@login_required
 def motor_codes_index(request):
     all_codes = TrackItemsCode.objects.filter(green_flag=True, code__gt=1000000)
     print(all_codes.count())
@@ -229,6 +231,7 @@ def motor_codes_index(request):
     return render(request, 'codes/codes.html', context)
 
 
+@login_required
 def motor_codes_check(request):
     all_codes = TrackItemsCode.objects.all()
     print(all_codes.count())
@@ -241,6 +244,7 @@ def motor_codes_check(request):
     return redirect('req_track:motor_codes_index')
 
 
+@login_required
 def motor_codes_process(request):
     green_codes = TrackItemsCode.objects.filter(green_flag=True)[0:150]
     for code in green_codes:
@@ -285,6 +289,7 @@ def motor_codes_process(request):
     return redirect('req_track:motor_codes_index')
 
 
+@login_required
 def proformas(request):
     all_proformas = TrackXpref.objects.filter(red_flag=False, is_entered=False).order_by('date_fa')
     count = all_proformas.values('number').distinct().count()
@@ -298,6 +303,7 @@ def proformas(request):
     return render(request, 'proformas/proformas.html', context)
 
 
+@login_required
 def proformas_complete(request):
     all_proformas = TrackXpref.objects.filter(is_entered=True, red_flag=False)
     count = all_proformas.values('number').distinct().count()
@@ -311,6 +317,7 @@ def proformas_complete(request):
     return render(request, 'proformas/proformas.html', context)
 
 
+@login_required
 def proformas_uncomplete(request):
     all_proformas = TrackXpref.objects.filter(red_flag=True, is_entered=True)
     count = all_proformas.values('number').distinct().count()
@@ -324,16 +331,19 @@ def proformas_uncomplete(request):
     return render(request, 'proformas/proformas.html', context)
 
 
+@login_required
 def track_prof_count(track_prof):
     count = TrackXpref.objects.filter(number=track_prof.number).aggregate(Sum('qty'))
     return count
 
 
+@login_required
 def prof_count(prof):
     count = prof.prefspec_set.filter(price__gt=0).aggregate(Sum('qty'))
     return count
 
 
+@login_required
 def check_proforma(request):
     allproformas = TrackXpref.objects.all()
     for track_prof in allproformas:
@@ -358,6 +368,7 @@ def check_proforma(request):
     return redirect('req_track:proformas')
 
 
+@login_required
 def create_proforma(request):
     """
     Creates Proformas from imported proformas. Works with proformas that are not entered before.
@@ -408,12 +419,14 @@ def create_proforma(request):
     return redirect('req_track:check_proforma')
 
 
+@login_required
 def clear_flags(request):
     profs = TrackXpref.objects.all()
     profs.update(is_entered=False, red_flag=False)
     return redirect('req_track:proformas_uncomplete')
 
 
+@login_required
 def prof_followup_list(request):
     profs = ProformaFollowUp.objects.all()
 
@@ -425,6 +438,7 @@ def prof_followup_list(request):
     return render(request, 'proformas/followup/index.html', context)
 
 
+@login_required
 def prof_followup_list2(request):
     # profs = Xpref.objects.filter(is_active=True)
     profs = Xpref.objects.all()
@@ -437,6 +451,7 @@ def prof_followup_list2(request):
     return render(request, 'proformas/followup/index2.html', context)
 
 
+@login_required
 def prof_followup_find(request):
     if request.method == 'POST':
         number = request.POST['prof_number']
@@ -451,6 +466,7 @@ def prof_followup_find(request):
     return render(request, 'proformas/followup/find.html', context)
 
 
+@login_required
 def prof_followup_form(request, prof_pk):
     prof = Xpref.objects.get(pk=prof_pk)
     form = ProfFollowUpForm(instance=prof)
@@ -470,6 +486,7 @@ def prof_followup_form(request, prof_pk):
     return render(request, 'proformas/followup/form.html', context)
 
 
+@login_required
 def req_followup_form(request, req_pk):
     req = Requests.objects.get(pk=req_pk)
     form = ReqFollowUpForm(instance=req)
@@ -489,11 +506,13 @@ def req_followup_form(request, req_pk):
     return render(request, 'proformas/followup/form.html', context)
 
 
+@login_required
 def similar(a, b):
     from difflib import SequenceMatcher
     return SequenceMatcher(None, a, b).ratio()
 
 
+@login_required
 def customer_compare(request):
     cs = Customer.objects.all()
     c_temp = Customer_temp.objects.all()
@@ -513,6 +532,7 @@ def customer_compare(request):
                 i += 1
 
 
+@login_required
 def customer_compare_list(request):
     # resolvers = CustomerResolver.objects.filter(resolved=True)
     # resolvers = CustomerResolver.objects.filter(resolved=True)[:500]
@@ -523,6 +543,7 @@ def customer_compare_list(request):
     return render(request, 'customer/customer_compare_list.html', context)
 
 
+@login_required
 def customer_compare(requests):
     customers = Customer.objects.filter(code_temp__isnull=False)
     no_code = Customer.objects.filter(code_temp__isnull=True)
@@ -533,6 +554,7 @@ def customer_compare(requests):
     return render(requests, 'customer/customer_compare.html', context)
 
 
+@login_required
 def customer_compare_entered(request):
     resolvers = CustomerResolver.objects.filter(resolved=True, cleared=False)
     context = {
@@ -541,6 +563,7 @@ def customer_compare_entered(request):
     return render(request, 'customer/customer_compare_list.html', context)
 
 
+@login_required
 def customer_status_update(request):
     data = json.loads(request.body.decode('utf-8'))
     item = CustomerResolver.objects.get(pk=data['id'])
@@ -556,6 +579,7 @@ def customer_status_update(request):
     return JsonResponse(context, safe=False)
 
 
+@login_required
 def customer_entered(request):
     customers = CustomerResolver.objects.filter(resolved=True, cleared=False)
     c = [c.code1 for c in customers]
@@ -565,6 +589,7 @@ def customer_entered(request):
     return JsonResponse(context, safe=False)
 
 
+@login_required
 def perms_index(request):
     perms = Perm.objects.all()
     productions = perms.filter(perm_number__lt=2000)
@@ -601,6 +626,7 @@ def perms_index(request):
     return render(request, 'perms/index.html', context)
 
 
+@login_required
 def modify_perm(request):
     perms = Perm.objects.all()
     for perm in perms:
@@ -612,6 +638,7 @@ def modify_perm(request):
     return redirect('req_track:perms_index')
 
 
+@login_required
 def perms_not_entered(request):
     perms = Perm.objects.all()
     productions = perms.filter(perm_number__lt=2000)
@@ -626,6 +653,7 @@ def perms_not_entered(request):
     return render(request, 'perms/index.html', context)
 
 
+@login_required
 def update_perms(statistics):
     perms = TadvinTotal.objects.filter(doctype_code=62, entered=False)
     distinct_perms = perms.values('doc_number').distinct().values('doc_number', 'year', 'date', 'prof_number')
@@ -653,6 +681,7 @@ def update_perms(statistics):
     return statistics, newly_added_perms
 
 
+@login_required
 def update_permspecs(statistics, newly_added_perms):
     index = 1
     for a in newly_added_perms:
@@ -676,6 +705,7 @@ def update_permspecs(statistics, newly_added_perms):
     return statistics
 
 
+@login_required
 def update_invouts(statistics, newly_added_perms):
     newly_added_perms_ids = [perm.number for perm in newly_added_perms]
     invouts = TadvinTotal.objects.filter(doctype_code=64, entered=False, perm_number__in=newly_added_perms_ids)
@@ -701,6 +731,7 @@ def update_invouts(statistics, newly_added_perms):
     return statistics, newly_added_invouts
 
 
+@login_required
 def update_invout_specs(statistics, newly_added_invouts):
     index = 1
     for a in newly_added_invouts:
@@ -726,6 +757,7 @@ def update_invout_specs(statistics, newly_added_invouts):
     return statistics
 
 
+@login_required
 def update_invoices(statistics, newly_added_invouts):
     newly_added_invouts_ids = [inv.number for inv in newly_added_invouts]
     invoices = TadvinTotal.objects.filter(doctype_code=66, entered=False, havale_number__in=newly_added_invouts_ids)
@@ -751,6 +783,7 @@ def update_invoices(statistics, newly_added_invouts):
     return statistics, newly_added_invoices
 
 
+@login_required
 def update_invoice_specs(statistics, newly_added_invoices):
     index = 1
     # allInvoices = Invoice.objects.all()
@@ -776,6 +809,7 @@ def update_invoice_specs(statistics, newly_added_invoices):
     return statistics
 
 
+@login_required
 def update_data_from_tadvin(request):
 
     statistics = {}
@@ -797,6 +831,7 @@ def update_data_from_tadvin(request):
     return redirect('perm_index2')
 
 
+@login_required
 def data(request):
     data = TadvinTotal.objects.all()
     context = {
@@ -805,6 +840,7 @@ def data(request):
     return render(request, 'data/data.html', context)
 
 
+@login_required
 def data_process_first(request):
     print('process started 1 of 9')
     from request.models import (
@@ -921,3 +957,17 @@ def data_process_first(request):
             t.save()
 
     return redirect('req_track:data')
+
+
+@login_required
+def update_jdate(request):
+    from req_track.models import ReqEntered
+    reqe = ReqEntered.objects.filter(date_fa__isnull=True)
+    i = 1
+    for r in reqe:
+        r.date_fa = r.jdate_form_text()
+        r.save()
+        if i % 100 == 0:
+            print(f"#{i} Done...")
+        i += 1
+    print('All done.')
