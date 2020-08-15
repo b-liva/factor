@@ -6,16 +6,16 @@ SECRET_KEY = set_secret_key(
     'SECRET_KEY_PRODUCTION'
 )
 
-DEBUG = True
-ALLOWED_HOSTS = ['crm.jemcomotor.ir', 'localhost', '127.0.0.1']
+# DEBUG = True
+# ALLOWED_HOSTS = ['crm.jemcomotor.ir', 'localhost', '127.0.0.1']
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'jcrm_production',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
+        'HOST': os.environ.get('DB_HOST'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         },

@@ -31,5 +31,14 @@ frontend/
 temp_files/
 
 .vscode/
+env_vars
+
+# todo: ???
+Dockerfile
+proxy
+scripts
+.dockerignore
+docker-compose-deploy.yml
+docker-compose.yml
 
 .fandogh/

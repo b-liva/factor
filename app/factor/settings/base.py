@@ -25,7 +25,7 @@ from django.core.exceptions import ImproperlyConfigured
 #         raise ImproperlyConfigured('set the %s settings' % settings)
 def set_secret_key(settings, secret):
     try:
-        return os.environ[secret]
+        return os.environ.get(secret, 'FakeSoChangeMe.')
     except KeyError:
         raise ImproperlyConfigured('SECRET_KEY Error, please set the %s %s on Env' % (settings, secret,))
 
@@ -38,7 +38,12 @@ READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(ROOT_DIR.path(".env")))
-DEBUG = env.bool("DJANGO_DEBUG", False)
+DEBUG = bool(int(os.environ.get("DJANGO_DEBUG", 0)))
+
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS_ENV = os.environ.get('ALLOWED_HOSTS')
+if ALLOWED_HOSTS_ENV:
+    ALLOWED_HOSTS.extend(ALLOWED_HOSTS_ENV.split(','))
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
@@ -174,12 +179,12 @@ CORS_ORIGIN_WHITELIST = (
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 # STATIC_ROOT = str(ROOT_DIR("staticfiles"))
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(ROOT_DIR, 'static')
-STATICFILES_DIRS = [
-    os.path.join(FRONTEND_DIR, 'dist')
-]
-# STATIC_ROOT = os.path.join(BASE_DIR, '../../static')
+
+STATIC_URL = "/static/static/"
+MEDIA_URL = "/static/media/"
+
+STATIC_ROOT = '/vol/web/static/'
+STATIC_media = '/vol/web/media/'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
@@ -189,15 +194,6 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
-
-# MEDIA
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-# MEDIA_ROOT = str(APPS_DIR("media"))
-# https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(ROOT_DIR, 'media')
-# MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
@@ -211,7 +207,6 @@ TEMPLATES = [
             os.path.join(ROOT_DIR, 'reportbugs/templates'),
             os.path.join(ROOT_DIR, 'api/v1/templates'),
             os.path.join(ROOT_DIR, 'templates'),
-            os.path.join(ROOT_DIR, 'frontend/dist/templates')
         ],
         'APP_DIRS': True,
         'OPTIONS': {

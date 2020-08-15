@@ -40,8 +40,6 @@ class User(AbstractUser):
         count = perms.count()
         ps_count = ps.values('xpref_id').distinct().aggregate(count=Count('xpref_id'))
         ps_qty = ps.aggregate(sum=Sum('qty'))
-        print(self, ps_qty['sum'])
-        print(self, ps_count)
 
         return {
             'perms': perms,
