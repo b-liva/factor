@@ -1,5 +1,6 @@
 import datetime
 import json
+import requests
 import os
 from base64 import encode
 
@@ -1642,3 +1643,77 @@ def proforma_has_payment_no_perm(request):
         'duplicates_proforma_tds': duplicates_proforma_tds,
     }
     return render(request, 'requests/admin_jemco/ypref/has_payment_not_perm.html', context)
+
+
+@login_required
+def pfcost(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    specs = proforma.prefspec_set.filter(price__gt=0)
+    host = os.environ.get('CAPIHOST')
+    costs = requests.get(f'http://{host}/cost').json()['response']
+    results = list()
+    no_cost = list()
+    added = False
+    for spec in specs:
+        for cost in costs:
+            if spec.kw == float(cost['kw']) and spec.rpm == int(cost['rpm']) and spec.voltage == 380:
+                item_unit_profit = spec.price - float(cost['cost'])
+                results.append({
+                    'code': spec.code,
+                    'qty': spec.qty,
+                    'kw': cost['kw'],
+                    'rpm': cost['rpm'],
+                    'voltage': spec.voltage,
+                    'im': spec.im,
+                    'ic': spec.ic,
+                    'ip': spec.ip,
+                    'item_unit_cost': cost['cost'],
+                    'item_total_cost': cost['cost'] * spec.qty,
+                    'item_unit_price': spec.price,
+                    'item_total_price': spec.price * spec.qty,
+                    'item_unit_profit': item_unit_profit,
+                    'item_total_profit': spec.qty * item_unit_profit,
+                    'item_percent': 100 * (spec.price - float(cost['cost'])) / float(cost['cost'])
+                })
+                added = True
+                break
+        if not added:
+            no_cost.append({
+                'code': spec.code,
+                'qty': spec.qty,
+                'kw': spec.kw,
+                'rpm': spec.rpm,
+                'voltage': spec.voltage,
+                'im': spec.im,
+                'ic': spec.ic,
+                'ip': spec.ip,
+                'price': spec.price
+            })
+        added = False
+
+    cost_total = 0
+    price_total = 0
+    for res in results:
+        cost_total += res['item_total_cost']
+        price_total += res['item_total_price']
+    profit_total = (price_total - cost_total)
+    if cost_total:
+        profit_total_percent = 100 * profit_total / cost_total
+    else:
+        profit_total_percent = None
+    total = {
+        'cost_total': cost_total,
+        'price_total': price_total,
+        'profit_total': profit_total,
+        'profit_total_percent': profit_total_percent,
+    }
+
+    context = {
+        'proforma': proforma,
+        'specs': specs,
+        'costs': costs,
+        'results': results,
+        'total': total,
+        'no_cost': no_cost
+    }
+    return render(request, 'requests/admin_jemco/ypref/details_cost.html', context)

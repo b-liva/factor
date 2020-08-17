@@ -122,6 +122,10 @@
                                         <a href="{% url 'perform_discount' ypref_pk=pref.pk %}">
                                             <i class="fa fa-percent green" aria-hidden="true"></i>اعمال تخفیف</a>
                                     </li>
+                                    <li>
+                                        <a href="{% url 'pfcost' ypref_pk=pref.pk %}">
+                                            <i class="fa fa-percent green" aria-hidden="true"></i>سود</a>
+                                    </li>
                                     {#                                    <li><a href="{% url 'proforma_pdf' ypref_pk=pref.pk render_header=False %}">#}
                                     {#                                        <i class="fa fa-file-pdf-o red"#}
                                     {#                                           aria-hidden="true"></i>پیش فاکتور بدون#}

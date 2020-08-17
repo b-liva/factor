@@ -36,6 +36,7 @@ import nested_dict as nd
 import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from collections import defaultdict as dd
+User = get_user_model()
 
 
 # Create your views here.

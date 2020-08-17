@@ -41,4 +41,10 @@ scripts
 docker-compose-deploy.yml
 docker-compose.yml
 
+app/.fandoghignore
+
+workspace.tar.gz
+
+.fandogh/
+
 .fandogh/
