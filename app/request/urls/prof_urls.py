@@ -7,7 +7,6 @@ import request.views
 from request.viewsFolder import proformaViews
 
 
-
 urlpatterns = [
                   path('pdf-header', proformaViews.pdf_header, name='pdf_header'),
                   path('pdf-footer', proformaViews.pdf_footer, name='pdf_footer'),

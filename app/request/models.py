@@ -431,6 +431,25 @@ class Xpref(models.Model):
     def total_proforma_qty_remain(self):
         return self.total_proforma_qty() - self.total_proforma_qty_sent()
 
+    def proforma_profit_percentage(self):
+        import requests
+        specs = self.prefspec_set.filter(price__gt=0)
+        host = os.environ.get('CAPIHOST')
+        costs = requests.get(f'http://{host}/cost').json()['response']
+        total_cost = 0
+        total_price = 0
+        for spec in specs:
+            for cost in costs:
+                if spec.kw == float(cost['kw']) and spec.rpm == int(cost['rpm']) and spec.voltage == 380:
+                    total_cost += cost['cost'] * spec.qty
+                    total_price += spec.price * spec.qty
+                    break
+        if total_cost:
+            percentage = 100 * (total_price - total_cost) / total_cost
+        else:
+            percentage = 'نامشخص'
+        return percentage
+
     class Meta:
         permissions = (
             ('index_proforma', 'Can index Proforma'),

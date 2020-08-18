@@ -156,8 +156,46 @@ def verify(request):
     profs_signed = profs_active.filter(verified=True, signed=True)
     if profs_signed.count() >= 50:
         profs_signed = profs_signed[profs_signed.count() - 50:]
+
+    new_profs = list()
+    host = os.environ.get('CAPIHOST')
+    try:
+        costs = requests.get(f'http://{host}/cost').json()['response']
+        status = True
+    except:
+        status = False
+        for prof in profs:
+            new_profs.append({
+                'number': prof.number,
+                'customer': prof.req_id.customer.name,
+                'owner': prof.req_id.owner.last_name,
+                'pk': prof.pk,
+                'percentage': 'عدم دسترسی'
+            })
+    if status:
+        for prof in profs:
+            specs = prof.prefspec_set.filter(price__gt=0)
+            total_cost = 0
+            total_price = 0
+            for spec in specs:
+                for cost in costs:
+                    if spec.kw == float(cost['kw']) and spec.rpm == int(cost['rpm']) and spec.voltage == 380:
+                        total_cost += cost['cost'] * spec.qty
+                        total_price += spec.price * spec.qty
+                        break
+            if total_cost:
+                percentage = 100 * (total_price - total_cost) / total_cost
+            else:
+                percentage = 'نامشخص'
+            new_profs.append({
+                'number': prof.number,
+                'customer': prof.req_id.customer.name,
+                'owner': prof.req_id.owner.last_name,
+                'pk': prof.pk,
+                'percentage': percentage if isinstance(percentage, str) else "{0:0.1f}".format(percentage)
+            })
     context = {
-        'proformas': profs,
+        'proformas': new_profs,
         'profs_need_change': profs_need_change,
         'profs_to_verified': profs_to_verified,
         'profs_signed': profs_signed,
@@ -1650,7 +1688,13 @@ def pfcost(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
     specs = proforma.prefspec_set.filter(price__gt=0)
     host = os.environ.get('CAPIHOST')
-    costs = requests.get(f'http://{host}/cost').json()['response']
+    try:
+        api_req = requests.get(f'http://{host}/cost')
+    except:
+        messages.add_message(request, level=20, message='خطا')
+        return redirect('errorpage')
+    costs = api_req.json()['response']
+    print(api_req.status_code)
     results = list()
     no_cost = list()
     added = False

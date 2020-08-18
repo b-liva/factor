@@ -232,7 +232,6 @@ def expert_remaining_reqs_not_entered(account):
 @register.simple_tag()
 def expert_remaining_reqs_not_entered_new(pk):
     account = User.objects.get(pk=pk)
-    print(account)
     reqs = ReqEntered.objects.filter(owner_text__contains=account.last_name, is_request=True, is_entered=False)
     if account.last_name=='فروغی':
         reqs = reqs.exclude(owner_text__contains='ظریف')

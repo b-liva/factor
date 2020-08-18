@@ -61,7 +61,7 @@
                                         <td>{% if spec.ip %}{{ spec.ip }}{% endif %}</td>
                                         <td>{% if spec.ic %}{{ spec.ic }}{% endif %}</td>
                                         <td>{{ spec.item_unit_cost|floatformat|intcomma }}</td>
-                                        <td>{{ spec.item_total_cost }}</td>
+                                        <td>{{ spec.item_total_cost|floatformat|intcomma }}</td>
                                         <td>{{ spec.item_unit_price|floatformat|intcomma }}</td>
                                         <td>{{ spec.item_total_price|floatformat|intcomma }}</td>
                                         <td>{{ spec.item_unit_profit|floatformat|intcomma }}</td>
@@ -82,6 +82,7 @@
                             </tr>
                             </tbody>
                         </table>
+                    <h3 class="text-center" style="margin-top: 50px">بدون قیمت تمام شده</h3>
                         <table class="table table-hover text-center">
                             <thead>
                             <tr class="d-inline bg-danger">

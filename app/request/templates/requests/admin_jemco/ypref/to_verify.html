@@ -107,8 +107,9 @@
                                             <a class="badge"
                                                href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof.number }}</a>
                                         </td>
-                                        <td>{{ prof.req_id.customer.name }}</td>
-                                        <td>{{ prof.req_id.owner.last_name }}</td>
+                                        <td>{{ prof.customer }}</td>
+                                        <td>{{ prof.owner }}</td>
+                                        <td>{{ prof.percentage }}</td>
                                         <td>
                                             <a class="btn btn-xs btn-success"
                                                href="{% url 'pref_verify_to_send' ypref_pk=prof.pk %}">صدور
