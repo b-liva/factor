@@ -1,0 +1,4 @@
+p, anonymous, /, GET
+p, admin, *, *
+g, jemco3, admin
+g, zarif, admin
