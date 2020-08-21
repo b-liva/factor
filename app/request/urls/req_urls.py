@@ -1,36 +1,23 @@
 from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 import request.views
 from request import views2
-from request.filters.filters import RequestFilter
 from .. import reqSpecViews
-from django_filters.views import FilterView
-from request.viewsFolder.request.request import (RequestList, RequestFilterView)
+
 
 urlpatterns = [
-    path('project_type', request.views2.project_type_form, name='project_type_form'),
-    path('project-type/index', request.views2.projects_type_index, name='projects_type_index'),
-
     path('req_form', request.views2.req_form, name='req_form'),
     path('wrong_data', request.views2.wrong_data, name='wrong_data'),
     path('req_form_copy', request.views2.req_form_copy, name='req_form_copy'),
-    path('index', request.views2.request_index, name='request_index'),
     path('index-exp', request.views2.index_by_month_exp, name='index_by_month_exp'),
-    path('index-p', request.views2.request_index_paginate, name='request_index_paginate'),
     path('spec_export', request.views2.spec_export, name='spec_export'),
-    path('index-vue', request.views2.request_index_vue, name='request_index_vue'),
     path('index-vue-deleted', request.views2.request_index_vue_deleted, name='request_index_vue_deleted'),
     path('spec-search', request.views2.reqspec_search, name='reqspec_search'),
     path('reqspec_clear_cache', request.views2.reqspec_clear_cache, name='reqspec_clear_cache'),
     path('fsearch3', request.views2.fsearch3, name='fsearch3'),
-    path('fsearch2', request.views2.fsearch2, name='fsearch2'),
-    path('search', RequestList.as_view(), name='req_search2'),
     path('request-report', request.views2.req_report, name='req_report'),
     path('request_report_cc', request.views2.request_report_cc, name='request_report_cc'),
-    path('search-req2', RequestFilterView.as_view(), name='search_req'),
 
     path('find', request.views2.request_find, name='request_find'),
     path('<int:request_pk>/', include([

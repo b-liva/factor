@@ -289,7 +289,7 @@ class PrivateRequestTests(CustomAPITestCase):
         edited_req = Requests.objects.get(pk=req.pk)
         self.assertRedirects(
             res,
-            expected_url=reverse('request_index_paginate'),
+            expected_url=reverse('req_report'),
             status_code=status.HTTP_302_FOUND,
             target_status_code=status.HTTP_200_OK,
         )
@@ -357,7 +357,7 @@ class PrivateRequestTests(CustomAPITestCase):
         exist = Requests.objects.filter(pk=req.pk, is_active=True).exists()
         self.assertRedirects(
             res,
-            expected_url=reverse('request_index_paginate'),
+            expected_url=reverse('req_report'),
             status_code=status.HTTP_302_FOUND,
             target_status_code=status.HTTP_200_OK,
         )

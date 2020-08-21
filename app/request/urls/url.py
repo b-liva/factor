@@ -21,9 +21,6 @@ import request.views
 from request import views2
 
 urlpatterns = [
-                  path('project_type', request.views2.project_type_form, name='project_type_form'),
-                  path('project-type/index', request.views2.projects_type_index, name='projects_type_index'),
-
                   path('img/<int:img_pk>/del', request.views2.image_delete, name='image_delete'),
                   path('<int:img_pk>/img/del', request.views2.img_del, name='img_del'),
                   path('<int:img_pk>/prof_img/del', request.views2.prof_img_del, name='prof_img_del'),

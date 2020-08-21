@@ -16,29 +16,6 @@ from request.forms import forms
 
 
 # Create your views here.
-
-@login_required
-def project_type_form(request):
-
-    if request.method == 'POST':
-        form = forms.ProjectTypeForm(request.POST)
-        project_type = form.save(commit=False)
-        project_type.save()
-        return redirect('projects_type_index')
-    else:
-        form = forms.ProjectTypeForm()
-    return render(request, 'requests/admin_jemco/project_type/form.html', {
-        'form': form,
-    })
-
-@login_required
-def projects_type_index(request):
-    all_project_types = models.ProjectType.objects.all()
-    return render(request, 'requests/admin_jemco/project_type/index.html', {
-        'projects': all_project_types,
-    })
-
-
 @login_required
 # add a new request to the system
 def request_form(request):

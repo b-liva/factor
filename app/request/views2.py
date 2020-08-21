@@ -1,68 +1,37 @@
-from django.core.cache import cache
 import xlwt
-from django.contrib.humanize.templatetags.humanize import intcomma
-from django.db.models import Q, Sum, F, FloatField, Count, Subquery
-from datetime import datetime
 import json
-import json_tricks
 import jdatetime
-from django.core.serializers import serialize
+
+from django.db.models import Q, Sum, F, FloatField, Count
+from datetime import datetime
+from django.core.cache import cache
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils import timezone
-# from django.utils.datetime_safe import strftime
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from req_track.models import ReqEntered
-
-User = get_user_model()
-
 from request.filters.filters import RequestFilter
 from request.forms.forms import RequestCopyForm, CommentForm
 from request.forms.search import ReqSearchForm
-from request.views import find_all_obj
-from .models import Requests, ReqSpec, PrefSpec, IMType, Perm
+from .models import Requests, ReqSpec, PrefSpec
 from .models import Xpref, Payment
 from . import models
 from customer.models import Customer
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 import request.templatetags.functions as funcs
 from request.forms import forms, search
 from core.access_control.permission_check import OrderProxy, AccessControl
 import nested_dict as nd
 import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from collections import defaultdict as dd
 User = get_user_model()
 
 
 # Create your views here.
-@login_required
-def project_type_form(request):
-    if request.method == 'POST':
-        form = forms.ProjectTypeForm(request.POST)
-        project_type = form.save(commit=False)
-        project_type.save()
-        return redirect('projects_type_index')
-    else:
-        form = forms.ProjectTypeForm()
-    return render(request, 'requests/admin_jemco/project_type/form.html', {
-        'form': form,
-    })
-
-
-@login_required
-def projects_type_index(request):
-    all_project_types = models.ProjectType.objects.all()
-    return render(request, 'requests/admin_jemco/project_type/index.html', {
-        'projects': all_project_types,
-    })
-
-
 @login_required
 # add a new request to the system
 def request_form(request):
@@ -436,216 +405,6 @@ def proforma_total(spset):
     return sum
 
 
-def fsearch2(request):
-    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
-    if not can_index:
-        messages.error(request, 'عدم دسترسی کافی!')
-        return redirect('errorpage')
-
-    data = json.loads(request.body.decode('utf-8'))
-    specs = ReqSpec.objects.filter(is_active=True)
-    pmnt_total = Payment.objects.filter(is_active=True)
-
-    if request.method == 'POST':
-        form_data = {}
-        form_data['price'] = data['price']
-        form_data['tech'] = data['tech']
-        form_data['permission'] = data['permission']
-        form_data['sent'] = data['sent']
-        form_data['customer_name'] = data['customer_name']
-        form_data['kw_min'] = data['kw_min']
-        form_data['kw_max'] = data['kw_max']
-        form_data['rpm'] = data['rpm']
-        form_data['date_min'] = data['date_min']
-        form_data['date_max'] = data['date_max']
-        # if request.POST['kw_min']:
-        #     form_data['kw_min'] = (request.POST['kw_min'])
-        #     specs = specs.filter(kw__gte=form_data['kw_min'])
-        # if request.POST['kw_max']:
-        #     form_data['kw_max'] = (request.POST['kw_max'])
-        #     specs = specs.filter(kw__lte=form_data['kw_max'])
-        if form_data['price']:
-            specs = specs.filter(price=form_data['price'])
-            # payments = payments.filter(xpref_id__req_id__price=form_data['price'])
-        if form_data['permission']:
-            specs = specs.filter(permission=form_data['permission'])
-            # payments = payments.filter(xpref_id__req_id__price=form_data['permission'])
-        if form_data['sent']:
-            specs = specs.filter(sent=form_data['sent'])
-            # payments = payments.filter(xpref_id__req_id__price=form_data['sent'])
-        if form_data['tech']:
-            specs = specs.filter(tech=form_data['tech'])
-            # payments = payments.filter(xpref_id__req_id__price=form_data['tech'])
-        if form_data['customer_name']:
-            specs = specs.filter(req_id__customer__name__icontains=form_data['customer_name'])
-            # payments = payments.filter(xpref_id__req_id__price=form_data['customer_name'])
-        if form_data['kw_min']:
-            specs = specs.filter(kw__gte=form_data['kw_min'])
-            # payments = payments.filter(xpref_id__req_id__price=form_data['kw_min'])
-        if form_data['kw_max']:
-            specs = specs.filter(kw__lte=form_data['kw_max'])
-            # payments = payments.filter(xpref_id__req_id__price=form_data['kw_max'])
-        if form_data['date_min']:
-            specs = specs.filter(req_id__date_fa__gte=form_data['date_min'])
-            pmnt_total = pmnt_total.filter(date_fa__gte=form_data['date_min'])
-            # payments = payments.filter(xpref_id__req_id__price=form_data['date_min'])
-        if form_data['date_max']:
-            specs = specs.filter(req_id__date_fa__lte=form_data['date_max'])
-            pmnt_total = pmnt_total.filter(date_fa__lte=form_data['date_max'])
-            # payments = payments.filter(xpref_id__req_id__price=form_data['date_max'])
-        if form_data['rpm']:
-
-            # specs = specs.filter(rpm=form_data['rpm'])
-            rng = [750, 1000, 1500, 3000]
-            i = 0
-            if int(form_data['rpm']) <= rng[0]:
-                form_data['rpm'] = rng[0]
-            for r in rng:
-                if r < int(form_data['rpm']) <= rng[i] and i > 0:
-                    form_data['rpm'] = rng[i]
-                i += 1
-            if int(form_data['rpm']) > max(rng):
-                form_data['rpm'] = 3000
-
-            # specs = specs.filter(rpm=form_data['rpm'])
-            specs = specs.filter(rpm=form_data['rpm'])
-            # payments = payments.filter(xpref_id__req_id__price=form_data['rpm'])
-
-        # if request.POST.get('sent') == 'true':
-        #     form_data['sent'] = True
-        #     specs = specs.filter(sent=form_data['sent'])
-
-        # if request.POST.get('permission') == 'true':
-        #     form_data['permission'] = True
-        #     specs = specs.filter(permission=form_data['permission'])
-
-        # if request.POST['rpm']:
-        #     form_data['rpm'] = request.POST['rpm']
-        #     specs = specs.filter(rpm=form_data['rpm'])
-        # if request.POST['customer_name']:
-        #     form_data['customer_name'] = request.POST['customer_name']
-        #     specs = specs.filter(req_id__customer__name__icontains=form_data['customer_name'])
-        # specs = ReqSpec.objects.filter(req_id__customer__name__icontains=customer_name).filter(kw=kw).filter(rpm=rpm)
-        # print(f"items: {form_data['kw']} + {form_data['rpm']} + {form_data['customer_name']}")
-        search_form = search.SpecSearchForm(form_data)
-        # search_form = search.SpecSearchForm()
-    # elif request.method == 'GET':
-    else:
-        specs = ReqSpec.objects.filter(is_active=True)
-        search_form = search.SpecSearchForm()
-
-    today = jdatetime.date.today()
-
-    response = []
-
-    date_format = "%m/%d/%Y"
-    total_kw = 0
-    total_qty = 0
-    payment_sum = 0
-
-    if not request.user.is_superuser:
-        specs = specs.filter(req_id__owner=request.user) | specs.filter(req_id__colleagues=request.user)
-
-    payments_all_total = 0
-    for p in pmnt_total:
-        payments_all_total += p.amount
-
-    unverified_profs_total = 0
-    verified_profs_total = 0
-
-    for spec in specs:
-        diff = today - spec.req_id.date_fa
-        # url = url(request_read, request_pk=spec.req_id.pk)
-        url = reverse('request_details', kwargs={'request_pk': spec.req_id.pk})
-        customer_url = reverse('customer_read', kwargs={'customer_pk': spec.req_id.customer.pk})
-
-        owner_colleagues = []
-        total_kw += spec.qty * spec.kw
-        total_qty += spec.qty
-        diff = today - spec.req_id.date_fa
-        proformas = spec.req_id.xpref_set.filter(is_active=True)
-        unverified_profs = []
-        verified_profs = []
-        payments = []
-        for prof in proformas:
-            prof_amount = 0
-            for item in prof.prefspec_set.filter(is_active=True):
-                prof_amount += item.qty * item.price
-            prof_amount = 1.09 * prof_amount
-            temp_prof = {
-                'number': prof.number,
-                'prof_amount': prof_amount,
-                'prof_url': reverse('pref_details', kwargs={'ypref_pk': prof.pk}),
-            }
-            if prof.verified:
-                verified_profs_total += prof_amount
-                verified_profs.append(temp_prof)
-            else:
-
-                unverified_profs_total += prof_amount
-                unverified_profs.append(temp_prof)
-            pmnts = prof.payment_set.filter(is_active=True)
-            for pay in pmnts:
-                payment_sum += pay.amount
-                amount = int(pay.amount)
-                payments.append({
-                    'number': pay.number,
-                    'amount': amount,
-                    'pmnt_url': reverse('payment_details', kwargs={'ypayment_pk': pay.pk}),
-                })
-        owner_colleagues.append({
-            'last_name': spec.req_id.owner.last_name,
-        })
-        for colleage in spec.req_id.colleagues.all():
-            owner_colleagues.append({
-                'last_name': colleage.last_name,
-            })
-
-        response.append(
-            {
-                # 'spec': spec,
-                # 'date_fa': str(spec.req_id.date_fa),
-                'delay': diff.days,
-                'customer_name': spec.req_id.customer.name,
-                'customer_url': customer_url,
-                'qty': spec.qty,
-                'rpm': spec.rpm,
-                'kw': spec.kw,
-                'voltage': spec.voltage,
-                'reqNo': spec.req_id.number,
-                'price': spec.price,
-                'tech': spec.tech,
-                'permission': spec.permission,
-                'sent': spec.sent,
-                'url': url,
-                'owner_colleagues': owner_colleagues,
-                # 'profs': profs,
-                'unverified_profs': unverified_profs,
-                'verified_profs': verified_profs,
-                'payments': payments,
-                'date_fa': spec.req_id.date_fa.strftime("%Y-%m-%d"),
-                # 'date_fa': jdatetime.date.fromgregorian(date=spec.req_id.pub_date),
-                # 'date_fa': json_tricks.dumps(spec.req_id.date_fa),
-                # 'date_fa': serialize('json', spec.req_id.date_fa, cls=DateTimeEncoder),
-                # 'colleagues': req.colleagues.all(),
-            })
-    context = {
-        # 'reqspecs': specs,
-        'response': response,
-        # 'search_form': search_form,
-        'total_kw': total_kw,
-        'total_qty': total_qty,
-        'verified_profs_total': verified_profs_total,
-        'unverified_profs_total': unverified_profs_total,
-        'unv_perc': 100 * verified_profs_total / (verified_profs_total + unverified_profs_total),
-        'payment_sum': payment_sum,
-        'payment_percentage': 100 * (payment_sum / payments_all_total),
-        'rpm': form_data['rpm'],
-    }
-    # return render(request, 'requests/admin_jemco/yreqspec/index.html', context)
-    return JsonResponse(context, safe=False)
-
-
 def fsearch3(request):
 
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
@@ -682,100 +441,6 @@ def request_insert(request):
 
 
 @login_required
-def request_index(request):
-    # todo: should be removed.
-    # requests =request_form Requests.objects.all()
-    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
-    if not can_index:
-        messages.error(request, 'عدم دسترسی کافی!')
-        return redirect('errorpage')
-    # requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
-    # requests = Requests.objects.all().order_by('date_fa').reverse()
-    today = jdatetime.date.today()
-
-    requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
-    if not request.user.is_superuser:
-        requests = requests.filter(owner=request.user)
-    response = {}
-
-    date_format = "%m/%d/%Y"
-    for req in requests:
-        diff = today - req.date_fa
-        time_entered = jdatetime.date. fromgregorian(date=req.pub_date, locale='fa_IR')
-        delay_entered = time_entered - req.date_fa
-        response[req.pk] = {
-            'req': req,
-            'pub_date': time_entered,
-            'delay_entered': delay_entered,
-            'delay': diff.days,
-            'colleagues': req.colleagues.all(),
-        }
-    if request.user.is_superuser:
-        requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
-
-    page = request.GET.get('page', 1)
-    req_list = requests
-    paginator = Paginator(req_list, 30)
-    try:
-        req_page = paginator.page(page)
-    except PageNotAnInteger:
-        req_page = paginator.page(1)
-    except EmptyPage:
-        req_page = paginator.page(paginator.num_pages)
-    context = {
-        'req_page': req_page,
-        'all_requests': requests,
-        'response': response
-    }
-    return render(request, 'requests/admin_jemco/yrequest/index.html', context)
-
-
-@login_required
-def request_index_paginate(request):
-    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
-    if not can_index:
-        messages.error(request, 'عدم دسترسی کافی!')
-        return redirect('errorpage')
-    today = jdatetime.date.today()
-
-    requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
-    if not request.user.is_superuser:
-        requests = requests.filter(Q(owner=request.user) | Q(colleagues=request.user))
-
-    response = {}
-    if request.user.is_superuser:
-        requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
-
-    page = request.GET.get('page', 1)
-    req_list = requests
-    paginator = Paginator(req_list, 30)
-    try:
-        req_page = paginator.page(page)
-    except PageNotAnInteger:
-        req_page = paginator.page(1)
-    except EmptyPage:
-        req_page = paginator.page(paginator.num_pages)
-
-    for req in req_page.object_list:
-        diff = today - req.date_fa
-        time_entered = jdatetime.date.fromgregorian(date=req.pub_date, locale='fa_IR')
-        delay_entered = time_entered - req.date_fa
-        response[req.pk] = {
-            'req': req,
-            'pub_date': time_entered,
-            'delay_entered': delay_entered,
-            'delay': diff.days,
-            'colleagues': req.colleagues.all(),
-        }
-    context = {
-        'req_page': req_page,
-        'all_requests': requests,
-        'response': response
-    }
-    return render(request, 'requests/admin_jemco/yrequest/index2.html', context)
-
-
-@login_required
 def req_to_follow(request, request_pk):
     can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
     if not can_index:
@@ -793,41 +458,6 @@ def req_to_follow(request, request_pk):
         comment.save()
 
     return redirect('req_report')
-
-
-@login_required
-def request_index_vue(request):
-    # requests =request_form Requests.objects.all()
-    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
-    if not can_index:
-        messages.error(request, 'عدم دسترسی کافی!')
-        return redirect('errorpage')
-    # requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
-    # requests = Requests.objects.all().order_by('date_fa').reverse()
-    today = jdatetime.date.today()
-
-    requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
-    if not request.user.is_superuser:
-        requests = requests.filter(owner=request.user)
-    response = {}
-
-    date_format = "%m/%d/%Y"
-    for req in requests:
-        diff = today - req.date_fa
-        response[req.pk] = {
-            'req': req,
-            'delay': diff.days,
-            'colleagues': req.colleagues.all(),
-        }
-    if request.user.is_superuser:
-        requests = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
-    context = {
-        'all_requests': requests,
-        'response': response,
-        'showHide': True,
-        'message': 'درخواست ها',
-    }
-    return render(request, 'requests/admin_jemco/yrequest/vue/index.html', context)
 
 
 @login_required
@@ -868,7 +498,7 @@ def request_find(request):
     req_no = str(int(request.POST['year']) * 10000 + int(request.POST['req_no']))
     if not Requests.objects.filter(number=req_no):
         messages.error(request, 'درخواست مورد نظر یافت نشد.')
-        return redirect('request_index_paginate')
+        return redirect('req_report')
     req = Requests.objects.filter(is_active=True).get(number=req_no)
     return redirect('request_details', request_pk=req.pk)
 
@@ -885,11 +515,6 @@ def request_read(request, request_pk):
     except:
         messages.error(request, 'درخواست مورد نظر یافت نشد.')
         return redirect('errorpage')
-
-    colleagues = req.colleagues.all()
-    colleague = False
-    if request.user in colleagues:
-        colleague = True
 
     order_proxy_obj = OrderProxy(request.user, 'request.read_requests', req)
     access = AccessControl(order_proxy_obj)
@@ -1104,7 +729,7 @@ def request_delete(request, request_pk):
         req.save()
         req.reqspec_set.update(is_active=False)
 
-    return redirect('request_index_paginate')
+    return redirect('req_report')
 
 
 @login_required
@@ -1163,7 +788,7 @@ def request_edit_form(request, request_pk):
             file_instance = models.RequestFiles(image=f, req=req_item)
             file_instance.save()
         # return redirect('request_index')
-        return redirect('request_index_paginate')
+        return redirect('req_report')
 
     context = {
         'customer': req.customer.name,
