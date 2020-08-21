@@ -25,8 +25,11 @@ from django.utils import timezone
 # add payment to the prefactor
 @login_required
 def payment_form(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
-    if not can_add:
+    acl_obj = PaymentProxy(request.user, 'request.add_payment')
+    is_allowed = AccessControl(acl_obj).allow()
+
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
+    if not is_allowed:
         messages.error(request, 'Sorry, No way to access')
         return redirect('errorpage')
     reqs, xprefs, xpayments = find_all_obj()
@@ -47,11 +50,13 @@ def pay_form_prof(request, prof_pk):
 def pay_form(request):
     try:
         proforma = Xpref.objects.get(pk=request.POST['xpref_id'])
-        can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment', instance=proforma)
+        acl_obj = PaymentProxy(request.user, 'request.add_payment', obj=proforma)
+        is_allowed = AccessControl(acl_obj).allow()
+        # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_payment', instance=proforma)
         if not proforma.perm:
             messages.error(request, 'پیش فاکتور مورد نظر مجوز نشده و دریافتی برای آن قابل ثبت نیست.')
             # todo: this is too messy. please refactor me.
-            if can_add:
+            if is_allowed:
                 if proforma.owner == request.user:
                     return redirect('pref_details', ypref_pk=proforma.pk)
                 else:
@@ -59,8 +64,10 @@ def pay_form(request):
             else:
                 return redirect('errorpage')
     except:
-        can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
-    if not can_add:
+        acl_obj = PaymentProxy(request.user, 'request.add_payment')
+        is_allowed = AccessControl(acl_obj).allow()
+        # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
+    if not is_allowed:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
@@ -99,8 +106,10 @@ def pay_form(request):
 
 @login_required
 def payment_insert(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
-    if not can_add:
+    acl_obj = PaymentProxy(request.user, 'request.add_payment')
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
+    if not is_allowed:
         messages.error(request, 'Sorry, No way to access')
         return redirect('errorpage')
 
@@ -130,8 +139,10 @@ def payment_insert(request):
 
 @login_required
 def payment_index(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
-    if not can_add:
+    acl_obj = PaymentProxy(request.user, 'request.add_payment')
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
+    if not is_allowed:
         messages.error(request, 'Sorry, No way to access')
         return redirect('errorpage')
 
@@ -289,8 +300,11 @@ def payments_export(request):
 
 @login_required
 def payment_index_deleted(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_deleted_payment')
-    if not can_add:
+    acl_obj = PaymentProxy(request.user, 'request.index_deleted_payment')
+    is_allowed = AccessControl(acl_obj).allow()
+
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_deleted_payment')
+    if not is_allowed:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
@@ -572,8 +586,10 @@ def payment_details(request, ypayment_pk):
 @login_required
 def payment_delete(request, ypayment_pk):
     payment = Payment.objects.get(pk=ypayment_pk)
-    can_delete = funcs.has_perm_or_is_owner(request.user, 'request.delete_payment', payment)
-    if not can_delete:
+    acl_obj = PaymentProxy(request.user, 'request.delete_payment', payment)
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.delete_payment', payment)
+    if not is_allowed:
         messages.error(request, 'No access!')
         return redirect('errorpage')
     if request.method == 'GET':
@@ -607,8 +623,10 @@ def payment_edit(request, ypayment_pk):
     # 6 - if form is valid the save request and its related images
     # 7 - render the template file
     payment = Payment.objects.filter(is_active=True).get(pk=ypayment_pk)
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.change_payment', payment)
-    if not can_edit:
+    acl_obj = PaymentProxy(request.user, 'request.delete_payment', payment)
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.change_payment', payment)
+    if not is_allowed:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     if payment.date_fa:

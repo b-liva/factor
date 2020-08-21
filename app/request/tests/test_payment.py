@@ -44,7 +44,7 @@ class PrivatePaymentTests(CustomAPITestCase):
 
     def test_create_payment_post_limited_by_user(self):
         """Test create Payment posting data limited by user."""
-        self.client.force_login(user=self.ex_user)
+        self.client.force_login(user=self.user)
         res = self.client.post(reverse('pay_form'), self.payment_payload)
         self.assertRedirects(
             res,
