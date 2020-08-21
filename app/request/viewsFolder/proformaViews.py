@@ -19,6 +19,7 @@ from django_jalali.db import models as jmodels
 from xhtml2pdf import pisa
 
 import request.templatetags.functions as funcs
+from core.access_control.permission_check import ProformaProxy, AccessControl
 
 from django.contrib.auth import get_user_model
 from django.templatetags.static import static
@@ -761,9 +762,10 @@ def pref_details(request, ypref_pk):
         messages.error(request, 'Nothin found')
         return redirect('errorpage')
     pref = Xpref.objects.get(pk=ypref_pk)
-    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
 
-    if not can_read:
+    acl_obj = ProformaProxy(request.user, 'request.read_proforma', pref)
+    allowed = AccessControl(acl_obj).allow()
+    if not allowed:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     nestes_dict = {}

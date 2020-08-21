@@ -22,7 +22,8 @@ class ProformaFilterSet(django_filters.FilterSet):
             'number': ['exact'],
             'req_id': ['exact'],
             'number_td': ['exact'],
-            'req_id__customer__name': ['icontains']
+            'req_id__customer__name': ['icontains'],
+            'perm': ['exact']
         }
 
 
@@ -38,7 +39,7 @@ class ProformaNode(OwnQuerySet, DjangoObjectType):
         filter_fields = {
             'number': ['exact'],
             'number_td': ['exact'],
-            'req_id__customer__name': ['icontains']
+            'req_id__customer__name': ['icontains'],
         }
 
         interfaces = (relay.Node,)

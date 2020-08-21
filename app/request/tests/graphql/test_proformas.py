@@ -2,7 +2,8 @@ import json
 from graphene_django.utils.testing import GraphQLTestCase
 from graphql_relay import to_global_id
 
-from accounts.tests.test_public_funcs import CustomAPITestCase, Xpref
+from accounts.tests.test_public_funcs import CustomAPITestCase
+from request.models import Xpref
 from factor.schema import schema
 
 

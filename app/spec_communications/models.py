@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-User = get_user_model()
 from request.models import ReqSpec
+User = get_user_model()
 # Create your models here.
 
 

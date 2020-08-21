@@ -8,6 +8,7 @@ from django.db.models import Q, Sum
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
+from core.access_control.permission_check import AccessControl, PaymentProxy
 from customer.models import Customer
 from request.forms.payment_forms import PaymentSearchForm
 from request.views import find_all_obj
@@ -564,11 +565,14 @@ def payment_find(request):
 
 @login_required
 def payment_details(request, ypayment_pk):
+
     if not Payment.objects.filter(is_active=True).filter(pk=ypayment_pk) and not request.user.is_superuser:
         messages.error(request, 'صفحه مورد نظر یافت نشد')
         return redirect('errorpage')
     payment = Payment.objects.get(pk=ypayment_pk)
-    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_payment', payment)
+    # can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_payment', payment)
+    acl_obj = PaymentProxy(request.user, 'request.read_payment', payment)
+    can_read = AccessControl(acl_obj).allow()
     if not can_read:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')

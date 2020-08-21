@@ -1,11 +1,11 @@
 from django.contrib import admin
 # from django.contrib.auth.models import User as DefaultUser
 from django.contrib.auth import get_user_model
-from accounts.models import CustomerUser, StaffPosition, StaffInfo
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
+from accounts.models import CustomerUser, StaffPosition, StaffInfo
 from accounts.forms import CustomUserCreationForm, CustomUserChangeForm, CustomerUserCreationForm, CustomerUserChangeForm
 
 User = get_user_model()

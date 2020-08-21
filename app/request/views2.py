@@ -32,6 +32,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import request.templatetags.functions as funcs
 from request.forms import forms, search
+from core.access_control.permission_check import OrderProxy, AccessControl
 import nested_dict as nd
 import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -874,6 +875,7 @@ def request_find(request):
 
 @login_required
 def request_read(request, request_pk):
+
     if not Requests.objects.filter(is_active=True).filter(pk=request_pk) and not request.user.is_superuser:
         messages.error(request, 'صفحه مورد نظر یافت نشد')
         return redirect('errorpage')
@@ -889,7 +891,10 @@ def request_read(request, request_pk):
     if request.user in colleagues:
         colleague = True
 
-    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_requests', req, colleague)
+    order_proxy_obj = OrderProxy(request.user, 'request.read_requests', req)
+    access = AccessControl(order_proxy_obj)
+    can_read = access.allow()
+    # can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_requests', req, colleague)
     if not can_read:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
@@ -1472,7 +1477,6 @@ def index_by_month_exp(request):
     from django.db import models
     from django.db.models import Sum, FloatField, ExpressionWrapper, F, Value, Count, Avg, Max, Min
     from django.db.models.functions import Concat, TruncMonth
-    from request.sandbox import MyTruncMonth
     from accounts.models import User
     reqs = Requests.cobjects.with_date().filter(is_active=True)
     requests_perm_month = reqs.annotate(
@@ -1524,6 +1528,7 @@ def index_by_month_exp(request):
         'reqs_per_month': reqs_per_month
     }
     return render(request, 'requests/admin_jemco/yrequest/index_by_month_exp.html', context)
+
 
 def index_by_month_exp(request):
     from request.models import Requests

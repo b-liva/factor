@@ -1,10 +1,6 @@
 from django import template
 
 
-def somefn():
-    pass
-
-
 def has_perm_or_is_owner(user_obj, permissions, instance=None, colleague=None):
     if user_obj.is_superuser:
         return True

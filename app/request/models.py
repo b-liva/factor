@@ -131,7 +131,7 @@ class Requests(models.Model):
     parent_number = models.IntegerField(null=True, blank=True)
     pub_date = models.DateTimeField(default=now)
     date_fa = jmodels.jDateField(default=now)
-    date_fa_raw = models.DateField(default=now)
+    # date_fa_raw = models.DateField(default=now)
     date_fa_text = models.CharField(null=True, blank=True, max_length=20)
     date_finished = jmodels.jDateField(blank=True, null=True)
     colleagues = models.ManyToManyField('accounts.User', blank=True, null=True)

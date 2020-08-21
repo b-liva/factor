@@ -25,8 +25,6 @@ class UserNode(DjangoObjectType):
     permission_json = List(JSONString)
 
     def resolve_order_not_entered_count(self, info):
-        print(info.context.user)
-        print(self.last_name)
         return ReqEntered.objects.filter(is_entered=False, is_request=True,
                                          owner_text__icontains=self.last_name).count()
 

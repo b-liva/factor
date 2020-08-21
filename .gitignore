@@ -19,10 +19,10 @@ githublink.txt
 app/node_modules
 package-lock.json
 app/venv
-/z_mine
+z_mine
 app/fixtures
-/.idea
-/.vs
+.idea
+.vs
 *.orig
 
 
@@ -44,7 +44,5 @@ docker-compose.yml
 app/.fandoghignore
 
 workspace.tar.gz
-
-.fandogh/
 
 .fandogh/

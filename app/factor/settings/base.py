@@ -14,25 +14,27 @@ import os, json, sys
 from django.urls import reverse_lazy
 from django.core.exceptions import ImproperlyConfigured
 
-# with open(os.path.abspath('factor/factor-secrets.json')) as f:
-#     secrets = json.loads(f.read())
 
-
-# def get_secret_setting(settings, secrets=secrets):
-#     try:
-#         return secrets[settings]
-#     except KeyError:
-#         raise ImproperlyConfigured('set the %s settings' % settings)
 def set_secret_key(settings, secret):
     try:
         return os.environ.get(secret, 'FakeSoChangeMe.')
     except KeyError:
         raise ImproperlyConfigured('SECRET_KEY Error, please set the %s %s on Env' % (settings, secret,))
 
+
 ROOT_DIR = (
     environ.Path(__file__) - 3
-)  # (nikan/config/settings/base.py - 3 = nikan/)
-# APPS_DIR = ROOT_DIR.path("factor")
+)  # (app/factor/settings/base.py - 3 = app/)
+sys.path.insert(0, "D:\\localprojects\\w\\jemco\\jCrm3_ok\\app\\")
+ROOT_URLCONF = "factor.urls"
+WSGI_APPLICATION = "factor.wsgi.application"
+LOCALE_PATHS = [ROOT_DIR.path("locale")]
+TEMPLATES_DIR = os.path.join(ROOT_DIR, 'templates')
+FRONTEND_DIR = os.path.join(ROOT_DIR, 'frontend')
+AUTH_USER_MODEL = 'accounts.User'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = reverse_lazy('account_login')
+
 env = environ.Env()
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 if READ_DOT_ENV_FILE:
@@ -45,12 +47,7 @@ ALLOWED_HOSTS_ENV = os.environ.get('ALLOWED_HOSTS')
 if ALLOWED_HOSTS_ENV:
     ALLOWED_HOSTS.extend(ALLOWED_HOSTS_ENV.split(','))
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.0/topics/i18n/
-# Local time zone. Choices are
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# though not all of them may be available with every OS.
-# In Windows, this must be set to your system time zone.
+
 TIME_ZONE = 'Asia/Tehran'
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = "en-us"
@@ -62,23 +59,6 @@ USE_I18N = True
 USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
-# https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
-LOCALE_PATHS = [ROOT_DIR.path("locale")]
-
-# URLS
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
-ROOT_URLCONF = "factor.urls"
-# https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
-WSGI_APPLICATION = "factor.wsgi.application"
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATES_DIR = os.path.join(ROOT_DIR, 'templates')
-
-FRONTEND_DIR = os.path.join(ROOT_DIR, 'frontend')
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # APPS
 # ------------------------------------------------------------------------------
@@ -134,12 +114,6 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-# https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
-AUTH_USER_MODEL = 'accounts.User'
-# https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = '/'
-# https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-LOGIN_URL = reverse_lazy('account_login')
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -173,6 +147,7 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
+    'http://localhost:8001',
 )
 
 # STATIC
