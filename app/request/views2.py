@@ -1,9 +1,9 @@
 import xlwt
 import json
 import jdatetime
+from datetime import datetime
 
 from django.db.models import Q, Sum, F, FloatField, Count
-from datetime import datetime
 from django.core.cache import cache
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, JsonResponse
@@ -24,19 +24,29 @@ from . import models
 from customer.models import Customer
 import request.templatetags.functions as funcs
 from request.forms import forms, search
-from core.access_control.permission_check import OrderProxy, AccessControl
+from core.access_control.permission_check import OrderProxy, AccessControl, ProformaProxy
 import nested_dict as nd
 import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from request.models import Requests, ReqSpec, Xpref, PrefSpec
+from django.db import models
+from django.db.models import Sum, FloatField, ExpressionWrapper, F, Value, Count, Avg, Max, Min
+from django.db.models.functions import Concat, TruncMonth
+from accounts.models import User
+from request.models import Requests
+from accounts.models import User
+from req_track.models import ReqEntered
+
 User = get_user_model()
 
 
 # Create your views here.
 @login_required
-# add a new request to the system
 def request_form(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
-    if not can_add:
+    acl_obj = ProformaProxy(request.user, 'request.add_requests')
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
+    if not is_allowed:
         messages.error(request, 'Sorry, You need some priviliges to do this.')
         return redirect('errorpage')
 
@@ -50,8 +60,10 @@ def request_form(request):
 
 @login_required
 def req_form_copy(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests', )
-    if not can_add:
+    acl_obj = ProformaProxy(request.user, 'request.add_requests')
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_requests', )
+    if not is_allowed:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
@@ -108,8 +120,10 @@ def req_form_copy(request):
 
 @login_required
 def req_form(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
-    if not can_add:
+    acl_obj = OrderProxy(request.user, 'request.add_requests')
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
+    if not is_allowed:
         messages.error(request, 'عدم دستری کافی!')
         return redirect('errorpage')
 
@@ -180,7 +194,7 @@ def wrong_data2(request):
     context = {
         'reqspecs': probably_wrong,
     }
-    return render(request, 'requests/admin_jemco/yreqspec/wrong_data.html', context)\
+    return render(request, 'requests/admin_jemco/yreqspec/wrong_data.html', context)
 
 
 def function_define(request, specs):
@@ -243,19 +257,18 @@ def function_define(request, specs):
 
 @login_required
 def reqspec_search(request):
-    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
-    if not can_index:
+    acl_obj = OrderProxy(request.user, 'request.index_requests')
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not is_allowed:
         messages.error(request, 'عدم دسترسی کافی!')
         return redirect('errorpage')
     form_data = {}
-    # specs = ReqSpec.objects.filter(is_active=True)
 
     if not request.method == 'POST':
         if 'reqspec-search-post' in request.session:
             request.POST = request.session['reqspec-search-post']
             request.method = 'POST'
-
-    # request.session['temp_request_in_session'] = request.POST
 
     specs = ReqSpec.objects.filter(req_id__is_active=True).prefetch_related('req_id', 'req_id__owner', 'req_id__customer', 'req_id__colleagues', 'type', 'req_id__xpref_set', 'req_id__xpref_set__payment_set')
     if request.method == 'POST':
@@ -406,9 +419,10 @@ def proforma_total(spset):
 
 
 def fsearch3(request):
-
-    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
-    if not can_index:
+    acl_obj = OrderProxy(request.user, 'request.index_requests')
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not is_allowed:
         messages.error(request, 'عدم دسترسی کافی!')
         return redirect('errorpage')
     context = {
@@ -419,8 +433,10 @@ def fsearch3(request):
 
 @login_required
 def request_insert(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
-    if not can_add:
+    acl_obj = OrderProxy(request.user, 'request.add_requests')
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
+    if not is_allowed:
         messages.error(request, 'No Priviliges')
         return redirect('errorpage')
     if request.method == 'POST':
@@ -442,8 +458,10 @@ def request_insert(request):
 
 @login_required
 def req_to_follow(request, request_pk):
-    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
-    if not can_index:
+    acl_obj = OrderProxy(request.user, 'request.index_requests')
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not is_allowed:
         messages.error(request, 'عدم دسترسی کافی!')
         return redirect('errorpage')
 
@@ -462,9 +480,10 @@ def req_to_follow(request, request_pk):
 
 @login_required
 def request_index_vue_deleted(request):
-    # requests =request_form Requests.objects.all()
-    can_index = funcs.has_perm_or_is_owner(request.user, 'request.index_deleted_requests')
-    if not can_index:
+    acl_obj = OrderProxy(request.user, 'request.index_deleted_requests')
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_deleted_requests')
+    if not is_allowed:
         messages.error(request, 'عدم دسترسی کافی!')
         return redirect('errorpage')
     # requests = Requests.objects.filter(owner=request.user).order_by('date_fa').reverse()
@@ -515,12 +534,10 @@ def request_read(request, request_pk):
     except:
         messages.error(request, 'درخواست مورد نظر یافت نشد.')
         return redirect('errorpage')
-
-    order_proxy_obj = OrderProxy(request.user, 'request.read_requests', req)
-    access = AccessControl(order_proxy_obj)
-    can_read = access.allow()
-    # can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_requests', req, colleague)
-    if not can_read:
+    acl_obj = OrderProxy(request.user, 'request.read_requests', req)
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.read_requests', req, colleague)
+    if not is_allowed:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
@@ -615,8 +632,10 @@ def request_delete(request, request_pk):
         messages.error(request, 'Nothing found')
         return redirect('errorpage')
     req = Requests.objects.filter(is_active=True).get(pk=request_pk)
-    can_delete = funcs.has_perm_or_is_owner(request.user, 'request.delete_requests', req)
-    if not can_delete:
+    acl_obj = OrderProxy(request.user, 'request.delete_requests', req)
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.delete_requests', req)
+    if not is_allowed:
         messages.error(request, 'No access')
         return redirect('errorpage')
     if request.method == 'GET':
@@ -653,12 +672,14 @@ def request_edit_form(request, request_pk):
         return redirect('errorpage')
 
     req = Requests.objects.filter(is_active=True).get(pk=request_pk)
-    colleagues = req.colleagues.all()
-    colleague = False
-    if request.user in colleagues:
-        colleague = True
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.change_requests', req, colleague=colleague)
-    if not can_add:
+    # colleagues = req.colleagues.all()
+    # colleague = False
+    # if request.user in colleagues:
+    #     colleague = True
+    acl_obj = OrderProxy(request.user, 'request.change_requests', req)
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.change_requests', req, colleague=colleague)
+    if not is_allowed:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
 
@@ -757,8 +778,10 @@ class LazyEncoder(DjangoJSONEncoder):
 
 @login_required
 def req_report(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
-    if not can_add:
+    acl_obj = OrderProxy(request.user, 'request.index_requests')
+    is_allowed = AccessControl(acl_obj).allow()
+    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
+    if not is_allowed:
         messages.error(request, 'عدم دسترسی کافی')
         return redirect('errorpage')
     filters = {}
@@ -996,68 +1019,8 @@ def find_by_number(request):
     return JsonResponse(context, safe=False)
 
 
+@login_required
 def index_by_month_exp(request):
-    from request.models import Requests, ReqSpec, Xpref, PrefSpec
-    from django.db import models
-    from django.db.models import Sum, FloatField, ExpressionWrapper, F, Value, Count, Avg, Max, Min
-    from django.db.models.functions import Concat, TruncMonth
-    from accounts.models import User
-    reqs = Requests.cobjects.with_date().filter(is_active=True)
-    requests_perm_month = reqs.annotate(
-        month=TruncMonth('custom_date')
-    ).values('month').distinct().order_by('month').annotate(
-        tcount=Count('id')
-    )
-
-    month = [
-        {'start': '1397-10-01', 'end': '1397-10-30', 'name': 'دی'},
-        {'start': '1397-11-01', 'end': '1397-11-30', 'name': 'بهمن'},
-        {'start': '1397-12-01', 'end': '1397-11-29', 'name': 'اسفند'},
-        {'start': '1398-01-01', 'end': '1398-01-31', 'name': 'فروردین'},
-        {'start': '1398-02-01', 'end': '1398-02-31', 'name': 'اردیبهشت'},
-        {'start': '1398-03-01', 'end': '1398-03-31', 'name': 'خرداد'},
-        {'start': '1398-04-01', 'end': '1398-04-31', 'name': 'تیر'},
-        {'start': '1398-05-01', 'end': '1398-05-31', 'name': 'مرداد'},
-        {'start': '1398-05-01', 'end': '1398-05-31', 'name': 'مرداد'},
-        {'start': '1398-06-01', 'end': '1398-06-31', 'name': 'شهریور'},
-        {'start': '1398-07-01', 'end': '1398-07-30', 'name': 'مهر'},
-        {'start': '1398-08-01', 'end': '1398-08-30', 'name': 'آبان'},
-        {'start': '1398-09-01', 'end': '1398-09-30', 'name': 'آذر'},
-        {'start': '1398-10-01', 'end': '1398-10-30', 'name': 'دی'},
-        {'start': '1398-11-01', 'end': '1398-11-30', 'name': 'بهمن'},
-        {'start': '1398-12-01', 'end': '1398-12-29', 'name': 'اسفند'},
-        {'start': '1399-01-01', 'end': '1399-01-31', 'name': 'فروردین'},
-        {'start': '1399-02-01', 'end': '1399-02-31', 'name': 'اردیبهشت'},
-        {'start': '1399-03-01', 'end': '1399-03-31', 'name': 'خرداد'},
-        {'start': '1399-04-01', 'end': '1399-04-31', 'name': 'تیر'},
-        {'start': '1399-05-01', 'end': '1399-05-31', 'name': 'مرداد'},
-    ]
-    users = User.objects.filter(sales_exp=True)
-    reqs_per_month = list()
-    for m in month:
-        inner_data = list()
-        index = f"{m['name']} - {m['start'].split('-')[0]}"
-        reqs = Requests.objects.filter(date_fa__gte=m['start'], date_fa__lte=m['end'], is_active=True)
-        reqs_input = ReqEntered.objects.filter(date_txt__gte=m['start'], date_txt__lte=m['end'])
-        inner_data.append(index)
-        inner_data.append(reqs_input.count())
-        for user in users:
-            user_reqs = reqs.filter(owner=user)
-            inner_data.append(user_reqs.count())
-        inner_data.append(reqs.count())
-        reqs_per_month.append(inner_data)
-    context = {
-        'users': users,
-        'requests_perm_month': requests_perm_month,
-        'reqs_per_month': reqs_per_month
-    }
-    return render(request, 'requests/admin_jemco/yrequest/index_by_month_exp.html', context)
-
-
-def index_by_month_exp(request):
-    from request.models import Requests
-    from accounts.models import User
-    from req_track.models import ReqEntered
 
     month = [
         {'start': '1397-10-01', 'end': '1397-10-30', 'name': 'دی'},

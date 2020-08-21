@@ -7,7 +7,7 @@ class AccessControl:
 
 
 class OrderProxy:
-    def __init__(self, user, permission, obj):
+    def __init__(self, user, permission, obj=None):
         self.obj = obj
         self.user = user
         self.permission = permission
@@ -15,6 +15,8 @@ class OrderProxy:
     def allow(self):
         if self.user.is_superuser:
             return True
+        if not self.obj:
+            return self.user.has_perm(self.permission)
         if self.obj.owner == self.user or self.user in self.obj.colleagues.all():
             return self.user.has_perm(self.permission)
 
@@ -22,7 +24,7 @@ class OrderProxy:
 
 
 class ProformaProxy:
-    def __init__(self, user, permission, obj):
+    def __init__(self, user, permission, obj=None):
         self.obj = obj
         self.user = user
         self.permission = permission
@@ -30,6 +32,8 @@ class ProformaProxy:
     def allow(self):
         if self.user.is_superuser:
             return True
+        if not self.obj:
+            return self.user.has_perm(self.permission)
         if self.obj.owner == self.user or self.user in self.obj.req_id.colleagues.all():
             return self.user.has_perm(self.permission)
 
@@ -37,7 +41,7 @@ class ProformaProxy:
 
 
 class PaymentProxy:
-    def __init__(self, user, permission, obj):
+    def __init__(self, user, permission, obj=None):
         self.obj = obj
         self.user = user
         self.permission = permission
@@ -45,6 +49,8 @@ class PaymentProxy:
     def allow(self):
         if self.user.is_superuser:
             return True
+        if not self.obj:
+            return self.user.has_perm(self.permission)
         if self.obj.owner == self.user or self.user in self.obj.xpref_id.req_id.colleagues.all():
             return self.user.has_perm(self.permission)
 
