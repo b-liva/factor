@@ -176,12 +176,12 @@
 
                                         <td>
                                             <a class="btn btn-xs btn-warning"
-                                               href="{% url 'reqspec_edit_form' req_pk=request.pk yreqSpec_pk=reqspec.pk %}">
+                                               href="{% url 'reqspec_edit_form' request_pk=request.pk yreqSpec_pk=reqspec.pk %}">
                                                 <i class="fa fa-pencil" aria-hidden="true"></i> ویرایش
                                             </a>
 
                                             <a class="btn btn-primary btn-xs btn-danger"
-                                               href="{% url 'reqSpec_delete' req_pk=request.pk yreqSpec_pk=reqspec.pk %}"><i
+                                               href="{% url 'reqSpec_delete' request_pk=request.pk yreqSpec_pk=reqspec.pk %}"><i
                                                     class="fa fa-trash"></i> حذف</a>
                                         </td>
                                     {% endif %}

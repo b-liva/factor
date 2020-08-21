@@ -17,7 +17,7 @@ class OrderProxy:
             return True
         if not self.obj:
             return self.user.has_perm(self.permission)
-        if self.obj.owner == self.user or self.user in self.obj.colleagues.all():
+        if self.user == self.obj.owner or self.user in self.obj.colleagues.all():
             return self.user.has_perm(self.permission)
 
         return False
@@ -34,7 +34,8 @@ class ProformaProxy:
             return True
         if not self.obj:
             return self.user.has_perm(self.permission)
-        if self.obj.owner == self.user or self.user in self.obj.req_id.colleagues.all():
+        if self.user == self.obj.owner or self.user == self.obj.req_id.owner or self.user in self.obj.req_id.colleagues.all():
+
             return self.user.has_perm(self.permission)
 
         return False
@@ -51,7 +52,7 @@ class PaymentProxy:
             return True
         if not self.obj:
             return self.user.has_perm(self.permission)
-        if self.obj.owner == self.user or self.user in self.obj.xpref_id.req_id.colleagues.all():
+        if self.obj.owner == self.user or self.user == self.obj.xpref_id.owner or self.user == self.obj.xpref_id.req_id.owner or self.user in self.obj.xpref_id.req_id.colleagues.all():
             return self.user.has_perm(self.permission)
 
         return False

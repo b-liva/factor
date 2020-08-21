@@ -333,13 +333,13 @@ class PrivateProformaTest(CustomAPITestCase):
 
     def test_create_prefspec_get_user_is_req_owner(self):
         """Test req owner can get prefspec form"""
-        self.client.force_login(user=self.user)
-        req = self.sample_request(owner=self.user, customer=self.customer, number=981515)
-        spec1 = self.sample_reqspec(owner=self.user, req_id=req, kw=55, rpm=1000)
-        spec2 = self.sample_reqspec(owner=self.user, req_id=req, kw=315, rpm=1500)
-        spec3 = self.sample_reqspec(owner=self.user, req_id=req, kw=160, rpm=3000)
-        spec4 = self.sample_reqspec(owner=self.user, req_id=req, kw=160, rpm=3000, is_active=False)
-        proforma = self.sample_proforma(req=req, owner=self.ex_user, number=9820009)
+        self.client.force_login(user=self.ex_user)
+        req = self.sample_request(owner=self.ex_user, customer=self.customer, number=981515000)
+        spec1 = self.sample_reqspec(owner=self.ex_user, req_id=req, kw=55, rpm=1000)
+        spec2 = self.sample_reqspec(owner=self.ex_user, req_id=req, kw=315, rpm=1500)
+        spec3 = self.sample_reqspec(owner=self.ex_user, req_id=req, kw=160, rpm=3000)
+        spec4 = self.sample_reqspec(owner=self.ex_user, req_id=req, kw=160, rpm=3000, is_active=False)
+        proforma = self.sample_proforma(req=req, owner=self.user, number=98200109)
         res = self.client.get(reverse('prof_spec_form', args=[proforma.pk]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.context['proforma'].pk, proforma.pk)
