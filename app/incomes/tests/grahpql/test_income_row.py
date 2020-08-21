@@ -180,8 +180,6 @@ class TestIncomes(GraphQLTestCase, CustomAPITestCase):
             'proforma': prof.pk,
             'income': income.pk
         })
-
-        # print(f'proforma vat: {prof.number}', prof.total_proforma_price_vat()['price_vat'])
         json_response = json.loads(response.content)
         # TODO: proper error message.
         self.assertIsNone(json_response['data']['incomeRowMutation'])
@@ -229,8 +227,6 @@ class TestIncomes(GraphQLTestCase, CustomAPITestCase):
             'proforma': prof.pk,
             'income': income.pk
         })
-
-        # print(f'proforma vat: {prof.number}', prof.total_proforma_price_vat()['price_vat'])
         json_response = json.loads(response.content)
         # TODO: proper error message.
         self.assertIsNone(json_response['data']['incomeRowMutation'])

@@ -257,7 +257,6 @@ def payments_export(request):
     #     pass
     for payment in payments:
         row_num += 1
-        print(payment.type)
         type = payment.type.title if payment.type is not None else None
         due_date = str(payment.due_date) if payment.due_date is not None else None
         exportables = [
@@ -337,7 +336,6 @@ def assign(request):
     r_payments = data['payments']
     payments = []
     not_found = []
-    print(r_payments)
     for payment in r_payments:
         pay = Payment.objects.filter(number=payment)
         if pay.exists():
@@ -362,7 +360,6 @@ def add_sheet(payments, wb):
     locale.setlocale(locale.LC_ALL, 'en_US')
     sheet_no = 1
     today = jdatetime.date.today()
-    print(today)
     today = str(today)
     today = today.replace('-', '/')
     customers = payments.values('xpref_id__req_id__customer').distinct()
@@ -435,11 +432,8 @@ def payment_download(request):
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="received.xlsx"'
     data = json.loads(request.body.decode('utf-8'))
-    print(data)
     ids = [item['id'] for item in data['payments']]
-    print(ids)
     payments = Payment.objects.filter(id__in=ids)
-    print(payments)
     # response = HttpResponse(content_type='application/ms-excel')
     wb = make_excel_total_payments(payments)
     wb = add_sheet(payments, wb)
@@ -506,7 +500,6 @@ def make_excel_total_payments(payments):
 
 
     today = jdatetime.date.today()
-    print(today)
     today = str(today)
     today = today.replace('-', '/')
     ws.write(row_num, 3, f'ارسال رسید اسناد دریافتنی در تاریخ {today}', even_style)
@@ -532,8 +525,6 @@ def make_excel_total_payments(payments):
         ]
         index += 1
         style.font.bold = False
-
-        print(row_num % 2)
         for col_num in range(len(exportables)):
             ws.write(row_num, col_num, exportables[col_num], [odd_style, even_style][index % 2])
 
@@ -543,12 +534,6 @@ def make_excel_total_payments(payments):
     ws.write(row_num, 4, sum)
 
     ws.cols_right_to_left = True
-    # wb.save('python_excel_test.xls')
-    # print(wb)
-    # print('file: ', wb)
-    # sio = io.BytesIO()
-    # wb.save(sio)
-    # print(sio)
     return wb
 
 
@@ -649,7 +634,6 @@ def testimage(request):
     files = False
     if request.method == 'POST':
         files = request.FILES.getlist('image')
-        print(f'files: {files} and paymentis: {payment}')
         if form.is_valid():
             for f in files:
                 img = models.PaymentFiles(image=f, payment=payment)

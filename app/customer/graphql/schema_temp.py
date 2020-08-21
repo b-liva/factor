@@ -20,9 +20,6 @@ class Query(object):
     customers_count = graphene.Int()
 
     def resolve_all_customers(self, info, **kwargs):
-        print(info)
-        print(kwargs)
-        print(self)
         name = kwargs.get('name')
         if name is not None:
             return Customer.objects.filter(name__icontains=name)

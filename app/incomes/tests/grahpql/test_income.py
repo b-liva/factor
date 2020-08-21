@@ -63,7 +63,6 @@ class TestIncomes(GraphQLTestCase, CustomAPITestCase):
             'name': new_customer.name
         })
         json_response = json.loads(response.content)
-        print(json_response)
         incomes = json_response['data']['allIncomes']['edges']
         self.assertTrue('data' in json_response)
         self.assertEqual(len(incomes), 2)

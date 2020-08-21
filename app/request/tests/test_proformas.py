@@ -66,7 +66,6 @@ class PrivateProformaTest(CustomAPITestCase):
         """Test create proforma"""
         self.client.force_login(user=self.ex_user)
         res = self.client.get(reverse('pro_form'))
-        # print(res.context)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.context['message'], 'ثبت پیش فاکتور')
 
@@ -97,7 +96,6 @@ class PrivateProformaTest(CustomAPITestCase):
         self.proforma_payload.update({'req_id': req.pk})
         del(self.proforma_payload['exp_date_fa'])
         res = self.client.post(reverse('pro_form'), self.proforma_payload)
-        print(res)
         proforma = req.xpref_set.first()
         date_fa_str = self.proforma_payload['date_fa']
         exp_date_expected = jdatetime.datetime.strptime(date_fa_str, "%Y-%m-%d").date() + jdatetime.timedelta(7)

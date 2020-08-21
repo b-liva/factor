@@ -70,7 +70,6 @@ class TrackXpref(models.Model):
 
     def items(self):
         count = TrackXpref.objects.filter(number=self.number).count()
-        print(count)
         return count
 
 

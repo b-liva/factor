@@ -5,14 +5,11 @@ class HasPermOrIsOwner(BasePermission):
     message = "You have not enough perms..."
 
     def has_object_permission(self, request, view, instance, *args, **kwargs):
-        # print(args)
-        # print(kwargs)
         user_obj = request.user
         colleague = None
         permissions = None
         if 'colleague' in kwargs:
             colleague = kwargs['colleague']
-            print(colleague)
         if permissions in kwargs:
             permissions = kwargs['permissions']
         if user_obj.is_superuser:
@@ -23,8 +20,6 @@ class HasPermOrIsOwner(BasePermission):
             else:
                 return colleague
         if instance is not None:
-            print(user_obj)
-            print(instance.owner)
             if user_obj == instance.owner:
                 if hasattr(instance, 'is_active'):
                     return instance.is_active

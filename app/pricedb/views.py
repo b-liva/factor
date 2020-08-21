@@ -55,11 +55,6 @@ def pricedb_form(request):
             motor.save()
             pk_list.append(motor.pk)
         motor_pks[kw] = pk_list
-    print(motor_pks)
-    # for kw, pks in motor_pks.items():
-    #     print(kw)
-    #     print(pks)
-    # print(motor_pks)
     return render(request, 'pricedb/form.html', {
         'motor_pks': motor_pks,
         'db_kw': db_kw,
@@ -79,7 +74,6 @@ def pricedb_insert(request):
         if key.startswith('pk_'):
             a = key.split('_')
             kv[a[1]] = request.POST[key]
-    # print(kv)
     for pk in kv:
         motor = MotorDB.objects.get(pk=pk)
         if not kv[pk]:
@@ -139,7 +133,6 @@ def pricedb_details(request, pricedb_pk):
     db_speed = [1000, 1500, 3000]
     priceset = PriceDb.objects.get(pk=pricedb_pk)
     prices = priceset.motordb_set.all().order_by('pk')
-    # print(prices)
     list = []
     for pr in prices:
         list.append(pr.prime_cost)
@@ -151,7 +144,6 @@ def pricedb_details(request, pricedb_pk):
             price_list.append(list[count])
             count += 1
         final[kw] = price_list
-    print(final)
     return render(request, 'pricedb/details.html', {
         'price_list': final,
         'price_set': priceset,

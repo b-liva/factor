@@ -41,7 +41,6 @@ class IncomeModelFormMutation(DjangoModelFormMutation):
     @login_required
     def get_form_kwargs(cls, root, info, **input):
         owner = info.context.user
-        # print('this is the owner from vue client: ', owner, owner.is_authenticated)
         input['owner'] = str(owner.pk)
         attrs = ['customer', 'type']
         input = graphql_utils.from_globad_bulk(attrs, input)
@@ -51,7 +50,6 @@ class IncomeModelFormMutation(DjangoModelFormMutation):
         if global_id:
             node_type, pk = from_global_id(global_id)
             instance = cls._meta.model._default_manager.get(pk=pk)
-            print('nn: ', instance)
             kwargs["instance"] = instance
             kwargs['data']['owner'] = str(instance.owner.pk)
 
@@ -86,14 +84,11 @@ class IncomeRowModelFormMutation(DjangoModelFormMutation):
         proforma_assigns = proforma.incomerow_set.aggregate(sum=Sum('amount'))
         if proforma_assigns['sum'] is None:
             proforma_assigns['sum'] = 0
-        print(proforma_assigns)
         income_assings = income.incomerow_set.aggregate(sum=Sum('amount'))
         if income_assings['sum'] is None:
             income_assings['sum'] = 0
         remained_income = income.amount - income_assings['sum']
-        print(remained_income)
         proforma_remained = proforma.total_proforma_price_vat()['price_vat'] - proforma_assigns['sum']
-        print(proforma_remained)
 
         if amount > remained_income:
             raise GraphQLError('مبلغ بزرگتر از مانده دریافتی')

@@ -134,21 +134,6 @@ class PrivateRequestTests(CustomAPITestCase):
         self.assertEqual(res.context['request'].number, req.number)
         self.assertEqual(len(res.context['reqspecs']), req.reqspec_set.count())
 
-    def test_retrieve_request_list(self):
-        """Test private list requests: superuser sees all, experts sees themselves"""
-        req1 = self.sample_request(owner=self.user, number=1324580)
-        req2 = self.sample_request(owner=self.user, number=132458)
-        # todo: This route is not being used.
-        self.client.force_login(user=self.ex_user)
-        req3 = self.sample_request(owner=self.ex_user, number=13245)
-        res = self.client.get(reverse('request_index'))
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.context['all_requests']), 1)
-
-        self.client.force_login(user=self.superuser)
-        superuser_res = self.client.get(reverse('request_index'))
-        self.assertEqual(superuser_res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(superuser_res.context['all_requests']), 4)
 
     def test_retrieve_request_report_page_needs_permission(self):
         """Test retrieving request list needs permission"""

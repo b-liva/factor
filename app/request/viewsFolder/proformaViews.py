@@ -747,7 +747,6 @@ def find_no_price_by_id(request):
     } for rspec in rspecs]
 
     # Similar specs
-    print(len(requests))
     context = {
         'rs': pk,
         'requests': requests,
@@ -897,15 +896,11 @@ def pref_details_backup(request, ypref_pk):
 
     prof_images = pref.proffiles_set.all()
     prefspecs = pref.prefspec_set.all()
-    print('pref and specs found')
-    print(f'pk={pref.pk} - number={pref.number}')
-    print(f'specs: {prefspecs}')
     i = 0
     for prefspec in prefspecs:
         kw = prefspec.kw
         speed = prefspec.rpm
         price = MotorDB.objects.filter(kw=kw).filter(speed=speed).last()
-        print(f'price is exactly: {price} with type: {type(price)}')
         proforma_total += prefspec.qty * prefspec.price
         if hasattr(price, 'prime_cost'):
             sales_total += prefspec.qty * price.prime_cost
@@ -1052,7 +1047,7 @@ def delete_proforma_no_prefspec(request, ypref_pk):
         if prefspecs.count() == 0:
             prof.delete()
     except:
-        print('h03')
+        print('error')
 
         return redirect('pref_index')
     return redirect('pref_index')
@@ -1112,8 +1107,6 @@ def pro_form(request):
             # make a list of specs for this proforma
             req = proforma.req_id
             specs_set = req.reqspec_set.filter(finished=False, is_active=True)
-            # print(f'request is: {req}')
-            # print(f'specs: {specs_set}')
 
             for spec in specs_set:
                 form = forms.ProfSpecForm()
@@ -1130,7 +1123,7 @@ def pro_form(request):
                     proforma.prefspec_set.all().delete()
                     proforma.delete()
                     messages.error(request, 'اطلاعات سرعت صحیح نیست.')
-                    return redirect('reqspec_edit_form', req_pk=req.pk, yreqSpec_pk=spec.pk)
+                    return redirect('reqspec_edit_form', request_pk=req.pk, yreqSpec_pk=spec.pk)
                 spec_item.voltage = spec.voltage
                 spec_item.ip = spec.ip
                 spec_item.im = spec.im
@@ -1349,10 +1342,6 @@ def pref_edit2(request, ypref_pk):
     # form = forms.ProformaForm(request.POST or None, request.FILES or None)
     img_form = proforma_forms.ProfFileForm(request.POST, request.FILES)
     files = request.FILES.getlist('image')
-    # fv = form.is_valid()
-    # fvi = img_form.is_valid()
-    # print(f'fv is: {fv}')
-    # print(f'fvi is: {fvi}')
     if form.is_valid() and img_form.is_valid():
         prof_item = form.save(commit=False)
         # prof_item.owner = request.user
@@ -1414,7 +1403,6 @@ def pref_insert(request):
     for i in spec_ids:
         j = int(i)
         print(str(i) + ':' + str(spec_prices[x]))
-        # r = PrefSpec.objects.filter(pk=spec_ids[x])
         spec = ReqSpec.objects.filter(is_active=True).get(pk=j)
 
         pref_spec = PrefSpec()
@@ -1422,8 +1410,6 @@ def pref_insert(request):
         pref_spec.price = 0
         pref_spec.price = spec_prices[x]
 
-        # if spec_prices[x] == '':
-        # else:
         pref_spec.kw = spec.kw
         pref_spec.qty = spec.qty
         pref_spec.rpm = spec.rpm
@@ -1696,7 +1682,6 @@ def pfcost(request, ypref_pk):
         messages.add_message(request, level=20, message='خطا')
         return redirect('errorpage')
     costs = api_req.json()['response']
-    print(api_req.status_code)
     results = list()
     no_cost = list()
     added = False

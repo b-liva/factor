@@ -18,34 +18,31 @@ urlpatterns = [
     path('fsearch3', request.views2.fsearch3, name='fsearch3'),
     path('request-report', request.views2.req_report, name='req_report'),
     path('request_report_cc', request.views2.request_report_cc, name='request_report_cc'),
-
     path('find', request.views2.request_find, name='request_find'),
+    path('reqSpec/index', request.reqSpecViews.reqspec_index, name='reqSpec_index'),
+    path('index-no-summary', request.reqSpecViews.reqspec_index_no_summary, name='reqspec_index_no_summary'),
+    path("vue", TemplateView.as_view(template_name="requests/admin_jemco/yrequest/vue/index_test.html"), name="req_app", ),
+
+    path('reqspec_index_no_summary_no_routine', request.reqSpecViews.reqspec_index_no_summary_no_routine,
+         name='reqspec_index_no_summary_no_routine'),
+    path('reqspec_index_with_summary', request.reqSpecViews.reqspec_index_with_summary,
+         name='reqspec_index_with_summary'),
+    path('reqspec_index_IE', request.reqSpecViews.reqspec_index_IE, name='reqspec_index_IE'),
+    path('assign-code-motor', request.reqSpecViews.assign_code_to_motor, name='assign_code_to_motor'),
     path('<int:request_pk>/', include([
         path('', request.views2.request_read, name='request_details'),
-        path('read-vue', request.views2.read_vue, name='read_vue'),
         path('delete', request.views2.request_delete, name='request_delete'),
-        path('edit', request.views2.request_edit, name='request_edit'),
         path('editForm', request.views2.request_edit_form, name='request_edit_form'),
         path('finish', request.views2.finish, name='request_finish'),
         path('req-to-follow', request.views2.req_to_follow, name='req_to_follow'),
+        path('reqSpec/form', reqSpecViews.reqspec_form, name='reqSpec_form'),
+        path('spec_form', reqSpecViews.spec_form, name='spec_form'),
+        path('part_form', reqSpecViews.part_form, name='part_form'),
+        path('reqSpec/<int:yreqSpec_pk>/', include([
+            path('delete', request.reqSpecViews.reqspec_delete, name='reqSpec_delete'),
+            path('edit', request.reqSpecViews.reqspec_edit, name='reqSpec_edit'),
+            path('editForm', request.reqSpecViews.reqspec_edit_form, name='reqspec_edit_form'),
+            path('copy', request.reqSpecViews.reqspec_copy, name='reqspec_copy'),
+        ])),
     ])),
-
-    path('<int:req_pk>/reqSpec/form', reqSpecViews.reqspec_form, name='reqSpec_form'),
-    path('<int:req_pk>/spec_form', reqSpecViews.spec_form, name='spec_form'),
-    path('reqSpec/index', request.reqSpecViews.reqspec_index, name='reqSpec_index'),
-    path('index-no-summary', request.reqSpecViews.reqspec_index_no_summary, name='reqspec_index_no_summary'),
-    path('reqspec_index_no_summary_no_routine', request.reqSpecViews.reqspec_index_no_summary_no_routine, name='reqspec_index_no_summary_no_routine'),
-    path('reqspec_index_with_summary', request.reqSpecViews.reqspec_index_with_summary, name='reqspec_index_with_summary'),
-    path('reqspec_index_IE', request.reqSpecViews.reqspec_index_IE, name='reqspec_index_IE'),
-    path('assign-code-motor', request.reqSpecViews.assign_code_to_motor, name='assign_code_to_motor'),
-    path('<int:req_pk>/reqSpec/<int:yreqSpec_pk>/', include([
-        path('delete', request.reqSpecViews.reqspec_delete, name='reqSpec_delete'),
-        path('edit', request.reqSpecViews.reqspec_edit, name='reqSpec_edit'),
-        path('editForm', request.reqSpecViews.reqspec_edit_form, name='reqspec_edit_form'),
-        path('copy', request.reqSpecViews.reqspec_copy, name='reqspec_copy'),
-    ])),
-
-    path('<int:req_pk>/part_form', reqSpecViews.part_form, name='part_form'),
-    path("vue", TemplateView.as_view(template_name="requests/admin_jemco/yrequest/vue/index_test.html"), name="req_app", ),
-
 ]

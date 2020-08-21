@@ -118,7 +118,6 @@ def check_orders(request):
     ereqs = ReqEntered.objects.filter(is_entered=False)
     for e in ereqs:
         if Requests.objects.filter(is_active=True).filter(number=e.number_automation):
-            print(f"order No: {e.number_automation}: is entered.")
             e.is_entered = True
             e.save()
         else:
@@ -223,7 +222,6 @@ def payment_assign(request):
 @login_required
 def motor_codes_index(request):
     all_codes = TrackItemsCode.objects.filter(green_flag=True, code__gt=1000000)
-    print(all_codes.count())
     context = {
         'all_codes': all_codes,
     }
@@ -234,7 +232,6 @@ def motor_codes_index(request):
 @login_required
 def motor_codes_check(request):
     all_codes = TrackItemsCode.objects.all()
-    print(all_codes.count())
     keywords = ['وات', 'موتور', 'kw', 'rpm']
     for code in all_codes:
         if any(keyword in code.details for keyword in keywords):
@@ -250,16 +247,13 @@ def motor_codes_process(request):
     for code in green_codes:
         a = code.details.split('.')
         for key, x in enumerate(a):
-            print(x)
             y = x.split(' ')
             if len(y) > 1:
-                print(y)
                 del (a[key])
                 for i in y:
                     a.append(i)
             y = x.split('-')
             if len(y) > 1:
-                print(y)
                 del (a[key])
                 for i in y:
                     a.append(i)
@@ -657,7 +651,6 @@ def perms_not_entered(request):
 def update_perms(statistics):
     perms = TadvinTotal.objects.filter(doctype_code=62, entered=False)
     distinct_perms = perms.values('doc_number').distinct().values('doc_number', 'year', 'date', 'prof_number')
-    print(statistics, perms.count(), distinct_perms.count())
 
     newly_added_perms = []
     index = 1
@@ -665,7 +658,6 @@ def update_perms(statistics):
         pref = Xpref.objects.filter(number_td=d['prof_number'])
         if pref.exists():
             p = pref.last()
-            print(d, p)
             perm = Perm.objects.create(
                 proforma=p,
                 number=d['doc_number'],

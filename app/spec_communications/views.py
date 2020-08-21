@@ -13,7 +13,6 @@ def speccm_vueadd(request):
         form_data = {}
         form_data['spec'] = data['spec']
         form_data['text'] = data['text']
-        print(f"{data['text']} for sped {data['spec']}")
         form = SpecCmForm(data)
         if form.is_valid():
             speccm_item = form.save(commit=False)

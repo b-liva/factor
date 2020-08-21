@@ -63,7 +63,6 @@ class Query(ObjectType):
     all_project_types = DjangoFilterConnectionField(ProjectTypeType)
 
     def resolve_project_type(self, info, **kwargs):
-        print(info)
         if 'id' in kwargs:
             id = kwargs.get('id')
             return ProjectType.objects.get(pk=id)
@@ -73,7 +72,6 @@ class Query(ObjectType):
         return None
 
     def resolve_all_project_types(self, info, **kwargs):
-        print(info)
         return ProjectType.objects.all()
 
     rpm_type = relay.Node.Field(RpmTypeNode)

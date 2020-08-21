@@ -11,9 +11,6 @@ def permission_required(perm: Union[Enum, Iterable[Enum]]):
         @wraps(func)
         @context(func)
         def wrapper(context, *args, **kwargs):
-            print(context)
-            print(args)
-            print(kwargs)
             is_owner_perm = is_colleague_perm = False
             obj = None
             if len(args) > 0:

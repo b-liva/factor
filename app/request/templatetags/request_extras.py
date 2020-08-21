@@ -49,9 +49,7 @@ def total_received():
 def is_sent(reqspec):
     sent = False
     pref_set = reqspec.prefspec_set.filter(xpref_id__is_active=True)
-    # print(f"pref specs: {pref_set}")
     for p in pref_set:
-        print(f"pref: {p}")
         if p.sent:
             sent = True
     return sent
@@ -197,10 +195,8 @@ def daily_kilowatt(t):
         'req_id__date_fa').annotate(
         request_sum=Sum(F('kw') * F('qty'), output_field=FloatField())).order_by(
         'req_id__date_fa').reverse()
-    print(f"avg: {daily_kwatt.count()}")
     daily_avg = daily_kwatt.distinct().aggregate(
         request_avg=Avg(F('kw') * F('qty'), output_field=FloatField()))
-    # print(f"daily_kilowatt: {daily_kwatt['request_sum']}")
     return daily_avg['request_avg']
 
 
@@ -364,7 +360,6 @@ def perm_days_new(proforma):
         'warning_class': warning_class,
         'delay': diff.days,
     }
-    print(context)
     return context
 
 
@@ -380,7 +375,6 @@ def similar_customer(code):
 @register.simple_tag()
 def proforma_from_requests_with_perms(req):
     proformas = Xpref.objects.filter(is_active=True, req_id=req, perm_prof__isnull=False)
-    print(proformas.count())
     status = 'element_enabled' if proformas.exists() else 'element-disabled'
     context = {
         'proformas': proformas,
@@ -391,7 +385,6 @@ def proforma_from_requests_with_perms(req):
 
 @register.simple_tag()
 def payments_from_proformas(proformas):
-    print(proformas)
     pays = Payment.objects.filter(is_active=True, xpref_id__in=proformas)
     status = 'element_enabled' if pays.exists() else 'element-disabled'
     context = {

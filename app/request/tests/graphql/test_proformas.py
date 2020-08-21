@@ -188,7 +188,6 @@ class TestProforma(GraphQLTestCase, CustomAPITestCase):
 
         response = self.query(query, variables=variables)
         json_response = json.loads(response.content)
-        print('Not Found: ', json_response)
 
         self.assertResponseHasErrors(response)
         self.assertIsNone(json_response['data']['proforma'])

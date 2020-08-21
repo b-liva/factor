@@ -187,7 +187,6 @@ class ProformaForm(forms.ModelForm):
 class ProformaEditForm(forms.ModelForm):
 
     def __init__(self, current_user, *args, **kwargs):
-        print(f'current user is: {current_user}')
         super(ProformaEditForm, self).__init__(*args, **kwargs)
 
         list = ['verified', 'perm']

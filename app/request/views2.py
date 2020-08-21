@@ -95,7 +95,7 @@ def req_form_copy(request):
                 s.req_id = master_req
                 s.save()
             messages.error(request, f"درخواست شماره {master_req.number} از درخواست شماره {temp_number} کپی گردید.")
-            return redirect('spec_form', req_pk=master_req.pk)
+            return redirect('spec_form', request_pk=master_req.pk)
 
     if request.method == 'GET':
         form = RequestCopyForm()
@@ -132,7 +132,7 @@ def req_form(request):
             for f in files:
                 file_instance = models.RequestFiles(image=f, req=req_item)
                 file_instance.save()
-            return redirect('spec_form', req_pk=req_item.pk)
+            return redirect('spec_form', request_pk=req_item.pk)
     else:
         form = forms.RequestFrom()
         file_instance = forms.RequestFileForm()
@@ -434,7 +434,7 @@ def request_insert(request):
             req.owner = request.user
             req.pub_date = timezone.datetime.now()
             req.save()
-            return redirect('reqSpec_form', req_pk=req.pk)
+            return redirect('reqSpec_form', request_pk=req.pk)
         else:
             return render(request, 'requests/admin_jemco/yrequest/form.html', {'error': 'some field is empty'})
     return render(request, 'requests/admin_jemco/yrequest/form.html')
@@ -610,99 +610,6 @@ def request_read(request, request_pk):
 
 
 @login_required
-def read_vue(request, request_pk):
-    if not Requests.objects.filter(pk=request_pk) and not request.user.is_superuser:
-        messages.error(request, 'صفحه مورد نظر یافت نشد')
-        return redirect('errorpage')
-
-    req = Requests.objects.get(pk=request_pk)
-    colleagues = req.colleagues.all()
-    colleague = False
-    if request.user in colleagues:
-        colleague = True
-
-    can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_requests', req, colleague)
-    if not can_read:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
-    if not request.user.is_superuser:
-        req.edited_by_customer = False
-        req.save()
-
-    reqspecs = req.reqspec_set.all()
-    req_files = req.requestfiles_set.all()
-    req_imgs = []
-    req_pdfs = []
-    req_words = []
-    req_other_files = []
-    files = {}
-    nested_files = nd.nested_dict()
-    # default_nested_files = dd.default_factory()
-
-    xfiles = {
-        'img': {},
-        'pdf': {},
-        'doc': {},
-        'other': {},
-    }
-
-    for f in req_files:
-        if str(f.image).lower().endswith('.jpg') or str(f.image).lower().endswith('.jpeg') or str(
-                f.image).lower().endswith('.png'):
-            req_imgs.append(f)
-            nested_files['ximg'][f.pk]['url'] = f.image.url
-            nested_files['ximg'][f.pk]['name'] = f.image.name.split('/')[-1]
-            # nested_files['img']['name'] = f.image.name.split('/')
-            xfiles['img'][f.pk] = {}
-            xfiles['img'][f.pk]['url'] = f.image.url
-            xfiles['img'][f.pk]['name'] = f.image.name.split('/')[-1]
-        elif str(f.image).lower().endswith('.pdf'):
-            req_pdfs.append(f)
-            nested_files['pdf']['url'] = f.image.url
-            nested_files['pdf']['name'] = f.image.name.split('/')[-1]
-            xfiles['pdf'][f.pk] = {}
-            xfiles['pdf'][f.pk]['url'] = f.image.url
-            xfiles['pdf'][f.pk]['name'] = f.image.name.split('/')[-1]
-
-        elif str(f.image).lower().endswith('.doc'):
-            req_words.append(f)
-            xfiles['doc'][f.pk] = {}
-            xfiles['doc'][f.pk]['url'] = f.image.url
-            xfiles['doc'][f.pk]['name'] = f.image.name.split('/')[-1]
-        else:
-            req_other_files.append(f)
-            xfiles['other'][f.pk] = {}
-            xfiles['other'][f.pk]['url'] = f.image.url
-            xfiles['other'][f.pk]['name'] = f.image.name.split('/')[-1]
-
-    files['req_imgs'] = req_imgs
-    files['req_pdfs'] = req_pdfs
-    files['req_words'] = req_words
-    files['req_other_files'] = req_other_files
-
-    img_names = {}
-    for r in req_files:
-        name = r.image.name
-        newname = name.split('/')
-        las = newname[-1]
-        img_names[r.pk] = las
-
-    kw = total_kw(request_pk)
-    context = {
-        'request': req,
-        'reqspecs': reqspecs,
-        'req_images': req_files,
-        'total_kw': kw,
-        'files': files,
-        'nested_files': nested_files,
-        'xfiles': xfiles
-    }
-    return render(request, 'requests/admin_jemco/yrequest/vue/details.html', context)
-    # return JsonResponse(context, safe=False)
-
-
-@login_required
 def request_delete(request, request_pk):
     if not Requests.objects.filter(is_active=True).filter(pk=request_pk):
         messages.error(request, 'Nothing found')
@@ -730,14 +637,6 @@ def request_delete(request, request_pk):
         req.reqspec_set.update(is_active=False)
 
     return redirect('req_report')
-
-
-@login_required
-def request_edit(request, request_pk):
-    if not Requests.objects.filter(pk=request_pk):
-        messages.error(request, 'Nothing found')
-        return redirect('errorpage')
-    return HttpResponse('request Edit' + str(request_pk))
 
 
 @login_required

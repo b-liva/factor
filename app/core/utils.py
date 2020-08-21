@@ -26,9 +26,7 @@ class DeletePermissionCheck:
             obj = input.model._default_manager.get(
                 pk=from_global_id(input.id)[1]
             )
-            print(obj, hasattr(obj, 'number'))
             obj.delete()
-            print('obj deleted.')
             if hasattr(obj, 'number'):
                 number = obj.number
                 msg = f"{input.label} شماره {obj.number} با موفقیت حذف گردید."

@@ -38,7 +38,7 @@
                         <ul class="dropdown-menu" role="menu">
                             <li>
                                 {% if perms.request.sale_expert %}
-                                    <a href="{% url 'spec_form' req_pk=request.pk %}">
+                                    <a href="{% url 'spec_form' request_pk=request.pk %}">
                                         <i class="fa fa-plus green"></i> افزودن ردیف
                                     </a>
                                 {% endif %}

@@ -14,7 +14,8 @@ from request.forms import forms
 
 # Create your views here.
 @login_required
-def reqspec_form(request, req_pk):
+def reqspec_form(request, request_pk):
+    req_pk = request_pk
     if not Requests.objects.filter(is_active=True).filter(pk=req_pk):
         messages.error(request, 'No such Request')
         return redirect('errorpage')
@@ -115,7 +116,6 @@ def reqspec_index_IE(request):
 
 @login_required
 def assign_code_to_motor(request):
-    print('hhhhhhh')
     imb3 = IMType.objects.get(title='IMB3')
     imb35 = IMType.objects.get(title='IMB35')
     ip55 = IPType.objects.get(title="IP55")
@@ -154,7 +154,8 @@ def assign_code_to_motor(request):
 
 
 @login_required
-def reqspec_delete(request, yreqSpec_pk, req_pk):
+def reqspec_delete(request, yreqSpec_pk, request_pk):
+    req_pk = request_pk
     if not ReqSpec.objects.filter(is_active=True).filter(pk=yreqSpec_pk):
         messages.error(request, 'No such Spec.')
         return redirect('errorpage')
@@ -179,11 +180,12 @@ def reqspec_delete(request, yreqSpec_pk, req_pk):
         messages.add_message(request, level=20, message=msg)
 
         reqspec.delete()
-    return redirect('spec_form', req_pk=req_pk)
+    return redirect('spec_form', request_pk=request_pk)
 
 
 @login_required
-def reqspec_edit(request, yreqSpec_pk, req_pk):
+def reqspec_edit(request, yreqSpec_pk, request_pk):
+    req_pk = request_pk
     if not Requests.objects.filter(is_active=True).filter(pk=req_pk) or not ReqSpec.objects.filter(
             is_active=True).filter(pk=yreqSpec_pk):
         messages.error(request, 'no request or specs')
@@ -205,7 +207,8 @@ def reqspec_edit(request, yreqSpec_pk, req_pk):
 
 
 @login_required
-def spec_form(request, req_pk):
+def spec_form(request, request_pk):
+    req_pk = request_pk
     if not Requests.objects.get(pk=req_pk):
         messages.error(request, 'درخواست مورد نظر یافت نشد.')
         return redirect('errorpage')
@@ -239,7 +242,7 @@ def spec_form(request, req_pk):
 
             spec.save()
             messages.add_message(request, level=20, message=f'یک ردیف به درخواست شماره {req.number} اضافه شد.')
-            return redirect('spec_form', req_pk=req_pk)
+            return redirect('spec_form', request_pk=request_pk)
     else:
         form = forms.SpecAddForm()
 
@@ -258,7 +261,8 @@ def spec_form(request, req_pk):
 
 
 @login_required
-def part_form(request, req_pk):
+def part_form(request, request_pk):
+    req_pk = request_pk
     if not Requests.objects.get(pk=req_pk):
         messages.error(request, 'درخواست مورد نظر یافت نشد.')
         return redirect('errorpage')
@@ -277,7 +281,7 @@ def part_form(request, req_pk):
             part.owner = request.user
             part.save()
             messages.add_message(request, level=20, message=f'یک ردیف به درخواست شماره {req.number} اضافه شد.')
-            return redirect('part_form', req_pk=req_pk)
+            return redirect('part_form', request_pk=request_pk)
         else:
             print('form not valid(part)')
     else:
@@ -296,7 +300,8 @@ def part_form(request, req_pk):
 
 
 @login_required
-def reqspec_edit_form(request, yreqSpec_pk, req_pk):
+def reqspec_edit_form(request, yreqSpec_pk, request_pk):
+    req_pk = request_pk
     if not Requests.objects.filter(is_active=True).filter(pk=req_pk) or not ReqSpec.objects.filter(
             is_active=True).filter(pk=yreqSpec_pk):
         messages.error(request, 'no request or specs')
@@ -339,7 +344,7 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
             spec.save()
             # form = forms.SpecForm()
             messages.add_message(request, level=20, message='جزئیات درخواست اصلاح شد')
-            return redirect('spec_form', req_pk=req.pk)
+            return redirect('spec_form', request_pk=req.pk)
 
     context = {
         'req_obj': req,
@@ -351,9 +356,9 @@ def reqspec_edit_form(request, yreqSpec_pk, req_pk):
 
 
 @login_required
-def reqspec_copy(request, yreqSpec_pk, req_pk):
+def reqspec_copy(request, yreqSpec_pk, request_pk):
     spec = ReqSpec.objects.get(pk=yreqSpec_pk)
     spec.pk = None
     spec.save()
     messages.error(request, 'ردیف با موفقیت کپی شد.')
-    return redirect('reqspec_edit_form', yreqSpec_pk=spec.pk, req_pk=spec.req_id.pk)
+    return redirect('reqspec_edit_form', yreqSpec_pk=spec.pk, request_pk=spec.req_id.pk)

@@ -1,3 +1,4 @@
+import os
 from django.db.models.expressions import ExpressionWrapper
 from django.db.models.functions import Cast
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -32,7 +33,6 @@ def upload_location(instance, filename):
     if instance._meta.model_name == 'paymentfiles':
         id = instance.pay.id
         no = instance.pay.number
-    print(f'model name: {instance._meta.model_name}')
     return '%s/id%s_No%s/%s' % (instance._meta.model_name, id, no, filename)
 
 
@@ -600,7 +600,6 @@ class Perm(TimeStampedModel):
 
     def update_delays(self):
         remaining = self.qty_total() - self.qty_sent()
-        print('remaingin: ', remaining)
         if remaining == 0:
             date = change_date_format(self.date, '/')
             self.date_complete = date

@@ -68,7 +68,6 @@ class RequestTestCases(GraphQLTestCase, CustomAPITestCase):
         '''
         response = self.query(query)
         json_response = json.loads(response.content)
-        print(json_response)
         payments = json_response['data']['allPayments']['edges']
         self.assertResponseNoErrors(response)
         self.assertEqual(len(payments), 1)

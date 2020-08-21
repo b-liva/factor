@@ -146,16 +146,11 @@ class UpdateCustomer(relay.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        print(root)
-        print(info)
-        print('input: ', input)
         try:
             customer_instance = get_object(Customer, input['id'])
-            print('customer instance: ', customer_instance, customer_instance.pk)
             input['customer']['id'] = input['id']
             if customer_instance:
                 form = CustomerModelform(input['customer'] or None, instance=customer_instance)
-                print('form is valid: ', form.is_valid(), form.errors)
                 updated_customer = form.save(commit=False)
                 updated_customer.save()
                 customer_data = input.get('customer')

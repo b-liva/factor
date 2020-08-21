@@ -67,23 +67,18 @@
                             {#                        <td>{{ spec.price }}</td>#}
                             <td>
 
-                                <a href="{% url 'reqspec_edit_form' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">
+                                <a href="{% url 'reqspec_edit_form' yreqSpec_pk=spec.pk request_pk=req_obj.pk %}">
                                     <button class="btn btn-warning btn-xs">
                                         <i class="fa fa-pencil"></i> ویرایش
                                     </button>
                                 </a>
-                                {#                                <a href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">#}
-                                {#                                    <button class="btn btn-danger btn-xs">#}
-                                {#                                        <i class="fa fa-trash"></i> حذف#}
-                                {#                                    </button>#}
-                                {#                                </a>#}
 
                                 <a class="btn btn-xs btn-danger"
-                                   href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">
+                                   href="{% url 'reqSpec_delete' yreqSpec_pk=spec.pk request_pk=req_obj.pk %}">
                                     <i class="fa fa-trash"></i>حذف
                                 </a>
                                 <a class="btn btn-xs btn-success"
-                                   href="{% url 'reqspec_copy' yreqSpec_pk=spec.pk req_pk=req_obj.pk %}">
+                                   href="{% url 'reqspec_copy' yreqSpec_pk=spec.pk request_pk=req_obj.pk %}">
                                     <i class="fa fa-copy"></i> کپی
                                 </a>
 
@@ -117,30 +112,15 @@
             <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
                 <div>
                     {% if show_part_form %}
-                        <a class="btn btn-xs btn-success" href="{% url 'spec_form' req_pk=req_obj.pk %}"><i class="fa fa-plus"></i> الکتروموتور</a>
+                        <a class="btn btn-xs btn-success" href="{% url 'spec_form' request_pk=req_obj.pk %}"><i class="fa fa-plus"></i> الکتروموتور</a>
                         {% else %}
-                        <a class="btn btn-xs btn-success" href="{% url 'part_form' req_pk=req_obj.pk %}"><i class="fa fa-plus"></i> قطعه</a>
+                        <a class="btn btn-xs btn-success" href="{% url 'part_form' request_pk=req_obj.pk %}"><i class="fa fa-plus"></i> قطعه</a>
                     {% endif %}
-                    {#                    <form method="POST" action="{% url 'spec_form' req_pk=req_obj.pk %}" enctype="multipart/form-data">#}
                     <div class="">
                         <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form.as_p }}
-                            {#                            <input class="btn btn-primary" type="submit" value="save and add another" name="done">#}
-                            {#                            <div class="col-md-4">#}
-                            {#                                {% for visible in form.visible_fields %}#}
-                            {#                                    {% if visible.name in list %}#}
-                            {#                                        {{ visible.name }}#}
-                            {#                                        {{ visible }}#}
-                            {#                                    {% endif %}#}
-                            {#                                {% endfor %}#}
-                            {#                            </div>#}
-                            {#                            <div class="col-md-4">#}
-                            {##}
-                            {#                            </div>#}
                             <button class="btn btn-primary" type="submit">ذخیره</button>
-                            {#                            <a class="btn btn-success" href="{% url 'request_index' %}">لیست درخواست ها</a>#}
-                            {#                            <a class="btn btn-success" href="{% url 'req_search' %}">لیست درخواست ها</a>#}
                             <a class="btn btn-success" href="{% url 'req_form' %}">درخواست جدید</a>
 
                         </form>

@@ -50,7 +50,7 @@ def req_form(request):
             for f in files:
                 file_instance = models.RequestFiles(image=f, req=req_item)
                 file_instance.save()
-            return redirect('spec_form', req_pk=req_item.pk)
+            return redirect('spec_form', request_pk=req_item.pk)
     else:
         form = forms.RequestFrom()
         file_instance = forms.RequestFileForm()
@@ -77,7 +77,7 @@ def request_insert(request):
             req.owner = request.user
             req.pub_date = timezone.datetime.now()
             req.save()
-            return redirect('reqSpec_form', req_pk=req.pk)
+            return redirect('reqSpec_form', request_pk=req.pk)
         else:
             return render(request, 'requests/admin_jemco/yrequest/form.html', {'error': 'some field is empty'})
     return render(request, 'requests/admin_jemco/yrequest/form.html')

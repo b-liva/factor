@@ -58,7 +58,6 @@ class IncomeNode(OwnQuerySet, DjangoObjectType):
 
     def resolve_cash(self, info, **kwargs):
         cash = ['حواله']
-        print(self.type.title, self.pk)
         if self.type.title in cash:
             return True
         return False

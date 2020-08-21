@@ -14,7 +14,7 @@
                     {% csrf_token %}
                     <button class="btn btn-sm btn-primary" type="submit">بله</button>
 {#                    <a class="btn btn-sm btn-danger" href="{% url 'request_index' %}">خیر</a>#}
-                    <a class="btn btn-sm btn-danger" href="{% url 'request_index' %}">خیر</a>
+                    <a class="btn btn-sm btn-danger" href="{% url 'req_report' %}">خیر</a>
                 </form>
             {% endif %}
             {% if fn == 'customer_del' %}
@@ -39,7 +39,7 @@
                 </form>
             {% endif %}
             {% if fn == 'reqspec_del' %}
-                <form action="{% url 'reqSpec_delete' req_pk=req_id yreqSpec_pk=reqspec_id %}" method="POST">
+                <form action="{% url 'reqSpec_delete' request_pk=req_id yreqSpec_pk=reqspec_id %}" method="POST">
                     {% csrf_token %}
                     <button class="btn btn-sm btn-primary" type="submit">بله</button>
                     <a class="btn btn-sm btn-danger" href="{% url 'request_details' request_pk=req_id %}">خیر</a>

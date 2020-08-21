@@ -80,7 +80,6 @@ class TendersScraper(object):
         term = requests.utils.quote('الکترو')
         term = requests.utils.quote(key)
         while pageno <= max_pages:
-            # print(f"term= {term} & pageNo= {pageno}")
             payload = f"term={term}&allGrpId=0&current={pageno}&status=2"
             headers = {
                 'content-type': "application/x-www-form-urlencoded",
@@ -121,15 +120,8 @@ class AriaTender(object):
         result = response.text
 
         soup = BeautifulSoup(result, 'html.parser')
-        # print(soup)
         links = soup.findAll('a')
-        # print(links)
-        # print(links)
-        # results = response.json()
-        # resinner = results['list']
-        # print(resinner)
         links = soup.select('div.Tender-Box-Div-Description-f a')
-        print(links)
         i = 1
         for link in links:
             tender = {}
@@ -137,9 +129,6 @@ class AriaTender(object):
             tender['href'] = href
             tender['title'] = link.text
             href = f'http://www.ariatender.com{href}'
-            # print(f'{i} -  {link.text} | {href}')
             tenders.append(tender)
             i += 1
-
-        print(tenders)
         return tenders

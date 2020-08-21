@@ -87,9 +87,6 @@ class CreateProformaSpecBatch(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, proforma_id, specs_list):
         proforma_spec_list = []
         proforma = Xpref.objects.get(pk=from_global_id(proforma_id)[1])
-        print('proforma id:', proforma_id)
-        print('this is proforma:', proforma)
-        print('spec list: ', specs_list)
 
         proforma.prefspec_set.all().delete()
         for spec in specs_list:
