@@ -25,6 +25,7 @@ from customer.models import Customer
 import request.templatetags.functions as funcs
 from request.forms import forms, search
 from core.access_control.permission_check import OrderProxy, AccessControl, ProformaProxy
+from core.access_control.decorator import check_perm
 import nested_dict as nd
 import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -42,6 +43,7 @@ User = get_user_model()
 
 # Create your views here.
 @login_required
+@check_perm('request.add_requests', OrderProxy)
 def request_form(request):
     acl_obj = ProformaProxy(request.user, 'request.add_requests')
     is_allowed = AccessControl(acl_obj).allow()
@@ -119,14 +121,8 @@ def req_form_copy(request):
 
 
 @login_required
+@check_perm('request.add_requests', OrderProxy)
 def req_form(request):
-    acl_obj = OrderProxy(request.user, 'request.add_requests')
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_requests')
-    if not is_allowed:
-        messages.error(request, 'عدم دستری کافی!')
-        return redirect('errorpage')
-
     file_instance = forms.RequestFileForm()
     if request.method == 'POST':
         form = forms.RequestFrom(request.POST or None, request.FILES or None)
@@ -523,24 +519,9 @@ def request_find(request):
 
 
 @login_required
+@check_perm('request.read_requests', OrderProxy)
 def request_read(request, request_pk):
-
-    if not Requests.objects.filter(is_active=True).filter(pk=request_pk) and not request.user.is_superuser:
-        messages.error(request, 'صفحه مورد نظر یافت نشد')
-        return redirect('errorpage')
-
-    try:
-        req = Requests.objects.get(pk=request_pk)
-    except:
-        messages.error(request, 'درخواست مورد نظر یافت نشد.')
-        return redirect('errorpage')
-    acl_obj = OrderProxy(request.user, 'request.read_requests', req)
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.read_requests', req, colleague)
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
+    req = Requests.objects.get(pk=request_pk)
     if not request.user.is_superuser:
         req.edited_by_customer = False
         req.save()
@@ -627,17 +608,9 @@ def request_read(request, request_pk):
 
 
 @login_required
+@check_perm('request.delete_requests', OrderProxy)
 def request_delete(request, request_pk):
-    if not Requests.objects.filter(is_active=True).filter(pk=request_pk):
-        messages.error(request, 'Nothing found')
-        return redirect('errorpage')
     req = Requests.objects.filter(is_active=True).get(pk=request_pk)
-    acl_obj = OrderProxy(request.user, 'request.delete_requests', req)
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.delete_requests', req)
-    if not is_allowed:
-        messages.error(request, 'No access')
-        return redirect('errorpage')
     if request.method == 'GET':
         context = {
             'id': req.pk,
@@ -659,6 +632,7 @@ def request_delete(request, request_pk):
 
 
 @login_required
+@check_perm('request.change_requests', OrderProxy)
 def request_edit_form(request, request_pk):
     # 1- check for permissions
     # 2 - find request and related images
@@ -667,21 +641,8 @@ def request_edit_form(request, request_pk):
     # 5 - get the list of files from request
     # 6 - if form is valid the save request and its related images
     # 7 - render the template file
-    if not Requests.objects.filter(is_active=True, pk=request_pk):
-        messages.error(request, 'Nothin found')
-        return redirect('errorpage')
 
     req = Requests.objects.filter(is_active=True).get(pk=request_pk)
-    # colleagues = req.colleagues.all()
-    # colleague = False
-    # if request.user in colleagues:
-    #     colleague = True
-    acl_obj = OrderProxy(request.user, 'request.change_requests', req)
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.change_requests', req, colleague=colleague)
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
 
     req_images = req.requestfiles_set.all()
     img_names = {}
@@ -777,20 +738,12 @@ class LazyEncoder(DjangoJSONEncoder):
 
 
 @login_required
+@check_perm('request.index_requests', OrderProxy)
 def req_report(request):
-    order_acl = OrderProxy(request.user, 'request.index_requests')
-    acl_obj = AccessControl(order_acl)
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-    filters = {}
     req_list = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
+    acl_obj = OrderProxy(user=request.user)
     req_list = req_list.filter(acl_obj.show())
-    # if not request.user.is_superuser:
-    #     # req_list = req_list.filter(owner=request.user)
-    #     req_list = req_list.filter(Q(owner=request.user) | Q(colleagues=request.user))
+
     req_filter = RequestFilter(request.GET, queryset=req_list)
     if not request.method == 'POST':
         if 'search-persons-post' in request.session:

@@ -1,7 +1,7 @@
 from django.db.models import Q
 
 from core.models import UserRelation
-from request.models import Xpref
+from request.models import Xpref, Requests, ReqSpec
 
 
 class AccessControl:
@@ -32,13 +32,16 @@ class AccessControl:
 
 
 class OrderProxy(AccessControl):
+    model = Requests
+    lookup = 'request_pk'
 
     def allow(self):
         if self.user.is_superuser:
             return True
         if not self.obj:
             return self.user.has_perm(self.permission)
-        if self.user == self.obj.owner or self.user in self.obj.colleagues.all():
+        users_list = self.get_related_users()
+        if self.obj.owner in users_list or len(set(users_list).intersection(set(self.obj.colleagues.all()))) > 0:
             return self.user.has_perm(self.permission)
 
         return False
@@ -47,6 +50,30 @@ class OrderProxy(AccessControl):
         if self.user.is_superuser:
             return Q()
         users_list = self.get_related_users()
+        print('user; ', users_list)
+        return Q(owner__in=users_list) | Q(colleagues__in=users_list)
+
+
+class SpecProxy(AccessControl):
+    model = ReqSpec
+    lookup = 'yreqSpec_pk'
+
+    def allow(self):
+        if self.user.is_superuser:
+            return True
+        if not self.obj:
+            return self.user.has_perm(self.permission)
+        users_list = self.get_related_users()
+        if self.obj.req_id.owner in users_list or len(set(users_list).intersection(set(self.obj.req_id.colleagues.all()))) > 0:
+            return self.user.has_perm(self.permission)
+
+        return False
+
+    def show(self):
+        if self.user.is_superuser:
+            return Q()
+        users_list = self.get_related_users()
+        print('user; ', users_list)
         return Q(owner__in=users_list) | Q(colleagues__in=users_list)
 
 

@@ -10,41 +10,31 @@ from django.contrib.auth.decorators import login_required
 import request.templatetags.functions as funcs
 from django.contrib import messages
 from request.forms import forms
+from core.access_control.decorator import check_perm
+from core.access_control.permission_check import OrderProxy, SpecProxy
 
 
 # Create your views here.
 @login_required
+@check_perm('request.add_reqspec', OrderProxy)
 def reqspec_form(request, request_pk):
     req_pk = request_pk
-    if not Requests.objects.filter(is_active=True).filter(pk=req_pk):
-        messages.error(request, 'No such Request')
-        return redirect('errorpage')
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec')
-    if not can_add:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
+
     req_obj = Requests.objects.filter(is_active=True).get(pk=req_pk)
     specs = req_obj.reqspec_set.filter(is_active=True)
     return render(request, 'requests/admin_jemco/yreqspec/form.html', {'req_obj': req_obj, 'specs': specs})
 
 
 @login_required
+@check_perm('request.index_reqspecs', SpecProxy)
 def reqspec_index(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_reqspecs')
-    if not can_add:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
     reqspecs = ReqSpec.objects.filter(is_active=True).all()
     return render(request, 'requests/admin_jemco/yreqspec/index.html', {'reqspecs': reqspecs})
 
 
 @login_required
+@check_perm('request.index_reqspecs', SpecProxy)
 def reqspec_index_no_summary(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_reqspecs')
-    if not can_add:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
 
     reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='',
                                       type__title='روتین')
@@ -58,12 +48,8 @@ def reqspec_index_no_summary(request):
 
 
 @login_required
+@check_perm('request.index_reqspecs', SpecProxy)
 def reqspec_index_no_summary_no_routine(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_reqspecs')
-    if not can_add:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
     reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='',
                                       type__title='روتین')
     reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), code=99009900, summary='')
@@ -75,22 +61,12 @@ def reqspec_index_no_summary_no_routine(request):
 
 
 @login_required
+@check_perm('request.index_reqspecs', SpecProxy)
 def reqspec_index_with_summary(request):
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_reqspecs')
-    if not can_add:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
     reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='',
                                       type__title='روتین')
     reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), code=99009900).exclude(
         summary='')
-    # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='فلنجدارعمودنصب روبه پایین')
-    # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='فلنجی')
-    # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='فلنج دار')
-    # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4), summary='با پایه وفلنج')
-    # reqspecs = ReqSpec.objects.filter(is_active=True, req_id__owner=User.objects.get(pk=4)).filter(Q(summary='فلنجی') | Q(summary='فلنج دار') | Q(summary='با پایه وفلنج'))
-
     context = {
         'motors': reqspecs
     }
@@ -98,6 +74,7 @@ def reqspec_index_with_summary(request):
 
 
 @login_required
+@check_perm('request.index_reqspecs', SpecProxy)
 def reqspec_index_IE(request):
     can_add = funcs.has_perm_or_is_owner(request.user, 'request.index_reqspecs')
     if not can_add:
@@ -154,18 +131,10 @@ def assign_code_to_motor(request):
 
 
 @login_required
+@check_perm('request.delete_reqspec', SpecProxy)
 def reqspec_delete(request, yreqSpec_pk, request_pk):
     req_pk = request_pk
-    if not ReqSpec.objects.filter(is_active=True).filter(pk=yreqSpec_pk):
-        messages.error(request, 'No such Spec.')
-        return redirect('errorpage')
-
     reqspec = ReqSpec.objects.filter(is_active=True).get(pk=yreqSpec_pk)
-    can_del = funcs.has_perm_or_is_owner(request.user, 'request.delete_reqspec', reqspec)
-    if not can_del:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
     req = reqspec.req_id
 
     if request.method == 'GET':
@@ -184,12 +153,10 @@ def reqspec_delete(request, yreqSpec_pk, request_pk):
 
 
 @login_required
+@check_perm('request.edit_reqspec', SpecProxy)
 def reqspec_edit(request, yreqSpec_pk, request_pk):
     req_pk = request_pk
-    if not Requests.objects.filter(is_active=True).filter(pk=req_pk) or not ReqSpec.objects.filter(
-            is_active=True).filter(pk=yreqSpec_pk):
-        messages.error(request, 'no request or specs')
-        return redirect('errorpage')
+
     req = Requests.objects.filter(is_active=True).get(pk=req_pk)
     specs = ReqSpec.objects.filter(is_active=True).filter(req_id=req)
     spec = ReqSpec.objects.filter(is_active=True).get(pk=yreqSpec_pk)
@@ -207,16 +174,9 @@ def reqspec_edit(request, yreqSpec_pk, request_pk):
 
 
 @login_required
+@check_perm('request.add_reqspec', OrderProxy)
 def spec_form(request, request_pk):
     req_pk = request_pk
-    if not Requests.objects.get(pk=req_pk):
-        messages.error(request, 'درخواست مورد نظر یافت نشد.')
-        return redirect('errorpage')
-
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqspec', instance=Requests.objects.get(pk=req_pk))
-    if not can_add:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
 
     form = forms.SpecForm()
     req = Requests.objects.filter(is_active=True).get(pk=req_pk)
@@ -261,16 +221,9 @@ def spec_form(request, request_pk):
 
 
 @login_required
+@check_perm('request.add_reqpart', OrderProxy)
 def part_form(request, request_pk):
     req_pk = request_pk
-    if not Requests.objects.get(pk=req_pk):
-        messages.error(request, 'درخواست مورد نظر یافت نشد.')
-        return redirect('errorpage')
-
-    can_add = funcs.has_perm_or_is_owner(request.user, 'request.add_reqpart', instance=Requests.objects.get(pk=req_pk))
-    if not can_add:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
     req = Requests.objects.get(pk=req_pk, is_active=True)
 
     if request.method == 'POST':
@@ -300,22 +253,9 @@ def part_form(request, request_pk):
 
 
 @login_required
+@check_perm('request.change_reqspec', SpecProxy)
 def reqspec_edit_form(request, yreqSpec_pk, request_pk):
     req_pk = request_pk
-    if not Requests.objects.filter(is_active=True).filter(pk=req_pk) or not ReqSpec.objects.filter(
-            is_active=True).filter(pk=yreqSpec_pk):
-        messages.error(request, 'no request or specs')
-        return redirect('errorpage')
-
-    reqspec = ReqSpec.objects.filter(is_active=True).get(pk=yreqSpec_pk)
-    colleagues = reqspec.req_id.colleagues.all()
-    colleague = False
-    if request.user in colleagues:
-        colleague = True
-    can_edit = funcs.has_perm_or_is_owner(request.user, 'request.change_reqspec', reqspec, colleague)
-    if not can_edit:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
 
     req = Requests.objects.get(pk=req_pk)
     specs = req.reqspec_set.all()
