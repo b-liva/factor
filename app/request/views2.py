@@ -778,7 +778,8 @@ class LazyEncoder(DjangoJSONEncoder):
 
 @login_required
 def req_report(request):
-    acl_obj = OrderProxy(request.user, 'request.index_requests')
+    order_acl = OrderProxy(request.user, 'request.index_requests')
+    acl_obj = AccessControl(order_acl)
     is_allowed = AccessControl(acl_obj).allow()
     # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
     if not is_allowed:
@@ -786,9 +787,10 @@ def req_report(request):
         return redirect('errorpage')
     filters = {}
     req_list = Requests.objects.filter(is_active=True).order_by('date_fa').reverse()
-    if not request.user.is_superuser:
-        # req_list = req_list.filter(owner=request.user)
-        req_list = req_list.filter(Q(owner=request.user) | Q(colleagues=request.user))
+    req_list = req_list.filter(acl_obj.show())
+    # if not request.user.is_superuser:
+    #     # req_list = req_list.filter(owner=request.user)
+    #     req_list = req_list.filter(Q(owner=request.user) | Q(colleagues=request.user))
     req_filter = RequestFilter(request.GET, queryset=req_list)
     if not request.method == 'POST':
         if 'search-persons-post' in request.session:

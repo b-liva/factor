@@ -1,9 +1,15 @@
+from django.db.models import Q
+
+
 class AccessControl:
     def __init__(self, access_obj):
         self.access_obj = access_obj
 
     def allow(self):
         return self.access_obj.allow()
+
+    def show(self):
+        return self.access_obj.show()
 
 
 class OrderProxy:
@@ -21,6 +27,11 @@ class OrderProxy:
             return self.user.has_perm(self.permission)
 
         return False
+
+    def show(self):
+        if self.user.is_superuser:
+            return Q()
+        return Q(owner=self.user) | Q(colleagues=self.user)
 
 
 class ProformaProxy:
