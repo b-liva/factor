@@ -1,24 +1,37 @@
 from django.db.models import Q
 
 from core.models import UserRelation
+from request.models import Xpref
 
 
 class AccessControl:
-    def __init__(self, access_obj):
-        self.access_obj = access_obj
-
-    def allow(self):
-        return self.access_obj.allow()
-
-    def show(self):
-        return self.access_obj.show()
-
-
-class OrderProxy:
-    def __init__(self, user, permission, obj=None):
+    def __init__(self, user, permission=None, obj=None):
         self.obj = obj
         self.user = user
         self.permission = permission
+
+    def allow(self):
+        pass
+
+    def show(self):
+        pass
+
+    def get_related_users(self):
+        users_list = []
+        parents = UserRelation.objects.filter(child=self.user)
+        children = UserRelation.objects.filter(parent=self.user)
+        if parents.exists():
+            users_list.extend([user.parent for user in parents])
+
+        if children.exists():
+            children = children[0].child.all()
+            users_list.extend([user for user in children])
+
+        users_list.extend([self.user])
+        return users_list
+
+
+class OrderProxy(AccessControl):
 
     def allow(self):
         if self.user.is_superuser:
@@ -33,28 +46,13 @@ class OrderProxy:
     def show(self):
         if self.user.is_superuser:
             return Q()
-        return Q(owner=self.user) | Q(colleagues=self.user)
+        users_list = self.get_related_users()
+        return Q(owner__in=users_list) | Q(colleagues__in=users_list)
 
 
-class ProformaProxy:
-    def __init__(self, user, permission, obj=None):
-        self.obj = obj
-        self.user = user
-        self.permission = permission
-
-    def get_related_users(self):
-        users_list = []
-        parents = UserRelation.objects.filter(child=self.user)
-        childs = UserRelation.objects.filter(parent=self.user)
-        if parents.exists():
-            users_list.extend([user.parent for user in parents])
-
-        if childs.exists():
-            childs = childs[0].child.all()
-            users_list.extend([user for user in childs])
-
-        users_list.extend([self.user])
-        return users_list
+class ProformaProxy(AccessControl):
+    model = Xpref
+    lookup = 'ypref_pk'
 
     def allow(self):
         if self.user.is_superuser:
@@ -78,11 +76,7 @@ class ProformaProxy:
         return Q(owner__in=users_list) | Q(req_id__colleagues__in=users_list) | Q(req_id__owner__in=users_list)
 
 
-class PaymentProxy:
-    def __init__(self, user, permission, obj=None):
-        self.obj = obj
-        self.user = user
-        self.permission = permission
+class PaymentProxy(AccessControl):
 
     def allow(self):
         if self.user.is_superuser:

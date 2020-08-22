@@ -64,25 +64,39 @@ from django.template import Context
 User = get_user_model()
 
 
-@login_required
-def pref_index(request):
-    proforma_acl = ProformaProxy(request.user, 'request.index_proforma')
-    acl_obj = AccessControl(proforma_acl)
-    is_allowed = acl_obj.allow()
+def check_perm(perm, acl):
+    def decorator(fn):
+        def wrapper(*args, **kwargs):
+            request = args[0]
+            obj = None
+            lookup = kwargs.get(acl.lookup, None)
+            if lookup:
+                if not acl.model.objects.filter(pk=lookup):
+                    messages.error(request, 'Nothin found')
+                    return redirect('errorpage')
+                obj = acl.model.objects.get(pk=lookup)
+            is_allowed = acl(request.user, perm, obj=obj).allow()
+            if not is_allowed:
+                messages.error(request, 'عدم دسترسی کافی')
+                return redirect('errorpage')
 
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
+            # print('is allowd: ', is_allowed)
+            #
+            # print(perm, acl, acl.model)
+            # print(args)
+            # print(kwargs)
+            return fn(*args, **kwargs)
+        return wrapper
+    return decorator
+
+
+@login_required
+@check_perm('request.index_proforma', ProformaProxy)
+def pref_index(request):
 
     prof_list = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
+    acl_obj = ProformaProxy(request.user)
     prof_list = prof_list.filter(acl_obj.show()).distinct()
-
-    # if not request.user.is_superuser:
-    #     prof_list = prof_list.filter(
-    #         Q(owner=request.user) | Q(req_id__colleagues=request.user) | Q(req_id__owner=request.user)
-    #     ).distinct()
-
     if not request.method == 'POST':
         if 'proforma-search-post' in request.session:
             request.POST = request.session['proforma-search-post']
@@ -271,8 +285,6 @@ def prof_export(request):
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
 
-    # if request.user.is_superuser:
-    #     pass
     for prof in profs:
         row_num += 1
 
@@ -295,13 +307,8 @@ def prof_export(request):
 
 
 @login_required
+@check_perm('request.index_proforma', ProformaProxy)
 def prefspec_index(request):
-    acl_obj = ProformaProxy(request.user, 'request.index_proforma')
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
 
     spec_list = PrefSpec.objects.filter(xpref_id__is_active=True, xpref_id__perm=True, price__gt=0) \
         .annotate(qty_remaining=F('qty') - F('qty_sent'))
@@ -377,22 +384,18 @@ def prefspec_clear_cache(request):
 
 
 @login_required
+@check_perm('request.index_proforma', ProformaProxy)
 def perm_index(request):
-    acl_obj = ProformaProxy(request.user, 'request.index_proforma')
-    is_allowed = AccessControl(acl_obj).allow()
-
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
 
     prof_list = Xpref.objects.filter(is_active=True, req_id__is_active=True, perm=True) \
         .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0))) \
         .annotate(total_qty_sent=Sum('prefspec__qty_sent', filter=Q(prefspec__price__gt=0))) \
         .annotate(qty_remaining=F('total_qty') - F('total_qty_sent')).order_by('due_date').prefetch_related('owner')
 
-    if not request.user.is_superuser:
-        prof_list = prof_list.filter(owner=request.user)
+    acl_obj = ProformaProxy(request.user)
+    prof_list = prof_list.filter(acl_obj.show())
+    # if not request.user.is_superuser:
+    #     prof_list = prof_list.filter(owner=request.user)
         # prof_list = prof_list.filter(req_id__owner=request.user)
 
     if not request.method == 'POST':
@@ -461,14 +464,8 @@ def perm_index(request):
 
 
 @login_required
+@check_perm('request.index_proforma', ProformaProxy)
 def perm_index2(request):
-    acl_obj = ProformaProxy(request.user, 'request.index_proforma')
-    is_allowed = AccessControl(acl_obj).allow()
-
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
     # perm_numbers = Perm.objects.values('number').distinct().prefetch_related('permspec_perm__qty', 'inv_out_perm__inventoryoutspec__qty')
     perm_numbers = Perm.objects.all().order_by('date')
     context = {
@@ -637,15 +634,8 @@ def perm_specs(request):
 
 
 @login_required
+@check_perm('request.index_deleted_proforma', ProformaProxy)
 def pref_index_deleted(request):
-    acl_obj = ProformaProxy(request.user, 'request.index_deleted_proforma')
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_deleted_proforma')
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-    # prefs = Xpref.objects.filter(req_id__owner=request.user).order_by('pub_date').reverse()
-    # prefs = Xpref.objects.all().order_by('date_fa').reverse()
     prefs = Xpref.objects.filter(is_active=False, owner=request.user).order_by('date_fa').reverse()
     if request.user.is_superuser:
         prefs = Xpref.objects.filter(is_active=False).order_by('date_fa').reverse()
@@ -773,17 +763,10 @@ def find_no_price_by_id(request):
 
 
 @login_required
+@check_perm('request.read_proforma', ProformaProxy)
 def pref_details(request, ypref_pk):
-    if not Xpref.objects.filter(pk=ypref_pk):
-        messages.error(request, 'Nothin found')
-        return redirect('errorpage')
     pref = Xpref.objects.get(pk=ypref_pk)
 
-    acl_obj = ProformaProxy(request.user, 'request.read_proforma', pref)
-    is_allowed = AccessControl(acl_obj).allow()
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
     nestes_dict = {}
     proforma_total = 0
     kw_total = 0
@@ -833,13 +816,10 @@ def pref_details(request, ypref_pk):
 
 
 @login_required
+@check_perm('request.add_proforma', ProformaProxy)
 def perform_discount(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
-    acl_obj = ProformaProxy(request.user, 'request.add_proforma', proforma)
-    is_allowed = AccessControl(acl_obj).allow()
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
+
     if request.method == 'POST':
         form = DiscountForm(request.POST)
         if form.is_valid():
@@ -865,26 +845,15 @@ def perform_discount(request, ypref_pk):
 
 
 @login_required
+@check_perm('request.add_xpref', ProformaProxy)
 def proforma_copy(request, ypref_pk):
-
-    if not Xpref.objects.filter(pk=ypref_pk):
-        messages.error(request, 'Nothin found')
-        return redirect('errorpage')
-    pref = Xpref.objects.get(pk=ypref_pk)
-    acl_obj = ProformaProxy(request.user, 'request.add_xpref', pref)
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref', pref)
-
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
     proforma = Xpref.objects.get(pk=ypref_pk)
     pref_specs = proforma.prefspec_set.all()
     proforma.pk = None
 
     last = Xpref.objects.order_by('number').last()
     proforma.number = last.number + 1
+    proforma.owner = request.user
     proforma.save()
 
     for pspec in pref_specs:
@@ -893,76 +862,6 @@ def proforma_copy(request, ypref_pk):
         pspec.save()
 
     return redirect('pref_edit_form', ypref_pk=proforma.pk)
-
-
-@login_required
-def pref_details_backup(request, ypref_pk):
-    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
-        messages.error(request, 'Nothin found')
-        return redirect('errorpage')
-
-    pref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
-    acl_obj = ProformaProxy(request.user, 'request.read_proforma', pref)
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-    nestes_dict = {}
-
-    spec_total = 0
-    proforma_total = 0
-    sales_total = 0
-    percentage = 0
-    total_percentage = 0
-    # pref = Xpref.objects.get(pk=ypref_pk)
-
-    prof_images = pref.proffiles_set.all()
-    prefspecs = pref.prefspec_set.all()
-    i = 0
-    for prefspec in prefspecs:
-        kw = prefspec.kw
-        speed = prefspec.rpm
-        price = MotorDB.objects.filter(kw=kw).filter(speed=speed).last()
-        proforma_total += prefspec.qty * prefspec.price
-        if hasattr(price, 'prime_cost'):
-            sales_total += prefspec.qty * price.prime_cost
-            percentage = (prefspec.price / (price.prime_cost))
-            prime = price.prime_cost
-        else:
-            prime = 'N/A'
-            sales_total = "N/A"
-            percentage = False
-        if percentage >= 1:
-            percentage_class = 'good-conditions'
-        elif percentage < 1:
-            percentage_class = 'bad-conditions'
-        else:
-            percentage_class = 'no-value'
-        nestes_dict[i] = {
-            'obj': prefspec,
-            'sale_price': prime,
-            'percentage': percentage,
-            'percentage_class': percentage_class,
-            'spec_total': prefspec.qty * prefspec.price
-        }
-        i += 1
-        if hasattr(price, 'prime_cost'):
-            total_percentage = proforma_total / sales_total
-    if total_percentage >= 1:
-        total_percentage_class = 'good-conditions'
-    else:
-        total_percentage_class = 'bad-conditions'
-    return render(request, 'requests/admin_jemco/ypref/details.html', {
-        'pref': pref,
-        'prefspecs': prefspecs,
-        'nested': nestes_dict,
-        'proforma_total': proforma_total,
-        'sales_total': sales_total,
-        'total_percentage': total_percentage,
-        'total_percentage_class': total_percentage_class,
-        'prof_images': prof_images,
-    })
 
 
 @login_required
@@ -983,13 +882,8 @@ def pref_send_verified(request, ypref_pk):
 
 
 @login_required
-def proforma_changed_needed(request, ypref_pk):
-    acl_obj = ProformaProxy(request.user, 'request.add_profchangerequest')
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_profchangerequest')
-    if not is_allowed:
-        messages.error(request, 'عدم دستری کافی!')
-        return redirect('errorpage')
+@check_perm('request.add_profchangerequest', ProformaProxy)
+def proforma_change_needed(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
     from request.models import ProfChangeRequest
 
@@ -1036,19 +930,10 @@ def cancel_pref_verify_to_send(request, ypref_pk):
 
 
 @login_required
+@check_perm('request.delete_xpref', ProformaProxy)
 def pref_delete(request, ypref_pk):
-    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
-        messages.error(request, 'Nothin found')
-        return redirect('errorpage')
     pref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
-    acl_obj = ProformaProxy(request.user, 'request.delete_xpref', pref)
-    is_allowed = AccessControl(acl_obj).allow()
 
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.delete_xpref', pref)
-
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
     if request.method == 'GET':
         context = {
             'id': pref.pk,
@@ -1068,6 +953,7 @@ def pref_delete(request, ypref_pk):
 
 
 @login_required
+@check_perm('request.delete_xpref', ProformaProxy)
 def delete_proforma_no_prefspec(request, ypref_pk):
     try:
         prof = Xpref.objects.get(pk=ypref_pk)
@@ -1082,14 +968,8 @@ def delete_proforma_no_prefspec(request, ypref_pk):
 
 
 @login_required
+@check_perm('request.add_xpref', ProformaProxy)
 def pro_form_cookie(request, req_id):
-    acl_obj = ProformaProxy(request.user, 'request.add_xpref')
-    is_allowed = AccessControl(acl_obj).allow()
-
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
     try:
         req = Requests.objects.get(pk=req_id)
         if req.reqspec_set.count() == 0:
@@ -1108,14 +988,8 @@ def pro_form_cookie(request, req_id):
 
 
 @login_required
+@check_perm('request.add_xpref', ProformaProxy)
 def pro_form(request):
-    acl_obj = ProformaProxy(request.user, 'request.add_xpref')
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
     reqs = Requests.objects.filter(is_active=True)
     owners_reqs = Requests.objects.filter(is_active=True).filter(owner=request.user)
     imgform = proforma_forms.ProfFileForm()
@@ -1202,13 +1076,8 @@ def pro_form(request):
 
 
 @login_required
+@check_perm('request.add_xpref', ProformaProxy)
 def pref_insert_spec_form(request, ypref_pk):
-    acl_obj = ProformaProxy(request.user, 'request.add_xpref')
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref')
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
     pref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
     req = Requests.objects.filter(is_active=True).get(pk=pref.req_id.pk)
     specs = req.reqspec_set.filter(is_active=True)
@@ -1247,18 +1116,9 @@ def pref_insert_spec_form(request, ypref_pk):
 
 
 @login_required
+@check_perm('request.change_xpref', ProformaProxy)
 def pref_edit(request, ypref_pk):
-    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
-        messages.error(request, 'no Proforma ّFound')
-        return redirect('errorpage')
     xpref = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
-    acl_obj = ProformaProxy(request.user, 'request.change_xpref', xpref)
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.change_xpref', xpref)
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
     # spec_prices = [float(i.replace(',', '')) for i in request.POST.getlist('price')]
     # spec_prices = request.POST.getlist('price')
     spec_prices = [i if i is not '' else '0' for i in request.POST.getlist('price')]
@@ -1336,6 +1196,7 @@ def pref_edit(request, ypref_pk):
 
 
 @login_required
+@check_perm('request.change_xpref', ProformaProxy)
 def pref_edit2(request, ypref_pk):
     # 1- check for permissions
     # 2 - find proforma and related images and specs
@@ -1345,18 +1206,7 @@ def pref_edit2(request, ypref_pk):
     # 6 - if form is valid the save request and its related images
     # 7 - render the template file
 
-    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
-        messages.error(request, 'Nothin found')
-        return redirect('errorpage')
-
     prof = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
-    acl_obj = ProformaProxy(request.user, 'request.change_xpref', prof)
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.change_xpref', prof)
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
     # prof = models.Xpref.objects.get(pk=ypref_pk)
     prof_images = prof.proffiles_set.all()
     img_names = {}
@@ -1464,18 +1314,9 @@ def pref_insert(request):
 
 
 @login_required
+@check_perm('request.change_xpref', ProformaProxy)
 def pref_edit_form(request, ypref_pk):
-    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
-        messages.error(request, 'no Proforma')
-        return redirect('errorpage')
     proforma = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
-    acl_obj = ProformaProxy(request.user, 'request.change_xpref', proforma)
-    is_allowed = AccessControl(acl_obj).allow()
-
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.change_xpref', proforma)
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
     show = True
     if proforma.total_proforma_price_vat()['price_vat'] == 0:
         show = False
@@ -1490,20 +1331,11 @@ def pref_edit_form(request, ypref_pk):
 
 
 @login_required
+@check_perm('request.add_xpref', ProformaProxy)
 def prof_spec_form(request, ypref_pk):
-    if not Xpref.objects.filter(is_active=True).filter(pk=ypref_pk):
-        messages.error(request, 'no Proforma')
-        return redirect('errorpage')
     proforma = Xpref.objects.filter(is_active=True).get(pk=ypref_pk)
     req = proforma.req_id
     reqspecs = req.reqspec_set.filter(is_active=True)
-
-    acl_obj = ProformaProxy(request.user, 'request.add_xpref', obj=proforma)
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_xpref', instance=proforma)
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
 
     if request.method == 'POST':
         print(request.POST)
