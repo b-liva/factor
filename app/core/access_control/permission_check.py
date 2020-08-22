@@ -1,7 +1,7 @@
 from django.db.models import Q
 
 from core.models import UserRelation
-from request.models import Xpref, Requests, ReqSpec
+from request.models import Xpref, Requests, ReqSpec, Payment
 
 
 class AccessControl:
@@ -64,7 +64,8 @@ class SpecProxy(AccessControl):
         if not self.obj:
             return self.user.has_perm(self.permission)
         users_list = self.get_related_users()
-        if self.obj.req_id.owner in users_list or len(set(users_list).intersection(set(self.obj.req_id.colleagues.all()))) > 0:
+        if self.obj.req_id.owner in users_list or len(
+                set(users_list).intersection(set(self.obj.req_id.colleagues.all()))) > 0:
             return self.user.has_perm(self.permission)
 
         return False
@@ -104,14 +105,27 @@ class ProformaProxy(AccessControl):
 
 
 class PaymentProxy(AccessControl):
+    model = Payment
+    lookup = 'ypayment_pk'
 
     def allow(self):
         if self.user.is_superuser:
             return True
         if not self.obj:
             return self.user.has_perm(self.permission)
-        if self.obj.owner == self.user or self.user == self.obj.xpref_id.owner or self.user == self.obj.xpref_id.req_id.owner or self.user in self.obj.xpref_id.req_id.colleagues.all():
+        users_list = self.get_related_users()
+        if self.obj.owner in users_list or self.obj.xpref_id.owner in users_list or \
+                self.obj.xpref_id.req_id.owner in users_list or \
+                len(set(users_list).intersection(set(self.obj.xpref_id.req_id.colleagues.all()))) > 0:
             return self.user.has_perm(self.permission)
 
         return False
 
+    def show(self):
+        if self.user.is_superuser:
+            return Q()
+
+        users_list = self.get_related_users()
+
+        return Q(owner__in=users_list) | Q(xpref_id__owner__in=users_list) | \
+               Q(xpref_id__req_id__colleagues__in=users_list) | Q(xpref_id__req_id__owner__in=users_list)

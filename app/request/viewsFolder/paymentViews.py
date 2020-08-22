@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 
 from core.access_control.permission_check import AccessControl, PaymentProxy
+from core.access_control.decorator import check_perm
 from customer.models import Customer
 from request.forms.payment_forms import PaymentSearchForm
 from request.views import find_all_obj
@@ -24,14 +25,8 @@ from django.utils import timezone
 
 # add payment to the prefactor
 @login_required
+@check_perm('request.add_payment', PaymentProxy)
 def payment_form(request):
-    acl_obj = PaymentProxy(request.user, 'request.add_payment')
-    is_allowed = AccessControl(acl_obj).allow()
-
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
-    if not is_allowed:
-        messages.error(request, 'Sorry, No way to access')
-        return redirect('errorpage')
     reqs, xprefs, xpayments = find_all_obj()
     return render(request, 'requests/admin_jemco/ypayment/form.html', {
         'reqs': reqs,
@@ -47,32 +42,23 @@ def pay_form_prof(request, prof_pk):
 
 
 @login_required
+@check_perm('request.add_payment', PaymentProxy)
 def pay_form(request):
-    try:
-        proforma = Xpref.objects.get(pk=request.POST['xpref_id'])
-        acl_obj = PaymentProxy(request.user, 'request.add_payment', obj=proforma)
-        is_allowed = AccessControl(acl_obj).allow()
-        # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_payment', instance=proforma)
+    img_form = payment_forms.PaymentFileForm()
+
+    if request.method == 'POST':
+        proforma_id = request.POST.get('xpref_id', None)
+        if not proforma_id:
+            return redirect('pay_form')
+        exists = Xpref.objects.filter(pk=request.POST['xpref_id']).exists()
+        if exists:
+            proforma = Xpref.objects.get(pk=request.POST['xpref_id'])
+        else:
+            return redirect('pay_form')
         if not proforma.perm:
             messages.error(request, 'پیش فاکتور مورد نظر مجوز نشده و دریافتی برای آن قابل ثبت نیست.')
-            # todo: this is too messy. please refactor me.
-            if is_allowed:
-                if proforma.owner == request.user:
-                    return redirect('pref_details', ypref_pk=proforma.pk)
-                else:
-                    return redirect('payment_index')
-            else:
-                return redirect('errorpage')
-    except:
-        acl_obj = PaymentProxy(request.user, 'request.add_payment')
-        is_allowed = AccessControl(acl_obj).allow()
-        # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
+            return redirect('pref_details', ypref_pk=proforma.pk)
 
-    img_form = payment_forms.PaymentFileForm()
-    if request.method == 'POST':
         form = payment_forms.PaymentFrom(request.POST, request.FILES)
         add_img_form = payment_forms.PaymentFileForm(request.POST or None, request.FILES or None)
         files = request.FILES.getlist('image')
@@ -105,14 +91,8 @@ def pay_form(request):
 
 
 @login_required
+@check_perm('request.add_payment', PaymentProxy)
 def payment_insert(request):
-    acl_obj = PaymentProxy(request.user, 'request.add_payment')
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
-    if not is_allowed:
-        messages.error(request, 'Sorry, No way to access')
-        return redirect('errorpage')
-
     xpref = Xpref.objects.get(number=request.POST['xpref_no'])
     payment = Payment()
     payment.xpref_id = xpref
@@ -138,16 +118,11 @@ def payment_insert(request):
 
 
 @login_required
+@check_perm('request.add_payment', PaymentProxy)
 def payment_index(request):
-    acl_obj = PaymentProxy(request.user, 'request.add_payment')
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_payment')
-    if not is_allowed:
-        messages.error(request, 'Sorry, No way to access')
-        return redirect('errorpage')
-
     payment_list = Payment.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
-
+    acl = PaymentProxy(user=request.user)
+    payment_list = payment_list.filter(acl.show()).distinct()
     if not request.method == 'POST':
         if 'payment-search-post' in request.session:
             request.POST = request.session['payment-search-post']
@@ -299,16 +274,8 @@ def payments_export(request):
 
 
 @login_required
+@check_perm('request.index_deleted_payment', PaymentProxy)
 def payment_index_deleted(request):
-    acl_obj = PaymentProxy(request.user, 'request.index_deleted_payment')
-    is_allowed = AccessControl(acl_obj).allow()
-
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_deleted_payment')
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
-
-    # payments = Payment.objects.all().order_by('date_fa').reverse()
     payments = Payment.objects.filter(is_active=False, owner=request.user).order_by('date_fa').reverse()
     if request.user.is_superuser:
         payments = Payment.objects.filter(is_active=False).order_by('date_fa').reverse()
@@ -563,18 +530,9 @@ def payment_find(request):
 
 
 @login_required
+@check_perm('request.read_payment', PaymentProxy)
 def payment_details(request, ypayment_pk):
-
-    if not Payment.objects.filter(is_active=True).filter(pk=ypayment_pk) and not request.user.is_superuser:
-        messages.error(request, 'صفحه مورد نظر یافت نشد')
-        return redirect('errorpage')
     payment = Payment.objects.get(pk=ypayment_pk)
-    # can_read = funcs.has_perm_or_is_owner(request.user, 'request.read_payment', payment)
-    acl_obj = PaymentProxy(request.user, 'request.read_payment', payment)
-    can_read = AccessControl(acl_obj).allow()
-    if not can_read:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
     images = models.PaymentFiles.objects.filter(pay=payment)
     context = {
         'payment': payment,
@@ -584,14 +542,9 @@ def payment_details(request, ypayment_pk):
 
 
 @login_required
+@check_perm('request.delete_payment', PaymentProxy)
 def payment_delete(request, ypayment_pk):
     payment = Payment.objects.get(pk=ypayment_pk)
-    acl_obj = PaymentProxy(request.user, 'request.delete_payment', payment)
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.delete_payment', payment)
-    if not is_allowed:
-        messages.error(request, 'No access!')
-        return redirect('errorpage')
     if request.method == 'GET':
         context = {
             'id': payment.pk,
@@ -614,6 +567,7 @@ def payment_delete(request, ypayment_pk):
 
 
 @login_required
+@check_perm('request.delete_payment', PaymentProxy)
 def payment_edit(request, ypayment_pk):
     # 1- check for permissions
     # 2 - find proforma and related images and specs
@@ -623,12 +577,6 @@ def payment_edit(request, ypayment_pk):
     # 6 - if form is valid the save request and its related images
     # 7 - render the template file
     payment = Payment.objects.filter(is_active=True).get(pk=ypayment_pk)
-    acl_obj = PaymentProxy(request.user, 'request.delete_payment', payment)
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.change_payment', payment)
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
     if payment.date_fa:
         payment.date_fa = payment.date_fa.togregorian()
     if payment.due_date:
