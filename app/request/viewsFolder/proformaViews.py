@@ -66,8 +66,9 @@ User = get_user_model()
 
 @login_required
 def pref_index(request):
-    acl_obj = ProformaProxy(request.user, 'request.index_proforma')
-    is_allowed = AccessControl(acl_obj).allow()
+    proforma_acl = ProformaProxy(request.user, 'request.index_proforma')
+    acl_obj = AccessControl(proforma_acl)
+    is_allowed = acl_obj.allow()
 
     # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_proforma')
     if not is_allowed:
@@ -75,11 +76,12 @@ def pref_index(request):
         return redirect('errorpage')
 
     prof_list = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
+    prof_list = prof_list.filter(acl_obj.show()).distinct()
 
-    if not request.user.is_superuser:
-        prof_list = prof_list.filter(
-            Q(owner=request.user) | Q(req_id__colleagues=request.user) | Q(req_id__owner=request.user)
-        ).distinct()
+    # if not request.user.is_superuser:
+    #     prof_list = prof_list.filter(
+    #         Q(owner=request.user) | Q(req_id__colleagues=request.user) | Q(req_id__owner=request.user)
+    #     ).distinct()
 
     if not request.method == 'POST':
         if 'proforma-search-post' in request.session:

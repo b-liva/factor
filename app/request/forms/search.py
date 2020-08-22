@@ -1,5 +1,27 @@
 from django import forms
 from django_jalali import forms as jforms
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+
+def prepare_owner_choices():
+    # this is the format.
+    # owner_choices = (
+    #     (0, '---',),
+    #     (2, 'محمدی',),
+    #     (3, 'علوی',),
+    #     (4, 'ظریف',),
+    # )
+
+    owner_choices = ((0, '---'),)
+
+    exps = User.objects.filter(sales_exp=True)
+    users = [(u.pk, u.last_name) for u in exps]
+    owner_choices = list(owner_choices)
+    owner_choices.extend(users)
+    owner_choices = tuple(owner_choices)
+
+    return owner_choices
 
 
 class SpecSearchForm(forms.Form):
@@ -241,12 +263,7 @@ class ProformaSearchForm(forms.Form):
             'class': 'form-control',
         }), choices=sort_asc_dsc, required=False)
 
-    owner_choices = (
-        (0, '---',),
-        (2, 'محمدی',),
-        (3, 'علوی',),
-        (4, 'ظریف',),
-    )
+    owner_choices = prepare_owner_choices()
 
     owner = forms.ChoiceField(
         label='کارشناس',
