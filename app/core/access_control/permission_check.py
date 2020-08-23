@@ -50,7 +50,6 @@ class OrderProxy(AccessControl):
         if self.user.is_superuser:
             return Q()
         users_list = self.get_related_users()
-        print('user; ', users_list)
         return Q(owner__in=users_list) | Q(colleagues__in=users_list)
 
 
@@ -74,7 +73,6 @@ class SpecProxy(AccessControl):
         if self.user.is_superuser:
             return Q()
         users_list = self.get_related_users()
-        print('user; ', users_list)
         return Q(owner__in=users_list) | Q(colleagues__in=users_list)
 
 
