@@ -49,6 +49,7 @@ urlpatterns = [
                   path('errorpage/', request.views.errorpage, name="errorpage"),
                   path('account/', include('accounts.url')),
                   path('request/', include('request.urls.url')),
+                  path('feature/', include('jfeature.urls')),
                   # path('api/request/', include('request.urls.url')),
                   path('customer/', include('customer.url')),
                   path('fund/', include('fund.url')),

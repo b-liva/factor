@@ -1,0 +1,57 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load static %}
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                {% if messages %}
+                    {% include 'general/errors.html' %}
+                {% endif %}
+                {#            {% include 'elements/customer_card.html' with customer=request.customer %}#}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div>
+                    <p>ثبت ویژگی پیشنهادی جهت اعمال در سیستم</p>
+                </div>
+                <p>{{ proforma.number }}</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-xs btn-success" type="submit">ثبت</button>
+                    <a class="btn btn-xs btn-danger" href="{% url 'dashboard' %}">انصراف</a>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <hr>
+            <h3 class="text-center">پیشنهاد های ثبت شده</h3>
+            <div class="col-md-8 col-md-offset-2">
+                <table class="table table-hover text-center">
+                    <thead>
+                    <tr>
+                        <td>ردیف</td>
+                        <td>عنوان</td>
+                        <td>پیشنهاد دهنده</td>
+                        <td>تاریخ</td>
+                        <td>انجام شده</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for feature in features %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ feature.title }}</td>
+                            <td>{{ feature.owner.last_name }}</td>
+                            <td>{{ feature.created }}</td>
+                            <td><input type="checkbox" {% if feature.done %}checked{% endif %} disabled></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
