@@ -151,7 +151,7 @@ $(document).ready(function () {
     $('#autocomplete').autocomplete({
         serviceUrl: '/customer/autocomplete',
         contentType: 'application/json',
-        dataType:'json',
+        dataType: 'json',
         // lookup: arr,
         // onSearchComplete: function (query, suggestions) {
         //     alert(suggestions);
@@ -170,6 +170,10 @@ $(document).ready(function () {
     });
     $('#cu_chosen').chosen();
 
+    new AutoNumeric.multiple('input[name=price]', {
+        digitGroupSeparator: ',',
+        decimalPlaces: 0
+    });
 
 });
 
@@ -186,10 +190,3 @@ function checkBeforeDelete() {
     alert('are you sure?');
 }
 
-
-$("#myModal").on("show", function () {    // wire up the OK button to dismiss the modal when shown
-    $("#myModal a.btn").on("click", function (e) {
-        console.log("button pressed");   // just as an example...
-        $("#myModal").modal('hide');     // dismiss the dialog
-    });
-});

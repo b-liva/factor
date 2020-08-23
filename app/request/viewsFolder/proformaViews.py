@@ -1065,9 +1065,9 @@ def pref_insert_spec_form(request, ypref_pk):
     # These checks if there is any string that can't be change to a number.
     for i in prices:
         try:
-            price_list.append(float(i))
+            price_list.append(float(i.replace(',', '')))
         except:
-            messages.error(request, 'اشکال در اطلاعات قیمت')
+            messages.error(request, 'خطا در مقادیر قیمت')
             return redirect('prof_spec_form', ypref_pk=pref.pk)
     if prices == zeros:
         messages.error(request, 'پیش فاکتور شامل هیچ قیمتی نیست.')
@@ -1082,7 +1082,7 @@ def pref_insert_spec_form(request, ypref_pk):
     i = 0
     for s in prefspecs:
         s.qty = qty[i]
-        s.price = prices[i] if prices[i] else 0
+        s.price = prices[i].replace(',','') if prices[i] else 0
         s.considerations = considerations[i]
         s.save()
         i += 1
@@ -1118,7 +1118,7 @@ def pref_edit(request, ypref_pk):
     x = 0
     for item in xspec:
         item.sent = True if str(item.pk) in spec_sent and spec_prices[x] != 0 and item.xpref_id.perm else False
-        item.price = spec_prices[x]
+        item.price = spec_prices[x].replace(',', '')
         item.qty = spec_qty[x]
 
         item.qty_sent = spec_qty_sent[x]

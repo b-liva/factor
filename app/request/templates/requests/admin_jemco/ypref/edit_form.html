@@ -37,8 +37,12 @@
                             <td><input type="number" name="qty" value="{{ prof_spec.qty }}" class="form-control" style="max-width: 80px;"></td>
                             <td>{{ prof_spec.kw | floatformat }}</td>
                             <td>{{ prof_spec.rpm }}</td>
-                            <td><input type="number" name="price" value="{{ prof_spec.price | floatformat }}"
+                            <td>
+                                <div>
+                                    <input type="text" name="price" value="{{ prof_spec.price | floatformat }}"
                                        class="form-control" style="max-width: 150px;">
+                                </div>
+
                             <td><input type="number" name="qty_sent" value="{{ prof_spec.qty_sent }}"
                                        class="form-control" style="max-width: 80px;"></td>
                             {#                            <td><input name="sent" type="checkbox" {% if prof_spec.sent %} checked {% endif %} value="{{ prof_spec.pk|enc }}" ></td>#}
