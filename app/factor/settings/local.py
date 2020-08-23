@@ -16,7 +16,9 @@ DEBUG = True
 #     # "SECRET_KEY_LOCAL",
 #     default="wf$gn46*y4((^9gsj8_4j=%i=40v2dpuyypf56xww72aj40b5=",
 # )
-
+ROOT_PATH_LOCAL = os.environ.get('ROOT_PATH', None)
+if ROOT_PATH_LOCAL:
+    sys.path.insert(0, ROOT_PATH_LOCAL)
 # SECRET_KEY = os.environ['SECRET_KEY_LOCAL']
 # SECRET_KEY = os.environ.get('SECRET_KEY_LOCAL')
 SECRET_KEY = set_secret_key(

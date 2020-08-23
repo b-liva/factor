@@ -1,5 +1,7 @@
 from .base import *  # noqa
 from .base import env
+
+sys.path.insert(0, os.environ.get('ROOT_PATH', '/app/'))
 # SECRET_KEY = get_secret_setting('SECRET_KEY_PRODUCTION')
 SECRET_KEY = set_secret_key(
     os.environ['DJANGO_SETTINGS_MODULE'],

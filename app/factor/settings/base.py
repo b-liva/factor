@@ -21,11 +21,11 @@ def set_secret_key(settings, secret):
     except KeyError:
         raise ImproperlyConfigured('SECRET_KEY Error, please set the %s %s on Env' % (settings, secret,))
 
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = (
     environ.Path(__file__) - 3
 )  # (app/factor/settings/base.py - 3 = app/)
-sys.path.insert(0, "D:\\localprojects\\w\\jemco\\jCrm3_ok\\app\\")
+
 ROOT_URLCONF = "factor.urls"
 WSGI_APPLICATION = "factor.wsgi.application"
 LOCALE_PATHS = [ROOT_DIR.path("locale")]
