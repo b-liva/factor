@@ -24,7 +24,7 @@ from . import models
 from customer.models import Customer
 import request.templatetags.functions as funcs
 from request.forms import forms, search
-from core.access_control.permission_check import OrderProxy, AccessControl, ProformaProxy
+from core.access_control.permission_check import OrderProxy, AccessControl, ProformaProxy, SpecProxy
 from core.access_control.decorator import check_perm
 import nested_dict as nd
 import random
@@ -252,13 +252,8 @@ def function_define(request, specs):
 
 
 @login_required
+@check_perm('request.index_reqspecs', SpecProxy)
 def reqspec_search(request):
-    acl_obj = OrderProxy(request.user, 'request.index_requests')
-    is_allowed = AccessControl(acl_obj).allow()
-    # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.index_requests')
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی!')
-        return redirect('errorpage')
     form_data = {}
 
     if not request.method == 'POST':
