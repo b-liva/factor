@@ -31,12 +31,13 @@
                         <tr>
                             <th colspan="1" class="text-center"></th>
                             <th colspan="1" class="text-center">ورودی</th>
-                            <th colspan="4" class="text-center"> ثبت شده</th>
+                            <th colspan="11" class="text-center"> ثبت شده</th>
                         </tr>
                             <tr>
                                 <th colspan="col" class="text-center">ماه</th>
+                                <th></th>
                                 {% for user in users %}
-                                    <th colspan="col" class="text-center">{{ user.last_name }}</th>
+                                    <th colspan="2" class="text-center">{{ user.last_name }}</th>
                                 {% endfor %}
                                 <th colspan="col" class="text-center">کل</th>
                             </tr>
