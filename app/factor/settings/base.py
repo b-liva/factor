@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
+import corsheaders
 import environ
 import os, json, sys
 from django.urls import reverse_lazy
@@ -21,9 +22,10 @@ def set_secret_key(settings, secret):
     except KeyError:
         raise ImproperlyConfigured('SECRET_KEY Error, please set the %s %s on Env' % (settings, secret,))
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = (
-    environ.Path(__file__) - 3
+        environ.Path(__file__) - 3
 )  # (app/factor/settings/base.py - 3 = app/)
 
 ROOT_URLCONF = "factor.urls"
@@ -46,7 +48,6 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 ALLOWED_HOSTS_ENV = os.environ.get('ALLOWED_HOSTS')
 if ALLOWED_HOSTS_ENV:
     ALLOWED_HOSTS.extend(ALLOWED_HOSTS_ENV.split(','))
-
 
 TIME_ZONE = 'Asia/Tehran'
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
@@ -111,11 +112,10 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
     'graphql_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -146,11 +146,17 @@ MIDDLEWARE = [
 ]
 
 # CORS_ORIGIN_ALLOW_ALL = True
-
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
     'http://localhost:8001',
 )
+CORS_ORIGIN_WHITELIST_ENV = os.environ.get('CORS_ORIGIN_WHITELIST', ())
+if CORS_ORIGIN_WHITELIST_ENV:
+    CORS_ORIGIN_WHITELIST = CORS_ORIGIN_WHITELIST + tuple(CORS_ORIGIN_WHITELIST_ENV.split(','))
+
+CORS_ALLOW_HEADERS = [
+    'X-CSRFToken',
+]
 
 # STATIC
 # ------------------------------------------------------------------------------
@@ -246,7 +252,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+                      "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -338,3 +344,6 @@ GRAPHENE = {
 GRAPHQL_JWT = {
     'JWT_ALLOW_ARGUMENT': True,
 }
+
+# CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_NAME = 'X-CSRFToken'

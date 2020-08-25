@@ -21,15 +21,24 @@ from django.conf.urls.static import static
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from graphene_django.views import GraphQLView
+from graphql_jwt.decorators import jwt_cookie
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from accounts.viewsFolder.views import LoginAfterPasswordChangeView
 import tender.views
 import request.views
 from factor import views as general_views
 
+
+class PrivateGraphQLView(LoginRequiredMixin, GraphQLView):
+    pass
+
+
 urlpatterns = [
                   path('admin/', admin.site.urls),
+                  # path("graphql/", jwt_cookie(GraphQLView.as_view(graphiql=True))),
                   path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True))),
+                  # path("graphql/", GraphQLView.as_view(graphiql=True)),
                   path('accounts/password/change/', LoginAfterPasswordChangeView.as_view(),
                        name='account_change_password'),
                   path('accounts/', include('allauth.urls')),
