@@ -4,7 +4,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 from graphql_relay import from_global_id
 from customer.models import Customer
 from .types import RequestNode, ReqSpecNode, ProjectTypeType, IMTypeNode, IPTypeNode, ICTypeNode, RpmTypeNode
-from request.models import ProjectType, Requests
+from request.models import ProjectType, Requests, ReqSpec
 
 
 class KwCounts(ObjectType):
@@ -12,8 +12,36 @@ class KwCounts(ObjectType):
     kw = Int()
     count = Int()
 
-    def resolve_kw(self, info):
-        return 15987453
+    # this override Statistics kw class
+    # def resolve_kw(self, info):
+    #     return 15987453
+
+
+def active_orders():
+    return Requests.objects.filter(is_active=True)
+
+
+def reqspecs_raw():
+    return ReqSpec.objects.filter(req_id__is_active=True)
+
+
+def calculate_kw(rs):
+    kw = rs.aggregate(
+            kw=Sum(F('qty') * F('kw'), output_field=FloatField())
+        )['kw']
+    return kw
+
+
+def kw_per_project_type(project_type):
+    specs = reqspecs_raw().filter(type__title=project_type)
+    kw = calculate_kw(specs)
+    return kw
+
+
+def count_per_project_type(project_type):
+    specs = reqspecs_raw().filter(type__title=project_type)
+    count = specs.values('req_id').distinct().count()
+    return count
 
 
 class Statistics(ObjectType):
@@ -24,30 +52,30 @@ class Statistics(ObjectType):
     ex = Field(KwCounts)
 
     def resolve_total(self, info):
-        count = Requests.objects.filter(is_active=True).count()
-        reqs = Requests.objects.filter(is_active=True)
-        kw = 0
-        for req in reqs:
-            kw += req.total_kw()
+        count = active_orders().count()
+        rs = reqspecs_raw()
+        kw = calculate_kw(rs)
         return KwCounts(title='تعداد درخواست ها', kw=kw, count=count)
 
     def resolve_routine(self, info):
-        count = 100
-        kw = 2500
+        kw = kw_per_project_type('روتین')
+        count = count_per_project_type('روتین')
         return KwCounts(title='روتین (KW)', kw=kw, count=count)
 
     def resolve_ex(self, info):
-        count = 10
-        kw = 1354
+        kw = kw_per_project_type('ضد انفجار')
+        count = count_per_project_type('ضد انفجار')
         return KwCounts(title='ضدانفجار (KW)', kw=kw, count=count)
 
     def resolve_services(self, info):
-        count = 456
-        kw = 9874
+        kw = kw_per_project_type('تعمیرات')
+        count = count_per_project_type('تعمیرات')
         return KwCounts(title='تعمیرات (KW)', kw=kw, count=count)
 
     def resolve_project(self, info):
-        return KwCounts(title='پروژه (KW)', count=125)
+        kw = kw_per_project_type('پروژه')
+        count = count_per_project_type('پروژه')
+        return KwCounts(title='پروژه (KW)', count=count, kw=kw)
 
 
 class Query(ObjectType):

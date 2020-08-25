@@ -9,6 +9,6 @@ class Query(object):
 
     def resolve_automation_orders(self, info, **kwargs):
         # if not info.context.user.is_superuser:
-        if info.context.user.is_superuser:
+        if not info.context.user.is_superuser:
             return ReqEntered.objects.filter(owner_text__contains=info.context.user.last_name, is_request=True, is_entered=False)
         return ReqEntered.objects.filter(is_request=True, is_entered=False)

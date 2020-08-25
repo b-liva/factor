@@ -23,7 +23,8 @@ class ProformaFilterSet(django_filters.FilterSet):
             'req_id': ['exact'],
             'number_td': ['exact'],
             'req_id__customer__name': ['icontains'],
-            'perm': ['exact']
+            'perm': ['exact'],
+            'perm_number': ['exact'],
         }
 
 
