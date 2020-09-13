@@ -64,6 +64,8 @@ from django.template.loader import get_template
 from django.template import Context
 User = get_user_model()
 
+ROUND_LEVEL = 1000000
+
 
 @login_required
 @check_perm('request.index_proforma', ProformaProxy)
@@ -801,10 +803,9 @@ def perform_discount(request, ypref_pk):
             discount = form.cleaned_data['discount_value']
             pspecs = proforma.prefspec_set.filter(price__gt=0)
             coef = (1 - discount / 100)
-            round_leven = 100000
             for pspec in pspecs:
                 pspec.price = coef * pspec.price
-                pspec.price = math.ceil(pspec.price / round_leven) * round_leven
+                pspec.price = math.ceil(pspec.price / ROUND_LEVEL) * ROUND_LEVEL
                 pspec.save()
         messages.add_message(request, level=messages.INFO, message=f"{discount} درصد تخفیف اعمال شد.")
         return redirect('pref_details', ypref_pk=proforma.pk)
@@ -1021,7 +1022,7 @@ def pro_form(request):
                         spec_item.price = MotorDB.objects.get(motor__code=spec_item.code).sale_price
                 except:
                     pass
-
+                spec_item.price = math.ceil(spec_item.price / ROUND_LEVEL) * ROUND_LEVEL
                 spec_item.save()
                 spec.price = True
                 spec.save()
