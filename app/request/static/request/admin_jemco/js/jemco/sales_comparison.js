@@ -43,7 +43,6 @@ Vue.component('sales_comparison', {
         "<tr>" +
         "<td>نام</td>" +
         "<td>تعداد</td>" +
-        "<td>تعداد2</td>" +
         "<td>دستگاه</td>" +
         "<td>کیلووات</td>" +
         "<td>مبلغ</td>" +
@@ -57,7 +56,6 @@ Vue.component('sales_comparison', {
         "<tr @click='res.show_details = !res.show_details'>" +
         "<td>{{res.name}}</td>" +
         "<td>{{res.count}}</td>" +
-        "<td>{{res.ps_count}}</td>" +
         "<td>{{res.ps_qty}}</td>" +
         "<td>{{pretty(res.kw)}}" +
         " ({{pretty(100*res.kw/total_fn('kw'), '0,0.00')}}%)</td>" +
@@ -75,6 +73,7 @@ Vue.component('sales_comparison', {
         "<td>شماره مجوز</td>" +
         "<td>شماره تدوین</td>" +
         "<td colspan='5'>مشتری</td>" +
+        "<td>کیلووات</td>" +
         "<td>جمع پیش فاکتور</td>" +
         "<td>دریافت شده</td>" +
         "<td>مانده</td>" +
@@ -86,6 +85,7 @@ Vue.component('sales_comparison', {
         "<td>{{perm.perm_number}}</td>" +
         "<td>{{perm.number_td}}</td>" +
         "<td colspan='5'>{{perm.customer}}</td>" +
+        "<td>{{pretty(perm.total_kw)}}</td>" +
         "<td>{{pretty(perm.proforma_total)}}</td>" +
         "<td>{{pretty(perm.total_received)}}({{pretty(perm.total_received_percentage)}}%)</td>" +
         "<td>{{pretty(perm.perm_receivable)}}({{pretty(perm.perm_receivable_percentage)}}%)</td>" +
@@ -97,7 +97,6 @@ Vue.component('sales_comparison', {
         "<tr>" +
         "<td>جمع</td>" +
         "<td>{{total_fn('count')}}</td>" +
-        "<td>{{total_fn('ps_count')}}</td>" +
         "<td>{{total_fn('ps_qty')}}</td>" +
         "<td>{{pretty(total_fn('kw'))}}</td>" +
         "<td>{{pretty(total_fn('price'))}} ({{pretty(total_fn('price') / total_fn('kw'))}} بر kw)</td>" +

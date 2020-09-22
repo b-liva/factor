@@ -162,6 +162,13 @@
                             <td>{{ prefspec.xpref_id.owner }}</td>
                         </tr>
                     {% endfor %}
+                    <tr>
+                        <td colspan="4">جمع</td>
+                        <td>{{ qty | intcomma }}</td>
+                        <td colspan="2"></td>
+                        <td>{{ kw | floatformat | intcomma }}</td>
+                        <td>{{ amount | floatformat | intcomma }}</td>
+                    </tr>
                     </tbody>
 {% endblock %}
 {% block pagination_links %}

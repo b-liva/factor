@@ -313,9 +313,9 @@ def prefspec_index(request):
             owner = User.objects.get(pk=request.POST['owner'])
             spec_list = spec_list.distinct().filter(Q(xpref_id__owner=owner) | Q(xpref_id__req_id__colleagues=owner))
         if request.POST['date_min']:
-            spec_list = spec_list.filter(xpref_id__date_fa__gte=request.POST['date_min'])
+            spec_list = spec_list.filter(xpref_id__perm_date__gte=request.POST['date_min'])
         if request.POST['date_max']:
-            spec_list = spec_list.filter(xpref_id__date_fa__lte=request.POST['date_max'])
+            spec_list = spec_list.filter(xpref_id__perm_date__lte=request.POST['date_max'])
         if request.POST['kw_max']:
             spec_list = spec_list.filter(kw__lte=request.POST['kw_max'])
         if request.POST['kw_min']:
@@ -338,6 +338,14 @@ def prefspec_index(request):
         if request.POST['dsc_asc'] == '2':
             spec_list = spec_list.reverse()
 
+    kw = 0
+    amount = 0
+    qty = 0
+    for spec in spec_list:
+        kw = kw + spec.qty * spec.kw
+        amount = amount + 1.09 * (spec.price * spec.qty)
+        qty = qty + spec.qty
+
     page = request.GET.get('page')
     paginator = Paginator(spec_list, item_per_page)
     try:
@@ -348,6 +356,9 @@ def prefspec_index(request):
         prefspec_page = paginator.page(paginator.num_pages)
     context = {
         'pref_specs': prefspec_page,
+        'qty': qty,
+        'kw': kw,
+        'amount': amount,
         'form': form,
     }
     return render(request, 'requests/admin_jemco/ypref/prefspec_index.html', context)
@@ -429,10 +440,20 @@ def perm_index(request):
         # 'remain': prof_list.aggregate(remain=F('total')-F('sent'))['remain'],
     }
     qty['remain'] = qty['total'] - qty['qty_sent']
+    tkw = 0
+    amount = 0
+    amount_due = 0
+    for proforma in prof_list:
+        tkw = tkw + proforma.total_kw()
+        amount = amount + proforma.total_proforma_price_vat()['price_vat']
+        amount_due = amount_due + proforma.total_proforma_received()['remaining']
     context = {
         'permission': res,
         'form': form,
         'qty': qty,
+        'tkw': tkw,
+        'amount': amount,
+        'amount_due': amount_due,
         'title': 'مجوز ساخت',
         'showDelete': True,
     }

@@ -113,6 +113,7 @@
                         <th scope="col" class="text-center">تعداد ارسال شده</th>
 {#                        <th scope="col" class="text-center test-phase">ارسال شده</th>#}
                         <th scope="col" class="text-center">تعداد باقیمانده</th>
+                        <th scope="col" class="text-center">کیلووات</th>
 {#                        <th scope="col" class="text-center test-phase">باقیمانده</th>#}
                         <th scope="col" class="text-center">باقیمانده(روز)</th>
 {#                        <th scope="col" class="text-center test-phase">باقیمانده(روز)</th>#}
@@ -187,6 +188,7 @@
 {#                            </td>#}
 {#                            <td>{{ p.total_proforma_qty_remain }}</td>#}
                             <td>{{ p.perm_qty_remainder }}</td>
+                            <td>{{ p.total_kw|floatformat|intcomma }}</td>
 {#                            <td>#}
 {#                                {% invout_qty_not_sent p.perm_prof.first %}#}
 {#                            </td>#}
@@ -220,10 +222,14 @@
                         </tr>
                     {% endfor %}
                     <tr>
-                        <td colspan="6">جمع</td>
+                        <td colspan="9">جمع</td>
                         <td>{{ qty.total }}</td>
                         <td>{{ qty.qty_sent }}</td>
                         <td>{{ qty.remain }}</td>
+                        <td>{{ tkw | floatformat | intcomma }}</td>
+                        <td colspan="2"></td>
+                        <td>{{ amount | floatformat | intcomma }}</td>
+                        <td>{{ amount_due | floatformat | intcomma }}</td>
                     </tr>
                     </tbody>
 {% endblock %}

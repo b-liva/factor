@@ -884,6 +884,7 @@ def fetch_sales_data(request):
                 'perm_receivable': a.total_proforma_received()['remaining'],
                 'perm_receivable_percentage': a.total_proforma_received()['remaining_percent'],
                 'proforma_number': a.number,
+                'total_kw': a.total_kw(),
                 'url': request.build_absolute_uri(reverse('pref_details', kwargs={'ypref_pk': a.pk})),
                 'customer': a.req_id.customer.name,
                 'customer_url': request.build_absolute_uri(reverse('customer_read', kwargs={'customer_pk': a.req_id.customer.pk})),

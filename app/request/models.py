@@ -450,6 +450,10 @@ class Xpref(models.Model):
             percentage = 'نامشخص'
         return percentage
 
+    def total_kw(self):
+        kw = self.prefspec_set.filter(price__gt=0).aggregate(sum=Sum(F('qty') * F('kw'), output_field=FloatField()))['sum']
+        return kw
+
     class Meta:
         permissions = (
             ('index_proforma', 'Can index Proforma'),
