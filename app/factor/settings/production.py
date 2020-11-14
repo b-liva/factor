@@ -23,3 +23,6 @@ DATABASES = {
         },
     }
 }
+PORT = os.environ.get('DB_PORT', None)
+if PORT:
+    DATABASES['default']['PORT'] = PORT

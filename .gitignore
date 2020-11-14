@@ -46,3 +46,4 @@ app/.fandoghignore
 workspace.tar.gz
 
 .fandogh/
+/app/data/

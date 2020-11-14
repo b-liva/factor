@@ -14,7 +14,7 @@ import environ
 import os, json, sys
 from django.urls import reverse_lazy
 from django.core.exceptions import ImproperlyConfigured
-
+from corsheaders.defaults import default_headers
 
 def set_secret_key(settings, secret):
     try:
@@ -145,18 +145,19 @@ MIDDLEWARE = [
     'core.middleware.jauth.JauthMiddleware'
 ]
 
-# CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8080',
-    'http://localhost:8001',
-)
-CORS_ORIGIN_WHITELIST_ENV = os.environ.get('CORS_ORIGIN_WHITELIST', ())
-if CORS_ORIGIN_WHITELIST_ENV:
-    CORS_ORIGIN_WHITELIST = CORS_ORIGIN_WHITELIST + tuple(CORS_ORIGIN_WHITELIST_ENV.split(','))
+CORS_ORIGIN_ALLOW_ALL = bool(int(os.environ.get('CORS_ORIGIN_ALLOW_ALL', 1)))
 
-CORS_ALLOW_HEADERS = [
-    'X-CSRFToken',
-]
+# print(CORS_ORIGIN_ALLOW_ALL)
+# CORS_ORIGIN_WHITELIST = (
+#     'http://localhost:8080',
+#     'http://localhost:8001',
+#     'http://localhost',
+# )
+# CORS_ORIGIN_WHITELIST_ENV = os.environ.get('CORS_ORIGIN_WHITELIST', ())
+# if CORS_ORIGIN_WHITELIST_ENV:
+#     CORS_ORIGIN_WHITELIST = CORS_ORIGIN_WHITELIST + tuple(CORS_ORIGIN_WHITELIST_ENV.split(','))
+
+CORS_ALLOW_HEADERS = list(default_headers) + ['authorization']
 
 # STATIC
 # ------------------------------------------------------------------------------
@@ -346,4 +347,5 @@ GRAPHQL_JWT = {
 }
 
 # CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_NAME = 'X-CSRFToken'
+# CSRF_COOKIE_NAME = 'X-CSRFToken'
+DATA_DIR = os.path.join(ROOT_DIR, 'data/')
