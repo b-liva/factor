@@ -12,6 +12,7 @@ class UserNode(DjangoObjectType):
     class Meta:
         model = User
         filter_fields = {
+            'is_active': ['exact'],
             'is_customer': ['exact'],
             'sales_exp': ['exact']
         }

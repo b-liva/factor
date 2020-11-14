@@ -1,3 +1,4 @@
+import jdatetime
 from django.db.models import Sum, F, FloatField
 from graphene import relay, Field, List, String, Int, ID, GlobalID, ObjectType
 from graphene_django.filter import DjangoFilterConnectionField
@@ -38,43 +39,130 @@ def kw_per_project_type(project_type):
     return kw
 
 
-def count_per_project_type(project_type):
+def count_per_project_type(project_type, days=None, **filters):
+
     specs = reqspecs_raw().filter(type__title=project_type)
+    if days:
+        specs = specs.filter(**filters)
     count = specs.values('req_id').distinct().count()
+
     return count
 
 
 class Statistics(ObjectType):
-    total = Field(KwCounts)
-    routine = Field(KwCounts)
-    project = Field(KwCounts)
-    services = Field(KwCounts)
-    ex = Field(KwCounts)
+    class Input:
+        days = Int()
+    total = Field(KwCounts, days=Int())
+    routine = Field(KwCounts, days=Int())
+    project = Field(KwCounts, days=Int())
+    services = Field(KwCounts, days=Int())
+    ex = Field(KwCounts, days=Int())
 
-    def resolve_total(self, info):
-        count = active_orders().count()
-        rs = reqspecs_raw()
-        kw = calculate_kw(rs)
+    def resolve_total(self, info, days):
+        orders_filters = {
+            'is_active': True
+        }
+        filters = {
+            'req_id__is_active': True
+        }
+
+        if days:
+            today = jdatetime.date.today()
+            start_date = today - jdatetime.timedelta(days)
+            orders_filters.update({
+                'date_fa__gte': start_date
+            })
+            filters.update({
+                'req_id__date_fa__gte': start_date
+            })
+
+        orders_active = Requests.objects.filter(**orders_filters)
+        count = orders_active.count()
+
+        rspec = ReqSpec.objects.filter(**filters)
+        kw = calculate_kw(rspec)
+        kw = 0 if not kw else kw
+        count = 0 if not count else count
+
         return KwCounts(title='تعداد درخواست ها', kw=kw, count=count)
 
-    def resolve_routine(self, info):
-        kw = kw_per_project_type('روتین')
-        count = count_per_project_type('روتین')
+    def resolve_routine(self, info, days=None):
+        filters = {
+            'type__title': 'روتین'
+        }
+        if days:
+            today = jdatetime.date.today()
+            start_date = today - jdatetime.timedelta(days)
+            filters.update({
+                'req_id__date_fa__gte': start_date,
+            })
+        specs = reqspecs_raw().filter(**filters)
+        kw = calculate_kw(specs)
+        count = specs.values('req_id').distinct().count()
+
+        kw = 0 if not kw else kw
+        count = 0 if not count else count
         return KwCounts(title='روتین (KW)', kw=kw, count=count)
 
-    def resolve_ex(self, info):
-        kw = kw_per_project_type('ضد انفجار')
-        count = count_per_project_type('ضد انفجار')
+    def resolve_ex(self, info, days=None):
+        filters = {
+            'type__title': 'ضد انفجار'
+        }
+        if days:
+            today = jdatetime.date.today()
+            start_date = today - jdatetime.timedelta(days)
+            filters.update({
+                'req_id__date_fa__gte': start_date,
+            })
+        specs = reqspecs_raw().filter(**filters)
+        kw = calculate_kw(specs)
+        count = specs.values('req_id').distinct().count()
+
+        kw = 0 if not kw else kw
+        count = 0 if not count else count
         return KwCounts(title='ضدانفجار (KW)', kw=kw, count=count)
 
-    def resolve_services(self, info):
-        kw = kw_per_project_type('تعمیرات')
-        count = count_per_project_type('تعمیرات')
+    def resolve_services(self, info, days=None):
+
+        filters = {
+            'type__title': 'تعمیرات'
+        }
+        if days:
+            today = jdatetime.date.today()
+            start_date = today - jdatetime.timedelta(days)
+            filters.update({
+                'req_id__date_fa__gte': start_date,
+            })
+        specs = reqspecs_raw().filter(**filters)
+        kw = calculate_kw(specs)
+        count = specs.values('req_id').distinct().count()
+
+        kw = 0 if not kw else kw
+        count = 0 if not count else count
+
+        # kw = kw_per_project_type('تعمیرات')
+        # count = count_per_project_type('تعمیرات')
         return KwCounts(title='تعمیرات (KW)', kw=kw, count=count)
 
-    def resolve_project(self, info):
-        kw = kw_per_project_type('پروژه')
-        count = count_per_project_type('پروژه')
+    def resolve_project(self, info, days=None):
+        filters = {
+            'type__title': 'تعمیرات'
+        }
+        if days:
+            today = jdatetime.date.today()
+            start_date = today - jdatetime.timedelta(days)
+            filters.update({
+                'req_id__date_fa__gte': start_date,
+            })
+        specs = reqspecs_raw().filter(**filters)
+        kw = calculate_kw(specs)
+        count = specs.values('req_id').distinct().count()
+
+        kw = 0 if not kw else kw
+        count = 0 if not count else count
+
+        # kw = kw_per_project_type('پروژه')
+        # count = count_per_project_type('پروژه')
         return KwCounts(title='پروژه (KW)', count=count, kw=kw)
 
 
@@ -114,7 +202,8 @@ class Query(ObjectType):
     ic = relay.Node.Field(ICTypeNode)
     all_ics = DjangoFilterConnectionField(ICTypeNode)
 
-    dashboard_statistics = Field(Statistics, customer=ID())
+    dashboard_statistics = Field(Statistics, customer=ID(), days=Int())
 
     def resolve_dashboard_statistics(self, info, **kwargs):
+        print(kwargs)
         return True

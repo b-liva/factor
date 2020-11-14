@@ -1,7 +1,7 @@
 from django.db.models import Sum, F, FloatField
 import django_filters
 import graphene
-from graphene import relay, InputObjectType
+from graphene import relay
 from graphene_django import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
@@ -48,6 +48,7 @@ class ProformaNode(OwnQuerySet, DjangoObjectType):
     amount_total = graphene.Float()
     paid_total = graphene.Float()
     unpaid_total = graphene.Float()
+    
 
     @classmethod
     @login_required
@@ -97,7 +98,22 @@ class PrefSpecNode(OwnQuerySet, DjangoObjectType):
         return super(PrefSpecNode, cls).get_node(info, id)
 
 
-class ProformaSpecInput(InputObjectType):
+class PrefSpecSummary(graphene.ObjectType):
+    kw = graphene.Float()
+    rpm = graphene.Int()
+    count = graphene.Int()
+
+
+class CustomerBySale(graphene.ObjectType):
+
+    customer_id = graphene.Int()
+    customer_name = graphene.String()
+    qty = graphene.Int()
+    amount = graphene.Float()
+    last_purchase = 2
+
+
+class ProformaSpecInput(graphene.InputObjectType):
     eqId = graphene.ID()
     id = graphene.ID()
     qty = graphene.Int()

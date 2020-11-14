@@ -62,6 +62,7 @@ from ..utils import render_to_pdf, link_callback
 
 from django.template.loader import get_template
 from django.template import Context
+
 User = get_user_model()
 
 ROUND_LEVEL = 1000000
@@ -70,7 +71,6 @@ ROUND_LEVEL = 1000000
 @login_required
 @check_perm('request.index_proforma', ProformaProxy)
 def pref_index(request):
-
     prof_list = Xpref.objects.filter(is_active=True).order_by('date_fa', 'pk').reverse()
     acl_obj = ProformaProxy(request.user)
     prof_list = prof_list.filter(acl_obj.show()).distinct()
@@ -92,7 +92,6 @@ def pref_index(request):
             else:
                 prof_list = prof_list.filter(req_id__customer__name__contains=request.POST['customer_name'])
         if request.POST['owner'] and request.POST['owner'] != '0':
-
             owner = User.objects.get(pk=request.POST['owner'])
             prof_list = prof_list.distinct().filter(Q(owner=owner) | Q(req_id__colleagues=owner))
         if request.POST['date_min']:
@@ -226,7 +225,6 @@ def perm_clear_session(request):
 
 @login_required
 def prof_export(request):
-
     try:
         context = cache.get('profs_in_sessions')
         profs = context['prefs']
@@ -286,7 +284,6 @@ def prof_export(request):
 @login_required
 @check_perm('request.index_proforma', ProformaProxy)
 def prefspec_index(request):
-
     spec_list = PrefSpec.objects.filter(xpref_id__is_active=True, xpref_id__perm=True, price__gt=0) \
         .annotate(qty_remaining=F('qty') - F('qty_sent'))
 
@@ -309,7 +306,6 @@ def prefspec_index(request):
             else:
                 spec_list = spec_list.filter(xpref_id__req_id__customer__name__contains=request.POST['customer_name'])
         if request.POST['owner'] and request.POST['owner'] != '0':
-
             owner = User.objects.get(pk=request.POST['owner'])
             spec_list = spec_list.distinct().filter(Q(xpref_id__owner=owner) | Q(xpref_id__req_id__colleagues=owner))
         if request.POST['date_min']:
@@ -374,7 +370,6 @@ def prefspec_clear_cache(request):
 @login_required
 @check_perm('request.index_proforma', ProformaProxy)
 def perm_index(request):
-
     prof_list = Xpref.objects.filter(is_active=True, req_id__is_active=True, perm=True) \
         .annotate(total_qty=Sum('prefspec__qty', filter=Q(prefspec__price__gt=0))) \
         .annotate(total_qty_sent=Sum('prefspec__qty_sent', filter=Q(prefspec__price__gt=0))) \
@@ -384,7 +379,7 @@ def perm_index(request):
     prof_list = prof_list.filter(acl_obj.show())
     # if not request.user.is_superuser:
     #     prof_list = prof_list.filter(owner=request.user)
-        # prof_list = prof_list.filter(req_id__owner=request.user)
+    # prof_list = prof_list.filter(req_id__owner=request.user)
 
     if not request.method == 'POST':
 
@@ -404,7 +399,6 @@ def perm_index(request):
             else:
                 prof_list = prof_list.filter(req_id__customer__name__contains=request.POST['customer_name'])
         if request.POST['owner'] and request.POST['owner'] != '0':
-
             owner = User.objects.get(pk=request.POST['owner'])
             prof_list = prof_list.distinct().filter(
                 Q(owner=owner) | Q(req_id__colleagues=owner) | Q(req_id__owner=owner))
@@ -433,8 +427,10 @@ def perm_index(request):
         res.append(p)
     prof_list_nums = [prof.number for prof in prof_list]
     qty = {
-        'total': PrefSpec.objects.filter(xpref_id__number__in=prof_list_nums, price__gt=0).aggregate(total=Sum('qty'))['total'],
-        'qty_sent': PrefSpec.objects.filter(xpref_id__number__in=prof_list_nums, price__gt=0).aggregate(qty_sent=Sum('qty_sent'))['qty_sent'],
+        'total': PrefSpec.objects.filter(xpref_id__number__in=prof_list_nums, price__gt=0).aggregate(total=Sum('qty'))[
+            'total'],
+        'qty_sent': PrefSpec.objects.filter(xpref_id__number__in=prof_list_nums, price__gt=0).aggregate(
+            qty_sent=Sum('qty_sent'))['qty_sent'],
         # 'total': prof_list.aggregate(total=Sum('qty'))['total'],
         # 'sent': prof_list.aggregate(sent=Sum('sent'))['sent'],
         # 'remain': prof_list.aggregate(remain=F('total')-F('sent'))['remain'],
@@ -1104,7 +1100,7 @@ def pref_insert_spec_form(request, ypref_pk):
     i = 0
     for s in prefspecs:
         s.qty = qty[i]
-        s.price = prices[i].replace(',','') if prices[i] else 0
+        s.price = prices[i].replace(',', '') if prices[i] else 0
         s.considerations = considerations[i]
         s.save()
         i += 1
@@ -1549,19 +1545,43 @@ def pfcost(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
     specs = proforma.prefspec_set.filter(price__gt=0)
     host = os.environ.get('CAPIHOST')
+    prof_date = proforma.date_fa.togregorian()
+    # headers = {
+    #     'Content-type': 'application/json'
+    # }
+    # payload = {
+    #     'date': str(prof_date.year)+str(prof_date.month)+str(prof_date.day)
+    # }
     try:
         api_req = requests.get(f'http://{host}/cost')
+        # api_req = requests.post(f'http://{host}/cost', json=payload, headers=headers)
     except:
         messages.add_message(request, level=20, message='خطا')
         return redirect('errorpage')
+    try:
+        mcosts = requests.get(f'http://{host}/material_pandas')
+    except:
+        messages.add_message(request, level=20, message='خطا')
+        return redirect('errorpage')
+
     costs = api_req.json()['response']
+    formula = api_req.json()['formula']
+
+    if formula == 1:
+        formula_txt = 'فرمول قدیم'
+    elif formula == 2:
+        formula_txt = 'فرمول جدید'
+    else:
+        formula_txt = 'فرمول جدید'
+
+    material_cost = mcosts.json()['response']
     results = list()
     no_cost = list()
     added = False
     for spec in specs:
         for cost in costs:
             if spec.kw == float(cost['kw']) and spec.rpm == int(cost['rpm']) and spec.voltage == 380:
-                item_unit_profit = spec.price - float(cost['cost'])
+                item_unit_profit = spec.price - float(cost['cost_calc'])
                 results.append({
                     'code': spec.code,
                     'qty': spec.qty,
@@ -1571,13 +1591,13 @@ def pfcost(request, ypref_pk):
                     'im': spec.im,
                     'ic': spec.ic,
                     'ip': spec.ip,
-                    'item_unit_cost': cost['cost'],
-                    'item_total_cost': cost['cost'] * spec.qty,
+                    'item_unit_cost': cost['cost_calc'],
+                    'item_total_cost': cost['cost_calc'] * spec.qty,
                     'item_unit_price': spec.price,
                     'item_total_price': spec.price * spec.qty,
                     'item_unit_profit': item_unit_profit,
                     'item_total_profit': spec.qty * item_unit_profit,
-                    'item_percent': 100 * (spec.price - float(cost['cost'])) / float(cost['cost'])
+                    'item_percent': 100 * (spec.price - float(cost['cost_calc'])) / float(cost['cost_calc'])
                 })
                 added = True
                 break
@@ -1618,6 +1638,123 @@ def pfcost(request, ypref_pk):
         'costs': costs,
         'results': results,
         'total': total,
-        'no_cost': no_cost
+        'no_cost': no_cost,
+        'material_cost': material_cost,
+        'prof': proforma,
+        'formula_txt': formula_txt
     }
     return render(request, 'requests/admin_jemco/ypref/details_cost.html', context)
+
+
+@login_required
+def adjust_cost(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    silicon = request.POST.get('silicon')
+    cu = request.POST.get('cu')
+    alu = request.POST.get('alu')
+    steel = request.POST.get('steel')
+    dicast = request.POST.get('dicast')
+
+    host = os.environ.get('CAPIHOST')
+    headers = {
+        'Content-type': 'application/json'
+    }
+    payload = {
+        "cu": int(cu.replace(',', '')),
+        "silicon": int(silicon.replace(',', '')),
+        "alu": int(alu.replace(',', '')),
+        "steel": int(steel.replace(',', '')),
+        "dicast": int(dicast.replace(',', '')),
+    }
+    api_req = requests.post(url=f'http://{host}/change_cost_pandas', json=payload, headers=headers)
+    context = {
+        'prof': proforma,
+        # 'res': api_req.json()
+    }
+    return redirect('pfcost', ypref_pk=ypref_pk)
+    # return render(request, 'requests/admin_jemco/ypref/details_cost.html', context)
+
+
+@login_required
+def pandas(request):
+    from django.conf import settings
+    import pandas as pd
+    customer = request.POST.get('customer')
+    type = request.POST.get('type')
+    print(customer, type)
+
+    data_path = settings.DATA_DIR + 'sales.xlsx'
+    df = pd.read_excel(data_path)
+    col_names = {
+        'نوع': 'type',
+        'سریال': 'serial_no',
+        'فاکتور': 'invoice_no',
+        'تاریخ': 'date',
+        'مشتری': 'customer_code',
+        'نام مشتری': 'customer_name',
+        'وضعیت ثبت': 'status',
+        'مبلغ قابل پرداخت': 'amount',
+    }
+    df.rename(columns=col_names, inplace=True)
+
+    filt_by_customer = (df['customer_name'].str.contains(customer)) & (df['type'] == type)
+    df = df[filt_by_customer] if customer else df
+    amount_total = df['amount'].sum()
+    df_dict = df.to_dict(orient='records')
+
+    customer_group = df.groupby(['customer_name'])
+    customer_amount_total = customer_group['amount'].sum()
+    context = {
+        'df': df_dict,
+        'amount_total': amount_total,
+        'customer_amount_total': customer_amount_total,
+        'customer_group': customer_group,
+    }
+    return render(request, 'requests/admin_jemco/ypref/pandas.html', context)
+
+
+@login_required
+def set_one_time(request, ypref_pk):
+    host = os.environ.get('CAPIHOST')
+    try:
+        api_req = requests.get(f'http://{host}/reset')
+    except:
+        messages.add_message(request, level=20, message='خطا')
+        return redirect('errorpage')
+
+    return redirect('pfcost', ypref_pk=ypref_pk)
+
+
+def set_formula_1(request, ypref_pk):
+    host = os.environ.get('CAPIHOST')
+    headers = {
+        'Content-type': 'application/json'
+    }
+
+    payload = {
+        'formula': 1
+    }
+    try:
+        api_req = requests.post(url=f'http://{host}/change_cost_formula', json=payload, headers=headers)
+    except:
+        messages.add_message(request, level=20, message='خطا')
+        return redirect('errorpage')
+    return redirect('pfcost', ypref_pk=ypref_pk)
+
+
+@login_required
+def set_formula_2(request, ypref_pk):
+    host = os.environ.get('CAPIHOST')
+    headers = {
+        'Content-type': 'application/json'
+    }
+
+    payload = {
+        'formula': 2
+    }
+    try:
+        api_req = requests.post(url=f'http://{host}/change_cost_formula', json=payload, headers=headers)
+    except:
+        messages.add_message(request, level=20, message='خطا')
+        return redirect('errorpage')
+    return redirect('pfcost', ypref_pk=ypref_pk)

@@ -5,13 +5,47 @@
 {% block right_col %}
     <div class="container">
         <div class="row">
-            {% include 'admin_theme/page_elements/details_header.html' with show_me='proforma' request=proforma.req_id prof=proforma %}
-        </div>
-        <div>
             <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+                <p class="text-center">{{ res }}</p>
                 <h3 class="text-center">پیش فاکتور</h3>
-                <h4 class="text-center red">{{ pref.number }}</h4>
+                <h4 class="text-center red">
+                    <a href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof.number }}</a></h4>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <form action="{% url 'adjust_cost' ypref_pk=prof.pk %}" method="post">
+                    {% csrf_token %}
+                    <table class="table table-hover text-center">
+                        <thead>
+                        <tr>
+                            <td class="d-inline bg-blue-sky">ورق سیلیکون</td>
+                            <td class="d-inline bg-blue-sky">مس</td>
+                            <td class="d-inline bg-blue-sky">آلومینیوم</td>
+                            <td class="d-inline bg-blue-sky">ورق فولادی</td>
+                            <td class="d-inline bg-blue-sky">چدن</td>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><input name="silicon" value="{{ material_cost.silicon | floatformat | intcomma }}" type="text"></td>
+                            <td><input name="cu" value="{{ material_cost.copper | floatformat | intcomma }}" type="text"></td>
+                            <td><input name="alu" value="{{ material_cost.alu | floatformat | intcomma }}" type="text"></td>
+                            <td><input name="steel" value="{{ material_cost.steel | floatformat | intcomma }}" type="text"></td>
+                            <td><input name="dicast" value="{{ material_cost.cast_ir | floatformat | intcomma }}" type="text"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-sm btn-success btn-round">ثبت</button>
+                    <a class="btn btn-sm btn-warning btn-round" href="{% url 'set_one_time' ypref_pk=prof.pk %}">پیش فرض</a>
+
+                    <a class="btn btn-xs btn-primary btn-round" href="{% url 'set_formula_1' ypref_pk=prof.pk %}">فرمول قدیم</a>
+                    <a class="btn btn-xs btn-primary btn-round" href="{% url 'set_formula_2' ypref_pk=prof.pk %}">فرمول جدید</a>
+                </form>
+
+            </div>
+
         </div>
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
@@ -78,11 +112,15 @@
                                 <td>{{ total.price_total|floatformat|intcomma }}</td>
                                 <td></td>
                                 <td>{{ total.profit_total|floatformat|intcomma }}</td>
-                                <td>{{ total.profit_total_percent|floatformat }}</td>
+                                <td>
+                                    <p>{{ total.profit_total_percent|floatformat }}</p>
+                                    <p data-toggle="tooltip" title="نحوه محاسبه قیمت تمام شده از تاریخ آبان 99 تغییر داشته است!" class="text-danger">
+                                        {{ formula_txt }}</p>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
-                    <h3 class="text-center" style="margin-top: 50px">بدون قیمت تمام شده</h3>
+                        <h3 class="text-center" style="margin-top: 50px">بدون قیمت تمام شده</h3>
                         <table class="table table-hover text-center">
                             <thead>
                             <tr class="d-inline bg-danger">

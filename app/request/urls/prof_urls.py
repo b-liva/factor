@@ -8,6 +8,7 @@ from request.viewsFolder import proformaViews
 
 
 urlpatterns = [
+                  path('pandas', proformaViews.pandas, name='pandas'),
                   path('pdf-header', proformaViews.pdf_header, name='pdf_header'),
                   path('pdf-footer', proformaViews.pdf_footer, name='pdf_footer'),
                   path('pro_form', proformaViews.pro_form, name='pro_form'),
@@ -35,10 +36,14 @@ urlpatterns = [
                       path('insert_form', proformaViews.pref_insert_spec_form, name='pref_insert_spec_form'),
                       path('', proformaViews.pref_details, name='pref_details'),
                       path('pfcost', proformaViews.pfcost, name='pfcost'),
+                      path('adjust_cost', proformaViews.adjust_cost, name='adjust_cost'),
                       path('perform_discount', proformaViews.perform_discount, name='perform_discount'),
                       path('proforma-copy', proformaViews.proforma_copy, name='proforma_copy'),
                       path('verified', proformaViews.pref_verify_to_send, name='pref_verify_to_send'),
                       path('signed', proformaViews.pref_send_verified, name='pref_send_verified'),
+                      path('set_one_time', proformaViews.set_one_time, name='set_one_time'),
+                      path('set_formula_1', proformaViews.set_formula_1, name='set_formula_1'),
+                      path('set_formula_2', proformaViews.set_formula_2, name='set_formula_2'),
                       path('change-needed', proformaViews.proforma_change_needed, name='proforma_change_needed'),
                       path('change-done/<int:change_pk>', proformaViews.change_done, name='change_done'),
                       path('cancel_verified', proformaViews.cancel_pref_verify_to_send, name='cancel_pref_verify_to_send'),
