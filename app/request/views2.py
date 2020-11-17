@@ -61,13 +61,14 @@ def request_form(request):
 
 
 @login_required
+@check_perm('request.add_requests', OrderProxy)
 def req_form_copy(request):
-    acl_obj = ProformaProxy(request.user, 'request.add_requests')
-    is_allowed = AccessControl(acl_obj).allow()
+    # acl_obj = OrderProxy(request.user, 'request.add_requests')
+    # is_allowed = AccessControl(acl_obj).allow()
     # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.add_requests', )
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
+    # if not is_allowed:
+    #     messages.error(request, 'عدم دسترسی کافی')
+    #     return redirect('errorpage')
 
     if request.method == 'POST':
         form = RequestCopyForm(request.POST or None)
