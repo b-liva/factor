@@ -1542,19 +1542,32 @@ def proforma_has_payment_no_perm(request):
 
 @login_required
 def pfcost(request, ypref_pk):
+    print('*&*&*&*&*&*&*& request method', request.method)
     proforma = Xpref.objects.get(pk=ypref_pk)
     specs = proforma.prefspec_set.filter(price__gt=0)
     host = os.environ.get('CAPIHOST')
     prof_date = proforma.date_fa.togregorian()
-    # headers = {
-    #     'Content-type': 'application/json'
-    # }
-    # payload = {
-    #     'date': str(prof_date.year)+str(prof_date.month)+str(prof_date.day)
-    # }
+
+    discount = {
+        'un90_disc': 0,
+        'up90_disc': 0,
+    }
+    un90_disc = up90_disc = 1
+    if 'discounts' in request.session:
+        discount['un90_disc'] = request.session['discounts']['un90_disc']
+        un90_disc = 1 - float(discount['un90_disc']) / 100
+        discount['up90_disc'] = request.session['discounts']['up90_disc']
+        up90_disc = 1 - float(discount['up90_disc']) / 100
+
+    headers = {
+        'Content-type': 'application/json'
+    }
+    payload = {
+        'date': 10000*prof_date.year+100*prof_date.month+prof_date.day,
+    }
     try:
-        api_req = requests.get(f'http://{host}/cost')
-        # api_req = requests.post(f'http://{host}/cost', json=payload, headers=headers)
+        # api_req = requests.get(f'http://{host}/cost')
+        api_req = requests.post(f'http://{host}/cost', json=payload, headers=headers)
     except:
         messages.add_message(request, level=20, message='خطا')
         return redirect('errorpage')
@@ -1565,6 +1578,13 @@ def pfcost(request, ypref_pk):
         return redirect('errorpage')
 
     costs = api_req.json()['response']
+    file_name = api_req.json()['file_name']
+    file_name_fa = str(file_name)
+    year = file_name_fa[0:4]
+    month = file_name_fa[4:6]
+    day = file_name_fa[6:8]
+    date_greg = datetime.date(year=int(year), month=int(month), day=int(day))
+    date_fa = jdatetime.date.fromgregorian(date=date_greg, local='fa_IR')
     formula = api_req.json()['formula']
 
     if formula == 1:
@@ -1579,9 +1599,14 @@ def pfcost(request, ypref_pk):
     no_cost = list()
     added = False
     for spec in specs:
+        if spec.kw < 90:
+            disc = un90_disc
+        else:
+            disc = up90_disc
         for cost in costs:
             if spec.kw == float(cost['kw']) and spec.rpm == int(cost['rpm']) and spec.voltage == 380:
-                item_unit_profit = spec.price - float(cost['cost_calc'])
+
+                item_unit_profit = spec.price * disc - float(cost['cost_calc'])
                 results.append({
                     'code': spec.code,
                     'qty': spec.qty,
@@ -1593,11 +1618,11 @@ def pfcost(request, ypref_pk):
                     'ip': spec.ip,
                     'item_unit_cost': cost['cost_calc'],
                     'item_total_cost': cost['cost_calc'] * spec.qty,
-                    'item_unit_price': spec.price,
-                    'item_total_price': spec.price * spec.qty,
+                    'item_unit_price': spec.price * disc,
+                    'item_total_price': spec.price * disc * spec.qty,
                     'item_unit_profit': item_unit_profit,
                     'item_total_profit': spec.qty * item_unit_profit,
-                    'item_percent': 100 * (spec.price - float(cost['cost_calc'])) / float(cost['cost_calc'])
+                    'item_percent': 100 * (spec.price * disc - float(cost['cost_calc'])) / float(cost['cost_calc'])
                 })
                 added = True
                 break
@@ -1611,7 +1636,7 @@ def pfcost(request, ypref_pk):
                 'im': spec.im,
                 'ic': spec.ic,
                 'ip': spec.ip,
-                'price': spec.price
+                'price': spec.price * disc
             })
         added = False
 
@@ -1641,7 +1666,10 @@ def pfcost(request, ypref_pk):
         'no_cost': no_cost,
         'material_cost': material_cost,
         'prof': proforma,
-        'formula_txt': formula_txt
+        'formula_txt': formula_txt,
+        'file_name': file_name,
+        'date_fa': date_fa,
+        'discount': discount
     }
     return render(request, 'requests/admin_jemco/ypref/details_cost.html', context)
 
@@ -1649,6 +1677,17 @@ def pfcost(request, ypref_pk):
 @login_required
 def adjust_cost(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
+    un90_disc = request.POST.get('un90_disc')
+    if not un90_disc:
+        un90_disc = 0
+    up90_disc = request.POST.get('up90_disc')
+    if not up90_disc:
+        up90_disc = 0
+    request.session['discounts'] = {
+        'un90_disc': un90_disc,
+        'up90_disc': up90_disc,
+    }
+
     silicon = request.POST.get('silicon')
     cu = request.POST.get('cu')
     alu = request.POST.get('alu')
@@ -1681,7 +1720,6 @@ def pandas(request):
     import pandas as pd
     customer = request.POST.get('customer')
     type = request.POST.get('type')
-    print(customer, type)
 
     data_path = settings.DATA_DIR + 'sales.xlsx'
     df = pd.read_excel(data_path)
@@ -1714,10 +1752,26 @@ def pandas(request):
 
 
 @login_required
-def set_one_time(request, ypref_pk):
+def proforma_profit(request, ypref_pk):
+    if 'discounts' in request.session:
+        del request.session['discounts']
+    return redirect('reset_defaults', ypref_pk=ypref_pk)
+
+
+@login_required
+def reset_defaults(request, ypref_pk):
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    prof_date = proforma.date_fa.togregorian()
     host = os.environ.get('CAPIHOST')
+    headers = {
+        'Content-type': 'application/json'
+    }
+
+    payload = {
+        'date': 10000*prof_date.year+100*prof_date.month+prof_date.day,
+    }
     try:
-        api_req = requests.get(f'http://{host}/reset')
+        api_req = requests.post(f'http://{host}/reset', json=payload, headers=headers)
     except:
         messages.add_message(request, level=20, message='خطا')
         return redirect('errorpage')

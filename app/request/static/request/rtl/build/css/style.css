@@ -280,3 +280,6 @@ ul.quick-list {
     100% {height: 15px;}
 }
 
+input.cost-input{
+    width: 120px;
+}

@@ -124,11 +124,11 @@
                                     </li>
                                     {% if user.is_superuser %}
                                         <li>
-                                            <a href="{% url 'set_one_time' ypref_pk=pref.pk %}">
+                                            <a href="{% url 'reset_defaults' ypref_pk=pref.pk %}">
                                                 <i class="fa fa-percent green" aria-hidden="true"></i>ست</a>
                                         </li>
                                         <li>
-                                            <a href="{% url 'pfcost' ypref_pk=pref.pk %}">
+                                            <a href="{% url 'proforma_profit' ypref_pk=pref.pk %}">
                                                 <i class="fa fa-percent green" aria-hidden="true"></i>سود</a>
 
                                         </li>
