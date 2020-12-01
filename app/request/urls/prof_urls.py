@@ -32,6 +32,7 @@ urlpatterns = [
                   path('find', proformaViews.pref_find, name='pref_find'),
                   path('find_price_by_id', proformaViews.find_price_by_id, name='find_price_by_id'),
                   path('find_no_price_by_id', proformaViews.find_no_price_by_id, name='find_no_price_by_id'),
+                  path('clist', proformaViews.clist, name='clist'),
                   path('<int:ypref_pk>/', include([
                       path('insert_form', proformaViews.pref_insert_spec_form, name='pref_insert_spec_form'),
                       path('', proformaViews.pref_details, name='pref_details'),

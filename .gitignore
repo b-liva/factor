@@ -47,3 +47,5 @@ workspace.tar.gz
 
 .fandogh/
 /app/data/
+
+stage/

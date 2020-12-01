@@ -1,0 +1,143 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+{% load sales_ex_dashboard %}
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <form action="{% url 'clist' %}" method="post">
+                    {% csrf_token %}
+                    <div class="container">
+                        <div class="row clearfix">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" class="text-center d-inline bg-blue-sky">ورق سیلیکون</th>
+                                        <th scope="col" class="text-center d-inline bg-blue-sky">مس</th>
+                                        <th scope="col" class="text-center d-inline bg-blue-sky">آلومینیوم</th>
+                                        <th scope="col" class="text-center d-inline bg-blue-sky">ورق فولادی</th>
+                                        <th scope="col" class="text-center d-inline bg-blue-sky">چدن</th>
+                                    </tr>
+
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="text-center"><input class="cost-input" name="silicon"
+                                                                       value="{{ material_cost.silicon | floatformat | intcomma }}"
+                                                                       type="text"></td>
+                                        <td class="text-center"><input class="cost-input" name="cu"
+                                                                       value="{{ material_cost.cu | floatformat | intcomma }}"
+                                                                       type="text"></td>
+                                        <td class="text-center"><input class="cost-input" name="alu"
+                                                                       value="{{ material_cost.alu | floatformat | intcomma }}"
+                                                                       type="text"></td>
+                                        <td class="text-center"><input class="cost-input" name="steel"
+                                                                       value="{{ material_cost.steel | floatformat | intcomma }}"
+                                                                       type="text"></td>
+                                        <td class="text-center"><input class="cost-input" name="dicast"
+                                                                       value="{{ material_cost.cast_ir | floatformat | intcomma }}"
+                                                                       type="text"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-xs btn-success btn-round">ثبت</button>
+                    <a class="btn btn-xs btn-warning btn-round" href="{% url 'clist' %}">پیش فرض</a>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <table id="example" class="display nowrap" style="width:100%">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th class="text-center" style="background: #34495E; color: white" colspan="6">3000</th>
+                    <th class="text-center" style="background: #00979A; color: white" colspan="6">1500</th>
+                    <th class="text-center" style="background: #34495E; color: white" colspan="6">1000</th>
+                </tr>
+                <tr>
+                    <th class="right-border">ردیف</th>
+                    <th class="right-border text-center">کیلووات</th>
+                    <th>تمام شده</th>
+                    <th>پایه</th>
+                    <th>%سود پایه</th>
+                    <th>فروش</th>
+                    <th>%سود فروش</th>
+                    <th class="right-border">کیلووات</th>
+                    <th>تمام شده</th>
+                    <th>پایه</th>
+                    <th>%سود پایه</th>
+                    <th>فروش</th>
+                    <th>%سود فروش</th>
+                    <th class="right-border">کیلووات</th>
+                    <th>تمام شده</th>
+                    <th>پایه</th>
+                    <th>%سود پایه</th>
+                    <th>فروش</th>
+                    <th>%سود فروش</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for key, value in new_list.items %}
+                    <tr>
+                        <td class="right-border">{{ forloop.counter }}</td>
+                        {% for i in value %}
+                            <td
+                                    style="color: white; {% if i.rpm == 1500 %}background: #00979A;{% else %}background: #34495E{% endif %}"
+                                    class="right-border left-dashed-border text-center">
+                                {{ i.kw|floatformat }}
+                            </td>
+                            <td>{{ i.cost_calc|floatformat|intcomma }}</td>
+                            <td>{{ i.base|intcomma }}</td>
+                            <td>{{ i.base_profit|floatformat:2 }}</td>
+                            <td>{{ i.sales|intcomma }}</td>
+                            <td>{{ i.sales_profit|floatformat:2 }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+{#        <div class="row">#}
+{#            <div class="col-md-8 col-md-offset-2">#}
+{#                <table class="table">#}
+{#                    <thead>#}
+{#                    <tr>#}
+{#                        <th>ردیف</th>#}
+{#                        <th>توان</th>#}
+{#                        <th>دور</th>#}
+{#                        <th>تمام شده</th>#}
+{#                        <th>پایه</th>#}
+{#                        <th>%سود پایه</th>#}
+{#                        <th>فروش</th>#}
+{#                        <th>%سود فروش</th>#}
+{#                        <th>پایه فایل</th>#}
+{#                        <th>فروش فایل</th>#}
+{#                    </tr>#}
+{#                    </thead>#}
+{#                    <tbody>#}
+{#                    {% for cost in costs %}#}
+{#                        <tr>#}
+{#                            <td>{{ forloop.counter }}</td>#}
+{#                            <td>{{ cost.kw|floatformat }}</td>#}
+{#                            <td>{{ cost.rpm|floatformat:0 }}</td>#}
+{#                            <td>{{ cost.cost_calc|intcomma }}</td>#}
+{#                            <td>{{ cost.base|intcomma }}</td>#}
+{#                            <td>{{ cost.base_profit|floatformat:2 }}</td>#}
+{#                            <td>{{ cost.sales|intcomma }}</td>#}
+{#                            <td>{{ cost.sales_profit|floatformat:2 }}</td>#}
+{#                            <td>{{ cost.base_file|floatformat:0|intcomma }}</td>#}
+{#                            <td>{{ cost.sale_file|floatformat:0|intcomma }}</td>#}
+{#                        </tr>#}
+{#                    {% endfor %}#}
+{#                    </tbody>#}
+{#                </table>#}
+{#            </div>#}
+{#        </div>#}
+    </div>
+{% endblock %}

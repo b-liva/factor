@@ -56,7 +56,7 @@ from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationFi
 
 from request.templatetags import functions, request_extras
 from pricedb.models import MotorDB
-
+from request.viewsFolder.utilies import cost_utils
 from django.views.generic import View
 from ..utils import render_to_pdf, link_callback
 
@@ -1358,6 +1358,7 @@ def prof_spec_form(request, ypref_pk):
 
 
 @login_required
+@check_perm('request.read_proforma', ProformaProxy)
 def proforma_pdf(request, ypref_pk, render_header):
     render_header = True if render_header == 'True' else False
     footer = False
@@ -1376,13 +1377,13 @@ def proforma_pdf(request, ypref_pk, render_header):
         return redirect('errorpage')
 
     pref = Xpref.objects.get(pk=ypref_pk)
-    acl_obj = ProformaProxy(request.user, 'request.read_proforma', pref)
-    is_allowed = AccessControl(acl_obj).allow()
+    # acl_obj = ProformaProxy(request.user, 'request.read_proforma', pref)
+    # is_allowed = AccessControl(acl_obj).allow()
     # is_allowed = funcs.has_perm_or_is_owner(request.user, 'request.read_proforma', pref)
 
-    if not is_allowed:
-        messages.error(request, 'عدم دسترسی کافی')
-        return redirect('errorpage')
+    # if not is_allowed:
+    #     messages.error(request, 'عدم دسترسی کافی')
+    #     return redirect('errorpage')
 
     import os
     from django.conf import settings
@@ -1391,6 +1392,7 @@ def proforma_pdf(request, ypref_pk, render_header):
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'pdf_style.css'),
         # os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'pdf_style2.css'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'css', 'custom.min.css'),
+        # os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'build', 'fonts', 'woff', 'IRANSansWeb.woff'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap', 'dist', 'css',
                      'bootstrap.min.css'),
         os.path.join(settings.STATIC_ROOT, 'request', 'rtl', 'vendors', 'bootstrap-rtl', 'dist', 'css',
@@ -1405,6 +1407,7 @@ def proforma_pdf(request, ypref_pk, render_header):
         'margin-bottom': '1.37795in',
         'margin-left': '0.1in',
         'encoding': "UTF-8",
+        "enable-local-file-access": ""
         # 'footer-html': 'http://google.com',
     }
     if header:
@@ -1563,7 +1566,7 @@ def pfcost(request, ypref_pk):
         'Content-type': 'application/json'
     }
     payload = {
-        'date': 10000*prof_date.year+100*prof_date.month+prof_date.day,
+        'date': 10000 * prof_date.year + 100 * prof_date.month + prof_date.day,
     }
     try:
         # api_req = requests.get(f'http://{host}/cost')
@@ -1605,7 +1608,6 @@ def pfcost(request, ypref_pk):
             disc = up90_disc
         for cost in costs:
             if spec.kw == float(cost['kw']) and spec.rpm == int(cost['rpm']) and spec.voltage == 380:
-
                 item_unit_profit = spec.price * disc - float(cost['cost_calc'])
                 results.append({
                     'code': spec.code,
@@ -1768,7 +1770,7 @@ def reset_defaults(request, ypref_pk):
     }
 
     payload = {
-        'date': 10000*prof_date.year+100*prof_date.month+prof_date.day,
+        'date': 10000 * prof_date.year + 100 * prof_date.month + prof_date.day,
     }
     try:
         api_req = requests.post(f'http://{host}/reset', json=payload, headers=headers)
@@ -1812,3 +1814,35 @@ def set_formula_2(request, ypref_pk):
         messages.add_message(request, level=20, message='خطا')
         return redirect('errorpage')
     return redirect('pfcost', ypref_pk=ypref_pk)
+
+
+def base_prices():
+    from django.conf import settings
+    import pandas as pd
+    data_path = settings.DATA_DIR + 'prices.xlsx'
+    df = pd.read_excel(data_path)
+
+
+@login_required
+def clist(request):
+
+    df = cost_utils.price_df()
+
+    [costs, materials] = cost_utils.get_last_costs(request)
+
+    costs = cost_utils.calculate_profits(costs, df)
+
+    all_combinations = cost_utils.rpm_kw_combinations(costs)
+    costs = cost_utils.fill_blank_costs(all_combinations, costs)
+
+    new_costs = cost_utils.sort_costs_by(costs, 'kw')
+    cost_grp = cost_utils.group_costs_by(new_costs)
+
+    sorted_cost_dict = cost_utils.sorted_cost_dict(cost_grp)
+
+    context = {
+        'costs': new_costs,
+        'new_list': sorted_cost_dict,
+        'material_cost': materials,
+    }
+    return render(request, 'requests/admin_jemco/ypref/clist.html', context)

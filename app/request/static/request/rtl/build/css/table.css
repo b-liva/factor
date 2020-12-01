@@ -1,0 +1,12 @@
+.right-border, .left-border{
+    border-right: 1px solid black;
+}
+.left-border{
+    border-left: 1px solid black;
+}
+.left-dashed-border{
+    border-left: 1px dashed black;
+}
+.border-top{
+    border-top: 1px solid black;
+}
