@@ -1,12 +1,9 @@
 import re
 import jdatetime
 from django.contrib.auth.models import Group, Permission
-from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from rest_framework import status
-from django_jalali.db import models as jmodel
 from accounts.tests.test_public_funcs import CustomAPITestCase
 from cost import models
 from cost.models import ProjectCost
@@ -27,68 +24,68 @@ def create_cost(client):
     cc = CreateCost()  # create cost
     payload = cc.create_total_cost()
     payload['owner'] = exp_user.pk
-
-    res = client.post(CREATE_COST_URL, payload)
-    return res
+    return payload
 
 
 class CreateCost:
 
-    ch_number = "9837"
-    motor_type = "ls"
-    standard_parts = 9832749892837
-    cost_production = 912387498
-    general_cost = 923874
-    cost_practical = 298374982374
+    def __init__(self, **kwargs):
+        self.ch_number = "9837"
+        self.motor_type = "ls"
+        self.standard_parts = 9832749892837
+        self.cost_production = 912387498
+        self.general_cost = 923874
+        self.cost_practical = 298374982374
 
-    wage_payload = {
-        'qty': 1,
-        'price': 2500,
-        'unit': ('hr', 'hr')
-    }
-    steel_rebar_payload = {
-        'qty': 1,
-        'price': 2500,
-        'unit': ('kg', 'kg')
-    }
+        self.wage_payload = {
+            'qty': 1,
+            'price': 2500,
+            'unit': ('hr', 'hr')
+        }
+        self.steel_rebar_payload = {
+            'qty': 1,
+            'price': 2500,
+            'unit': ('kg', 'kg')
+        }
 
-    overhead_payload = wage_payload
-    cast_iron_payload = silicon_payload = alu_payload = cu_payload = steel_payload = steel_rebar_payload
-    bearing_payload = {
-        'qty': 1,
-        'price': 2500,
-        'unit': ('count', 'count')
-    }
-    test_payload = {
-        'qty': 1,
-        'price': 2500,
-        'unit': ('item', 'item')
-    }
-    certificate_payload = {
-        'qty': 1,
-        'price': 2500,
-        'unit': ('item', 'item')
-    }
+        self.overhead_payload = self.wage_payload
+        self.cast_iron_payload = self.silicon_payload = self.alu_payload = self.cu_payload = self.steel_payload \
+            = self.steel_rebar_payload
+        self.bearing_payload = {
+            'qty': 1,
+            'price': 2500,
+            'unit': ('count', 'count')
+        }
+        self.test_payload = {
+            'qty': 1,
+            'price': 2500,
+            'unit': ('item', 'item')
+        }
+        self.certificate_payload = {
+            'qty': 1,
+            'price': 2500,
+            'unit': ('item', 'item')
+        }
 
-    models_list = [
-        models.WageCost,
-        models.SteelRebar,
-        models.OverheadCost,
-        models.Steel,
-        models.CuStator,
-        models.AluIngot,
-        models.SiliconSheet,
-        models.CastIron,
-        models.Bearing,
-        models.Test,
-        models.Certificate,
-    ]
+        self.models_list = [
+            models.WageCost,
+            models.SteelRebar,
+            models.OverheadCost,
+            models.Steel,
+            models.CuStator,
+            models.AluIngot,
+            models.SiliconSheet,
+            models.CastIron,
+            models.Bearing,
+            models.Test,
+            models.Certificate,
+        ]
 
-    def modify_model_names(self, models_list):
+    def modify_model_names(self):
         """todo: This should generate function based on model names"""
         # func_template = f"""def create_{x}(self, **kwargs): return models.{y}.objects.create(**kwargs)"""
         modified_model_names = dict()
-        for name in models_list:
+        for name in self.models_list:
             x = re.findall('[A-Z][^A-Z]*', name.__name__)
             x = [i.lower() for i in x]
             modified_model_names['_'.join(x)] = name
@@ -173,32 +170,63 @@ class CreateCost:
         return payload
 
 
-class PublicCostAPITest(TestCase):
+class PublicCostAPITest(CustomAPITestCase):
     """Test the user API (public)"""
 
     def setUp(self):
-        self.client = APIClient()
+        super().setUp()
+        self.client_anon = APIClient()
+        self.client_exp = APIClient()
+        self.client_exp.force_authenticate(user=self.ex_user)
+        cc = CreateCost()
+        self.payload = cc.create_total_cost()
 
-    def test_list_cost_unauthorized(self):
+        self.payload['owner'] = self.ex_user.pk
+        res = self.client_exp.post(CREATE_COST_URL, self.payload)
+        self.sample_cost = ProjectCost.objects.get(pk=res.data['id'])
+
+    def test_list_cost_unauthenticated(self):
         """Test that authentication is required for listing cost"""
-        res = self.client.get(CREATE_COST_URL)
+        res = self.client_anon.get(CREATE_COST_URL)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_create_cost_unauthorized(self):
+    def test_create_cost_unauthenticated(self):
         """Test that authentication is required for creating cost"""
-        cc = CreateCost()  # create cost
-        payload = cc.create_total_cost()
-
-        res = self.client.post(CREATE_COST_URL, payload)
+        res = self.client_anon.post(CREATE_COST_URL, self.payload)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_update_cost_fail_unauthenticated(self):
+        """Test that anonymous user can't update cost"""
+        self.payload['practical_cost'] = 1232
+        url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
+        res = self.client_anon.put(url, self.payload)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
-class PrivateCostAPITest(TestCase):
+    def test_delete_cost_fail_unauthenticated(self):
+        """Test that anonymous user can't update cost"""
+        url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
+        res = self.client_anon.delete(url)
+        exists = ProjectCost.objects.filter(pk=self.sample_cost.pk).exists()
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertTrue(exists)
+
+
+class PrivateCostAPITest(CustomAPITestCase):
     def setUp(self):
-        self.client = APIClient()
-        custom_api = CustomAPITestCase()
-        self.user = custom_api.sample_user(username='anon')
+        super().setUp()
+        self.client_anon = APIClient()
         self.client.force_authenticate(user=self.user)
+        self.client_exp = APIClient()
+        self.client_exp.force_authenticate(user=self.ex_user)
+        self.client_superuser = APIClient()
+        self.client_superuser.force_authenticate(user=self.superuser)
+
+        cc = CreateCost()  # create cost
+        self.payload = cc.create_total_cost()
+        self.payload['owner'] = self.ex_user.pk
+
+        res = self.client_exp.post(CREATE_COST_URL, self.payload)
+        self.sample_cost = ProjectCost.objects.get(pk=res.data['id'])
 
     def test_create_cost_fails_unauthorized(self):
         """Test that authenticated user with no permission can't create cost(get)"""
@@ -207,142 +235,56 @@ class PrivateCostAPITest(TestCase):
 
     def test_create_cost_post_fails_unauthorized(self):
         """Test that authenticated user with no permission can't create cost(post)"""
-        cc = CreateCost()  # create cost
-        payload = cc.create_total_cost()
-        payload['owner'] = self.user
-        res = self.client.post(CREATE_COST_URL, payload)
+        self.payload['owner'] = self.user.pk
+        res = self.client.post(CREATE_COST_URL, self.payload)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_cost_post_success(self):
         """Test that authorized user can create cost"""
-        custom_api = CustomAPITestCase()
-        custom_api.sale_expert_group = Group.objects.create(name='sale_expert')
-        exp_user = custom_api.sample_user(username='exp')
-        exp_user.groups.add(custom_api.sale_expert_group)
-        custom_api.sale_expert_group.permissions.add(
-            Permission.objects.get(codename='add_projectcost', content_type__app_label='cost'),
-        )
-        self.client.force_authenticate(user=exp_user)
-
-        cc = CreateCost()  # create cost
-        payload = cc.create_total_cost()
-        payload['owner'] = exp_user.pk
-
-        res = self.client.post(CREATE_COST_URL, payload)
+        self.payload['owner'] = self.ex_user.pk
+        res = self.client_exp.post(CREATE_COST_URL, self.payload)
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(res.data['wage'], payload['wage'])
-        self.assertEqual(res.data['owner'], payload['owner'])
+        self.assertEqual(res.data['wage'], self.payload['wage'])
+        self.assertEqual(res.data['owner'], self.payload['owner'])
 
     def test_retrieve_cost_fails_unauthorized(self):
         """Test that user with no permission can't retrieve cost"""
-        custom_api = CustomAPITestCase()
-        custom_api.sale_expert_group = Group.objects.create(name='sale_expert')
-        exp_user = custom_api.sample_user(username='exp')
-        exp_user.groups.add(custom_api.sale_expert_group)
-        custom_api.sale_expert_group.permissions.add(
-            Permission.objects.get(codename='add_projectcost', content_type__app_label='cost'),
-        )
-        self.client.force_authenticate(user=exp_user)
 
-        cc = CreateCost()  # create cost
-        payload = cc.create_total_cost()
-        payload['owner'] = exp_user.pk
-
-        res = self.client.post(CREATE_COST_URL, payload)
-        url = reverse('cost:manage', kwargs={'pk': res.data['id']})
+        url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
         res = self.client.get(url)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         
     def test_update_cost_fails_unauthorized(self):
         """Test that user with no permission can't update cost"""
-        custom_api = CustomAPITestCase()
-        custom_api.sale_expert_group = Group.objects.create(name='sale_expert')
-        exp_user = custom_api.sample_user(username='exp')
-        exp_user.groups.add(custom_api.sale_expert_group)
-        custom_api.sale_expert_group.permissions.add(
-            Permission.objects.get(codename='add_projectcost', content_type__app_label='cost'),
-        )
-        self.client.force_authenticate(user=exp_user)
+        self.payload['cost_practical'] = 1233
 
-        cc = CreateCost()  # create cost
-        payload = cc.create_total_cost()
-        payload['owner'] = exp_user.pk
-
-        res = self.client.post(CREATE_COST_URL, payload)
-        payload['cost_practical'] = 1233
-
-        url = reverse('cost:manage', kwargs={'pk': res.data['id']})
-        res = self.client.put(url, payload)
+        url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
+        res = self.client.put(url, self.payload)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_cost_fails_unauthorized(self):
         """Test that user with no permission can't update cost"""
-        custom_api = CustomAPITestCase()
-        custom_api.sale_expert_group = Group.objects.create(name='sale_expert')
-        exp_user = custom_api.sample_user(username='exp')
-        exp_user.groups.add(custom_api.sale_expert_group)
-        custom_api.sale_expert_group.permissions.add(
-            Permission.objects.get(codename='add_projectcost', content_type__app_label='cost'),
-        )
-        self.client.force_authenticate(user=exp_user)
-
-        cc = CreateCost()  # create cost
-        payload = cc.create_total_cost()
-        payload['owner'] = exp_user.pk
-
-        res = self.client.post(CREATE_COST_URL, payload)
-
-        url = reverse('cost:manage', kwargs={'pk': res.data['id']})
+        url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
         res = self.client.delete(url)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_cost_success(self):
         """Test that user with update permission can update cost"""
-        custom_api = CustomAPITestCase()
-        custom_api.sale_expert_group = Group.objects.create(name='sale_expert')
-        exp_user = custom_api.sample_user(username='exp')
-        exp_user.groups.add(custom_api.sale_expert_group)
-        custom_api.sale_expert_group.permissions.add(
-            Permission.objects.get(codename='add_projectcost', content_type__app_label='cost'),
-            Permission.objects.get(codename='change_projectcost', content_type__app_label='cost'),
-        )
-        self.client.force_authenticate(user=exp_user)
-
-        cc = CreateCost()  # create cost
-        payload = cc.create_total_cost()
-        payload['owner'] = exp_user.pk
-        pc = self.client.post(CREATE_COST_URL, payload)
-
-        url = reverse('cost:manage', kwargs={'pk': pc.data['id']})
-        payload['cost_practical'] = 123
-        res = self.client.put(url, payload)
+        url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
+        self.payload['cost_practical'] = 123
+        res = self.client_exp.put(url, self.payload)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data['cost_practical'], payload['cost_practical'])
+        self.assertEqual(res.data['cost_practical'], self.payload['cost_practical'])
 
     def test_delete_cost_success(self):
         """Test that user with delete permission can delete cost"""
-        custom_api = CustomAPITestCase()
-        custom_api.sale_expert_group = Group.objects.create(name='sale_expert')
-        exp_user = custom_api.sample_user(username='exp')
-        exp_user.groups.add(custom_api.sale_expert_group)
-        custom_api.sale_expert_group.permissions.add(
-            Permission.objects.get(codename='add_projectcost', content_type__app_label='cost'),
-            Permission.objects.get(codename='delete_projectcost', content_type__app_label='cost'),
-        )
-        self.client.force_authenticate(user=exp_user)
+        cost_pk = self.sample_cost.pk
+        url = reverse('cost:manage', kwargs={'pk': cost_pk})
 
-        cc = CreateCost()  # create cost
-        payload = cc.create_total_cost()
-        payload['owner'] = exp_user.pk
-        pc = self.client.post(CREATE_COST_URL, payload)
-        # pc_obj = ProjectCost.objects.get(pk=pc.data['id'])
+        res = self.client_exp.delete(url)
 
-        url = reverse('cost:manage', kwargs={'pk': pc.data['id']})
-
-        res = self.client.delete(url, {'pk': pc.data['id']})
-
-        exists = ProjectCost.objects.filter(pk=pc.data['id']).exists()
+        exists = ProjectCost.objects.filter(pk=cost_pk).exists()
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(exists)

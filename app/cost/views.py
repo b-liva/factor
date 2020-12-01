@@ -8,10 +8,10 @@ from cost.models import ProjectCost
 class ProjectCostList(generics.ListCreateAPIView):
     queryset = ProjectCost.objects.all()
     serializer_class = ProjectCostSerializer
-    permission_classes = [permissions.IsAuthenticated, permissions.DjangoModelPermissions]
+    permission_classes = [permissions.IsAuthenticated, CustomDjangoModelPermissions]
 
 
 class ProjectCostManage(generics.RetrieveUpdateDestroyAPIView):
     queryset = ProjectCost.objects.all()
     serializer_class = ProjectCostSerializer
-    permission_classes = [permissions.IsAuthenticated, permissions.DjangoModelPermissions]
+    permission_classes = [permissions.IsAuthenticated, CustomDjangoModelPermissions]
