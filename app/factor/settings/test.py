@@ -14,7 +14,7 @@ from .base import *  # noqa
 # )
 # SECRET_KEY = get_secret_setting('SECRET_KEY_TEST')
 SECRET_KEY = os.environ['SECRET_KEY_TEST']
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
 # https://docs.djangoproject.com/en/dev/ref/settings/#test-runner
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 

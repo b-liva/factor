@@ -188,6 +188,7 @@ class CustomAPITestCase(APITestCase):
             Permission.objects.get(codename='index_motorscode', content_type__app_label='motordb'),
             Permission.objects.get(codename='change_motorscode', content_type__app_label='motordb'),
             Permission.objects.get(codename='delete_motorscode', content_type__app_label='motordb'),
+            Permission.objects.get(codename='add_projectcost', content_type__app_label='cost'),
         )
         ex_user.super_user = True
         ex_user.save()

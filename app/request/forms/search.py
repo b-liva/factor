@@ -2,6 +2,7 @@ from django import forms
 from django_jalali import forms as jforms
 from django.contrib.auth import get_user_model
 User = get_user_model()
+import django.db.utils
 
 
 def prepare_owner_choices():
@@ -14,17 +15,23 @@ def prepare_owner_choices():
     # )
 
     owner_choices = ((0, '---'),)
+    try:
 
-    exps = User.objects.filter(sales_exp=True)
-    users = [(u.pk, u.last_name) for u in exps]
-    owner_choices = list(owner_choices)
-    owner_choices.extend(users)
-    owner_choices = tuple(owner_choices)
+        exps = User.objects.filter(sales_exp=True)
+        users = [(u.pk, u.last_name) for u in exps]
+        owner_choices = list(owner_choices)
+        owner_choices.extend(users)
+        owner_choices = tuple(owner_choices)
+    except:
+        owner_choices = []
 
     return owner_choices
 
 
 class SpecSearchForm(forms.Form):
+    def file(self):
+        pass
+
     customer_name = forms.CharField(label='مشتری', max_length=100, required=False)
     customer_name.widget = forms.TextInput(attrs={
         'class': 'form-control',

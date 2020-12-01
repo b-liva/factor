@@ -104,6 +104,7 @@ LOCAL_APPS = [
     'motordb.apps.MotordbConfig',
     'incomes.apps.IncomesConfig',
     'core.apps.CoreConfig',
+    'cost.apps.CostConfig',
     'jfeature.apps.JfeatureConfig',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -291,10 +292,10 @@ WEBPACK_LOADER = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticated',
         # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
