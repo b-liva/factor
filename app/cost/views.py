@@ -1,6 +1,6 @@
 from rest_framework import (generics, permissions)
 from cost.serializers import ProjectCostSerializer
-from cost.permissions import CustomDjangoModelPermissions
+from cost.permissions import (CustomDjangoModelPermissions, CustomDjangoObjectPermissions)
 from cost.models import ProjectCost
 
 
@@ -8,10 +8,18 @@ from cost.models import ProjectCost
 class ProjectCostList(generics.ListCreateAPIView):
     queryset = ProjectCost.objects.all()
     serializer_class = ProjectCostSerializer
-    permission_classes = [permissions.IsAuthenticated, CustomDjangoModelPermissions]
+    permission_classes = [
+        permissions.IsAuthenticated,
+        CustomDjangoModelPermissions,
+        CustomDjangoObjectPermissions
+    ]
 
 
 class ProjectCostManage(generics.RetrieveUpdateDestroyAPIView):
     queryset = ProjectCost.objects.all()
     serializer_class = ProjectCostSerializer
-    permission_classes = [permissions.IsAuthenticated, CustomDjangoModelPermissions]
+    permission_classes = [
+        permissions.IsAuthenticated,
+        CustomDjangoModelPermissions,
+        CustomDjangoObjectPermissions
+    ]

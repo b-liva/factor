@@ -6,6 +6,7 @@ from request.models import TimeStampedModel
 from django_jalali.db import models as jmodels
 User = get_user_model()
 
+
 # Create your models here.
 class BaseCostRow(models.Model):
     unit_choices = [
@@ -91,3 +92,8 @@ class ProjectCost(ProjectCostBase):
     cost_production = models.IntegerField()
     general_cost = models.IntegerField()
     cost_practical = models.IntegerField()
+
+    class Meta:
+        permissions = [
+            ('read_projectcost', 'can read projectcost'),
+        ]

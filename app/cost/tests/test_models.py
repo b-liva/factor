@@ -195,6 +195,12 @@ class PublicCostAPITest(CustomAPITestCase):
         res = self.client_anon.post(CREATE_COST_URL, self.payload)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_retrieve_cost_fail_unauthenticated(self):
+        """Test that authentication is required for retrieving cost"""
+        url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
+        res = self.client_anon.get(url)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_update_cost_fail_unauthenticated(self):
         """Test that anonymous user can't update cost"""
         self.payload['practical_cost'] = 1232
@@ -254,6 +260,13 @@ class PrivateCostAPITest(CustomAPITestCase):
         url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
         res = self.client.get(url)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_retrieve_cost_success(self):
+        """Test that user with read permission can retrieve cost"""
+
+        url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
+        res = self.client_exp.get(url)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
         
     def test_update_cost_fails_unauthorized(self):
         """Test that user with no permission can't update cost"""
@@ -288,3 +301,33 @@ class PrivateCostAPITest(CustomAPITestCase):
         exists = ProjectCost.objects.filter(pk=cost_pk).exists()
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(exists)
+
+    def test_retrieve_cost_obj_fails(self):
+        """Test that user can't retrieve cost of other users"""
+        self.user.user_permissions.add(
+            Permission.objects.get(codename='read_projectcost', content_type__app_label='cost'),
+        )
+        url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_update_cost_obj_fails(self):
+        """Test that user can't update other users costs"""
+        self.user.user_permissions.add(
+            Permission.objects.get(codename='change_projectcost', content_type__app_label='cost')
+        )
+        url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
+        self.payload['practical_cost'] = 345
+        res = self.client.put(url, self.payload)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_cost_obj_fails(self):
+        """Test that user can't delete other users costs"""
+        self.user.user_permissions.add(
+            Permission.objects.get(codename='delete_projectcost', content_type__app_label='cost')
+        )
+        url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
+        res = self.client.delete(url)
+        exists = ProjectCost.objects.filter(pk=self.sample_cost.pk).exists()
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertTrue(exists)

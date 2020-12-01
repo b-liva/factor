@@ -189,6 +189,7 @@ class CustomAPITestCase(APITestCase):
             Permission.objects.get(codename='change_motorscode', content_type__app_label='motordb'),
             Permission.objects.get(codename='delete_motorscode', content_type__app_label='motordb'),
             Permission.objects.get(codename='add_projectcost', content_type__app_label='cost'),
+            Permission.objects.get(codename='read_projectcost', content_type__app_label='cost'),
             Permission.objects.get(codename='change_projectcost', content_type__app_label='cost'),
             Permission.objects.get(codename='delete_projectcost', content_type__app_label='cost'),
         )
