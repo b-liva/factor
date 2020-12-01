@@ -14,6 +14,7 @@ class BaseCostRow(models.Model):
         ('machine', _('machine')),
         ('item', _('item')),
     ]
+    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, default=1)
     qty = models.IntegerField()
     price = models.IntegerField()
     unit = models.CharField(max_length=10, choices=unit_choices)
@@ -23,7 +24,11 @@ class BaseCostRow(models.Model):
 
 
 class WageCost(BaseCostRow):
-    pass
+
+    class Meta:
+        permissions = [
+            ('read_wagecost', 'can retrieve wage cost')
+        ]
 
 
 class SteelRebar(BaseCostRow):

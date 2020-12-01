@@ -192,6 +192,10 @@ class CustomAPITestCase(APITestCase):
             Permission.objects.get(codename='read_projectcost', content_type__app_label='cost'),
             Permission.objects.get(codename='change_projectcost', content_type__app_label='cost'),
             Permission.objects.get(codename='delete_projectcost', content_type__app_label='cost'),
+            Permission.objects.get(codename='add_wagecost', content_type__app_label='cost'),
+            Permission.objects.get(codename='read_wagecost', content_type__app_label='cost'),
+            Permission.objects.get(codename='change_wagecost', content_type__app_label='cost'),
+            Permission.objects.get(codename='delete_wagecost', content_type__app_label='cost'),
         )
         ex_user.super_user = True
         ex_user.save()
