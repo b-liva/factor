@@ -62,13 +62,22 @@ class CastIron(BaseCostRow):
 class Bearing(BaseCostRow):
     name = models.CharField(max_length=12)
 
+    def __str__(self):
+        return self.name
+
 
 class Test(BaseCostRow):
     name = models.CharField(max_length=12)
 
+    def __str__(self):
+        return self.name
+
 
 class Certificate(BaseCostRow):
     name = models.CharField(max_length=12)
+
+    def __str__(self):
+        return self.name
 
 
 class ProjectCostBase(TimeStampedModel):
@@ -97,6 +106,9 @@ class ProjectCost(ProjectCostBase):
     cost_production = models.IntegerField()
     general_cost = models.IntegerField()
     cost_practical = models.IntegerField()
+
+    def __str__(self):
+        return str(self.cost_practical)
 
     class Meta:
         permissions = [
