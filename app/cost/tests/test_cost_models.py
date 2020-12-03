@@ -7,6 +7,7 @@ from rest_framework import status
 from accounts.tests.test_public_funcs import CustomAPITestCase
 from cost import models
 from cost.models import ProjectCost
+from core.utilities.test_utils import core as test_core_utils
 
 CREATE_COST_URL = reverse('cost:create')
 
@@ -185,14 +186,14 @@ class PublicCostAPITest(CustomAPITestCase):
         res = self.client_exp.post(CREATE_COST_URL, self.payload)
         self.sample_cost = ProjectCost.objects.get(pk=res.data['id'])
 
-    def test_list_cost_unauthenticated(self):
-        """Test that authentication is required for listing cost"""
-        res = self.client_anon.get(CREATE_COST_URL)
-        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
-
     def test_create_cost_unauthenticated(self):
         """Test that authentication is required for creating cost"""
         res = self.client_anon.post(CREATE_COST_URL, self.payload)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_list_cost_unauthenticated(self):
+        """Test that authentication is required for listing cost"""
+        res = self.client_anon.get(CREATE_COST_URL)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_retrieve_cost_fail_unauthenticated(self):
@@ -253,6 +254,20 @@ class PrivateCostAPITest(CustomAPITestCase):
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(res.data['wage'], self.payload['wage'])
         self.assertEqual(res.data['owner'], self.payload['owner'])
+
+    def test_list_costs_needs_ownership(self):
+        """Test that user can see list of own costs ony"""
+        self.payload['owner'] = self.user.pk
+        perms = (
+            ('add_projectcost', 'cost'),
+            ('read_projectcost', 'cost'),
+        )
+        self.user = test_core_utils.grant_django_model_permissions(self.user, perms)
+        self.client.post(CREATE_COST_URL, self.payload)
+        res = self.client.get(CREATE_COST_URL)
+        count = ProjectCost.objects.filter(owner=self.user).count()
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), count)
 
     def test_retrieve_cost_fails_unauthorized(self):
         """Test that user with no permission can't retrieve cost"""

@@ -14,6 +14,9 @@ class ProjectCostList(generics.ListCreateAPIView):
         CustomDjangoObjectPermissions
     ]
 
+    def get_queryset(self):
+        return ProjectCost.objects.filter(owner=self.request.user)
+
 
 class ProjectCostManage(generics.RetrieveUpdateDestroyAPIView):
     queryset = ProjectCost.objects.all()

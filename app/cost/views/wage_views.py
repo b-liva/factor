@@ -13,6 +13,9 @@ class WageCreateList(generics.ListCreateAPIView):
         CustomDjangoObjectPermissions
     ]
 
+    def get_queryset(self):
+        return WageCost.objects.filter(owner=self.request.user)
+
 
 class WageCostManager(generics.RetrieveUpdateDestroyAPIView):
     queryset = WageCost.objects.all()

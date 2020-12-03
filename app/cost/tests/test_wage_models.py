@@ -6,6 +6,8 @@ from rest_framework import status
 from accounts.tests.test_public_funcs import CustomAPITestCase
 from cost import models
 from cost.models import WageCost
+from core.utilities.test_utils import core as test_core_utils
+
 
 CREATE_WAGE_URL = reverse('cost:create_wage')
 
@@ -38,14 +40,14 @@ class PublicWageAPITest(CustomAPITestCase):
         self.wage_payload['owner'] = self.ex_user
         self.sample_wage = cw.create_wage(**self.wage_payload)
 
-    def test_list_wage_unauthenticated(self):
-        """Test that authentication is required for listing wage"""
-        res = self.client_anon.get(CREATE_WAGE_URL)
-        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
-
     def test_create_wage_unauthenticated(self):
         """Test that authentication is required for creating wage"""
         res = self.client_anon.post(CREATE_WAGE_URL, self.wage_payload)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_list_wage_unauthenticated(self):
+        """Test that authentication is required for listing wage"""
+        res = self.client_anon.get(CREATE_WAGE_URL)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_retrieve_wage_fail_unauthenticated(self):
@@ -59,7 +61,6 @@ class PublicWageAPITest(CustomAPITestCase):
         self.wage_payload['qty'] = 5
         url = reverse('cost:manage_wage', kwargs={'pk': self.sample_wage.pk})
         res = self.client_anon.put(url, self.wage_payload)
-        print(res.data)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_wage_fail_unauthenticated(self):
@@ -104,6 +105,20 @@ class PrivateWageAPITest(CustomAPITestCase):
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(res.data['owner'], self.wage_payload['owner'])
+
+    def test_list_wage_needs_ownership(self):
+        """Test that user can see own wage cost"""
+        self.wage_payload['owner'] = self.user.pk
+        perms = (
+            ('add_wagecost', 'cost'),
+            ('read_wagecost', 'cost'),
+        )
+        self.user = test_core_utils.grant_django_model_permissions(self.user, perms)
+        self.client.post(CREATE_WAGE_URL, self.wage_payload)
+        res = self.client.get(CREATE_WAGE_URL)
+        count = WageCost.objects.filter(owner=self.user).count()
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), count)
 
     def test_retrieve_wage_fails_unauthorized(self):
         """Test that user with no permission can't retrieve wage"""
