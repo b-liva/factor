@@ -4,23 +4,11 @@ import factory
 from faker import Factory
 from django.utils.translation import gettext as _
 from django.contrib.auth import get_user_model
-from django.utils.timezone import now
-from django_jalali.db import models as jmodels
 from cost import models
+from core.tests.factory.factories import UserFactory
 
 faker = Factory.create()
 User = get_user_model()
-
-
-class UserFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = User
-        django_get_or_create = ('username', )
-
-    username = faker.user_name()
-    first_name = faker.user_name()
-    last_name = faker.user_name()
-    password = faker.password()
 
 
 unit_choices = [
