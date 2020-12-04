@@ -83,6 +83,14 @@ class User(AbstractUser):
         total_received = pays.aggregate(sum=Sum('amount'))
         return total_received['sum']
 
+    def make_user_an_expertuser(self):
+        self.sales_exp = True
+        self.save()
+
+    def make_user_a_superuser(self):
+        self.is_superuser = True
+        self.save()
+
 
 class CustomerUser(User):
     is_active_customer = models.BooleanField(default=True)
