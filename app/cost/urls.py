@@ -9,5 +9,5 @@ urlpatterns = [
     path('manage/<int:pk>/', ProjectCostManage.as_view(), name='manage'),
     path('manage/<int:pk>/', ProjectCostManage.as_view(), name='manage'),
     path('wage/create/', wage_views.WageCreateList.as_view(), name='create_wage'),
-    path('wage/create/<int:pk>', wage_views.WageCostManager.as_view(), name='manage_wage'),
+    path('wage/manage/<int:pk>', wage_views.WageCostManager.as_view(), name='manage_wage'),
 ]

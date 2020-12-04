@@ -8,6 +8,7 @@ from accounts.tests.test_public_funcs import CustomAPITestCase
 from cost import models
 from cost.models import ProjectCost
 from core.utilities.test_utils import core as test_core_utils
+from cost.tests.factory import factories
 
 CREATE_COST_URL = reverse('cost:create')
 
@@ -319,18 +320,20 @@ class PrivateCostAPITest(CustomAPITestCase):
 
     def test_retrieve_cost_obj_fails(self):
         """Test that user can't retrieve cost of other users"""
-        self.user.user_permissions.add(
-            Permission.objects.get(codename='read_projectcost', content_type__app_label='cost'),
+        perms = (
+            ('read_projectcost', 'cost'),
         )
+        test_core_utils.grant_django_model_permissions(self.user, perms)
         url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
         res = self.client.get(url)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_update_cost_obj_fails(self):
+    def test_update_cost_needs_ownership(self):
         """Test that user can't update other users costs"""
-        self.user.user_permissions.add(
-            Permission.objects.get(codename='change_projectcost', content_type__app_label='cost')
+        perms = (
+            ('change_projectcost', 'cost'),
         )
+        test_core_utils.grant_django_model_permissions(self.user, perms)
         url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
         self.payload['practical_cost'] = 345
         res = self.client.put(url, self.payload)
@@ -338,11 +341,75 @@ class PrivateCostAPITest(CustomAPITestCase):
 
     def test_delete_cost_obj_fails(self):
         """Test that user can't delete other users costs"""
-        self.user.user_permissions.add(
-            Permission.objects.get(codename='delete_projectcost', content_type__app_label='cost')
+        perms = (
+            ('delete_projectcost', 'cost'),
         )
+        test_core_utils.grant_django_model_permissions(self.user, perms)
         url = reverse('cost:manage', kwargs={'pk': self.sample_cost.pk})
         res = self.client.delete(url)
         exists = ProjectCost.objects.filter(pk=self.sample_cost.pk).exists()
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTrue(exists)
+
+    def test_patch_bearing_to_project_cost(self):
+        """Test that bearing patch to prject cost works"""
+        brng = factories.BearingCostFactory.create_batch(3)
+        tst = factories.TestCostFactory.create_batch(3)
+        cert = factories.CertificateCostFactory.create_batch(3)
+        project_cost = factories.ProjectCostFactory.create(owner=self.ex_user, bearing=brng, test=tst, certificate=cert)
+        bearing = factories.BearingCostFactory()
+
+        url = reverse('cost:manage', kwargs={'pk': project_cost.pk})
+        payload = {
+            'bearing': [i.pk for i in project_cost.bearing.all()] + [bearing.pk]
+        }
+        pc = ProjectCost.objects.get(pk=project_cost.pk)
+        res = self.client_exp.patch(url, payload)
+        pc_bearing_pks = [i.pk for i in pc.bearing.all()]
+        pc_bearing_last = pc.bearing.last()
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertListEqual(pc_bearing_pks, payload['bearing'])
+        self.assertEqual(bearing.pk, pc_bearing_last.pk)
+
+    def test_patch_test_to_project_cost(self):
+        """Test that test patch to prject cost works"""
+        brng = factories.BearingCostFactory.create_batch(3)
+        tst = factories.TestCostFactory.create_batch(3)
+        cert = factories.CertificateCostFactory.create_batch(3)
+        project_cost = factories.ProjectCostFactory.create(owner=self.ex_user, bearing=brng, test=tst, certificate=cert)
+        test = factories.TestCostFactory()
+
+        url = reverse('cost:manage', kwargs={'pk': project_cost.pk})
+        payload = {
+            'test': [i.pk for i in project_cost.test.all()] + [test.pk]
+        }
+        pc = ProjectCost.objects.get(pk=project_cost.pk)
+        res = self.client_exp.patch(url, payload)
+        pc_test_pks = [i.pk for i in pc.test.all()]
+        pc_test_last = pc.test.last()
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertListEqual(pc_test_pks, payload['test'])
+        self.assertEqual(test.pk, pc_test_last.pk)
+
+    def test_patch_certificate_to_project_cost(self):
+        """Test that certificate patch to prject cost works"""
+        brngs = factories.BearingCostFactory.create_batch(3)
+        tsts = factories.TestCostFactory.create_batch(3)
+        certs = factories.CertificateCostFactory.create_batch(3)
+        project_cost = factories.ProjectCostFactory.create(owner=self.ex_user, bearing=brngs, test=tsts, certificate=certs)
+        cert = factories.CertificateCostFactory()
+
+        url = reverse('cost:manage', kwargs={'pk': project_cost.pk})
+        payload = {
+            'certificate': [i.pk for i in project_cost.certificate.all()] + [cert.pk]
+        }
+        pc = ProjectCost.objects.get(pk=project_cost.pk)
+        res = self.client_exp.patch(url, payload)
+        pc_cert_pks = [i.pk for i in pc.certificate.all()]
+        pc_cert_last = pc.certificate.last()
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertListEqual(pc_cert_pks, payload['certificate'])
+        self.assertEqual(cert.pk, pc_cert_last.pk)
