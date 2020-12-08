@@ -1549,7 +1549,10 @@ def pfcost(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
     specs = proforma.prefspec_set.filter(price__gt=0)
     host = os.environ.get('CAPIHOST')
-    prof_date = proforma.date_fa.togregorian()
+    if 'based_on_last_cost' in request.session and request.session['based_on_last_cost']:
+        prof_date = datetime.date.today()
+    else:
+        prof_date = proforma.date_fa.togregorian()
 
     discount = {
         'un90_disc': 0,
@@ -1602,7 +1605,7 @@ def pfcost(request, ypref_pk):
     no_cost = list()
     added = False
     for spec in specs:
-        if spec.kw < 90:
+        if spec.kw <= 90:
             disc = un90_disc
         else:
             disc = up90_disc
@@ -1757,13 +1760,30 @@ def pandas(request):
 def proforma_profit(request, ypref_pk):
     if 'discounts' in request.session:
         del request.session['discounts']
+    return redirect('default_cost', ypref_pk=ypref_pk)
+
+
+@login_required
+def last_cost(request, ypref_pk):
+    request.session['based_on_last_cost'] = True
+    return redirect('reset_defaults', ypref_pk=ypref_pk)
+
+
+@login_required
+def default_cost(request, ypref_pk):
+    if 'based_on_last_cost' in request.session:
+        del request.session['based_on_last_cost']
     return redirect('reset_defaults', ypref_pk=ypref_pk)
 
 
 @login_required
 def reset_defaults(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
-    prof_date = proforma.date_fa.togregorian()
+    if 'based_on_last_cost' in request.session and request.session['based_on_last_cost']:
+        prof_date = datetime.date.today()
+    else:
+        prof_date = proforma.date_fa.togregorian()
+
     host = os.environ.get('CAPIHOST')
     headers = {
         'Content-type': 'application/json'

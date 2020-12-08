@@ -78,8 +78,9 @@
                     </div>
 
                     <button type="submit" class="btn btn-sm btn-success btn-round">ثبت</button>
-                    <a class="btn btn-sm btn-warning btn-round" href="{% url 'reset_defaults' ypref_pk=prof.pk %}">پیش
+                    <a class="btn btn-sm btn-warning btn-round" href="{% url 'default_cost' ypref_pk=prof.pk %}">پیش
                         فرض</a>
+                    <a class="btn btn-sm btn-warning btn-round" href="{% url 'last_cost' ypref_pk=prof.pk %}">آخرین قیمت</a>
 
                     <a class="btn btn-xs btn-primary btn-round" href="{% url 'set_formula_1' ypref_pk=prof.pk %}">فرمول
                         قدیم</a>
