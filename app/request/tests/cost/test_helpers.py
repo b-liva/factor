@@ -49,34 +49,26 @@ class TestUtils(TestCase):
     def test_handle_spec_not_in_routine_costs(self):
         date = '20201014'
         self.spec['power'] = 2000
-        file_name = helpers.get_filename_base_on_date(date)
-        cost_df = helpers.get_cost_dataframe_by_date_str(file_name)
-        modified_db = helpers.modify_data_frame(cost_df)
+        modified_db = helpers.prepare_data_frame_based_on_proforma_date(date)
         cost = helpers.calculate_cost_of_spec(modified_db, **self.spec)
         self.assertEqual(cost, None)
 
     def test_calculate_cost_of_proforma_spec(self):
         date = '20201014'
-        file_name = helpers.get_filename_base_on_date(date)
-        cost_df = helpers.get_cost_dataframe_by_date_str(file_name)
-        modified_db = helpers.modify_data_frame(cost_df)
+        modified_db = helpers.prepare_data_frame_based_on_proforma_date(date)
         cost = helpers.calculate_cost_of_spec(modified_db, **self.spec)
         self.assertEqual(cost, 879466988)
 
     def test_calculate_profit_of_proforma_spec(self):
         date = '20201014'
-        file_name = helpers.get_filename_base_on_date(date)
-        cost_df = helpers.get_cost_dataframe_by_date_str(file_name)
-        modified_db = helpers.modify_data_frame(cost_df)
+        modified_db = helpers.prepare_data_frame_based_on_proforma_date(date)
         cost = helpers.calculate_cost_of_spec(modified_db, **self.spec)
         profit = self.spec['price'] - cost
         self.assertEqual(round(profit, 2), 175893397.6)
 
     def test_add_profit_to_specs(self):
         date = '20201014'
-        file_name = helpers.get_filename_base_on_date(date)
-        cost_df = helpers.get_cost_dataframe_by_date_str(file_name)
-        modified_db = helpers.modify_data_frame(cost_df)
+        modified_db = helpers.prepare_data_frame_based_on_proforma_date(date)
         specs_profit = helpers.add_profit_to_specs(modified_db, self.specs)
         specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
         self.assertEqual(len(specs_profit_split['specs_has_profit']), 2)
@@ -84,9 +76,7 @@ class TestUtils(TestCase):
 
     def test_calculate_proforma_profit(self):
         date = '20201014'
-        file_name = helpers.get_filename_base_on_date(date)
-        cost_df = helpers.get_cost_dataframe_by_date_str(file_name)
-        modified_db = helpers.modify_data_frame(cost_df)
+        modified_db = helpers.prepare_data_frame_based_on_proforma_date(date)
         specs_profit = helpers.add_profit_to_specs(modified_db, self.specs)
         specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
         results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
@@ -100,17 +90,13 @@ class TestUtils(TestCase):
             {'power': 160, 'rpm': 1000, 'voltage': 380, 'price': 15485258},
         ]
         date = '20201014'
-        file_name = helpers.get_filename_base_on_date(date)
-        cost_df = helpers.get_cost_dataframe_by_date_str(file_name)
-        modified_db = helpers.modify_data_frame(cost_df)
+        modified_db = helpers.prepare_data_frame_based_on_proforma_date(date)
 
         cost = helpers.calculate_cost_of_proforma_by_specs(modified_db, specs)
         self.assertEqual(cost, 2548468142.40)
 
     def test_calculate_profit_of_specs(self):
         date = '20201014'
-        file_name = helpers.get_filename_base_on_date(date)
-        cost_df = helpers.get_cost_dataframe_by_date_str(file_name)
-        modified_db = helpers.modify_data_frame(cost_df)
+        modified_db = helpers.prepare_data_frame_based_on_proforma_date(date)
         profits = helpers.add_profits_to_specs(modified_db, self.specs)
         self.assertEqual(len(profits), 5)

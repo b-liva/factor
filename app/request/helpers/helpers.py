@@ -71,6 +71,13 @@ def calculate_profit_of_proforma(specs):
     }
 
 
+def prepare_data_frame_based_on_proforma_date(date):
+    file_name = get_filename_base_on_date(date)
+    cost_df = get_cost_dataframe_by_date_str(file_name)
+    modified_db = modify_data_frame(cost_df)
+    return modified_db
+
+
 def split_specs_if_profit_exists(specs):
     specs_has_profit = list()
     specs_no_profit = list()
