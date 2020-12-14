@@ -36,7 +36,8 @@ FRONTEND_DIR = os.path.join(ROOT_DIR, 'frontend')
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = reverse_lazy('account_login')
-
+USER_HOME = os.path.expanduser('~')
+PROJECT_DATA_DIR = os.path.join(USER_HOME, 'data')
 env = environ.Env()
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 if READ_DOT_ENV_FILE:
