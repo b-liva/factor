@@ -28,12 +28,35 @@ CACHES = {
     }
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(ROOT_DIR, 'test_database.sqlite3'),
+DB_DRIVER = os.environ.get('DB_DRIVER', 'sqlite')
+print("db driver: ", DB_DRIVER)
+if DB_DRIVER == 'sqlite':
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(ROOT_DIR, 'test_database.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ.get('DB_NAME', 'jcm3'),
+            'USER': os.environ.get('DB_USER', 'root'),
+            'PASSWORD': os.environ.get('DB_PASS', ''),
+            'HOST': os.environ.get('DB_HOST', 'localhost'),
+            'TEST': {
+                'NAME': os.environ.get('DB_NAME_TEST', 'test_jtest3'),
+                'CHARSET': 'utf8',
+                'COLLATION': 'utf8_general_ci',
+            },
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+                # 'init_command': 'ALTER DATABASE <YOUR_DB_NAME> CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci',
+            },
+        },
+    }
 
 # PASSWORDS
 # ------------------------------------------------------------------------------

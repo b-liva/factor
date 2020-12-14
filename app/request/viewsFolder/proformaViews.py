@@ -1545,7 +1545,6 @@ def proforma_has_payment_no_perm(request):
 
 @login_required
 def pfcost(request, ypref_pk):
-    print('*&*&*&*&*&*&*& request method', request.method)
     proforma = Xpref.objects.get(pk=ypref_pk)
     specs = proforma.prefspec_set.filter(price__gt=0)
     host = os.environ.get('CAPIHOST')

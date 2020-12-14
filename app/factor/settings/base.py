@@ -113,8 +113,8 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = (
-    'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'graphql_jwt.backends.JSONWebTokenBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
@@ -169,6 +169,7 @@ STATIC_URL = "/static/static/"
 MEDIA_URL = "/static/media/"
 
 STATIC_ROOT = '/vol/web/static/'
+# STATIC_ROOT = os.path.join(ROOT_DIR, 'static')
 STATIC_media = '/vol/web/media/'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
