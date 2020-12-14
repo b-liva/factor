@@ -38,6 +38,7 @@ urlpatterns = [
                       path('', proformaViews.pref_details, name='pref_details'),
                       path('pfcost', proformaViews.pfcost, name='pfcost'),
                       path('proforma_profit', proformaViews.proforma_profit, name='proforma_profit'),
+                      path('proforma_profit2', proformaViews.proforma_profit2, name='proforma_profit2'),
                       path('adjust_cost', proformaViews.adjust_cost, name='adjust_cost'),
                       path('perform_discount', proformaViews.perform_discount, name='perform_discount'),
                       path('proforma-copy', proformaViews.proforma_copy, name='proforma_copy'),

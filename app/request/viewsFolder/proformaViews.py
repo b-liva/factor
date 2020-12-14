@@ -1763,6 +1763,13 @@ def proforma_profit(request, ypref_pk):
 
 
 @login_required
+def proforma_profit2(request, ypref_pk):
+    if 'discounts' in request.session:
+        del request.session['discounts']
+    return redirect('default_cost', ypref_pk=ypref_pk)
+
+
+@login_required
 def last_cost(request, ypref_pk):
     request.session['based_on_last_cost'] = True
     return redirect('reset_defaults', ypref_pk=ypref_pk)

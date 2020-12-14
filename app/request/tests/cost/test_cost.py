@@ -52,7 +52,7 @@ class PrivateTestCost(CustomAPITestCase):
         self.assertEqual(res.status_code, status.HTTP_302_FOUND)
         self.assertRedirects(
             res,
-            expected_url=reverse('default_cost2', kwargs={'ypref_pk': self.proforma.pk}),
+            expected_url=reverse('default_cost', kwargs={'ypref_pk': self.proforma.pk}),
             status_code=status.HTTP_302_FOUND,
             target_status_code=status.HTTP_302_FOUND
         )
