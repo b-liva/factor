@@ -352,3 +352,10 @@ GRAPHQL_JWT = {
 # CSRF_COOKIE_SECURE = True
 # CSRF_COOKIE_NAME = 'X-CSRFToken'
 DATA_DIR = os.path.join(ROOT_DIR, 'data/')
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}

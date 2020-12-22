@@ -42,6 +42,7 @@ from django.urls import reverse
 from factor import settings
 from customer.models import Customer
 from request import models
+from request.helpers import helpers
 from request.forms.forms import CommentForm, ProfFollowUpForm
 from request.forms.search import ProformaSearchForm, PermSearchForm, PrefSpecSearchForm
 import request.templatetags.functions as funcs
@@ -1763,10 +1764,42 @@ def proforma_profit(request, ypref_pk):
 
 
 @login_required
-def proforma_profit2(request, ypref_pk):
-    if 'discounts' in request.session:
-        del request.session['discounts']
-    return redirect('default_cost', ypref_pk=ypref_pk)
+def prof_profit(request, ypref_pk):
+    from django.core.cache import cache
+    cache.set('item', {
+        'first': 1,
+        'second': 2,
+    })
+
+    discount = {
+        'lte__90': 0,
+        'gt__90': 0,
+    }
+
+    proforma = Xpref.objects.get(pk=ypref_pk)
+    date_greg = proforma.date_fa.togregorian()
+    date = helpers.get_date_str(date_greg)
+
+    specs = proforma.prefspec_set.all()
+    if 'test' in request.session:
+        for a in specs:
+            print(a)
+        del(request.session['test'])
+    specs_list = [{'power': spec.kw, 'rpm': spec.rpm, 'voltage': spec.voltage, 'price': spec.price} for spec in specs]
+    modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+    specs_profit = helpers.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
+    specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
+    results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
+
+    context = {
+        'only_test': 'text for test.',
+        'proforma': {
+            'cost': results['cost'],
+            'profit': results['profit'],
+            'percent': results['percent']
+        },
+    }
+    return render(request, 'requests/admin_jemco/ypref/details_cost2.html',  context)
 
 
 @login_required
@@ -1804,6 +1837,10 @@ def reset_defaults(request, ypref_pk):
         messages.add_message(request, level=20, message='خطا')
         return redirect('errorpage')
 
+    return redirect('pfcost', ypref_pk=ypref_pk)
+
+
+def reset_defaults2(request, ypref_pk):
     return redirect('pfcost', ypref_pk=ypref_pk)
 
 

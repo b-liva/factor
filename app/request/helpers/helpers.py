@@ -65,8 +65,10 @@ def calculate_profit_of_proforma(specs):
     for spec in specs:
         cost_total += spec['cost']
         profit_total += spec['profit']
-
-    percent = (profit_total / cost_total) * 100
+    if cost_total:
+        percent = (profit_total / cost_total) * 100
+    else:
+        percent = None
     response = {
         'cost': cost_total,
         'profit': profit_total,
@@ -77,6 +79,7 @@ def calculate_profit_of_proforma(specs):
 
 def prepare_data_frame_based_on_proforma_date(date):
     file_name = get_filename_base_on_date(date)
+    print(file_name)
     cost_df = get_cost_dataframe_by_date_str(file_name)
     modified_db = modify_data_frame(cost_df)
     return modified_db
@@ -165,6 +168,8 @@ def calculate_cost_of_proforma_by_specs(df, specs):
 
 def calculate_cost_of_spec(df, **kwargs):
     power = kwargs.get('power', None)
+    if type(power) == float:
+        power = round(power) if power.is_integer() else power
     rpm = kwargs.get('rpm', None)
     voltage = kwargs.get('voltage', None)
     if voltage > 400:
@@ -268,3 +273,9 @@ def prepare_data_frame2(df):
     df.rename(columns=col_names, inplace=True)
     df['cost_calc'] = df['cost']
     return df
+
+
+def get_date_str(date_greg):
+    print(date_greg)
+    return str(date_greg).replace('-', '')
+    # return str(10000 * date_greg.year + 100 * date_greg.month + date_greg.day)

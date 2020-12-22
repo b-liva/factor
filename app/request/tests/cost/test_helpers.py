@@ -12,14 +12,14 @@ class TestUtils(TestCase):
     def setUp(self):
         self.spec = {'power': 132, 'rpm': 1500, 'voltage': 380, 'price': 1000000000}
         self.specs = [
-            {'power': 132, 'rpm': 1500, 'voltage': 380, 'price': 1000000000},
+            {'power': 132.0, 'rpm': 1500, 'voltage': 380, 'price': 1000000000},
             {'power': 75, 'rpm': 750, 'voltage': 380, 'price': 180000000},
             {'power': 18.5, 'rpm': 3000, 'voltage': 380, 'price': 160000000},
             {'power': 2500, 'rpm': 1000, 'voltage': 380, 'price': 20000000000},
             {'power': 160, 'rpm': 1000, 'voltage': 1000, 'price': 7500000000},
         ]
         self.routine_specs = [
-            {'power': 132, 'rpm': 1500, 'voltage': 380, 'price': 1000000000},
+            {'power': 132.0, 'rpm': 1500, 'voltage': 380, 'price': 1000000000},
             {'power': 18.5, 'rpm': 3000, 'voltage': 380, 'price': 160000000},
         ]
         self.not_routine_specs = [
@@ -94,6 +94,36 @@ class TestUtils(TestCase):
         results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
         self.assertEqual(round(results['profit'], 2),  26718036.8)
         self.assertEqual(round(results['percent'], 2), 2.65)
+
+    def test_calculate_proforma_profit_one_spec(self):
+        date = '20201014'
+        discount = {
+            'lte__90': 15,
+            'gt__90': 10,
+        }
+
+        modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+        specs_profit = helpers.add_profit_to_specs(modified_df, [self.spec], discount_dict=discount)
+        specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
+
+        results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
+        self.assertEqual(round(results['profit'], 2),  20533012.0)
+        self.assertEqual(round(results['percent'], 2), 2.33)
+
+    def test_specs_have_no_cost(self):
+        date = '20201014'
+        discount = {
+            'lte__90': 15,
+            'gt__90': 10,
+        }
+
+        modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+        specs_profit = helpers.add_profit_to_specs(modified_df, self.not_routine_specs, discount_dict=discount)
+        specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
+
+        results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
+        self.assertEqual(results['profit'], 0)
+        self.assertIsNone(results['percent'], None)
 
     def test_calculate_cost_of_proforma(self):
         specs = [
