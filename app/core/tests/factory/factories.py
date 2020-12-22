@@ -27,5 +27,3 @@ def add_user_to_groupe(user, group='sale_expert'):
     sale_expert_group = Group.objects.get(name=group)
     user.groups.add(sale_expert_group)
     return user
-
-
