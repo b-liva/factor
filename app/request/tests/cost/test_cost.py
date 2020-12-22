@@ -43,6 +43,17 @@ class PrivateTestCost(CustomAPITestCase):
         self.proforma = factories.ProformaFactory.create()
         factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=1000000000, kw=132, rpm=1500)
 
+    def prepare_prof_routine_not_routine_specs(self):
+        import jdatetime
+        date = jdatetime.date(year=1399, month=7, day=15)
+        date = date.togregorian()
+
+        self.proforma.pub_date = date
+        self.proforma.save()
+
+        factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=160000000, kw=18.5, rpm=3000)
+        factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=160000000, kw=2500, rpm=3000)
+
     def test_prevents_user_with_no_permission_to_get_proforma_profit(self):
         self.client.force_login(self.user)
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
@@ -79,18 +90,7 @@ class PrivateTestCost(CustomAPITestCase):
     def test_calculate_proforma_profit(self):
         self.client.force_login(self.superuser)
 
-        # date = datetime.date(2020, 10, 15)
-
-        import jdatetime
-        date = jdatetime.date(year=1399, month=7, day=15)
-        date = date.togregorian()
-
-        self.proforma.pub_date = date
-        self.proforma.save()
-
-        factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=160000000, kw=18.5, rpm=3000)
-        factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=160000000, kw=2500, rpm=3000)
-
+        self.prepare_prof_routine_not_routine_specs()
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
         res = self.client.get(url)
 
@@ -103,18 +103,7 @@ class PrivateTestCost(CustomAPITestCase):
 
     def test_proforma_profit_path_with_specs(self):
         self.client.force_login(self.superuser)
-
-        # date = datetime.date(2020, 10, 15)
-
-        import jdatetime
-        date = jdatetime.date(year=1399, month=7, day=15)
-        date = date.togregorian()
-
-        self.proforma.pub_date = date
-        self.proforma.save()
-
-        factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=160000000, kw=18.5, rpm=3000)
-        factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=160000000, kw=2500, rpm=3000)
+        self.prepare_prof_routine_not_routine_specs()
 
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
         res = self.client.get(url)
