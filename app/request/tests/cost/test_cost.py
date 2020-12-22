@@ -46,9 +46,9 @@ class PrivateTestCost(CustomAPITestCase):
     def prepare_prof_routine_not_routine_specs(self):
         import jdatetime
         date = jdatetime.date(year=1399, month=7, day=15)
-        date = date.togregorian()
+        # date = date.togregorian()
 
-        self.proforma.pub_date = date
+        self.proforma.date_fa = date
         self.proforma.save()
 
         factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=160000000, kw=18.5, rpm=3000)
@@ -96,10 +96,10 @@ class PrivateTestCost(CustomAPITestCase):
 
         self.assertIn('proforma', res.context)
         proforma_result = res.context['proforma']
-        self.assertEqual(proforma_result['cost'], 1016225963.20)
+        self.assertEqual(proforma_result['cost'], 1009281963.20)
 
-        self.assertEqual(round(proforma_result['profit'], 2), 143774036.80)
-        self.assertEqual(round(proforma_result['percent'], 2), 14.15)
+        self.assertEqual(round(proforma_result['profit'], 2), 150718036.80)
+        self.assertEqual(round(proforma_result['percent'], 2), 14.93)
 
     def test_proforma_profit_path_with_specs(self):
         self.client.force_login(self.superuser)
@@ -125,10 +125,10 @@ class PrivateTestCost(CustomAPITestCase):
         for sp in specs_not_profit:
             print('not profit: ', sp)
         self.assertEqual(kw132['power'], 132)
-        self.assertEqual(round(kw132['profit'], 1), 109333012.0)
-        self.assertEqual(round(kw132['percent'], 2),   12.28)
+        self.assertEqual(round(kw132['profit'], 1), 120533012.00)
+        self.assertEqual(round(kw132['percent'], 2), 13.71)
         self.assertEqual(round(kw18['power'], 1), 18.5)
-        self.assertEqual(round(kw18['profit'], 1), 34441024.80)
-        self.assertEqual(round(kw18['percent'], 2),  27.43)
+        self.assertEqual(round(kw18['profit'], 1), 30185024.80)
+        self.assertEqual(round(kw18['percent'], 2),  23.25)
         self.assertEqual(len(specs_profit), 2)
         self.assertEqual(len(specs_not_profit), 1)
