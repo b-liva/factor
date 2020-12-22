@@ -1790,6 +1790,7 @@ def prof_profit(request, ypref_pk):
 
     context = {
         'only_test': 'text for test.',
+        'prof': proforma,
         'proforma': {
             'cost': results['cost'],
             'profit': results['profit'],

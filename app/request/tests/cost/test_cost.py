@@ -132,3 +132,23 @@ class PrivateTestCost(CustomAPITestCase):
         self.assertEqual(round(kw18['percent'], 2),  23.25)
         self.assertEqual(len(specs_profit), 2)
         self.assertEqual(len(specs_not_profit), 1)
+
+    def test_proforma_profit_path_context_has_proforma_object(self):
+        self.client.force_login(self.superuser)
+        self.prepare_prof_routine_not_routine_specs()
+
+        url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
+        res = self.client.get(url)
+
+        self.assertIn('prof', res.context)
+        self.assertEqual(res.context['prof'].pk, self.proforma.pk)
+
+    def test_proforma_profit_path_context_has_file_date(self):
+        self.client.force_login(self.superuser)
+        self.prepare_prof_routine_not_routine_specs()
+
+        url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
+        res = self.client.get(url)
+
+        self.assertIn('cost_file_name', res.context)
+        self.assertEqual(res.context['cost_file_name'], '20201002')
