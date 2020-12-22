@@ -30,15 +30,9 @@ CACHES = {
 
 DB_DRIVER = os.environ.get('DB_DRIVER', 'sqlite')
 print("db driver: ", DB_DRIVER)
-if DB_DRIVER == 'sqlite':
 
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(ROOT_DIR, 'test_database.sqlite3'),
-        }
-    }
-else:
+if DB_DRIVER == 'mysql':
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -57,6 +51,15 @@ else:
             },
         },
     }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(ROOT_DIR, 'test_database.sqlite3'),
+        }
+    }
+
+print('db name: ', DATABASES['default']['NAME'])
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
