@@ -1798,6 +1798,10 @@ def prof_profit(request, ypref_pk):
             'profit': results['profit'],
             'percent': results['percent']
         },
+        'specs': {
+            'pspecs_with_profit': specs_profit_split['specs_has_profit'],
+            'pspecs_no_profit': specs_profit_split['specs_no_profit'],
+        },
     }
     return render(request, 'requests/admin_jemco/ypref/details_cost2.html',  context)
 
