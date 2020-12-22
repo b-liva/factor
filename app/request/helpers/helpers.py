@@ -79,7 +79,6 @@ def calculate_profit_of_proforma(specs):
 
 def prepare_data_frame_based_on_proforma_date(date):
     file_name = get_filename_base_on_date(date)
-    print(file_name)
     cost_df = get_cost_dataframe_by_date_str(file_name)
     modified_db = modify_data_frame(cost_df)
     return modified_db
@@ -276,6 +275,5 @@ def prepare_data_frame2(df):
 
 
 def get_date_str(date_greg):
-    print(date_greg)
     return str(date_greg).replace('-', '')
     # return str(10000 * date_greg.year + 100 * date_greg.month + date_greg.day)

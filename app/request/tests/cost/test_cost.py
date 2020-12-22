@@ -45,7 +45,6 @@ class PrivateTestCost(CustomAPITestCase):
 
     def test_prevents_user_with_no_permission_to_get_proforma_profit(self):
         self.client.force_login(self.user)
-        # print('item01: ', self.proforma.prefspec_set.all())
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
         res = self.client.get(url)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
@@ -53,7 +52,6 @@ class PrivateTestCost(CustomAPITestCase):
     def test_superuser_get_proforma_profit(self):
         self.client.force_login(self.superuser)
 
-        # print('item02: ', self.proforma.prefspec_set.all())
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
         res = self.client.get(url)
         self.assertEqual(res.status_code, status.HTTP_302_FOUND)
@@ -71,7 +69,6 @@ class PrivateTestCost(CustomAPITestCase):
         res = self.client.get(url)
         ca = cache.get('item')
         self.assertEqual(ca['first'], 1)
-        print(res.context['only_test'])
 
     def test_save_data_to_cache(self):
         pass
@@ -93,18 +90,9 @@ class PrivateTestCost(CustomAPITestCase):
 
         factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=160000000, kw=18.5, rpm=3000)
         factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=160000000, kw=2500, rpm=3000)
-        for a in self.proforma.prefspec_set.all():
-            print(a.kw, a.rpm, a.price)
+
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
         res = self.client.get(url)
-        # self.assertIn('pspecs_with_profit', res.context)
-        # self.assertIn('pspecs_no_profit', res.context)
-        # specs_profit = res.context['pspecs_with_profit']
-        # specs_not_profit = res.context['pspecs_no_profit']
-        # self.assertIsNotNone(specs_profit)
-        # self.assertIsNotNone(specs_not_profit)
-        # self.assertEqual(len(specs_profit), 2)
-        # self.assertEqual(len(specs_not_profit), 1)
 
         self.assertIn('proforma', res.context)
         proforma_result = res.context['proforma']

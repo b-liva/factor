@@ -1781,10 +1781,7 @@ def prof_profit(request, ypref_pk):
     date = helpers.get_date_str(date_greg)
 
     specs = proforma.prefspec_set.all()
-    if 'test' in request.session:
-        for a in specs:
-            print(a)
-        del(request.session['test'])
+
     specs_list = [{'power': spec.kw, 'rpm': spec.rpm, 'voltage': spec.voltage, 'price': spec.price} for spec in specs]
     modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
     specs_profit = helpers.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
