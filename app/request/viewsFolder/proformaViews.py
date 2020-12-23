@@ -1782,7 +1782,18 @@ def prof_profit(request, ypref_pk):
 
     specs = proforma.prefspec_set.all()
 
-    specs_list = [{'power': spec.kw, 'rpm': spec.rpm, 'voltage': spec.voltage, 'price': spec.price} for spec in specs]
+    specs_list = [
+        {
+            'code': spec.code,
+            'qty': spec.qty,
+            'power': spec.kw,
+            'rpm': spec.rpm,
+            'voltage': spec.voltage,
+            'price': spec.price,
+            'im': spec.im,
+            'ip': spec.ip,
+            'ic': spec.ic,
+        } for spec in specs]
     modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
     cost_file_date_fa = helpers.get_date_fa_from_file_name(cost_file_name)
     specs_profit = helpers.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
@@ -1806,7 +1817,7 @@ def prof_profit(request, ypref_pk):
             'date_fa': cost_file_date_fa,
         },
     }
-    return render(request, 'requests/admin_jemco/ypref/details_cost2.html',  context)
+    return render(request, 'requests/admin_jemco/ypref/details_cost2.html', context)
 
 
 @login_required
@@ -1895,7 +1906,6 @@ def base_prices():
 
 @login_required
 def clist(request):
-
     df = cost_utils.price_df()
 
     [costs, materials] = cost_utils.get_last_costs(request)

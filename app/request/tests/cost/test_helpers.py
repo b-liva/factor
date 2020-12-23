@@ -10,22 +10,22 @@ from request.helpers import helpers
 
 class TestUtils(TestCase):
     def setUp(self):
-        self.spec = {'power': 132, 'rpm': 1500, 'voltage': 380, 'price': 1000000000}
+        self.spec = {'qty': 2, 'code': 2, 'power': 132, 'rpm': 1500, 'voltage': 380, 'price': 1000000000}
         self.specs = [
-            {'power': 132.0, 'rpm': 1500, 'voltage': 380, 'price': 1000000000},
-            {'power': 75, 'rpm': 750, 'voltage': 380, 'price': 180000000},
-            {'power': 18.5, 'rpm': 3000, 'voltage': 380, 'price': 160000000},
-            {'power': 2500, 'rpm': 1000, 'voltage': 380, 'price': 20000000000},
-            {'power': 160, 'rpm': 1000, 'voltage': 1000, 'price': 7500000000},
+            {'qty': 2, 'code': 2, 'power': 132.0, 'rpm': 1500, 'voltage': 380, 'price': 1000000000},
+            {'qty': 2, 'code': 2, 'power': 75, 'rpm': 750, 'voltage': 380, 'price': 180000000},
+            {'qty': 2, 'code': 2, 'power': 18.5, 'rpm': 3000, 'voltage': 380, 'price': 160000000},
+            {'qty': 2, 'code': 2, 'power': 2500, 'rpm': 1000, 'voltage': 380, 'price': 20000000000},
+            {'qty': 2, 'code': 2, 'power': 160, 'rpm': 1000, 'voltage': 1000, 'price': 7500000000},
         ]
         self.routine_specs = [
-            {'power': 132.0, 'rpm': 1500, 'voltage': 380, 'price': 1000000000},
-            {'power': 18.5, 'rpm': 3000, 'voltage': 380, 'price': 160000000},
+            {'qty': 2, 'code': 2, 'power': 132.0, 'rpm': 1500, 'voltage': 380, 'price': 1000000000},
+            {'qty': 2, 'code': 2, 'power': 18.5, 'rpm': 3000, 'voltage': 380, 'price': 160000000},
         ]
         self.not_routine_specs = [
-            {'power': 75, 'rpm': 750, 'voltage': 380, 'price': 180000000},
-            {'power': 2500, 'rpm': 1000, 'voltage': 380, 'price': 20000000000},
-            {'power': 160, 'rpm': 1000, 'voltage': 1000, 'price': 7500000000},
+            {'qty': 2, 'code': 2, 'power': 75, 'rpm': 750, 'voltage': 380, 'price': 180000000},
+            {'qty': 2, 'code': 2, 'power': 2500, 'rpm': 1000, 'voltage': 380, 'price': 20000000000},
+            {'qty': 2, 'code': 2, 'power': 160, 'rpm': 1000, 'voltage': 1000, 'price': 7500000000},
         ]
 
     def test_return_file_name_based_on_date_str(self):
@@ -102,6 +102,9 @@ class TestUtils(TestCase):
         self.assertEqual(round(specs_profit_split['specs_has_profit'][0]['price'], 2), 900000000)
         self.assertEqual(round(specs_profit_split['specs_has_profit'][0]['profit'], 2), 20533012.00)
         self.assertEqual(round(specs_profit_split['specs_has_profit'][0]['percent'], 2), 2.33)
+        self.assertEqual(round(specs_profit_split['specs_has_profit'][0]['total_cost'], 2), 1758933976)
+        self.assertEqual(round(specs_profit_split['specs_has_profit'][0]['total_price'], 2), 1800000000)
+        self.assertEqual(round(specs_profit_split['specs_has_profit'][0]['total_profit'], 2), 41066024.00)
 
     def test_calculate_proforma_profit(self):
         date = '20201014'

@@ -30,14 +30,20 @@ def add_profit_to_specs(df, specs, discount_dict=None):
                 'cost': cost,
                 'price': profit['price'],
                 'profit': profit['profit'],
-                'percent': percent
+                'percent': percent,
+                'total_cost': spec['qty'] * cost,
+                'total_price': spec['qty'] * profit['price'],
+                'total_profit': spec['qty'] * profit['profit'],
             }
         else:
             pr = {
                 'cost': None,
                 'price': None,
                 'profit': None,
-                'percent': None
+                'percent': None,
+                'total_cost': None,
+                'total_price': None,
+                'total_profit': None,
             }
         spec.update(pr)
         specs_with_profit.append(spec)
