@@ -81,6 +81,13 @@ class TestUtils(TestCase):
         cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
         self.assertEqual(cost, 879466988)
 
+    def test_calculate_cost_of_proforma_spec_400v(self):
+        date = '20201014'
+        self.spec['voltage'] = 400
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
+        cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
+        self.assertEqual(round(cost, 2), 967413686.8)
+
     def test_calculate_profit_of_proforma_spec(self):
         date = '20201014'
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
