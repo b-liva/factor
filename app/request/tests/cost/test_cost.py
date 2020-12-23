@@ -9,7 +9,7 @@ from accounts.tests.test_public_funcs import CustomAPITestCase
 from core.tests.factory import factories as core_factories
 from request.models import Xpref
 from request.tests.factory import factories
-
+from request.helpers import helpers
 
 class TestPublicCost(CustomAPITestCase):
 
@@ -46,7 +46,7 @@ class PrivateTestCost(CustomAPITestCase):
     def prepare_prof_routine_not_routine_specs(self):
         import jdatetime
         date = jdatetime.date(year=1399, month=7, day=15)
-        # date = date.togregorian()
+        #         # date = date.togregorian()
 
         self.proforma.date_fa = date
         self.proforma.save()
@@ -144,11 +144,16 @@ class PrivateTestCost(CustomAPITestCase):
         self.assertEqual(res.context['prof'].pk, self.proforma.pk)
 
     def test_proforma_profit_path_context_has_file_date(self):
+        cost_file_name = "20201002"
+        cost_file_date_fa = helpers.get_date_fa_from_file_name(cost_file_name)
         self.client.force_login(self.superuser)
         self.prepare_prof_routine_not_routine_specs()
 
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
         res = self.client.get(url)
 
-        self.assertIn('cost_file_name', res.context)
-        self.assertEqual(res.context['cost_file_name'], '20201002')
+        self.assertIn('cost_file', res.context)
+        self.assertIn('name', res.context['cost_file'])
+        self.assertIn('date_fa', res.context['cost_file'])
+        self.assertEqual(res.context['cost_file']['name'], cost_file_name)
+        self.assertEqual(res.context['cost_file']['date_fa'], cost_file_date_fa)

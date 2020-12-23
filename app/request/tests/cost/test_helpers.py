@@ -28,16 +28,39 @@ class TestUtils(TestCase):
             {'power': 160, 'rpm': 1000, 'voltage': 1000, 'price': 7500000000},
         ]
 
-    def test_return_file_name_based_on_date(self):
+    def test_return_file_name_based_on_date_str(self):
         date_str = "20201014"
         filename = helpers.get_filename_base_on_date(date_str)
         self.assertEqual(filename, "20201002")
+
+    def test_return_cost_file_date_from_proforma_date(self):
+        import jdatetime
+        date = jdatetime.date(year=1399, month=7, day=15)
+        date = date.togregorian()
+        date = helpers.get_date_str(date)
+        file_name = helpers.get_filename_base_on_date(date)
+        self.assertEqual(file_name, "20201002")
 
     def test_selects_file_based_on_filename(self):
         filename = '20200609'
         cost_df = helpers.get_cost_dataframe_by_date_str(filename)
         modified_df = helpers.modify_data_frame(cost_df)
         self.assertEqual(modified_df.iloc[0, 34], 104703578)
+
+    def test_get_cost_date_fa_from_file_name(self):
+        file_name = "20201002"
+        import jdatetime
+        date_fa = jdatetime.date(year=1399, month=7, day=11)
+        cost_date_fa = helpers.get_date_fa_from_file_name(file_name)
+        self.assertEqual(cost_date_fa.year, date_fa.year)
+        self.assertEqual(cost_date_fa.month, date_fa.month)
+        self.assertEqual(cost_date_fa.day, date_fa.day)
+
+    def test_get_date_from_date_str(self):
+        file_name = "20201002"
+        date_output = helpers.get_date_from_date_str(file_name)
+        date = datetime.date(year=2020, month=10, day=2)
+        self.assertEqual(date_output, date)
 
     def test_select_routine_specs(self):
         specs_splitted = helpers.split_specs_routine_and_not_routine(self.specs)
@@ -48,19 +71,19 @@ class TestUtils(TestCase):
     def test_handle_spec_not_in_routine_costs(self):
         date = '20201014'
         self.spec['power'] = 2000
-        modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
         cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
         self.assertEqual(cost, None)
 
     def test_calculate_cost_of_proforma_spec(self):
         date = '20201014'
-        modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
         cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
         self.assertEqual(cost, 879466988)
 
     def test_calculate_profit_of_proforma_spec(self):
         date = '20201014'
-        modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
         cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
         profit = self.spec['price'] - cost
         self.assertEqual(round(profit, 2), 120533012)
@@ -71,7 +94,7 @@ class TestUtils(TestCase):
             'lte__90': 0,
             'gt__90': 10,
         }
-        modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
         specs_profit = helpers.add_profit_to_specs(modified_df, self.specs, discount_dict=discount)
         specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
         self.assertEqual(len(specs_profit_split['specs_has_profit']), 2)
@@ -87,7 +110,7 @@ class TestUtils(TestCase):
             'gt__90': 10,
         }
 
-        modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
         specs_profit = helpers.add_profit_to_specs(modified_df, self.specs, discount_dict=discount)
         specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
 
@@ -102,7 +125,7 @@ class TestUtils(TestCase):
             'gt__90': 10,
         }
 
-        modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
         specs_profit = helpers.add_profit_to_specs(modified_df, [self.spec], discount_dict=discount)
         specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
 
@@ -117,7 +140,8 @@ class TestUtils(TestCase):
             'gt__90': 10,
         }
 
-        modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
+        print("************: ", type(modified_df))
         specs_profit = helpers.add_profit_to_specs(modified_df, self.not_routine_specs, discount_dict=discount)
         specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
 
@@ -133,7 +157,7 @@ class TestUtils(TestCase):
             {'power': 160, 'rpm': 1000, 'voltage': 380, 'price': 15485258},
         ]
         date = '20201014'
-        modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
 
         cost = helpers.calculate_cost_of_proforma_by_specs(modified_df, specs)
         self.assertEqual(cost, 2548468142.40)
@@ -148,7 +172,7 @@ class TestUtils(TestCase):
         }
 
         date = '20201014'
-        modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
 
         response = helpers.adjust_df_materials(modified_df, material_payload)
         adjusted_df = response['adjusted_df']
@@ -165,7 +189,7 @@ class TestUtils(TestCase):
         }
         date = '20201014'
         self.spec['price'] = 1000000000
-        modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
         cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
         profit = helpers.calculate_spec_profit_with_discount(cost, self.spec, discount_dict=discount)
         self.assertEqual(profit['profit'], 20533012)

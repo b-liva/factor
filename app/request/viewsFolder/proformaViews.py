@@ -1783,7 +1783,8 @@ def prof_profit(request, ypref_pk):
     specs = proforma.prefspec_set.all()
 
     specs_list = [{'power': spec.kw, 'rpm': spec.rpm, 'voltage': spec.voltage, 'price': spec.price} for spec in specs]
-    modified_df = helpers.prepare_data_frame_based_on_proforma_date(date)
+    modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
+    cost_file_date_fa = helpers.get_date_fa_from_file_name(cost_file_name)
     specs_profit = helpers.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
     specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
     results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
@@ -1799,6 +1800,10 @@ def prof_profit(request, ypref_pk):
         'specs': {
             'pspecs_with_profit': specs_profit_split['specs_has_profit'],
             'pspecs_no_profit': specs_profit_split['specs_no_profit'],
+        },
+        'cost_file': {
+            'name': cost_file_name,
+            'date_fa': cost_file_date_fa,
         },
     }
     return render(request, 'requests/admin_jemco/ypref/details_cost2.html',  context)
