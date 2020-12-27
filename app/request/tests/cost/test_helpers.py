@@ -241,3 +241,15 @@ class TestUtils(TestCase):
             'gt__90': 0,
         }
         self.assertDictEqual(discount, expected_discount)
+
+    def test_get_costs(self):
+        # df
+        # get costs from df
+        date = '20201014'
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
+        materials_cost = helpers.get_materials_cost(modified_df)
+        self.assertEqual(materials_cost['silicon'], 330000)
+        self.assertEqual(materials_cost['cu'], 2100000)
+        self.assertEqual(materials_cost['cast_iron'], 220000)
+        self.assertEqual(materials_cost['steel'], 150000)
+        self.assertEqual(materials_cost['alu'], 500000)

@@ -177,3 +177,14 @@ class PrivateTestCost(CustomAPITestCase):
         self.assertIn('discount', res.context)
         self.assertDictEqual(res.context['discount'], discount)
         self.assertEqual(res.context['proforma']['price'], 3450000000)
+
+    def test_materials_cost_for_prof_profit(self):
+        self.client.force_login(self.superuser)
+        url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
+        res = self.client.get(url)
+        self.assertIn('material_cost', res.context)
+        self.assertEqual(res.context['material_cost']['silicon'], 330000)
+        self.assertEqual(res.context['material_cost']['cu'], 2100000)
+        self.assertEqual(res.context['material_cost']['cast_iron'], 220000)
+        self.assertEqual(res.context['material_cost']['steel'], 150000)
+        self.assertEqual(res.context['material_cost']['alu'], 500000)

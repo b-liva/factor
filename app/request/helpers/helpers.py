@@ -312,3 +312,14 @@ def handle_invalid_discounts(request):
     discount['lte__90'] = int(discount['lte__90']) if discount['lte__90'] is not "" else 0
     discount['gt__90'] = int(discount['gt__90']) if discount['gt__90'] is not "" else 0
     return discount
+
+
+def get_materials_cost(df):
+    costs_in_file = {
+        'silicon': float(df.loc[3, 'silicon']),
+        'cu': float(df.loc[3, 'cu']),
+        'alu': float(df.loc[3, 'alu']),
+        'steel': float(df.loc[3, 'steel']),
+        'cast_iron': float(df.loc[3, 'dicast']),
+    }
+    return costs_in_file

@@ -1792,6 +1792,7 @@ def prof_profit(request, ypref_pk):
             'ic': spec.ic,
         } for spec in specs]
     modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
+    materials = helpers.get_materials_cost(modified_df)
     cost_file_date_fa = helpers.get_date_fa_from_file_name(cost_file_name)
     specs_profit = helpers.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
     specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
@@ -1815,6 +1816,7 @@ def prof_profit(request, ypref_pk):
             'date_fa': cost_file_date_fa,
         },
         'discount': discount,
+        'material_cost': materials
     }
     return render(request, 'requests/admin_jemco/ypref/details_cost2.html', context)
 
