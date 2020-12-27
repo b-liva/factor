@@ -146,7 +146,7 @@ class TestUtils(TestCase):
         specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
 
         results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
-        self.assertEqual(round(results['profit'], 2),  26718036.8)
+        self.assertEqual(round(results['profit'], 2), 26718036.8)
         self.assertEqual(round(results['percent'], 2), 2.65)
         self.assertEqual(round(results['price'], 2), 2072000000)
 
@@ -162,7 +162,7 @@ class TestUtils(TestCase):
         specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
 
         results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
-        self.assertEqual(round(results['profit'], 2),  20533012.0)
+        self.assertEqual(round(results['profit'], 2), 20533012.0)
         self.assertEqual(round(results['percent'], 2), 2.33)
 
     def test_specs_have_no_cost(self):
@@ -224,3 +224,20 @@ class TestUtils(TestCase):
         cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
         profit = helpers.calculate_spec_profit_with_discount(cost, self.spec, discount_dict=discount)
         self.assertEqual(profit['profit'], 20533012)
+
+    def test_handle_invalid_discounts(self):
+        class Req:
+            POST = None
+
+        request = Req()
+        request.POST = {
+            'un90_disc': "",
+            'up90_disc': 0,
+        }
+
+        discount = helpers.handle_invalid_discounts(request)
+        expected_discount = {
+            'lte__90': 0,
+            'gt__90': 0,
+        }
+        self.assertDictEqual(discount, expected_discount)

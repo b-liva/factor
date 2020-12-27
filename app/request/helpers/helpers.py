@@ -302,3 +302,13 @@ def get_date_from_date_str(file_name):
     day = int(file_name[6:8])
     date = datetime.date(year=year, month=month, day=day)
     return date
+
+
+def handle_invalid_discounts(request):
+    discount = {
+        'lte__90': request.POST.get('un90_disc', 0),
+        'gt__90': request.POST.get('up90_disc', 0),
+    }
+    discount['lte__90'] = int(discount['lte__90']) if discount['lte__90'] is not "" else 0
+    discount['gt__90'] = int(discount['gt__90']) if discount['gt__90'] is not "" else 0
+    return discount

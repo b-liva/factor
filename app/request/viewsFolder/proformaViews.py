@@ -1771,13 +1771,7 @@ def prof_profit(request, ypref_pk):
         'second': 2,
     })
 
-    discount = {
-        'lte__90': request.POST.get('un90_disc', 0),
-        'gt__90': request.POST.get('up90_disc', 0),
-    }
-
-    discount['lte__90'] = int(discount['lte__90']) if discount['lte__90'] is not "" else 0
-    discount['gt__90'] = int(discount['gt__90']) if discount['gt__90'] is not "" else 0
+    discount = helpers.handle_invalid_discounts(request)
 
     proforma = Xpref.objects.get(pk=ypref_pk)
     date_greg = proforma.date_fa.togregorian()
