@@ -1805,6 +1805,7 @@ def prof_profit(request, ypref_pk):
         'prof': proforma,
         'proforma': {
             'cost': results['cost'],
+            'price': results['price'],
             'profit': results['profit'],
             'percent': results['percent']
         },

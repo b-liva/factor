@@ -18,6 +18,20 @@ def split_specs_routine_and_not_routine(specs):
     }
 
 
+def split_specs_if_profit_exists(specs):
+    specs_has_profit = list()
+    specs_no_profit = list()
+    for spec in specs:
+        if spec['profit']:
+            specs_has_profit.append(spec)
+        else:
+            specs_no_profit.append(spec)
+    return {
+        'specs_has_profit': specs_has_profit,
+        'specs_no_profit': specs_no_profit,
+    }
+
+
 def add_profit_to_specs(df, specs, discount_dict=None):
     specs_with_profit = list()
     for spec in specs:
@@ -38,11 +52,11 @@ def add_profit_to_specs(df, specs, discount_dict=None):
         else:
             pr = {
                 'cost': None,
-                'price': None,
+                'price': spec['price'],
                 'profit': None,
                 'percent': None,
                 'total_cost': None,
-                'total_price': None,
+                'total_price': spec['price'] * spec['qty'],
                 'total_profit': None,
             }
         spec.update(pr)
@@ -67,16 +81,19 @@ def calculate_spec_profit_with_discount(cost, spec, discount_dict=None):
 
 def calculate_profit_of_proforma(specs):
     cost_total = 0
+    price_total = 0
     profit_total = 0
     for spec in specs:
         cost_total += spec['cost']
         profit_total += spec['profit']
+        price_total += spec['price'] * spec['qty']
     if cost_total:
         percent = (profit_total / cost_total) * 100
     else:
         percent = None
     response = {
         'cost': cost_total,
+        'price': price_total,
         'profit': profit_total,
         'percent': percent
     }
@@ -147,20 +164,6 @@ def calculate_cost_pandas2(df):
     df['cost_calc'] = df['practical_cost'] + df['cost_general'] + df['هزینه بسته بندی']
 
     return df
-
-
-def split_specs_if_profit_exists(specs):
-    specs_has_profit = list()
-    specs_no_profit = list()
-    for spec in specs:
-        if spec['profit']:
-            specs_has_profit.append(spec)
-        else:
-            specs_no_profit.append(specs_no_profit)
-    return {
-        'specs_has_profit': specs_has_profit,
-        'specs_no_profit': specs_no_profit,
-    }
 
 
 def calculate_cost_of_proforma_by_specs(df, specs):

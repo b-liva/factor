@@ -62,10 +62,14 @@ class TestUtils(TestCase):
         date = datetime.date(year=2020, month=10, day=2)
         self.assertEqual(date_output, date)
 
-    def test_select_routine_specs(self):
+    def test_split_specs_routine(self):
         specs_splitted = helpers.split_specs_routine_and_not_routine(self.specs)
         self.assertEqual(len(specs_splitted['routine_specs']), 2)
         self.assertListEqual(self.routine_specs, specs_splitted['routine_specs'])
+
+    def test_split_specs_not_routine(self):
+        specs_splitted = helpers.split_specs_routine_and_not_routine(self.specs)
+        self.assertEqual(len(specs_splitted['not_routine_specs']), 3)
         self.assertListEqual(self.not_routine_specs, specs_splitted['not_routine_specs'])
 
     def test_handle_spec_not_in_routine_costs(self):
@@ -74,6 +78,18 @@ class TestUtils(TestCase):
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
         cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
         self.assertEqual(cost, None)
+
+    def test_spec_if_proforma_exist(self):
+        discount = {
+            'lte__90': 10,
+            'gt__90': 10,
+        }
+        date = '20201014'
+        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
+        specs_profit = helpers.add_profit_to_specs(modified_df, self.specs, discount_dict=discount)
+        specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
+        self.assertEqual(len(specs_profit_split['specs_no_profit']), 3)
+        self.assertEqual(specs_profit_split['specs_no_profit'][0]['power'], self.not_routine_specs[0]['power'])
 
     def test_calculate_cost_of_proforma_spec(self):
         date = '20201014'
@@ -112,6 +128,11 @@ class TestUtils(TestCase):
         self.assertEqual(round(specs_profit_split['specs_has_profit'][0]['total_cost'], 2), 1758933976)
         self.assertEqual(round(specs_profit_split['specs_has_profit'][0]['total_price'], 2), 1800000000)
         self.assertEqual(round(specs_profit_split['specs_has_profit'][0]['total_profit'], 2), 41066024.00)
+        self.assertEqual(round(specs_profit_split['specs_no_profit'][0]['price']), self.not_routine_specs[0]['price'])
+        self.assertEqual(
+            round(specs_profit_split['specs_no_profit'][0]['total_price']),
+            self.not_routine_specs[0]['price'] * self.not_routine_specs[0]['qty']
+        )
 
     def test_calculate_proforma_profit(self):
         date = '20201014'
@@ -127,6 +148,7 @@ class TestUtils(TestCase):
         results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
         self.assertEqual(round(results['profit'], 2),  26718036.8)
         self.assertEqual(round(results['percent'], 2), 2.65)
+        self.assertEqual(round(results['price'], 2), 2072000000)
 
     def test_calculate_proforma_profit_one_spec(self):
         date = '20201014'
@@ -151,7 +173,6 @@ class TestUtils(TestCase):
         }
 
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
-        print("************: ", type(modified_df))
         specs_profit = helpers.add_profit_to_specs(modified_df, self.not_routine_specs, discount_dict=discount)
         specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
 
