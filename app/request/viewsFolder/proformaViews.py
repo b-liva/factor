@@ -1772,9 +1772,12 @@ def prof_profit(request, ypref_pk):
     })
 
     discount = {
-        'lte__90': 0,
-        'gt__90': 0,
+        'lte__90': request.POST.get('un90_disc', 0),
+        'gt__90': request.POST.get('up90_disc', 0),
     }
+
+    discount['lte__90'] = int(discount['lte__90']) if discount['lte__90'] is not "" else 0
+    discount['gt__90'] = int(discount['gt__90']) if discount['gt__90'] is not "" else 0
 
     proforma = Xpref.objects.get(pk=ypref_pk)
     date_greg = proforma.date_fa.togregorian()
@@ -1817,6 +1820,7 @@ def prof_profit(request, ypref_pk):
             'name': cost_file_name,
             'date_fa': cost_file_date_fa,
         },
+        'discount': discount,
     }
     return render(request, 'requests/admin_jemco/ypref/details_cost2.html', context)
 

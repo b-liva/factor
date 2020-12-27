@@ -26,6 +26,72 @@
                 </table>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <form action="{% url 'prof_profit' ypref_pk=prof.pk %}" method="post">
+                    {% csrf_token %}
+                    <div class="container">
+                        <div class="row clearfix">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" class="text-center d-inline bg-blue-sky">%تخفیف زیر 90</th>
+                                        <th scope="col" class="text-center d-inline bg-blue-sky">%تخفیف بالاتر از 90
+                                        </th>
+                                        <th scope="col" class="text-center d-inline bg-blue-sky">ورق سیلیکون</th>
+                                        <th scope="col" class="text-center d-inline bg-blue-sky">مس</th>
+                                        <th scope="col" class="text-center d-inline bg-blue-sky">آلومینیوم</th>
+                                        <th scope="col" class="text-center d-inline bg-blue-sky">ورق فولادی</th>
+                                        <th scope="col" class="text-center d-inline bg-blue-sky">چدن</th>
+                                    </tr>
+
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="text-center"><input class="cost-input" name="un90_disc"
+                                                                       value="{{ discount.lte__90 }}" type="text">
+                                        </td>
+                                        <td class="text-center"><input class="cost-input" name="up90_disc"
+                                                                       value="{{ discount.gt__90 }}" type="text">
+                                        </td>
+                                        <td class="text-center"><input class="cost-input" name="silicon"
+                                                                       value="{{ material_cost.silicon | floatformat | intcomma }}"
+                                                                       type="text"></td>
+                                        <td class="text-center"><input class="cost-input" name="cu"
+                                                                       value="{{ material_cost.copper | floatformat | intcomma }}"
+                                                                       type="text"></td>
+                                        <td class="text-center"><input class="cost-input" name="alu"
+                                                                       value="{{ material_cost.alu | floatformat | intcomma }}"
+                                                                       type="text"></td>
+                                        <td class="text-center"><input class="cost-input" name="steel"
+                                                                       value="{{ material_cost.steel | floatformat | intcomma }}"
+                                                                       type="text"></td>
+                                        <td class="text-center"><input class="cost-input" name="dicast"
+                                                                       value="{{ material_cost.cast_ir | floatformat | intcomma }}"
+                                                                       type="text"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-sm btn-success btn-round">ثبت</button>
+{#                    <a class="btn btn-sm btn-warning btn-round" href="{% url 'default_cost' ypref_pk=prof.pk %}">پیش#}
+{#                        فرض</a>#}
+{#                    <a class="btn btn-sm btn-warning btn-round" href="{% url 'last_cost' ypref_pk=prof.pk %}">آخرین#}
+{#                        قیمت</a>#}
+{##}
+{#                    <a class="btn btn-xs btn-primary btn-round" href="{% url 'set_formula_1' ypref_pk=prof.pk %}">فرمول#}
+{#                        قدیم</a>#}
+{#                    <a class="btn btn-xs btn-primary btn-round" href="{% url 'set_formula_2' ypref_pk=prof.pk %}">فرمول#}
+{#                        جدید</a>#}
+                </form>
+
+            </div>
+
+        </div>
 
         <div class="row" style="margin-top: 50px;">
             <div>

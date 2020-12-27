@@ -11,6 +11,7 @@ from request.models import Xpref
 from request.tests.factory import factories
 from request.helpers import helpers
 
+
 class TestPublicCost(CustomAPITestCase):
 
     def setUp(self):
@@ -157,3 +158,22 @@ class PrivateTestCost(CustomAPITestCase):
         self.assertIn('date_fa', res.context['cost_file'])
         self.assertEqual(res.context['cost_file']['name'], cost_file_name)
         self.assertEqual(res.context['cost_file']['date_fa'], cost_file_date_fa)
+
+    def test_prof_profit_post_discount(self):
+        self.client.force_login(self.superuser)
+        prof = factories.ProformaFactory.create(number=153)
+        factories.ProformaSpecFactory.create(xpref_id=prof, price=1000000000, kw=132, rpm=1500, qty=3)
+        factories.ProformaSpecFactory.create(xpref_id=prof, price=500000000, kw=90, rpm=1500, qty=2)
+        url = reverse('prof_profit', kwargs={'ypref_pk': prof.pk})
+        post_data = {
+            'un90_disc': 10,
+            'up90_disc': 15
+        }
+        res = self.client.post(url, data=post_data)
+        discount = {
+            'lte__90': 10,
+            'gt__90': 15,
+        }
+        self.assertIn('discount', res.context)
+        self.assertDictEqual(res.context['discount'], discount)
+        self.assertEqual(res.context['proforma']['price'], 3450000000)
