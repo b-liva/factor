@@ -3,5 +3,135 @@
 {% load request_extras %}
 {% load sales_ex_dashboard %}
 {% block right_col %}
-    test
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6 col-sm-5 col-md-4">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>پیش فاکتور</td>
+                        <td><a class="btn btn-xs btn-primary btn-round"
+                               href="{% url 'pref_details' ypref_pk=prof.pk %}">{{ prof.number }}</a></td>
+                    </tr>
+                    <tr>
+                        <td>مبنای قیمت تمام شده</td>
+                        <td><p class="text-center text-danger" data-toggle="tooltip"
+                               title="{{ cost_file.name }}">{{ cost_file.date_fa }}</p></td>
+                    </tr>
+                    <tr>
+                        <td>تاریخ پیش فاکتور</td>
+                        <td>{{ prof.date_fa }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 50px;">
+            <div>
+                <div class="col-md-1 red"> اطلاعات ردیف ها</div>
+                <div class="col-md-11">
+                    <div class="table-responsive">
+                        <table class="table table-hover text-center">
+                            <thead>
+                            <tr class="d-inline bg-primary">
+                                <td scope="col" class="text-center">ردیف</td>
+                                <td scope="col" class="text-center">کد کالا</td>
+                                <td scope="col" class="text-center">تعداد</td>
+                                <td scope="col" class="text-center">کیلووات</td>
+                                <td scope="col" class="text-center">سرعت</td>
+                                <td scope="col" class="text-center">ولتاژ</td>
+                                <td scope="col" class="text-center">IM</td>
+                                <td scope="col" class="text-center">IP</td>
+                                <td scope="col" class="text-center">IC</td>
+                                <td scope="col" class="text-center">تمام شده واحد</td>
+                                <td scope="col" class="text-center">تمام شده کل</td>
+                                <td scope="col" class="text-center">قیمت واحد</td>
+                                <td scope="col" class="text-center">قیمت کل</td>
+                                <td scope="col" class="text-center">سود واحد</td>
+                                <td scope="col" class="text-center">سود کل</td>
+                                <td scope="col" class="text-center">درصد سود</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for spec in specs.pspecs_with_profit %}
+                                <tr>
+                                    <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                    <td>{{ spec.code }}</td>
+                                    <td>{{ spec.qty }}</td>
+                                    <td>{{ spec.power }}</td>
+                                    <td>{{ spec.rpm }}</td>
+                                    <td>{{ spec.voltage }}</td>
+                                    <td>{% if spec.im %}{{ spec.im }}{% endif %}</td>
+                                    <td>{% if spec.ip %}{{ spec.ip }}{% endif %}</td>
+                                    <td>{% if spec.ic %}{{ spec.ic }}{% endif %}</td>
+                                    <td>{{ spec.cost|floatformat|intcomma }}</td>
+                                    <td>{{ spec.total_cost|floatformat|intcomma }}</td>
+                                    <td>{{ spec.price|floatformat|intcomma }}</td>
+                                    <td>{{ spec.total_price|floatformat|intcomma }}</td>
+                                    <td>{{ spec.profit|floatformat|intcomma }}</td>
+                                    <td>{{ spec.total_profit|floatformat|intcomma }}</td>
+                                    <td>{{ spec.percent|floatformat }}</td>
+                                </tr>
+
+                            {% endfor %}
+                            <tr>
+                                <td colspan="10"></td>
+                                <td>{{ proforma.cost|floatformat|intcomma }}</td>
+                                <td></td>
+                                <td>{{ proforma.price|floatformat|intcomma }}</td>
+                                <td></td>
+                                <td>{{ proforma.profit|floatformat|intcomma }}</td>
+                                <td>{{ proforma.percent|floatformat|intcomma }}</td>
+                                <td>
+                                    <p>{{ total.profit_total_percent|floatformat }}</p>
+                                    <p data-toggle="tooltip"
+                                       title="نحوه محاسبه قیمت تمام شده از  مهرماه 99 تغییر داشته است!"
+                                       class="text-danger">
+                                        {{ formula_txt }}</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <h3 class="text-center" style="margin-top: 50px">بدون قیمت تمام شده</h3>
+                        <table class="table table-hover text-center">
+                            <thead>
+                            <tr class="d-inline bg-danger">
+                                <td scope="col" class="text-center">ردیف</td>
+                                <td scope="col" class="text-center">کد کالا</td>
+                                <td scope="col" class="text-center">تعداد</td>
+                                <td scope="col" class="text-center">کیلووات</td>
+                                <td scope="col" class="text-center">سرعت</td>
+                                <td scope="col" class="text-center">ولتاژ</td>
+                                <td scope="col" class="text-center">IM</td>
+                                <td scope="col" class="text-center">IP</td>
+                                <td scope="col" class="text-center">IC</td>
+                                <td scope="col" class="text-center">قیمت واحد</td>
+                                <td scope="col" class="text-center">قیمت کل</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for spec in specs.pspecs_no_profit %}
+                                <tr>
+                                    <th scope="row" class="text-center">{{ forloop.counter }}</th>
+                                    <td>{{ spec.code }}</td>
+                                    <td>{{ spec.qty }}</td>
+                                    <td>{{ spec.power }}</td>
+                                    <td>{{ spec.rpm }}</td>
+                                    <td>{{ spec.voltage }}</td>
+                                    <td>{% if spec.im %}{{ spec.im }}{% endif %}</td>
+                                    <td>{% if spec.ip %}{{ spec.ip }}{% endif %}</td>
+                                    <td>{% if spec.ic %}{{ spec.ic }}{% endif %}</td>
+                                    <td>{{ spec.price|floatformat|intcomma }}</td>
+                                    <td>{{ spec.total_price|floatformat|intcomma }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 {% endblock %}
