@@ -21,7 +21,6 @@ class TestPublicCost(CustomAPITestCase):
         factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=1000000000, kw=132, rpm=1500)
 
     def test_prevents_unauth_user_to_get_proforma_profit(self):
-
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
         res = self.client_anon.get(url)
         self.assertRedirects(
@@ -74,20 +73,6 @@ class PrivateTestCost(CustomAPITestCase):
             target_status_code=status.HTTP_302_FOUND
         )
 
-    def test_if_request_has_filter_data(self):
-        self.client.force_login(self.superuser)
-
-        url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
-        res = self.client.get(url)
-        ca = cache.get('item')
-        self.assertEqual(ca['first'], 1)
-
-    def test_save_data_to_cache(self):
-        pass
-
-    def test_get_data_from_cache(self):
-        pass
-
     def test_calculate_proforma_profit(self):
         self.client.force_login(self.superuser)
 
@@ -130,7 +115,7 @@ class PrivateTestCost(CustomAPITestCase):
         self.assertEqual(round(kw132['percent'], 2), 13.71)
         self.assertEqual(round(kw18['power'], 1), 18.5)
         self.assertEqual(round(kw18['profit'], 1), 30185024.80)
-        self.assertEqual(round(kw18['percent'], 2),  23.25)
+        self.assertEqual(round(kw18['percent'], 2), 23.25)
         self.assertEqual(len(specs_profit), 2)
         self.assertEqual(len(specs_not_profit), 1)
 
@@ -185,6 +170,57 @@ class PrivateTestCost(CustomAPITestCase):
         self.assertIn('material_cost', res.context)
         self.assertEqual(res.context['material_cost']['silicon'], 330000)
         self.assertEqual(res.context['material_cost']['cu'], 2100000)
-        self.assertEqual(res.context['material_cost']['cast_iron'], 220000)
+        self.assertEqual(res.context['material_cost']['dicast'], 220000)
         self.assertEqual(res.context['material_cost']['steel'], 150000)
         self.assertEqual(res.context['material_cost']['alu'], 500000)
+
+    def test_adjust_materials_cost_prof_profit_post(self):
+        self.client.force_login(self.superuser)
+        self.prepare_prof_routine_not_routine_specs()
+        discount_payload = {
+            'lte__90': 0,
+            'gt__90': 0,
+        }
+        materials_payload = {
+            "silicon": "300,000",
+            "cu": "210,000,0",
+            "alu": "500,000",
+            "steel": "150,000",
+            "dicast": "220,000",
+        }
+        materials_payload = {
+            "silicon": 300000,
+            "cu": 2100000,
+            "alu": 500000,
+            "steel": 150000,
+            "dicast": 220000,
+        }
+        payload = dict()
+        payload.update(discount_payload)
+        payload.update(materials_payload)
+        print("payload: ", payload)
+
+        url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
+        res = self.client.post(url, data=payload)
+
+        self.assertDictEqual(res.context['material_cost'], materials_payload)
+
+        specs_profit = res.context['specs']['pspecs_with_profit']
+        specs_not_profit = res.context['specs']['pspecs_no_profit']
+        kw18 = kw132 = None
+
+        for sp in specs_profit:
+            if round(sp['power']) == 132:
+                kw132 = sp
+            elif round(sp['power'], 1) == 18.5:
+                kw18 = sp
+        for sp in specs_not_profit:
+            print('not profit: ', sp)
+        self.assertEqual(kw132['power'], 132)
+        self.assertEqual(round(kw132['profit'], 1), 146069012.00)
+        self.assertEqual(round(kw132['percent'], 2),  17.11)
+        self.assertEqual(round(kw18['power'], 1), 18.5)
+        self.assertEqual(round(kw18['profit'], 1), 33410624.80)
+        self.assertEqual(round(kw18['percent'], 2),  26.39)
+        self.assertEqual(len(specs_profit), 2)
+        self.assertEqual(len(specs_not_profit), 1)

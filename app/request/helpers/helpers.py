@@ -108,24 +108,21 @@ def prepare_data_frame_based_on_proforma_date(date):
 
 
 def adjust_df_materials(modified_df, material_payload):
-    df_pickle_path = os.path.join(settings.PROJECT_DATA_DIR, 'cost_df_pickle')
     df_copy = copy.deepcopy(modified_df)
 
     modified_df = modify_cost(material_payload, df_copy)
-    # adjusted_df.to_pickle(df_pickle_path)
-    # adjusted_df = pd.read_pickle(df_pickle_path)
-    # pandas_class.save_df(adjusted_df, 'df')
-    modified_df = calculate_cost_pandas2(modified_df)
 
+    modified_df = calculate_cost_pandas2(modified_df)
+    adjusted_materials = {
+        'silicon': int(modified_df.loc[3, 'silicon']),
+        'cu': int(modified_df.loc[3, 'cu']),
+        'alu': int(modified_df.loc[3, 'alu']),
+        'steel': int(modified_df.loc[3, 'steel']),
+        'dicast': int(modified_df.loc[3, 'dicast']),
+    }
     return {
         'adjusted_df': modified_df,
-        'adjusted_materials': {
-            'silicon': int(modified_df.loc[3, 'silicon']),
-            'cu': int(modified_df.loc[3, 'cu']),
-            'alu': int(modified_df.loc[3, 'alu']),
-            'steel': int(modified_df.loc[3, 'steel']),
-            'dicast': int(modified_df.loc[3, 'dicast']),
-        }
+        'adjusted_materials': adjusted_materials
     }
 
 
@@ -320,9 +317,21 @@ def get_materials_cost(df):
         'cu': float(df.loc[3, 'cu']),
         'alu': float(df.loc[3, 'alu']),
         'steel': float(df.loc[3, 'steel']),
-        'cast_iron': float(df.loc[3, 'dicast']),
+        'dicast': float(df.loc[3, 'dicast']),
     }
     return costs_in_file
+
+
+def get_materials_post(request):
+    materials_post_data = {
+        'silicon': request.POST.get('silicon'),
+        'cu': request.POST.get('cu'),
+        'alu': request.POST.get('alu'),
+        'steel': request.POST.get('steel'),
+        'dicast': request.POST.get('dicast'),
+    }
+    return materials_post_data
+
 
 def remove_comma_from_number(number):
     if type(number) in [int, float]:

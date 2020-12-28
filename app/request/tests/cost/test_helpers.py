@@ -242,6 +242,29 @@ class TestUtils(TestCase):
         }
         self.assertDictEqual(discount, expected_discount)
 
+    def test_get_material_cost_post(self):
+        class Req:
+            POST = None
+
+        request = Req()
+        request.POST = {
+            "silicon": 300000,
+            "cu": 2100000,
+            "alu": 500000,
+            "steel": 150000,
+            "dicast": 220000,
+        }
+
+        materials_cost = helpers.get_materials_post(request)
+        expected_material_cost = {
+            "silicon": 300000,
+            "cu": 2100000,
+            "alu": 500000,
+            "steel": 150000,
+            "dicast": 220000,
+        }
+        self.assertDictEqual(materials_cost, expected_material_cost)
+
     def test_get_costs(self):
         # df
         # get costs from df
@@ -250,7 +273,7 @@ class TestUtils(TestCase):
         materials_cost = helpers.get_materials_cost(modified_df)
         self.assertEqual(materials_cost['silicon'], 330000)
         self.assertEqual(materials_cost['cu'], 2100000)
-        self.assertEqual(materials_cost['cast_iron'], 220000)
+        self.assertEqual(materials_cost['dicast'], 220000)
         self.assertEqual(materials_cost['steel'], 150000)
         self.assertEqual(materials_cost['alu'], 500000)
 

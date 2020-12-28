@@ -6,7 +6,6 @@ import requests
 import os
 from base64 import encode
 
-from django.core.cache import cache
 import random
 
 import jdatetime
@@ -1765,18 +1764,33 @@ def proforma_profit(request, ypref_pk):
 
 @login_required
 def prof_profit(request, ypref_pk):
-    from django.core.cache import cache
-    cache.set('item', {
-        'first': 1,
-        'second': 2,
-    })
-
-    discount = helpers.handle_invalid_discounts(request)
-
+    # get proforma and pf date...
     proforma = Xpref.objects.get(pk=ypref_pk)
     date_greg = proforma.date_fa.togregorian()
     date = helpers.get_date_str(date_greg)
 
+    # get df
+    modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
+    #
+    discount = None
+    if request.method == 'GET':
+        pass
+    if request.method == "POST":
+        discount = helpers.handle_invalid_discounts(request)
+        material_payload = {
+            'silicon': helpers.remove_comma_from_number(request.POST.get('silicon', 0)),
+            'cu': helpers.remove_comma_from_number(request.POST.get('cu', 0)),
+            'alu': helpers.remove_comma_from_number(request.POST.get('alu', 0)),
+            'steel': helpers.remove_comma_from_number(request.POST.get('steel', 0)),
+            'dicast': helpers.remove_comma_from_number(request.POST.get('dicast', 0)),
+        }
+        adjusted_materials = helpers.adjust_df_materials(modified_df, material_payload)
+        modified_df = adjusted_materials['adjusted_df']
+        materials = adjusted_materials['adjusted_materials']
+
+        # get discount
+        # get materials post data
+        # calculate new costs
     specs = proforma.prefspec_set.all()
 
     specs_list = [
@@ -1791,8 +1805,10 @@ def prof_profit(request, ypref_pk):
             'ip': spec.ip,
             'ic': spec.ic,
         } for spec in specs]
-    modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
+
+    # common calculations
     materials = helpers.get_materials_cost(modified_df)
+
     cost_file_date_fa = helpers.get_date_fa_from_file_name(cost_file_name)
     specs_profit = helpers.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
     specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
