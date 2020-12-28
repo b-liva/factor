@@ -253,3 +253,19 @@ class TestUtils(TestCase):
         self.assertEqual(materials_cost['cast_iron'], 220000)
         self.assertEqual(materials_cost['steel'], 150000)
         self.assertEqual(materials_cost['alu'], 500000)
+
+    def test_remove_comma_from_string_number(self):
+        number = "330,000"
+        number_without_comma = helpers.remove_comma_from_number(number)
+        self.assertEqual(number_without_comma, 330000)
+
+    def test_remove_comma_from_int(self):
+        number = 330000
+        number_without_comma = helpers.remove_comma_from_number(number)
+        self.assertEqual(number_without_comma, 330000)
+
+    def test_remove_comma_from_float(self):
+        number = "330,000.22"
+        number_without_comma = helpers.remove_comma_from_number(number)
+        self.assertEqual(number_without_comma, 330000.22)
+

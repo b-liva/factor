@@ -323,3 +323,10 @@ def get_materials_cost(df):
         'cast_iron': float(df.loc[3, 'dicast']),
     }
     return costs_in_file
+
+def remove_comma_from_number(number):
+    if type(number) in [int, float]:
+        return number
+    if type(number) == str:
+        return float(number.replace(',', ''))
+    return number
