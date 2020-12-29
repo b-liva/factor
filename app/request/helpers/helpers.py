@@ -322,14 +322,17 @@ def get_materials_cost(df):
     return costs_in_file
 
 
-def get_materials_post(request):
-    materials_post_data = {
-        'silicon': request.POST.get('silicon'),
-        'cu': request.POST.get('cu'),
-        'alu': request.POST.get('alu'),
-        'steel': request.POST.get('steel'),
-        'dicast': request.POST.get('dicast'),
-    }
+def get_materials_post_payload(request):
+    materials = [
+        'silicon',
+        'cu',
+        'alu',
+        'steel',
+        'dicast'
+    ]
+    materials_post_data = dict()
+    for material in materials:
+        materials_post_data[material] = request.POST.get(material)
     return materials_post_data
 
 
