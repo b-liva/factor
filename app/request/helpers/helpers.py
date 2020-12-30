@@ -1,7 +1,7 @@
 import os
 import copy
-from django.conf import settings
 import pandas as pd
+from django.conf import settings
 
 
 def split_specs_routine_and_not_routine(specs):

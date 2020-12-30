@@ -1766,7 +1766,13 @@ def proforma_profit(request, ypref_pk):
 def prof_profit(request, ypref_pk):
     # get proforma and pf date...
     proforma = Xpref.objects.get(pk=ypref_pk)
-    date_greg = proforma.date_fa.togregorian()
+    prof_date = proforma.date_fa
+    st = request.session.get('current_profit_date', None)
+
+    request.session['current_profit_date'] = ''
+    if st:
+        prof_date = jdatetime.date.today()
+    date_greg = prof_date.togregorian()
     date = helpers.get_date_str(date_greg)
 
     # get df
@@ -1786,7 +1792,6 @@ def prof_profit(request, ypref_pk):
         }
         adjusted_materials = helpers.adjust_df_materials(modified_df, material_payload)
         modified_df = adjusted_materials['adjusted_df']
-        materials = adjusted_materials['adjusted_materials']
 
         # get discount
         # get materials post data
@@ -1834,7 +1839,15 @@ def prof_profit(request, ypref_pk):
         'discount': discount,
         'material_cost': materials
     }
+
     return render(request, 'requests/admin_jemco/ypref/details_cost2.html', context)
+
+
+def current_profit(request, ypref_pk):
+    today = jdatetime.date.today()
+    request.session['current_profit_date'] = str(today)
+    cache.set('current_profit_date', today, None)
+    return redirect('prof_profit', ypref_pk=ypref_pk)
 
 
 @login_required

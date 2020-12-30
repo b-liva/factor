@@ -1,5 +1,6 @@
 import datetime
 
+import jdatetime
 from django.core.cache import cache
 from django.shortcuts import reverse
 from rest_framework import status
@@ -108,8 +109,6 @@ class PrivateTestCost(CustomAPITestCase):
                 kw132 = sp
             elif round(sp['power'], 1) == 18.5:
                 kw18 = sp
-        for sp in specs_not_profit:
-            print('not profit: ', sp)
         self.assertEqual(kw132['power'], 132)
         self.assertEqual(round(kw132['profit'], 1), 120533012.00)
         self.assertEqual(round(kw132['percent'], 2), 13.71)
@@ -198,7 +197,6 @@ class PrivateTestCost(CustomAPITestCase):
         payload = dict()
         payload.update(discount_payload)
         payload.update(materials_payload)
-        print("payload: ", payload)
 
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
         res = self.client.post(url, data=payload)
@@ -214,13 +212,50 @@ class PrivateTestCost(CustomAPITestCase):
                 kw132 = sp
             elif round(sp['power'], 1) == 18.5:
                 kw18 = sp
-        for sp in specs_not_profit:
-            print('not profit: ', sp)
         self.assertEqual(kw132['power'], 132)
         self.assertEqual(round(kw132['profit'], 1), 146069012.00)
-        self.assertEqual(round(kw132['percent'], 2),  17.11)
+        self.assertEqual(round(kw132['percent'], 2), 17.11)
         self.assertEqual(round(kw18['power'], 1), 18.5)
         self.assertEqual(round(kw18['profit'], 1), 33410624.80)
-        self.assertEqual(round(kw18['percent'], 2),  26.39)
+        self.assertEqual(round(kw18['percent'], 2), 26.39)
         self.assertEqual(len(specs_profit), 2)
         self.assertEqual(len(specs_not_profit), 1)
+
+    def test_current_profit_sets_today_in_session(self):
+        self.client.force_login(self.superuser)
+
+        today = jdatetime.date.today()
+
+        url = reverse('current_profit', kwargs={'ypref_pk': self.proforma.pk})
+        response = self.client.get(url)
+        self.assertEqual(
+            self.client.session.get('current_profit_date'),
+            str(today)
+        )
+        self.assertRedirects(
+            response=response,
+            expected_url=reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk}),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+
+    def test_current_profit_picks_today_date(self):
+        self.client.force_login(self.superuser)
+
+        prof_date = jdatetime.date(year=1399, month=3, day=6)  # file: 1399-02-14:20200503
+        self.proforma.date_fa = prof_date
+        self.proforma.save()
+
+        today = jdatetime.date.today()
+
+        session = self.client.session
+        session.update({
+            'current_profit_date': str(today),
+            'special_case': "test"
+        })
+        session.save()
+
+        url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.context['prof'], self.proforma)
+        self.assertEqual(response.context['cost_file']['name'], "20201102")
