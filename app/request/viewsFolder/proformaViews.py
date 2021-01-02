@@ -1768,13 +1768,11 @@ def prof_profit(request, ypref_pk):
     proforma = Xpref.objects.get(pk=ypref_pk)
     prof_date = proforma.date_fa
     st = request.session.get('current_profit_date', None)
-
-    request.session['current_profit_date'] = ''
     if st:
         prof_date = jdatetime.date.today()
+        del request.session['current_profit_date']
     date_greg = prof_date.togregorian()
     date = helpers.get_date_str(date_greg)
-
     # get df
     modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
     #
@@ -1846,7 +1844,6 @@ def prof_profit(request, ypref_pk):
 def current_profit(request, ypref_pk):
     today = jdatetime.date.today()
     request.session['current_profit_date'] = str(today)
-    cache.set('current_profit_date', today, None)
     return redirect('prof_profit', ypref_pk=ypref_pk)
 
 
@@ -1956,3 +1953,18 @@ def clist(request):
         'material_cost': materials,
     }
     return render(request, 'requests/admin_jemco/ypref/clist.html', context)
+
+
+def total_profit(request):
+    date_start = jdatetime.date(year=1399, month=3, day=1)
+    proformas = Xpref.objects.filter(is_active=True, date_fa__gte=date_start, perm=True)
+    proforma_profit = helpers.proformas_profit(proformas)
+    context = {
+        'proforma_count': proformas.count(),
+        'cost': proforma_profit['cost'],
+        'price': proforma_profit['price'],
+        'profit': proforma_profit['profit'],
+        'percent': proforma_profit['percent'],
+        'date_start': date_start
+    }
+    return render(request, 'requests/admin_jemco/ypref/cost/total_cost.html', context)

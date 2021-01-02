@@ -8,9 +8,10 @@ from rest_framework.test import APIClient
 from django.conf import settings
 from accounts.tests.test_public_funcs import CustomAPITestCase
 from core.tests.factory import factories as core_factories
-from request.models import Xpref
+from request.models import Xpref, PrefSpec
 from request.tests.factory import factories
 from request.helpers import helpers
+from request.tests.factory.base_proformas import BaseProformaFactories
 
 
 class TestPublicCost(CustomAPITestCase):
@@ -42,7 +43,7 @@ class PrivateTestCost(CustomAPITestCase):
         self.client_exp.force_authenticate(user=self.ex_user)
 
         self.proforma = factories.ProformaFactory.create()
-        factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=1000000000, kw=132, rpm=1500)
+        factories.ProformaSpecFactory.create(xpref_id=self.proforma, qty=1, price=1000000000, kw=132, rpm=1500)
 
     def prepare_prof_routine_not_routine_specs(self):
         import jdatetime
@@ -52,8 +53,8 @@ class PrivateTestCost(CustomAPITestCase):
         self.proforma.date_fa = date
         self.proforma.save()
 
-        factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=160000000, kw=18.5, rpm=3000)
-        factories.ProformaSpecFactory.create(xpref_id=self.proforma, price=160000000, kw=2500, rpm=3000)
+        factories.ProformaSpecFactory.create(xpref_id=self.proforma, qty=1, price=160000000, kw=18.5, rpm=3000)
+        factories.ProformaSpecFactory.create(xpref_id=self.proforma, qty=1, price=160000000, kw=2500, rpm=3000)
 
     def test_prevents_user_with_no_permission_to_get_proforma_profit(self):
         self.client.force_login(self.user)
@@ -78,13 +79,13 @@ class PrivateTestCost(CustomAPITestCase):
         self.client.force_login(self.superuser)
 
         self.prepare_prof_routine_not_routine_specs()
+
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
         res = self.client.get(url)
 
         self.assertIn('proforma', res.context)
         proforma_result = res.context['proforma']
         self.assertEqual(proforma_result['cost'], 1009281963.20)
-
         self.assertEqual(round(proforma_result['profit'], 2), 150718036.80)
         self.assertEqual(round(proforma_result['percent'], 2), 14.93)
 
@@ -251,11 +252,33 @@ class PrivateTestCost(CustomAPITestCase):
         session = self.client.session
         session.update({
             'current_profit_date': str(today),
-            'special_case': "test"
         })
         session.save()
 
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
         response = self.client.get(url)
+        self.assertEqual(response.context['prof'].date_fa, self.proforma.date_fa)
+        self.assertNotIn('current_profit_date', self.client.session)
         self.assertEqual(response.context['prof'], self.proforma)
         self.assertEqual(response.context['cost_file']['name'], "20201102")
+
+    def test_total_cost(self):
+        self.client.force_login(self.ex_user)
+        PrefSpec.objects.all().delete()
+        Xpref.objects.all().delete()
+
+        BaseProformaFactories().base_proformas()
+
+        url = reverse('total_profit')
+        response = self.client.get(url)
+
+        self.assertIn('cost', response.context)
+        self.assertIn('price', response.context)
+        self.assertIn('profit', response.context)
+        self.assertIn('percent', response.context)
+
+        self.assertEqual(response.context['proforma_count'], 3)
+        self.assertEqual(round(response.context['cost'], 2), 4784590556.00)
+        self.assertEqual(round(response.context['price'], 2), 5400000000.00)
+        self.assertEqual(round(response.context['profit'], 2), 615409444.00)
+        self.assertEqual(round(response.context['percent'], 2), 11.4)

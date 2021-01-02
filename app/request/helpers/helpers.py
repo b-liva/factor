@@ -138,8 +138,8 @@ def modify_cost(payload, df):
 def calculate_cost_pandas(df):
     df['material_main'] = df['وزن سيليكون استيل'] * df['silicon'] + df['سيم لاكي'] * df['cu'] + df['شمش الومينيوم'] * \
                           df['alu'] + df['وزن قطعات چدني (كامل )'] * df['dicast'] + df['ميلگرد فولادي'] * df['steel']
-    df['material_other'] = 0.1 * (df['قيمت بلبرينگ'] + df['material_main'])
-    df['material_total'] = df['material_other'] + df['قيمت بلبرينگ'] + df['material_main']
+    df['material_other'] = 0.1 * (df['bearing_cost'] + df['material_main'])
+    df['material_total'] = df['material_other'] + df['bearing_cost'] + df['material_main']
     df['cost_overhead'] = df['نرخ سربار'] * df['زمان/ماشين']
     df['cost_wage'] = df['نرخ دستمزد'] * df['زمان /دستمزد']
     df['practical_cost'] = df['material_total'] + df['cost_overhead'] + df['cost_wage']
@@ -152,8 +152,8 @@ def calculate_cost_pandas(df):
 def calculate_cost_pandas2(df):
     df['material_main'] = df['وزن سيليكون استيل'] * df['silicon'] + df['سيم لاكي'] * df['cu'] + df['شمش الومينيوم'] * \
                           df['alu'] + df['وزن قطعات چدني (كامل )'] * df['dicast'] + df['ميلگرد فولادي'] * df['steel']
-    df['material_other'] = 0.12 * (df['قيمت بلبرينگ'] + df['material_main'])
-    df['material_total'] = df['material_other'] + df['قيمت بلبرينگ'] + df['material_main']
+    df['material_other'] = 0.12 * (df['bearing_cost'] + df['material_main'])
+    df['material_total'] = df['material_other'] + df['bearing_cost'] + df['material_main']
     df['cost_overhead'] = df['نرخ سربار'] * df['زمان/ماشين']
     df['cost_wage'] = df['نرخ دستمزد'] * df['زمان /دستمزد']
     df['practical_cost'] = df['material_total'] + df['cost_overhead'] + df['cost_wage']
@@ -195,6 +195,8 @@ def get_filename_base_on_date(date):
     cost_file_path = os.path.join(settings.PROJECT_DATA_DIR, 'costs')
     files = os.listdir(cost_file_path)
     files_no_ext = [file.split('.')[0] for file in files]
+    files_no_ext.sort()
+
     file_date = files_no_ext[len(files_no_ext) - 1]
     if date < int(files_no_ext[1]):
         return int(files_no_ext[1])
@@ -237,7 +239,6 @@ def prepare_data_frame(df):
 
     df.columns = df.loc[2]
     df = df.loc[3:69]
-    df['قيمت بلبرينگ'] = df['قيمت بلبرينگ'].fillna(0)
 
     col_names = {
         'POWER(KW)': 'title',
@@ -245,9 +246,12 @@ def prepare_data_frame(df):
         'قيمت سيم لاكي': 'cu',
         'قيمت شمش الومينيوم': 'alu',
         ' قيمت قطعات چدني (كامل )': 'dicast',
-        'قيمت ميلگرد فولادي': 'steel'
+        'قيمت ميلگرد فولادي': 'steel',
+        'قيمت بلبرينگ': 'bearing_cost'
     }
+
     df.rename(columns=col_names, inplace=True)
+    df['bearing_cost'] = df['bearing_cost'].fillna(0)
     df['cost_calc'] = df['cost']
     return df
 
@@ -265,7 +269,6 @@ def prepare_data_frame2(df):
 
     df.columns = df.loc[2]
     df = df.loc[3:69]
-    df['قيمت بلبرينگ'] = df['قيمت بلبرينگ'].fillna(0)
 
     col_names = {
         'POWER(KW)': 'title',
@@ -273,9 +276,11 @@ def prepare_data_frame2(df):
         'قيمت سيم لاكي': 'cu',
         'قيمت شمش الومينيوم': 'alu',
         ' قيمت قطعات چدني (كامل )': 'dicast',
-        'قيمت ميلگرد فولادي': 'steel'
+        'قيمت ميلگرد فولادي': 'steel',
+        'قيمت بلبرينگ': 'bearing_cost'
     }
     df.rename(columns=col_names, inplace=True)
+    df['bearing_cost'] = df['bearing_cost'].fillna(0)
     df['cost_calc'] = df['cost']
     return df
 
@@ -294,6 +299,7 @@ def get_date_fa_from_file_name(file_name):
 
 def get_date_from_date_str(file_name):
     import datetime
+    file_name = str(file_name)
     year = int(file_name[0:4])
     month = int(file_name[4:6])
     day = int(file_name[6:8])
@@ -384,5 +390,8 @@ def proformas_profit(proformas):
         profit = calculate_proforma_profit(proforma)
         for item in items:
             result[item] += profit[item]
-    result['percent'] = 100 * result['profit'] / result['cost']
+    if result['cost']:
+        result['percent'] = 100 * result['profit'] / result['price']
+    else:
+        result['percent'] = None
     return result

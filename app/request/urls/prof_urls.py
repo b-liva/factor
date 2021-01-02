@@ -6,7 +6,6 @@ import request.views
 
 from request.viewsFolder import proformaViews
 
-
 urlpatterns = [
                   path('pandas', proformaViews.pandas, name='pandas'),
                   path('pdf-header', proformaViews.pdf_header, name='pdf_header'),
@@ -14,8 +13,10 @@ urlpatterns = [
                   path('pro_form', proformaViews.pro_form, name='pro_form'),
                   path('pro_form_cookie/<int:req_id>', proformaViews.pro_form_cookie, name='pro_form_cookie'),
                   path('index', proformaViews.pref_index, name='pref_index'),
+                  path('total_profit', proformaViews.total_profit, name='total_profit'),
                   path('verify', proformaViews.verify, name='verify'),
-                  path('index-pay-no-perm', proformaViews.proforma_has_payment_no_perm, name='proforma_has_payment_no_perm'),
+                  path('index-pay-no-perm', proformaViews.proforma_has_payment_no_perm,
+                       name='proforma_has_payment_no_perm'),
                   path('pref_index_cc', proformaViews.pref_index_cc, name='pref_index_cc'),
                   path('perm_clear_session', proformaViews.perm_clear_session, name='perm_clear_session'),
                   path('prefspec-index', proformaViews.prefspec_index, name='prefspec_index'),
@@ -53,7 +54,8 @@ urlpatterns = [
                       path('set_formula_2', proformaViews.set_formula_2, name='set_formula_2'),
                       path('change-needed', proformaViews.proforma_change_needed, name='proforma_change_needed'),
                       path('change-done/<int:change_pk>', proformaViews.change_done, name='change_done'),
-                      path('cancel_verified', proformaViews.cancel_pref_verify_to_send, name='cancel_pref_verify_to_send'),
+                      path('cancel_verified', proformaViews.cancel_pref_verify_to_send,
+                           name='cancel_pref_verify_to_send'),
                       path('cancel_signed', proformaViews.cancel_pref_send_verified, name='cancel_pref_send_verified'),
                       path('delete', proformaViews.pref_delete, name='pref_delete'),
                       path('prof-delete', proformaViews.delete_proforma_no_prefspec,
@@ -63,7 +65,8 @@ urlpatterns = [
                       path('edit2', proformaViews.pref_edit2, name='pref_edit2'),
                       path('to-follow', proformaViews.to_follow, name='to_follow'),
                       path('prof_spec_form', request.viewsFolder.proformaViews.prof_spec_form, name='prof_spec_form'),
-                      path('proforma-pdf/<render_header>/', request.viewsFolder.proformaViews.proforma_pdf, name='proforma_pdf'),
+                      path('proforma-pdf/<render_header>/', request.viewsFolder.proformaViews.proforma_pdf,
+                           name='proforma_pdf'),
                   ])),
                   path('followup/<int:followup_pk>/', include([
                       path('delete', request.viewsFolder.proformaViews.followup_delete,

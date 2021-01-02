@@ -10,6 +10,7 @@ from django.test import Client, TestCase
 from request.helpers import helpers
 from request.models import PrefSpec, Xpref
 from request.tests.factory import factories
+from request.tests.factory.base_proformas import BaseProformaFactories
 
 
 class TestUtils(TestCase):
@@ -332,40 +333,10 @@ class TestUtils(TestCase):
         PrefSpec.objects.all().delete()
         Xpref.objects.all().delete()
 
-        prof1 = factories.ProformaFactory.create(number=150)
+        BaseProformaFactories().base_proformas()
 
-        date_str = '20201014'
-        date = helpers.get_date_from_date_str(date_str)
-        date_fa = jdatetime.date.fromgregorian(date=date, locale='fa_IR')
-        prof1.date_fa = date_fa
-        prof1.save()
-
-        factories.ProformaSpecFactory.create(xpref_id=prof1, price=160000000, kw=18.5, rpm=3000, qty=1)
-        factories.ProformaSpecFactory.create(xpref_id=prof1, price=1000000000, kw=132, rpm=1500, qty=2)
-
-        prof2 = factories.ProformaFactory.create(number=151)
-
-        date_str = '20201014'
-        date = helpers.get_date_from_date_str(date_str)
-        date_fa = jdatetime.date.fromgregorian(date=date, locale='fa_IR')
-        prof2.date_fa = date_fa
-        prof2.save()
-
-        factories.ProformaSpecFactory.create(xpref_id=prof2, price=160000000, kw=18.5, rpm=3000, qty=1)
-        factories.ProformaSpecFactory.create(xpref_id=prof2, price=520000000, kw=90, rpm=1500, qty=2)
-
-        prof3 = factories.ProformaFactory.create(number=152)
-
-        date_str = '20201014'
-        date = helpers.get_date_from_date_str(date_str)
-        date_fa = jdatetime.date.fromgregorian(date=date, locale='fa_IR')
-        prof3.date_fa = date_fa
-        prof3.save()
-
-        factories.ProformaSpecFactory.create(xpref_id=prof3, price=1000000000, kw=132, rpm=1500, qty=1)
-        factories.ProformaSpecFactory.create(xpref_id=prof3, price=520000000, kw=90, rpm=1500, qty=2)
-
-        proformas = [prof1, prof2, prof3]
+        # proformas = [prof1, prof2, prof3]
+        proformas = Xpref.objects.filter(is_active=True)
 
         results = helpers.proformas_profit(proformas)
         self.assertIn('cost', results)
@@ -376,6 +347,4 @@ class TestUtils(TestCase):
         self.assertEqual(round(results['cost'], 2), 4784590556.00)
         self.assertEqual(round(results['price'], 2), 5400000000.00)
         self.assertEqual(round(results['profit'], 2), 615409444.00)
-        self.assertEqual(round(results['percent'], 2), 12.86)
-
-
+        self.assertEqual(round(results['percent'], 2), 11.4)

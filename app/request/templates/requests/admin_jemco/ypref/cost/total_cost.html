@@ -1,0 +1,43 @@
+{% extends 'requests/admin_jemco/page_elements/base_html/admin_base.html' %}
+{% load humanize %}
+{% load request_extras %}
+{% load sales_ex_dashboard %}
+{% block right_col %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>تاریخ شروع:</td>
+                        <td>{{ date_start }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="text-center d-inline bg-blue-sky">تعداد مجوز</th>
+                            <th scope="col" class="text-center d-inline bg-blue-sky">هزینه کل</th>
+                            <th scope="col" class="text-center d-inline bg-blue-sky">قیمت کل</th>
+                            <th scope="col" class="text-center d-inline bg-blue-sky">سود</th>
+                            <th scope="col" class="text-center d-inline bg-blue-sky">درصد</th>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="text-center">{{ proforma_count|floatformat:0|intcomma }}</td>
+                            <td class="text-center">{{ cost|floatformat:0|intcomma }}</td>
+                            <td class="text-center">{{ price|floatformat:0|intcomma }}</td>
+                            <td class="text-center">{{ profit|floatformat:0|intcomma }}</td>
+                            <td class="text-center">{{ percent|floatformat|intcomma }}%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
