@@ -32,15 +32,25 @@ class TestPublicCost(CustomAPITestCase):
             target_status_code=status.HTTP_200_OK,
         )
 
+    def test_prevent_unauth_user_total_profit(self):
+        url = reverse('total_profit')
+        res = self.client_anon.get(url)
+        self.assertRedirects(
+            res,
+            expected_url=settings.LOGIN_URL + '?next=' + url,
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+
 
 class PrivateTestCost(CustomAPITestCase):
 
     def setUp(self):
         super().setUp()
         self.client_exp = APIClient()
-        self.ex_user = core_factories.create_user()
-        self.ex_user = core_factories.add_user_to_groupe(self.ex_user)
-        self.client_exp.force_authenticate(user=self.ex_user)
+        # self.ex_user = core_factories.create_user()
+        # self.ex_user = core_factories.add_user_to_groupe(self.ex_user)
+        self.client_exp.force_login(user=self.ex_user)
 
         self.proforma = factories.ProformaFactory.create()
         factories.ProformaSpecFactory.create(xpref_id=self.proforma, qty=1, price=1000000000, kw=132, rpm=1500)
@@ -60,19 +70,23 @@ class PrivateTestCost(CustomAPITestCase):
         self.client.force_login(self.user)
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
         res = self.client.get(url)
-        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
 
     def test_superuser_get_proforma_profit(self):
-        self.client.force_login(self.superuser)
+        self.client.force_login(self.ex_user)
 
         url = reverse('prof_profit', kwargs={'ypref_pk': self.proforma.pk})
         res = self.client.get(url)
-        self.assertEqual(res.status_code, status.HTTP_302_FOUND)
         self.assertRedirects(
             res,
-            expected_url=reverse('default_cost', kwargs={'ypref_pk': self.proforma.pk}),
+            expected_url=reverse('errorpage'),
             status_code=status.HTTP_302_FOUND,
-            target_status_code=status.HTTP_302_FOUND
+            target_status_code=status.HTTP_200_OK
         )
 
     def test_calculate_proforma_profit(self):
@@ -262,8 +276,36 @@ class PrivateTestCost(CustomAPITestCase):
         self.assertEqual(response.context['prof'], self.proforma)
         self.assertEqual(response.context['cost_file']['name'], "20201102")
 
-    def test_total_cost(self):
+    def test_total_profit_fails_no_permission(self):
+        url = reverse('total_profit')
+        self.client.force_login(self.user)
+        res = self.client.get(url)
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+
+    def test_total_profit_fails_with_exp_user(self):
         self.client.force_login(self.ex_user)
+        url = reverse('total_profit')
+        res = self.client.get(url)
+        self.assertRedirects(
+            res,
+            expected_url=reverse('errorpage'),
+            status_code=status.HTTP_302_FOUND,
+            target_status_code=status.HTTP_200_OK
+        )
+
+    def test_total_profit_success_with_superuser(self):
+        self.client.force_login(self.superuser)
+        url = reverse('total_profit')
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_perms(self):
+        self.client.force_login(self.superuser)
         PrefSpec.objects.all().delete()
         Xpref.objects.all().delete()
 
@@ -271,7 +313,32 @@ class PrivateTestCost(CustomAPITestCase):
 
         url = reverse('total_profit')
         response = self.client.get(url)
+        self.assertEqual(response.context['proforma_count'], 0)
+        self.assertEqual(round(response.context['cost'], 2), 0)
+        self.assertEqual(round(response.context['price'], 2), 0)
+        self.assertEqual(round(response.context['profit'], 2), 0)
+        self.assertEqual(response.context['percent'], None)
 
+    def test_total_profit(self):
+        self.client.force_login(self.superuser)
+        PrefSpec.objects.all().delete()
+        Xpref.objects.all().delete()
+
+        BaseProformaFactories().base_proformas()
+        Xpref.objects.update(perm=True)
+
+        prof1 = factories.ProformaFactory.create(number=155)
+        date_str = '20201014'
+        date = helpers.get_date_from_date_str(date_str)
+        date_fa = jdatetime.date.fromgregorian(date=date, locale='fa_IR')
+        prof1.date_fa = date_fa
+        prof1.perm = False
+        prof1.save()
+        factories.ProformaSpecFactory.create(xpref_id=prof1, price=160000000, kw=18.5, rpm=3000, qty=1)
+        factories.ProformaSpecFactory.create(xpref_id=prof1, price=1000000000, kw=132, rpm=1500, qty=2)
+
+        url = reverse('total_profit')
+        response = self.client.get(url)
         self.assertIn('cost', response.context)
         self.assertIn('price', response.context)
         self.assertIn('profit', response.context)

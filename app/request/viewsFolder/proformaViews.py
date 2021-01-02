@@ -1764,6 +1764,8 @@ def proforma_profit(request, ypref_pk):
 
 @login_required
 def prof_profit(request, ypref_pk):
+    if not request.user.is_superuser:
+        return redirect('errorpage')
     # get proforma and pf date...
     proforma = Xpref.objects.get(pk=ypref_pk)
     prof_date = proforma.date_fa
@@ -1955,7 +1957,10 @@ def clist(request):
     return render(request, 'requests/admin_jemco/ypref/clist.html', context)
 
 
+@login_required
 def total_profit(request):
+    if not request.user.is_superuser:
+        return redirect('errorpage')
     date_start = jdatetime.date(year=1399, month=3, day=1)
     proformas = Xpref.objects.filter(is_active=True, date_fa__gte=date_start, perm=True)
     proforma_profit = helpers.proformas_profit(proformas)
