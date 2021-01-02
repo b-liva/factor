@@ -149,8 +149,10 @@ class TestUtils(TestCase):
 
         results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
         self.assertEqual(round(results['profit'], 2), 26718036.8)
+        self.assertEqual(round(results['cost'], 2), 2018563926.40)
+        self.assertEqual(round(results['price'], 2), 2072000000.00)
+        self.assertEqual(round(results['profit'], 2), 53436073.60)
         self.assertEqual(round(results['percent'], 2), 2.65)
-        self.assertEqual(round(results['price'], 2), 2072000000)
 
     def test_calculate_proforma_profit_one_spec(self):
         date = '20201014'
@@ -164,7 +166,9 @@ class TestUtils(TestCase):
         specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
 
         results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
-        self.assertEqual(round(results['profit'], 2), 20533012.0)
+        self.assertEqual(round(results['cost'], 2),  1758933976.00)
+        self.assertEqual(round(results['price'], 2),  1800000000.00)
+        self.assertEqual(round(results['profit'], 2), 41066024.00)
         self.assertEqual(round(results['percent'], 2), 2.33)
 
     def test_specs_have_no_cost(self):
