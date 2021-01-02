@@ -8,6 +8,8 @@ import xlrd
 from django.conf import settings
 from django.test import Client, TestCase
 from request.helpers import helpers
+from request.models import PrefSpec, Xpref
+from request.tests.factory import factories
 
 
 class TestUtils(TestCase):
@@ -136,7 +138,8 @@ class TestUtils(TestCase):
             self.not_routine_specs[0]['price'] * self.not_routine_specs[0]['qty']
         )
 
-    def test_calculate_proforma_profit(self):
+    def test_calculate_proforma_profit_temp(self):
+        # todo: probably should be removed.
         date = '20201014'
         discount = {
             'lte__90': 15,
@@ -148,7 +151,6 @@ class TestUtils(TestCase):
         specs_profit_split = helpers.split_specs_if_profit_exists(specs_profit)
 
         results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
-        self.assertEqual(round(results['profit'], 2), 26718036.8)
         self.assertEqual(round(results['cost'], 2), 2018563926.40)
         self.assertEqual(round(results['price'], 2), 2072000000.00)
         self.assertEqual(round(results['profit'], 2), 53436073.60)
@@ -297,3 +299,83 @@ class TestUtils(TestCase):
         number = "330,000.22"
         number_without_comma = helpers.remove_comma_from_number(number)
         self.assertEqual(number_without_comma, 330000.22)
+
+    def test_calculate_proforma_profit(self):
+        discount = {
+            'lte__90': 0,
+            'gt__90': 0,
+        }
+
+        date_str = '20201014'
+        date = helpers.get_date_from_date_str(date_str)
+        date_fa = jdatetime.date.fromgregorian(date=date, locale='fa_IR')
+
+        proforma = factories.ProformaFactory.create(number=153)
+        proforma.date_fa = date_fa
+        proforma.save()
+
+        factories.ProformaSpecFactory.create(xpref_id=proforma, price=1000000000, kw=132, rpm=1500, qty=1)
+        factories.ProformaSpecFactory.create(xpref_id=proforma, price=520000000, kw=90, rpm=1500, qty=2)
+
+        profit = helpers.calculate_proforma_profit(proforma, discount=discount)
+        self.assertIn('cost', profit)
+        self.assertIn('price', profit)
+        self.assertIn('profit', profit)
+        self.assertIn('percent', profit)
+
+        self.assertEqual(round(profit['cost'], 2), 1822746808.80)
+        self.assertEqual(round(profit['price'], 2), 2040000000.00)
+        self.assertEqual(round(profit['profit'], 2), 217253191.20)
+        self.assertEqual(round(profit['percent'], 2), 11.92)
+
+    def test_proformas_profit(self):
+        PrefSpec.objects.all().delete()
+        Xpref.objects.all().delete()
+
+        prof1 = factories.ProformaFactory.create(number=150)
+
+        date_str = '20201014'
+        date = helpers.get_date_from_date_str(date_str)
+        date_fa = jdatetime.date.fromgregorian(date=date, locale='fa_IR')
+        prof1.date_fa = date_fa
+        prof1.save()
+
+        factories.ProformaSpecFactory.create(xpref_id=prof1, price=160000000, kw=18.5, rpm=3000, qty=1)
+        factories.ProformaSpecFactory.create(xpref_id=prof1, price=1000000000, kw=132, rpm=1500, qty=2)
+
+        prof2 = factories.ProformaFactory.create(number=151)
+
+        date_str = '20201014'
+        date = helpers.get_date_from_date_str(date_str)
+        date_fa = jdatetime.date.fromgregorian(date=date, locale='fa_IR')
+        prof2.date_fa = date_fa
+        prof2.save()
+
+        factories.ProformaSpecFactory.create(xpref_id=prof2, price=160000000, kw=18.5, rpm=3000, qty=1)
+        factories.ProformaSpecFactory.create(xpref_id=prof2, price=520000000, kw=90, rpm=1500, qty=2)
+
+        prof3 = factories.ProformaFactory.create(number=152)
+
+        date_str = '20201014'
+        date = helpers.get_date_from_date_str(date_str)
+        date_fa = jdatetime.date.fromgregorian(date=date, locale='fa_IR')
+        prof3.date_fa = date_fa
+        prof3.save()
+
+        factories.ProformaSpecFactory.create(xpref_id=prof3, price=1000000000, kw=132, rpm=1500, qty=1)
+        factories.ProformaSpecFactory.create(xpref_id=prof3, price=520000000, kw=90, rpm=1500, qty=2)
+
+        proformas = [prof1, prof2, prof3]
+
+        results = helpers.proformas_profit(proformas)
+        self.assertIn('cost', results)
+        self.assertIn('price', results)
+        self.assertIn('profit', results)
+        self.assertIn('percent', results)
+
+        self.assertEqual(round(results['cost'], 2), 4784590556.00)
+        self.assertEqual(round(results['price'], 2), 5400000000.00)
+        self.assertEqual(round(results['profit'], 2), 615409444.00)
+        self.assertEqual(round(results['percent'], 2), 12.86)
+
+

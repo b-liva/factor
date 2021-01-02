@@ -342,3 +342,47 @@ def remove_comma_from_number(number):
     if type(number) == str:
         return float(number.replace(',', ''))
     return number
+
+
+def calculate_proforma_profit(proforma, discount=None):
+    date = proforma.date_fa.togregorian()
+    date = get_date_str(date_greg=date)
+    specs = proforma.prefspec_set.filter(price__gt=0).all()
+
+    specs_list = [
+        {
+            'code': spec.code,
+            'qty': spec.qty,
+            'power': spec.kw,
+            'rpm': spec.rpm,
+            'voltage': spec.voltage,
+            'price': spec.price,
+            'im': spec.im,
+            'ip': spec.ip,
+            'ic': spec.ic,
+        } for spec in specs]
+
+    modified_df, cost_file_name = prepare_data_frame_based_on_proforma_date(date)
+    specs_profit = add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
+    specs_profit_split = split_specs_if_profit_exists(specs_profit)
+
+    results = calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
+    return results
+
+
+def proformas_profit(proformas):
+    result = {
+        "cost": 0,
+        "price": 0,
+        "profit": 0,
+        "percent": 0,
+    }
+
+    items = ['cost', 'price', 'profit']
+
+    for proforma in proformas:
+        profit = calculate_proforma_profit(proforma)
+        for item in items:
+            result[item] += profit[item]
+    result['percent'] = 100 * result['profit'] / result['cost']
+    return result
