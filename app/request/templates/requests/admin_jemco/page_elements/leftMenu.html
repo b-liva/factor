@@ -15,6 +15,7 @@
                     <li><a href="{% url 'dashboard' %}">داشبورد</a></li>
                     {% if user.is_superuser %}
                         <li><a href="{% url 'dashboard2' %}">پیگیری</a></li>
+                        <li><a href="{% url 'total_profit' %}">سود</a></li>
                     {% endif %}
                     <li><a href="{% url 'sales_comparison' %}">dash</a></li>
                     <li><a href="{% url 'tenders_admin' %}">مناقصات</a></li>
@@ -38,7 +39,8 @@
                 </li>
             {% endif %}
             {% if perms.request.index_requests %}
-                <li><a><i class="fa fa-file"  aria-hidden="true"></i> درخواست <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-file" aria-hidden="true"></i> درخواست <span
+                        class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{% url 'req_form' %}">ثبت درخواست جدید</a></li>
                         <li><a href="{% url 'req_form_copy' %}">کپی درخواست</a></li>
@@ -60,7 +62,8 @@
                 </li>
             {% endif %}
             {% if perms.request.index_proforma %}
-                <li><a><i class="fa fa-file-text" aria-hidden="true"></i> پیش فاکتور<span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-file-text" aria-hidden="true"></i> پیش فاکتور<span
+                        class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% if perms.request.index_proforma %}
                             <li><a href="{% url 'pref_index' %}">پیش فاکتورها</a></li>
@@ -106,7 +109,8 @@
                 </li>
             {% endif %}
             {% if user.is_superuser %}
-                <li><a><i class="fa fa-database" aria-hidden="true"></i> دیتا <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-database" aria-hidden="true"></i> دیتا <span
+                        class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         {% if perms.request.index_reqspecs %}
                             <li><a href="{% url 'req_track:data' %}">دیتا</a></li>
