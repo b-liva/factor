@@ -450,3 +450,8 @@ def kw_sold(kw, qty):
 @register.simple_tag()
 def amount_sold(price, qty):
     return price * qty * 1.09
+
+
+@register.simple_tag()
+def bg_flag_status(value):
+    return "green_flag2" if value > 0 else "red_flag"

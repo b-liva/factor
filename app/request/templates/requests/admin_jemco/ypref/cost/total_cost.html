@@ -32,7 +32,7 @@
                             <td class="text-center">{{ cost|floatformat:0|intcomma }}</td>
                             <td class="text-center">{{ price|floatformat:0|intcomma }}</td>
                             <td class="text-center">{{ profit|floatformat:0|intcomma }}</td>
-                            <td class="text-center">{{ percent|floatformat|intcomma }}%</td>
+                            <td class="text-center {% if profit > 0 %}bg-green{% else %}bg-red{% endif %}">{{ percent|floatformat|intcomma }}%</td>
                         </tr>
                         </tbody>
                     </table>

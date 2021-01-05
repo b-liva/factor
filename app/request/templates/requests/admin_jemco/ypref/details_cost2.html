@@ -137,7 +137,7 @@
                                     <td>{{ spec.total_price|floatformat|intcomma }}</td>
                                     <td>{{ spec.profit|floatformat|intcomma }}</td>
                                     <td>{{ spec.total_profit|floatformat|intcomma }}</td>
-                                    <td>{{ spec.percent|floatformat }}</td>
+                                    <td class="{% bg_flag_status value=spec.total_profit as status %}{{ status }}">{{ spec.percent|floatformat }}</td>
                                 </tr>
 
                             {% endfor %}
@@ -148,9 +148,11 @@
                                 <td>{{ proforma.price|floatformat|intcomma }}</td>
                                 <td></td>
                                 <td>{{ proforma.profit|floatformat|intcomma }}</td>
-                                <td>{{ proforma.percent|floatformat|intcomma }}</td>
+                                <td class="{% bg_flag_status value=proforma.profit as status %} {{ status }}"
+                                    style="border-top: 1px solid black;">{{ proforma.percent|floatformat|intcomma }}</td>
                                 <td>
-                                    <p>{{ total.profit_total_percent|floatformat }}</p>
+                                    <p>
+                                        {{ total.profit_total_percent|floatformat }}</p>
                                     <p data-toggle="tooltip"
                                        title="نحوه محاسبه قیمت تمام شده از  مهرماه 99 تغییر داشته است!"
                                        class="text-danger">

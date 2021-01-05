@@ -60,3 +60,15 @@
         - [] update
         - [] delete
     
+<h4>Profit</h4>
+-   styles
+    - [x] total_profit negative/positive style
+    - [x] prof_profit negative/positive style per row
+    - [x] clist neg/pos style per row.
+-   total profit
+    - filter result based on 
+        - [] customer
+        - [] date
+    - project profits
+-   prof profit
+    - [] project profits
