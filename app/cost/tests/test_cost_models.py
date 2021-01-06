@@ -9,6 +9,7 @@ from cost import models
 from cost.models import ProjectCost
 from core.utilities.test_utils import core as test_core_utils
 from cost.tests.factory import factories
+from core.tests.factory import factories as core_factories
 
 CREATE_COST_URL = reverse('cost:create')
 
@@ -178,14 +179,15 @@ class PublicCostAPITest(CustomAPITestCase):
     def setUp(self):
         super().setUp()
         self.client_anon = APIClient()
-        self.client_exp = APIClient()
-        self.client_exp.force_authenticate(user=self.ex_user)
-        cc = CreateCost()
-        self.payload = cc.create_total_cost()
 
-        self.payload['owner'] = self.ex_user.pk
-        res = self.client_exp.post(CREATE_COST_URL, self.payload)
-        self.sample_cost = ProjectCost.objects.get(pk=res.data['id'])
+        self.client_exp = APIClient()
+        self.ex_user = core_factories.create_user()
+        self.ex_user = core_factories.add_user_to_groupe(self.ex_user)
+        self.client_exp.force_authenticate(user=self.ex_user)
+
+        result = factories.create_payload(owner=self.ex_user)
+        self.payload = result['payload']
+        self.sample_cost = result['pc']
 
     def test_create_cost_unauthenticated(self):
         """Test that authentication is required for creating cost"""
@@ -223,18 +225,22 @@ class PrivateCostAPITest(CustomAPITestCase):
     def setUp(self):
         super().setUp()
         self.client_anon = APIClient()
+        self.user = core_factories.create_user(username='user')
         self.client.force_authenticate(user=self.user)
+
         self.client_exp = APIClient()
+        self.ex_user = core_factories.create_user(username='exp_user', last_name='expert_user')
+        self.ex_user = core_factories.add_user_to_groupe(self.ex_user)
         self.client_exp.force_authenticate(user=self.ex_user)
+
         self.client_superuser = APIClient()
+        self.superuser = core_factories.create_user(username='superuser')
+        self.superuser = core_factories.add_user_to_groupe(self.superuser)
         self.client_superuser.force_authenticate(user=self.superuser)
 
-        cc = CreateCost()  # create cost
-        self.payload = cc.create_total_cost()
-        self.payload['owner'] = self.ex_user.pk
-
-        res = self.client_exp.post(CREATE_COST_URL, self.payload)
-        self.sample_cost = ProjectCost.objects.get(pk=res.data['id'])
+        result = factories.create_payload(owner=self.ex_user)
+        self.payload = result['payload']
+        self.sample_cost = result['pc']
 
     def test_create_cost_fails_unauthorized(self):
         """Test that authenticated user with no permission can't create cost(get)"""
