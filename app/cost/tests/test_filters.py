@@ -22,10 +22,6 @@ class PrivateApiTest(CustomAPITestCase):
         self.client_exp = APIClient()
         self.client_exp.force_authenticate(user=self.ex_user)
 
-        cc = CreateCost()  # create cost
-        self.payload = cc.create_total_cost()
-        self.payload['owner'] = self.ex_user.pk
-
     def test_filter_costs_by_qty(self):
         """Test that filter backend based on wage"""
         qty_gte = 6000
