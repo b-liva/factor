@@ -13,6 +13,7 @@ class BaseCostRow(models.Model):
         ('kg', _('kg')),
         ('machine', _('machine')),
         ('item', _('item')),
+        ('count', _('count')),
     ]
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, default=1)
     qty = models.IntegerField()
@@ -21,6 +22,9 @@ class BaseCostRow(models.Model):
 
     class Meta:
         abstract = True
+
+    def __str__(self):
+        return f"{self.qty} {self.unit} => {self.price}"
 
 
 class WageCost(BaseCostRow):
@@ -114,3 +118,4 @@ class ProjectCost(ProjectCostBase):
         permissions = [
             ('read_projectcost', 'can read projectcost'),
         ]
+        ordering = ['-id']
