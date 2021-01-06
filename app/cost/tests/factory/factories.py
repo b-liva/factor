@@ -1,4 +1,3 @@
-import random
 import secrets
 import factory
 from faker import Factory
@@ -14,6 +13,7 @@ User = get_user_model()
 unit_choices = [
         ('kg', _('kg')),
         ('machine', _('machine')),
+        ('pph', _('per hour')),
         ('item', _('item')),
     ]
 
@@ -23,20 +23,11 @@ def get_random_unit_choice():
 
 
 class BaseCostFactory(factory.django.DjangoModelFactory):
-    # users = UserFactory.create_batch(5)
-
-    # def __int__(self):
-    #     super().__init__()
-    #     get_user_model().objects.delete()
 
     owner = factory.SubFactory(UserFactory)
-    # qty = faker.random_int()
     qty = factory.lazy_attribute(lambda o: faker.random_int())
-    # price = faker.random_int()
     price = factory.lazy_attribute(lambda o: faker.random_int())
-    # unit = factory.LazyFunction(get_random_unit_choice)
-    # unit = faker.random_choices(unit_choices, 1)
-    unit = factory.lazy_attribute(lambda o: faker.random_choices(unit_choices, 1))
+    unit = factory.lazy_attribute(lambda o: faker.random_choices(unit_choices[0], 1)[0])
 
 
 class WageCostFactory(BaseCostFactory):
@@ -105,9 +96,9 @@ class ProjectCostFactory(factory.django.DjangoModelFactory):
         model = models.ProjectCost
 
     ch_number = faker.random_int()
-    motor_type = faker.name()
+    motor_type = faker.word()[:2]
     # date_fa = jmodels.jDateField(default=now)
-
+    date_fa = faker.date()
     owner = factory.SubFactory(UserFactory)
     wage = factory.SubFactory(WageCostFactory)
     steel_rebar = factory.SubFactory(SteelrebarCostFactory)
@@ -118,10 +109,10 @@ class ProjectCostFactory(factory.django.DjangoModelFactory):
     silicon = factory.SubFactory(SiliconSheetCostFactory)
     cast_iron = factory.SubFactory(CastIronCostFactory)
 
-    standard_parts = faker.random_int()
-    cost_production = faker.random_int()
-    general_cost = faker.random_int()
-    cost_practical = faker.random_int()
+    standard_parts = factory.lazy_attribute(lambda o: faker.random_int())
+    cost_production = factory.lazy_attribute(lambda o: faker.random_int())
+    general_cost = factory.lazy_attribute(lambda o: faker.random_int())
+    cost_practical = factory.lazy_attribute(lambda o: faker.random_int())
 
     @factory.post_generation
     def bearing(self, create, extracted, **kwargs):
@@ -146,3 +137,64 @@ class ProjectCostFactory(factory.django.DjangoModelFactory):
         if extracted:
             for cr in extracted:
                 self.certificate.add(cr)
+
+
+def create_brs_tsts_certs(count=5):
+    brngs = BearingCostFactory.create_batch(count)
+    tsts = TestCostFactory.create_batch(count)
+    certs = CertificateCostFactory.create_batch(count)
+    return {
+        'bearing': brngs,
+        'test': tsts,
+        'certificate': certs
+    }
+
+
+def create_sample_project_cost(**params):
+    pc = ProjectCostFactory.create(**params)
+    return pc
+
+
+def create_sample_project_cost_batch(batch_size, **params):
+    pc = ProjectCostFactory.create_batch(batch_size, **params)
+    return pc
+
+
+def create_batch(batch_size, **kwargs):
+    import time
+    time_start = time.time()
+    create_sample_project_cost_batch(batch_size, **kwargs)
+    time_end = time.time()
+    print("Duration time: ", time_end - time_start)
+
+
+def create_payload(**kwargs):
+    params = create_brs_tsts_certs()
+    params['owner'] = kwargs.get('owner')
+    pc = create_sample_project_cost(**params)
+
+    payload = {
+        'owner': pc.owner.pk,
+        'wage': pc.wage.pk,
+        'steel_rebar': pc.steel_rebar.pk,
+        'overhead': pc.overhead.pk,
+        'steel': pc.steel.pk,
+        'cu': pc.cu.pk,
+        'alu': pc.alu.pk,
+        'silicon': pc.silicon.pk,
+        'cast_iron': pc.cast_iron.pk,
+        'ch_number': pc.ch_number,
+        'motor_type': pc.motor_type,
+        'date_fa': str(pc.date_fa),
+        'bearing': [i.pk for i in pc.bearing.all()],
+        'test': [i.pk for i in pc.test.all()],
+        'certificate': [i.pk for i in pc.certificate.all()],
+        'standard_parts': pc.standard_parts,
+        'cost_production': pc.cost_production,
+        'general_cost': pc.general_cost,
+        'cost_practical': pc.cost_practical,
+    }
+    return {
+        'pc': pc,
+        'payload': payload,
+    }
