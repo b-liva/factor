@@ -10,6 +10,7 @@ from cost.models import ProjectCost
 from core.utilities.test_utils import core as test_core_utils
 from cost.tests.factory import factories
 from core.tests.factory import factories as core_factories
+from cost.views.views import CustomPagination
 
 CREATE_COST_URL = reverse('cost:create')
 
@@ -274,7 +275,19 @@ class PrivateCostAPITest(CustomAPITestCase):
         res = self.client.get(CREATE_COST_URL)
         count = ProjectCost.objects.filter(owner=self.user).count()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), count)
+        self.assertEqual(len(res.data['results']), count)
+        self.assertLessEqual(len(res.data), CustomPagination().page_size)
+
+    def test_list_cost_paginated_success(self):
+        """Test listing paginated costs."""
+
+        payload = factories.create_brs_tsts_certs()
+        payload['owner'] = self.ex_user
+        factories.ProjectCostFactory.create_batch(10, **payload)
+        res = self.client_exp.get(CREATE_COST_URL)
+        count = ProjectCost.objects.filter(owner=self.ex_user).count()
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data['results']), 5)
 
     def test_retrieve_cost_fails_unauthorized(self):
         """Test that user with no permission can't retrieve cost"""
@@ -362,6 +375,7 @@ class PrivateCostAPITest(CustomAPITestCase):
         brng = factories.BearingCostFactory.create_batch(3)
         tst = factories.TestCostFactory.create_batch(3)
         cert = factories.CertificateCostFactory.create_batch(3)
+
         project_cost = factories.ProjectCostFactory.create(owner=self.ex_user, bearing=brng, test=tst, certificate=cert)
         bearing = factories.BearingCostFactory()
 
