@@ -389,7 +389,7 @@ def proformas_profit(proformas):
         for item in items:
             result[item] += profit[item]
     if result['cost']:
-        result['percent'] = 100 * result['profit'] / result['price']
+        result['percent'] = 100 * (result['price'] / result['cost'] - 1)
     else:
         result['percent'] = None
     return result
