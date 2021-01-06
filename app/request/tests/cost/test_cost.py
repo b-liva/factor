@@ -348,4 +348,4 @@ class PrivateTestCost(CustomAPITestCase):
         self.assertEqual(round(response.context['cost'], 2), 4784590556.00)
         self.assertEqual(round(response.context['price'], 2), 5400000000.00)
         self.assertEqual(round(response.context['profit'], 2), 615409444.00)
-        self.assertEqual(round(response.context['percent'], 2), 11.4)
+        self.assertEqual(round(response.context['percent'], 2), 12.86)

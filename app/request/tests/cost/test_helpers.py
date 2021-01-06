@@ -107,7 +107,7 @@ class TestUtils(TestCase):
         self.spec['voltage'] = 400
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
         cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
-        self.assertEqual(round(cost, 2), 967413686.8)
+        self.assertEqual(round(cost, 2), 879466988)
 
     def test_calculate_profit_of_proforma_spec(self):
         date = '20201014'
@@ -316,7 +316,7 @@ class TestUtils(TestCase):
         proforma.save()
 
         factories.ProformaSpecFactory.create(xpref_id=proforma, price=1000000000, kw=132, rpm=1500, qty=1)
-        factories.ProformaSpecFactory.create(xpref_id=proforma, price=520000000, kw=90, rpm=1500, qty=2)
+        factories.ProformaSpecFactory.create(xpref_id=proforma, price=520000000, kw=90, rpm=1500, qty=2, voltage=400)
 
         profit = helpers.calculate_proforma_profit(proforma, discount=discount)
         self.assertIn('cost', profit)
@@ -347,4 +347,4 @@ class TestUtils(TestCase):
         self.assertEqual(round(results['cost'], 2), 4784590556.00)
         self.assertEqual(round(results['price'], 2), 5400000000.00)
         self.assertEqual(round(results['profit'], 2), 615409444.00)
-        self.assertEqual(round(results['percent'], 2), 11.4)
+        self.assertEqual(round(results['percent'], 2), 12.86)

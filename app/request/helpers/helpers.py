@@ -185,8 +185,6 @@ def calculate_cost_of_spec(df, **kwargs):
     if not len(cost_series):
         return None
     cost = cost_series['cost_calc'].values[0]
-    if voltage == 400:
-        cost = 1.1 * cost
     return cost
 
 
