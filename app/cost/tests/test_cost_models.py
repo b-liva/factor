@@ -42,12 +42,12 @@ class CreateCost:
         self.wage_payload = {
             'qty': 1,
             'price': 2500,
-            'unit': ('hr', 'hr')
+            'unit': 'hr'
         }
         self.steel_rebar_payload = {
             'qty': 1,
             'price': 2500,
-            'unit': ('kg', 'kg')
+            'unit': 'kg'
         }
 
         self.overhead_payload = self.wage_payload
@@ -56,17 +56,17 @@ class CreateCost:
         self.bearing_payload = {
             'qty': 1,
             'price': 2500,
-            'unit': ('count', 'count')
+            'unit': 'count'
         }
         self.test_payload = {
             'qty': 1,
             'price': 2500,
-            'unit': ('item', 'item')
+            'unit': 'item'
         }
         self.certificate_payload = {
             'qty': 1,
             'price': 2500,
-            'unit': ('item', 'item')
+            'unit': 'item'
         }
 
         self.models_list = [

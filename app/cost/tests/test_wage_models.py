@@ -18,7 +18,7 @@ class CreateWage:
         self.wage_payload = {
             'qty': 1,
             'price': 2500,
-            'unit': ('machine', _('machine')),
+            'unit': 'machine',
         }
 
     def create_wage(self, **kwargs):
