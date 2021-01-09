@@ -106,6 +106,7 @@ LOCAL_APPS = [
     'incomes.apps.IncomesConfig',
     'core.apps.CoreConfig',
     'cost.apps.CostConfig',
+    'automation.apps.AutomationConfig',
     'jfeature.apps.JfeatureConfig',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
