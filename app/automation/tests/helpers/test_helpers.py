@@ -43,3 +43,19 @@ class AutomateOrderHelperTest(AutomationBase):
         self.spec3.delete()
         res = helpers.order_is_routine(self.order)
         self.assertTrue(res)
+
+    def test_generate_proforma_number(self):
+        req_fact.ProformaFactory.create(number=9813255)
+        req_fact.ProformaFactory.create(number=9813250)
+        req_fact.ProformaFactory.create(number=9813200)
+        res = helpers.generate_proforma_number()
+        self.assertEqual(res, 9813255 + 1)
+
+    def test_create_proforma_from_order(self):
+        req_fact.ProformaFactory.create(number=9813255)
+        req_fact.ProformaFactory.create(number=9813250)
+        req_fact.ProformaFactory.create(number=9813200)
+        res = helpers.create_proforma_from_order(self.order)
+        self.assertEqual(res.number, 9813255 + 1)
+        self.assertEqual(res.owner, self.order.owner)
+        self.assertEqual(res.req_id, self.order)
