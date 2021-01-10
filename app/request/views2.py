@@ -1021,3 +1021,14 @@ def index_by_month_exp(request):
         'reqs_per_month': reqs_per_month
     }
     return render(request, 'requests/admin_jemco/yrequest/index_by_month_exp.html', context)
+
+
+def order_valid(request, request_pk):
+    from automation.helpers import helpers
+    order = Requests.objects.get(pk=request_pk)
+    if helpers.order_is_routine(order):
+        proforma = helpers.create_proforma_from_order(order)
+        helpers.create_proforma_specs(proforma)
+        return redirect('pref_details', ypref_pk=proforma.pk)
+    else:
+        return redirect('req_report')

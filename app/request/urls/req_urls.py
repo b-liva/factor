@@ -34,6 +34,7 @@ urlpatterns = [
         path('delete', request.views2.request_delete, name='request_delete'),
         path('editForm', request.views2.request_edit_form, name='request_edit_form'),
         path('finish', request.views2.finish, name='request_finish'),
+        path('order_valid', request.views2.order_valid, name='order_valid'),
         path('req-to-follow', request.views2.req_to_follow, name='req_to_follow'),
         path('reqSpec/form', reqSpecViews.reqspec_form, name='reqSpec_form'),
         path('spec_form', reqSpecViews.spec_form, name='spec_form'),
