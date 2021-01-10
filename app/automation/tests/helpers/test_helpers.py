@@ -12,6 +12,7 @@ class AutomationBase(TestCase):
         self.spec1 = req_fact.ReqSpecFactory.create(kw=132, rpm=1500, voltage=380, req_id=self.order)
         self.spec2 = req_fact.ReqSpecFactory.create(kw=18.5, rpm=1500, voltage=380, req_id=self.order)
         self.spec3 = req_fact.ReqSpecFactory.create(kw=18.5, rpm=750, voltage=380, req_id=self.order)
+        self.proforma = req_fact.ProformaFactory.create(req_id=self.order)
 
     def assertHasAttr(self, obj, attr, message=None):
         if not hasattr(obj, attr):
@@ -59,3 +60,14 @@ class AutomateOrderHelperTest(AutomationBase):
         self.assertEqual(res.number, 9813255 + 1)
         self.assertEqual(res.owner, self.order.owner)
         self.assertEqual(res.req_id, self.order)
+
+    def test_create_proforma_specs(self):
+        self.spec3.delete()
+        helpers.create_proforma_specs(self.proforma)
+        specs = self.proforma.prefspec_set.all()
+        self.assertEqual(specs.count(), 2)
+        self.assertEqual(132, specs[0].kw)
+
+    def test_get_spec_price(self):
+        res = helpers.get_spec_price(self.spec1)
+        self.assertEqual(round(res, 2), 1580000000.00)

@@ -1,6 +1,9 @@
+import os
 import jdatetime
-
+import pandas as pd
+from django.conf import settings
 from request.models import Xpref, PrefSpec
+from decimal import Decimal
 
 LOOKUP_STR = [
     '22KW-3000',
@@ -74,7 +77,6 @@ LOOKUP_STR = [
 
 
 def spec_is_routine(spec):
-    from decimal import Decimal
     spec_lookup_str = f"{Decimal(spec.kw).normalize()}KW-{spec.rpm}"
     if spec_lookup_str not in LOOKUP_STR:
         return False
@@ -104,3 +106,28 @@ def create_proforma_from_order(order):
     proforma.exp_date_fa = expiry_date
     proforma.save()
     return proforma
+
+
+def get_spec_price(spec):
+    price_path = os.path.join(settings.PROJECT_DATA_DIR, 'price/prices.xlsx')
+    df = pd.read_excel(price_path)
+    filt = (df['kw'] == float(spec.kw)) & (df['rpm'] == spec.rpm)
+    price = df[filt]['sales'].values[0]
+    return price
+
+
+def create_proforma_specs(proforma):
+    specs = proforma.req_id.reqspec_set.all()
+    for spec in specs:
+        pspec = PrefSpec()
+        pspec.code = spec.code
+        pspec.owner = proforma.owner
+        pspec.xpref_id = proforma
+        pspec.reqspec_eq = spec
+        pspec.qty = spec.qty
+        pspec.type = spec.type.title
+        pspec.price = get_spec_price(spec)
+        pspec.kw = spec.kw
+        pspec.rpm = spec.rpm_new.rpm
+        pspec.voltage = spec.voltage
+        pspec.save()
