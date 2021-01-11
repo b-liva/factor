@@ -47,7 +47,7 @@ class AutomateOrderHelperTest(AutomationBase):
         self.assertTrue(res)
 
     def test_order_is_not_routine(self):
-        res = helpers.order_is_routine(self.order)
+        res = self.order.order_is_routine()
         self.assertFalse(res)
 
     def test_order_is_not_routine_imb35(self):
@@ -56,7 +56,7 @@ class AutomateOrderHelperTest(AutomationBase):
         im = req_fact.ImTypeFactory.create(title='IMB35')
         self.spec1.im = im
         self.spec1.save()
-        res = helpers.order_is_routine(self.order)
+        res = self.order.order_is_routine()
         self.assertFalse(res)
         self.assertFalse(res)
 
@@ -66,7 +66,7 @@ class AutomateOrderHelperTest(AutomationBase):
         ip = req_fact.IPTypeFactory.create(title='IP56')
         self.spec1.ip = ip
         self.spec1.save()
-        res = helpers.order_is_routine(self.order)
+        res = self.order.order_is_routine()
         self.assertFalse(res)
 
     def test_order_is_not_routine_ic611(self):
@@ -75,7 +75,7 @@ class AutomateOrderHelperTest(AutomationBase):
         ic = req_fact.IcTypeFactory.create(title='IC611')
         self.spec1.ic = ic
         self.spec1.save()
-        res = helpers.order_is_routine(self.order)
+        res = self.order.order_is_routine()
         self.assertFalse(res)
 
     def test_order_is_not_routine_ie1(self):
@@ -84,12 +84,12 @@ class AutomateOrderHelperTest(AutomationBase):
         ie = req_fact.IeTypeFactory.create(title='IE2')
         self.spec1.ie = ie
         self.spec1.save()
-        res = helpers.order_is_routine(self.order)
+        res = self.order.order_is_routine()
         self.assertFalse(res)
 
     def test_order_is_routine(self):
         self.spec3.delete()
-        res = helpers.order_is_routine(self.order)
+        res = self.order.order_is_routine()
         self.assertTrue(res)
 
     def test_generate_proforma_number(self):

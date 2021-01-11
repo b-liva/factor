@@ -241,6 +241,13 @@ class Requests(models.Model):
 
         return context
 
+    def order_is_routine(self):
+        specs = self.reqspec_set.all()
+        for spec in specs:
+            if not spec.spec_is_routine():
+                return False
+        return True
+
 
 class RequestFiles(models.Model):
     req = models.ForeignKey(Requests, on_delete=models.CASCADE)

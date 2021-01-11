@@ -76,14 +76,6 @@ LOOKUP_STR = [
 ]
 
 
-def order_is_routine(order):
-    specs = order.reqspec_set.all()
-    for spec in specs:
-        if not spec.spec_is_routine():
-            return False
-    return True
-
-
 def generate_proforma_number():
     last_proforma = Xpref.objects.filter(is_active=True).order_by('number').last()
     return last_proforma.number + 1
