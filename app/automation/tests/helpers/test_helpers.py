@@ -71,3 +71,9 @@ class AutomateOrderHelperTest(AutomationBase):
     def test_get_spec_price(self):
         res = helpers.get_spec_price(self.spec1)
         self.assertEqual(round(res, 2), 1580000000.00)
+
+    def test_get_spec_price_400v(self):
+        self.spec1.voltage = 400
+        self.spec1.save()
+        res = helpers.get_spec_price(self.spec1)
+        self.assertEqual(round(res, 2), round(1580000000.00 * 1.1, 2))

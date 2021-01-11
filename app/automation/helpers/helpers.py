@@ -113,6 +113,8 @@ def get_spec_price(spec):
     df = pd.read_excel(price_path)
     filt = (df['kw'] == float(spec.kw)) & (df['rpm'] == spec.rpm)
     price = df[filt]['sales'].values[0]
+    if spec.voltage == 400:
+        price = price * 1.1
     return price
 
 
