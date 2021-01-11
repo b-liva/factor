@@ -1031,4 +1031,4 @@ def order_valid(request, request_pk):
         helpers.create_proforma_specs(proforma)
         return redirect('pref_details', ypref_pk=proforma.pk)
     else:
-        return redirect('req_report')
+        return redirect('request_details', request_pk=request_pk)

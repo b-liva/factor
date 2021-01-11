@@ -12,7 +12,7 @@ class ProformaAutomation(AutomationBase):
         proformas = Xpref.objects.filter(is_active=True)
         self.assertRedirects(
             response,
-            expected_url=reverse('req_report'),
+            expected_url=reverse('request_details', kwargs={'request_pk': self.order.pk}),
             status_code=status.HTTP_302_FOUND,
             target_status_code=status.HTTP_302_FOUND
         )
