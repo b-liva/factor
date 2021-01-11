@@ -76,22 +76,10 @@ LOOKUP_STR = [
 ]
 
 
-def spec_is_routine(spec):
-    spec_lookup_str = f"{Decimal(spec.kw).normalize()}KW-{spec.rpm}"
-    NOT_IN_LOOKUP_STR = spec_lookup_str not in LOOKUP_STR
-    IS_IMB3 = spec.im.title == 'IMB3'
-    IS_IP55 = spec.ip.title == 'IP55'
-    IS_IC411 = spec.ic.title == 'IC411'
-    IS_IE1 = spec.ie.title == 'IE1'
-    if NOT_IN_LOOKUP_STR or not IS_IMB3 or not IS_IP55 or not IS_IC411 or not IS_IE1:
-        return False
-    return True
-
-
 def order_is_routine(order):
     specs = order.reqspec_set.all()
     for spec in specs:
-        if not spec_is_routine(spec):
+        if not spec.spec_is_routine():
             return False
     return True
 

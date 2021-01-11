@@ -9,6 +9,9 @@ from django.db import models
 import jdatetime
 from django.utils.timezone import now
 from django_jalali.db import models as jmodels
+from decimal import Decimal
+
+from request.helpers.const import LOOKUP_STR
 
 
 class TimeStampedModel(models.Model):
@@ -291,6 +294,17 @@ class ReqSpec(models.Model):
 
     def __str__(self):
         return '%s - %skw' % (self.qty, self.kw)
+
+    def spec_is_routine(self):
+        spec_lookup_str = f"{Decimal(self.kw).normalize()}KW-{self.rpm}"
+        NOT_IN_LOOKUP_STR = spec_lookup_str not in LOOKUP_STR
+        IS_IMB3 = self.im.title == 'IMB3'
+        IS_IP55 = self.ip.title == 'IP55'
+        IS_IC411 = self.ic.title == 'IC411'
+        IS_IE1 = self.ie.title == 'IE1'
+        if NOT_IN_LOOKUP_STR or not IS_IMB3 or not IS_IP55 or not IS_IC411 or not IS_IE1:
+            return False
+        return True
 
 
 class ReqRows(TimeStampedModel):

@@ -28,19 +28,22 @@ class AutomationBase(TestCase):
 
 class AutomateOrderHelperTest(AutomationBase):
     def test_spec_not_routine(self):
-        res = helpers.spec_is_routine(self.spec3)
+        # res = helpers.spec_is_routine(self.spec3)
+        res = self.spec3.spec_is_routine()
         self.assertFalse(res)
 
     def test_spec_is_routine_decimal(self):
         self.spec2.kw = 18.5
         self.spec2.save()
-        res = helpers.spec_is_routine(self.spec2)
+        # res = helpers.spec_is_routine(self.spec2)
+        res = self.spec2.spec_is_routine()
         self.assertTrue(res)
 
     def test_spec_is_routine(self):
         self.spec2.kw = 132.0
         self.spec2.save()
-        res = helpers.spec_is_routine(self.spec2)
+        # res = helpers.spec_is_routine(self.spec2)
+        res = self.spec2.spec_is_routine()
         self.assertTrue(res)
 
     def test_order_is_not_routine(self):
