@@ -10,9 +10,10 @@ class AutomationBase(TestCase):
         self.client = Client()
         self.order = req_fact.RequestFactory.create()
         IMB3 = req_fact.ImTypeFactory.create(title='IMB3')
-        self.spec1 = req_fact.ReqSpecFactory.create(kw=132, rpm=1500, voltage=380, req_id=self.order, im=IMB3)
-        self.spec2 = req_fact.ReqSpecFactory.create(kw=18.5, rpm=1500, voltage=380, req_id=self.order, im=IMB3)
-        self.spec3 = req_fact.ReqSpecFactory.create(kw=18.5, rpm=750, voltage=380, req_id=self.order, im=IMB3)
+        IP55 = req_fact.IPTypeFactory.create(title='IP55')
+        self.spec1 = req_fact.ReqSpecFactory.create(kw=132, rpm=1500, voltage=380, req_id=self.order, im=IMB3, ip=IP55)
+        self.spec2 = req_fact.ReqSpecFactory.create(kw=18.5, rpm=1500, voltage=380, req_id=self.order, im=IMB3, ip=IP55)
+        self.spec3 = req_fact.ReqSpecFactory.create(kw=18.5, rpm=750, voltage=380, req_id=self.order, im=IMB3, ip=IP55)
         self.proforma = req_fact.ProformaFactory.create(req_id=self.order)
 
     def assertHasAttr(self, obj, attr, message=None):
@@ -46,6 +47,16 @@ class AutomateOrderHelperTest(AutomationBase):
 
         im = req_fact.ImTypeFactory.create(title='IMB35')
         self.spec1.im = im
+        self.spec1.save()
+        res = helpers.order_is_routine(self.order)
+        self.assertFalse(res)
+        self.assertFalse(res)
+
+    def test_order_is_not_routine_ip56(self):
+        self.spec3.delete()
+
+        ip = req_fact.IPTypeFactory.create(title='IP56')
+        self.spec1.ip = ip
         self.spec1.save()
         res = helpers.order_is_routine(self.order)
         self.assertFalse(res)

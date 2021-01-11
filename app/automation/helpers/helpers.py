@@ -80,7 +80,8 @@ def spec_is_routine(spec):
     spec_lookup_str = f"{Decimal(spec.kw).normalize()}KW-{spec.rpm}"
     NOT_IN_LOOKUP_STR = spec_lookup_str not in LOOKUP_STR
     IS_IMB3 = spec.im.title == 'IMB3'
-    if NOT_IN_LOOKUP_STR or not IS_IMB3:
+    IS_IP55 = spec.ip.title == 'IP55'
+    if NOT_IN_LOOKUP_STR or not IS_IMB3 or not IS_IP55:
         return False
     return True
 
