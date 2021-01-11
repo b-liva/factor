@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from request.tests.factory import factories as req_fact
 from automation.helpers import helpers
+from customer.tests.factory import factories as cu_factory
 
 HAS_ATTR_MESSAGE = '{} should have an attribute {}'
 
@@ -13,12 +14,11 @@ class AutomationBase(TestCase):
         IP55 = req_fact.IPTypeFactory.create(title='IP55')
         IC411 = req_fact.IcTypeFactory.create(title='IC411')
         IE1 = req_fact.IeTypeFactory.create(title='IE1')
-        self.spec1 = req_fact.ReqSpecFactory.create(kw=132, rpm=1500, voltage=380, req_id=self.order, im=IMB3,
-                                                    ip=IP55, ic=IC411, ie=IE1)
-        self.spec2 = req_fact.ReqSpecFactory.create(kw=18.5, rpm=1500, voltage=380, req_id=self.order, im=IMB3,
-                                                    ip=IP55, ic=IC411, ie=IE1)
-        self.spec3 = req_fact.ReqSpecFactory.create(kw=18.5, rpm=750, voltage=380, req_id=self.order, im=IMB3,
-                                                    ip=IP55, ic=IC411, ie=IE1)
+
+        payload = {'voltage': 380, 'req_id': self.order, 'im': IMB3, 'ip': IP55, 'ic': IC411, 'ie': IE1}
+        self.spec1 = req_fact.ReqSpecFactory.create(kw=132, rpm=1500, **payload)
+        self.spec2 = req_fact.ReqSpecFactory.create(kw=18.5, rpm=1500, **payload)
+        self.spec3 = req_fact.ReqSpecFactory.create(kw=18.5, rpm=750, **payload)
         self.proforma = req_fact.ProformaFactory.create(req_id=self.order)
 
     def assertHasAttr(self, obj, attr, message=None):
@@ -121,3 +121,11 @@ class AutomateOrderHelperTest(AutomationBase):
         self.spec1.save()
         res = helpers.get_spec_price(self.spec1)
         self.assertEqual(round(res, 2), round(1580000000.00 * 1.1, 2))
+
+    def test_get_spec_price_base(self):
+        agent = cu_factory.CustomerFactory.create(agent=True)
+        self.order.customer = agent
+        self.order.save()
+
+        res = helpers.get_spec_price(self.spec1)
+        self.assertEqual(round(res, 2), 1410000000.00)

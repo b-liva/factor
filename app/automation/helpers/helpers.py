@@ -114,13 +114,21 @@ def create_proforma_from_order(order):
 
 
 def get_spec_price(spec):
+    selector = get_selector_by_customer(spec)
     price_path = os.path.join(settings.PROJECT_DATA_DIR, 'price/prices.xlsx')
     df = pd.read_excel(price_path)
     filt = (df['kw'] == float(spec.kw)) & (df['rpm'] == spec.rpm)
-    price = df[filt]['sales'].values[0]
+    price = df[filt][selector].values[0]
     if spec.voltage == 400:
         price = price * 1.1
     return price
+
+
+def get_selector_by_customer(spec):
+    selector = 'sales'
+    if spec.req_id.customer.agent:
+        selector = 'base'
+    return selector
 
 
 def create_proforma_specs(proforma):

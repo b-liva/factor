@@ -23,3 +23,4 @@ class CustomerFactory(factory.django.DjangoModelFactory):
     type = factory.SubFactory(CustomerTypeFactory)
     code = factory.Sequence(lambda n: n)
     name = factory.Sequence(lambda n: 'customer %s' % n)
+    agent = False
