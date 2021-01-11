@@ -121,8 +121,8 @@
                             {% csrf_token %}
                             {{ form.as_p }}
                             <button class="btn btn-primary" type="submit">ذخیره</button>
+                            <a class="btn btn-success" href="{% url 'order_valid' request_pk=req_obj.pk %}">تأیید</a>
                             <a class="btn btn-success" href="{% url 'req_form' %}">درخواست جدید</a>
-
                         </form>
                     </div>
 
