@@ -12,12 +12,13 @@ class AutomationBase(TestCase):
         IMB3 = req_fact.ImTypeFactory.create(title='IMB3')
         IP55 = req_fact.IPTypeFactory.create(title='IP55')
         IC411 = req_fact.IcTypeFactory.create(title='IC411')
+        IE1 = req_fact.IeTypeFactory.create(title='IE1')
         self.spec1 = req_fact.ReqSpecFactory.create(kw=132, rpm=1500, voltage=380, req_id=self.order, im=IMB3,
-                                                    ip=IP55, ic=IC411)
+                                                    ip=IP55, ic=IC411, ie=IE1)
         self.spec2 = req_fact.ReqSpecFactory.create(kw=18.5, rpm=1500, voltage=380, req_id=self.order, im=IMB3,
-                                                    ip=IP55, ic=IC411)
+                                                    ip=IP55, ic=IC411, ie=IE1)
         self.spec3 = req_fact.ReqSpecFactory.create(kw=18.5, rpm=750, voltage=380, req_id=self.order, im=IMB3,
-                                                    ip=IP55, ic=IC411)
+                                                    ip=IP55, ic=IC411, ie=IE1)
         self.proforma = req_fact.ProformaFactory.create(req_id=self.order)
 
     def assertHasAttr(self, obj, attr, message=None):
@@ -70,6 +71,15 @@ class AutomateOrderHelperTest(AutomationBase):
 
         ic = req_fact.IcTypeFactory.create(title='IC611')
         self.spec1.ic = ic
+        self.spec1.save()
+        res = helpers.order_is_routine(self.order)
+        self.assertFalse(res)
+
+    def test_order_is_not_routine_ie1(self):
+        self.spec3.delete()
+
+        ie = req_fact.IeTypeFactory.create(title='IE2')
+        self.spec1.ie = ie
         self.spec1.save()
         res = helpers.order_is_routine(self.order)
         self.assertFalse(res)

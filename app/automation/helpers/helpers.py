@@ -82,7 +82,8 @@ def spec_is_routine(spec):
     IS_IMB3 = spec.im.title == 'IMB3'
     IS_IP55 = spec.ip.title == 'IP55'
     IS_IC411 = spec.ic.title == 'IC411'
-    if NOT_IN_LOOKUP_STR or not IS_IMB3 or not IS_IP55 or not IS_IC411:
+    IS_IE1 = spec.ie.title == 'IE1'
+    if NOT_IN_LOOKUP_STR or not IS_IMB3 or not IS_IP55 or not IS_IC411 or not IS_IE1:
         return False
     return True
 
