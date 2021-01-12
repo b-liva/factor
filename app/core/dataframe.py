@@ -1,7 +1,5 @@
-import os
 import copy
 import pandas as pd
-from django.conf import settings
 
 from core import file
 
@@ -17,7 +15,7 @@ class DataFrame:
 
     @classmethod
     def get_cost_dataframe_by_date_str(cls, filename):
-        cost_file_path = os.path.join(settings.PROJECT_DATA_DIR, f'costs/{filename}.xlsx')
+        cost_file_path = file.get_cost_file_path(filename)
         df_temp = pd.read_excel(cost_file_path)
         return df_temp
 

@@ -17,3 +17,7 @@ def get_filename_base_on_date(date):
         if date > int(file):
             file_date = file
     return file_date
+
+
+def get_cost_file_path(filename):
+    return os.path.join(COST_FILE_BASE_PATH, f'costs/{filename}.xlsx')
