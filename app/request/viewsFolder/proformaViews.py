@@ -20,6 +20,7 @@ from django_jalali.db import models as jmodels
 from xhtml2pdf import pisa
 
 from core.dataframe import DataFrame
+from core.date import Date
 from request.forms.proforma_forms import DiscountForm
 import request.templatetags.functions as funcs
 from core.access_control.permission_check import ProformaProxy, AccessControl
@@ -1817,7 +1818,7 @@ def prof_profit(request, ypref_pk):
     # common calculations
     materials = helpers.get_materials_cost(modified_df)
 
-    cost_file_date_fa = helpers.get_date_fa_from_file_name(cost_file_name)
+    cost_file_date_fa = Date.get_date_fa_from_file_name(cost_file_name)
     specs_profit = ProformaSpec.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
     specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
     results = Proforma.get_proforma_profit(specs_profit_split['specs_has_profit'])

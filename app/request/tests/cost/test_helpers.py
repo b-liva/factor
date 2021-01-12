@@ -9,6 +9,7 @@ from django.conf import settings
 from django.test import Client, TestCase
 
 from core.dataframe import DataFrame
+from core.date import Date
 from request.helpers import helpers
 from request.models import PrefSpec, Xpref
 from request.tests.factory import factories
@@ -59,14 +60,14 @@ class TestUtils(TestCase):
         file_name = "20201002"
         import jdatetime
         date_fa = jdatetime.date(year=1399, month=7, day=11)
-        cost_date_fa = helpers.get_date_fa_from_file_name(file_name)
+        cost_date_fa = Date.get_date_fa_from_file_name(file_name)
         self.assertEqual(cost_date_fa.year, date_fa.year)
         self.assertEqual(cost_date_fa.month, date_fa.month)
         self.assertEqual(cost_date_fa.day, date_fa.day)
 
     def test_get_date_from_date_str(self):
         file_name = "20201002"
-        date_output = helpers.get_date_from_date_str(file_name)
+        date_output = Date.get_date_from_date_str(file_name)
         date = datetime.date(year=2020, month=10, day=2)
         self.assertEqual(date_output, date)
 
@@ -288,7 +289,7 @@ class TestUtils(TestCase):
         }
 
         date_str = '20201014'
-        date = helpers.get_date_from_date_str(date_str)
+        date = Date.get_date_from_date_str(date_str)
         date_fa = jdatetime.date.fromgregorian(date=date, locale='fa_IR')
 
         proforma = factories.ProformaFactory.create(number=153)

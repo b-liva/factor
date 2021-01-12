@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from django.conf import settings
 from accounts.tests.test_public_funcs import CustomAPITestCase
+from core.date import Date
 from core.tests.factory import factories as core_factories
 from request.models import Xpref, PrefSpec
 from request.tests.factory import factories
@@ -145,7 +146,7 @@ class PrivateTestCost(CustomAPITestCase):
 
     def test_proforma_profit_path_context_has_file_date(self):
         cost_file_name = "20201002"
-        cost_file_date_fa = helpers.get_date_fa_from_file_name(cost_file_name)
+        cost_file_date_fa = Date.get_date_fa_from_file_name(cost_file_name)
         self.client.force_login(self.superuser)
         self.prepare_prof_routine_not_routine_specs()
 
@@ -329,7 +330,7 @@ class PrivateTestCost(CustomAPITestCase):
 
         prof1 = factories.ProformaFactory.create(number=155)
         date_str = '20201014'
-        date = helpers.get_date_from_date_str(date_str)
+        date = Date.get_date_from_date_str(date_str)
         date_fa = jdatetime.date.fromgregorian(date=date, locale='fa_IR')
         prof1.date_fa = date_fa
         prof1.perm = False
