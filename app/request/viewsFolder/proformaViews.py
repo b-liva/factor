@@ -1816,7 +1816,7 @@ def prof_profit(request, ypref_pk):
         } for spec in specs]
 
     # common calculations
-    materials = helpers.get_materials_cost(modified_df)
+    materials = DataFrame.get_materials_cost(modified_df)
 
     cost_file_date_fa = Date.get_date_fa_from_file_name(cost_file_name)
     specs_profit = ProformaSpec.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)

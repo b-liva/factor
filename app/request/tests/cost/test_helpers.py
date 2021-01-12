@@ -245,7 +245,7 @@ class TestUtils(TestCase):
             "dicast": 220000,
         }
 
-        materials_cost = helpers.get_materials_post_payload(request)
+        materials_cost = DataFrame.get_materials_post_payload(request)
         expected_material_cost = {
             "silicon": 300000,
             "cu": 2100000,
@@ -260,7 +260,7 @@ class TestUtils(TestCase):
         # get costs from df
         date = '20201014'
         modified_df, cost_file_name = DataFrame.prepare_data_frame_based_on_proforma_date(date)
-        materials_cost = helpers.get_materials_cost(modified_df)
+        materials_cost = DataFrame.get_materials_cost(modified_df)
         self.assertEqual(materials_cost['silicon'], 330000)
         self.assertEqual(materials_cost['cu'], 2100000)
         self.assertEqual(materials_cost['dicast'], 220000)

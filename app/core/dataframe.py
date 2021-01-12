@@ -171,3 +171,29 @@ class DataFrame:
         df['dicast'] = payload['dicast']
         df['cu'] = payload['cu']
         return df
+
+    @classmethod
+    def get_materials_cost(cls, df):
+        costs_in_file = {
+            'silicon': float(df.loc[3, 'silicon']),
+            'cu': float(df.loc[3, 'cu']),
+            'alu': float(df.loc[3, 'alu']),
+            'steel': float(df.loc[3, 'steel']),
+            'dicast': float(df.loc[3, 'dicast']),
+        }
+        return costs_in_file
+
+    @classmethod
+    def get_materials_post_payload(cls, request):
+        # todo: remvoe me
+        materials = [
+            'silicon',
+            'cu',
+            'alu',
+            'steel',
+            'dicast'
+        ]
+        materials_post_data = dict()
+        for material in materials:
+            materials_post_data[material] = request.POST.get(material)
+        return materials_post_data
