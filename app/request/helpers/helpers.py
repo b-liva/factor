@@ -6,53 +6,6 @@ from django.conf import settings
 from request.helpers.proforma import ProformaSpec
 
 
-def add_profit_to_specs(df, specs, discount_dict=None):
-    specs_with_profit = list()
-    for spec in specs:
-        cost = calculate_cost_of_spec(df, **spec)
-        if cost:
-
-            profit = calculate_spec_profit_with_discount(cost, spec, discount_dict)
-            percent = 100 * profit['profit'] / cost
-            pr = {
-                'cost': cost,
-                'price': profit['price'],
-                'profit': profit['profit'],
-                'percent': percent,
-                'total_cost': spec['qty'] * cost,
-                'total_price': spec['qty'] * profit['price'],
-                'total_profit': spec['qty'] * profit['profit'],
-            }
-        else:
-            pr = {
-                'cost': None,
-                'price': spec['price'],
-                'profit': None,
-                'percent': None,
-                'total_cost': None,
-                'total_price': spec['price'] * spec['qty'],
-                'total_profit': None,
-            }
-        spec.update(pr)
-        specs_with_profit.append(spec)
-    return specs_with_profit
-
-
-def calculate_spec_profit_with_discount(cost, spec, discount_dict=None):
-    discount = 0
-    if discount_dict:
-        if spec['power'] <= 90:
-            discount = discount_dict['lte__90']
-        else:
-            discount = discount_dict['gt__90']
-    price = spec['price'] * (1 - discount / 100)
-    profit = price - cost
-    return {
-        'price': price,
-        'profit': profit
-    }
-
-
 def calculate_profit_of_proforma(specs):
     cost_total = 0
     price_total = 0
@@ -135,23 +88,6 @@ def calculate_cost_pandas2(df):
     df['cost_calc'] = df['practical_cost'] + df['cost_general'] + df['هزینه بسته بندی']
 
     return df
-
-
-def calculate_cost_of_spec(df, **kwargs):
-    power = kwargs.get('power', None)
-    if type(power) == float:
-        power = round(power) if power.is_integer() else power
-    rpm = kwargs.get('rpm', None)
-    voltage = kwargs.get('voltage', None)
-    if voltage > 400:
-        return None
-    costs = df.loc[:, ['title', 'cost_calc']]
-    filt = costs['title'] == f'{power}KW-{rpm}'
-    cost_series = costs[filt]
-    if not len(cost_series):
-        return None
-    cost = cost_series['cost_calc'].values[0]
-    return cost
 
 
 def get_filename_base_on_date(date):
@@ -333,7 +269,7 @@ def calculate_proforma_profit(proforma, discount=None):
         } for spec in specs]
 
     modified_df, cost_file_name = prepare_data_frame_based_on_proforma_date(date)
-    specs_profit = add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
+    specs_profit = ProformaSpec.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
     specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
 
     results = calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])

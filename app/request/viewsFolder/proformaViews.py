@@ -1817,7 +1817,7 @@ def prof_profit(request, ypref_pk):
     materials = helpers.get_materials_cost(modified_df)
 
     cost_file_date_fa = helpers.get_date_fa_from_file_name(cost_file_name)
-    specs_profit = helpers.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
+    specs_profit = ProformaSpec.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
     specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
     results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
 

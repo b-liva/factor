@@ -72,7 +72,7 @@ class TestUtils(TestCase):
         date = '20201014'
         self.spec['power'] = 2000
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
-        cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
+        cost = ProformaSpec.calculate_cost_of_spec(modified_df, **self.spec)
         self.assertEqual(cost, None)
 
     def test_spec_if_proforma_exist(self):
@@ -82,7 +82,7 @@ class TestUtils(TestCase):
         }
         date = '20201014'
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
-        specs_profit = helpers.add_profit_to_specs(modified_df, self.specs, discount_dict=discount)
+        specs_profit = ProformaSpec.add_profit_to_specs(modified_df, self.specs, discount_dict=discount)
         specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
         self.assertEqual(len(specs_profit_split['specs_no_profit']), 3)
         self.assertEqual(specs_profit_split['specs_no_profit'][0]['power'], self.not_routine_specs[0]['power'])
@@ -90,20 +90,20 @@ class TestUtils(TestCase):
     def test_calculate_cost_of_proforma_spec(self):
         date = '20201014'
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
-        cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
+        cost = ProformaSpec.calculate_cost_of_spec(modified_df, **self.spec)
         self.assertEqual(cost, 879466988)
 
     def test_calculate_cost_of_proforma_spec_400v(self):
         date = '20201014'
         self.spec['voltage'] = 400
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
-        cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
+        cost = ProformaSpec.calculate_cost_of_spec(modified_df, **self.spec)
         self.assertEqual(round(cost, 2), 879466988)
 
     def test_calculate_profit_of_proforma_spec(self):
         date = '20201014'
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
-        cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
+        cost = ProformaSpec.calculate_cost_of_spec(modified_df, **self.spec)
         profit = self.spec['price'] - cost
         self.assertEqual(round(profit, 2), 120533012)
 
@@ -114,7 +114,7 @@ class TestUtils(TestCase):
             'gt__90': 10,
         }
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
-        specs_profit = helpers.add_profit_to_specs(modified_df, self.specs, discount_dict=discount)
+        specs_profit = ProformaSpec.add_profit_to_specs(modified_df, self.specs, discount_dict=discount)
         specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
         self.assertEqual(len(specs_profit_split['specs_has_profit']), 2)
         self.assertEqual(len(specs_profit_split['specs_no_profit']), 3)
@@ -139,7 +139,7 @@ class TestUtils(TestCase):
         }
 
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
-        specs_profit = helpers.add_profit_to_specs(modified_df, self.specs, discount_dict=discount)
+        specs_profit = ProformaSpec.add_profit_to_specs(modified_df, self.specs, discount_dict=discount)
         specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
 
         results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
@@ -156,7 +156,7 @@ class TestUtils(TestCase):
         }
 
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
-        specs_profit = helpers.add_profit_to_specs(modified_df, [self.spec], discount_dict=discount)
+        specs_profit = ProformaSpec.add_profit_to_specs(modified_df, [self.spec], discount_dict=discount)
         specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
 
         results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
@@ -173,7 +173,7 @@ class TestUtils(TestCase):
         }
 
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
-        specs_profit = helpers.add_profit_to_specs(modified_df, self.not_routine_specs, discount_dict=discount)
+        specs_profit = ProformaSpec.add_profit_to_specs(modified_df, self.not_routine_specs, discount_dict=discount)
         specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
 
         results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
@@ -196,7 +196,7 @@ class TestUtils(TestCase):
         adjusted_df = response['adjusted_df']
         adjusted_material_payload = response['adjusted_materials']
 
-        spec_cost = helpers.calculate_cost_of_spec(adjusted_df, **self.spec)
+        spec_cost = ProformaSpec.calculate_cost_of_spec(adjusted_df, **self.spec)
         self.assertEqual(adjusted_material_payload['silicon'], material_payload['silicon'])
         self.assertEqual(spec_cost, 811370988)
 
@@ -208,8 +208,8 @@ class TestUtils(TestCase):
         date = '20201014'
         self.spec['price'] = 1000000000
         modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
-        cost = helpers.calculate_cost_of_spec(modified_df, **self.spec)
-        profit = helpers.calculate_spec_profit_with_discount(cost, self.spec, discount_dict=discount)
+        cost = ProformaSpec.calculate_cost_of_spec(modified_df, **self.spec)
+        profit = ProformaSpec.calculate_spec_profit_with_discount(cost, self.spec, discount_dict=discount)
         self.assertEqual(profit['profit'], 20533012)
 
     def test_handle_invalid_discounts(self):
