@@ -8,6 +8,7 @@ import xlrd
 from django.conf import settings
 from django.test import Client, TestCase
 
+from core import file
 from core.dataframe import DataFrame
 from core.date import Date
 from request.helpers import helpers
@@ -39,7 +40,7 @@ class TestUtils(TestCase):
 
     def test_return_file_name_based_on_date_str(self):
         date_str = "20201014"
-        filename = DataFrame.get_filename_base_on_date(date_str)
+        filename = file.get_filename_base_on_date(date_str)
         self.assertEqual(filename, "20201002")
 
     def test_return_cost_file_date_from_proforma_date(self):
@@ -47,7 +48,7 @@ class TestUtils(TestCase):
         date = jdatetime.date(year=1399, month=7, day=15)
         date = date.togregorian()
         date = DataFrame.get_date_str(date)
-        file_name = DataFrame.get_filename_base_on_date(date)
+        file_name = file.get_filename_base_on_date(date)
         self.assertEqual(file_name, "20201002")
 
     def test_selects_file_based_on_filename(self):

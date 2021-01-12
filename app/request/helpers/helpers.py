@@ -1,6 +1,3 @@
-import copy
-
-
 def handle_invalid_discounts(request):
     discount = {
         'lte__90': request.POST.get('un90_disc', 0),

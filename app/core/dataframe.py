@@ -3,6 +3,8 @@ import copy
 import pandas as pd
 from django.conf import settings
 
+from core import file
+
 
 class DataFrame:
 
@@ -12,26 +14,10 @@ class DataFrame:
 
     @classmethod
     def prepare_data_frame_based_on_proforma_date(cls, date):
-        file_name = cls.get_filename_base_on_date(date)
+        file_name = file.get_filename_base_on_date(date)
         cost_df = cls.get_cost_dataframe_by_date_str(file_name)
         modified_db = cls.modify_data_frame(cost_df)
         return modified_db, file_name
-
-    @classmethod
-    def get_filename_base_on_date(cls, date):
-        date = int(date)
-        cost_file_path = os.path.join(settings.PROJECT_DATA_DIR, 'costs')
-        files = os.listdir(cost_file_path)
-        files_no_ext = [file.split('.')[0] for file in files]
-        files_no_ext.sort()
-
-        file_date = files_no_ext[len(files_no_ext) - 1]
-        if date < int(files_no_ext[1]):
-            return int(files_no_ext[1])
-        for file in files_no_ext:
-            if date > int(file):
-                file_date = file
-        return file_date
 
     @classmethod
     def get_cost_dataframe_by_date_str(cls, filename):
