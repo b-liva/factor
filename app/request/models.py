@@ -12,7 +12,7 @@ from django_jalali.db import models as jmodels
 from decimal import Decimal
 import pandas as pd
 from django.conf import settings
-from request.helpers.const import LOOKUP_STR
+from request.conf.settings import LOOKUP_STR
 
 
 class TimeStampedModel(models.Model):
