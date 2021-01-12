@@ -3,19 +3,7 @@ import copy
 import pandas as pd
 from django.conf import settings
 
-
-def split_specs_if_profit_exists(specs):
-    specs_has_profit = list()
-    specs_no_profit = list()
-    for spec in specs:
-        if spec['profit']:
-            specs_has_profit.append(spec)
-        else:
-            specs_no_profit.append(spec)
-    return {
-        'specs_has_profit': specs_has_profit,
-        'specs_no_profit': specs_no_profit,
-    }
+from request.helpers.proforma import ProformaSpec
 
 
 def add_profit_to_specs(df, specs, discount_dict=None):
@@ -346,7 +334,7 @@ def calculate_proforma_profit(proforma, discount=None):
 
     modified_df, cost_file_name = prepare_data_frame_based_on_proforma_date(date)
     specs_profit = add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
-    specs_profit_split = split_specs_if_profit_exists(specs_profit)
+    specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
 
     results = calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
     return results
