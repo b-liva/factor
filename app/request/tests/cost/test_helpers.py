@@ -47,7 +47,7 @@ class TestUtils(TestCase):
         import jdatetime
         date = jdatetime.date(year=1399, month=7, day=15)
         date = date.togregorian()
-        date = DataFrame.get_date_str(date)
+        date = Date.get_date_str(date)
         file_name = file.get_filename_base_on_date(date)
         self.assertEqual(file_name, "20201002")
 

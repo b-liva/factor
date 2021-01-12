@@ -9,10 +9,6 @@ from core import file
 class DataFrame:
 
     @classmethod
-    def get_date_str(cls, date_greg):
-        return str(date_greg).replace('-', '')
-
-    @classmethod
     def prepare_data_frame_based_on_proforma_date(cls, date):
         file_name = file.get_filename_base_on_date(date)
         cost_df = cls.get_cost_dataframe_by_date_str(file_name)

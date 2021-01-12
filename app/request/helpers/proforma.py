@@ -1,4 +1,5 @@
 from core.dataframe import DataFrame
+from core.date import Date
 
 
 class Proforma:
@@ -26,7 +27,7 @@ class Proforma:
     @classmethod
     def calculate_proforma_profit(cls, proforma, discount=None):
         date = proforma.date_fa.togregorian()
-        date = DataFrame.get_date_str(date_greg=date)
+        date = Date.get_date_str(date_greg=date)
         specs = proforma.prefspec_set.filter(price__gt=0).all()
 
         specs_list = [

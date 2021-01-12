@@ -17,3 +17,7 @@ class Date:
         day = int(file_name[6:8])
         date = datetime.date(year=year, month=month, day=day)
         return date
+
+    @classmethod
+    def get_date_str(cls, date_greg):
+        return str(date_greg).replace('-', '')

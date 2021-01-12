@@ -1778,7 +1778,7 @@ def prof_profit(request, ypref_pk):
         prof_date = jdatetime.date.today()
         del request.session['current_profit_date']
     date_greg = prof_date.togregorian()
-    date = DataFrame.get_date_str(date_greg)
+    date = Date.get_date_str(date_greg)
     # get df
     modified_df, cost_file_name = DataFrame.prepare_data_frame_based_on_proforma_date(date)
     #
