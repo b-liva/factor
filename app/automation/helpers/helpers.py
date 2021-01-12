@@ -3,7 +3,6 @@ import jdatetime
 import pandas as pd
 from django.conf import settings
 from request.models import Xpref, PrefSpec
-from decimal import Decimal
 
 LOOKUP_STR = [
     '22KW-3000',
@@ -93,24 +92,6 @@ def create_proforma_from_order(order):
     return proforma
 
 
-def get_spec_price(spec):
-    selector = get_selector_by_customer(spec)
-    price_path = os.path.join(settings.PROJECT_DATA_DIR, 'price/prices.xlsx')
-    df = pd.read_excel(price_path)
-    filt = (df['kw'] == float(spec.kw)) & (df['rpm'] == spec.rpm)
-    price = df[filt][selector].values[0]
-    if spec.voltage == 400:
-        price = price * 1.1
-    return price
-
-
-def get_selector_by_customer(spec):
-    selector = 'sales'
-    if spec.req_id.customer.agent:
-        selector = 'base'
-    return selector
-
-
 def create_proforma_specs(proforma):
     specs = proforma.req_id.reqspec_set.all()
     for spec in specs:
@@ -121,7 +102,7 @@ def create_proforma_specs(proforma):
         pspec.reqspec_eq = spec
         pspec.qty = spec.qty
         pspec.type = spec.type.title
-        pspec.price = get_spec_price(spec)
+        pspec.price = spec.get_spec_price()
         pspec.kw = spec.kw
         pspec.rpm = spec.rpm_new.rpm
         pspec.voltage = spec.voltage

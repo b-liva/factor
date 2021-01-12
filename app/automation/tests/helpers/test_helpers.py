@@ -116,13 +116,13 @@ class AutomateOrderHelperTest(AutomationBase):
         self.assertEqual(132, specs[0].kw)
 
     def test_get_spec_price(self):
-        res = helpers.get_spec_price(self.spec1)
+        res = self.spec1.get_spec_price()
         self.assertEqual(round(res, 2), 1580000000.00)
 
     def test_get_spec_price_400v(self):
         self.spec1.voltage = 400
         self.spec1.save()
-        res = helpers.get_spec_price(self.spec1)
+        res = self.spec1.get_spec_price()
         self.assertEqual(round(res, 2), round(1580000000.00 * 1.1, 2))
 
     def test_get_spec_price_base(self):
@@ -130,5 +130,5 @@ class AutomateOrderHelperTest(AutomationBase):
         self.order.customer = agent
         self.order.save()
 
-        res = helpers.get_spec_price(self.spec1)
+        res = self.spec1.get_spec_price()
         self.assertEqual(round(res, 2), 1410000000.00)

@@ -10,7 +10,8 @@ import jdatetime
 from django.utils.timezone import now
 from django_jalali.db import models as jmodels
 from decimal import Decimal
-
+import pandas as pd
+from django.conf import settings
 from request.helpers.const import LOOKUP_STR
 
 
@@ -312,6 +313,22 @@ class ReqSpec(models.Model):
         if NOT_IN_LOOKUP_STR or not IS_IMB3 or not IS_IP55 or not IS_IC411 or not IS_IE1:
             return False
         return True
+
+    def get_selector_by_customer(self):
+        selector = 'sales'
+        if self.req_id.customer.agent:
+            selector = 'base'
+        return selector
+
+    def get_spec_price(self):
+        selector = self.get_selector_by_customer()
+        price_path = os.path.join(settings.PROJECT_DATA_DIR, 'price/prices.xlsx')
+        df = pd.read_excel(price_path)
+        filt = (df['kw'] == float(self.kw)) & (df['rpm'] == self.rpm)
+        price = df[filt][selector].values[0]
+        if self.voltage == 400:
+            price = price * 1.1
+        return price
 
 
 class ReqRows(TimeStampedModel):
