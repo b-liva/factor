@@ -1024,7 +1024,6 @@ def index_by_month_exp(request):
 
 
 def order_valid(request, request_pk):
-    from automation.helpers import helpers
     order = Requests.objects.get(pk=request_pk)
     if order.order_is_routine():
         proforma = Xpref.create_proforma_from_order(order)

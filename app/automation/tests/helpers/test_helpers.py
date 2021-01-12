@@ -2,7 +2,6 @@ from django.test import TestCase, Client
 
 from request.models import Xpref
 from request.tests.factory import factories as req_fact
-from automation.helpers import helpers
 from customer.tests.factory import factories as cu_factory
 
 HAS_ATTR_MESSAGE = '{} should have an attribute {}'
