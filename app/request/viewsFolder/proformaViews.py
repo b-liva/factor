@@ -19,6 +19,7 @@ from django.template.loader import get_template, render_to_string
 from django_jalali.db import models as jmodels
 from xhtml2pdf import pisa
 
+from core import number as number_handler
 from core.dataframe import DataFrame
 from core.date import Date
 from request.forms.proforma_forms import DiscountForm
@@ -1788,11 +1789,11 @@ def prof_profit(request, ypref_pk):
     if request.method == "POST":
         discount = DataFrame.handle_invalid_discounts(request)
         material_payload = {
-            'silicon': helpers.remove_comma_from_number(request.POST.get('silicon', 0)),
-            'cu': helpers.remove_comma_from_number(request.POST.get('cu', 0)),
-            'alu': helpers.remove_comma_from_number(request.POST.get('alu', 0)),
-            'steel': helpers.remove_comma_from_number(request.POST.get('steel', 0)),
-            'dicast': helpers.remove_comma_from_number(request.POST.get('dicast', 0)),
+            'silicon': number_handler.remove_comma_from_number(request.POST.get('silicon', 0)),
+            'cu': number_handler.remove_comma_from_number(request.POST.get('cu', 0)),
+            'alu': number_handler.remove_comma_from_number(request.POST.get('alu', 0)),
+            'steel': number_handler.remove_comma_from_number(request.POST.get('steel', 0)),
+            'dicast': number_handler.remove_comma_from_number(request.POST.get('dicast', 0)),
         }
         adjusted_materials = DataFrame.adjust_df_materials(modified_df, material_payload)
         modified_df = adjusted_materials['adjusted_df']

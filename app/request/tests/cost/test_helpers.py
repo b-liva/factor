@@ -16,6 +16,7 @@ from request.models import PrefSpec, Xpref
 from request.tests.factory import factories
 from request.tests.factory.base_proformas import BaseProformaFactories
 from request.helpers.proforma import Proforma, ProformaSpec
+from core import number as number_handler
 
 
 class TestUtils(TestCase):
@@ -270,17 +271,17 @@ class TestUtils(TestCase):
 
     def test_remove_comma_from_string_number(self):
         number = "330,000"
-        number_without_comma = helpers.remove_comma_from_number(number)
+        number_without_comma = number_handler.remove_comma_from_number(number)
         self.assertEqual(number_without_comma, 330000)
 
     def test_remove_comma_from_int(self):
         number = 330000
-        number_without_comma = helpers.remove_comma_from_number(number)
+        number_without_comma = number_handler.remove_comma_from_number(number)
         self.assertEqual(number_without_comma, 330000)
 
     def test_remove_comma_from_float(self):
         number = "330,000.22"
-        number_without_comma = helpers.remove_comma_from_number(number)
+        number_without_comma = number_handler.remove_comma_from_number(number)
         self.assertEqual(number_without_comma, 330000.22)
 
     def test_calculate_proforma_profit(self):
