@@ -177,3 +177,13 @@ class DataFrame:
         for material in materials:
             materials_post_data[material] = request.POST.get(material)
         return materials_post_data
+
+    @classmethod
+    def handle_invalid_discounts(cls, request):
+        discount = {
+            'lte__90': request.POST.get('un90_disc', 0),
+            'gt__90': request.POST.get('up90_disc', 0),
+        }
+        discount['lte__90'] = int(discount['lte__90']) if discount['lte__90'] is not "" else 0
+        discount['gt__90'] = int(discount['gt__90']) if discount['gt__90'] is not "" else 0
+        return discount

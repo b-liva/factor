@@ -226,7 +226,7 @@ class TestUtils(TestCase):
             'up90_disc': 0,
         }
 
-        discount = helpers.handle_invalid_discounts(request)
+        discount = DataFrame.handle_invalid_discounts(request)
         expected_discount = {
             'lte__90': 0,
             'gt__90': 0,

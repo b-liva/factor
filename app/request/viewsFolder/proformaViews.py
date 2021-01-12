@@ -1786,7 +1786,7 @@ def prof_profit(request, ypref_pk):
     if request.method == 'GET':
         pass
     if request.method == "POST":
-        discount = helpers.handle_invalid_discounts(request)
+        discount = DataFrame.handle_invalid_discounts(request)
         material_payload = {
             'silicon': helpers.remove_comma_from_number(request.POST.get('silicon', 0)),
             'cu': helpers.remove_comma_from_number(request.POST.get('cu', 0)),
