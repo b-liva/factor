@@ -509,6 +509,11 @@ class Xpref(models.Model):
         proforma.save()
         return proforma
 
+    def create_proforma_specs(self):
+        specs = self.req_id.reqspec_set.all()
+        for spec in specs:
+            PrefSpec.create_spec(self, spec)
+
     class Meta:
         permissions = (
             ('index_proforma', 'Can index Proforma'),
@@ -569,6 +574,21 @@ class PrefSpec(models.Model):
 
     def total_price(self):
         return self.qty * self.price
+
+    @classmethod
+    def create_spec(cls, proforma, spec):
+        pspec = cls()
+        pspec.code = spec.code
+        pspec.owner = proforma.owner
+        pspec.xpref_id = proforma
+        pspec.reqspec_eq = spec
+        pspec.qty = spec.qty
+        pspec.type = spec.type.title
+        pspec.price = spec.get_spec_price()
+        pspec.kw = spec.kw
+        pspec.rpm = spec.rpm_new.rpm
+        pspec.voltage = spec.voltage
+        pspec.save()
 
 
 class ProfChangeRequest(models.Model):

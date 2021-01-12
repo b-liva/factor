@@ -1028,7 +1028,7 @@ def order_valid(request, request_pk):
     order = Requests.objects.get(pk=request_pk)
     if order.order_is_routine():
         proforma = Xpref.create_proforma_from_order(order)
-        helpers.create_proforma_specs(proforma)
+        proforma.create_proforma_specs()
         return redirect('pref_details', ypref_pk=proforma.pk)
     else:
         return redirect('request_details', request_pk=request_pk)

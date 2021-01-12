@@ -112,7 +112,7 @@ class AutomateOrderHelperTest(AutomationBase):
 
     def test_create_proforma_specs(self):
         self.spec3.delete()
-        helpers.create_proforma_specs(self.proforma)
+        self.proforma.create_proforma_specs()
         specs = self.proforma.prefspec_set.all()
         self.assertEqual(specs.count(), 2)
         self.assertEqual(132, specs[0].kw)

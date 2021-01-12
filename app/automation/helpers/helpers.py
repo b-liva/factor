@@ -73,20 +73,3 @@ LOOKUP_STR = [
     '280KW-1000',
     '315KW-1000',
 ]
-
-
-def create_proforma_specs(proforma):
-    specs = proforma.req_id.reqspec_set.all()
-    for spec in specs:
-        pspec = PrefSpec()
-        pspec.code = spec.code
-        pspec.owner = proforma.owner
-        pspec.xpref_id = proforma
-        pspec.reqspec_eq = spec
-        pspec.qty = spec.qty
-        pspec.type = spec.type.title
-        pspec.price = spec.get_spec_price()
-        pspec.kw = spec.kw
-        pspec.rpm = spec.rpm_new.rpm
-        pspec.voltage = spec.voltage
-        pspec.save()
