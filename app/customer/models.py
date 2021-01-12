@@ -1,20 +1,12 @@
-# from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import Sum, F, FloatField, Count
 from django.urls import reverse
 from django.utils.timezone import now
 from django_jalali.db import models as jmodels
-# from django.contrib.auth.models import User
-
 from django.contrib.auth import get_user_model
-User = get_user_model()
-
-from django import forms
-
-
-# Create your models here.
 from request.models import Payment, Requests, ReqSpec, PrefSpec
+User = get_user_model()
 
 
 def default_customer_code():

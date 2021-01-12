@@ -1,21 +1,14 @@
-import os
 import datetime
-
 import jdatetime
-import pandas as pd
-import xlrd
+from django.test import TestCase
 
-from django.conf import settings
-from django.test import Client, TestCase
-
-from core import file
 from core.dataframe import DataFrame
 from core.date import Date
 from request.models import PrefSpec, Xpref
 from request.tests.factory import factories
 from request.tests.factory.base_proformas import BaseProformaFactories
 from request.helpers.proforma import Proforma, ProformaSpec
-from core import number as number_handler
+from core import (number as number_handler, file)
 
 
 class TestUtils(TestCase):

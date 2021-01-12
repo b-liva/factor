@@ -1,71 +1,40 @@
 import math
-import pdfkit
 import datetime
 import json
 import requests
 import os
-from base64 import encode
-
 import random
-
-import jdatetime
-import xlwt
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.template.loader import get_template, render_to_string
-
-from django_jalali.db import models as jmodels
-from xhtml2pdf import pisa
-
+from django.template.loader import render_to_string
 from core import number as number_handler
 from core.dataframe import DataFrame
 from core.date import Date
 from request.forms.proforma_forms import DiscountForm
-import request.templatetags.functions as funcs
 from core.access_control.permission_check import ProformaProxy, AccessControl
 from core.access_control.decorator import check_perm
-
 from django.contrib.auth import get_user_model
 from django.templatetags.static import static
-from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationField, Value, DateField, DateTimeField, Q, \
-    Sum
-
 import pdfkit
 import jdatetime
 import xlwt
 from django.urls import reverse
-
-from factor import settings
 from customer.models import Customer
 from request import models
 from request.forms.forms import CommentForm, ProfFollowUpForm
 from request.forms.search import ProformaSearchForm, PermSearchForm, PrefSpecSearchForm
-import request.templatetags.functions as funcs
 from request.models import Requests, Xpref, ReqSpec, PrefSpec, ProformaFollowUP, Perm, ProjectType, ProfChangeRequest
-from pricedb.models import MotorDB
-
 from request.forms import proforma_forms, forms
 from django.contrib.auth.decorators import login_required
-
-from django.db.models import F, Field, FloatField, ExpressionWrapper, DurationField, Value, DateField, DateTimeField, Q, \
-    Sum
-
-from request.templatetags import functions, request_extras
+from django.db.models import F, Q, Sum
+from request.templatetags import request_extras
 from pricedb.models import MotorDB
 from request.viewsFolder.utilies import cost_utils
-from django.views.generic import View
-
 from request.helpers.proforma import ProformaSpec, Proforma
-from ..utils import render_to_pdf, link_callback
-
-from django.template.loader import get_template
-from django.template import Context
 
 User = get_user_model()
 
