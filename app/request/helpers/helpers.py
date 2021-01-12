@@ -6,7 +6,7 @@ from django.conf import settings
 from request.helpers.proforma import ProformaSpec
 
 
-def calculate_profit_of_proforma(specs):
+def get_proforma_profit(specs):
     cost_total = 0
     price_total = 0
     profit_total = 0
@@ -272,7 +272,7 @@ def calculate_proforma_profit(proforma, discount=None):
     specs_profit = ProformaSpec.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
     specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
 
-    results = calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
+    results = get_proforma_profit(specs_profit_split['specs_has_profit'])
     return results
 
 
