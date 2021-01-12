@@ -11,7 +11,6 @@ from core.date import Date
 from core.tests.factory import factories as core_factories
 from request.models import Xpref, PrefSpec
 from request.tests.factory import factories
-from request.helpers import helpers
 from request.tests.factory.base_proformas import BaseProformaFactories
 
 

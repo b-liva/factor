@@ -44,7 +44,6 @@ from django.urls import reverse
 from factor import settings
 from customer.models import Customer
 from request import models
-from request.helpers import helpers
 from request.forms.forms import CommentForm, ProfFollowUpForm
 from request.forms.search import ProformaSearchForm, PermSearchForm, PrefSpecSearchForm
 import request.templatetags.functions as funcs

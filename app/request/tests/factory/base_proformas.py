@@ -1,5 +1,4 @@
 import jdatetime
-from request.helpers import helpers
 from request.tests.factory import factories
 from core.date import Date
 
