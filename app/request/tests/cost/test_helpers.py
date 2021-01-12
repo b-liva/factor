@@ -67,16 +67,6 @@ class TestUtils(TestCase):
         date = datetime.date(year=2020, month=10, day=2)
         self.assertEqual(date_output, date)
 
-    def test_split_specs_routine(self):
-        specs_splitted = helpers.split_specs_routine_and_not_routine(self.specs)
-        self.assertEqual(len(specs_splitted['routine_specs']), 2)
-        self.assertListEqual(self.routine_specs, specs_splitted['routine_specs'])
-
-    def test_split_specs_not_routine(self):
-        specs_splitted = helpers.split_specs_routine_and_not_routine(self.specs)
-        self.assertEqual(len(specs_splitted['not_routine_specs']), 3)
-        self.assertListEqual(self.not_routine_specs, specs_splitted['not_routine_specs'])
-
     def test_handle_spec_not_in_routine_costs(self):
         date = '20201014'
         self.spec['power'] = 2000
@@ -188,19 +178,6 @@ class TestUtils(TestCase):
         results = helpers.calculate_profit_of_proforma(specs_profit_split['specs_has_profit'])
         self.assertEqual(results['profit'], 0)
         self.assertIsNone(results['percent'], None)
-
-    def test_calculate_cost_of_proforma(self):
-        specs = [
-            {'power': 132, 'rpm': 1500, 'voltage': 380, 'price': 1651151},
-            {'power': 75, 'rpm': 1500, 'voltage': 380, 'price': 8454185},
-            {'power': 18.5, 'rpm': 3000, 'voltage': 380, 'price': 2155151},
-            {'power': 160, 'rpm': 1000, 'voltage': 380, 'price': 15485258},
-        ]
-        date = '20201014'
-        modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
-
-        cost = helpers.calculate_cost_of_proforma_by_specs(modified_df, specs)
-        self.assertEqual(cost, 2548468142.40)
 
     def test_adjust_materials(self):
         material_payload = {

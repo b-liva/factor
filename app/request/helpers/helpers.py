@@ -4,20 +4,6 @@ import pandas as pd
 from django.conf import settings
 
 
-def split_specs_routine_and_not_routine(specs):
-    routine_specs = list()
-    not_routine_specs = list()
-    for spec in specs:
-        if spec['power'] <= 450 and (spec['rpm'] in [1000, 1500, 3000]) and spec['voltage'] <= 400:
-            routine_specs.append(spec)
-        else:
-            not_routine_specs.append(spec)
-    return {
-        'routine_specs': routine_specs,
-        'not_routine_specs': not_routine_specs
-    }
-
-
 def split_specs_if_profit_exists(specs):
     specs_has_profit = list()
     specs_no_profit = list()
@@ -161,14 +147,6 @@ def calculate_cost_pandas2(df):
     df['cost_calc'] = df['practical_cost'] + df['cost_general'] + df['هزینه بسته بندی']
 
     return df
-
-
-def calculate_cost_of_proforma_by_specs(df, specs):
-    specs_splitted = split_specs_routine_and_not_routine(specs)
-    cost = 0
-    for spec in specs_splitted['routine_specs']:
-        cost += calculate_cost_of_spec(df, **spec)
-    return cost
 
 
 def calculate_cost_of_spec(df, **kwargs):
