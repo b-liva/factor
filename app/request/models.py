@@ -492,6 +492,11 @@ class Xpref(models.Model):
         kw = self.prefspec_set.filter(price__gt=0).aggregate(sum=Sum(F('qty') * F('kw'), output_field=FloatField()))['sum']
         return kw
 
+    @classmethod
+    def generate_proforma_number(cls):
+        last_proforma = cls.objects.filter(is_active=True).order_by('number').last()
+        return last_proforma.number + 1
+
     class Meta:
         permissions = (
             ('index_proforma', 'Can index Proforma'),

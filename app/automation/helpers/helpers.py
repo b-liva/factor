@@ -75,18 +75,13 @@ LOOKUP_STR = [
 ]
 
 
-def generate_proforma_number():
-    last_proforma = Xpref.objects.filter(is_active=True).order_by('number').last()
-    return last_proforma.number + 1
-
-
 def create_proforma_from_order(order):
     today = jdatetime.date.today()
     expiry_date = today + jdatetime.timedelta(7)
     proforma = Xpref()
     proforma.owner = order.owner
     proforma.req_id = order
-    proforma.number = generate_proforma_number()
+    proforma.number = Xpref.generate_proforma_number()
     proforma.exp_date_fa = expiry_date
     proforma.save()
     return proforma

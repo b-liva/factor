@@ -1,4 +1,6 @@
 from django.test import TestCase, Client
+
+from request.models import Xpref
 from request.tests.factory import factories as req_fact
 from automation.helpers import helpers
 from customer.tests.factory import factories as cu_factory
@@ -96,7 +98,7 @@ class AutomateOrderHelperTest(AutomationBase):
         req_fact.ProformaFactory.create(number=9813255)
         req_fact.ProformaFactory.create(number=9813250)
         req_fact.ProformaFactory.create(number=9813200)
-        res = helpers.generate_proforma_number()
+        res = Xpref.generate_proforma_number()
         self.assertEqual(res, 9813255 + 1)
 
     def test_create_proforma_from_order(self):
