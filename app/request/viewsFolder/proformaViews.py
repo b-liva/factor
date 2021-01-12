@@ -19,6 +19,7 @@ from django.template.loader import get_template, render_to_string
 from django_jalali.db import models as jmodels
 from xhtml2pdf import pisa
 
+from core.dataframe import DataFrame
 from request.forms.proforma_forms import DiscountForm
 import request.templatetags.functions as funcs
 from core.access_control.permission_check import ProformaProxy, AccessControl
@@ -1776,9 +1777,9 @@ def prof_profit(request, ypref_pk):
         prof_date = jdatetime.date.today()
         del request.session['current_profit_date']
     date_greg = prof_date.togregorian()
-    date = helpers.get_date_str(date_greg)
+    date = DataFrame.get_date_str(date_greg)
     # get df
-    modified_df, cost_file_name = helpers.prepare_data_frame_based_on_proforma_date(date)
+    modified_df, cost_file_name = DataFrame.prepare_data_frame_based_on_proforma_date(date)
     #
     discount = None
     if request.method == 'GET':
@@ -1792,7 +1793,7 @@ def prof_profit(request, ypref_pk):
             'steel': helpers.remove_comma_from_number(request.POST.get('steel', 0)),
             'dicast': helpers.remove_comma_from_number(request.POST.get('dicast', 0)),
         }
-        adjusted_materials = helpers.adjust_df_materials(modified_df, material_payload)
+        adjusted_materials = DataFrame.adjust_df_materials(modified_df, material_payload)
         modified_df = adjusted_materials['adjusted_df']
 
         # get discount
@@ -1965,7 +1966,7 @@ def total_profit(request):
         return redirect('errorpage')
     date_start = jdatetime.date(year=1399, month=3, day=1)
     proformas = Xpref.objects.filter(is_active=True, date_fa__gte=date_start, perm=True)
-    proforma_profit = helpers.proformas_profit(proformas)
+    proforma_profit = Proforma.proformas_profit(proformas)
     context = {
         'proforma_count': proformas.count(),
         'cost': proforma_profit['cost'],

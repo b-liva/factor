@@ -1,3 +1,6 @@
+from core.dataframe import DataFrame
+
+
 class Proforma:
     @classmethod
     def get_proforma_profit(cls, specs):
@@ -19,6 +22,53 @@ class Proforma:
             'percent': percent
         }
         return response
+
+    @classmethod
+    def calculate_proforma_profit(cls, proforma, discount=None):
+        date = proforma.date_fa.togregorian()
+        date = DataFrame.get_date_str(date_greg=date)
+        specs = proforma.prefspec_set.filter(price__gt=0).all()
+
+        specs_list = [
+            {
+                'code': spec.code,
+                'qty': spec.qty,
+                'power': spec.kw,
+                'rpm': spec.rpm,
+                'voltage': spec.voltage,
+                'price': spec.price,
+                'im': spec.im,
+                'ip': spec.ip,
+                'ic': spec.ic,
+            } for spec in specs]
+
+        modified_df, cost_file_name = DataFrame.prepare_data_frame_based_on_proforma_date(date)
+        specs_profit = ProformaSpec.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
+        specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
+
+        results = Proforma.get_proforma_profit(specs_profit_split['specs_has_profit'])
+        return results
+
+    @classmethod
+    def proformas_profit(cls, proformas):
+        result = {
+            "cost": 0,
+            "price": 0,
+            "profit": 0,
+            "percent": 0,
+        }
+
+        items = ['cost', 'price', 'profit']
+
+        for proforma in proformas:
+            profit = cls.calculate_proforma_profit(proforma)
+            for item in items:
+                result[item] += profit[item]
+        if result['cost']:
+            result['percent'] = 100 * (result['price'] / result['cost'] - 1)
+        else:
+            result['percent'] = None
+        return result
 
 
 class ProformaSpec:
