@@ -105,7 +105,7 @@ class AutomateOrderHelperTest(AutomationBase):
         req_fact.ProformaFactory.create(number=9813255)
         req_fact.ProformaFactory.create(number=9813250)
         req_fact.ProformaFactory.create(number=9813200)
-        res = helpers.create_proforma_from_order(self.order)
+        res = Xpref.create_proforma_from_order(self.order)
         self.assertEqual(res.number, 9813255 + 1)
         self.assertEqual(res.owner, self.order.owner)
         self.assertEqual(res.req_id, self.order)

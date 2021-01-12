@@ -1027,7 +1027,7 @@ def order_valid(request, request_pk):
     from automation.helpers import helpers
     order = Requests.objects.get(pk=request_pk)
     if order.order_is_routine():
-        proforma = helpers.create_proforma_from_order(order)
+        proforma = Xpref.create_proforma_from_order(order)
         helpers.create_proforma_specs(proforma)
         return redirect('pref_details', ypref_pk=proforma.pk)
     else:

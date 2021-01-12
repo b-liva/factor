@@ -75,18 +75,6 @@ LOOKUP_STR = [
 ]
 
 
-def create_proforma_from_order(order):
-    today = jdatetime.date.today()
-    expiry_date = today + jdatetime.timedelta(7)
-    proforma = Xpref()
-    proforma.owner = order.owner
-    proforma.req_id = order
-    proforma.number = Xpref.generate_proforma_number()
-    proforma.exp_date_fa = expiry_date
-    proforma.save()
-    return proforma
-
-
 def create_proforma_specs(proforma):
     specs = proforma.req_id.reqspec_set.all()
     for spec in specs:
