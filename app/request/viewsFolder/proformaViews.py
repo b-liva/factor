@@ -59,7 +59,7 @@ from pricedb.models import MotorDB
 from request.viewsFolder.utilies import cost_utils
 from django.views.generic import View
 
-from request.helpers.proforma import ProformaSpec
+from request.helpers.proforma import ProformaSpec, Proforma
 from ..utils import render_to_pdf, link_callback
 
 from django.template.loader import get_template
@@ -1819,7 +1819,7 @@ def prof_profit(request, ypref_pk):
     cost_file_date_fa = helpers.get_date_fa_from_file_name(cost_file_name)
     specs_profit = ProformaSpec.add_profit_to_specs(modified_df, specs_list, discount_dict=discount)
     specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
-    results = helpers.get_proforma_profit(specs_profit_split['specs_has_profit'])
+    results = Proforma.get_proforma_profit(specs_profit_split['specs_has_profit'])
 
     context = {
         'only_test': 'text for test.',

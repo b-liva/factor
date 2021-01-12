@@ -11,7 +11,7 @@ from request.helpers import helpers
 from request.models import PrefSpec, Xpref
 from request.tests.factory import factories
 from request.tests.factory.base_proformas import BaseProformaFactories
-from request.helpers.proforma import ProformaSpec
+from request.helpers.proforma import Proforma, ProformaSpec
 
 
 class TestUtils(TestCase):
@@ -142,7 +142,7 @@ class TestUtils(TestCase):
         specs_profit = ProformaSpec.add_profit_to_specs(modified_df, self.specs, discount_dict=discount)
         specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
 
-        results = helpers.get_proforma_profit(specs_profit_split['specs_has_profit'])
+        results = Proforma.get_proforma_profit(specs_profit_split['specs_has_profit'])
         self.assertEqual(round(results['cost'], 2), 2018563926.40)
         self.assertEqual(round(results['price'], 2), 2072000000.00)
         self.assertEqual(round(results['profit'], 2), 53436073.60)
@@ -159,7 +159,7 @@ class TestUtils(TestCase):
         specs_profit = ProformaSpec.add_profit_to_specs(modified_df, [self.spec], discount_dict=discount)
         specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
 
-        results = helpers.get_proforma_profit(specs_profit_split['specs_has_profit'])
+        results = Proforma.get_proforma_profit(specs_profit_split['specs_has_profit'])
         self.assertEqual(round(results['cost'], 2),  1758933976.00)
         self.assertEqual(round(results['price'], 2),  1800000000.00)
         self.assertEqual(round(results['profit'], 2), 41066024.00)
@@ -176,7 +176,7 @@ class TestUtils(TestCase):
         specs_profit = ProformaSpec.add_profit_to_specs(modified_df, self.not_routine_specs, discount_dict=discount)
         specs_profit_split = ProformaSpec.split_specs_if_profit_exists(specs_profit)
 
-        results = helpers.get_proforma_profit(specs_profit_split['specs_has_profit'])
+        results = Proforma.get_proforma_profit(specs_profit_split['specs_has_profit'])
         self.assertEqual(results['profit'], 0)
         self.assertIsNone(results['percent'], None)
 

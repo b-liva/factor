@@ -1,3 +1,26 @@
+class Proforma:
+    @classmethod
+    def get_proforma_profit(cls, specs):
+        cost_total = 0
+        price_total = 0
+        profit_total = 0
+        for spec in specs:
+            cost_total += spec['cost'] * spec['qty']
+            profit_total += spec['profit'] * spec['qty']
+            price_total += spec['price'] * spec['qty']
+        if cost_total:
+            percent = (profit_total / cost_total) * 100
+        else:
+            percent = None
+        response = {
+            'cost': cost_total,
+            'price': price_total,
+            'profit': profit_total,
+            'percent': percent
+        }
+        return response
+
+
 class ProformaSpec:
     @classmethod
     def split_specs_if_profit_exists(cls, specs):
